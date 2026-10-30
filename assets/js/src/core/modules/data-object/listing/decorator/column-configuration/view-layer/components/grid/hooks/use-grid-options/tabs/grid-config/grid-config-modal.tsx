@@ -27,7 +27,7 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { PreviewModeProvider, usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
 import { PreviewModeSwitch } from '@Pimcore/components/preview-mode/preview-mode-switch'
 import { PreviewModeBar } from '@Pimcore/components/preview-mode/preview-mode-bar'
-import { getFallbackItem } from '@Pimcore/components/preview-mode/fallback-item'
+import { getFallbackItem, type FallbackRow } from '@Pimcore/components/preview-mode/fallback-item'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useStyles } from './grid-config-modal.styles'
@@ -74,7 +74,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   const { styles } = useStyles()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
-  const firstRow = gridData?.items?.[0]
+  const firstRow = gridData?.items?.[0] as FallbackRow | undefined
 
   const onApplyClick = (): void => {
     baseOnApplyClick()

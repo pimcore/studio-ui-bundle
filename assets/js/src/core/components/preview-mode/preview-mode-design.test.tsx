@@ -143,9 +143,8 @@ describe('preview mode design', () => {
     expect(screen.queryByTestId('language-switch')).not.toBeInTheDocument()
   })
 
-  it('AC5: the SDK keeps exporting the same names (new props are optional)', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const sdk = require('../../../sdk/components/preview-mode')
+  it('AC5: the SDK keeps exporting the same names (new props are optional)', async () => {
+    const sdk = await import('../../../sdk/components/preview-mode')
     expect(Object.keys(sdk)).toEqual(expect.arrayContaining([
       'PreviewModeProvider', 'usePreviewMode', 'usePreviewModeOptional', 'PreviewModeSwitch', 'PreviewModeBar', 'ColumnPreview', 'truncatePath'
     ]))

@@ -77,8 +77,8 @@ export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true }: Pr
 
       {enabled && showLanguageSwitch && (
         <Flex
-          style={ { flex: 1 } }
           justify="flex-end"
+          style={ { flex: 1 } }
         >
           <PermissionBasedLanguageSelectionControl
             onChange={ (value) => { if (value !== null) setLanguage(value) } }

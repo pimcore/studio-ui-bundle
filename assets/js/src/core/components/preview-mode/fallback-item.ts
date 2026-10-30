@@ -10,7 +10,7 @@
 
 import { type PreviewModeFallbackItem } from './preview-mode-provider'
 
-interface FallbackRow {
+export interface FallbackRow {
   id?: number | string
   fullpath?: string
   columns?: Array<{ key?: string, value?: unknown }>
