@@ -65,6 +65,7 @@ describe('preview mode value frame, divider and language switch', () => {
     const value = String(styles.value)
 
     expect(value).toContain('.ant-table-cell')
+    expect(value).toContain('.ant-table-cell::before')
     expect(value).toContain('.ant-table-content table')
     expect(value).toMatch(/border: 0 !important/)
     expect(value).toMatch(/border-radius: 0 !important/)

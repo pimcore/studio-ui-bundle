@@ -43,20 +43,24 @@ export const useStyles = createStyles(({ token, css }) => {
       flex: 1;
       min-width: 0;
 
-      /* the grid renders its cells with a table frame; outside the grid the value shows plain */
-      .ant-table-wrapper,
-      .ant-table,
-      .ant-table-container,
-      .ant-table-content,
-      .ant-table-content table,
-      .ant-table-cell {
+      /* the grid renders its cells with a table frame (some of it !important, per row and pseudo element);
+         outside the grid the value shows plain, so this out-ranks those rules */
+      &&&&&&&& .ant-table-wrapper,
+      &&&&&&&& .ant-table,
+      &&&&&&&& .ant-table-container,
+      &&&&&&&& .ant-table-content,
+      &&&&&&&& .ant-table-content table,
+      &&&&&&&& .ant-table-row,
+      &&&&&&&& .ant-table-cell,
+      &&&&&&&& .ant-table-cell::before,
+      &&&&&&&& .ant-table-cell::after {
         border: 0 !important;
         border-radius: 0 !important;
         background: transparent !important;
         box-shadow: none !important;
       }
 
-      .ant-table-cell {
+      &&&&&&&& .ant-table-cell {
         padding-inline: 0 !important;
       }
     `
