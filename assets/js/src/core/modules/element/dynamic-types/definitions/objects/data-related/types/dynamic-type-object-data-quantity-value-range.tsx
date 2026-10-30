@@ -27,7 +27,7 @@ export type QuantityValueRangeObjectDataDefinition = AbstractObjectDataDefinitio
   unitWidth: string | null
   decimalPrecision: number | null
   width: string | null
-  autoConvert: boolean
+  autoConvert?: boolean
 }
 
 export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDataAbstract {

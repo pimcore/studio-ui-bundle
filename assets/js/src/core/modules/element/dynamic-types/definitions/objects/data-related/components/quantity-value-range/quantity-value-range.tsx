@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import _ from 'lodash'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
@@ -51,8 +51,13 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
   const fieldWidth = useFieldWidth()
   const { token } = useToken()
 
+  const latestValue = useRef<QuantityValueRangeValue>(value)
+  const changeCounter = useRef(0)
+
   const setValue = (newValue: QuantityValueRangeValue): void => {
-    if (!_.isEqual(newValue, value)) {
+    if (!_.isEqual(newValue, latestValue.current)) {
+      latestValue.current = newValue
+      changeCounter.current++
       setValueState(newValue)
       props.onChange?.(newValue.minimum === null && newValue.maximum === null && newValue.unitId === null ? null : newValue)
     }
@@ -76,26 +81,42 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
       return bound
     }
 
-    return await convertValue(fromUnitId, toUnitId, bound) ?? bound
+    return await convertValue(fromUnitId, toUnitId, bound)
   }
 
   const onChangeSelect = (unitId?: string): void => {
-    if (props.autoConvert === true && !_.isEmpty(unitId) && value.unitId !== null) {
-      void Promise.all([
-        convertBound(value.unitId, unitId!, value.minimum),
-        convertBound(value.unitId, unitId!, value.maximum)
-      ]).then(([minimum, maximum]) => {
-        setValue({
-          minimum,
-          maximum,
-          unitId: unitId!
-        })
-      })
-    }
+    const fromUnitId = value.unitId
+    const newUnitId = _.isEmpty(unitId) ? null : (unitId ?? null)
 
     setValue({
       ...value,
-      unitId: _.isEmpty(unitId) ? null : (unitId ?? null)
+      unitId: newUnitId
+    })
+
+    if (props.autoConvert !== true || newUnitId === null || fromUnitId === null) {
+      return
+    }
+
+    const requestedChange = changeCounter.current
+    const { minimum, maximum } = value
+
+    void Promise.all([
+      convertBound(fromUnitId, newUnitId, minimum),
+      convertBound(fromUnitId, newUnitId, maximum)
+    ]).then(([convertedMinimum, convertedMaximum]) => {
+      const failed = (typeof minimum === 'number' && convertedMinimum === null) ||
+        (typeof maximum === 'number' && convertedMaximum === null)
+
+      // Drop the answer when the user changed the field meanwhile or a bound could not be converted
+      if (failed || requestedChange !== changeCounter.current) {
+        return
+      }
+
+      setValue({
+        minimum: convertedMinimum,
+        maximum: convertedMaximum,
+        unitId: newUnitId
+      })
     })
   }
 
