@@ -154,9 +154,16 @@ const expandAdvanced = () => evaluate(`(() => { const headers = ${MODAL}.querySe
 const checkCollapsedCard = async (prefix, { closeOne = false } = {}) => {
   step = `${prefix}: collapsed advanced card`
   if (closeOne) {
-    const closed = await evaluate(`(() => { const h = ${MODAL}.querySelector('.stack-list-item .ant-collapse-header[aria-expanded=true]')
+    const closeHeader = () => evaluate(`(() => { const h = ${MODAL}.querySelector('.stack-list-item .ant-collapse-header[aria-expanded=true]')
       if (!h) return false; h.click(); return true })()`)
-    if (!closed) throw new Error('no advanced card to collapse, and adding an unsaved advanced column is not supported by this script')
+    if (!(await closeHeader())) {
+      // no advanced column in this config: convert one column in the modal (the transformation button; unsaved), then close it
+      const converted = await evaluate(`(() => { const i = ${MODAL}.querySelector('.pimcore-icon-transformation'); const b = i && i.closest('button')
+        if (!b) return false; b.click(); return true })()`)
+      if (!converted) throw new Error('no advanced card to collapse, and no column can be converted to an advanced one (unsaved)')
+      await quiet()
+      if (!(await closeHeader())) throw new Error('the unsaved advanced column did not appear')
+    }
     await quiet()
   }
   const state = await evaluate(`window.__pm.inspectCollapsed(${MODAL})`)
@@ -168,6 +175,7 @@ const checkOnOff = async (prefix, { closeOne = false } = {}) => {
   await expectState(false, `${prefix} off`)
   await shot(`${prefix}-preview-off`)
   await switchPreview(true)
+  // the migration view repeats the schema modal's cards; the collapsed case is asserted once per modal
   if (prefix !== 'schema-migration') await checkCollapsedCard(prefix, { closeOne })
   await expandAdvanced()
   await quiet()
