@@ -9,8 +9,11 @@
  */
 
 /**
- * The store renders the shared empty state while no group is assigned, and hides adding
- * and removing groups when the store is not editable or add/remove is disallowed.
+ * The store renders the shared empty state while no group is assigned, hides adding
+ * and removing groups when the store is not editable or add/remove is disallowed,
+ * renders the groups in the order the layout configures, and installs the layout the
+ * object delivers for its already active groups with the key titles it carries — which
+ * for a reopened object is a map keyed by group id, and so carries no order.
  */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not
@@ -36,6 +39,7 @@ import { type ClassificationStoreProps } from './classification-store'
 let mockGroupKeys: string[] = []
 const mockOpenModal = jest.fn()
 const mockItem = jest.fn()
+const mockUpdateCurrentLayoutData = jest.fn()
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -63,7 +67,7 @@ jest.mock('./provider', () => ({
   useClassificationStore: () => ({
     openModal: mockOpenModal,
     currentLayoutData: [],
-    updateCurrentLayoutData: jest.fn()
+    updateCurrentLayoutData: mockUpdateCurrentLayoutData
   })
 }))
 jest.mock('@Pimcore/components/language-selection/provider/use-language-selection', () => ({
@@ -74,7 +78,7 @@ jest.mock('./hooks/use-language-independent-value-permission', () => ({
 }))
 
 jest.mock('./classification-store-item', () => ({
-  ClassificationStoreItem: (props: { disallowDelete?: boolean }) => {
+  ClassificationStoreItem: (props: { disallowDelete?: boolean, groupLayout?: { id: number } }) => {
     mockItem(props)
     return <div data-testid='group' />
   }
@@ -94,6 +98,7 @@ describe('ClassificationStoreContent', () => {
     mockGroupKeys = []
     mockOpenModal.mockClear()
     mockItem.mockClear()
+    mockUpdateCurrentLayoutData.mockClear()
   })
 
   it('shows the empty state with an add button while no group is assigned', async () => {
@@ -139,5 +144,34 @@ describe('ClassificationStoreContent', () => {
     expect(screen.getByTestId('group')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'add' })).not.toBeInTheDocument()
     expect(mockItem).toHaveBeenCalledWith(expect.objectContaining({ disallowDelete: true }))
+  })
+
+  // reopening an object delivers its already active groups as a map keyed by group id,
+  // and the key titles it carries are what the group panels label their keys with
+  it('installs the layout of the already active groups with the key titles it carries', () => {
+    mockGroupKeys = ['7']
+
+    renderContent({
+      activeGroupDefinitions: {
+        7: {
+          id: 7,
+          name: 'Dimensions',
+          keys: [
+            { id: 11, name: 'ef000001', title: 'Height', definition: { datatype: 'data' } },
+            { id: 12, name: 'ef000002', title: null, definition: { datatype: 'data' } }
+          ]
+        }
+      }
+    } as unknown as Partial<ClassificationStoreProps>)
+
+    expect(mockUpdateCurrentLayoutData).toHaveBeenCalledWith([
+      expect.objectContaining({
+        id: 7,
+        keys: [
+          expect.objectContaining({ id: 11, title: 'Height' }),
+          expect.objectContaining({ id: 12, title: null })
+        ]
+      })
+    ])
   })
 })

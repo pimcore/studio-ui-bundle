@@ -118,13 +118,11 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()
   const [deleteKey] = useClassificationStoreConfigurationKeyDeleteMutation()
 
-  const getKeyTitle = (key: ClassificationStoreConfigurationKeyDetail): string | null => {
-    const keyDefinition = key.definition as { title?: unknown } | null
-    return typeof keyDefinition?.title === 'string' ? keyDefinition.title : null
-  }
-
+  // The configured title is a column of its own on the key, and the one the object editor
+  // labels the key with. Deriving it from the definition blob instead would write the blob's
+  // title back over the configured one on every save that does not mean to touch the title.
   const gridData = useMemo(
-    () => keys.map((key) => ({ ...key, title: getKeyTitle(key) ?? undefined })),
+    () => keys.map((key) => ({ ...key, title: key.title ?? undefined })),
     [keys]
   )
 
@@ -176,7 +174,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             id: createdKey.id,
             classificationStoreConfigurationKeyUpdate: {
               name: createdKey.name,
-              title: getKeyTitle(createdKey),
+              title: createdKey.title ?? null,
               description,
               type: createdKey.type,
               definition: createdKey.definition
@@ -248,7 +246,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       id: key.id,
       classificationStoreConfigurationKeyUpdate: {
         name: key.name,
-        title: getKeyTitle(key),
+        title: key.title ?? null,
         description: key.description ?? null,
         type: newType,
         definition: null
@@ -403,7 +401,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: newName,
-                    title: getKeyTitle(typedRow),
+                    title: typedRow.title ?? null,
                     description: typedRow.description ?? null,
                     type: typedRow.type,
                     definition: typedRow.definition
@@ -418,7 +416,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: typedRow.name,
-                    title: getKeyTitle(typedRow),
+                    title: typedRow.title ?? null,
                     description: (value as string).trim() === '' ? null : (value as string),
                     type: typedRow.type,
                     definition: typedRow.definition

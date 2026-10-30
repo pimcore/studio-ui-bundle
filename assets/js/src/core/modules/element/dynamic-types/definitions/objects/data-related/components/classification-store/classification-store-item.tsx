@@ -23,6 +23,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { Panel } from '@Pimcore/components/panel/panel'
 import { useClassificationStore } from './provider'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
+import { getKeyLabel } from './utils/key-label'
 import { useStyles } from './classification-store-item.styles'
 
 export interface ClassificationStoreItemProps {
@@ -131,6 +132,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
               key={ item.id }
               { ...item.definition }
               name={ item.id }
+              title={ getKeyLabel(item) }
             />
           ))}
         </Panel>

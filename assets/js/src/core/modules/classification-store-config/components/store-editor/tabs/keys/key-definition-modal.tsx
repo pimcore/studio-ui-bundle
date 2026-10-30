@@ -107,14 +107,14 @@ export const KeyDefinitionModal = ({
   const handleSave = async (): Promise<void> => {
     if (keyDetail === undefined || getLayoutRef.current === null) return
     const layout = getLayoutRef.current()
-    const keyDefinition = keyDetail.definition as { title?: unknown } | null
-    const title = typeof keyDefinition?.title === 'string' ? keyDefinition.title : null
 
     const response = await updateKey({
       id: keyDetail.id,
       classificationStoreConfigurationKeyUpdate: {
         name: keyDetail.name,
-        title,
+        // Saving a definition must not touch the configured title, which is a column of its
+        // own: the title carried inside the definition blob is a different value.
+        title: keyDetail.title ?? null,
         description: keyDetail.description,
         type: keyDetail.type,
         definition: (layout as Record<string, unknown> | null | undefined) ?? null
