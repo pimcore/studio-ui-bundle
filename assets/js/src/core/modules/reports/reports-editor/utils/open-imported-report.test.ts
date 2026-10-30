@@ -8,11 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   type BundleCustomReportsConfigurationTreeNode,
   type CustomReportsConfigGetTreeApiResponse
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { openImportedReport } from './open-imported-report'
+
+jest.mock('@Pimcore/modules/app/error-handler', () => ({
+  __esModule: true,
+  default: jest.fn(),
+  ApiError: jest.requireActual('@Pimcore/modules/app/error-handler/classes/api-error').default
+}))
 
 const report = (id: string): BundleCustomReportsConfigurationTreeNode => ({ id, text: id, cls: '', writeable: true })
 
@@ -62,6 +69,20 @@ describe('openImportedReport', () => {
 
     await openImportedReport({ reportName: 'imported', refetch, handleOpenReport })
 
+    expect(handleOpenReport).not.toHaveBeenCalled()
+  })
+
+  // RTK Query resolves a failed refetch with an `error` field instead of rejecting, which
+  // would otherwise slip past the caller's `.catch` and leave the user without feedback.
+  it('rejects with the api error when the refetch resolves with an error', async () => {
+    const error = { status: 500, data: { message: 'Tree unavailable' } }
+    const refetch = jest.fn(async () => ({ error }))
+    const handleOpenReport = jest.fn()
+
+    const result = openImportedReport({ reportName: 'imported', refetch, handleOpenReport })
+
+    await expect(result).rejects.toBeInstanceOf(ApiError)
+    await expect(result).rejects.toMatchObject({ errorData: error })
     expect(handleOpenReport).not.toHaveBeenCalled()
   })
 })

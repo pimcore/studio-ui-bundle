@@ -8,21 +8,35 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
+import { ApiError } from '@Pimcore/modules/app/error-handler'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import {
   type BundleCustomReportsConfigurationTreeNode,
   type CustomReportsConfigGetTreeApiResponse
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { findReportById } from '@Pimcore/modules/reports/reports-editor/components/helpers'
 
+export interface ReportsTreeRefetchResult {
+  data?: CustomReportsConfigGetTreeApiResponse
+  error?: ApiErrorData
+}
+
 interface OpenImportedReportArgs {
   reportName: string
-  refetch: () => Promise<{ data?: CustomReportsConfigGetTreeApiResponse }>
+  refetch: () => Promise<ReportsTreeRefetchResult>
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
 }
 
+/**
+ * @throws ApiError when the tree refetch resolves with an error; RTK Query never rejects it.
+ */
 export const openImportedReport = async ({ reportName, refetch, handleOpenReport }: OpenImportedReportArgs): Promise<void> => {
-  const { data: updatedData } = await refetch()
+  const { data: updatedData, error } = await refetch()
+
+  if (!isNil(error)) {
+    throw new ApiError(error)
+  }
 
   const importedReport = findReportById(updatedData?.items, reportName)
 

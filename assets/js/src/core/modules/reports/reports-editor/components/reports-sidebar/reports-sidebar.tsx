@@ -30,12 +30,12 @@ import { findReportById, isFolder } from '@Pimcore/modules/reports/reports-edito
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { exportReportConfig } from '@Pimcore/modules/reports/reports-editor/utils/export-report-config'
-import { openImportedReport } from '@Pimcore/modules/reports/reports-editor/utils/open-imported-report'
+import { openImportedReport, type ReportsTreeRefetchResult } from '@Pimcore/modules/reports/reports-editor/utils/open-imported-report'
 
 interface IReportsSidebarProps {
   isLoading: boolean
   isFetching: boolean
-  refetch: () => Promise<{ data?: CustomReportsConfigGetTreeApiResponse }>
+  refetch: () => Promise<ReportsTreeRefetchResult>
   reportsList?: CustomReportsConfigGetTreeApiResponse
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
   handleCloseReport: (id: BundleCustomReportsConfigurationTreeNode['id']) => void

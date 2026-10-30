@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { getReportImportUrl } from '@Pimcore/modules/reports/reports-editor/utils/config-transfer-urls'
 
@@ -34,8 +34,8 @@ export const ImportButton = ({ disabled = false, onImportSuccess }: IImportButto
   const handleUploadSuccess = (response: BundleCustomReportsDetails): void => {
     setIsModalOpen(false)
     void messageApi.success(t('reports.editor.import.success'))
-    onImportSuccess(response).catch(() => {
-      trackError(new GeneralError('Failed to refresh custom reports after import'))
+    onImportSuccess(response).catch((error: unknown) => {
+      trackError(error instanceof ApiError ? error : new GeneralError('Failed to refresh custom reports after import'))
     })
   }
 
