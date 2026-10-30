@@ -1336,6 +1336,7 @@ info: Info
 success: Erfolg
 no-value-set: Kein Wert gesetzt
 set-to-null: Leer (auf null setzen)
+setting-without-effect-in-studio: "Ohne Wirkung in Studio: Es wird jeweils eine Sprache dargestellt, die über die globale Sprachauswahl gewählt wird. Die Einstellung bleibt erhalten, weil dieselbe Klassendefinition weiterhin die klassische Admin-UI steuert."
 remove: Entfernen
 delete: Löschen
 clone: Klonen

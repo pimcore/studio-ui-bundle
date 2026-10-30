@@ -1336,6 +1336,7 @@ info: Info
 success: Framgång
 no-value-set: Inget värde angivet
 set-to-null: Tom (sätt till null)
+setting-without-effect-in-studio: "Ingen effekt i Studio: ett språk visas åt gången och språket väljs med den globala väljaren. Inställningen behålls eftersom samma klassdefinition fortfarande styr det äldre Admin-gränssnittet."
 remove: Ta bort
 delete: Ta bort
 clone: Klona

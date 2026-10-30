@@ -1338,6 +1338,7 @@ info: Info
 success: Success
 no-value-set: No value set
 set-to-null: Empty (set to null)
+setting-without-effect-in-studio: "No effect in Studio: one locale is rendered at a time and the language is chosen with the global selector. The setting is kept because the same class definition still drives the legacy Admin UI."
 remove: Remove
 delete: Delete
 clone: Clone

@@ -19,6 +19,10 @@ import cn from 'classnames'
 import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 import { AutoHideEmptyContent } from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
 import { useSuppressEmptyFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
+import {
+  labelLayoutItemProps,
+  useLabelLayout
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/label-layout-provider'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { isNonEmptyString } from '@sdk/utils'
 
@@ -34,6 +38,7 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
 
   const suppressEmptyLabel = useSuppressEmptyFieldLabel()
+  const labelLayout = useLabelLayout()
   const inheritanceStateContext = useInheritanceState()
   const inheritedState = inheritanceStateContext?.getInheritanceState(formFieldName)?.inherited
   const hasInheritanceIcon = inheritedState === true || inheritedState === 'broken'
@@ -42,7 +47,7 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
 
   const effectiveFormItemProps = shouldSuppressLabel
     ? { ...formItemProps, label: null, colon: false, labelCol: { span: 0 }, wrapperCol: { span: 24 } }
-    : formItemProps
+    : { ...formItemProps, ...labelLayoutItemProps(labelLayout) }
 
   return useMemo(() => (
     <ErrorBoundary>
