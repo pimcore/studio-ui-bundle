@@ -130,6 +130,34 @@ describe('Tooltip', () => {
     expect(await screen.findByRole('tooltip')).toBeInTheDocument()
   })
 
+  it('closes when its title turns empty and does not reopen by itself when the title returns', async () => {
+    const { rerender } = render(tooltip())
+    const button = screen.getByRole('button')
+
+    fireEvent.mouseEnter(button)
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Hint')
+
+    rerender(tooltip({ title: '' }))
+    await expectHidden()
+
+    rerender(tooltip())
+    await wait(150)
+    expect(screen.queryByRole('tooltip')).toBeNull()
+
+    fireEvent.mouseLeave(button)
+    fireEvent.mouseEnter(button)
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Hint')
+  })
+
+  it('does not report a close for a press while the tooltip is closed', () => {
+    const onOpenChange = jest.fn()
+    render(tooltip({ onOpenChange }))
+
+    fireEvent.mouseDown(screen.getByRole('button'))
+
+    expect(onOpenChange).not.toHaveBeenCalled()
+  })
+
   it('leaves click-triggered tooltips alone', async () => {
     render(tooltip({ trigger: 'click' }))
 

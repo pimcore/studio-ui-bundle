@@ -159,7 +159,7 @@ describe('EmailLogContainer', () => {
     expect(screen.getByTestId('email-log-total').textContent).toBe('1')
   })
 
-  it('labels the refresh button and gives it the Refresh tooltip', () => {
+  it('labels the refresh button and gives it the Reload tooltip', () => {
     render(<EmailLogContainer />)
 
     expect(screen.getByRole('button', { name: 'toolbar.reload' })).toHaveAttribute('data-tooltip', 'toolbar.reload')

@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { cloneElement, isValidElement, useRef, useState } from 'react'
+import React, { cloneElement, isValidElement, useEffect, useRef, useState } from 'react'
 import { Tooltip as AntTooltip, type TooltipProps } from 'antd'
-import { isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 
 /**
  * Delay in seconds before the tooltip of an action button (open, delete, search, upload, ...) appears.
@@ -50,6 +50,12 @@ const forgetPressedArea = (): void => {
   document.removeEventListener('mousemove', forgetPressedAreaOnMove, { capture: true })
 }
 
+const isBlank = (content: TooltipProps['title']): boolean => isNil(content) || content === '' || content === false
+
+// antd's own rule for a tooltip with nothing to show; it only applies it while `open` is uncontrolled
+const hasContent = ({ title, overlay }: TooltipProps): boolean =>
+  title === 0 || !isBlank(title) || (!isBlank(overlay) && overlay !== 0)
+
 /**
  * A press on the trigger (mouse down, click, Enter or Space) hides the tooltip, so it never covers
  * a menu, modal or popover the press opens. It stays hidden until the pointer leaves the trigger,
@@ -60,6 +66,14 @@ export const Tooltip = (props: TooltipProps): JSX.Element => {
   const [isHoverOpen, setIsHoverOpen] = useState(defaultOpen)
   const [pressedBy, setPressedBy] = useState<PressSource | null>(null)
   const pressedByRef = useRef<PressSource | null>(null)
+  const showsContent = hasContent(props)
+
+  // antd reports no open change while the content is empty, so the hover state would outlive it
+  useEffect(() => {
+    if (!showsContent) {
+      setIsHoverOpen(false)
+    }
+  }, [showsContent])
 
   const triggers = Array.isArray(trigger) ? trigger : [trigger]
   const hidesOnPress = isValidElement(children) && triggers.includes('hover') && triggers.every((t) => t === 'hover' || t === 'focus')
@@ -70,11 +84,15 @@ export const Tooltip = (props: TooltipProps): JSX.Element => {
     )
   }
 
+  const isOpen = isUndefined(open) ? showsContent && isHoverOpen : open
+
   const press = (source: PressSource): void => {
     pressedByRef.current = source
     setPressedBy(source)
     setIsHoverOpen(false)
-    onOpenChange?.(false)
+    if (isOpen) {
+      onOpenChange?.(false)
+    }
   }
 
   const release = (): void => {
@@ -135,7 +153,7 @@ export const Tooltip = (props: TooltipProps): JSX.Element => {
     <AntTooltip
       { ...props }
       onOpenChange={ handleOpenChange }
-      open={ pressedBy === null && (isUndefined(open) ? isHoverOpen : open) }
+      open={ pressedBy === null && isOpen }
     >
       {trackedChild}
     </AntTooltip>
