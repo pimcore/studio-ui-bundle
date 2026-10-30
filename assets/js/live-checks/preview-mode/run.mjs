@@ -186,8 +186,13 @@ try {
   await run('open the Grid Configuration modal', async () => {
     await click('[data-testid=border-button-studio-data-object-tree-widget]')
     await click('[data-testid^=tree-node-label-]', { text: '^sports car$' })
-    await click('[data-testid=listing-class-definition-select] .ant-select-selector')
-    await click('.ant-select-item-option[name=Car]')
+    await waitFor('the class select', `!!document.querySelector('[data-testid=listing-class-definition-select]')`)
+    await sleep(2000)
+    const carSelected = await evaluate(`/\\bCar\\b/.test((document.querySelector('[data-testid=listing-class-definition-select]') || {}).textContent || '')`)
+    if (!carSelected) { // the grid opens on Car by itself when the tree folder holds only cars
+      await click('[data-testid=listing-class-definition-select] .ant-select-selector')
+      await click('.ant-select-item-option[name=Car]')
+    }
     await waitFor('the grid sidebar', `!!document.querySelector('.sidebar__navigation__tabs .pimcore-icon-settings')`)
     await click('.sidebar__navigation__tabs .pimcore-icon-settings')
     await click('.pimcore-icon-show-details')
