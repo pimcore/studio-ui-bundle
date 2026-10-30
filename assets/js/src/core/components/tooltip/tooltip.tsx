@@ -21,8 +21,7 @@ export const actionTooltipDelay = 0.4
 
 type PressSource = 'pointer' | 'keyboard'
 
-// A trigger can re-mount under the resting pointer (an editor reloading its toolbar). The new
-// instance gets a fresh mouseenter, so the pressed area is kept here, outside any instance.
+// outlives the instance: a pressed trigger can re-mount under the resting pointer and get a new mouseenter
 let pressedArea: DOMRect | null = null
 
 const isInPressedArea = (x: number, y: number): boolean =>
