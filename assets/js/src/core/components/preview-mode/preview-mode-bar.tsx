@@ -26,6 +26,8 @@ export interface PreviewModeBarProps {
   allowedClasses?: string[]
   /** The language switch at the right end of the bar (default: shown) */
   showLanguageSwitch?: boolean
+  /** The item picker and its description (default: shown); off leaves only the language switch */
+  showItem?: boolean
 }
 
 export const truncatePath = (fullpath: string): string => {
@@ -36,8 +38,8 @@ export const truncatePath = (fullpath: string): string => {
   return `.../ ${parts[parts.length - 2]}/ ${parts[parts.length - 1]}`
 }
 
-export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true }: PreviewModeBarProps): React.JSX.Element => {
-  const { enabled, item, setItem, fallbackItem, language, setLanguage } = usePreviewMode()
+export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true, showItem = true }: PreviewModeBarProps): React.JSX.Element => {
+  const { item, setItem, fallbackItem, language, setLanguage } = usePreviewMode()
   const { currentLanguage } = useLanguageSelection()
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -61,21 +63,25 @@ export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true }: Pr
       className={ styles.bar }
       gap="extra-small"
     >
-      <Button onClick={ open }>
-        {t('preview-mode.preview-item')}
-      </Button>
+      {showItem && (
+        <>
+          <Button onClick={ open }>
+            {t('preview-mode.preview-item')}
+          </Button>
 
-      {id === undefined
-        ? <Text className={ styles.description }>{t('preview-mode.no-item')}</Text>
-        : (
-          <Tooltip title={ fullpath }>
-            <Text className={ styles.description }>
-              ID: {id}{fullpath !== null && <> {'│'} {truncatePath(fullpath)}</>}
-            </Text>
-          </Tooltip>
-          )}
+          {id === undefined
+            ? <Text className={ styles.description }>{t('preview-mode.no-item')}</Text>
+            : (
+              <Tooltip title={ fullpath }>
+                <Text className={ styles.description }>
+                  ID: {id}{fullpath !== null && <> {'│'} {truncatePath(fullpath)}</>}
+                </Text>
+              </Tooltip>
+              )}
+        </>
+      )}
 
-      {enabled && showLanguageSwitch && (
+      {showLanguageSwitch && (
         <Flex
           justify="flex-end"
           style={ { flex: 1 } }

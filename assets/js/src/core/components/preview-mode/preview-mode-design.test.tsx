@@ -146,7 +146,7 @@ describe('preview mode design', () => {
     expect(screen.getByTestId('preview-mode-column-preview-row')).toHaveTextContent('E-Type')
   })
 
-  it('AC4: with preview mode off there is no divider, no Preview row and no language switch', () => {
+  it('AC4: with preview mode off there is no divider and no Preview row', () => {
     render(
       <PreviewModeProvider>
         <PreviewModeBar />
@@ -156,7 +156,6 @@ describe('preview mode design', () => {
 
     expect(screen.queryByTestId('preview-mode-column-preview-row')).not.toBeInTheDocument()
     expect(screen.queryByTestId('preview-mode-column-preview-divider')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('language-switch')).not.toBeInTheDocument()
   })
 
   it('AC5: the SDK keeps exporting the same names (new props are optional)', async () => {

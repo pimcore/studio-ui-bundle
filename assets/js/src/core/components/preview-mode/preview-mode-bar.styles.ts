@@ -26,6 +26,7 @@ export const useStyles = createStyles(({ token, css }) => {
       margin: 0 -${token.paddingXS}px;
       width: auto;
       min-width: 0;
+      border-color: ${token.colorBorderSecondary};
     `,
 
     row: css`
@@ -41,6 +42,23 @@ export const useStyles = createStyles(({ token, css }) => {
     value: css`
       flex: 1;
       min-width: 0;
+
+      /* the grid renders its cells with a table frame; outside the grid the value shows plain */
+      .ant-table-wrapper,
+      .ant-table,
+      .ant-table-container,
+      .ant-table-content,
+      .ant-table-content table,
+      .ant-table-cell {
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+
+      .ant-table-cell {
+        padding-inline: 0 !important;
+      }
     `
   }
 })

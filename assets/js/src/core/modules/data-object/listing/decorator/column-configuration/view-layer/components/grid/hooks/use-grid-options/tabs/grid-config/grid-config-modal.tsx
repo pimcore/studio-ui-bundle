@@ -48,11 +48,10 @@ const PreviewModeToolbarContent = (): React.JSX.Element => {
       style={ { width: '100%' } }
     >
       <PreviewModeSwitch />
-      {enabled && (
-        <PreviewModeBar
-          allowedClasses={ selectedClassDefinition?.name !== undefined ? [selectedClassDefinition.name] : undefined }
-        />
-      )}
+      <PreviewModeBar
+        allowedClasses={ selectedClassDefinition?.name !== undefined ? [selectedClassDefinition.name] : undefined }
+        showItem={ enabled }
+      />
     </Flex>
   )
 }
