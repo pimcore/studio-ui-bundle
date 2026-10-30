@@ -51,6 +51,19 @@ describe('PageLayout split variant', () => {
     expect(getPaneSizing(getContainerOf('right'))).toEqual(['75%', 'auto', 'auto'])
   })
 
+  it('adds a custom class name to the layout', () => {
+    const { container } = render(
+      <PageLayout
+        className="custom-split"
+        leftItem={ left }
+        rightItem={ right }
+        variant="split"
+      />
+    )
+
+    expect(container.firstElementChild).toHaveClass('split-layout', 'style-splitLayout', 'custom-split', 'ant-flex')
+  })
+
   it('renders a resizable divider between the items', () => {
     const { container } = render(
       <PageLayout

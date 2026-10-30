@@ -11,7 +11,7 @@
 import { type PageLayoutSplitProps } from '../page-layout/page-layout'
 
 // The props of the deprecated SplitLayout and ConfigLayout, kept out of the SDK exports.
-export interface LegacySplitLayoutProps extends Omit<PageLayoutSplitProps, 'variant' | 'fullWidth' | 'resizable'> {
+export interface LegacySplitLayoutProps extends Omit<PageLayoutSplitProps, 'variant' | 'fullWidth' | 'resizable' | 'className'> {
   /** Shows only the left item, at full width (with both flags set, both items stay visible). */
   leftItemFullWidth?: boolean
   /** Shows only the right item, at full width (with both flags set, both items stay visible). */

@@ -20,6 +20,7 @@ export interface PageLayoutSplitProps {
   /** The item sizes are read on the first render only; later changes of `size`, `minSize` and `maxSize` are ignored. */
   leftItem: PageLayoutPaneProps
   rightItem: PageLayoutPaneProps
+  className?: string
   /** Shows only this item, at full width. */
   fullWidth?: 'left' | 'right'
   withDivider?: boolean
@@ -37,6 +38,7 @@ export const PageLayoutSplit = ({
   leftItem,
   rightItem,
   fullWidth,
+  className,
   withDivider = false,
   resizable = false,
   withToolbar = false
@@ -100,7 +102,7 @@ export const PageLayoutSplit = ({
 
   return (
     <Flex
-      className={ cn('split-layout', styles.splitLayout) }
+      className={ cn('split-layout', styles.splitLayout, className) }
       ref={ elementRef }
     >
       {fullWidth !== 'right' && (
