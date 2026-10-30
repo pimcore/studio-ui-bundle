@@ -49,3 +49,10 @@ export const pressDividerKey = (key: 'ArrowLeft' | 'ArrowRight', times = 1): voi
     fireEvent.keyDown(screen.getByRole('button'), { key })
   }
 }
+
+/** A mouse move on the document; jsdom does not support `movementX` in the event init. */
+export const moveMouse = (movementX: number): void => {
+  const event = new MouseEvent('mousemove', { bubbles: true })
+  Object.defineProperty(event, 'movementX', { value: movementX })
+  fireEvent(document, event)
+}

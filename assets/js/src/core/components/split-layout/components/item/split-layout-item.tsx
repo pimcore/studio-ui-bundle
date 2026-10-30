@@ -21,6 +21,6 @@ export interface SplitLayoutItemProps extends PageLayoutPaneProps {}
  * @deprecated Use `PageLayout` with `variant="split"` instead; it renders its items itself.
  * This alias is kept for backward compatibility and will be removed in the next major version.
  */
-const forwardedComponent: React.ForwardRefExoticComponent<SplitLayoutItemProps & React.RefAttributes<unknown>> = PageLayoutPane
+const forwardedComponent: React.ForwardRefExoticComponent<PageLayoutPaneProps & React.RefAttributes<unknown>> = PageLayoutPane
 
 export { forwardedComponent as SplitLayoutItem }

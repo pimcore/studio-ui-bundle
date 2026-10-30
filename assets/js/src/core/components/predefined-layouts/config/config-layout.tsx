@@ -9,14 +9,14 @@
  */
 
 import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
-import { type SplitLayoutProps } from '@Pimcore/components/split-layout/split-layout'
+import { type LegacySplitLayoutProps } from '@Pimcore/components/split-layout/legacy-split-layout-props'
 import React from 'react'
 
 /**
  * @deprecated Use `PageLayoutConfigProps` (with `variant: 'config'`) instead.
  * This type is kept for backward compatibility and will be removed in the next major version.
  */
-export interface ConfigLayoutProps extends SplitLayoutProps {}
+export interface ConfigLayoutProps extends LegacySplitLayoutProps {}
 
 /**
  * ConfigLayout - A predefined layout component for configuration interfaces
@@ -29,8 +29,8 @@ export interface ConfigLayoutProps extends SplitLayoutProps {}
  * - Built-in divider and toolbar alignment (`withDivider` and `withToolbar` default to true)
  * - `leftItemFullWidth` and `rightItemFullWidth` are ignored
  *
- * @deprecated Use `PageLayout` with `variant="config"` instead: `resizeAble` became `resizable`, the other props
- * and defaults are the same, and it also supports `fullWidth`. This alias is kept for backward compatibility and
+ * @deprecated Use `PageLayout` with `variant="config"` instead: `resizeAble` became `resizable`, drop the ignored
+ * full-width flags, the other props and defaults are the same. This alias is kept for backward compatibility and
  * will be removed in the next major version.
  *
  * @example
@@ -41,7 +41,7 @@ export interface ConfigLayoutProps extends SplitLayoutProps {}
  * />
  * ```
  */
-export const ConfigLayout = (props: ConfigLayoutProps): React.JSX.Element => {
+export const ConfigLayout = (props: LegacySplitLayoutProps): React.JSX.Element => {
   'use memo'
 
   const {

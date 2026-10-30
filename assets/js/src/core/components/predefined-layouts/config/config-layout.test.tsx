@@ -38,14 +38,14 @@ describe('ConfigLayout (deprecated wrapper)', () => {
   it('passes the items and flags on, with resizeAble as resizable', () => {
     render(
       <ConfigLayout
-        leftItem={ { minSize: 180, maxSize: 300, size: 180, children: tree } }
+        leftItem={ { minSize: 180, maxSize: 300, size: 30, children: tree } }
         resizeAble
         rightItem={ { children: form } }
         withToolbar={ false }
       />
     )
 
-    expect(getPaneSizing(getContainerOf('tree'))).toEqual(['180%', '180px', '300px'])
+    expect(getPaneSizing(getContainerOf('tree'))).toEqual(['30%', '180px', '300px'])
     expect(getPaneSizing(getContainerOf('form'))).toEqual(['80%', 'auto', 'auto'])
     expect(getDivider()).toHaveClass('style-dividerContainer style-resizable', { exact: true })
   })

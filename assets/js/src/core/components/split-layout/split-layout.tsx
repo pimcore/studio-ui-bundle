@@ -10,18 +10,13 @@
 
 import React from 'react'
 import { PageLayout, type PageLayoutSplitProps } from '../page-layout/page-layout'
+import { type LegacySplitLayoutProps } from './legacy-split-layout-props'
 
 /**
  * @deprecated Use `PageLayoutSplitProps` (with `variant: 'split'`) instead.
  * This type is kept for backward compatibility and will be removed in the next major version.
  */
-export interface SplitLayoutProps extends Omit<PageLayoutSplitProps, 'variant' | 'fullWidth' | 'resizable'> {
-  /** Shows only the left item, at full width (with both flags set, both items stay visible). */
-  leftItemFullWidth?: boolean
-  /** Shows only the right item, at full width (with both flags set, both items stay visible). */
-  rightItemFullWidth?: boolean
-  resizeAble?: boolean
-}
+export interface SplitLayoutProps extends LegacySplitLayoutProps {}
 
 const toFullWidth = (leftItemFullWidth: boolean, rightItemFullWidth: boolean): PageLayoutSplitProps['fullWidth'] => {
   if (leftItemFullWidth === rightItemFullWidth) {
@@ -36,7 +31,7 @@ const toFullWidth = (leftItemFullWidth: boolean, rightItemFullWidth: boolean): P
  * became `fullWidth="left"` and `fullWidth="right"`, `resizeAble` became `resizable`, the other props are the same.
  * This alias is kept for backward compatibility and will be removed in the next major version.
  */
-export const SplitLayout = ({ leftItemFullWidth = false, rightItemFullWidth = false, resizeAble, ...props }: SplitLayoutProps): React.JSX.Element => (
+export const SplitLayout = ({ leftItemFullWidth = false, rightItemFullWidth = false, resizeAble, ...props }: LegacySplitLayoutProps): React.JSX.Element => (
   <PageLayout
     { ...props }
     fullWidth={ toFullWidth(leftItemFullWidth, rightItemFullWidth) }
