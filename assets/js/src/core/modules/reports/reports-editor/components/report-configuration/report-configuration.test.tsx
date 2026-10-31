@@ -90,4 +90,14 @@ describe('ReportConfiguration layout', () => {
       dataSourceConfig: { type: 'custom', editorState: { a: 1 }, list: [3] }
     })
   })
+
+  it('applies a cleared data source field while keeping state without a form field', () => {
+    renderConfiguration()
+
+    mockOnValuesChange?.({}, { dataSourceConfig: { type: 'custom', list: undefined } })
+
+    expect(mockUpdateFormData).toHaveBeenCalledWith({
+      dataSourceConfig: { type: 'custom', editorState: { a: 1 }, list: undefined }
+    })
+  })
 })

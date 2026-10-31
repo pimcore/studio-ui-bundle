@@ -114,12 +114,12 @@ class UndefinedViewAdapter extends GenericAdapter {
   }
 }
 
-const mockReportData = (type: string, name: string = 'report', isFetching: boolean = false, chartDetailData: unknown = { items: [{ id: 1 }], totalItems: 1 }): Record<string, unknown> => {
+const mockReportData = (type: string, name: string = 'report', isFetching: boolean = false, withChartData: boolean = true): Record<string, unknown> => {
   const reportData = {
     isLoading: false,
     isFetching,
     reportDetailData: { name, dataSourceConfig: { type } },
-    chartDetailData,
+    chartDetailData: withChartData ? { items: [{ id: 1 }], totalItems: 1 } : undefined,
     refetchAll: jest.fn(),
     page: 1,
     setPage: jest.fn(),
@@ -187,7 +187,7 @@ describe('ReportViewContent', () => {
 
   it('renders the adapter view instead of the generic grid, chart and sidebar', () => {
     // like the real useReportData: no chart data for an adapter with its own view
-    const reportData = mockReportData('custom', 'report', false, undefined)
+    const reportData = mockReportData('custom', 'report', false, false)
     mockGetDynamicType.mockReturnValue(new CustomViewAdapter())
 
     renderView()
@@ -230,7 +230,7 @@ describe('ReportViewContent', () => {
   })
 
   it('shows an error state, no generic view and no chart request when the selected report failed to load after an adapter view', () => {
-    mockReportData('custom', 'previous-report', false, undefined)
+    mockReportData('custom', 'previous-report', false, false)
     mockGetDynamicType.mockReturnValue(new CustomViewAdapter())
 
     renderView('report')
@@ -244,7 +244,7 @@ describe('ReportViewContent', () => {
   })
 
   it('shows the toolbar with the export for an adapter view without chart data, and the pagination only for the generic view', () => {
-    mockReportData('custom', 'report', false, undefined)
+    mockReportData('custom', 'report', false, false)
     mockGetDynamicType.mockReturnValue(new CustomViewAdapter())
 
     const { unmount } = renderView()

@@ -9,7 +9,7 @@
  */
 
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { isArray, isNull, isUndefined, mergeWith } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
   type BundleCustomReportsConfigurationTreeNode,
@@ -44,7 +44,7 @@ interface IReportConfigurationProps {
 }
 
 const mergeDataSourceConfig = (current: ReportFormData['dataSourceConfig'], changed: ReportFormData['dataSourceConfig']): ReportFormData['dataSourceConfig'] =>
-  mergeWith({}, current, changed, (_target: unknown, source: unknown) => isArray(source) ? source : undefined)
+  ({ ...current, ...changed })
 
 interface IDataSourceConfig {
   type?: string
@@ -97,7 +97,7 @@ export const ReportConfiguration = ({ report, modifiedReports, setModifiedReport
 
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
     // updateFormData merges into the latest state, no need to spread a possibly stale currentData.
-    // The form only holds the bound fields: merge dataSourceConfig so that state a custom editor keeps there without form fields survives.
+    // The form only holds the bound fields: merge dataSourceConfig (top level, so a cleared field is applied) so that state a custom editor keeps there without form fields survives.
     updateFormData?.({
       ...allValues,
       ...(!isUndefined(allValues.dataSourceConfig) && { dataSourceConfig: mergeDataSourceConfig(currentData?.dataSourceConfig ?? null, allValues.dataSourceConfig) })
