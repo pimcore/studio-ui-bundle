@@ -10,7 +10,7 @@
 
 import React, { type ReactElement } from 'react'
 import { DynamicTypeCustomReportDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
-import { hasCustomReportDashboardView } from './get-custom-report-definition-adapter'
+import { providesCustomReportView } from './get-custom-report-definition-adapter'
 
 jest.mock('@Pimcore/app/depency-injection', () => ({ container: { get: jest.fn() } }))
 jest.mock('@Pimcore/app/config/services/service-ids', () => ({ serviceIds: {} }))
@@ -22,27 +22,25 @@ class PlainAdapter extends DynamicTypeCustomReportDefinitionAbstract {
   getCustomReportData (): ReactElement { return <></> }
 }
 
-class DashboardAdapter extends PlainAdapter {
-  providesCustomReportDashboardView (): boolean { return true }
+class ViewAdapter extends PlainAdapter {
+  getCustomReportView (): ReactElement { return <></> }
 }
 
-describe('hasCustomReportDashboardView', () => {
+describe('providesCustomReportView', () => {
   it('is false for an undefined adapter', () => {
-    expect(hasCustomReportDashboardView(undefined)).toBe(false)
+    expect(providesCustomReportView(undefined)).toBe(false)
   })
 
-  it('is false for an adapter that keeps the defaults', () => {
-    const adapter = new PlainAdapter()
-    expect(hasCustomReportDashboardView(adapter)).toBe(false)
-    expect(adapter.getCustomReportDashboardView({ reportName: 'r', visualization: 'table', showLegend: false })).toBeNull()
+  it('is false for an adapter that keeps the default view', () => {
+    expect(providesCustomReportView(new PlainAdapter())).toBe(false)
   })
 
-  it('is true for an adapter that provides a dashboard view', () => {
-    expect(hasCustomReportDashboardView(new DashboardAdapter())).toBe(true)
+  it('is true for an adapter that overrides the view', () => {
+    expect(providesCustomReportView(new ViewAdapter())).toBe(true)
   })
 
   it('tolerates an adapter built against an older SDK', () => {
     const legacy = { id: 'legacy' } as unknown as DynamicTypeCustomReportDefinitionAbstract
-    expect(hasCustomReportDashboardView(legacy)).toBe(false)
+    expect(providesCustomReportView(legacy)).toBe(false)
   })
 })

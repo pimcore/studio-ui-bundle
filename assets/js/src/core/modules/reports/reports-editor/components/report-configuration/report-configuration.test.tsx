@@ -12,15 +12,18 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { ReportConfiguration } from './report-configuration'
 
+const mockUpdateFormData = jest.fn()
+let mockOnValuesChange: ((changed: unknown, all: any) => void) | undefined
+
 jest.mock('@Pimcore/modules/reports/custom-reports-api-slice-enhanced', () => ({
   useCustomReportsReportQuery: () => ({ isLoading: false, isFetching: false, data: {}, refetch: jest.fn() })
 }))
 jest.mock('@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state', () => ({
   useReportFormState: () => ({
     initializeForm: jest.fn(),
-    currentData: { name: 'r', dataSourceConfig: { type: 'custom' } },
+    currentData: { name: 'r', dataSourceConfig: { type: 'custom', editorState: { a: 1 }, list: [1, 2] } },
     isDirty: false,
-    updateFormData: jest.fn(),
+    updateFormData: mockUpdateFormData,
     markFormSaved: jest.fn()
   })
 }))
@@ -41,7 +44,13 @@ jest.mock('@Pimcore/modules/reports/components/refetch/refetch', () => ({ Refetc
 jest.mock('@Pimcore/components/button/button', () => ({ Button: () => null }))
 jest.mock('@Pimcore/components/portal/portal', () => ({ Portal: () => null }))
 jest.mock('@Pimcore/components/content/content', () => ({ Content: ({ children }: any) => <div>{children}</div> }))
-jest.mock('@Pimcore/components/form/form-kit', () => ({ FormKit: ({ children }: any) => <div>{children}</div> }))
+jest.mock('@Pimcore/components/form/form-kit', () => ({
+  FormKit: ({ children, formProps }: any) => {
+    mockOnValuesChange = formProps.onValuesChange
+
+    return <div>{children}</div>
+  }
+}))
 jest.mock('@Pimcore/components/form/form', () => ({ Form: { useForm: () => [{}] } }))
 jest.mock('./components/general-settings/general-settings', () => ({
   GeneralSettings: () => <div data-testid="general-settings" />
@@ -69,5 +78,16 @@ describe('ReportConfiguration layout', () => {
     renderConfiguration()
 
     expect(order()).toEqual(['general-settings', 'source', 'adapter', 'permissions'])
+  })
+
+  it('keeps data source state without a form field when the form values change', () => {
+    renderConfiguration()
+
+    mockOnValuesChange?.({}, { displayName: 'New', dataSourceConfig: { type: 'custom', list: [3] } })
+
+    expect(mockUpdateFormData).toHaveBeenCalledWith({
+      displayName: 'New',
+      dataSourceConfig: { type: 'custom', editorState: { a: 1 }, list: [3] }
+    })
   })
 })

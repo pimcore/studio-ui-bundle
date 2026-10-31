@@ -2209,6 +2209,7 @@ user-menu.notification.modal.form.validation.provide-title: Proporcione un títu
 user-menu.notification.modal.form.validation.provide-message: Proporcione un mensaje
 reports.reports-title: Informes
 reports.select-report-name: Seleccione el nombre del informe
+reports.report-load-failed: No se pudo cargar el informe.
 reports.select-report: Seleccionar informe
 reports.export: Exportar
 reports.csv-export: Exportar CSV

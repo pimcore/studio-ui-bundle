@@ -61,9 +61,21 @@ jest.mock('@Pimcore/modules/reports/reports-view/components/report-toolbar/repor
 jest.mock('@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar', () => ({
   ReportTopBar: () => <div data-testid="report-top-bar" />
 }))
-jest.mock('@Pimcore/modules/reports/reports-view/components/report-detail/report-detail', () => ({
-  ReportDetail: () => <div data-testid="generic-report-detail" />
+// The real ReportDetail is rendered; only its heavy leaf dependencies are replaced
+const mockUseFullChartData = jest.fn()
+jest.mock('@Pimcore/modules/reports/reports-view/hooks/useFullChartData', () => ({
+  useFullChartData: (args: unknown) => mockUseFullChartData(args)
 }))
+jest.mock('@Pimcore/modules/reports/reports-view/components/report-chart/report-chart', () => ({ ReportChart: () => null }))
+jest.mock('@Pimcore/components/grid/grid', () => ({ Grid: () => <div data-testid="generic-report-detail" /> }))
+jest.mock('@Pimcore/components/grid/contexts/columns-context', () => ({
+  useColumnsContext: () => ({ columns: [], setColumns: jest.fn(), setInitialColumns: jest.fn() })
+}))
+jest.mock('@Pimcore/components/icon-button/icon-button', () => ({ IconButton: () => null }))
+jest.mock('@Pimcore/modules/element/hooks/use-element-helper', () => ({ useElementHelper: () => ({ openElement: jest.fn() }) }))
+jest.mock('@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select', () => ({ DrillDownSelect: () => null }))
+jest.mock('@Pimcore/modules/reports/reports-view/reports-view.styles', () => ({ useStyles: () => ({ styles: {} }) }))
+jest.mock('@Pimcore/app/config/app-config', () => ({ currentDomain: '' }))
 jest.mock('@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar', () => ({
   ReportSidebar: () => <div data-testid="generic-report-sidebar" />
 }))
@@ -71,7 +83,7 @@ jest.mock('@Pimcore/modules/reports/reports-view/components/report-sidebar/repor
 class GenericAdapter extends DynamicTypeCustomReportDefinitionAbstract {
   id = 'generic'
   getLabel (): ReactElement { return <>Generic</> }
-  getPagination (): boolean { return false }
+  getPagination (): boolean { return true }
   getCustomReportData (): ReactElement { return <></> }
 }
 
@@ -102,12 +114,12 @@ class UndefinedViewAdapter extends GenericAdapter {
   }
 }
 
-const mockReportData = (type: string, name: string = 'report', isFetching: boolean = false): Record<string, unknown> => {
+const mockReportData = (type: string, name: string = 'report', isFetching: boolean = false, chartDetailData: unknown = { items: [{ id: 1 }], totalItems: 1 }): Record<string, unknown> => {
   const reportData = {
     isLoading: false,
     isFetching,
     reportDetailData: { name, dataSourceConfig: { type } },
-    chartDetailData: { items: [{ id: 1 }], totalItems: 1 },
+    chartDetailData,
     refetchAll: jest.fn(),
     page: 1,
     setPage: jest.fn(),
@@ -139,6 +151,7 @@ const expectGenericView = (): void => {
 describe('ReportViewContent', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockUseFullChartData.mockReturnValue({ data: undefined })
   })
 
   it('renders the generic view when the adapter does not override the view', () => {
@@ -173,7 +186,8 @@ describe('ReportViewContent', () => {
   })
 
   it('renders the adapter view instead of the generic grid, chart and sidebar', () => {
-    const reportData = mockReportData('custom')
+    // like the real useReportData: no chart data for an adapter with its own view
+    const reportData = mockReportData('custom', 'report', false, undefined)
     mockGetDynamicType.mockReturnValue(new CustomViewAdapter())
 
     renderView()
@@ -184,6 +198,7 @@ describe('ReportViewContent', () => {
     expect(screen.queryByTestId('generic-report-sidebar')).not.toBeInTheDocument()
     // export stays available, the pagination belongs to the generic grid
     expect(screen.getByTestId('generic-report-toolbar')).toHaveTextContent('no-pagination')
+    expect(mockUseFullChartData).not.toHaveBeenCalled()
     expect(customViewProps).toHaveBeenCalledWith({
       reportName: 'report',
       reportDetailData: reportData.reportDetailData,
@@ -214,15 +229,34 @@ describe('ReportViewContent', () => {
     expect(customViewProps).not.toHaveBeenCalled()
   })
 
-  it('falls back to the generic view when the selected report failed to load after an adapter view', () => {
-    mockReportData('custom', 'previous-report', false)
+  it('shows an error state, no generic view and no chart request when the selected report failed to load after an adapter view', () => {
+    mockReportData('custom', 'previous-report', false, undefined)
     mockGetDynamicType.mockReturnValue(new CustomViewAdapter())
 
     renderView('report')
 
+    expect(screen.getByText('reports.report-load-failed')).toBeInTheDocument()
     expect(screen.queryByTestId('content-loading')).not.toBeInTheDocument()
-    expect(screen.getByTestId('generic-report-detail')).toBeInTheDocument()
+    expect(screen.queryByTestId('generic-report-detail')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('generic-report-toolbar')).not.toBeInTheDocument()
+    expect(mockUseFullChartData).not.toHaveBeenCalled()
     expect(customViewProps).not.toHaveBeenCalled()
+  })
+
+  it('shows the toolbar with the export for an adapter view without chart data, and the pagination only for the generic view', () => {
+    mockReportData('custom', 'report', false, undefined)
+    mockGetDynamicType.mockReturnValue(new CustomViewAdapter())
+
+    const { unmount } = renderView()
+
+    expect(screen.getByTestId('generic-report-toolbar')).toHaveTextContent('no-pagination')
+    unmount()
+
+    mockReportData('generic')
+    mockGetDynamicType.mockReturnValue(new GenericAdapter())
+    renderView()
+
+    expect(screen.getByTestId('generic-report-toolbar')).toHaveTextContent(/^pagination$/)
   })
 
   it('keeps the generic view while switching between reports of an adapter without its own view', () => {
@@ -231,8 +265,11 @@ describe('ReportViewContent', () => {
 
     renderView('report')
 
-    expect(screen.queryByTestId('content-loading')).not.toBeInTheDocument()
-    expect(screen.getByTestId('generic-report-detail')).toBeInTheDocument()
+    expect(screen.queryByTestId('custom-report-view')).not.toBeInTheDocument()
+    expect(customViewProps).not.toHaveBeenCalled()
+    expect(screen.queryByText('reports.report-load-failed')).not.toBeInTheDocument()
+    // the real ReportDetail is rendered (it shows its own loading state while fetching)
+    expect(mockUseFullChartData).toHaveBeenCalledWith({ name: 'previous-report' })
   })
 
   it('passes an increasing refreshToken to the adapter view when the report is refetched', () => {

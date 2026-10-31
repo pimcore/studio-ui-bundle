@@ -67,7 +67,13 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
 
     // reportDetailData still holds the previous report while the selected one is loading (or failed to load)
     if (reportDetailData.name !== currentReport) {
-      return isFetching ? <Content loading /> : null
+      return isFetching
+        ? <Content loading />
+        : (
+          <Content centered>
+            <Text>{t('reports.report-load-failed')}</Text>
+          </Content>
+          )
     }
 
     const view = currentAdapter.getCustomReportView({ reportName: currentReport, reportDetailData, reportData, refreshToken })
@@ -78,6 +84,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
 
   const customView = renderCustomView()
   const hasCustomView = !isNull(customView)
+  const isCustomViewShowingReport = hasCustomView && reportDetailData?.name === currentReport
 
   const renderMainContent = (): React.JSX.Element => (
     <Content
@@ -112,14 +119,14 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
       renderSidebar={ !hasCustomView && !isEmpty(reportDetailData) && (
         <ReportSidebar />
       ) }
-      renderToolbar={ (hasCustomView || (!isEmpty(chartDetailData?.items) && !isFetching)) && (
+      renderToolbar={ (isCustomViewShowingReport || (!hasCustomView && !isEmpty(chartDetailData?.items) && !isFetching)) && (
         <ReportToolbar
           currentReport={ currentReport }
           page={ page }
           pageSize={ pageSize }
           setPage={ setPage }
           setPageSize={ setPageSize }
-          showPagination={ !hasCustomView && showPagination }
+          showPagination={ !isCustomViewShowingReport && showPagination }
           totalItems={ chartDetailData?.totalItems ?? 0 }
         />
       ) }
