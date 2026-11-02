@@ -8,17 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { type FieldDefinitionAbstractFormFieldsProps, type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { useSyncTitleFromName } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/use-sync-title-from-name'
 import { Form, FormKit, Input, Switch, TextArea } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { kebabCase } from 'lodash'
 
+// A Classification Store key reads none of these options, so its key dialog does not offer them.
+const CLASSIFICATION_STORE_HIDDEN_OPTIONS: Partial<FieldDefinitionContext> = {
+  hideMandatory: true,
+  hideIndex: true,
+  hideUnique: true,
+  hideVisibleGridView: true,
+  hideVisibleSearch: true
+}
+
 export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   useSyncTitleFromName()
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
+  const context = props.context.area.includes('classification-store')
+    ? { ...props.context, ...CLASSIFICATION_STORE_HIDDEN_OPTIONS }
+    : props.context
   const typeTranslation = t('field-definition.' + kebabCase(props.type))
   const panelTitle = `${props.id} (${t('type')}: ${typeTranslation})`
 
@@ -28,7 +40,7 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         label={ t('name') }
         name="name"
       >
-        <Input disabled={ isCustomLayout || props.context.disableName } />
+        <Input disabled={ isCustomLayout || context.disableName } />
       </Form.Item>
 
       <Form.Item
@@ -45,24 +57,26 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
         <TextArea />
       </Form.Item>
 
+      {context.hideMandatory !== true && (
       <Form.Item name="mandatory">
         <Switch
-          disabled={ isCustomLayout || props.context.disableMandatory }
+          disabled={ isCustomLayout || context.disableMandatory }
           labelRight={ t('mandatory') }
         />
       </Form.Item>
+      )}
 
-      {!isCustomLayout && (
+      {!isCustomLayout && context.hideIndex !== true && (
       <Form.Item name="index">
         <Switch
-          disabled={ props.context.disableIndex }
+          disabled={ context.disableIndex }
           labelRight={ t('index') }
         />
       </Form.Item>
       )}
 
       {/* @todo check behavior for unique fields */}
-      {props.context.hideUnique !== true && (
+      {context.hideUnique !== true && (
       <Form.Item name="unique">
         <Switch
           disabled={ isCustomLayout }
@@ -71,7 +85,7 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
       </Form.Item>
       )}
 
-      {props.context.hideNotEditable !== true && (
+      {context.hideNotEditable !== true && (
         <Form.Item name="noteditable">
           <Switch labelRight={ t('not-editable') } />
         </Form.Item>
@@ -83,19 +97,23 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
 
       {!isCustomLayout && (
         <>
-          <Form.Item name="visibleGridView">
-            <Switch
-              disabled={ props.context.disableVisibleGridView }
-              labelRight={ t('visible-in-gridview') }
-            />
-          </Form.Item>
+          {context.hideVisibleGridView !== true && (
+            <Form.Item name="visibleGridView">
+              <Switch
+                disabled={ context.disableVisibleGridView }
+                labelRight={ t('visible-in-gridview') }
+              />
+            </Form.Item>
+          )}
 
-          <Form.Item name="visibleSearch">
-            <Switch
-              disabled={ props.context.disableVisibleSearch }
-              labelRight={ t('visible-in-searchresult') }
-            />
-          </Form.Item>
+          {context.hideVisibleSearch !== true && (
+            <Form.Item name="visibleSearch">
+              <Switch
+                disabled={ context.disableVisibleSearch }
+                labelRight={ t('visible-in-searchresult') }
+              />
+            </Form.Item>
+          )}
         </>
       )}
     </FormKit.Panel>

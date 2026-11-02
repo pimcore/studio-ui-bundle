@@ -25,6 +25,12 @@ export interface FieldDefinitionContext extends Record<string, any> {
   fieldDefinitions: ILayoutContext['fieldDefinitions']
   disableName?: boolean
   isEncryptedField?: boolean
+  hideMandatory?: boolean
+  hideIndex?: boolean
+  hideUnique?: boolean
+  hideNotEditable?: boolean
+  hideVisibleGridView?: boolean
+  hideVisibleSearch?: boolean
 }
 
 export interface FieldDefinitionConvertibleContext extends FieldDefinitionContext {
