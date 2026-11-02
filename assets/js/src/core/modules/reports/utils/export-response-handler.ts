@@ -12,5 +12,5 @@
  * A failed export answers with a JSON error body. Reading every response as a Blob would hide
  * that body from ApiError, so only a successful response is read as the file.
  */
-export const exportResponseHandler = async (response: Response): Promise<Blob | unknown> =>
+export const exportResponseHandler = async (response: Response): Promise<unknown> =>
   response.ok ? await response.blob() : await response.json()
