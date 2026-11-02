@@ -1400,6 +1400,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Bestandsgrootte
+system-information.checksum: Checksum
 system-information.modification-date: Wijzigingsdatum
 system-information.creation-date: Aanmaakdatum
 system-information.user-modification: Gebruiker wijziging

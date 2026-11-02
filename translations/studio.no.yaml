@@ -1400,6 +1400,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Filstørrelse
+system-information.checksum: Kontrollsum
 system-information.modification-date: Endringsdato
 system-information.creation-date: Opprettelsesdato
 system-information.user-modification: Endret av bruker

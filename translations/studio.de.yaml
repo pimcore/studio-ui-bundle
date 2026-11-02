@@ -1400,6 +1400,7 @@ system-information.type: Typ
 system-information.class-id: Klassen-ID
 system-information.class: Klasse
 system-information.file-size: Dateigröße
+system-information.checksum: Prüfsumme
 system-information.modification-date: Änderungsdatum
 system-information.creation-date: Erstellungsdatum
 system-information.user-modification: Benutzer Änderung
