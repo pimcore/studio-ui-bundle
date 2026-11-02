@@ -110,13 +110,13 @@ const createDocument = (settingsData?: Record<string, unknown>): ISystemInfoModa
 const createElement = (elementType: string, type: string): ISystemInfoModalData => ({
   id: 7,
   fullPath: '/images/hero.jpg',
-  type,
-  elementType,
   deeplink: `https://studio.example.com/admin/studio/${elementType}_7`,
   modificationDate: null,
   creationDate: null,
   userOwner: 0,
-  userModification: 0
+  userModification: 0,
+  type,
+  elementType
 } as unknown as ISystemInfoModalData)
 
 const mockCustomSettings = (dynamicCustomSettings?: Record<string, unknown>): void => {
