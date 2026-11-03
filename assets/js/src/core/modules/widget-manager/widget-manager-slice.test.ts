@@ -9,14 +9,12 @@
  */
 
 import { type Reducer, type UnknownAction } from '@reduxjs/toolkit'
-import { type IJsonModel, Model, type TabSetNode } from 'flexlayout-react'
+import { type IJsonModel, type IJsonTabSetNode, Model, type TabSetNode } from 'flexlayout-react'
 import { injectSliceWithState } from '@sdk/app'
 import {
   closeWidget,
+  expandMainWidget,
   initialState,
-  openMainWidget,
-  setActiveWidgetById,
-  toggleMainWidgetMaximize,
   updateInnerModel,
   type WidgetManagerState
 } from './widget-manager-slice'
@@ -77,78 +75,72 @@ const splitLayout: IJsonModel = {
   }
 }
 
-// like the real inner layout: the main tabset stays when emptied, other tabsets are removed
-const splitLayoutKeptMainTabset: IJsonModel = {
+// like the real inner layout: only the main tabset stays when emptied
+const bikeTabsetBesideEmptyMainTabset = (others: IJsonModel['layout']['children'] = []): IJsonModel => ({
   global: {},
   layout: {
     type: 'row',
     id: 'main',
     children: [
-      { type: 'tabset', id: 'main_tabset', enableDeleteWhenEmpty: false, children: [{ type: 'tab', id: 'car', component: 'element' }] },
+      { type: 'tabset', id: 'main_tabset', enableDeleteWhenEmpty: false, children: [] },
+      ...others,
       {
         type: 'tabset',
         id: 'bike_tabset',
+        selected: 1,
         children: [{ type: 'tab', id: 'bike', component: 'element' }, { type: 'tab', id: 'scooter', component: 'element' }]
       }
     ]
   }
+})
+
+const tabsets = (json: IJsonModel): string[] => {
+  const result: string[] = []
+  Model.fromJson(json).visitNodes((node) => {
+    if (node.getType() === 'tabset') {
+      result.push(`${node.getId()}:${node.getChildren().map((tab) => tab.getId()).join('+')}`)
+    }
+  })
+  return result
 }
 
-const maximizedTabset = (json: IJsonModel): string | undefined => Model.fromJson(json).getMaximizedTabset()?.getId()
-
-describe('widget-manager-slice maximize of a split tabset', () => {
+describe('widget-manager-slice expand of a main widget tabset', () => {
   const { reducer } = (injectSliceWithState as jest.Mock).mock.calls[0][0] as { reducer: Reducer<WidgetManagerState, UnknownAction> }
   const createState = (innerModel: IJsonModel): WidgetManagerState => ({ ...initialState, innerModel })
 
-  it('lets the tabset of the main tab fill the main area and undoes it on the second toggle', () => {
-    const state = createState(splitLayout)
-    const maximized = reducer(state, toggleMainWidgetMaximize('bike'))
-    const restored = reducer(maximized, toggleMainWidgetMaximize('bike'))
+  it('moves the tabs into the empty main tabset, which then fills the main area', () => {
+    const state = createState(bikeTabsetBesideEmptyMainTabset())
+    const expanded = reducer(state, expandMainWidget('bike'))
+    const model = Model.fromJson(expanded.innerModel)
 
-    expect(maximizedTabset(maximized.innerModel)).toBe('bike_tabset')
-    expect(maximizedTabset(restored.innerModel)).toBeUndefined()
-    expect(maximized.outerModel).toBe(state.outerModel)
+    expect(tabsets(expanded.innerModel)).toEqual(['main_tabset:bike+scooter'])
+    expect((model.getNodeById('main_tabset') as TabSetNode).getSelectedNode()?.getId()).toBe('bike')
+    expect(model.getMaximizedTabset()).toBeUndefined()
+    expect(expanded.mainWidgetContext).toEqual({ nodeId: 'bike' })
+    expect(expanded.outerModel).toBe(state.outerModel)
   })
 
-  it('does nothing without a split', () => {
-    const maximized = reducer(createState(singleTabset), toggleMainWidgetMaximize('car'))
+  it('moves only the tabs of the double-clicked tabset', () => {
+    const car: IJsonTabSetNode = { type: 'tabset', id: 'car_tabset', children: [{ type: 'tab', id: 'car', component: 'element' }] }
+    const expanded = reducer(createState(bikeTabsetBesideEmptyMainTabset([car])), expandMainWidget('scooter'))
 
-    expect(maximizedTabset(maximized.innerModel)).toBeUndefined()
-  })
-
-  it.each([
-    ['the kept main tabset', ['car'], ['bike', 'scooter']],
-    ['a removable tabset', ['scooter', 'bike'], ['car']]
-  ])('shows the remaining tabs when the last tab of the maximized tabset closes (%s)', (_, closedIds, remainingIds) => {
-    const maximized = reducer(createState(splitLayoutKeptMainTabset), toggleMainWidgetMaximize(closedIds[0]))
-    const closed = closedIds.reduce((current, tabId) => reducer(current, closeWidget(tabId)), maximized)
-
-    expect(maximizedTabset(closed.innerModel)).toBeUndefined()
-    remainingIds.forEach((tabId) => { expect(Model.fromJson(closed.innerModel).getNodeById(tabId)).toBeDefined() })
-  })
-
-  it('keeps the maximize when another tab of the maximized tabset remains', () => {
-    const maximized = reducer(createState(splitLayoutKeptMainTabset), toggleMainWidgetMaximize('bike'))
-    const closed = reducer(maximized, closeWidget('scooter'))
-
-    expect(maximizedTabset(closed.innerModel)).toBe('bike_tabset')
+    expect(tabsets(expanded.innerModel)).toEqual(['main_tabset:bike+scooter', 'car_tabset:car'])
   })
 
   it.each([
-    ['a new main tab', openMainWidget({ id: 'truck', type: 'tab', component: 'element', config: {} })],
-    ['an open main tab of the hidden tabset', openMainWidget({ id: 'car', type: 'tab', component: 'element', config: {} })],
-    ['a selected main tab of the hidden tabset', setActiveWidgetById('car')]
-  ])('shows all tab groups again for %s', (_, action) => {
-    const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('bike'))
-    const opened = reducer(maximized, action)
+    ['without a split', singleTabset],
+    ['when no tabset is empty', splitLayout]
+  ])('changes nothing %s', (_, layout) => {
+    const expanded = reducer(createState(layout), expandMainWidget('car'))
 
-    expect(maximizedTabset(opened.innerModel)).toBeUndefined()
+    expect(tabsets(expanded.innerModel)).toEqual(tabsets(layout))
   })
 
-  it('keeps the maximize for a main tab opened in the maximized tabset', () => {
-    const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('car'))
-    const opened = reducer(maximized, openMainWidget({ id: 'truck', type: 'tab', component: 'element', config: {} }))
+  it('gives a collapsed empty main tabset its width back', () => {
+    const expanded = reducer(createState(legacyCollapsedSplit), expandMainWidget('car'))
+    const mainTabset = Model.fromJson(expanded.innerModel).getNodeById('main_tabset') as TabSetNode
 
-    expect(maximizedTabset(opened.innerModel)).toBe('main_tabset')
+    expect(tabsets(expanded.innerModel)).toEqual(['main_tabset:car'])
+    expect(mainTabset.getWeight()).toBeGreaterThan(0)
   })
 })

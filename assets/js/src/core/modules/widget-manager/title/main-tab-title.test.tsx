@@ -9,7 +9,7 @@
  */
 
 /**
- * A double-click on the title of a main tab toggles the maximize of its tabset. FlexLayout's drag
+ * A double-click on the title of a main tab expands its tabset. FlexLayout's drag
  * handling swallows the dblclick event, so the second press of the double-click is the trigger.
  */
 
@@ -25,7 +25,7 @@ jest.mock('@sdk/app', () => ({
 }))
 
 jest.mock('../widget-manager-slice', () => ({
-  toggleMainWidgetMaximize: (nodeId: string) => ({ type: 'toggle', payload: nodeId })
+  expandMainWidget: (nodeId: string) => ({ type: 'expand', payload: nodeId })
 }))
 
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -43,14 +43,14 @@ describe('MainTabTitle', () => {
     mockDispatch.mockClear()
   })
 
-  it('toggles the maximize on the second press of a double-click', () => {
+  it('expands on the second press of a double-click', () => {
     render(<MainTabTitle node={ node } />)
 
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
     expect(mockDispatch).not.toHaveBeenCalled()
 
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'toggle', payload: 'title' })
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'expand', payload: 'title' })
   })
 
   it.each([
@@ -72,7 +72,7 @@ describe('MainTabTitle', () => {
     expect(mockDispatch).not.toHaveBeenCalled()
   })
 
-  it('toggles when the first press remounts the title, as selecting the tab beside an empty tabset does', () => {
+  it('expands when the first press remounts the title, as selecting the tab beside an empty tabset does', () => {
     const { unmount } = render(<MainTabTitle node={ node } />)
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
     unmount()
@@ -80,7 +80,7 @@ describe('MainTabTitle', () => {
     render(<MainTabTitle node={ node } />)
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
 
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'toggle', payload: 'title' })
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'expand', payload: 'title' })
   })
 
   it('ignores a middle-click double-click, which closes tabs', () => {

@@ -19,7 +19,7 @@ import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
 import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
 import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
-import { clearEmptyMaximizedTabset, showMainWidget, toggleMaximize } from './utils/maximize-main-widget'
+import { expandMainWidgetTabset } from './utils/expand-main-widget-tabset'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -115,16 +115,16 @@ const slice = createSlice({
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
-        showMainWidget(model, node)
         state.innerModel = { ...model.toJson() }
         state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     },
 
-    toggleMainWidgetMaximize: (state, action: PayloadAction<string>) => {
+    expandMainWidget: (state, action: PayloadAction<string>) => {
       const model = Model.fromJson(state.innerModel)
-      toggleMaximize(model, action.payload)
-      state.innerModel = { ...model.toJson() }
+      expandMainWidgetTabset(model, action.payload)
+      state.innerModel = restoreCollapsedRows(model.toJson())
+      state.mainWidgetContext = resolveMainWidgetContext(model)
     },
 
     openMainWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -138,7 +138,7 @@ const slice = createSlice({
       if (node !== undefined) {
         model.doAction(Actions.selectTab(node.getId()))
       } else {
-        node = model.doAction(
+        model.doAction(
           Actions.addNode(
             action.payload,
             'main_tabset',
@@ -149,7 +149,6 @@ const slice = createSlice({
         )
       }
 
-      showMainWidget(model, node)
       state.innerModel = { ...model.toJson() }
       state.mainWidgetContext = resolveMainWidgetContext(model)
     },
@@ -220,7 +219,6 @@ const slice = createSlice({
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
-        clearEmptyMaximizedTabset(model)
         state.innerModel = restoreCollapsedRows(model.toJson())
         state.mainWidgetContext = resolveMainWidgetContext(model)
       }
@@ -255,5 +253,5 @@ injectSliceWithState({
   reducer: persistedReducer
 })
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, toggleMainWidgetMaximize, openMainWidget, updateWidget, migrateWidget, rebindWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, expandMainWidget, openMainWidget, updateWidget, migrateWidget, rebindWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
 export const { selectInnerModel, selectOuterModel, selectMainWidgetContext, selectWidgetManagerRestored } = slice.selectors

@@ -14,7 +14,7 @@ import { type TabNode } from 'flexlayout-react'
 import { useAppDispatch } from '@sdk/app'
 import { Box } from '@Pimcore/components/box/box'
 import { TabTitleOuterContainer } from './tab-title-outer-container'
-import { toggleMainWidgetMaximize } from '../widget-manager-slice'
+import { expandMainWidget } from '../widget-manager-slice'
 import { useStyles } from './main-tab-title.styles'
 
 export interface MainTabTitleProps {
@@ -55,7 +55,7 @@ const MainTabTitleInner = ({ node }: MainTabTitleProps): React.JSX.Element => {
   // flexlayout's drag glass swallows the dblclick event, the second press carries the click count
   const onMouseDown = useCallback((event: MouseEvent<HTMLElement>): void => {
     if (event.button === 0 && event.detail === 2 && pressedTabIds.previous === node.getId()) {
-      dispatch(toggleMainWidgetMaximize(node.getId()))
+      dispatch(expandMainWidget(node.getId()))
     }
   }, [dispatch, node])
 
