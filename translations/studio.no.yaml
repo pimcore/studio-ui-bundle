@@ -1679,6 +1679,9 @@ user-management.add-folder: Ny mappe
 user-management.add-folder.label: Oppgi navnet på den nye mappen
 user-management.add-user: Ny bruker
 user-management.add-user.label: Oppgi navnet på den nye brukeren
+user-management.send-invitation: Send invitation link
+user-management.send-invitation.success: "Invitation sent to {{email}}"
+user-management.send-invitation.no-email: The user has no email address
 user-management.last-login: Siste innlogging
 user-management.search.id: ID
 roles.tree.all: Alle roller
