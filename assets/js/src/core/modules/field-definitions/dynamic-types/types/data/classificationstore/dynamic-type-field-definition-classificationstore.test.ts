@@ -25,7 +25,7 @@ jest.mock('@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstract
 }))
 
 jest.mock('@Pimcore/modules/field-definitions/dynamic-types/types/data/classificationstore/field-definition-classificationstore-form-fields', () => ({
-  FieldDefinitionClassificationstoreFormFields: () => null
+  FieldDefinitionClassificationstoreFormFields: jest.fn()
 }))
 
 const {

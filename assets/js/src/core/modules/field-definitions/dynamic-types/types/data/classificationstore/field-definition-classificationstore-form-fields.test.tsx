@@ -25,10 +25,10 @@ jest.mock('@sdk/components', () => ({
       </div>
     )
   },
-  InputNumber: () => null,
-  Select: () => null,
-  Switch: () => null,
-  TextArea: () => null
+  InputNumber: () => <span />,
+  Select: () => <span />,
+  Switch: () => <span />,
+  TextArea: () => <span />
 }))
 
 jest.mock('@Pimcore/modules/field-definitions/dynamic-types/hooks/use-classification-store-options', () => ({
