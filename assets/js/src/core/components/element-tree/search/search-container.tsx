@@ -11,6 +11,8 @@
 import React from 'react'
 import { Input } from 'antd'
 import { isEmpty } from 'lodash'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useStyles } from '@Pimcore/components/search-input/search-input.styles'
 import { type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 import { useTreeFilter } from '../provider/tree-filter-provider/use-tree-filter'
@@ -25,6 +27,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   const { searchTerm, setSearchTerm, setPage } = useElementTreeNode(props.node.id)
   const { total } = props
   const { pageSize } = useTreeFilter()
+  const { styles } = useStyles()
   const searchActive = !isEmpty(searchTerm) || total > pageSize
 
   function onSearch (searchTerm: string): void {
@@ -38,6 +41,14 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
 
   return (
     <Search
+      allowClear={ {
+        clearIcon: (
+          <Icon
+            className={ styles.closeIcon }
+            value='close'
+          />
+        )
+      } }
       aria-label={ props.label }
       defaultValue={ searchTerm }
       loading={ props.isLoading }

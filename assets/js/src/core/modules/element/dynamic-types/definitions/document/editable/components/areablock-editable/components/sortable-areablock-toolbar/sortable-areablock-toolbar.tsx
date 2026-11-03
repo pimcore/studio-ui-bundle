@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { isNil } from 'lodash'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space, Dropdown } from '@sdk/components'
 import { useStyles } from '../../areablock-editable.styles'
-import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
+import { type AreaInsertPosition, type AreablockEditableConfig } from '../../areablock-editable'
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
@@ -27,7 +27,6 @@ export interface SortableAreablockToolbarProps {
   id: string
   element: HTMLElement
   limitReached: boolean
-  areaTypes: AreaType[]
   config?: AreablockEditableConfig
   // Pre-computed in the parent (use-areablock-controls) so this component can be memoized.
   isFirst: boolean
@@ -35,7 +34,7 @@ export interface SortableAreablockToolbarProps {
   isHidden: boolean
   toolbarTitle?: string
   hasDialogBox: boolean
-  onAddArea: (element: HTMLElement | null, areaType?: string) => void
+  onAddArea: (element: HTMLElement | null, areaType?: string, position?: AreaInsertPosition) => void
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
@@ -60,7 +59,6 @@ const SortableAreablockToolbarInnerComponent = ({
   id,
   element,
   limitReached,
-  areaTypes,
   config,
   isFirst,
   isLast,
@@ -82,49 +80,43 @@ const SortableAreablockToolbarInnerComponent = ({
 }: SortableAreablockToolbarInnerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const clipboardItem = useAreablockClipboard()
   const canPaste = !isNil(clipboardItem) && !limitReached && configUtils.isTypePasteable(config, clipboardItem.type)
 
   const { menuItems } = useAreablockMenu({
     config,
-    onAddArea: (areaType: string) => { onAddArea(element, areaType) }
+    onAddArea: (areaType: string, position: AreaInsertPosition) => {
+      onAddArea(element, areaType, position)
+      setIsMenuOpen(false)
+    },
+    showInsertPosition: true
   })
 
   const buttons: React.ReactNode[] = []
   let deleteButton: React.ReactNode = null
 
+  // Always the dropdown, even for a single area type: it is what carries the
+  // insert above and insert below buttons.
   if (!limitReached) {
-    if (areaTypes.length === 1) {
-      buttons.push(
+    buttons.push(
+      <Dropdown
+        key="plus-dropdown"
+        menu={ { items: menuItems } }
+        onOpenChange={ setIsMenuOpen }
+        open={ isMenuOpen }
+        placement="bottomLeft"
+        trigger={ ['click'] }
+      >
         <IconButton
           aria-label={ t('areablock.new') }
           icon={ { value: 'new' } }
-          key="plus"
-          onClick={ () => {
-            onAddArea(element, areaTypes[0].type)
-          } }
           size="small"
           tooltip={ { title: t('areablock.new') } }
         />
-      )
-    } else {
-      buttons.push(
-        <Dropdown
-          key="plus-dropdown"
-          menu={ { items: menuItems } }
-          placement="bottomLeft"
-          trigger={ ['click'] }
-        >
-          <IconButton
-            aria-label={ t('areablock.new') }
-            icon={ { value: 'new' } }
-            size="small"
-            tooltip={ { title: t('areablock.new') } }
-          />
-        </Dropdown>
-      )
-    }
+      </Dropdown>
+    )
   }
 
   buttons.push(

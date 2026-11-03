@@ -30,6 +30,7 @@ import { type DynamicTypeGridCellNumber } from './definitions/grid-cell/types/nu
 import { type DynamicTypeGridCellSelect } from './definitions/grid-cell/types/select/dynamic-type-grid-cell-select'
 import { type DynamicTypeGridCellMultiSelect } from './definitions/grid-cell/types/multi-select/dynamic-type-grid-cell-multi-select'
 import { type DynamicTypeGridCellCheckbox } from './definitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
+import { type DynamicTypeGridCellRadio } from './definitions/grid-cell/types/radio/dynamic-type-grid-cell-radio'
 import { type DynamicTypeGridCellDate } from './definitions/grid-cell/types/date/dynamic-type-grid-cell-date'
 import { type DynamicTypeGridCellTime } from './definitions/grid-cell/types/time/dynamic-type-grid-cell-time'
 import { type DynamicTypeGridCellDateTime } from './definitions/grid-cell/types/date-time/dynamic-type-grid-cell-date-time'
@@ -286,6 +287,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellMultiSelect>(serviceIds['DynamicTypes/GridCell/MultiSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellBoolean>(serviceIds['DynamicTypes/GridCell/Boolean']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellCheckbox>(serviceIds['DynamicTypes/GridCell/Checkbox']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellRadio>(serviceIds['DynamicTypes/GridCell/Radio']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDate>(serviceIds['DynamicTypes/GridCell/Date']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTime>(serviceIds['DynamicTypes/GridCell/Time']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDateTime>(serviceIds['DynamicTypes/GridCell/DateTime']))

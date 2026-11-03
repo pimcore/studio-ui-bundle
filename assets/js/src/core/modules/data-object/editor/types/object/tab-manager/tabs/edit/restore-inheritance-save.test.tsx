@@ -109,6 +109,7 @@ jest.mock('@Pimcore/modules/data-object/services/processors/data-object-save-dat
   DataObjectSaveDataContext: function DataObjectSaveDataContext () {}
 }))
 jest.mock('@Pimcore/lib/event-bus', () => ({ eventBus: { publish: jest.fn() } }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: true }) }))
 jest.mock('@Pimcore/lib/event-bus/event-types', () => ({ eventTypes: {} }))
 jest.mock('@Pimcore/modules/element/services/edit-lock-gate', () => ({ awaitEditLockPersistAllowed: async () => true }))
 jest.mock('@Pimcore/components/message/useMessage', () => ({ useMessage: () => ({ error: jest.fn() }) }))
@@ -211,6 +212,7 @@ const Field = ({ name, title }: { name: string[], title: string }): React.JSX.El
     _props={ { name, title, noteditable: false, inherited: false } as any }
     formFieldName={ name }
     objectDataType={ dataType }
+    technicalName={ name[name.length - 1] }
   />
 )
 
