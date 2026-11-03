@@ -333,6 +333,68 @@ describe('KeyedList', () => {
       expect(onChange).toHaveBeenLastCalledWith({ added: { name: 'hello' } })
     })
 
+    it('add() stops exempting registrations once the parent echoes the value back (regression #15682)', () => {
+      const onChange = jest.fn()
+      const first = (
+        <RegisteringField
+          initialValue="hello"
+          name={ ['attributes', 'added', 'name'] }
+        />
+      )
+      const both = (
+        <>
+          {first}
+          <RegisteringField
+            initialValue="x"
+            name={ ['attributes', 'added', 'extra'] }
+          />
+        </>
+      )
+      const props = { value: { existing: { name: 'a' } }, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      rerender(keyedListUi(props, first))
+      flushDebounce()
+
+      const echoedProps = { value: { existing: { name: 'a' }, added: { name: 'hello' } }, onChange }
+      rerender(keyedListUi(echoedProps, first))
+      flushDebounce()
+      onChange.mockClear()
+
+      // a field mounting later under the saved entry is part of the loaded state, not a change
+      rerender(keyedListUi(echoedProps, both))
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
+    it('add() only exempts the added key, registrations of loaded entries stay baseline (regression #15682)', () => {
+      const onChange = jest.fn()
+      const props = { value: { existing: { name: 'a' } }, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      flushDebounce()
+
+      rerender(keyedListUi(props, <RegisteringField
+        initialValue="x"
+        name={ ['attributes', 'existing', 'other'] }
+                                  />))
+      flushDebounce()
+      onChange.mockClear()
+
+      // without the added entry the value equals the loaded state plus the registered default: no change left
+      act(() => { operations.remove('added') })
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
     it('add() does not overwrite an existing key', () => {
       const onChange = jest.fn()
 
