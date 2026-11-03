@@ -388,11 +388,31 @@ describe('KeyedList', () => {
       flushDebounce()
       onChange.mockClear()
 
-      // without the added entry the value equals the loaded state plus the registered default: no change left
+      // the added entry was reported, so removing it again before any echo is a change to report
       act(() => { operations.remove('added') })
       flushDebounce()
 
-      expect(onChange).not.toHaveBeenCalled()
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenLastCalledWith({ existing: { name: 'a', other: 'x' } })
+    })
+
+    it('add() then remove() before any echo reports the removal; an unreported addition stays silent (regression #15682)', () => {
+      const onChange = jest.fn()
+      renderKeyedList({ value: { existing: { name: 'a' } }, onChange })
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      flushDebounce()
+      expect(onChange).toHaveBeenCalledTimes(1)
+
+      act(() => { operations.remove('added') })
+      flushDebounce()
+      expect(onChange).toHaveBeenCalledTimes(2)
+      expect(onChange).toHaveBeenLastCalledWith({ existing: { name: 'a' } })
+
+      // nothing further to report
+      flushDebounce()
+      expect(onChange).toHaveBeenCalledTimes(2)
     })
 
     it('add() does not overwrite an existing key', () => {

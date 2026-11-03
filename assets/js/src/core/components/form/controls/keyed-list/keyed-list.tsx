@@ -51,6 +51,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   // keys added through add() since the last incoming value: their field registrations (e.g. prefilled
   // defaults) are content the user brought in, not part of the loaded state, so they stay a change
   const addedKeysRef = useRef<Set<string>>(new Set())
+  // the last value handed to onChange since the last incoming value: reverting to the baseline after that
+  // report still has to be reported, otherwise the consumer keeps the reported state
+  const lastReportedRef = useRef<KeyedListData['values'] | null>(null)
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
@@ -73,6 +76,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
 
     previousInitialValue.current = initialValue
     addedKeysRef.current.clear()
+    lastReportedRef.current = null
 
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -155,7 +159,10 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     // a list that came in empty and is still empty has nothing to report: registrations of
     // mounting fields only touch the baseline. Emptying a list that came in with entries (removing its last
     // entry) is a real change, consumers derive their deletion markers from it.
-    if (!isEqual(value, baselineValue.current) && !(isEmpty(value) && isEmpty(initialValue))) {
+    const differsFromBaseline = !isEqual(value, baselineValue.current) && !(isEmpty(value) && isEmpty(initialValue))
+    const revertsReported = lastReportedRef.current !== null && !isEqual(value, lastReportedRef.current)
+    if (differsFromBaseline || revertsReported) {
+      lastReportedRef.current = cloneDeep(value)
       onChange(value)
     }
   }, [bufferedValue])
