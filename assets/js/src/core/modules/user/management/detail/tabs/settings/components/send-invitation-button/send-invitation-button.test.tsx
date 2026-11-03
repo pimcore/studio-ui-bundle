@@ -11,9 +11,10 @@
 const mockSendInvitation = jest.fn()
 const mockSuccess = jest.fn()
 const mockTrackError = jest.fn()
+const mockMutationState = { isLoading: false }
 
 jest.mock('@Pimcore/modules/user/user-api-slice-enhanced', () => ({
-  useUserSendInvitationMutation: () => [mockSendInvitation, { isLoading: false }]
+  useUserSendInvitationMutation: () => [mockSendInvitation, mockMutationState]
 }))
 jest.mock('@Pimcore/components/message/useMessage', () => ({
   useMessage: () => ({ success: mockSuccess, error: jest.fn() })
@@ -58,6 +59,7 @@ import { SendInvitationButton } from './send-invitation-button'
 describe('SendInvitationButton', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockMutationState.isLoading = false
     mockSendInvitation.mockResolvedValue({ data: undefined })
   })
 
@@ -92,6 +94,34 @@ describe('SendInvitationButton', () => {
       />
     )
 
+    expect(screen.getByRole('button')).toBeDisabled()
+  })
+
+  it('is disabled while the request is pending, so one click cannot send two invitations', () => {
+    mockMutationState.isLoading = true
+
+    render(
+      <SendInvitationButton
+        email="invitee@example.com"
+        userId={ 42 }
+      />
+    )
+
+    // the project's Button renders a spinner for `loading` but neither forwards it to Ant Design
+    // nor suppresses onClick, so only `disabled` keeps a second request out
+    expect(screen.getByRole('button')).toBeDisabled()
+  })
+
+  it('is disabled while the editor holds unsaved changes', () => {
+    render(
+      <SendInvitationButton
+        email="new@example.com"
+        hasUnsavedChanges
+        userId={ 42 }
+      />
+    )
+
+    // the endpoint mails the stored address, which is not the one on screen yet
     expect(screen.getByRole('button')).toBeDisabled()
   })
 

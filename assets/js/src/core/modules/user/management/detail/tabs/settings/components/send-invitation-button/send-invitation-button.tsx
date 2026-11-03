@@ -24,6 +24,8 @@ export interface SendInvitationButtonProps {
   userId: number
   email?: string | null
   lastLogin?: number | null
+  /** The editor holds unsaved changes, so the stored email may not be the one on screen. */
+  hasUnsavedChanges?: boolean
   disabled?: boolean
 }
 
@@ -31,6 +33,7 @@ export const SendInvitationButton = ({
   userId,
   email,
   lastLogin,
+  hasUnsavedChanges,
   disabled
 }: SendInvitationButtonProps): React.JSX.Element | null => {
   const { t } = useTranslation()
@@ -47,6 +50,23 @@ export const SendInvitationButton = ({
   }
 
   const hasEmail = typeof email === 'string' && email.trim().length > 0
+
+  // The endpoint mails the stored address, not the one in the form. Sending while the editor is
+  // dirty would hand an account access token to the previous mailbox and then name the new one in
+  // the confirmation, so the invitation waits until the change is saved.
+  const isUnsaved = hasUnsavedChanges === true
+
+  const getBlockedReason = (): string | undefined => {
+    if (!hasEmail) {
+      return t('user-management.send-invitation.no-email')
+    }
+
+    if (isUnsaved) {
+      return t('user-management.send-invitation.unsaved-changes')
+    }
+
+    return undefined
+  }
 
   const handleClick = async (): Promise<void> => {
     // The link must land on the reset password route: it logs the user in with the token and
@@ -70,10 +90,10 @@ export const SendInvitationButton = ({
   return (
     <Button
       className="m-t-small"
-      disabled={ disabled === true || !hasEmail }
+      disabled={ disabled === true || !hasEmail || isUnsaved || isLoading }
       loading={ isLoading }
       onClick={ () => { void handleClick() } }
-      title={ hasEmail ? undefined : t('user-management.send-invitation.no-email') }
+      title={ getBlockedReason() }
       type="default"
     >
       {t('user-management.send-invitation')}

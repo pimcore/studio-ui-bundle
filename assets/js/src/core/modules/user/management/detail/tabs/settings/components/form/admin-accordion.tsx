@@ -22,8 +22,9 @@ interface IAdminAccordion {
   userId?: number
   email?: string | null
   lastLogin?: number | null
+  hasUnsavedChanges?: boolean
 }
-const AdminAccordion = ({ isDisabled, userId, email, lastLogin, ...props }: IAdminAccordion): React.JSX.Element => {
+const AdminAccordion = ({ isDisabled, userId, email, lastLogin, hasUnsavedChanges, ...props }: IAdminAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { Text } = Typography
   const user = getCurrentUser()
@@ -57,6 +58,7 @@ const AdminAccordion = ({ isDisabled, userId, email, lastLogin, ...props }: IAdm
           {userId !== undefined && (
             <SendInvitationButton
               email={ email }
+              hasUnsavedChanges={ hasUnsavedChanges }
               lastLogin={ lastLogin }
               userId={ userId }
             />
