@@ -1293,6 +1293,7 @@ close-tab: Tab schließen
 close-others: Andere schließen
 close-unmodified: Unveränderte schließen
 close-all: Alle schließen
+use-full-space: Ganzen Bereich nutzen
 asset.tree.context-menu.download: Herunterladen
 asset.tree.context-menu.download-as-zip: Als ZIP herunterladen
 element-selector.title.single: Element auswählen

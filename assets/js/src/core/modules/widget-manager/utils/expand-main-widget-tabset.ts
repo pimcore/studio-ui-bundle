@@ -23,19 +23,30 @@ const findEmptyTabset = (model: Model): TabSetNode | undefined => {
   return emptyTabset
 }
 
+const findExpansion = (model: Model, nodeId: string): { tabset: TabSetNode, emptyTabset: TabSetNode } | undefined => {
+  const tabset = model.getNodeById(nodeId)?.getParent()
+  const emptyTabset = findEmptyTabset(model)
+
+  return tabset instanceof TabSetNode && !isUndefined(emptyTabset) ? { tabset, emptyTabset } : undefined
+}
+
+export const canExpandMainWidgetTabset = (model: Model, nodeId: string): boolean => !isUndefined(findExpansion(model, nodeId))
+
 /**
  * Lets the tabset of the given main widget take the space of an empty tabset. Only the main tabset
  * stays when emptied, so the tabs move into it and their own tabset is removed.
  */
 export const expandMainWidgetTabset = (model: Model, nodeId: string): void => {
-  const tabset = model.getNodeById(nodeId)?.getParent()
-  const emptyTabset = findEmptyTabset(model)
+  const expansion = findExpansion(model, nodeId)
 
-  if (!(tabset instanceof TabSetNode) || isUndefined(emptyTabset)) {
+  if (isUndefined(expansion)) {
     return
   }
 
-  [...tabset.getChildren()].forEach((tab) => {
+  const { tabset, emptyTabset } = expansion
+  const tabs = [...tabset.getChildren()]
+
+  tabs.forEach((tab) => {
     model.doAction(Actions.moveNode(tab.getId(), emptyTabset.getId(), DockLocation.CENTER, -1, false))
   })
 

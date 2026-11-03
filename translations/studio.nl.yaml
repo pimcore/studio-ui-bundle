@@ -1293,6 +1293,7 @@ close-tab: Tabblad sluiten
 close-others: Overige sluiten
 close-unmodified: Ongewijzigde sluiten
 close-all: Alles sluiten
+use-full-space: Volledige ruimte gebruiken
 asset.tree.context-menu.download: Downloaden
 asset.tree.context-menu.download-as-zip: Downloaden als ZIP
 element-selector.title.single: Element selecteren

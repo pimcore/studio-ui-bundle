@@ -1293,6 +1293,7 @@ close-tab: Stäng flik
 close-others: Stäng andra
 close-unmodified: Stäng oförändrade
 close-all: Stäng alla
+use-full-space: Använd hela ytan
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
 element-selector.title.single: Välj ett element

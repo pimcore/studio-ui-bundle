@@ -10,13 +10,39 @@
 
 import type { DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { type TabNode } from 'flexlayout-react'
+import { isUndefined } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type CreateContextMenuItemsProps } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
+import { store } from '@Pimcore/app/store'
 import { t } from 'i18next'
+import { expandMainWidget } from '../widget-manager-slice'
+import { canExpandMainWidgetTabset } from '../utils/expand-main-widget-tabset'
 
-export const createContextMenuItems = ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps): DropdownProps['menu']['items'] => {
+const createExpandItems = ({ contextMenuState, closeContextMenu, model }: CreateContextMenuItemsProps): NonNullable<DropdownProps['menu']['items']> => {
+  const nodeId = contextMenuState?.tabNode.getId()
+
+  if (isUndefined(nodeId) || !canExpandMainWidgetTabset(model, nodeId)) {
+    return []
+  }
+
+  return [
+    { type: 'divider', key: 'use-full-space-divider' },
+    {
+      key: 'use-full-space',
+      label: t('use-full-space'),
+      onClick: () => {
+        store.dispatch(expandMainWidget(nodeId))
+        closeContextMenu()
+      }
+    }
+  ]
+}
+
+export const createContextMenuItems = (props: CreateContextMenuItemsProps): DropdownProps['menu']['items'] => {
+  const { contextMenuState, closeContextMenu, model, closeWidget } = props
+
   return [
     {
       key: 'close-tab',
@@ -74,6 +100,7 @@ export const createContextMenuItems = ({ contextMenuState, closeContextMenu, mod
           closeContextMenu()
         }
       }
-    }
+    },
+    ...createExpandItems(props)
   ]
 }
