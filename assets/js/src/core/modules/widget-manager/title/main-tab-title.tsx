@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { memo, useCallback, useEffect, useRef, type MouseEvent } from 'react'
+import React, { memo, useCallback, useEffect, type MouseEvent } from 'react'
 import cn from 'classnames'
 import { type TabNode } from 'flexlayout-react'
 import { useAppDispatch } from '@sdk/app'
@@ -21,30 +21,40 @@ export interface MainTabTitleProps {
   node: TabNode
 }
 
+// the browser counts clicks by position, so a press on another element (e.g. a close button) can come first;
+// kept by tab id for all titles, because selecting a tab can remount its title between the two presses
+const pressedTabIds: { previous?: string, current?: string } = {}
+let mountedTitles = 0
+
+const recordPress = (event: globalThis.MouseEvent): void => {
+  const title = event.target instanceof Element ? event.target.closest<HTMLElement>('.widget-manager__main-tab-title') : null
+  pressedTabIds.previous = pressedTabIds.current
+  pressedTabIds.current = title?.dataset.tabId
+}
+
 const MainTabTitleInner = ({ node }: MainTabTitleProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { styles } = useStyles()
-  const pressTargets = useRef<{ previous: EventTarget | null, current: EventTarget | null }>({ previous: null, current: null })
 
-  // the browser counts clicks by position, so a press on another element (e.g. a close button) can come first
   useEffect(() => {
-    const onPress = (event: globalThis.MouseEvent): void => {
-      pressTargets.current = { previous: pressTargets.current.current, current: event.target }
+    mountedTitles += 1
+
+    if (mountedTitles === 1) {
+      document.addEventListener('mousedown', recordPress, true)
     }
 
-    document.addEventListener('mousedown', onPress, true)
-
     return () => {
-      document.removeEventListener('mousedown', onPress, true)
+      mountedTitles -= 1
+
+      if (mountedTitles === 0) {
+        document.removeEventListener('mousedown', recordPress, true)
+      }
     }
   }, [])
 
   // flexlayout's drag glass swallows the dblclick event, the second press carries the click count
   const onMouseDown = useCallback((event: MouseEvent<HTMLElement>): void => {
-    const previousTarget = pressTargets.current.previous
-    const previousHitTitle = previousTarget instanceof Node && event.currentTarget.contains(previousTarget)
-
-    if (event.button === 0 && event.detail === 2 && previousHitTitle) {
+    if (event.button === 0 && event.detail === 2 && pressedTabIds.previous === node.getId()) {
       dispatch(toggleMainWidgetMaximize(node.getId()))
     }
   }, [dispatch, node])
@@ -53,6 +63,7 @@ const MainTabTitleInner = ({ node }: MainTabTitleProps): React.JSX.Element => {
     <Box
       className={ cn('widget-manager__main-tab-title', styles.title) }
       component='span'
+      data-tab-id={ node.getId() }
       onMouseDown={ onMouseDown }
     >
       <TabTitleOuterContainer node={ node } />

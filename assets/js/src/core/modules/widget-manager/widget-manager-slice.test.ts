@@ -14,12 +14,10 @@ import { injectSliceWithState } from '@sdk/app'
 import {
   closeWidget,
   initialState,
-  openBottomWidget,
   openMainWidget,
   setActiveWidgetById,
   toggleMainWidgetMaximize,
   updateInnerModel,
-  updateOuterModel,
   type WidgetManagerState
 } from './widget-manager-slice'
 
@@ -62,23 +60,6 @@ describe('widget-manager-slice', () => {
   })
 })
 
-// the tree is open on the left, the right side widget is closed
-const outerLayout: IJsonModel = {
-  global: {},
-  layout: {
-    type: 'row',
-    id: 'main',
-    children: [
-      { type: 'tabset', id: 'main_tabset', children: [{ type: 'tab', id: 'inner', component: 'inner-widget-manager' }] },
-      { type: 'tabset', id: 'bottom_tabset', children: [{ type: 'tab', id: 'jobs', component: 'jobs' }] }
-    ]
-  },
-  borders: [
-    { type: 'border', location: 'left', selected: 0, children: [{ type: 'tab', id: 'tree', component: 'tree' }, { type: 'tab', id: 'search', component: 'search' }] },
-    { type: 'border', location: 'right', selected: -1, children: [{ type: 'tab', id: 'notes', component: 'notes' }] }
-  ]
-}
-
 const singleTabset: IJsonModel = {
   global: {},
   layout: { type: 'row', id: 'main', children: [{ type: 'tabset', id: 'main_tabset', children: [{ type: 'tab', id: 'car', component: 'element' }] }] }
@@ -113,85 +94,43 @@ const splitLayoutKeptMainTabset: IJsonModel = {
   }
 }
 
-const openSideWidgets = (json: IJsonModel): Array<string | undefined> =>
-  Model.fromJson(json).getBorderSet().getBorders().map((border) => border.getSelectedNode()?.getId())
-
 const maximizedTabset = (json: IJsonModel): string | undefined => Model.fromJson(json).getMaximizedTabset()?.getId()
 
-describe('widget-manager-slice maximize of the main area', () => {
+describe('widget-manager-slice maximize of a split tabset', () => {
   const { reducer } = (injectSliceWithState as jest.Mock).mock.calls[0][0] as { reducer: Reducer<WidgetManagerState, UnknownAction> }
-  const createState = (innerModel: IJsonModel): WidgetManagerState => ({ ...initialState, outerModel: outerLayout, innerModel })
+  const createState = (innerModel: IJsonModel): WidgetManagerState => ({ ...initialState, innerModel })
 
-  it('hides the bottom panel and closes the open side widgets', () => {
-    const state = createState(singleTabset)
-    const maximized = reducer(state, toggleMainWidgetMaximize('car'))
-
-    expect(maximizedTabset(maximized.outerModel)).toBe('main_tabset')
-    expect(openSideWidgets(maximized.outerModel)).toEqual([undefined, undefined])
-    expect(maximized.innerModel).toBe(state.innerModel)
-  })
-
-  it('reopens exactly the side widgets that were open before on the second toggle', () => {
-    const maximized = reducer(createState(singleTabset), toggleMainWidgetMaximize('car'))
-    const restored = reducer(maximized, toggleMainWidgetMaximize('car'))
-
-    expect(maximizedTabset(restored.outerModel)).toBeUndefined()
-    expect(openSideWidgets(restored.outerModel)).toEqual(['tree', undefined])
-    expect(restored.maximizeRestoreTabIds).toBeUndefined()
-  })
-
-  it('maximizes the tabset of the main tab in a split layout and undoes it on restore', () => {
-    const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('bike'))
+  it('lets the tabset of the main tab fill the main area and undoes it on the second toggle', () => {
+    const state = createState(splitLayout)
+    const maximized = reducer(state, toggleMainWidgetMaximize('bike'))
     const restored = reducer(maximized, toggleMainWidgetMaximize('bike'))
 
     expect(maximizedTabset(maximized.innerModel)).toBe('bike_tabset')
     expect(maximizedTabset(restored.innerModel)).toBeUndefined()
+    expect(maximized.outerModel).toBe(state.outerModel)
   })
 
-  it('ends the mode when a side widget is opened, without reopening the earlier ones', () => {
-    const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('bike'))
-    const opened = reducer(maximized, setActiveWidgetById('search'))
-
-    expect(maximizedTabset(opened.outerModel)).toBeUndefined()
-    expect(maximizedTabset(opened.innerModel)).toBeUndefined()
-    expect(openSideWidgets(opened.outerModel)).toEqual(['search', undefined])
-    expect(opened.maximizeRestoreTabIds).toBeUndefined()
-  })
-
-  it('ends the mode when a bottom widget is opened', () => {
+  it('does nothing without a split', () => {
     const maximized = reducer(createState(singleTabset), toggleMainWidgetMaximize('car'))
-    const opened = reducer(maximized, openBottomWidget({ id: 'jobs', type: 'tab', component: 'jobs', config: {} }))
 
-    expect(maximizedTabset(opened.outerModel)).toBeUndefined()
-    expect(openSideWidgets(opened.outerModel)).toEqual([undefined, undefined])
-  })
-
-  it('restores the layout when the last main tab is closed', () => {
-    const maximized = reducer(createState(singleTabset), toggleMainWidgetMaximize('car'))
-    const closed = reducer(maximized, closeWidget('car'))
-
-    expect(maximizedTabset(closed.outerModel)).toBeUndefined()
-    expect(openSideWidgets(closed.outerModel)).toEqual(['tree', undefined])
+    expect(maximizedTabset(maximized.innerModel)).toBeUndefined()
   })
 
   it.each([
-    ['the kept main tabset', ['car']],
-    ['a removable tabset', ['scooter', 'bike']]
-  ])('ends the mode when the last tab of the maximized tabset in a split layout closes (%s)', (_, tabIds) => {
-    const maximized = reducer(createState(splitLayoutKeptMainTabset), toggleMainWidgetMaximize(tabIds[0]))
-    const closed = tabIds.reduce((current, tabId) => reducer(current, closeWidget(tabId)), maximized)
+    ['the kept main tabset', ['car'], ['bike', 'scooter']],
+    ['a removable tabset', ['scooter', 'bike'], ['car']]
+  ])('shows the remaining tabs when the last tab of the maximized tabset closes (%s)', (_, closedIds, remainingIds) => {
+    const maximized = reducer(createState(splitLayoutKeptMainTabset), toggleMainWidgetMaximize(closedIds[0]))
+    const closed = closedIds.reduce((current, tabId) => reducer(current, closeWidget(tabId)), maximized)
 
-    expect(maximizedTabset(closed.outerModel)).toBeUndefined()
     expect(maximizedTabset(closed.innerModel)).toBeUndefined()
-    expect(openSideWidgets(closed.outerModel)).toEqual(['tree', undefined])
-    expect(closed.maximizeRestoreTabIds).toBeUndefined()
+    remainingIds.forEach((tabId) => { expect(Model.fromJson(closed.innerModel).getNodeById(tabId)).toBeDefined() })
   })
 
-  it('keeps the mode when another tab of the maximized tabset remains', () => {
+  it('keeps the maximize when another tab of the maximized tabset remains', () => {
     const maximized = reducer(createState(splitLayoutKeptMainTabset), toggleMainWidgetMaximize('bike'))
     const closed = reducer(maximized, closeWidget('scooter'))
 
-    expect(maximizedTabset(closed.outerModel)).toBe('main_tabset')
     expect(maximizedTabset(closed.innerModel)).toBe('bike_tabset')
   })
 
@@ -199,27 +138,17 @@ describe('widget-manager-slice maximize of the main area', () => {
     ['a new main tab', openMainWidget({ id: 'truck', type: 'tab', component: 'element', config: {} })],
     ['an open main tab of the hidden tabset', openMainWidget({ id: 'car', type: 'tab', component: 'element', config: {} })],
     ['a selected main tab of the hidden tabset', setActiveWidgetById('car')]
-  ])('shows both tab groups but keeps the mode for %s', (_, action) => {
+  ])('shows all tab groups again for %s', (_, action) => {
     const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('bike'))
     const opened = reducer(maximized, action)
 
     expect(maximizedTabset(opened.innerModel)).toBeUndefined()
-    expect(maximizedTabset(opened.outerModel)).toBe('main_tabset')
-    expect(opened.maximizeRestoreTabIds).toEqual(['tree'])
   })
 
-  it('keeps the split maximize for a main tab opened in the maximized tabset', () => {
+  it('keeps the maximize for a main tab opened in the maximized tabset', () => {
     const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('car'))
     const opened = reducer(maximized, openMainWidget({ id: 'truck', type: 'tab', component: 'element', config: {} }))
 
     expect(maximizedTabset(opened.innerModel)).toBe('main_tabset')
-  })
-
-  it('drops the split maximize when the outer layout is replaced, e.g. by a perspective switch', () => {
-    const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('bike'))
-    const replaced = reducer(maximized, updateOuterModel(outerLayout))
-
-    expect(maximizedTabset(replaced.innerModel)).toBeUndefined()
-    expect(replaced.maximizeRestoreTabIds).toBeUndefined()
   })
 })

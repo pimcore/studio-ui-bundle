@@ -19,7 +19,7 @@ import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
 import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
 import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
-import { endMaximize, forgetMaximizeIfEnded, isLastMaximizedTab, restoreMaximizeIfMaximized, showMainWidget, toggleMaximize } from './utils/maximize-main-widget'
+import { clearEmptyMaximizedTabset, showMainWidget, toggleMaximize } from './utils/maximize-main-widget'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -35,8 +35,6 @@ export interface WidgetManagerState {
   innerModel: IJsonModel
   mainWidgetContext: MainWidgetContext
   restored: boolean
-  /** Side widgets that were open before the main area was maximized, reopened when it is restored. */
-  maximizeRestoreTabIds?: string[]
 }
 
 export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
@@ -67,7 +65,6 @@ const openOuterWidget = (state: WidgetManagerState, tab: WidgetManagerTabConfig,
     model.doAction(Actions.addNode(tab, toNodeId, DockLocation.CENTER, -1, true))
   }
 
-  endMaximize(state, model)
   state.outerModel = { ...model.toJson() }
 }
 
@@ -79,7 +76,6 @@ const slice = createSlice({
   reducers: {
     updateOuterModel: (state, action: PayloadAction<IJsonModel>) => {
       state.outerModel = { ...action.payload }
-      forgetMaximizeIfEnded(state)
     },
 
     updateInnerModel: (state, action: PayloadAction<IJsonModel>) => {
@@ -117,7 +113,6 @@ const slice = createSlice({
       }
 
       if (isOuterModelNode) {
-        endMaximize(state, model)
         state.outerModel = { ...model.toJson() }
       } else {
         showMainWidget(model, node)
@@ -127,7 +122,9 @@ const slice = createSlice({
     },
 
     toggleMainWidgetMaximize: (state, action: PayloadAction<string>) => {
-      toggleMaximize(state, action.payload)
+      const model = Model.fromJson(state.innerModel)
+      toggleMaximize(model, action.payload)
+      state.innerModel = { ...model.toJson() }
     },
 
     openMainWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -210,11 +207,8 @@ const slice = createSlice({
         isOuterModelNode = false
       }
 
-      let endsMaximize = false
-
       if (node !== undefined) {
         const nextTabId = isOuterModelNode ? undefined : getNextTabId(node)
-        endsMaximize = !isOuterModelNode && isLastMaximizedTab(node)
 
         model.doAction(Actions.deleteTab(node.getId()))
 
@@ -226,12 +220,9 @@ const slice = createSlice({
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
+        clearEmptyMaximizedTabset(model)
         state.innerModel = restoreCollapsedRows(model.toJson())
         state.mainWidgetContext = resolveMainWidgetContext(model)
-
-        if (endsMaximize) {
-          restoreMaximizeIfMaximized(state)
-        }
       }
     }
   },

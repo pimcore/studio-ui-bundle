@@ -9,7 +9,7 @@
  */
 
 /**
- * A double-click on the title of a main tab toggles the maximized main area. FlexLayout's drag
+ * A double-click on the title of a main tab toggles the maximize of its tabset. FlexLayout's drag
  * handling swallows the dblclick event, so the second press of the double-click is the trigger.
  */
 
@@ -43,7 +43,7 @@ describe('MainTabTitle', () => {
     mockDispatch.mockClear()
   })
 
-  it('toggles the maximized main area on the second press of a double-click', () => {
+  it('toggles the maximize on the second press of a double-click', () => {
     render(<MainTabTitle node={ node } />)
 
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
@@ -70,6 +70,17 @@ describe('MainTabTitle', () => {
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
 
     expect(mockDispatch).not.toHaveBeenCalled()
+  })
+
+  it('toggles when the first press remounts the title, as selecting the tab beside an empty tabset does', () => {
+    const { unmount } = render(<MainTabTitle node={ node } />)
+    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
+    unmount()
+
+    render(<MainTabTitle node={ node } />)
+    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
+
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'toggle', payload: 'title' })
   })
 
   it('ignores a middle-click double-click, which closes tabs', () => {
