@@ -48,6 +48,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
   const previousInitialValue = useRef(initialValue)
+  // keys added through add() since the last incoming value: their field registrations (e.g. prefilled
+  // defaults) are content the user brought in, not part of the loaded state, so they stay a change
+  const addedKeysRef = useRef<Set<string>>(new Set())
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
@@ -69,6 +72,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     previousInitialValue.current = initialValue
+    addedKeysRef.current.clear()
 
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -82,6 +86,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
         return currentValue
       }
 
+      addedKeysRef.current.add(key)
       const _newValue = cloneDeep(currentValue)
       _newValue[key] = newValue
       return _newValue
@@ -93,6 +98,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       const newValue = cloneDeep(currentValue)
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete newValue[key]
+      addedKeysRef.current.delete(key)
       return newValue
     })
   }, [])
@@ -123,7 +129,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       return obj
     }
 
-    if (isInitialValue) {
+    if (isInitialValue && !addedKeysRef.current.has(nameDifference[0])) {
       const newBaseline = cloneDeep(baselineValue.current)
       setWith(newBaseline, nameDifference, newSubValue, setAsObject)
       baselineValue.current = newBaseline

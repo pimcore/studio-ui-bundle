@@ -295,6 +295,44 @@ describe('KeyedList', () => {
       expect(onChange).toHaveBeenCalledWith({ existing: { name: 'a' }, added: { name: 'b' } })
     })
 
+    it('add() reports the default registered by a field of the added entry (regression #15682)', () => {
+      // an object brick added in the editor whose only content is the prefilled field default
+      const onChange = jest.fn()
+      const props = { value: { existing: { name: 'a' } }, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      flushDebounce()
+      onChange.mockClear()
+
+      rerender(keyedListUi(props, <RegisteringField
+        initialValue="hello"
+        name={ ['attributes', 'added', 'name'] }
+                                  />))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith({ existing: { name: 'a' }, added: { name: 'hello' } })
+    })
+
+    it('add() reports the default registered together with the added entry (regression #15682)', () => {
+      const onChange = jest.fn()
+      const props = { value: {}, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      rerender(keyedListUi(props, <RegisteringField
+        initialValue="hello"
+        name={ ['attributes', 'added', 'name'] }
+                                  />))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith({ added: { name: 'hello' } })
+    })
+
     it('add() does not overwrite an existing key', () => {
       const onChange = jest.fn()
 
