@@ -120,7 +120,7 @@ describe('useIsAuthenticated', () => {
     expect(mockDispatch).toHaveBeenCalledWith(setAuthState(false))
   })
 
-  it('falls back to the login when the status route cannot be reached', () => {
+  it('falls back to the login when the status route answers 401', () => {
     mockSessionQuery.mockReturnValue(queryResult({ isError: true, error: { status: 401, data: {} } }))
 
     renderHook(() => useIsAuthenticated())
@@ -137,5 +137,18 @@ describe('useIsAuthenticated', () => {
     renderHook(() => useIsAuthenticated())
 
     expect(mockDispatch).toHaveBeenCalledWith(setTwoFactorChallenge({ step: 'setup', digits: 8 }))
+  })
+
+  it('reads the code step from the current-user answer of a backend without the session route', () => {
+    mockSessionQuery.mockReturnValue(queryResult({ isError: true, error: { status: 404, data: {} } }))
+    mockCurrentUserQuery.mockReturnValue(queryResult({
+      isError: true,
+      error: { status: 401, data: { twoFactorRequired: true, twoFactorStep: 'verify', digits: 6 } }
+    }))
+
+    renderHook(() => useIsAuthenticated())
+
+    expect(mockDispatch).toHaveBeenCalledWith(setTwoFactorChallenge({ step: 'verify', digits: 6 }))
+    expect(mockDispatch).toHaveBeenCalledWith(setAuthState(false))
   })
 })

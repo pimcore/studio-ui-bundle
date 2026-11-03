@@ -29,7 +29,7 @@ export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
   // The session status answers 200 without a session, so the login page shows no failed request. The
   // current-user route answers 401 there.
   const session = useSessionGetStatusQuery(undefined, { skip })
-  // A backend from before the session route answers 404 to a request that has a session: ask it the old way
+  // A backend from before the session route answers 404 (with or without a session): ask it the old way
   const sessionRouteMissing = session.isError && 'status' in session.error && session.error.status === 404
   const currentUser = useUserGetCurrentInformationQuery(undefined, { skip: skip || !sessionRouteMissing })
   const answer = sessionRouteMissing ? currentUser : session
