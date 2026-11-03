@@ -8,24 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { SendInvitationButton } from './send-invitation-button'
-
 const mockSendInvitation = jest.fn()
+const mockSuccess = jest.fn()
+const mockTrackError = jest.fn()
 
 jest.mock('@Pimcore/modules/user/user-api-slice-enhanced', () => ({
   useUserSendInvitationMutation: () => [mockSendInvitation, { isLoading: false }]
 }))
-
-const mockSuccess = jest.fn()
-
 jest.mock('@Pimcore/components/message/useMessage', () => ({
   useMessage: () => ({ success: mockSuccess, error: jest.fn() })
 }))
-
-const mockTrackError = jest.fn()
-
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
   default: (error: unknown) => { mockTrackError(error) },
@@ -33,27 +25,35 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
     constructor (public readonly errorData: unknown) {}
   }
 }))
-
-jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({
-  useUser: () => ({ id: 1, isAdmin: true })
-}))
-
-jest.mock('@Pimcore/app/config/app-config', () => ({
-  currentDomain: 'http://localhost'
-}))
-
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ id: 1, isAdmin: true }) }))
+jest.mock('@Pimcore/app/config/app-config', () => ({ currentDomain: 'http://localhost' }))
 // the real router module builds the app router (and its whole import tree) at import time
 jest.mock('@Pimcore/app/router/router', () => ({
   routes: { passwordReset: '/pimcore-studio/reset-password/' }
 }))
-
-jest.mock('react-router-dom', () => ({
-  generatePath: (path: string) => path
+jest.mock('react-router-dom', () => ({ generatePath: (path: string) => path }))
+jest.mock('@Pimcore/components/button/button', () => ({
+  Button: ({ children, onClick, disabled, title }: {
+    children: React.ReactNode
+    onClick: () => void
+    disabled?: boolean
+    title?: string
+  }) => (
+    <button
+      disabled={ disabled }
+      onClick={ onClick }
+      title={ title }
+    >{children}</button>
+  )
 }))
+jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key })
-}))
+// eslint-disable-next-line import/first
+import React from 'react'
+// eslint-disable-next-line import/first
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+// eslint-disable-next-line import/first
+import { SendInvitationButton } from './send-invitation-button'
 
 describe('SendInvitationButton', () => {
   beforeEach(() => {
