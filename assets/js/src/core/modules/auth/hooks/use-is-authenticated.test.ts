@@ -55,6 +55,13 @@ describe('useIsAuthenticated', () => {
     jest.clearAllMocks()
   })
 
+  it('imports the session hook from a generated client that really exports it', () => {
+    // The mock above would hide a regenerated client that lost the route
+    const generated = jest.requireActual('../authorization-api-slice.gen')
+
+    expect(typeof generated.useSessionGetStatusQuery).toBe('function')
+  })
+
   it('asks the session status route first and leaves the current-user route alone', () => {
     renderHook(() => useIsAuthenticated())
 
