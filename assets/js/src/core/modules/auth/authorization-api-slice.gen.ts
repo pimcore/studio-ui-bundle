@@ -22,10 +22,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Authorization"],
             }),
-            sessionGetStatus: build.query<SessionGetStatusApiResponse, SessionGetStatusApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/session` }),
-                providesTags: ["Authorization"],
-            }),
             loginTwoFactor: build.mutation<LoginTwoFactorApiResponse, LoginTwoFactorApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/login/2fa`,
@@ -54,8 +50,6 @@ export type LoginTokenApiResponse = unknown;
 export type LoginTokenApiArg = {
     authenticationToken: AuthenticationToken;
 };
-export type SessionGetStatusApiResponse = /** status 200 Session status. */ SessionStatus;
-export type SessionGetStatusApiArg = void;
 export type LoginTwoFactorApiResponse = unknown;
 export type LoginTwoFactorApiArg = {
     twoFactorCode: TwoFactorCode;
@@ -67,16 +61,6 @@ export type TwoFactorLoginStep = {
     twoFactorStep: "verify" | "setup";
     /** Number of digits in a code */
     digits: number;
-};
-export type SessionStatus = {
-    /** True if a Studio user is logged in */
-    authenticated: boolean;
-    /** A two-factor code is needed */
-    twoFactorRequired?: boolean | null;
-    /** What to do next */
-    twoFactorStep?: ("verify" | "setup") | null;
-    /** Number of digits in a code */
-    digits?: number | null;
 };
 export type InvalidCredentials = {
     /** Error */
@@ -106,4 +90,4 @@ export type TwoFactorCode = {
     /** Code */
     code: string;
 };
-export const { useLoginMutation, useLogoutMutation, useLoginTokenMutation, useSessionGetStatusQuery, useLoginTwoFactorMutation } = injectedRtkApi;
+export const { useLoginMutation, useLogoutMutation, useLoginTokenMutation, useLoginTwoFactorMutation } = injectedRtkApi;
