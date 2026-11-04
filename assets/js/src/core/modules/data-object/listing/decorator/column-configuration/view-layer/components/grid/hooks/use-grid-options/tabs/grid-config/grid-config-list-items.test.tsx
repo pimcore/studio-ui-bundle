@@ -9,6 +9,8 @@
  */
 
 import React from 'react'
+import fs from 'fs'
+import path from 'path'
 import { type TFunction } from 'i18next'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { render, screen } from '@testing-library/react'
@@ -95,5 +97,14 @@ describe('AC2: the preview bar shortens paths as before', () => {
     expect(truncatePath('/a')).toBe('a')
     expect(truncatePath('/a/b')).toBe('a/ b')
     expect(truncatePath('/a/b/c/d/e')).toBe('.../ d/ e')
+  })
+})
+
+describe('AC3: the list file keeps what F12 reads as text', () => {
+  it('AC3: grid-config-list.tsx keeps the dependency list and both preview literals', () => {
+    const list = fs.readFileSync(path.join(__dirname, 'grid-config-list.tsx'), 'utf8')
+    expect(list).toContain('<SimpleColumnPreview column={ column } />')
+    expect(list).toContain('<SimpleColumnPreviewsProvider')
+    expect(list).toContain('[columns, advancedColumnTemplate, sourceFieldTypes, previewEnabled, onExpandPipelineItem, focusedPipelineItem]')
   })
 })
