@@ -246,7 +246,8 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
       size: 220,
-      meta: { type: 'input', editable: true }
+      // The name absorbs what the fixed columns leave, so the table never outgrows the pane.
+      meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
       id: 'actions',
@@ -265,7 +266,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
   return (
     <SplitLayout
       leftItem={ {
-        size: 40,
+        size: 35,
         minSize: 250,
         children: (
           <ContentLayout
@@ -328,6 +329,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
               vertical
             >
               <Grid
+                autoWidth
                 columns={ columns }
                 data={ groups }
                 enableRowSelection
@@ -364,7 +366,8 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
       resizeAble
       rightItem={ {
         // Widest share that still leaves the groups list its own width; the key grid carries one column more.
-        size: 60,
+        // The detail carries the strip, the headings and the widest grid, so it takes the larger share.
+        size: 65,
         minSize: 300,
         children: activeGroup === undefined
           ? (
