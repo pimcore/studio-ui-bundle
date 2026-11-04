@@ -2217,14 +2217,15 @@ classification-store.select-keys-hint: Wählen Sie zuerst mindestens einen Schl�
 classification-store.no-sub-group: Keine Untergruppe
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Nicht zugeordnet ({{keyCount}})"
-classification-store.unassign-sub-group-keys: Zuordnung der Schlüssel dieser Gruppe aufheben
-classification-store.unassign-sub-group-confirm_one: "Zuordnung von 1 Schlüssel dieser Gruppe zur Untergruppe \"{{name}}\" aufheben?"
-classification-store.unassign-sub-group-confirm_other: "Zuordnung von {{count}} Schlüsseln dieser Gruppe zur Untergruppe \"{{name}}\" aufheben?"
+classification-store.unassign-sub-group-keys: Zuordnung der hier angezeigten Schlüssel aufheben
+classification-store.unassign-sub-group-confirm_one: "Zuordnung des 1 hier angezeigten Schlüssels zur Untergruppe \"{{name}}\" aufheben? Schlüssel dieser Gruppe auf anderen Seiten behalten sie."
+classification-store.unassign-sub-group-confirm_other: "Zuordnung der {{count}} hier angezeigten Schlüssel zur Untergruppe \"{{name}}\" aufheben? Schlüssel dieser Gruppe auf anderen Seiten behalten sie."
 classification-store.sub-groups-strip-hint: Dies sind die Untergruppen, die die Schlüssel dieser Gruppe verwenden. Das Vokabular bleibt beim Store.
 classification-store.manage-sub-groups: Untergruppen verwalten
 classification-store.sub-group-unused: "Kein Schlüssel dieser Gruppe verwendet die Untergruppe \"{{name}}\" mehr. Sie existiert weiterhin im Store."
 classification-store.assign-sub-group-progress: "Die Untergruppe wird {{done}} von {{total}} Schlüsseln zugeordnet…"
 classification-store.assign-sub-group-failed: "Die Untergruppe konnte folgenden Schlüsseln nicht zugeordnet werden: {{keyNames}}"
+classification-store.assign-sub-group-running: Warten, bis die Zuordnung der Untergruppe abgeschlossen ist
 home: Startseite
 preview.label: Vorschau
 preview.desktop: Desktop

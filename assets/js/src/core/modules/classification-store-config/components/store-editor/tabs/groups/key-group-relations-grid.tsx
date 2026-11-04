@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -24,6 +24,7 @@ import { createColumnHelper, functionalUpdate, type RowSelectionState, type Upda
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Header } from '@Pimcore/components/header/header'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   type ClassificationStoreConfigurationKeyGroupRelationCreate,
@@ -71,11 +72,15 @@ export const KeyGroupRelationsGrid = ({
   const [keyDialogOpen, setKeyDialogOpen] = useState(false)
   const [subGroupDialogOpen, setSubGroupDialogOpen] = useState(false)
   const [isAssigning, setIsAssigning] = useState(false)
+  // The same flag as isAssigning, readable synchronously: a second batch started before React
+  // has re-rendered with the disabled buttons still has to be refused.
+  const isAssigningRef = useRef(false)
   const [selectedRowsBySection, setSelectedRowsBySection] = useState<Record<string, RowSelectionState>>({})
+  const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
   const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyGroupRelationCollectionQuery(
-    { groupId: groupId!, body: { filters: { page: 1, pageSize } } },
+    { groupId: groupId!, body: { filters: { page, pageSize } } },
     { skip: groupId === undefined }
   )
 
@@ -84,20 +89,19 @@ export const KeyGroupRelationsGrid = ({
     [data?.items]
   )
 
-  // A sub-group section and its count cover the whole group rather than one page of it, so the
-  // page is resized to the reported total and the whole group arrives in one request.
-  // Deliberately not capped at appConfig.maxPageSize: that bounds the page-size control a user
-  // may type into, not the size of a group, and the collection endpoint declares no upper bound
-  // of its own (FilterParameter::$pageSize carries no constraint). Capping it made the keys past
-  // the cap unreachable — not editable, not removable — and made a group-wide unassign clear
-  // only the part of the group that had been loaded.
-  useEffect(() => {
-    if (data === undefined) return
+  const total = data?.totalItems ?? 0
 
-    if (data.totalItems > pageSize) {
-      setPageSize(data.totalItems)
-    }
-  }, [data, pageSize])
+  /** True when the grid holds the whole group, so a statement about the group can be made. */
+  const holdsWholeGroup = total <= pageSize
+
+  // A selection is keyed by sub-group section and key id, and both repeat across groups, so one
+  // carried over would let Assign and Unassign act on keys that are not on screen. The Groups
+  // tab also remounts this grid per group; the reset keeps that correct here rather than
+  // depending on how a parent happens to mount it.
+  useEffect(() => {
+    setSelectedRowsBySection({})
+    setPage(1)
+  }, [groupId])
 
   // The vocabulary is only read to label the headings and chips with a name instead of the
   // bare identifier the relation stores.
@@ -114,6 +118,11 @@ export const KeyGroupRelationsGrid = ({
   const [createRelation] = useClassificationStoreConfigurationKeyGroupRelationCreateMutation()
   const [deleteRelation] = useClassificationStoreConfigurationKeyGroupRelationDeleteMutation()
 
+  // The sections, and the chip counts built from them below, describe the page the grid is
+  // showing — not the whole group. A paginated grid whose headings group the rows in front of
+  // the user is coherent, and loading the whole group to widen them is what made every key past
+  // appConfig.maxPageSize unreachable. Where a statement about the whole group is unavoidable it
+  // is gated on holdsWholeGroup instead.
   const sections = useMemo(
     () => buildSubGroupSections({ items: relations, getSubGroup: subGroupOf }),
     [relations]
@@ -145,10 +154,18 @@ export const KeyGroupRelationsGrid = ({
     return rows?.[String(relation.keyId)] ?? false
   }), [relations, selectedRowsBySection])
 
-  /** Reports the sub groups the given keys were the last ones of in this group. */
+  /**
+   * Reports the sub groups the given keys were the last ones of in this group.
+   *
+   * Only while the grid holds the whole group: the claim is derived from the loaded relations,
+   * and on any other page a key left on a page that is not loaded would still use the sub group,
+   * which would make the message plainly wrong. Suppressed rather than guessed.
+   */
   const reportEmptiedSubGroups = useCallback((
     removed: ClassificationStoreConfigurationKeyGroupRelationDetail[]
   ): void => {
+    if (!holdsWholeGroup) return
+
     const removedKeyIds = new Set(removed.map((relation) => relation.keyId))
     const remaining = relations.filter((relation) => !removedKeyIds.has(relation.keyId))
 
@@ -160,17 +177,22 @@ export const KeyGroupRelationsGrid = ({
         name: subGroupNames.get(identifier) ?? identifier
       }))
     }
-  }, [relations, subGroupNames, messageApi, t])
+  }, [holdsWholeGroup, relations, subGroupNames, messageApi, t])
 
-  // One create-or-upsert per key, keeping its own sorter and mandatory. Failures are collected
-  // into one message: trackError would collapse identical server messages into a single modal
-  // that names no key at all.
+  // One create-or-upsert per key, carrying nothing but the pair and the sub group. Failures are
+  // collected into one message: trackError would collapse identical server messages into a
+  // single modal that names no key at all.
   const applySubGroup = useCallback(async (
     targets: ClassificationStoreConfigurationKeyGroupRelationDetail[],
     subGroup: string | null
   ): Promise<void> => {
     if (targets.length === 0) return
+    // Two batches in flight over the same keys would decide the assignment by whichever
+    // response landed last, so a second one is refused while the first is still settling. The
+    // check reads a ref rather than the state so a second call in the same tick still sees it.
+    if (isAssigningRef.current) return
 
+    isAssigningRef.current = true
     setIsAssigning(true)
 
     const failedNames: string[] = []
@@ -194,11 +216,13 @@ export const KeyGroupRelationsGrid = ({
     let completed = 0
 
     const responses = await Promise.all(targets.map(async (relation) => {
+      // sorter and mandatory are deliberately omitted: KeyGroupRelationCreate leaves an absent
+      // property at its stored value, so sending the pair and the sub group alone is enough and
+      // the assignment can no longer write back a sorter or mandatory captured before an edit
+      // that is still in flight.
       const payload: ClassificationStoreConfigurationKeyGroupRelationCreate = {
         keyId: relation.keyId,
         groupId: relation.groupId,
-        sorter: relation.sorter,
-        mandatory: relation.mandatory,
         subGroup
       }
 
@@ -222,6 +246,7 @@ export const KeyGroupRelationsGrid = ({
     }
 
     messageApi.destroy(ASSIGN_PROGRESS_KEY)
+    isAssigningRef.current = false
     setIsAssigning(false)
 
     if (failedNames.length > 0) {
@@ -262,12 +287,13 @@ export const KeyGroupRelationsGrid = ({
     relation: ClassificationStoreConfigurationKeyGroupRelationDetail,
     mandatory: boolean
   ): Promise<void> => {
-    // subGroup is deliberately omitted: a cell edit must never clear the assignment.
+    // subGroup and sorter are deliberately omitted: a cell edit must never clear the assignment,
+    // and re-sending the sorter the row happened to carry would undo a sorter edit of the same
+    // row that has not come back yet. An absent property keeps its stored value.
     const response = await createRelation({
       classificationStoreConfigurationKeyGroupRelationCreate: {
         keyId: relation.keyId,
         groupId: relation.groupId,
-        sorter: relation.sorter,
         mandatory
       }
     })
@@ -281,13 +307,12 @@ export const KeyGroupRelationsGrid = ({
     relation: ClassificationStoreConfigurationKeyGroupRelationDetail,
     sorter: number
   ): Promise<void> => {
-    // subGroup is deliberately omitted: a cell edit must never clear the assignment.
+    // subGroup and mandatory are deliberately omitted, for the same reason as above.
     const response = await createRelation({
       classificationStoreConfigurationKeyGroupRelationCreate: {
         keyId: relation.keyId,
         groupId: relation.groupId,
-        sorter,
-        mandatory: relation.mandatory
+        sorter
       }
     })
 
@@ -355,15 +380,17 @@ export const KeyGroupRelationsGrid = ({
       size: 80,
       meta: { type: 'input', autoWidth: true }
     }),
+    // Not editable while a batch of upserts is in flight: an edit of a row the batch also
+    // carries would be decided by whichever response landed last.
     columnHelper.accessor('mandatory', {
       header: t('classification-store.columns.mandatory'),
       size: 100,
-      meta: { type: 'boolean', editable: true, config: { align: 'center' } }
+      meta: { type: 'boolean', editable: !isAssigning, config: { align: 'center' } }
     }),
     columnHelper.accessor('sorter', {
       header: t('classification-store.columns.sorter'),
       size: 100,
-      meta: { type: 'number', editable: true }
+      meta: { type: 'number', editable: !isAssigning }
     }),
     columnHelper.display({
       id: 'actions',
@@ -371,13 +398,16 @@ export const KeyGroupRelationsGrid = ({
       size: 60,
       cell: (info) => (
         <IconButton
+          // Deleting a relation the batch is still upserting would recreate it, because the
+          // upsert creates what it cannot find.
+          disabled={ isAssigning }
           icon={ { value: 'trash' } }
           onClick={ () => { handleRemove(info.row.original) } }
           tooltip={ { title: t('delete') } }
         />
       )
     })
-  ], [t, handleRemove, columnHelper])
+  ], [t, handleRemove, columnHelper, isAssigning])
 
   // Stable array — only recomputed when relations change
   const excludedKeyIds = useMemo(() => relations.map((r) => r.keyId), [relations])
@@ -386,9 +416,16 @@ export const KeyGroupRelationsGrid = ({
     ? t('classification-store.relations-title', { name: groupName ?? String(groupId) })
     : t('classification-store.select-group-hint')
 
-  const nothingSelectedHint = selectedRelations.length === 0
-    ? t('classification-store.select-keys-hint')
-    : ''
+  // While a batch of upserts is settling every action that could write the same relations is
+  // held: the batch's own buttons, the per-row delete, the inline cells and the strip's
+  // unassign. The hint says which of the two is holding them.
+  const actionsBlocked = selectedRelations.length === 0 || isAssigning
+
+  const blockedHint = isAssigning
+    ? t('classification-store.assign-sub-group-running')
+    : selectedRelations.length === 0
+      ? t('classification-store.select-keys-hint')
+      : ''
 
   // One empty section keeps the loading and the empty state of the grid visible.
   const renderedSections = sections.length > 0 ? sections : [{ identifier: null, items: [] }]
@@ -417,6 +454,17 @@ export const KeyGroupRelationsGrid = ({
                   tooltip={ { title: t('refresh') } }
                 />
                 ) }
+            <Pagination
+              current={ page }
+              defaultPageSize={ pageSize }
+              onChange={ (newPage, newPageSize) => {
+                setPage(newPage)
+                setPageSize(newPageSize)
+              } }
+              showSizeChanger
+              showTotal={ (total) => t('pagination.show-total', { total }) }
+              total={ total }
+            />
           </Toolbar>
           )
         : undefined }
@@ -438,18 +486,18 @@ export const KeyGroupRelationsGrid = ({
               >
                 {t('classification-store.add-key')}
               </IconTextButton>
-              <Tooltip title={ nothingSelectedHint }>
+              <Tooltip title={ blockedHint }>
                 <IconTextButton
-                  disabled={ selectedRelations.length === 0 }
+                  disabled={ actionsBlocked }
                   icon={ { value: 'group-alt' } }
                   onClick={ () => { setSubGroupDialogOpen(true) } }
                 >
                   {t('classification-store.assign-sub-group')}
                 </IconTextButton>
               </Tooltip>
-              <Tooltip title={ nothingSelectedHint }>
+              <Tooltip title={ blockedHint }>
                 <IconTextButton
-                  disabled={ selectedRelations.length === 0 }
+                  disabled={ actionsBlocked }
                   icon={ { value: 'close' } }
                   onClick={ handleUnassignSelection }
                 >
@@ -469,6 +517,7 @@ export const KeyGroupRelationsGrid = ({
           <SubGroupStrip
             onShowSubGroups={ onShowSubGroups }
             onUnassign={ handleUnassignUsage }
+            unassignDisabled={ isAssigning }
             unassignedCount={ unassignedCount }
             usages={ usages }
           />

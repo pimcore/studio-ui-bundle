@@ -2217,14 +2217,15 @@ classification-store.select-keys-hint: Sélectionnez d'abord au moins une clé
 classification-store.no-sub-group: Aucun sous-groupe
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Non affectées ({{keyCount}})"
-classification-store.unassign-sub-group-keys: Retirer l'affectation des clés de ce groupe
-classification-store.unassign-sub-group-confirm_one: "Retirer l'affectation d'une clé de ce groupe au sous-groupe \"{{name}}\" ?"
-classification-store.unassign-sub-group-confirm_other: "Retirer l'affectation de {{count}} clés de ce groupe au sous-groupe \"{{name}}\" ?"
+classification-store.unassign-sub-group-keys: Retirer l'affectation des clés affichées ici
+classification-store.unassign-sub-group-confirm_one: "Retirer l'affectation de la clé affichée ici au sous-groupe \"{{name}}\" ? Les clés de ce groupe sur les autres pages la conservent."
+classification-store.unassign-sub-group-confirm_other: "Retirer l'affectation des {{count}} clés affichées ici au sous-groupe \"{{name}}\" ? Les clés de ce groupe sur les autres pages la conservent."
 classification-store.sub-groups-strip-hint: Voici les sous-groupes utilisés par les clés de ce groupe. Le vocabulaire reste au niveau du magasin.
 classification-store.manage-sub-groups: Gérer les sous-groupes
 classification-store.sub-group-unused: "Aucune clé de ce groupe n'utilise plus le sous-groupe \"{{name}}\". Il existe toujours dans le magasin."
 classification-store.assign-sub-group-progress: "Affectation du sous-groupe à {{done}} clé(s) sur {{total}}…"
 classification-store.assign-sub-group-failed: "Le sous-groupe n'a pas pu être affecté à : {{keyNames}}"
+classification-store.assign-sub-group-running: Attendez la fin de l'affectation du sous-groupe
 home: Accueil
 preview.label: Aperçu
 preview.desktop: Bureau

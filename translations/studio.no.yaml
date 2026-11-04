@@ -2217,14 +2217,15 @@ classification-store.select-keys-hint: Velg minst én nøkkel først
 classification-store.no-sub-group: Ingen undergruppe
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Uten tilknytning ({{keyCount}})"
-classification-store.unassign-sub-group-keys: Fjern tilknytningen for nøklene i denne gruppen
-classification-store.unassign-sub-group-confirm_one: "Fjerne tilknytningen av 1 nøkkel i denne gruppen til undergruppen \"{{name}}\"?"
-classification-store.unassign-sub-group-confirm_other: "Fjerne tilknytningen av {{count}} nøkler i denne gruppen til undergruppen \"{{name}}\"?"
+classification-store.unassign-sub-group-keys: Fjern tilknytningen for nøklene som vises her
+classification-store.unassign-sub-group-confirm_one: "Fjerne tilknytningen av 1 nøkkel som vises her til undergruppen \"{{name}}\"? Nøkler i denne gruppen på andre sider beholder den."
+classification-store.unassign-sub-group-confirm_other: "Fjerne tilknytningen av {{count}} nøkler som vises her til undergruppen \"{{name}}\"? Nøkler i denne gruppen på andre sider beholder den."
 classification-store.sub-groups-strip-hint: Dette er undergruppene nøklene i denne gruppen bruker. Vokabularet tilhører butikken.
 classification-store.manage-sub-groups: Administrer undergrupper
 classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker undergruppen \"{{name}}\" lenger. Den finnes fortsatt i butikken."
 classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
 classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
+classification-store.assign-sub-group-running: Vent til tilknytningen av undergruppen er ferdig
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord

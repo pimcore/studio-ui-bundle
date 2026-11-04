@@ -45,6 +45,12 @@ interface ISubGroupsTabProps {
   storeId: number
 }
 
+/** The two editable fields of a sub group, which an update always replaces together. */
+interface SubGroupDraft {
+  name: string
+  description: string | null
+}
+
 /** Message of a refused delete, which names the groups still using the sub group. */
 const inUseMessage = (error: FetchBaseQueryError | SerializedError): string | undefined => {
   if (!('status' in error) || error.status !== 409) return undefined
@@ -91,10 +97,26 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
     }
   }), [storeId, page, pageSize, searchTerm, sorting])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationSubGroupCollectionQuery(queryArgs)
+  const {
+    data,
+    error,
+    isError,
+    isLoading,
+    isFetching,
+    refetch
+  } = useClassificationStoreConfigurationSubGroupCollectionQuery(queryArgs)
 
   const subGroups = data?.items ?? []
   const total = data?.totalItems ?? 0
+
+  // A refused collection request must not read as a store without sub groups: a 403 or a 500
+  // left `data` undefined, which the empty default turned into "no sub groups yet". The error is
+  // reported, and the empty state below waits for a response that actually arrived.
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -204,19 +226,53 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
     })
   }
 
-  const handleUpdate = useCallback(async (
+  /** Cumulative pending change of a row, and the chain its saves run on, both keyed by row id. */
+  const draftsRef = useRef(new Map<number, SubGroupDraft>())
+  const chainsRef = useRef(new Map<number, Promise<void>>())
+
+  /**
+   * Saves one changed field of a row, carrying whatever earlier change of that row has not come
+   * back yet.
+   *
+   * `SubGroupUpdate` replaces both the name and the description, so a payload rebuilt from the
+   * row the grid renders would re-send the field the first request is still changing: editing
+   * the name and then the description sent the second PUT with the old name, and whichever
+   * answer landed last decided which of the two edits survived. The draft carries the pending
+   * value forward and the chain keeps the two requests in the order they were made.
+   */
+  const handleUpdate = useCallback((
     subGroup: ClassificationStoreConfigurationSubGroupDetail,
-    name: string,
-    description: string | null
-  ): Promise<void> => {
-    const response = await updateSubGroup({
-      id: subGroup.id,
-      classificationStoreConfigurationSubGroupUpdate: { name, description }
+    change: Partial<SubGroupDraft>
+  ): void => {
+    const { id } = subGroup
+    const stored: SubGroupDraft = { name: subGroup.name, description: subGroup.description ?? null }
+    const next: SubGroupDraft = { ...(draftsRef.current.get(id) ?? stored), ...change }
+
+    draftsRef.current.set(id, next)
+
+    const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
+      const response = await updateSubGroup({
+        id,
+        classificationStoreConfigurationSubGroupUpdate: next
+      })
+
+      if ('error' in response) {
+        // The server kept its own value, so the next edit of this row has to start from the
+        // refetched row rather than from a draft the server refused.
+        draftsRef.current.delete(id)
+        trackError(new ApiError(response.error!))
+      }
     })
 
-    if ('error' in response) {
-      trackError(new ApiError(response.error!))
-    }
+    chainsRef.current.set(id, chain)
+
+    void chain.then(() => {
+      // Nothing newer queued behind it: the row the grid shows is the row the server holds.
+      if (chainsRef.current.get(id) === chain) {
+        chainsRef.current.delete(id)
+        draftsRef.current.delete(id)
+      }
+    })
   }, [updateSubGroup])
 
   const columnHelper = useMemo(() => createColumnHelper<ClassificationStoreConfigurationSubGroupDetail>(), [])
@@ -315,7 +371,8 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
         style={ { height: '100%', padding: '0 16px' } }
         vertical
       >
-        { !isLoading && subGroups.length === 0
+        { /* Only a response that arrived can say the store has no sub groups. */ }
+        { !isLoading && !isError && data !== undefined && subGroups.length === 0
           ? <NoContent text={ t('classification-store.no-sub-groups') } />
           : (
             <Grid
@@ -328,13 +385,15 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
               onSortingChange={ onSortingChange }
               onUpdateCellData={ ({ columnId, value, rowData }) => {
                 const typedRow = rowData as ClassificationStoreConfigurationSubGroupDetail
+                // Only the edited field is handed over: the other one comes from the row's
+                // pending draft, never from the row the grid is still rendering.
                 if (columnId === 'name') {
                   const newName = (value as string).trim()
                   if (newName === '') return
-                  void handleUpdate(typedRow, newName, typedRow.description ?? null)
+                  handleUpdate(typedRow, { name: newName })
                 } else if (columnId === 'description') {
                   const newDescription = (value as string).trim()
-                  void handleUpdate(typedRow, typedRow.name, newDescription === '' ? null : newDescription)
+                  handleUpdate(typedRow, { description: newDescription === '' ? null : newDescription })
                 }
               } }
               sorting={ sorting }

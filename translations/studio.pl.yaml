@@ -2217,14 +2217,15 @@ classification-store.select-keys-hint: Najpierw wybierz co najmniej jeden klucz
 classification-store.no-sub-group: Brak podgrupy
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Nieprzypisane ({{keyCount}})"
-classification-store.unassign-sub-group-keys: Usuń przypisanie kluczy tej grupy
-classification-store.unassign-sub-group-confirm_one: "Usunąć przypisanie 1 klucza tej grupy do podgrupy \"{{name}}\"?"
-classification-store.unassign-sub-group-confirm_other: "Usunąć przypisanie {{count}} kluczy tej grupy do podgrupy \"{{name}}\"?"
+classification-store.unassign-sub-group-keys: Usuń przypisanie kluczy pokazanych tutaj
+classification-store.unassign-sub-group-confirm_one: "Usunąć przypisanie 1 klucza pokazanego tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
+classification-store.unassign-sub-group-confirm_other: "Usunąć przypisanie {{count}} kluczy pokazanych tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
 classification-store.sub-groups-strip-hint: To są podgrupy używane przez klucze tej grupy. Słownik pozostaje w magazynie.
 classification-store.manage-sub-groups: Zarządzaj podgrupami
 classification-store.sub-group-unused: "Żaden klucz tej grupy nie używa już podgrupy \"{{name}}\". Nadal istnieje w magazynie."
 classification-store.assign-sub-group-progress: "Przypisywanie podgrupy do {{done}} z {{total}} kluczy…"
 classification-store.assign-sub-group-failed: "Nie udało się przypisać podgrupy do: {{keyNames}}"
+classification-store.assign-sub-group-running: Poczekaj na zakończenie przypisywania podgrupy
 home: Strona główna
 preview.label: Podgląd
 preview.desktop: Komputer

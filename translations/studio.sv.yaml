@@ -2217,14 +2217,15 @@ classification-store.select-keys-hint: Välj minst en nyckel först
 classification-store.no-sub-group: Ingen undergrupp
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Okopplade ({{keyCount}})"
-classification-store.unassign-sub-group-keys: Ta bort kopplingen för nycklarna i denna grupp
-classification-store.unassign-sub-group-confirm_one: "Ta bort kopplingen mellan 1 nyckel i denna grupp och undergruppen \"{{name}}\"?"
-classification-store.unassign-sub-group-confirm_other: "Ta bort kopplingen mellan {{count}} nycklar i denna grupp och undergruppen \"{{name}}\"?"
+classification-store.unassign-sub-group-keys: Ta bort kopplingen för nycklarna som visas här
+classification-store.unassign-sub-group-confirm_one: "Ta bort kopplingen mellan 1 nyckel som visas här och undergruppen \"{{name}}\"? Nycklar i denna grupp på andra sidor behåller den."
+classification-store.unassign-sub-group-confirm_other: "Ta bort kopplingen mellan {{count}} nycklar som visas här och undergruppen \"{{name}}\"? Nycklar i denna grupp på andra sidor behåller den."
 classification-store.sub-groups-strip-hint: Detta är de undergrupper som nycklarna i denna grupp använder. Vokabulären tillhör lagret.
 classification-store.manage-sub-groups: Hantera undergrupper
 classification-store.sub-group-unused: "Ingen nyckel i denna grupp använder undergruppen \"{{name}}\" längre. Den finns fortfarande i lagret."
 classification-store.assign-sub-group-progress: "Kopplar undergruppen till {{done}} av {{total}} nycklar…"
 classification-store.assign-sub-group-failed: "Undergruppen kunde inte kopplas till: {{keyNames}}"
+classification-store.assign-sub-group-running: Vänta tills undergruppstilldelningen är klar
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator

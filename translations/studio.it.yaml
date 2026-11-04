@@ -2217,14 +2217,15 @@ classification-store.select-keys-hint: Seleziona prima almeno una chiave
 classification-store.no-sub-group: Nessun sottogruppo
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Non assegnate ({{keyCount}})"
-classification-store.unassign-sub-group-keys: Rimuovi l'assegnazione delle chiavi di questo gruppo
-classification-store.unassign-sub-group-confirm_one: "Rimuovere l'assegnazione di 1 chiave di questo gruppo dal sottogruppo \"{{name}}\"?"
-classification-store.unassign-sub-group-confirm_other: "Rimuovere l'assegnazione di {{count}} chiavi di questo gruppo dal sottogruppo \"{{name}}\"?"
+classification-store.unassign-sub-group-keys: Rimuovi l'assegnazione delle chiavi mostrate qui
+classification-store.unassign-sub-group-confirm_one: "Rimuovere l'assegnazione di 1 chiave mostrata qui dal sottogruppo \"{{name}}\"? Le chiavi di questo gruppo in altre pagine la mantengono."
+classification-store.unassign-sub-group-confirm_other: "Rimuovere l'assegnazione di {{count}} chiavi mostrate qui dal sottogruppo \"{{name}}\"? Le chiavi di questo gruppo in altre pagine la mantengono."
 classification-store.sub-groups-strip-hint: Questi sono i sottogruppi usati dalle chiavi di questo gruppo. Il vocabolario resta dello store.
 classification-store.manage-sub-groups: Gestisci sottogruppi
 classification-store.sub-group-unused: "Nessuna chiave di questo gruppo usa più il sottogruppo \"{{name}}\". Esiste ancora nello store."
 classification-store.assign-sub-group-progress: "Assegnazione del sottogruppo a {{done}} di {{total}} chiavi…"
 classification-store.assign-sub-group-failed: "Non è stato possibile assegnare il sottogruppo a: {{keyNames}}"
+classification-store.assign-sub-group-running: Attendere il termine dell'assegnazione del sottogruppo
 home: Home
 preview.label: Anteprima
 preview.desktop: Desktop

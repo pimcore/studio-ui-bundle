@@ -107,10 +107,22 @@ export interface ClassificationStoreConfigurationKeyGroupRelationDetail extends 
 }
 
 /**
- * The create-or-upsert payload of a key-group relation. An absent `subGroup` leaves the
- * stored assignment alone, an explicit null clears it.
+ * The create-or-upsert payload of a key-group relation. Only the pair is required: a property
+ * absent from the payload leaves the stored value alone, so a caller sends the fields it is
+ * changing and nothing else. An explicit null on `subGroup` clears the assignment; `sorter` and
+ * `mandatory` cannot be cleared and take 0 and false on a relation that does not exist yet.
+ *
+ * `sorter` and `mandatory` are re-declared optional: `KeyGroupRelationCreate` carries them as
+ * `AbsentValue::ABSENT` defaults outside `required: ['keyId', 'groupId']`, which the generated
+ * slice predates. The next regeneration reproduces them optional and this shadow goes with the
+ * rest of the block.
  */
-export interface ClassificationStoreConfigurationKeyGroupRelationCreate extends GeneratedKeyGroupRelationCreate {
+export interface ClassificationStoreConfigurationKeyGroupRelationCreate
+  extends Omit<GeneratedKeyGroupRelationCreate, 'sorter' | 'mandatory'> {
+  /** Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation */
+  sorter?: number
+  /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
+  mandatory?: boolean
   /** Identifier of the sub group to assign the key to in this group */
   subGroup?: string | null
 }
@@ -397,9 +409,14 @@ const api = baseApi.enhanceEndpoints({
         const create: ClassificationStoreConfigurationKeyGroupRelationCreate =
           args.classificationStoreConfigurationKeyGroupRelationCreate
         const { keyId, groupId, sorter, mandatory } = create
-        // An absent subGroup means "leave the stored assignment alone" to the server, so a
-        // mandatory or sorter edit must not patch the cached sub group either.
-        const subGroupPatch = 'subGroup' in create ? { subGroup: create.subGroup ?? null } : {}
+        // Only what the payload carries is patched. An absent property means "leave the stored
+        // value alone" to the server, so patching it would blank the cell it belongs to for the
+        // length of the request — a sub-group assignment carries neither sorter nor mandatory.
+        const absentSafePatch = {
+          ...(sorter !== undefined ? { sorter } : {}),
+          ...(mandatory !== undefined ? { mandatory } : {}),
+          ...('subGroup' in create ? { subGroup: create.subGroup ?? null } : {})
+        }
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
         const matchesGroup = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg): boolean => a.groupId === groupId
@@ -412,15 +429,17 @@ const api = baseApi.enhanceEndpoints({
           (draft) => {
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
-              // Upsert — update mandatory/sorter in-place
-              draft.items[idx] = { ...draft.items[idx], sorter, mandatory, ...subGroupPatch }
+              // Upsert — update in-place whatever the payload named
+              draft.items[idx] = { ...draft.items[idx], ...absentSafePatch }
             } else {
-              // New relation — keyName/keyDescription/groupName filled in by server overwrite below
+              // New relation — keyName/keyDescription/groupName filled in by server overwrite
+              // below, and an absent sorter or mandatory takes the value the server gives a new
+              // relation rather than leaving the cached row without one.
               draft.items.push({
                 keyId,
                 groupId,
-                sorter,
-                mandatory,
+                sorter: sorter ?? 0,
+                mandatory: mandatory ?? false,
                 keyName: null,
                 keyDescription: null,
                 groupName: null,
@@ -641,7 +660,6 @@ export const {
   useClassificationStoreConfigurationKeyUpdateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
   // CRUD mutations — key-group relations
-  useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
   useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
   // CRUD mutations — collection-group relations
   useClassificationStoreConfigurationCollectionRelationCreateMutation,
@@ -665,5 +683,26 @@ export const {
   useClassificationStoreGetLayoutByKeyQuery,
   useLazyClassificationStoreGetLayoutByKeyQuery
 } = api
+
+type GeneratedKeyGroupRelationCreateTrigger =
+  ReturnType<typeof api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation>[0]
+
+/**
+ * The create-or-upsert trigger, taking the payload the shipped `KeyGroupRelationCreate`
+ * declares: every property but the pair optional, an absent one keeping its stored value. Only
+ * the argument is shadowed — the generated slice still requires `sorter` and `mandatory`, which
+ * it carried before they became `AbsentValue::ABSENT` defaults. Done here once so no call site
+ * has to cast, and removed with the rest of the hand-written block on the next regeneration.
+ */
+export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation = (): [
+  (arg: {
+    classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate
+  }) => ReturnType<GeneratedKeyGroupRelationCreateTrigger>,
+  ReturnType<typeof api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation>[1]
+] => {
+  const [trigger, state] = api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation()
+
+  return [trigger, state]
+}
 
 export { api }

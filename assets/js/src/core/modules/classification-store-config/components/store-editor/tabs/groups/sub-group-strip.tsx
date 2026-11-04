@@ -27,6 +27,8 @@ interface ISubGroupStripProps {
   usages: SubGroupUsage[]
   unassignedCount: number
   onUnassign: (usage: SubGroupUsage) => void
+  /** Held while a batch of assignments is still settling, which would decide the result. */
+  unassignDisabled?: boolean
   /** Opens the Sub groups tab, where the store's vocabulary is managed. */
   onShowSubGroups?: () => void
 }
@@ -35,6 +37,7 @@ export const SubGroupStrip = ({
   usages,
   unassignedCount,
   onUnassign,
+  unassignDisabled = false,
   onShowSubGroups
 }: ISubGroupStripProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -55,6 +58,7 @@ export const SubGroupStrip = ({
           <Tag key={ usage.identifier }>
             { t('classification-store.sub-group-with-count', { name: usage.name, keyCount: usage.count }) }
             <IconButton
+              disabled={ unassignDisabled }
               icon={ { value: 'close' } }
               onClick={ () => { onUnassign(usage) } }
               size="small"

@@ -19,10 +19,28 @@
 import React from 'react'
 import { Flex } from 'antd'
 
+/**
+ * The real one resolves its icon through the dependency-injection container. This stand-in keeps
+ * the parts a test addresses it by — the accessible label, the disabled state and the click — so
+ * controls built from it, such as the pagination's page buttons, stay reachable.
+ */
+const IconButtonMock = ({ 'aria-label': label, disabled, onClick }: {
+  'aria-label'?: string
+  disabled?: boolean
+  onClick?: () => void
+}): React.JSX.Element => (
+  <button
+    aria-label={ label }
+    disabled={ disabled }
+    onClick={ onClick }
+    type="button"
+  />
+)
+
 export const sdkComponentsMock = {
   Flex,
   CreatableSelect: () => null,
-  IconButton: () => null,
+  IconButton: IconButtonMock,
   Modal: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
   useStudioModal: () => ({ modal: {}, localModal: {} })
 }

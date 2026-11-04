@@ -14,8 +14,16 @@
  * The sub groups tab manages the store-level vocabulary: it lists the sub groups of the store,
  * creates one with a name and applies an entered description with a following update, and
  * renames or re-describes one with a single update. The identifier is never part of a payload.
- * Delete is offered on every row and a refusal is shown after the fact.
+ * Delete is offered on every row and a refusal is shown after the fact. A refused collection
+ * request is reported rather than rendered as a store without sub groups, and two edits of one
+ * row reach the server in order, the second carrying the first.
  */
+
+// trackError runs for real and ends at this service, which needs the application shell's modal
+// instance. Only the sink is replaced, so what is asserted is a reported error.
+jest.mock('@Pimcore/modules/app/error-handler/services/error-modal-service', () => ({
+  ErrorModalService: { setModalInstance: jest.fn(), showError: jest.fn() }
+}))
 
 // antd-style ships untranspiled ESM, which jest does not transform
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -90,7 +98,11 @@ import userEvent, { type UserEvent } from '@testing-library/user-event'
 // eslint-disable-next-line import/first
 import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 // eslint-disable-next-line import/first
+import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
+// eslint-disable-next-line import/first
 import { SubGroupsTab } from './sub-groups-tab'
+
+const showErrorMock = ErrorModalService.showError as unknown as jest.Mock
 
 const STORE_ID = 1
 const COLLECTION_URL = `/pimcore-studio/api/classification-store/configuration/stores/${STORE_ID}/sub-groups`
@@ -231,6 +243,7 @@ describe('SubGroupsTab', () => {
   beforeEach(() => {
     requests.length = 0
     deleteConflictMessage = null
+    showErrorMock.mockClear()
   })
 
   afterEach(() => {
@@ -329,6 +342,71 @@ describe('SubGroupsTab', () => {
     // asks it again rather than editing the rows it happens to hold.
     await waitFor(() => { expect(collectionRequests().length).toBeGreaterThan(1) })
     expect(await screen.findByDisplayValue('Measures')).toBeInTheDocument()
+  })
+
+  it('reports a refused collection request instead of showing the empty state', async () => {
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      requests.push({ url: input.url, method: input.method, body: undefined })
+
+      return jsonResponse({ message: 'forbidden' }, 403)
+    }) as unknown as typeof fetch
+
+    renderTab()
+
+    await waitFor(() => { expect(showErrorMock).toHaveBeenCalledTimes(1) })
+
+    // A 403 is not an empty store, so the message that says it is must not appear
+    expect(screen.queryByText('classification-store.no-sub-groups')).not.toBeInTheDocument()
+  })
+
+  it('serializes two edits of one row, the second carrying the first', async () => {
+    // An update replaces both fields, so a second edit that rebuilt its payload from the row
+    // the grid still renders would re-send the old name and discard the rename.
+    let releaseFirstPut: () => void = () => {}
+    const firstPut = new Promise<void>((resolve) => { releaseFirstPut = resolve })
+    let puts = 0
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      let body: Record<string, unknown> | undefined
+
+      try {
+        body = JSON.parse(await input.clone().text())
+      } catch {
+        body = undefined
+      }
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(COLLECTION_URL)) {
+        return jsonResponse({ items: [dimensions], totalItems: 1 })
+      }
+
+      puts += 1
+
+      if (puts === 1) await firstPut
+
+      return jsonResponse({ ...dimensions, ...body })
+    }) as unknown as typeof fetch
+
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    fireEvent.change(screen.getByLabelText('name-0'), { target: { value: 'Measures' } })
+    await waitFor(() => { expect(writeRequests()).toHaveLength(1) })
+
+    // The row still renders the stored name while the first update is in flight
+    expect(screen.getByLabelText('name-0')).toHaveValue('Dimensions')
+    fireEvent.change(screen.getByLabelText('description-0'), { target: { value: 'how big it is' } })
+
+    // Held behind the first rather than racing it
+    expect(writeRequests()).toHaveLength(1)
+
+    releaseFirstPut()
+
+    await waitFor(() => { expect(writeRequests()).toHaveLength(2) })
+
+    expect(writeRequests()[0].body).toEqual({ name: 'Measures', description: 'size related' })
+    expect(writeRequests()[1].body).toEqual({ name: 'Measures', description: 'how big it is' })
   })
 
   it('re-describes a sub group with a single update carrying its name and description', async () => {

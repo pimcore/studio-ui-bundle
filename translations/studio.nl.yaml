@@ -2217,14 +2217,15 @@ classification-store.select-keys-hint: Selecteer eerst minstens één sleutel
 classification-store.no-sub-group: Geen subgroep
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Niet toegewezen ({{keyCount}})"
-classification-store.unassign-sub-group-keys: Toewijzing van de sleutels van deze groep opheffen
-classification-store.unassign-sub-group-confirm_one: "Toewijzing van 1 sleutel van deze groep aan subgroep \"{{name}}\" opheffen?"
-classification-store.unassign-sub-group-confirm_other: "Toewijzing van {{count}} sleutels van deze groep aan subgroep \"{{name}}\" opheffen?"
+classification-store.unassign-sub-group-keys: Toewijzing van de hier weergegeven sleutels opheffen
+classification-store.unassign-sub-group-confirm_one: "Toewijzing van de 1 hier weergegeven sleutel aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
+classification-store.unassign-sub-group-confirm_other: "Toewijzing van de {{count}} hier weergegeven sleutels aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
 classification-store.sub-groups-strip-hint: Dit zijn de subgroepen die de sleutels van deze groep gebruiken. Het vocabulaire blijft bij de store.
 classification-store.manage-sub-groups: Subgroepen beheren
 classification-store.sub-group-unused: "Geen enkele sleutel van deze groep gebruikt subgroep \"{{name}}\" nog. Hij bestaat nog steeds in de store."
 classification-store.assign-sub-group-progress: "Subgroep wordt aan {{done}} van {{total}} sleutels toegewezen…"
 classification-store.assign-sub-group-failed: "De subgroep kon niet worden toegewezen aan: {{keyNames}}"
+classification-store.assign-sub-group-running: Wacht tot de toewijzing van de subgroep klaar is
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad

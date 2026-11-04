@@ -11,11 +11,12 @@
 /* eslint-disable max-lines */
 
 /**
- * The key grid of a group assigns a selection of keys to a sub group of the store, one
- * create-or-upsert per key that keeps that key's own sorter and mandatory. A failure of part of
- * the batch is reported once, naming every key it could not assign. An inline cell edit never
- * carries the sub group, so editing a cell cannot clear an assignment; unassigning sends it
- * as an explicit null.
+ * The key grid of a group pages through the group's relations and assigns a selection of keys to
+ * a sub group of the store, one create-or-upsert per key carrying nothing but the pair and the
+ * sub group. A failure of part of the batch is reported once, naming every key it could not
+ * assign. An inline cell edit never carries the sub group, so editing a cell cannot clear an
+ * assignment; unassigning sends it as an explicit null. While a batch is settling, every action
+ * that could write the same relations is held.
  */
 
 // antd-style ships untranspiled ESM, which jest does not transform
@@ -60,11 +61,12 @@ jest.mock('@sdk/modules/app', () => jest.requireActual('@test-utils/mocks/sdk-ba
 jest.mock('@sdk/app', () => jest.requireActual('@test-utils/mocks/sdk-barrel-mock').sdkAppMock)
 
 // The real cell resolves its renderer through the dynamic type registry. This stand-in shows the
-// value and reports an edit of it the way the registered cells do.
+// value, honours the column's editable flag and reports an edit the way the registered cells do.
 jest.mock('@Pimcore/components/grid/columns/default-cell', () => ({
   DefaultCell: (props: any) => (
     <button
       aria-label={ `cell-${String(props.column.id)}-${String(props.row.id)}` }
+      disabled={ props.column.columnDef.meta?.editable === false }
       onClick={ () => {
         props.table.options.meta.onUpdateCellData({
           rowIndex: props.row.index,
@@ -216,6 +218,11 @@ const renderGrid = (): void => {
 const assignButton = (): HTMLElement => screen.getByRole('button', { name: 'classification-store.assign-sub-group' })
 const unassignButton = (): HTMLElement => screen.getByRole('button', { name: 'classification-store.unassign-sub-group' })
 
+/** The row actions carry their label in a tooltip only, so they are the row's non-cell buttons. */
+const deleteButtons = (): HTMLElement[] => screen.getAllByRole('row')
+  .flatMap((row) => within(row).queryAllByRole('button'))
+  .filter((button) => !(button.getAttribute('aria-label') ?? '').startsWith('cell-'))
+
 /** No inter-event delay: these tests click through several rows and a dialog. */
 const setupUser = (): UserEvent => userEvent.setup({ delay: null })
 
@@ -267,37 +274,10 @@ describe('KeyGroupRelationsGrid', () => {
     globalThis.fetch = originalFetch
   })
 
-  it('requests every relation of the group instead of stopping at the default page', async () => {
-    // More keys than the default page holds, with a stub that truncates to the requested page
-    // size: a grid that kept paging would leave the headings and counts describing 20 of 25.
-    const many = Array.from({ length: 25 }, (_, index) => relation(100 + index, `key-${index}`, index, false))
-
-    globalThis.fetch = jest.fn(async (input: Request) => {
-      const body = JSON.parse(await input.clone().text())
-
-      requests.push({ url: input.url, method: input.method, body })
-
-      if (input.url.endsWith(RELATIONS_URL)) {
-        return jsonResponse({ items: many.slice(0, body.filters.pageSize as number), totalItems: many.length })
-      }
-
-      return jsonResponse({ items: [], totalItems: 0 })
-    }) as unknown as typeof fetch
-
-    renderGrid()
-
-    expect(await screen.findByText('key-24', undefined, WAIT_BUDGET)).toBeInTheDocument()
-    expect(
-      requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters.pageSize)
-    ).toEqual([20, 25])
-  })
-
-  it('sizes the page from the reported total rather than capping it at the page-size maximum', async () => {
-    // appConfig.maxPageSize is 200 and bounds the page-size control, not the size of a group.
-    // Capping the request at it left the keys past 200 unreachable and made a group-wide
-    // unassign clear only the loaded part, so the request asks for the whole reported total.
-    // Asserted on the requests rather than on a rendered row: 250 rows of the real grid are
-    // slow to render and are not what this pins.
+  it('asks for one page of the group and leaves the rest to the pagination control', async () => {
+    // A group larger than one page is paged, not loaded whole. Sizing the request from the
+    // reported total made every key past appConfig.maxPageSize unreachable, because the only
+    // fetched page was capped there; the headings and chip counts describe the page instead.
     const TOTAL = 250
 
     globalThis.fetch = jest.fn(async (input: Request) => {
@@ -314,11 +294,78 @@ describe('KeyGroupRelationsGrid', () => {
 
     renderGrid()
 
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    // One request, at the default page size, and no second one widening it to the total
     await waitFor(() => {
       expect(
-        requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters.pageSize)
-      ).toEqual([20, TOTAL])
+        requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters)
+      ).toEqual([{ page: 1, pageSize: 20 }])
     }, WAIT_BUDGET)
+
+    // The control is offered, and it reports the whole group rather than the loaded page
+    expect(screen.getByText('pagination.show-total:250')).toBeInTheDocument()
+  })
+
+  it('requests the page the pagination control moves to', async () => {
+    const TOTAL = 250
+    const user = setupUser()
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        return jsonResponse({ items: relations, totalItems: TOTAL })
+      }
+
+      return jsonResponse({ items: [], totalItems: 0 })
+    }) as unknown as typeof fetch
+
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    await user.click(screen.getByRole('button', { name: 'pagination.next-page' }))
+
+    await waitFor(() => {
+      expect(
+        requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters.page)
+      ).toEqual([1, 2])
+    }, WAIT_BUDGET)
+  })
+
+  it('suppresses the "no keys left" message while the grid holds only part of the group', async () => {
+    // The claim is derived from the loaded relations, so on a group that does not fit the page a
+    // key on another page may still use the sub group. Shown only when the page is the group.
+    const user = setupUser()
+    const assigned = [{ ...relation(11, 'height', 1, false), subGroup: SUB_GROUP }]
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        return jsonResponse({ items: assigned, totalItems: 250 })
+      }
+
+      if (input.url.endsWith(SUB_GROUPS_URL)) {
+        return jsonResponse({ items: vocabulary, totalItems: vocabulary.length })
+      }
+
+      return jsonResponse({ ...assigned[0], ...body })
+    }) as unknown as typeof fetch
+
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    await user.click(screen.getAllByRole('checkbox')[1])
+    await user.click(unassignButton())
+
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(screen.queryByText(/sub-group-unused/)).not.toBeInTheDocument()
   })
 
   it('keeps the key grid within the width the group detail pane gives it', async () => {
@@ -347,7 +394,7 @@ describe('KeyGroupRelationsGrid', () => {
     expect(unassignButton()).toBeEnabled()
   })
 
-  it('assigns the sub group with one upsert per key, keeping each sorter and mandatory', async () => {
+  it('assigns the sub group with one upsert per key, carrying nothing but the pair', async () => {
     const user = setupUser()
     refusedKeyIds = [12]
     renderGrid()
@@ -358,10 +405,13 @@ describe('KeyGroupRelationsGrid', () => {
 
     await waitFor(() => { expect(upsertRequests()).toHaveLength(3) }, WAIT_BUDGET)
 
+    // sorter and mandatory are absent rather than echoed back: an absent property keeps its
+    // stored value, so the assignment cannot overwrite a cell edit of the same row that was
+    // made after the grid rendered the value the batch would have carried.
     expect(upsertRequests().map((request) => request.body)).toEqual([
-      { keyId: 11, groupId: GROUP_ID, sorter: 1, mandatory: false, subGroup: SUB_GROUP },
-      { keyId: 12, groupId: GROUP_ID, sorter: 2, mandatory: true, subGroup: SUB_GROUP },
-      { keyId: 13, groupId: GROUP_ID, sorter: 3, mandatory: false, subGroup: SUB_GROUP }
+      { keyId: 11, groupId: GROUP_ID, subGroup: SUB_GROUP },
+      { keyId: 12, groupId: GROUP_ID, subGroup: SUB_GROUP },
+      { keyId: 13, groupId: GROUP_ID, subGroup: SUB_GROUP }
     ])
 
     // the two keys the server accepted keep the assignment
@@ -388,7 +438,7 @@ describe('KeyGroupRelationsGrid', () => {
     expect(failures).toHaveLength(1)
   })
 
-  it('omits the sub group from a mandatory cell edit', async () => {
+  it('sends only the edited cell, never the sub group or the sibling cell', async () => {
     const user = setupUser()
     renderGrid()
     await screen.findByText('height', undefined, WAIT_BUDGET)
@@ -398,7 +448,7 @@ describe('KeyGroupRelationsGrid', () => {
     await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
 
     expect('subGroup' in upsertRequests()[0].body!).toBe(false)
-    expect(upsertRequests()[0].body).toEqual({ keyId: 11, groupId: GROUP_ID, sorter: 1, mandatory: true })
+    expect(upsertRequests()[0].body).toEqual({ keyId: 11, groupId: GROUP_ID, mandatory: true })
   })
 
   it('unassigns a selection with an explicit null sub group', async () => {
@@ -414,9 +464,55 @@ describe('KeyGroupRelationsGrid', () => {
     expect(upsertRequests()[0].body).toEqual({
       keyId: 11,
       groupId: GROUP_ID,
-      sorter: 1,
-      mandatory: false,
       subGroup: null
     })
+  })
+
+  it('holds the per-row delete while a batch of assignments is still settling', async () => {
+    // An upsert that reached the server after the delete would recreate the relation, because
+    // the upsert creates what it cannot find.
+    const user = setupUser()
+    let releaseUpsert: () => void = () => {}
+    const upsertGate = new Promise<void>((resolve) => { releaseUpsert = resolve })
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        return jsonResponse({ items: relations, totalItems: relations.length })
+      }
+
+      if (input.url.endsWith(SUB_GROUPS_URL)) {
+        return jsonResponse({ items: vocabulary, totalItems: vocabulary.length })
+      }
+
+      await upsertGate
+
+      return jsonResponse({ ...relations.find((item) => item.keyId === body.keyId), ...body })
+    }) as unknown as typeof fetch
+
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    await selectKeys(user, 'height')
+    await user.click(unassignButton())
+
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    // The batch's own buttons and every row's delete are held until it settles
+    for (const button of deleteButtons()) {
+      expect(button).toBeDisabled()
+    }
+    expect(unassignButton()).toBeDisabled()
+    expect(assignButton()).toBeDisabled()
+    // and so are the cells the batch could overwrite
+    expect(screen.getByLabelText('cell-mandatory-11')).toBeDisabled()
+    expect(screen.getByLabelText('cell-sorter-11')).toBeDisabled()
+
+    releaseUpsert()
+
+    await waitFor(() => { expect(deleteButtons()[0]).toBeEnabled() }, WAIT_BUDGET)
   })
 })
