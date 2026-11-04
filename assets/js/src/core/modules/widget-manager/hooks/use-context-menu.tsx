@@ -9,10 +9,10 @@
  */
 
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import React, { useRef, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState, useMemo, type KeyboardEvent } from 'react'
 import { type Model, TabNode } from 'flexlayout-react'
 import type { MenuRef } from 'antd'
-import { isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useClickOutside } from '@Pimcore/utils/hooks/use-click-outside'
 
@@ -34,25 +34,83 @@ export interface CreateContextMenuItemsProps {
   closeWidget: (id: string) => void
 }
 
+interface OpenContextMenuState extends ContextMenuState {
+  openedByKeyboard: boolean
+}
+
+// a menu action can close or remount the opening tab, then the active main tab takes the focus
+const returnFocus = (opener: Element): void => {
+  const target = opener.isConnected
+    ? opener
+    : document.querySelector('.widget-manager-tab-title--active-main .widget-manager__tab-title-close-button')
+
+  if (target instanceof HTMLElement) {
+    target.focus()
+  }
+}
+
 export const useContextMenu = (
   model: Model,
   createContextMenuItems?: ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps) => DropdownProps['menu']['items']
 ): UseContextMenuReturn => {
-  const [contextMenuState, setContextMenuState] = useState<ContextMenuState | null>(null)
+  const [contextMenuState, setContextMenuState] = useState<OpenContextMenuState | null>(null)
   const dropdownRef = useRef<MenuRef>(null)
+  const keyboardOpenerRef = useRef<Element | null>(null)
   const { closeWidget } = useWidgetManager()
 
-  const closeContextMenu = (): void => {
+  const dismissContextMenu = (): void => {
+    keyboardOpenerRef.current = null
     setContextMenuState(null)
   }
 
-  useClickOutside(dropdownRef, closeContextMenu)
+  const closeContextMenu = (): void => {
+    const opener = keyboardOpenerRef.current
+    dismissContextMenu()
+
+    if (!isNull(opener)) {
+      requestAnimationFrame(() => { returnFocus(opener) })
+    }
+  }
+
+  useClickOutside(dropdownRef, dismissContextMenu)
 
   const showContextMenu = (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     if (node instanceof TabNode) {
       event.preventDefault()
-      setContextMenuState({ x: event.clientX, y: event.clientY, tabNode: node })
+      // the context menu key and Shift+F10 open it with a button other than the right mouse button
+      const openedByKeyboard = event.button !== 2
+      keyboardOpenerRef.current = openedByKeyboard && event.target instanceof Element ? event.target : null
+      setContextMenuState({ x: event.clientX, y: event.clientY, tabNode: node, openedByKeyboard })
       node.getExtraData()
+    }
+  }
+
+  useEffect(() => {
+    if (contextMenuState?.openedByKeyboard !== true) {
+      return
+    }
+
+    // rc-menu registers its items after mounting, so the focus can only land a few frames later
+    let framesLeft = 10
+    let frame = 0
+    const focusMenu = (): void => {
+      dropdownRef.current?.focus()
+      framesLeft -= 1
+
+      if (dropdownRef.current?.menu?.list?.contains(document.activeElement) !== true && framesLeft > 0) {
+        frame = requestAnimationFrame(focusMenu)
+      }
+    }
+
+    focusMenu()
+
+    return () => { cancelAnimationFrame(frame) }
+  }, [contextMenuState])
+
+  const onMenuKeyDown = (event: KeyboardEvent<HTMLUListElement>): void => {
+    if (event.key === 'Escape' || event.key === 'Tab') {
+      event.preventDefault()
+      closeContextMenu()
     }
   }
 
@@ -66,7 +124,7 @@ export const useContextMenu = (
   const dropdown = contextMenuState !== null && !isUndefined(createContextMenuItems)
     ? (
       <Dropdown
-        menu={ { items: menuItems } }
+        menu={ { items: menuItems, onKeyDown: onMenuKeyDown } }
         menuRef={ dropdownRef }
         open
         overlayStyle={ { position: 'absolute', left: contextMenuState.x, top: contextMenuState.y } }
