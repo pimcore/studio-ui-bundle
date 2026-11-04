@@ -2203,6 +2203,28 @@ classification-store.select-group: Seleccionar grupo
 classification-store.search-groups: Buscar grupos…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Subgrupos
+classification-store.add-sub-group: Añadir subgrupo
+classification-store.delete-sub-group: "¿Eliminar el subgrupo \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: Un subgrupo pertenece al almacén, por lo que uno nuevo estará disponible para todos los grupos de este almacén.
+classification-store.delete-sub-group-in-use-hint: Primero quite la asignación de las claves a este subgrupo en los grupos indicados arriba y después elimínelo.
+classification-store.no-sub-groups: Este almacén todavía no tiene subgrupos
+classification-store.select-sub-group: Seleccionar subgrupo
+classification-store.search-sub-groups: Buscar subgrupos…
+classification-store.assign-sub-group: Asignar subgrupo
+classification-store.unassign-sub-group: Quitar asignación
+classification-store.select-keys-hint: Seleccione primero al menos una clave
+classification-store.no-sub-group: Sin subgrupo
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Sin asignar ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Quitar la asignación de las claves de este grupo
+classification-store.unassign-sub-group-confirm_one: "¿Quitar la asignación de 1 clave de este grupo al subgrupo \"{{name}}\"?"
+classification-store.unassign-sub-group-confirm_other: "¿Quitar la asignación de {{count}} claves de este grupo al subgrupo \"{{name}}\"?"
+classification-store.sub-groups-strip-hint: Estos son los subgrupos que usan las claves de este grupo. El vocabulario pertenece al almacén.
+classification-store.manage-sub-groups: Gestionar subgrupos
+classification-store.sub-group-unused: "Ninguna clave de este grupo usa ya el subgrupo \"{{name}}\". Sigue existiendo en el almacén."
+classification-store.assign-sub-group-progress: "Asignando el subgrupo a {{done}} de {{total}} claves…"
+classification-store.assign-sub-group-failed: "No se pudo asignar el subgrupo a: {{keyNames}}"
 home: Inicio
 preview.label: Vista previa
 preview.desktop: Escritorio

@@ -8,22 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { GroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/groups-tab'
 import { KeysTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/keys-tab'
 import { CollectionsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/collections-tab'
+import { SubGroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/sub-groups-tab'
 import { useStyles } from '@Pimcore/modules/classification-store-config/classification-store-config.styles'
 
 interface IStoreEditorProps {
   storeId: number
 }
 
+const SUB_GROUPS_TAB_KEY = 'sub-groups'
+
 export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const [activeKey, setActiveKey] = useState<string>('keys')
+
+  const showSubGroups = useCallback(() => { setActiveKey(SUB_GROUPS_TAB_KEY) }, [])
 
   const tabItems = [
     {
@@ -39,7 +46,10 @@ export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element =
       icon: <Icon value='group' />,
       label: t('classification-store.tabs.groups'),
       children: (
-        <GroupsTab storeId={ storeId } />
+        <GroupsTab
+          onShowSubGroups={ showSubGroups }
+          storeId={ storeId }
+        />
       )
     },
     {
@@ -49,15 +59,24 @@ export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element =
       children: (
         <CollectionsTab storeId={ storeId } />
       )
+    },
+    {
+      key: SUB_GROUPS_TAB_KEY,
+      icon: <Icon value='group-alt' />,
+      label: t('classification-store.tabs.sub-groups'),
+      children: (
+        <SubGroupsTab storeId={ storeId } />
+      )
     }
   ]
 
   return (
     <Tabs
+      activeKey={ activeKey }
       className={ styles.storeEditorTabsContainer }
-      defaultActiveKey="keys"
       items={ tabItems }
       noTabBarMargin
+      onChange={ setActiveKey }
     />
   )
 }

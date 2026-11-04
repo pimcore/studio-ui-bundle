@@ -2203,6 +2203,28 @@ classification-store.select-group: Gruppe auswählen
 classification-store.search-groups: Gruppen suchen…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Untergruppen
+classification-store.add-sub-group: Untergruppe hinzufügen
+classification-store.delete-sub-group: "Untergruppe \"{{subGroupName}}\" löschen?"
+classification-store.add-sub-group-store-hint: Eine Untergruppe gehört zum Store, eine neue steht daher jeder Gruppe dieses Stores zur Verfügung.
+classification-store.delete-sub-group-in-use-hint: Heben Sie die Zuordnung der Schlüssel zu dieser Untergruppe zuerst in den oben genannten Gruppen auf und löschen Sie sie dann.
+classification-store.no-sub-groups: Dieser Store hat noch keine Untergruppen
+classification-store.select-sub-group: Untergruppe auswählen
+classification-store.search-sub-groups: Untergruppen suchen…
+classification-store.assign-sub-group: Untergruppe zuordnen
+classification-store.unassign-sub-group: Zuordnung aufheben
+classification-store.select-keys-hint: Wählen Sie zuerst mindestens einen Schlüssel aus
+classification-store.no-sub-group: Keine Untergruppe
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Nicht zugeordnet ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Zuordnung der Schlüssel dieser Gruppe aufheben
+classification-store.unassign-sub-group-confirm_one: "Zuordnung von 1 Schlüssel dieser Gruppe zur Untergruppe \"{{name}}\" aufheben?"
+classification-store.unassign-sub-group-confirm_other: "Zuordnung von {{count}} Schlüsseln dieser Gruppe zur Untergruppe \"{{name}}\" aufheben?"
+classification-store.sub-groups-strip-hint: Dies sind die Untergruppen, die die Schlüssel dieser Gruppe verwenden. Das Vokabular bleibt beim Store.
+classification-store.manage-sub-groups: Untergruppen verwalten
+classification-store.sub-group-unused: "Kein Schlüssel dieser Gruppe verwendet die Untergruppe \"{{name}}\" mehr. Sie existiert weiterhin im Store."
+classification-store.assign-sub-group-progress: "Die Untergruppe wird {{done}} von {{total}} Schlüsseln zugeordnet…"
+classification-store.assign-sub-group-failed: "Die Untergruppe konnte folgenden Schlüsseln nicht zugeordnet werden: {{keyNames}}"
 home: Startseite
 preview.label: Vorschau
 preview.desktop: Desktop

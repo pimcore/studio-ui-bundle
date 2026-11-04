@@ -44,6 +44,8 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 
 interface IGroupsTabProps {
   storeId: number
+  /** Opens the Sub groups tab of the store, where the vocabulary is managed. */
+  onShowSubGroups?: () => void
 }
 
 interface IGroupDetailFormValues {
@@ -51,7 +53,7 @@ interface IGroupDetailFormValues {
   description: string
 }
 
-export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
+export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { token } = theme.useToken()
   const { localModal: modal } = useStudioModal()
@@ -419,6 +421,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
                   <KeyGroupRelationsGrid
                     groupId={ activeGroup.id }
                     groupName={ activeGroup.name }
+                    onShowSubGroups={ onShowSubGroups }
                     storeId={ storeId }
                   />
                 </Flex>

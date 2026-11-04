@@ -2203,6 +2203,28 @@ classification-store.select-group: Groep selecteren
 classification-store.search-groups: Groepen zoeken…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Subgroepen
+classification-store.add-sub-group: Subgroep toevoegen
+classification-store.delete-sub-group: "Subgroep \"{{subGroupName}}\" verwijderen?"
+classification-store.add-sub-group-store-hint: Een subgroep hoort bij de store, dus een nieuwe komt beschikbaar voor elke groep van deze store.
+classification-store.delete-sub-group-in-use-hint: Maak eerst de toewijzing van de sleutels aan deze subgroep ongedaan in de hierboven genoemde groepen en verwijder hem daarna.
+classification-store.no-sub-groups: Deze store heeft nog geen subgroepen
+classification-store.select-sub-group: Subgroep selecteren
+classification-store.search-sub-groups: Subgroepen zoeken…
+classification-store.assign-sub-group: Subgroep toewijzen
+classification-store.unassign-sub-group: Toewijzing opheffen
+classification-store.select-keys-hint: Selecteer eerst minstens één sleutel
+classification-store.no-sub-group: Geen subgroep
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Niet toegewezen ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Toewijzing van de sleutels van deze groep opheffen
+classification-store.unassign-sub-group-confirm_one: "Toewijzing van 1 sleutel van deze groep aan subgroep \"{{name}}\" opheffen?"
+classification-store.unassign-sub-group-confirm_other: "Toewijzing van {{count}} sleutels van deze groep aan subgroep \"{{name}}\" opheffen?"
+classification-store.sub-groups-strip-hint: Dit zijn de subgroepen die de sleutels van deze groep gebruiken. Het vocabulaire blijft bij de store.
+classification-store.manage-sub-groups: Subgroepen beheren
+classification-store.sub-group-unused: "Geen enkele sleutel van deze groep gebruikt subgroep \"{{name}}\" nog. Hij bestaat nog steeds in de store."
+classification-store.assign-sub-group-progress: "Subgroep wordt aan {{done}} van {{total}} sleutels toegewezen…"
+classification-store.assign-sub-group-failed: "De subgroep kon niet worden toegewezen aan: {{keyNames}}"
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad

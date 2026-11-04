@@ -15,11 +15,132 @@ import {
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
   type ClassificationStoreConfigurationKeyCollectionApiResponse,
-  type ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
-  type ClassificationStoreConfigurationCollectionRelationCollectionApiArg
+  type ClassificationStoreConfigurationCollectionRelationCollectionApiArg,
+  type ClassificationStoreCollection2 as GeneratedKeyLayout,
+  type ClassificationStoreGroupLayout2 as GeneratedGroupLayout,
+  type ClassificationStoreConfigurationKeyGroupRelationCreate as GeneratedKeyGroupRelationCreate,
+  type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+
+const CONFIGURATION_PREFIX = '/pimcore-studio/api/classification-store/configuration'
+const SUB_GROUP_COLLECTION_ENDPOINT = 'classificationStoreConfigurationSubGroupCollection'
+
+// ─── Hand-written sub-group contract ────────────────────────────────────────────
+// The sub-group endpoints and the `subGroup` field shipped after this client was last
+// generated. Each declaration below either adds a name the generated slice does not carry
+// or shadows a generated one, so the next regeneration supersedes this block by deleting it.
+
+export interface ClassificationStoreConfigurationSubGroupDetail {
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object
+  }
+  /** ID of the sub group */
+  id: number
+  /** Generated identifier of the sub group, the value a key-group relation stores */
+  identifier: string
+  /** Name of the sub group */
+  name: string
+  /** ID of the store this sub group belongs to */
+  storeId: number
+  /** Description of the sub group */
+  description: string | null
+  /** Creation date as Unix timestamp */
+  creationDate: number | null
+  /** Modification date as Unix timestamp */
+  modificationDate: number | null
+}
+
+export interface ClassificationStoreConfigurationSubGroupCreate {
+  /** Name of the sub group */
+  name: string
+  /** ID of the store this sub group belongs to */
+  storeId: number
+}
+
+export interface ClassificationStoreConfigurationSubGroupUpdate {
+  /** Name of the sub group */
+  name: string
+  /** Description of the sub group */
+  description: string | null
+}
+
+export interface ClassificationStoreConfigurationSubGroupCollectionApiResponse {
+  totalItems: number
+  items: ClassificationStoreConfigurationSubGroupDetail[]
+}
+
+export interface ClassificationStoreConfigurationSubGroupCollectionApiArg {
+  /** ID of the store to list sub groups for */
+  storeId: number
+  body: {
+    filters?: {
+      page?: number
+      pageSize?: number
+      columnFilters?: object
+      sortFilter?: object
+      additionalSortFilters?: object
+    }
+  }
+}
+
+export interface ClassificationStoreConfigurationSubGroupCreateApiArg {
+  classificationStoreConfigurationSubGroupCreate: ClassificationStoreConfigurationSubGroupCreate
+}
+
+export interface ClassificationStoreConfigurationSubGroupUpdateApiArg {
+  /** Id of the sub group configuration */
+  id: number
+  classificationStoreConfigurationSubGroupUpdate: ClassificationStoreConfigurationSubGroupUpdate
+}
+
+export interface ClassificationStoreConfigurationSubGroupDeleteApiArg {
+  /** Id of the sub group configuration */
+  id: number
+}
+
+/** A key-group relation, which now also stores the identifier of its sub group. */
+export interface ClassificationStoreConfigurationKeyGroupRelationDetail extends GeneratedKeyGroupRelationDetail {
+  /** Identifier of the sub group this key is assigned to in this group */
+  subGroup?: string | null
+}
+
+/**
+ * The create-or-upsert payload of a key-group relation. An absent `subGroup` leaves the
+ * stored assignment alone, an explicit null clears it.
+ */
+export interface ClassificationStoreConfigurationKeyGroupRelationCreate extends GeneratedKeyGroupRelationCreate {
+  /** Identifier of the sub group to assign the key to in this group */
+  subGroup?: string | null
+}
+
+export interface ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse {
+  totalItems: number
+  items: ClassificationStoreConfigurationKeyGroupRelationDetail[]
+}
+
+/** The sub groups of a group layout, in the order of their first key. */
+export interface ClassificationStoreSubGroupLayout {
+  /** Identifier of the sub group */
+  identifier: string
+  /** Name of the sub group */
+  name: string
+  /** Description of the sub group */
+  description: string | null
+}
+
+export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
+  /** Identifier of the sub group this key is assigned to in its group */
+  subGroup?: string | null
+}
+
+export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
+  keys: ClassificationStoreCollection2[]
+  /** Sub groups the keys of this group are assigned to, ordered by their first key */
+  subGroups?: ClassificationStoreSubGroupLayout[]
+}
 
 // Helper: scan all active query cache entries for a given endpoint name and patch each one
 type PatchFn<T> = (draft: T) => void
@@ -274,7 +395,12 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationKeyGroupRelationCreate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
-        const { keyId, groupId, sorter, mandatory } = args.classificationStoreConfigurationKeyGroupRelationCreate
+        const create: ClassificationStoreConfigurationKeyGroupRelationCreate =
+          args.classificationStoreConfigurationKeyGroupRelationCreate
+        const { keyId, groupId, sorter, mandatory } = create
+        // An absent subGroup means "leave the stored assignment alone" to the server, so a
+        // mandatory or sorter edit must not patch the cached sub group either.
+        const subGroupPatch = 'subGroup' in create ? { subGroup: create.subGroup ?? null } : {}
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
         const matchesGroup = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg): boolean => a.groupId === groupId
@@ -288,10 +414,19 @@ const api = baseApi.enhanceEndpoints({
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
               // Upsert — update mandatory/sorter in-place
-              draft.items[idx] = { ...draft.items[idx], sorter, mandatory }
+              draft.items[idx] = { ...draft.items[idx], sorter, mandatory, ...subGroupPatch }
             } else {
               // New relation — keyName/keyDescription/groupName filled in by server overwrite below
-              draft.items.push({ keyId, groupId, sorter, mandatory, keyName: null, keyDescription: null, groupName: null })
+              draft.items.push({
+                keyId,
+                groupId,
+                sorter,
+                mandatory,
+                keyName: null,
+                keyDescription: null,
+                groupName: null,
+                subGroup: create.subGroup ?? null
+              })
               draft.totalItems += 1
             }
           },
@@ -420,6 +555,121 @@ const api = baseApi.enhanceEndpoints({
       }
     }
   }
+}).injectEndpoints({
+  endpoints: (build) => ({
+
+    // ─── Sub groups ───────────────────────────────────────────────────────────
+
+    classificationStoreConfigurationSubGroupCollection: build.query<
+      ClassificationStoreConfigurationSubGroupCollectionApiResponse,
+      ClassificationStoreConfigurationSubGroupCollectionApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/stores/${queryArg.storeId}/sub-groups`,
+        method: 'POST',
+        body: queryArg.body
+      }),
+      providesTags: ['Classification Store']
+    }),
+
+    classificationStoreConfigurationSubGroupCreate: build.mutation<
+      ClassificationStoreConfigurationSubGroupDetail,
+      ClassificationStoreConfigurationSubGroupCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/sub-groups/add`,
+        method: 'POST',
+        body: queryArg.classificationStoreConfigurationSubGroupCreate
+      }),
+      invalidatesTags: () => [],
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const { storeId } = args.classificationStoreConfigurationSubGroupCreate
+        const matchesStore = (a: ClassificationStoreConfigurationSubGroupCollectionApiArg): boolean => a.storeId === storeId
+        try {
+          const { data: created } = await queryFulfilled
+          patchAllCacheEntries<
+            ClassificationStoreConfigurationSubGroupCollectionApiResponse,
+            ClassificationStoreConfigurationSubGroupCollectionApiArg
+          >(
+            dispatch,
+            SUB_GROUP_COLLECTION_ENDPOINT,
+            (draft) => {
+              draft.items.push(created)
+              draft.totalItems += 1
+            },
+            matchesStore
+          )
+        } catch {
+          // Mutation failed — cache stays stale until next refetch
+        }
+      }
+    }),
+
+    classificationStoreConfigurationSubGroupUpdate: build.mutation<
+      ClassificationStoreConfigurationSubGroupDetail,
+      ClassificationStoreConfigurationSubGroupUpdateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/sub-groups/${queryArg.id}`,
+        method: 'PUT',
+        body: queryArg.classificationStoreConfigurationSubGroupUpdate
+      }),
+      invalidatesTags: () => [],
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationSubGroupCollectionApiResponse>(
+          dispatch,
+          SUB_GROUP_COLLECTION_ENDPOINT,
+          (draft) => {
+            const idx = draft.items.findIndex((s) => s.id === args.id)
+            if (idx !== -1) {
+              const update = args.classificationStoreConfigurationSubGroupUpdate
+              draft.items[idx] = { ...draft.items[idx], ...update }
+            }
+          }
+        )
+        try {
+          const { data: updated } = await queryFulfilled
+          patchAllCacheEntries<ClassificationStoreConfigurationSubGroupCollectionApiResponse>(
+            dispatch,
+            SUB_GROUP_COLLECTION_ENDPOINT,
+            (draft) => {
+              const idx = draft.items.findIndex((s) => s.id === updated.id)
+              if (idx !== -1) draft.items[idx] = updated
+            }
+          )
+        } catch {
+          patchResults.forEach((r) => { r.undo() })
+        }
+      }
+    }),
+
+    classificationStoreConfigurationSubGroupDelete: build.mutation<
+      unknown,
+      ClassificationStoreConfigurationSubGroupDeleteApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/sub-groups/${queryArg.id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: () => [],
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          patchAllCacheEntries<ClassificationStoreConfigurationSubGroupCollectionApiResponse>(
+            dispatch,
+            SUB_GROUP_COLLECTION_ENDPOINT,
+            (draft) => {
+              draft.items = draft.items.filter((s) => s.id !== args.id)
+              draft.totalItems = Math.max(0, draft.totalItems - 1)
+            }
+          )
+        } catch {
+          // Mutation failed — cache stays stale until next refetch
+        }
+      }
+    })
+  }),
+  overrideExisting: false
 })
 
 export type * from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
@@ -449,6 +699,11 @@ export const {
   // CRUD mutations — collection-group relations
   useClassificationStoreConfigurationCollectionRelationCreateMutation,
   useClassificationStoreConfigurationCollectionRelationDeleteMutation,
+  // Sub groups
+  useClassificationStoreConfigurationSubGroupCollectionQuery,
+  useClassificationStoreConfigurationSubGroupCreateMutation,
+  useClassificationStoreConfigurationSubGroupUpdateMutation,
+  useClassificationStoreConfigurationSubGroupDeleteMutation,
   // Store / other queries (unchanged)
   useClassificationStoreConfigurationStoreTreeQuery,
   useClassificationStoreConfigurationStoreCreateMutation,

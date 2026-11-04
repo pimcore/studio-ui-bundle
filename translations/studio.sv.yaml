@@ -2203,6 +2203,28 @@ classification-store.select-group: Välj grupp
 classification-store.search-groups: Sök grupper…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Undergrupper
+classification-store.add-sub-group: Lägg till undergrupp
+classification-store.delete-sub-group: "Ta bort undergruppen \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: En undergrupp hör till lagret, så en ny blir tillgänglig för alla grupper i detta lager.
+classification-store.delete-sub-group-in-use-hint: Ta först bort kopplingen mellan nycklarna och denna undergrupp i grupperna som nämns ovan, och ta sedan bort den.
+classification-store.no-sub-groups: Detta lager har inga undergrupper än
+classification-store.select-sub-group: Välj undergrupp
+classification-store.search-sub-groups: Sök undergrupper…
+classification-store.assign-sub-group: Koppla undergrupp
+classification-store.unassign-sub-group: Ta bort koppling
+classification-store.select-keys-hint: Välj minst en nyckel först
+classification-store.no-sub-group: Ingen undergrupp
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Okopplade ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Ta bort kopplingen för nycklarna i denna grupp
+classification-store.unassign-sub-group-confirm_one: "Ta bort kopplingen mellan 1 nyckel i denna grupp och undergruppen \"{{name}}\"?"
+classification-store.unassign-sub-group-confirm_other: "Ta bort kopplingen mellan {{count}} nycklar i denna grupp och undergruppen \"{{name}}\"?"
+classification-store.sub-groups-strip-hint: Detta är de undergrupper som nycklarna i denna grupp använder. Vokabulären tillhör lagret.
+classification-store.manage-sub-groups: Hantera undergrupper
+classification-store.sub-group-unused: "Ingen nyckel i denna grupp använder undergruppen \"{{name}}\" längre. Den finns fortfarande i lagret."
+classification-store.assign-sub-group-progress: "Kopplar undergruppen till {{done}} av {{total}} nycklar…"
+classification-store.assign-sub-group-failed: "Undergruppen kunde inte kopplas till: {{keyNames}}"
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator

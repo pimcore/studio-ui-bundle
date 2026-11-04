@@ -2203,6 +2203,28 @@ classification-store.select-group: Velg gruppe
 classification-store.search-groups: Søk i grupper…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Undergrupper
+classification-store.add-sub-group: Legg til undergruppe
+classification-store.delete-sub-group: "Slette undergruppen \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: En undergruppe hører til butikken, så en ny blir tilgjengelig for alle grupper i denne butikken.
+classification-store.delete-sub-group-in-use-hint: Fjern først tilknytningen av nøklene til denne undergruppen i gruppene nevnt over, og slett den deretter.
+classification-store.no-sub-groups: Denne butikken har ingen undergrupper ennå
+classification-store.select-sub-group: Velg undergruppe
+classification-store.search-sub-groups: Søk i undergrupper…
+classification-store.assign-sub-group: Tilknytt undergruppe
+classification-store.unassign-sub-group: Fjern tilknytning
+classification-store.select-keys-hint: Velg minst én nøkkel først
+classification-store.no-sub-group: Ingen undergruppe
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Uten tilknytning ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Fjern tilknytningen for nøklene i denne gruppen
+classification-store.unassign-sub-group-confirm_one: "Fjerne tilknytningen av 1 nøkkel i denne gruppen til undergruppen \"{{name}}\"?"
+classification-store.unassign-sub-group-confirm_other: "Fjerne tilknytningen av {{count}} nøkler i denne gruppen til undergruppen \"{{name}}\"?"
+classification-store.sub-groups-strip-hint: Dette er undergruppene nøklene i denne gruppen bruker. Vokabularet tilhører butikken.
+classification-store.manage-sub-groups: Administrer undergrupper
+classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker undergruppen \"{{name}}\" lenger. Den finnes fortsatt i butikken."
+classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
+classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
