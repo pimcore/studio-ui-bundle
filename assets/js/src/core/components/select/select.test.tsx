@@ -45,8 +45,8 @@ afterAll(() => {
 
 const lastValue = (onChange: jest.Mock): string[] => onChange.mock.calls[onChange.mock.calls.length - 1][0]
 
-const Controlled = ({ onChange, ...props }: Omit<SelectProps, 'onChange'> & { onChange: jest.Mock }): React.JSX.Element => {
-  const [value, setValue] = useState<string[]>([])
+const Controlled = ({ onChange, initialValue = [], ...props }: Omit<SelectProps, 'onChange'> & { onChange: jest.Mock, initialValue?: string[] }): React.JSX.Element => {
+  const [value, setValue] = useState<string[]>(initialValue)
 
   return (
     <Select
@@ -116,6 +116,39 @@ describe('Select "Select all"', () => {
     fireEvent.click(screen.getByText('select.select-all'))
 
     expect(lastValue(onChange)).toEqual(['FR', 'DE'])
+  })
+
+  it('forgets the search after a deselect, so Select all adds the whole visible list', () => {
+    const onChange = jest.fn()
+    render(<Controlled
+      initialValue={ ['FR'] }
+      onChange={ onChange }
+           />)
+
+    search('an')
+    pick('France')
+    fireEvent.click(screen.getByText('select.select-all'))
+
+    expect(lastValue(onChange)).toEqual(['AT', 'DE', 'FR'])
+  })
+
+  it('keeps the search when the dropdown is closed and reopened, so Select all matches the list', () => {
+    const onChange = jest.fn()
+    render(<Controlled
+      onChange={ onChange }
+      open={ undefined }
+           />)
+    const combobox = screen.getByRole('combobox')
+
+    fireEvent.mouseDown(combobox)
+    search('an')
+    fireEvent.keyDown(combobox, { key: 'Escape', keyCode: 27 })
+    fireEvent.mouseDown(combobox)
+
+    expect(screen.queryByText('Austria', { selector: '.ant-select-item-option-content' })).toBeNull()
+    fireEvent.click(screen.getByText('select.select-all'))
+
+    expect(lastValue(onChange)).toEqual(['DE', 'FR'])
   })
 
   it.each([

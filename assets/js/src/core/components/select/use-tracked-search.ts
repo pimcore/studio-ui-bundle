@@ -12,36 +12,57 @@ import { useState } from 'react'
 import type { SelectProps } from 'antd'
 
 interface TrackedSearchOptions {
+  /** Control the search text of the antd Select. Only then the tracked text is guaranteed to match the visible list. */
+  enabled: boolean
   mode: SelectProps['mode']
   autoClearSearchValue: SelectProps['autoClearSearchValue']
   onSearch: SelectProps['onSearch']
   onSelect: SelectProps['onSelect']
+  onDeselect: SelectProps['onDeselect']
 }
 
 /**
- * Mirrors the search text of the antd Select, which does not expose it. Needed to know which options are visible.
+ * Owns the search text of a multiple Select (passed back as `searchValue`), so the options that are visible and the
+ * options "Select all" adds can never drift apart. antd clears its own text without telling us (after a pick or
+ * deselect, on blur), so a controlled value has to repeat exactly those clears. It stays after the dropdown closes.
  */
-export const useTrackedSearch = ({ mode, autoClearSearchValue, onSearch, onSelect }: TrackedSearchOptions): {
+export const useTrackedSearch = ({
+  enabled,
+  mode,
+  autoClearSearchValue,
+  onSearch,
+  onSelect,
+  onDeselect
+}: TrackedSearchOptions): {
   searchValue: string
+  controlledSearchValue: string | undefined
   resetSearch: () => void
   handleSearch: (search: string) => void
   handleSelect: NonNullable<SelectProps['onSelect']>
+  handleDeselect: NonNullable<SelectProps['onDeselect']>
 } => {
   const [searchValue, setSearchValue] = useState('')
+  const clearsAfterPick = mode === 'multiple' && autoClearSearchValue !== false
 
   return {
     searchValue,
+    controlledSearchValue: enabled ? searchValue : undefined,
     resetSearch: () => { setSearchValue('') },
     handleSearch: (search) => {
       setSearchValue(search)
       onSearch?.(search)
     },
-    // rc-select clears its own search text after a pick in multiple mode, without calling onSearch.
     handleSelect: (selectedValue, option) => {
-      if (mode === 'multiple' && autoClearSearchValue !== false) {
+      if (clearsAfterPick) {
         setSearchValue('')
       }
       onSelect?.(selectedValue, option)
+    },
+    handleDeselect: (deselectedValue, option) => {
+      if (clearsAfterPick) {
+        setSearchValue('')
+      }
+      onDeselect?.(deselectedValue, option)
     }
   }
 }

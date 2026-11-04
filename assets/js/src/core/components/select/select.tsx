@@ -61,6 +61,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   onDropdownVisibleChange,
   onSearch,
   onSelect,
+  onDeselect,
   onFocus,
   onBlur,
   ...antdSelectProps
@@ -71,11 +72,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
-  const { searchValue, resetSearch, handleSearch, handleSelect } = useTrackedSearch({
+  const { searchValue, controlledSearchValue, resetSearch, handleSearch, handleSelect, handleDeselect } = useTrackedSearch({
+    enabled: allowSelectAll && mode === 'multiple' && antdSelectProps.searchValue === undefined,
     mode,
     autoClearSearchValue: antdSelectProps.autoClearSearchValue,
     onSearch,
-    onSelect
+    onSelect,
+    onDeselect
   })
 
   useImperativeHandle(ref, () => selectRef.current!)
@@ -165,9 +168,6 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   // Compose internal dropdown/focus state with optional consumer handlers (don't override them).
   const handleDropdownVisibleChange = (open: boolean): void => {
     setIsActive(open)
-    if (!open) {
-      resetSearch()
-    }
     onDropdownVisibleChange?.(open)
   }
 
@@ -175,9 +175,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     setIsFocus(true)
     onFocus?.(event)
   }
-
   const handleBlur = (event: React.FocusEvent<HTMLElement>): void => {
     setIsFocus(false)
+    resetSearch()
     onBlur?.(event)
   }
 
@@ -222,15 +222,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     antdSelectProps.onChange?.(clearedValue, [])
     selectRef.current?.blur()
   }
-
-  const { options, optionFilterProp, filterOption, maxCount } = antdSelectProps
-  const selectAllContext = { options, value, searchValue, optionFilterProp, filterOption }
+  const { options, optionFilterProp, filterOption, maxCount, searchValue: customSearchValue } = antdSelectProps
+  const selectAllContext = { options, value, searchValue: customSearchValue ?? searchValue, optionFilterProp, filterOption }
   const shouldShowSelectAll = allowSelectAll && mode === 'multiple' && maxCount === undefined && getSelectableOptions(selectAllContext).length > 0
 
   const handleSelectAll = (): void => {
     const values = getSelectAllValues(selectAllContext)
-    const selectedOptions = (options ?? []).filter(option => values.includes(option.value as string))
-    antdSelectProps.onChange?.(values, selectedOptions)
+    antdSelectProps.onChange?.(values, (options ?? []).filter(option => values.includes(option.value as string)))
   }
 
   const dropdownRender = shouldShowClearOption || shouldShowSelectAll
@@ -282,11 +280,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
             value={ 'alert-outline' }
           /> {t('no-data-available')}</Flex> }
         onBlur={ handleBlur }
+        onDeselect={ handleDeselect }
         onDropdownVisibleChange={ handleDropdownVisibleChange }
         onFocus={ handleFocus }
         onSearch={ handleSearch }
         onSelect={ handleSelect }
         ref={ selectRef }
+        searchValue={ controlledSearchValue }
         status={ status }
         style={ computedStyle }
         suffixIcon={ getSuffixIcon() }
