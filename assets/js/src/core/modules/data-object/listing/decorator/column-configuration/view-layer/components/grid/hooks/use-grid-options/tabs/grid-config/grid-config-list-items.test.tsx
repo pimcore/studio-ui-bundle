@@ -9,6 +9,8 @@
  */
 
 import React from 'react'
+import { type TFunction } from 'i18next'
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { render, screen } from '@testing-library/react'
 import { buildAdvancedBody, renderColumnTitle, renderRightToolbar } from './grid-config-list-items'
 import { truncatePath } from '@Pimcore/components/preview-mode/preview-mode-bar'
@@ -38,10 +40,10 @@ jest.mock('@Pimcore/components/language-selection/provider/use-language-selectio
 jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider', () => ({ SelectionType: {} }))
 jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector', () => ({ useElementSelector: jest.fn() }))
 
-const t = ((key: string) => `t:${key}`) as any
-const simple: any = { key: 'title', group: ['a', 'b'], config: { fieldDefinition: { title: 'Field title' } } }
-const plain: any = { key: 'id', config: {} }
-const advanced: any = { key: 'advanced', __meta: { advancedColumnConfig: { title: 'Mine' } } }
+const t = ((key: string) => `t:${key}`) as unknown as TFunction
+const simple = { key: 'title', group: ['a', 'b'], config: { fieldDefinition: { title: 'Field title' } } } as unknown as AvailableColumn
+const plain = { key: 'id', config: {} } as unknown as AvailableColumn
+const advanced = { key: 'advanced', __meta: { advancedColumnConfig: { title: 'Mine' } } } as unknown as AvailableColumn
 
 describe('AC1: the list helpers render the same items as before', () => {
   it('AC1: a simple column shows its translated field title with the group as tooltip', () => {
@@ -58,7 +60,7 @@ describe('AC1: the list helpers render the same items as before', () => {
     const { unmount } = render(<>{renderColumnTitle(advanced, t)}</>)
     expect(screen.getByText('Mine')).toBeTruthy()
     unmount()
-    render(<>{renderColumnTitle({ key: 'advanced' } as any, t)}</>)
+    render(<>{renderColumnTitle({ key: 'advanced' } as unknown as AvailableColumn, t)}</>)
     expect(screen.getByText('Add a title')).toBeTruthy()
   })
 
