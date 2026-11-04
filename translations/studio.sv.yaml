@@ -2225,7 +2225,6 @@ classification-store.manage-sub-groups: Hantera undergrupper
 classification-store.sub-group-unused: "Ingen nyckel i denna grupp använder undergruppen \"{{name}}\" längre. Den finns fortfarande i lagret."
 classification-store.assign-sub-group-progress: "Kopplar undergruppen till {{done}} av {{total}} nycklar…"
 classification-store.assign-sub-group-failed: "Undergruppen kunde inte kopplas till: {{keyNames}}"
-classification-store.group-exceeds-page-size: "Den här gruppen har {{total}} nycklar, fler än de {{shown}} som kan läsas in samtidigt. Undergruppernas rubriker och antal omfattar de första {{shown}} nycklarna."
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator

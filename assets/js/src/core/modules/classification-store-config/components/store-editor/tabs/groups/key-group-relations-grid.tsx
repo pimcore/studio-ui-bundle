@@ -50,7 +50,6 @@ interface IKeyGroupRelationsGridProps {
 }
 
 const ASSIGN_PROGRESS_KEY = 'classification-store-sub-group-assign'
-const TRUNCATED_GROUP_KEY = 'classification-store-group-exceeds-page-size'
 
 /** Sub group of a relation, with an unset one always reported as null. */
 const subGroupOf = (relation: ClassificationStoreConfigurationKeyGroupRelationDetail): string | null => {
@@ -86,29 +85,19 @@ export const KeyGroupRelationsGrid = ({
   )
 
   // A sub-group section and its count cover the whole group rather than one page of it, so the
-  // page is resized to the reported total instead of truncating the group at a page boundary.
-  // A group larger than one request can carry is reported rather than silently cut short.
+  // page is resized to the reported total and the whole group arrives in one request.
+  // Deliberately not capped at appConfig.maxPageSize: that bounds the page-size control a user
+  // may type into, not the size of a group, and the collection endpoint declares no upper bound
+  // of its own (FilterParameter::$pageSize carries no constraint). Capping it made the keys past
+  // the cap unreachable — not editable, not removable — and made a group-wide unassign clear
+  // only the part of the group that had been loaded.
   useEffect(() => {
     if (data === undefined) return
 
-    const wanted = Math.min(data.totalItems, appConfig.maxPageSize)
-
-    if (wanted > pageSize) {
-      setPageSize(wanted)
-      return
+    if (data.totalItems > pageSize) {
+      setPageSize(data.totalItems)
     }
-
-    if (data.totalItems > appConfig.maxPageSize) {
-      void messageApi.open({
-        key: TRUNCATED_GROUP_KEY,
-        type: 'warning',
-        content: t('classification-store.group-exceeds-page-size', {
-          shown: appConfig.maxPageSize,
-          total: data.totalItems
-        })
-      })
-    }
-  }, [data, pageSize, messageApi, t])
+  }, [data, pageSize])
 
   // The vocabulary is only read to label the headings and chips with a name instead of the
   // bare identifier the relation stores.

@@ -2225,7 +2225,6 @@ classification-store.manage-sub-groups: Subgroepen beheren
 classification-store.sub-group-unused: "Geen enkele sleutel van deze groep gebruikt subgroep \"{{name}}\" nog. Hij bestaat nog steeds in de store."
 classification-store.assign-sub-group-progress: "Subgroep wordt aan {{done}} van {{total}} sleutels toegewezen…"
 classification-store.assign-sub-group-failed: "De subgroep kon niet worden toegewezen aan: {{keyNames}}"
-classification-store.group-exceeds-page-size: "Deze groep heeft {{total}} sleutels, meer dan de {{shown}} die in één keer kunnen worden geladen. De koppen en aantallen van subgroepen betreffen de eerste {{shown}} sleutels."
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad

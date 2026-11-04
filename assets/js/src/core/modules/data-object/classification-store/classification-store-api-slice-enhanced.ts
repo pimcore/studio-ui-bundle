@@ -25,7 +25,6 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 const CONFIGURATION_PREFIX = '/pimcore-studio/api/classification-store/configuration'
-const SUB_GROUP_COLLECTION_ENDPOINT = 'classificationStoreConfigurationSubGroupCollection'
 
 // ─── Hand-written sub-group contract ────────────────────────────────────────────
 // The sub-group endpoints and the `subGroup` field shipped after this client was last
@@ -581,28 +580,11 @@ const api = baseApi.enhanceEndpoints({
         method: 'POST',
         body: queryArg.classificationStoreConfigurationSubGroupCreate
       }),
-      invalidatesTags: () => [],
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
-        const { storeId } = args.classificationStoreConfigurationSubGroupCreate
-        const matchesStore = (a: ClassificationStoreConfigurationSubGroupCollectionApiArg): boolean => a.storeId === storeId
-        try {
-          const { data: created } = await queryFulfilled
-          patchAllCacheEntries<
-            ClassificationStoreConfigurationSubGroupCollectionApiResponse,
-            ClassificationStoreConfigurationSubGroupCollectionApiArg
-          >(
-            dispatch,
-            SUB_GROUP_COLLECTION_ENDPOINT,
-            (draft) => {
-              draft.items.push(created)
-              draft.totalItems += 1
-            },
-            matchesStore
-          )
-        } catch {
-          // Mutation failed — cache stays stale until next refetch
-        }
-      }
+      // Invalidated rather than hand-patched. Which page a new sub group lands on, whether it
+      // matches a cached search and what each cached total becomes are all decided by the
+      // server's own filtering and ordering, so appending the row to every cached entry
+      // duplicated it across visited pages and corrupted filtered totals.
+      invalidatesTags: ['Classification Store']
     }),
 
     classificationStoreConfigurationSubGroupUpdate: build.mutation<
@@ -614,33 +596,10 @@ const api = baseApi.enhanceEndpoints({
         method: 'PUT',
         body: queryArg.classificationStoreConfigurationSubGroupUpdate
       }),
-      invalidatesTags: () => [],
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
-        const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationSubGroupCollectionApiResponse>(
-          dispatch,
-          SUB_GROUP_COLLECTION_ENDPOINT,
-          (draft) => {
-            const idx = draft.items.findIndex((s) => s.id === args.id)
-            if (idx !== -1) {
-              const update = args.classificationStoreConfigurationSubGroupUpdate
-              draft.items[idx] = { ...draft.items[idx], ...update }
-            }
-          }
-        )
-        try {
-          const { data: updated } = await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationSubGroupCollectionApiResponse>(
-            dispatch,
-            SUB_GROUP_COLLECTION_ENDPOINT,
-            (draft) => {
-              const idx = draft.items.findIndex((s) => s.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
-            }
-          )
-        } catch {
-          patchResults.forEach((r) => { r.undo() })
-        }
-      }
+      // Invalidated rather than hand-patched. A rename changes which cached searches the row
+      // belongs to and where the server sorts it, so patching the rows already present left a
+      // renamed sub group sitting in a search for its old name and absent from one for its new.
+      invalidatesTags: ['Classification Store']
     }),
 
     classificationStoreConfigurationSubGroupDelete: build.mutation<
@@ -651,22 +610,10 @@ const api = baseApi.enhanceEndpoints({
         url: `${CONFIGURATION_PREFIX}/sub-groups/${queryArg.id}`,
         method: 'DELETE'
       }),
-      invalidatesTags: () => [],
-      async onQueryStarted (args, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationSubGroupCollectionApiResponse>(
-            dispatch,
-            SUB_GROUP_COLLECTION_ENDPOINT,
-            (draft) => {
-              draft.items = draft.items.filter((s) => s.id !== args.id)
-              draft.totalItems = Math.max(0, draft.totalItems - 1)
-            }
-          )
-        } catch {
-          // Mutation failed — cache stays stale until next refetch
-        }
-      }
+      // Invalidated rather than hand-patched. The decrement was applied to every cached
+      // sub-group collection, including other stores and searches that never held the row, so
+      // a delete in one store shrank another store's pagination total while its rows stayed.
+      invalidatesTags: ['Classification Store']
     })
   }),
   overrideExisting: false

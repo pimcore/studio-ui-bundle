@@ -2225,7 +2225,6 @@ classification-store.manage-sub-groups: Administrer undergrupper
 classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker undergruppen \"{{name}}\" lenger. Den finnes fortsatt i butikken."
 classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
 classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
-classification-store.group-exceeds-page-size: "Denne gruppen har {{total}} nøkler, mer enn de {{shown}} som kan lastes inn samtidig. Undergruppenes overskrifter og antall gjelder de første {{shown}} nøklene."
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord

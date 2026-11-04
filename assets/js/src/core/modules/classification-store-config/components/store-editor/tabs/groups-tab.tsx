@@ -422,9 +422,16 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                   </Flex>
                 </FormKit>
                 <Flex style={ { flex: 1, overflow: 'hidden' } }>
+                  {/*
+                    Keyed by store and group so switching either remounts the grid. Its row
+                    selection is keyed by sub-group section and key id, and both repeat across
+                    groups, so a carried-over selection would let Assign and Unassign act on
+                    keys of the group the user just left.
+                  */}
                   <KeyGroupRelationsGrid
                     groupId={ activeGroup.id }
                     groupName={ activeGroup.name }
+                    key={ `${storeId}-${activeGroup.id}` }
                     onShowSubGroups={ onShowSubGroups }
                     storeId={ storeId }
                   />

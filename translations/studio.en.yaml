@@ -2229,7 +2229,6 @@ classification-store.manage-sub-groups: Manage sub groups
 classification-store.sub-group-unused: "No key of this group uses sub group \"{{name}}\" any more. It still exists in the store."
 classification-store.assign-sub-group-progress: "Assigning the sub group to {{done}} of {{total}} keys…"
 classification-store.assign-sub-group-failed: "The sub group could not be assigned to: {{keyNames}}"
-classification-store.group-exceeds-page-size: "This group has {{total}} keys, more than the {{shown}} that can be loaded at once. The sub group headings and counts cover the first {{shown}} keys."
 home: Home
 preview.label: Preview
 preview.desktop: Desktop

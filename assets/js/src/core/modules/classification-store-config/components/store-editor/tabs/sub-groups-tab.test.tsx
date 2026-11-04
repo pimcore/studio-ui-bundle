@@ -147,7 +147,15 @@ const renderTab = (): void => {
   )
 }
 
+/**
+ * The write endpoints store what they are sent and the collection endpoint reads it back, so
+ * what the tab shows after a write is what the server holds rather than what a cache patch
+ * guessed. The mutations invalidate the collection and the tab refetches it, so a stub that
+ * answered the same fixed list every time would report every write as having been lost.
+ */
 const stubFetch = (items: unknown[]): void => {
+  const stored = [...items] as Array<Record<string, unknown>>
+
   globalThis.fetch = jest.fn(async (input: Request) => {
     let body: Record<string, unknown> | undefined
 
@@ -160,26 +168,35 @@ const stubFetch = (items: unknown[]): void => {
     requests.push({ url: input.url, method: input.method, body })
 
     if (input.url.endsWith(CREATE_URL)) {
+      stored.push({ ...created })
+
       return jsonResponse(created)
     }
 
     if (input.url.endsWith(COLLECTION_URL)) {
-      return jsonResponse({ items, totalItems: items.length })
+      return jsonResponse({ items: stored, totalItems: stored.length })
     }
 
-    if (input.method === 'DELETE') {
-      return deleteConflictMessage === null
-        ? jsonResponse({})
-        : jsonResponse({ message: deleteConflictMessage }, 409)
-    }
-
-    // An update answers with the stored entity of the id in its path
     const id = Number(input.url.split('/').pop())
 
-    return jsonResponse({
-      ...(id === created.id ? created : dimensions),
-      ...body
-    })
+    if (input.method === 'DELETE') {
+      if (deleteConflictMessage !== null) {
+        return jsonResponse({ message: deleteConflictMessage }, 409)
+      }
+
+      const index = stored.findIndex((item) => item.id === id)
+      if (index !== -1) stored.splice(index, 1)
+
+      return jsonResponse({})
+    }
+
+    // An update answers with the stored entity of the id in its path, and keeps it
+    const index = stored.findIndex((item) => item.id === id)
+    const updated = { ...(index !== -1 ? stored[index] : id === created.id ? created : dimensions), ...body }
+
+    if (index !== -1) stored[index] = updated
+
+    return jsonResponse(updated)
   }) as unknown as typeof fetch
 }
 
@@ -297,6 +314,21 @@ describe('SubGroupsTab', () => {
     expect(await screen.findByText(deleteConflictMessage)).toBeInTheDocument()
     expect(screen.getByText('classification-store.delete-sub-group-in-use-hint')).toBeInTheDocument()
     expect(screen.getByDisplayValue('Dimensions')).toBeInTheDocument()
+  })
+
+  it('refetches the collection after a write instead of patching the cached pages', async () => {
+    stubFetch([dimensions])
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    expect(collectionRequests()).toHaveLength(1)
+
+    fireEvent.change(screen.getByLabelText('name-0'), { target: { value: 'Measures' } })
+
+    // The server decides which page, search and total the renamed row belongs to, so the tab
+    // asks it again rather than editing the rows it happens to hold.
+    await waitFor(() => { expect(collectionRequests().length).toBeGreaterThan(1) })
+    expect(await screen.findByDisplayValue('Measures')).toBeInTheDocument()
   })
 
   it('re-describes a sub group with a single update carrying its name and description', async () => {

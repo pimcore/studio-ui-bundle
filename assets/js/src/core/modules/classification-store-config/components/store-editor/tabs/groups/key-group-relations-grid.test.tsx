@@ -292,6 +292,35 @@ describe('KeyGroupRelationsGrid', () => {
     ).toEqual([20, 25])
   })
 
+  it('sizes the page from the reported total rather than capping it at the page-size maximum', async () => {
+    // appConfig.maxPageSize is 200 and bounds the page-size control, not the size of a group.
+    // Capping the request at it left the keys past 200 unreachable and made a group-wide
+    // unassign clear only the loaded part, so the request asks for the whole reported total.
+    // Asserted on the requests rather than on a rendered row: 250 rows of the real grid are
+    // slow to render and are not what this pins.
+    const TOTAL = 250
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        return jsonResponse({ items: relations, totalItems: TOTAL })
+      }
+
+      return jsonResponse({ items: [], totalItems: 0 })
+    }) as unknown as typeof fetch
+
+    renderGrid()
+
+    await waitFor(() => {
+      expect(
+        requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters.pageSize)
+      ).toEqual([20, TOTAL])
+    }, WAIT_BUDGET)
+  })
+
   it('keeps the key grid within the width the group detail pane gives it', async () => {
     renderGrid()
     await screen.findByText('height', undefined, WAIT_BUDGET)
