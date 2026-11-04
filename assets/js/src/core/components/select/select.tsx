@@ -18,6 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
 import { SelectActionButton } from './select-action-button'
+import { useTrackedSearch } from './use-tracked-search'
 import { getSelectableOptions, getSelectAllValues } from './select-all-values'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
@@ -59,6 +60,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   loading = false,
   onDropdownVisibleChange,
   onSearch,
+  onSelect,
   onFocus,
   onBlur,
   ...antdSelectProps
@@ -69,7 +71,12 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
-  const [searchValue, setSearchValue] = useState('')
+  const { searchValue, resetSearch, handleSearch, handleSelect } = useTrackedSearch({
+    mode,
+    autoClearSearchValue: antdSelectProps.autoClearSearchValue,
+    onSearch,
+    onSelect
+  })
 
   useImperativeHandle(ref, () => selectRef.current!)
 
@@ -159,14 +166,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   const handleDropdownVisibleChange = (open: boolean): void => {
     setIsActive(open)
     if (!open) {
-      setSearchValue('')
+      resetSearch()
     }
     onDropdownVisibleChange?.(open)
-  }
-
-  const handleSearch = (search: string): void => {
-    setSearchValue(search)
-    onSearch?.(search)
   }
 
   const handleFocus = (event: React.FocusEvent<HTMLElement>): void => {
@@ -283,6 +285,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
         onDropdownVisibleChange={ handleDropdownVisibleChange }
         onFocus={ handleFocus }
         onSearch={ handleSearch }
+        onSelect={ handleSelect }
         ref={ selectRef }
         status={ status }
         style={ computedStyle }

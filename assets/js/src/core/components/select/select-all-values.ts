@@ -35,7 +35,7 @@ const matchesSearch = (option: DefaultOptionType, { searchValue, optionFilterPro
   }
 
   const candidate = option[optionFilterProp]
-  return String(candidate ?? '').toLowerCase().includes(searchValue.toLowerCase())
+  return String(candidate ?? '').toUpperCase().includes(searchValue.toUpperCase())
 }
 
 const isSelectValue = (value: unknown): value is SelectValue => typeof value === 'string' || typeof value === 'number'

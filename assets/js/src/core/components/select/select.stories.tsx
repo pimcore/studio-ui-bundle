@@ -40,6 +40,17 @@ export const Multiple = {
   }
 }
 
+export const MultipleWithSelectAll = {
+  args: {
+    placeholder: 'Choose options...',
+    mode: 'multiple',
+    allowSelectAll: true,
+    allowClear: true,
+    showSearch: true,
+    optionFilterProp: 'label'
+  }
+}
+
 export const WithSearch = {
   args: {
     placeholder: 'Choose an option...',
