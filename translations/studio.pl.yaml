@@ -2225,6 +2225,7 @@ classification-store.manage-sub-groups: Zarządzaj podgrupami
 classification-store.sub-group-unused: "Żaden klucz tej grupy nie używa już podgrupy \"{{name}}\". Nadal istnieje w magazynie."
 classification-store.assign-sub-group-progress: "Przypisywanie podgrupy do {{done}} z {{total}} kluczy…"
 classification-store.assign-sub-group-failed: "Nie udało się przypisać podgrupy do: {{keyNames}}"
+classification-store.group-exceeds-page-size: "Ta grupa ma {{total}} kluczy, więcej niż {{shown}}, które można wczytać jednocześnie. Nagłówki i liczby podgrup dotyczą pierwszych {{shown}} kluczy."
 home: Strona główna
 preview.label: Podgląd
 preview.desktop: Komputer

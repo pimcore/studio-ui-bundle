@@ -13,6 +13,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
+import { isString } from 'lodash'
+import { type SerializedError } from '@reduxjs/toolkit'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Alert } from '@Pimcore/components/alert/alert'
@@ -43,14 +46,12 @@ interface ISubGroupsTabProps {
 }
 
 /** Message of a refused delete, which names the groups still using the sub group. */
-const inUseMessage = (error: unknown): string | undefined => {
-  if (typeof error !== 'object' || error === null) return undefined
-  if (!('status' in error) || (error as { status: unknown }).status !== 409) return undefined
+const inUseMessage = (error: FetchBaseQueryError | SerializedError): string | undefined => {
+  if (!('status' in error) || error.status !== 409) return undefined
 
-  const data = (error as { data?: { message?: unknown } }).data
-  const message = data?.message
+  const message = (error.data as { message?: unknown } | undefined)?.message
 
-  return typeof message === 'string' && message.trim() !== '' ? message : undefined
+  return isString(message) && message.trim() !== '' ? message : undefined
 }
 
 export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element => {
@@ -181,7 +182,7 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
 
         if (!('error' in response)) return
 
-        const stillInUse = inUseMessage(response.error)
+        const stillInUse = inUseMessage(response.error!)
 
         if (stillInUse === undefined) {
           trackError(new ApiError(response.error!))

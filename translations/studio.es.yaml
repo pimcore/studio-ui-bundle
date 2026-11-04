@@ -2225,6 +2225,7 @@ classification-store.manage-sub-groups: Gestionar subgrupos
 classification-store.sub-group-unused: "Ninguna clave de este grupo usa ya el subgrupo \"{{name}}\". Sigue existiendo en el almacén."
 classification-store.assign-sub-group-progress: "Asignando el subgrupo a {{done}} de {{total}} claves…"
 classification-store.assign-sub-group-failed: "No se pudo asignar el subgrupo a: {{keyNames}}"
+classification-store.group-exceeds-page-size: "Este grupo tiene {{total}} claves, más de las {{shown}} que se pueden cargar a la vez. Los encabezados y recuentos de subgrupos abarcan las primeras {{shown}} claves."
 home: Inicio
 preview.label: Vista previa
 preview.desktop: Escritorio

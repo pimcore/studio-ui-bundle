@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +24,6 @@ import { createColumnHelper, functionalUpdate, type RowSelectionState, type Upda
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Header } from '@Pimcore/components/header/header'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   type ClassificationStoreConfigurationKeyGroupRelationCreate,
@@ -51,6 +50,7 @@ interface IKeyGroupRelationsGridProps {
 }
 
 const ASSIGN_PROGRESS_KEY = 'classification-store-sub-group-assign'
+const TRUNCATED_GROUP_KEY = 'classification-store-group-exceeds-page-size'
 
 /** Sub group of a relation, with an unset one always reported as null. */
 const subGroupOf = (relation: ClassificationStoreConfigurationKeyGroupRelationDetail): string | null => {
@@ -73,11 +73,10 @@ export const KeyGroupRelationsGrid = ({
   const [subGroupDialogOpen, setSubGroupDialogOpen] = useState(false)
   const [isAssigning, setIsAssigning] = useState(false)
   const [selectedRowsBySection, setSelectedRowsBySection] = useState<Record<string, RowSelectionState>>({})
-  const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
   const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyGroupRelationCollectionQuery(
-    { groupId: groupId!, body: { filters: { page, pageSize } } },
+    { groupId: groupId!, body: { filters: { page: 1, pageSize } } },
     { skip: groupId === undefined }
   )
 
@@ -85,7 +84,31 @@ export const KeyGroupRelationsGrid = ({
     () => data?.items ?? [],
     [data?.items]
   )
-  const total = data?.totalItems ?? 0
+
+  // A sub-group section and its count cover the whole group rather than one page of it, so the
+  // page is resized to the reported total instead of truncating the group at a page boundary.
+  // A group larger than one request can carry is reported rather than silently cut short.
+  useEffect(() => {
+    if (data === undefined) return
+
+    const wanted = Math.min(data.totalItems, appConfig.maxPageSize)
+
+    if (wanted > pageSize) {
+      setPageSize(wanted)
+      return
+    }
+
+    if (data.totalItems > appConfig.maxPageSize) {
+      void messageApi.open({
+        key: TRUNCATED_GROUP_KEY,
+        type: 'warning',
+        content: t('classification-store.group-exceeds-page-size', {
+          shown: appConfig.maxPageSize,
+          total: data.totalItems
+        })
+      })
+    }
+  }, [data, pageSize, messageApi, t])
 
   // The vocabulary is only read to label the headings and chips with a name instead of the
   // bare identifier the relation stores.
@@ -389,17 +412,6 @@ export const KeyGroupRelationsGrid = ({
                   tooltip={ { title: t('refresh') } }
                 />
                 ) }
-            <Pagination
-              current={ page }
-              defaultPageSize={ pageSize }
-              onChange={ (newPage, newPageSize) => {
-                setPage(newPage)
-                setPageSize(newPageSize)
-              } }
-              showSizeChanger
-              showTotal={ (total) => t('pagination.show-total', { total }) }
-              total={ total }
-            />
           </Toolbar>
           )
         : undefined }

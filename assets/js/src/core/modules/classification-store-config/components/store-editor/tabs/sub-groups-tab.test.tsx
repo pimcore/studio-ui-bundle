@@ -8,10 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 /**
  * The sub groups tab manages the store-level vocabulary: it lists the sub groups of the store,
  * creates one with a name and applies an entered description with a following update, and
  * renames or re-describes one with a single update. The identifier is never part of a payload.
+ * Delete is offered on every row and a refusal is shown after the fact.
  */
 
 // antd-style ships untranspiled ESM, which jest does not transform
@@ -81,7 +84,7 @@ import { Provider } from 'react-redux'
 // eslint-disable-next-line import/first
 import { configureStore } from '@reduxjs/toolkit'
 // eslint-disable-next-line import/first
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import userEvent, { type UserEvent } from '@testing-library/user-event'
 // eslint-disable-next-line import/first
@@ -121,8 +124,11 @@ interface RecordedRequest {
 
 const requests: RecordedRequest[] = []
 
-const jsonResponse = (payload: unknown): Response => new Response(JSON.stringify(payload), {
-  status: 200,
+/** Message the server refuses a delete with, left null while it accepts one. */
+let deleteConflictMessage: string | null = null
+
+const jsonResponse = (payload: unknown, status = 200): Response => new Response(JSON.stringify(payload), {
+  status,
   headers: { 'Content-Type': 'application/json' }
 })
 
@@ -161,6 +167,12 @@ const stubFetch = (items: unknown[]): void => {
       return jsonResponse({ items, totalItems: items.length })
     }
 
+    if (input.method === 'DELETE') {
+      return deleteConflictMessage === null
+        ? jsonResponse({})
+        : jsonResponse({ message: deleteConflictMessage }, 409)
+    }
+
     // An update answers with the stored entity of the id in its path
     const id = Number(input.url.split('/').pop())
 
@@ -180,8 +192,9 @@ const collectionRequests = (): RecordedRequest[] =>
 const writeRequests = (): RecordedRequest[] =>
   requests.filter((request) => !request.url.endsWith(COLLECTION_URL))
 
-// Rendering the real grid and filling the dialog is slower than the default budget
-jest.setTimeout(20000)
+// Rendering the real grid and filling the dialog takes seconds on an idle machine and several
+// times that on a loaded worker of the full suite, so the budget is a wide guard.
+jest.setTimeout(60000)
 
 // The toolbar watches its own width through an observer jsdom does not provide
 beforeAll(() => {
@@ -200,6 +213,7 @@ describe('SubGroupsTab', () => {
 
   beforeEach(() => {
     requests.length = 0
+    deleteConflictMessage = null
   })
 
   afterEach(() => {
@@ -231,8 +245,14 @@ describe('SubGroupsTab', () => {
 
     await user.click(screen.getByRole('button', { name: 'classification-store.add-sub-group' }))
     // The required marker is part of the label text, so the match cannot be exact
-    await user.type(await screen.findByLabelText('classification-store.columns.name', { exact: false }), 'Weights')
-    await user.type(screen.getByLabelText('classification-store.columns.description', { exact: false }), 'kg and g')
+    const nameField = await screen.findByLabelText('classification-store.columns.name', { exact: false })
+    const descriptionField = screen.getByLabelText('classification-store.columns.description', { exact: false })
+
+    // Filled in one event per field: typing character by character re-renders the grid behind
+    // the dialog on every keystroke, which is what makes this test slow.
+    fireEvent.change(nameField, { target: { value: 'Weights' } })
+    fireEvent.change(descriptionField, { target: { value: 'kg and g' } })
+
     await user.click(screen.getByRole('button', { name: 'OK' }))
 
     await waitFor(() => { expect(writeRequests()).toHaveLength(2) })
@@ -260,6 +280,23 @@ describe('SubGroupsTab', () => {
     expect(writeRequests()[0].body).toEqual({ name: 'Measures', description: 'size related' })
 
     expect(await screen.findByDisplayValue('Measures')).toBeInTheDocument()
+  })
+
+  it('shows the message of a refused delete with the hint and keeps the row', async () => {
+    const user = setupUser()
+    deleteConflictMessage =
+      'Sub group "Dimensions" is still assigned to keys of the group(s) "Specs", "Shipping" and cannot be deleted'
+    stubFetch([dimensions])
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    // The row action carries its label in a tooltip only, so it is the row's one button
+    await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
+    await user.click(await screen.findByRole('button', { name: 'OK' }))
+
+    expect(await screen.findByText(deleteConflictMessage)).toBeInTheDocument()
+    expect(screen.getByText('classification-store.delete-sub-group-in-use-hint')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('Dimensions')).toBeInTheDocument()
   })
 
   it('re-describes a sub group with a single update carrying its name and description', async () => {

@@ -2225,6 +2225,7 @@ classification-store.manage-sub-groups: Gérer les sous-groupes
 classification-store.sub-group-unused: "Aucune clé de ce groupe n'utilise plus le sous-groupe \"{{name}}\". Il existe toujours dans le magasin."
 classification-store.assign-sub-group-progress: "Affectation du sous-groupe à {{done}} clé(s) sur {{total}}…"
 classification-store.assign-sub-group-failed: "Le sous-groupe n'a pas pu être affecté à : {{keyNames}}"
+classification-store.group-exceeds-page-size: "Ce groupe compte {{total}} clés, soit plus que les {{shown}} pouvant être chargées en une fois. Les titres et les décomptes de sous-groupes portent sur les {{shown}} premières clés."
 home: Accueil
 preview.label: Aperçu
 preview.desktop: Bureau

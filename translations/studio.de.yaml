@@ -2225,6 +2225,7 @@ classification-store.manage-sub-groups: Untergruppen verwalten
 classification-store.sub-group-unused: "Kein Schlüssel dieser Gruppe verwendet die Untergruppe \"{{name}}\" mehr. Sie existiert weiterhin im Store."
 classification-store.assign-sub-group-progress: "Die Untergruppe wird {{done}} von {{total}} Schlüsseln zugeordnet…"
 classification-store.assign-sub-group-failed: "Die Untergruppe konnte folgenden Schlüsseln nicht zugeordnet werden: {{keyNames}}"
+classification-store.group-exceeds-page-size: "Diese Gruppe hat {{total}} Schlüssel, mehr als die {{shown}}, die auf einmal geladen werden können. Die Untergruppen-Überschriften und -Anzahlen umfassen die ersten {{shown}} Schlüssel."
 home: Startseite
 preview.label: Vorschau
 preview.desktop: Desktop

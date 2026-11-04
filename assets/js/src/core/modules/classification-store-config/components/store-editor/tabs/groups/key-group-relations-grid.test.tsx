@@ -104,6 +104,9 @@ const RELATIONS_URL = `/pimcore-studio/api/classification-store/configuration/gr
 const UPSERT_URL = '/pimcore-studio/api/classification-store/configuration/key-group-relations/add'
 const SUB_GROUPS_URL = `/pimcore-studio/api/classification-store/configuration/stores/${STORE_ID}/sub-groups`
 
+/** Every wait here covers a render of the real grid and a request, which outgrows the default second. */
+const WAIT_BUDGET = { timeout: 15000 }
+
 const relation = (
   keyId: number,
   keyName: string,
@@ -226,14 +229,15 @@ const selectKeys = async (user: UserEvent, ...keyNames: string[]): Promise<void>
 const confirmAssign = async (user: UserEvent): Promise<void> => {
   await user.click(assignButton())
 
-  const dialog = await screen.findByRole('dialog')
+  const dialog = await screen.findByRole('dialog', undefined, WAIT_BUDGET)
 
   await user.click(within(dialog).getAllByRole('checkbox')[0])
   await user.click(within(dialog).getByRole('button', { name: 'classification-store.assign-sub-group' }))
 }
 
-// Rendering the real grid and clicking through its rows is slower than the default budget
-jest.setTimeout(20000)
+// Rendering the real grid and clicking through its rows takes seconds on an idle machine and
+// several times that on a loaded worker of the full suite, so the budget is a wide guard.
+jest.setTimeout(60000)
 
 // The toolbar watches its own width through an observer jsdom does not provide
 beforeAll(() => {
@@ -260,10 +264,35 @@ describe('KeyGroupRelationsGrid', () => {
     globalThis.fetch = originalFetch
   })
 
+  it('requests every relation of the group instead of stopping at the default page', async () => {
+    // More keys than the default page holds, with a stub that truncates to the requested page
+    // size: a grid that kept paging would leave the headings and counts describing 20 of 25.
+    const many = Array.from({ length: 25 }, (_, index) => relation(100 + index, `key-${index}`, index, false))
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        return jsonResponse({ items: many.slice(0, body.filters.pageSize as number), totalItems: many.length })
+      }
+
+      return jsonResponse({ items: [], totalItems: 0 })
+    }) as unknown as typeof fetch
+
+    renderGrid()
+
+    expect(await screen.findByText('key-24', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    expect(
+      requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters.pageSize)
+    ).toEqual([20, 25])
+  })
+
   it('offers a selection checkbox per key and enables the sub-group actions only with a selection', async () => {
     const user = setupUser()
     renderGrid()
-    await screen.findByText('height')
+    await screen.findByText('height', undefined, WAIT_BUDGET)
 
     // one for the whole section plus one per key
     expect(screen.getAllByRole('checkbox')).toHaveLength(relations.length + 1)
@@ -280,12 +309,12 @@ describe('KeyGroupRelationsGrid', () => {
     const user = setupUser()
     refusedKeyIds = [12]
     renderGrid()
-    await screen.findByText('height')
+    await screen.findByText('height', undefined, WAIT_BUDGET)
 
     await selectKeys(user, 'height', 'width', 'depth')
     await confirmAssign(user)
 
-    await waitFor(() => { expect(upsertRequests()).toHaveLength(3) })
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(3) }, WAIT_BUDGET)
 
     expect(upsertRequests().map((request) => request.body)).toEqual([
       { keyId: 11, groupId: GROUP_ID, sorter: 1, mandatory: false, subGroup: SUB_GROUP },
@@ -294,19 +323,25 @@ describe('KeyGroupRelationsGrid', () => {
     ])
 
     // the two keys the server accepted keep the assignment
-    expect(await screen.findByText('classification-store.sub-group-with-count:Dimensions,2')).toBeInTheDocument()
+    expect(
+      await screen.findByText('classification-store.sub-group-with-count:Dimensions,2', undefined, WAIT_BUDGET)
+    ).toBeInTheDocument()
   })
 
   it('names every key it could not assign in a single message', async () => {
     const user = setupUser()
     refusedKeyIds = [11, 13]
     renderGrid()
-    await screen.findByText('height')
+    await screen.findByText('height', undefined, WAIT_BUDGET)
 
     await selectKeys(user, 'height', 'width', 'depth')
     await confirmAssign(user)
 
-    const failures = await screen.findAllByText('classification-store.assign-sub-group-failed:height, depth')
+    const failures = await screen.findAllByText(
+      'classification-store.assign-sub-group-failed:height, depth',
+      undefined,
+      WAIT_BUDGET
+    )
 
     expect(failures).toHaveLength(1)
   })
@@ -314,11 +349,11 @@ describe('KeyGroupRelationsGrid', () => {
   it('omits the sub group from a mandatory cell edit', async () => {
     const user = setupUser()
     renderGrid()
-    await screen.findByText('height')
+    await screen.findByText('height', undefined, WAIT_BUDGET)
 
     await user.click(screen.getByLabelText('cell-mandatory-11'))
 
-    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) })
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
 
     expect('subGroup' in upsertRequests()[0].body!).toBe(false)
     expect(upsertRequests()[0].body).toEqual({ keyId: 11, groupId: GROUP_ID, sorter: 1, mandatory: true })
@@ -327,12 +362,12 @@ describe('KeyGroupRelationsGrid', () => {
   it('unassigns a selection with an explicit null sub group', async () => {
     const user = setupUser()
     renderGrid()
-    await screen.findByText('height')
+    await screen.findByText('height', undefined, WAIT_BUDGET)
 
     await selectKeys(user, 'height')
     await user.click(unassignButton())
 
-    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) })
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
 
     expect(upsertRequests()[0].body).toEqual({
       keyId: 11,
