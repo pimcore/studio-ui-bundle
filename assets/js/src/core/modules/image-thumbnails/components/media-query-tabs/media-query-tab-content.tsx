@@ -12,6 +12,7 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
 import { MediaQueryTransformationsField } from './media-query-transformations-field'
 import type { MediaQuery, TransformationType } from '../../types/media-query.types'
+import { uuid } from '@Pimcore/utils/uuid'
 
 interface MediaQueryTabContentProps {
   mediaQuery: MediaQuery
@@ -39,7 +40,7 @@ export const MediaQueryTabContent = ({
         if (existingId !== '' && existingId != null) {
           idMapRef.current[index] = existingId
         } else {
-          idMapRef.current[index] ??= `transformation-${crypto.randomUUID()}`
+          idMapRef.current[index] ??= `transformation-${uuid()}`
         }
         return {
           id: idMapRef.current[index],

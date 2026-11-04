@@ -13,6 +13,7 @@ import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-ed
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { areGroupsEqual } from '../utils/dropdown-filter'
+import { uuid } from '@Pimcore/utils/uuid'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn) => void
@@ -54,7 +55,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
         return
       }
 
-      setBatchEdits([...batchEdits, { ...column, rowId: crypto.randomUUID(), locale: nextLocale }])
+      setBatchEdits([...batchEdits, { ...column, rowId: uuid(), locale: nextLocale }])
       return
     }
 
@@ -64,7 +65,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     if (existingIndex !== -1) {
       updatedEdits[existingIndex] = { ...column, rowId: batchEdits[existingIndex].rowId, locale: null }
     } else {
-      updatedEdits.push({ ...column, rowId: crypto.randomUUID(), locale: null })
+      updatedEdits.push({ ...column, rowId: uuid(), locale: null })
     }
 
     setBatchEdits(updatedEdits)
