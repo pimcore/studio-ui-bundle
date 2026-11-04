@@ -2221,8 +2221,6 @@ classification-store.unassign-sub-group-keys: Usuń przypisanie kluczy pokazanyc
 classification-store.aria.unassign-sub-group-keys: "Usuń przypisanie kluczy pokazanych tutaj do podgrupy \"{{name}}\""
 classification-store.aria.delete-sub-group: "Usuń podgrupę \"{{name}}\""
 classification-store.unassign-sub-group-confirm_one: "Usunąć przypisanie 1 klucza pokazanego tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
-classification-store.unassign-sub-group-confirm_few: "Usunąć przypisanie {{count}} kluczy pokazanych tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
-classification-store.unassign-sub-group-confirm_many: "Usunąć przypisanie {{count}} kluczy pokazanych tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
 classification-store.unassign-sub-group-confirm_other: "Usunąć przypisanie {{count}} kluczy pokazanych tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
 classification-store.sub-groups-strip-hint: To są podgrupy używane przez klucze tej grupy. Słownik pozostaje w magazynie.
 classification-store.manage-sub-groups: Zarządzaj podgrupami
