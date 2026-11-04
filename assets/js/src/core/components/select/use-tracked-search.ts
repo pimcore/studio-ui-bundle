@@ -24,7 +24,8 @@ interface TrackedSearchOptions {
 /**
  * Owns the search text of a multiple Select (passed back as `searchValue`), so the options that are visible and the
  * options "Select all" adds can never drift apart. antd clears its own text without telling us (after a pick or
- * deselect, on blur), so a controlled value has to repeat exactly those clears. It stays after the dropdown closes.
+ * deselect, on blur), so a controlled value has to repeat those clears. It stays after the dropdown closes. Removing a tag with its x also clears
+ * the text (antd keeps it there), which only ever makes the list and "Select all" show more, never less.
  */
 export const useTrackedSearch = ({
   enabled,

@@ -46,7 +46,7 @@ export const DynamicSelectField = (props: SelectProps): React.JSX.Element => {
   return (
     <Select
       allowClear={ props.allowClear !== false }
-      allowSelectAll={ !isLoading }
+      allowSelectAll
       className={ props.className }
       disabled={ props.noteditable === true }
       id={ props.id }

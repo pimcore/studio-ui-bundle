@@ -38,7 +38,7 @@ export interface SelectProps extends AntdSelectProps {
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
   loadingSkeleton?: boolean
-  /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount`). */
+  /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount`, hidden while `loading`). */
   allowSelectAll?: boolean
 }
 
@@ -224,7 +224,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   }
   const { options, optionFilterProp, filterOption, maxCount, searchValue: customSearchValue } = antdSelectProps
   const selectAllContext = { options, value, searchValue: customSearchValue ?? searchValue, optionFilterProp, filterOption }
-  const shouldShowSelectAll = allowSelectAll && mode === 'multiple' && maxCount === undefined && getSelectableOptions(selectAllContext).length > 0
+  const shouldShowSelectAll = allowSelectAll && !loading && mode === 'multiple' && maxCount === undefined && getSelectableOptions(selectAllContext).length > 0
 
   const handleSelectAll = (): void => {
     const values = getSelectAllValues(selectAllContext)

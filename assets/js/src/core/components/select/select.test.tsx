@@ -151,6 +151,49 @@ describe('Select "Select all"', () => {
     expect(lastValue(onChange)).toEqual(['DE', 'FR'])
   })
 
+  it('forgets the search on blur, so Select all matches the list after the user comes back', () => {
+    const onChange = jest.fn()
+    render(<Controlled
+      onChange={ onChange }
+      open={ undefined }
+           />)
+    const combobox = screen.getByRole('combobox')
+
+    fireEvent.mouseDown(combobox)
+    search('an')
+    fireEvent.blur(combobox)
+    fireEvent.mouseDown(combobox)
+
+    expect(screen.getByText('Austria', { selector: '.ant-select-item-option-content' })).toBeTruthy()
+    fireEvent.click(screen.getByText('select.select-all'))
+
+    expect(lastValue(onChange)).toEqual(['AT', 'DE', 'FR'])
+  })
+
+  it('hides the row while loading but keeps the search when loading starts and ends', () => {
+    const onChange = jest.fn()
+    const { rerender } = render(<Controlled onChange={ onChange } />)
+
+    search('an')
+    rerender(<Controlled
+      loading
+      onChange={ onChange }
+             />)
+
+    expect(screen.queryByText('select.select-all')).toBeNull()
+    expect(screen.getByRole<HTMLInputElement>('combobox').value).toBe('an')
+
+    rerender(<Controlled
+      loading={ false }
+      onChange={ onChange }
+             />)
+
+    expect(screen.getByRole<HTMLInputElement>('combobox').value).toBe('an')
+    fireEvent.click(screen.getByText('select.select-all'))
+
+    expect(lastValue(onChange)).toEqual(['DE', 'FR'])
+  })
+
   it.each([
     ['without the prop', { allowSelectAll: false }],
     ['with maxCount', { maxCount: 2 }],
