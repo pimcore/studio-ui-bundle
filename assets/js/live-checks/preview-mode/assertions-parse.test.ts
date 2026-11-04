@@ -10,7 +10,7 @@
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 export {} // a module, so this require does not clash with the other test files' globals
-const { parseBarPath } = require('./assertions.cjs')
+const { parseBarPath, checkState } = require('./assertions.cjs')
 
 describe('assertions.cjs parseBarPath', () => {
   it('AC1: returns the trimmed text after the first │', () => {
@@ -31,5 +31,22 @@ describe('assertions.cjs parseBarPath', () => {
     expect(parseBarPath('ID: 9 │' + ' '.repeat(100000))).toBe('')
     expect(parseBarPath(' '.repeat(100000))).toBeNull()
     expect(performance.now() - start).toBeLessThan(50)
+  })
+
+  it('AC3: checkState reports the switch, off and on problems together', () => {
+    const none = { languageSwitch: false, previewSwitch: false, previewOn: false, bar: false, barId: null, barPath: null, rows: 0 }
+    expect(checkState(none, { previewOn: false })).toEqual(['language switch is missing', '"Preview mode" switch is missing'])
+    expect(checkState(none, { previewOn: true })).toEqual([
+      'language switch is missing',
+      '"Preview mode" switch is missing',
+      'the bar with the "Preview item" button is missing',
+      'no Preview row shows with preview mode on'
+    ])
+    expect(checkState({ ...none, bar: true, rows: 2 }, { previewOn: false })).toEqual([
+      'language switch is missing',
+      '"Preview mode" switch is missing',
+      'the preview bar shows with preview mode off',
+      '2 Preview row(s) show with preview mode off'
+    ])
   })
 })
