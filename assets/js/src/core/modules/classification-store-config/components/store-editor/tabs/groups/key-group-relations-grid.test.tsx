@@ -107,6 +107,9 @@ const SUB_GROUPS_URL = `/pimcore-studio/api/classification-store/configuration/s
 /** Every wait here covers a render of the real grid and a request, which outgrows the default second. */
 const WAIT_BUDGET = { timeout: 15000 }
 
+/** Width the group detail column leaves inside its padding; a wider grid clips its actions. */
+const PANE_CONTENT_WIDTH = 740
+
 const relation = (
   keyId: number,
   keyName: string,
@@ -287,6 +290,16 @@ describe('KeyGroupRelationsGrid', () => {
     expect(
       requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters.pageSize)
     ).toEqual([20, 25])
+  })
+
+  it('keeps the key grid within the width the group detail pane gives it', async () => {
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    for (const table of screen.getAllByRole('table')) {
+      expect(table.style.width).toBe('100%')
+      expect(Number.parseInt(table.style.minWidth, 10)).toBeLessThanOrEqual(PANE_CONTENT_WIDTH)
+    }
   })
 
   it('offers a selection checkbox per key and enables the sub-group actions only with a selection', async () => {

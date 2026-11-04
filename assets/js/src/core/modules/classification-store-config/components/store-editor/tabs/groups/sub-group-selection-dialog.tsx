@@ -77,10 +77,12 @@ export const SubGroupSelectionDialog = ({
       header: t('classification-store.columns.name'),
       size: 200
     }),
+    // The description absorbs what the fixed columns leave, so the table never outgrows the dialog.
     columnHelper.accessor('description', {
       header: t('classification-store.columns.description'),
-      size: 300,
-      cell: (info) => info.getValue() ?? '-'
+      size: 150,
+      cell: (info) => info.getValue() ?? '-',
+      meta: { autoWidth: true }
     })
   ]
 
@@ -121,6 +123,7 @@ export const SubGroupSelectionDialog = ({
           style={ { maxHeight: 'calc(65vh - 80px)', minHeight: 120 } }
         >
           <Grid
+            autoWidth
             columns={ columns }
             data={ availableSubGroups }
             enableRowSelection

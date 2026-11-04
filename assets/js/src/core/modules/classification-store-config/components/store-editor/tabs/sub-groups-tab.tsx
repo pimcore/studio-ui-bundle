@@ -235,10 +235,11 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
       size: 220,
       meta: { type: 'input', editable: true }
     }),
+    // The description absorbs what the fixed columns leave, so the table never outgrows the tab.
     columnHelper.accessor('description', {
       header: t('classification-store.columns.description'),
       size: 200,
-      meta: { type: 'input', editable: true }
+      meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
       id: 'actions',
@@ -318,6 +319,7 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
           ? <NoContent text={ t('classification-store.no-sub-groups') } />
           : (
             <Grid
+              autoWidth
               columns={ columns }
               data={ subGroups }
               enableSorting

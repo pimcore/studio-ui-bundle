@@ -45,6 +45,7 @@ export const KeyRelationsSection = ({
         <Title level={ 5 }>{ heading }</Title>
       ) }
       <Grid
+        autoWidth
         columns={ columns }
         data={ relations }
         enableMultipleRowSelection
