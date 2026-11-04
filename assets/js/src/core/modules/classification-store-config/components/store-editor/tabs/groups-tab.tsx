@@ -44,6 +44,8 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 
 interface IGroupsTabProps {
   storeId: number
+  /** Opens the Sub groups tab of the store, where the vocabulary is managed. */
+  onShowSubGroups?: () => void
 }
 
 interface IGroupDetailFormValues {
@@ -51,7 +53,7 @@ interface IGroupDetailFormValues {
   description: string
 }
 
-export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
+export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { token } = theme.useToken()
   const { localModal: modal } = useStudioModal()
@@ -244,7 +246,8 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
       size: 220,
-      meta: { type: 'input', editable: true }
+      // The name absorbs what the fixed columns leave, so the table never outgrows the pane.
+      meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
       id: 'actions',
@@ -263,7 +266,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
   return (
     <SplitLayout
       leftItem={ {
-        size: 45,
+        size: 35,
         minSize: 250,
         children: (
           <ContentLayout
@@ -326,6 +329,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
               vertical
             >
               <Grid
+                autoWidth
                 columns={ columns }
                 data={ groups }
                 enableRowSelection
@@ -361,7 +365,9 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
       } }
       resizeAble
       rightItem={ {
-        size: 55,
+        // Widest share that still leaves the groups list its own width; the key grid carries one column more.
+        // The detail carries the strip, the headings and the widest grid, so it takes the larger share.
+        size: 65,
         minSize: 300,
         children: activeGroup === undefined
           ? (
@@ -416,9 +422,17 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
                   </Flex>
                 </FormKit>
                 <Flex style={ { flex: 1, overflow: 'hidden' } }>
+                  {/*
+                    Keyed by store and group so switching either remounts the grid. Its row
+                    selection is keyed by sub-group section and key id, and both repeat across
+                    groups, so a carried-over selection would let Assign and Unassign act on
+                    keys of the group the user just left.
+                  */}
                   <KeyGroupRelationsGrid
                     groupId={ activeGroup.id }
                     groupName={ activeGroup.name }
+                    key={ `${storeId}-${activeGroup.id}` }
+                    onShowSubGroups={ onShowSubGroups }
                     storeId={ storeId }
                   />
                 </Flex>
