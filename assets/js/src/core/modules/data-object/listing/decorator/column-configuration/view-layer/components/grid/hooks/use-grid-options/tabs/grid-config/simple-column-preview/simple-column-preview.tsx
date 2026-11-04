@@ -75,7 +75,7 @@ export const SimpleColumnPreviewsProvider = ({ columns, children }: SimpleColumn
 
   const skip = !enabled || itemId === undefined || selectedClassDefinition === undefined || requestColumns.length === 0
 
-  const { data, isLoading, error } = useDataObjectGetGridQuery({
+  const { currentData, isFetching, error } = useDataObjectGetGridQuery({
     classId: selectedClassDefinition?.id ?? '',
     body: {
       folderId: 1,
@@ -89,13 +89,16 @@ export const SimpleColumnPreviewsProvider = ({ columns, children }: SimpleColumn
     }
   }, { skip })
 
+  // `data` keeps the previous arguments' result while a changed request loads; `currentData` does not
+  const isLoading = isFetching && currentData === undefined
+
   const value = useMemo(() => ({
     isLoading,
     hasError: error !== undefined,
-    row: data?.items?.[0],
+    row: currentData?.items?.[0],
     hasItem: itemId !== undefined,
     getLocale
-  }), [isLoading, error, data, itemId, currentLanguage, previewLanguage])
+  }), [isLoading, error, currentData, itemId, currentLanguage, previewLanguage])
 
   return <SimpleColumnPreviewsContext.Provider value={ value }>{children}</SimpleColumnPreviewsContext.Provider>
 }

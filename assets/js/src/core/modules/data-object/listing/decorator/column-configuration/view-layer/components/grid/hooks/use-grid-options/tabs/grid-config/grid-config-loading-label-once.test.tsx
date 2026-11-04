@@ -89,7 +89,7 @@ let mockColumns: any[] = []
 
 // every preview request stays pending
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice.gen', () => ({
-  useDataObjectGetGridQuery: () => ({ data: undefined, isLoading: true, error: undefined }),
+  useDataObjectGetGridQuery: () => ({ data: undefined, currentData: undefined, isLoading: true, isFetching: true, error: undefined }),
   useDataObjectGetGridPreviewQuery: () => ({ data: undefined, isLoading: true, error: undefined })
 }))
 

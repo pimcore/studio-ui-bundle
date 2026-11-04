@@ -93,7 +93,7 @@ const activeCalls = (): any[][] => useQueryMock.mock.calls.filter(([, options]) 
 describe('SimpleColumnPreview', () => {
   beforeEach(() => {
     useQueryMock.mockReset()
-    useQueryMock.mockReturnValue({ data: { totalItems: 1, items: [row] }, isLoading: false, error: undefined })
+    useQueryMock.mockReturnValue({ data: { totalItems: 1, items: [row] }, currentData: { totalItems: 1, items: [row] }, isLoading: false, isFetching: false, error: undefined })
   })
 
   it('AC1: shows each simple column value for the picked item below its column', () => {
@@ -122,7 +122,7 @@ describe('SimpleColumnPreview', () => {
   })
 
   it('AC3: shows the advanced preview error state when the request fails', () => {
-    useQueryMock.mockReturnValue({ data: undefined, isLoading: false, error: { error: 'boom' } })
+    useQueryMock.mockReturnValue({ data: undefined, currentData: undefined, isLoading: false, isFetching: false, error: { error: 'boom' } })
     renderPreviews()
 
     expect(screen.getAllByText(/grid\.advanced-column\.error-preview-data/)).toHaveLength(2)
@@ -130,14 +130,14 @@ describe('SimpleColumnPreview', () => {
   })
 
   it('AC3: shows the advanced preview empty state when no row is returned', () => {
-    useQueryMock.mockReturnValue({ data: { totalItems: 0, items: [] }, isLoading: false, error: undefined })
+    useQueryMock.mockReturnValue({ data: { totalItems: 0, items: [] }, currentData: { totalItems: 0, items: [] }, isLoading: false, isFetching: false, error: undefined })
     renderPreviews()
 
     expect(screen.getAllByText('grid.advanced-column.no-preview-data')).toHaveLength(2)
   })
 
   it('AC3: shows the empty state when the row has no value for the column', () => {
-    useQueryMock.mockReturnValue({ data: { totalItems: 1, items: [{ id: 42, columns: [{ key: 'name', value: 'Foo' }] }] }, isLoading: false })
+    useQueryMock.mockReturnValue({ data: { totalItems: 1, items: [{ id: 42, columns: [{ key: 'name', value: 'Foo' }] }] }, currentData: { totalItems: 1, items: [{ id: 42, columns: [{ key: 'name', value: 'Foo' }] }] }, isLoading: false, isFetching: false })
     renderPreviews()
 
     expect(screen.getByTestId('grid-name')).toBeInTheDocument()

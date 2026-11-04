@@ -127,7 +127,7 @@ const renderSaveFormError = async (on: boolean): Promise<{ text: string, html: s
 describe('Grid Configuration modal: warnings and errors with preview mode on and off', () => {
   beforeEach(() => {
     queryResult.mockReset()
-    queryResult.mockReturnValue({ data: { totalItems: 1, items: [{ id: 9, columns: [{ key: 'name', value: 'Foo' }] }] }, isLoading: false, error: undefined })
+    queryResult.mockReturnValue({ data: { totalItems: 1, items: [{ id: 9, columns: [{ key: 'name', value: 'Foo' }] }] }, currentData: { totalItems: 1, items: [{ id: 9, columns: [{ key: 'name', value: 'Foo' }] }] }, isLoading: false, isFetching: false, error: undefined })
   })
 
   it('AC1: the Save form shows its name validation error identically (text, element, position) with preview on and off', async () => {
@@ -153,7 +153,7 @@ describe('Grid Configuration modal: warnings and errors with preview mode on and
   })
 
   it('AC1: the preview request error is the one text that differs: it shows only with preview on, below its column', () => {
-    queryResult.mockReturnValue({ data: undefined, isLoading: false, error: { error: 'boom' } })
+    queryResult.mockReturnValue({ data: undefined, currentData: undefined, isLoading: false, isFetching: false, error: { error: 'boom' } })
 
     const off = render(withPreview(false, <GridConfigList />))
     expect(off.container.querySelector(dangerSelector)).toBeNull()
