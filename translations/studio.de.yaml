@@ -3050,6 +3050,7 @@ translations.merger.title: "Übersetzungen zusammenführen (Domain: {{domain}})"
 translations.merger.column.language: Sprache
 translations.merger.items: Einträge
 select.clear-selection: Auswahl löschen
+select.select-all: Alle auswählen
 asset.folder.preview.image-display: Bildanzeige
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groß
@@ -3072,6 +3073,10 @@ saved-search.delete.success: Gespeicherte Suche gelöscht
 saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
 saved-search.menu-shortcut-group: Menügruppe
 skip-to-content: Zum Inhalt springen
+preview-mode.switch: Vorschaumodus
+preview-mode.preview-item: Vorschauelement
+preview-mode.no-item: Kein Vorschauelement verfügbar
+preview-mode.preview: Vorschau
 tag-configuration.move-under: 'Verschieben unter'
 tag-configuration.move-search-placeholder: 'Nach einem Tag suchen'
 tree.actions.edit-tag: Bearbeiten

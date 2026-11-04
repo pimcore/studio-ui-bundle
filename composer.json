@@ -23,9 +23,9 @@
     },
     "require-dev": {
         "codeception/codeception": "^5.3.7",
-        "codeception/module-asserts": "^2",
+        "codeception/module-asserts": "^3.0",
         "codeception/module-symfony": "^3.1.1",
-        "phpstan/phpstan": "2.1.26",
+        "phpstan/phpstan": "2.3.5",
         "phpstan/phpstan-symfony": "^2.0.2",
         "phpunit/phpunit": "^12.5.23 || ^13.1.7",
         "nyholm/psr7": "^1",

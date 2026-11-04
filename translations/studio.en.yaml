@@ -3054,6 +3054,7 @@ translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
 select.clear-selection: Clear selection
+select.select-all: Select all
 asset.folder.preview.image-display: Image display
 asset.folder.preview.image-display.small: Small
 asset.folder.preview.image-display.large: Large
@@ -3076,6 +3077,10 @@ saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
 skip-to-content: Skip to content
+preview-mode.switch: Preview mode
+preview-mode.preview-item: Preview item
+preview-mode.no-item: No preview item available
+preview-mode.preview: Preview
 tag-configuration.move-under: 'Move under'
 tag-configuration.move-search-placeholder: 'Search for a tag'
 tree.actions.edit-tag: Edit
