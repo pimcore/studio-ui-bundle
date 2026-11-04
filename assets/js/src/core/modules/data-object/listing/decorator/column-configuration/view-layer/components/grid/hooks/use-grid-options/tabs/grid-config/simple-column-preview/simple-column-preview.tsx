@@ -25,7 +25,7 @@ import {
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
+import { SelectedColumnsContext, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
 type GridRow = DataObjectGetGridApiResponse['items'][number]
@@ -37,6 +37,8 @@ interface SimpleColumnPreviewsContextValue {
   row?: GridRow
   hasItem: boolean
   getLocale: (column: AvailableColumn) => string | null | undefined
+  /** The modal's draft columns, which the column ids of the previews decode against */
+  columns: AvailableColumn[]
 }
 
 const SimpleColumnPreviewsContext = createContext<SimpleColumnPreviewsContextValue | undefined>(undefined)
@@ -97,8 +99,9 @@ export const SimpleColumnPreviewsProvider = ({ columns, children }: SimpleColumn
     hasError: error !== undefined,
     row: currentData?.items?.[0],
     hasItem: itemId !== undefined,
-    getLocale
-  }), [isLoading, error, currentData, itemId, currentLanguage, previewLanguage])
+    getLocale,
+    columns
+  }), [isLoading, error, currentData, itemId, currentLanguage, previewLanguage, columns])
 
   return <SimpleColumnPreviewsContext.Provider value={ value }>{children}</SimpleColumnPreviewsContext.Provider>
 }
@@ -115,7 +118,15 @@ export const SimpleColumnPreview = ({ column }: SimpleColumnPreviewProps): React
   const { t } = useTranslation()
   const { useGridOptions, useColumnMapper } = useSettings()
   const { transformGridColumn } = useGridOptions()
-  const { shouldMapDataToColumn } = useColumnMapper()
+  const columnMapper = useColumnMapper()
+  const { shouldMapDataToColumn } = columnMapper
+  const outerSelectedColumns = useContext(SelectedColumnsContext)
+  const draftColumns = context?.columns
+  const columnId = useMemo(() => columnMapper.encodeColumnIdentifier(column as unknown as SelectedColumn), [column])
+  const selectedColumnsContext = useMemo(() => ({
+    ...outerSelectedColumns,
+    decodeColumnIdentifier: (columnIdentifier: string) => columnMapper.decodeColumnIdentifier(columnIdentifier, (draftColumns ?? []) as unknown as SelectedColumn[])
+  }), [outerSelectedColumns, draftColumns])
 
   if (context === undefined) {
     return null
@@ -157,22 +168,24 @@ export const SimpleColumnPreview = ({ column }: SimpleColumnPreviewProps): React
           ...columnDefinition,
           meta: { ...columnDefinition.meta, editable: false }
         }
-        const gridColumn = columnHelper.accessor(accessor, accessorOptions)
+        const gridColumn = columnHelper.accessor(accessor, { ...accessorOptions, id: columnId })
 
         return (
           <GridContentRenderer>
-            <Grid
-              autoWidth
-              columns={ [gridColumn] }
-              data={ [{
-                id: row?.id,
-                isLocked: row?.isLocked,
-                permissions: row?.permissions,
-                [accessor]: rowColumn.value,
-                '__api-data': row
-              }] }
-              hideColumnHeaders
-            />
+            <SelectedColumnsContext.Provider value={ selectedColumnsContext }>
+              <Grid
+                autoWidth
+                columns={ [gridColumn] }
+                data={ [{
+                  id: row?.id,
+                  isLocked: row?.isLocked,
+                  permissions: row?.permissions,
+                  [accessor]: rowColumn.value,
+                  '__api-data': row
+                }] }
+                hideColumnHeaders
+              />
+            </SelectedColumnsContext.Provider>
           </GridContentRenderer>
         )
       }}
