@@ -19,6 +19,7 @@ export const PreviewModeSwitch = (): React.JSX.Element => {
 
   return (
     <Switch
+      aria-label={ t('preview-mode.switch') }
       checked={ enabled }
       labelRight={ t('preview-mode.switch') }
       onChange={ setEnabled }
