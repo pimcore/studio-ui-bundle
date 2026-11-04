@@ -35,7 +35,8 @@ jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () 
   useSettings: () => ({
     useGridOptions: () => ({
       transformGridColumn: (column: AvailableColumn) => ({ header: column.key, meta: { type: column.type } })
-    })
+    }),
+    useColumnMapper: () => jest.requireActual('@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper').useDataObjectColumnMapper()
   })
 }))
 

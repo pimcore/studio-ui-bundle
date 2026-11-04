@@ -113,8 +113,9 @@ export interface SimpleColumnPreviewProps {
 export const SimpleColumnPreview = ({ column }: SimpleColumnPreviewProps): React.JSX.Element | null => {
   const context = useContext(SimpleColumnPreviewsContext)
   const { t } = useTranslation()
-  const { useGridOptions } = useSettings()
+  const { useGridOptions, useColumnMapper } = useSettings()
   const { transformGridColumn } = useGridOptions()
+  const { shouldMapDataToColumn } = useColumnMapper()
 
   if (context === undefined) {
     return null
@@ -122,7 +123,14 @@ export const SimpleColumnPreview = ({ column }: SimpleColumnPreviewProps): React
 
   const { isLoading, hasError, row, hasItem, getLocale } = context
   const locale = getLocale(column)
-  const rowColumn = row?.columns?.find((c) => c.key === column.key && (locale === undefined || (c.locale ?? null) === locale))
+  const rowColumn = row?.columns?.find((c) => {
+    if (column.type === 'dataobject.classificationstore') {
+      // The mapper falls back to the UI language for a missing locale: hand it the resolved preview locale
+      const mapped = { ...column, locale: locale === null ? 'default' : locale ?? column.locale } as unknown as SelectedColumn
+      return shouldMapDataToColumn(c, mapped)
+    }
+    return c.key === column.key && (locale === undefined || (c.locale ?? null) === locale)
+  })
 
   return (
     <ColumnPreview>

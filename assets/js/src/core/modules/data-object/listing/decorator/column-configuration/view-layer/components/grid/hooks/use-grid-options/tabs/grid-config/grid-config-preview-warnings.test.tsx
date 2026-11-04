@@ -73,7 +73,7 @@ jest.mock('./hooks/use-grid-config', () => ({
 const queryResult = jest.fn()
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice.gen', () => ({ useDataObjectGetGridQuery: () => queryResult() }))
 jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
-  useSettings: () => ({ useGridOptions: () => ({ transformGridColumn: (column: any) => ({ header: column.key, meta: {} }) }) })
+  useSettings: () => ({ useGridOptions: () => ({ transformGridColumn: (column: any) => ({ header: column.key, meta: {} }) }), useColumnMapper: () => jest.requireActual('@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper').useDataObjectColumnMapper() })
 }))
 jest.mock('@Pimcore/components/grid/grid', () => ({ Grid: () => <div data-testid="grid" /> }))
 jest.mock('@Pimcore/components/grid-content-renderer/grid-content-renderer', () => ({ GridContentRenderer: ({ children }: any) => <>{children}</> }))

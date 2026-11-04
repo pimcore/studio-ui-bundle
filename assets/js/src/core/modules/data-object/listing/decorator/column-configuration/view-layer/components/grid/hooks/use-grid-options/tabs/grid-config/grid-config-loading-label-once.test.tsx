@@ -47,7 +47,7 @@ jest.mock('@Pimcore/modules/data-object/listing/decorator/class-definition-selec
   useClassDefinitionSelection: () => ({ selectedClassDefinition: { id: 'CAR', name: 'Car' } })
 }))
 jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
-  useSettings: () => ({ useGridOptions: () => ({ transformGridColumn: () => ({ header: 'x', meta: {} }) }) })
+  useSettings: () => ({ useGridOptions: () => ({ transformGridColumn: () => ({ header: 'x', meta: {} }) }), useColumnMapper: () => jest.requireActual('@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper').useDataObjectColumnMapper() })
 }))
 jest.mock('@Pimcore/components/grid/grid', () => ({ Grid: () => <div data-testid="grid" /> }))
 jest.mock('@Pimcore/components/grid-content-renderer/grid-content-renderer', () => ({
