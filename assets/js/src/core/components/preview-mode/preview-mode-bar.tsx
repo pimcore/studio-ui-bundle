@@ -35,11 +35,33 @@ export const truncatePath = (fullpath: string): string => {
   if (parts.length <= 2) {
     return parts.join('/ ')
   }
-  return `.../ ${parts[parts.length - 2]}/ ${parts[parts.length - 1]}`
+  return `.../ ${parts.at(-2)}/ ${parts.at(-1)}`
+}
+
+const PreviewItemDescription = (): React.JSX.Element => {
+  const { item, fallbackItem } = usePreviewMode()
+  const { t } = useTranslation()
+  const { styles } = useStyles()
+
+  const id = item?.data?.id ?? fallbackItem?.id
+  const rawPath = item !== null ? item.data?.fullpath : fallbackItem?.fullpath
+  const fullpath = typeof rawPath === 'string' ? rawPath : null
+
+  if (id === undefined) {
+    return <Text className={ styles.description }>{t('preview-mode.no-item')}</Text>
+  }
+
+  return (
+    <Tooltip title={ fullpath }>
+      <Text className={ styles.description }>
+        ID: {id}{fullpath !== null && <> {'│'} {truncatePath(fullpath)}</>}
+      </Text>
+    </Tooltip>
+  )
 }
 
 export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true, showItem = true }: PreviewModeBarProps): React.JSX.Element => {
-  const { item, setItem, fallbackItem, language, setLanguage } = usePreviewMode()
+  const { setItem, language, setLanguage } = usePreviewMode()
   const { currentLanguage } = useLanguageSelection()
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -53,10 +75,6 @@ export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true, show
     }
   })
 
-  const id = item?.data?.id ?? fallbackItem?.id
-  const rawPath = item !== null ? item.data?.fullpath : fallbackItem?.fullpath
-  const fullpath = typeof rawPath === 'string' ? rawPath : null
-
   return (
     <Flex
       align="center"
@@ -69,15 +87,7 @@ export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true, show
             {t('preview-mode.preview-item')}
           </Button>
 
-          {id === undefined
-            ? <Text className={ styles.description }>{t('preview-mode.no-item')}</Text>
-            : (
-              <Tooltip title={ fullpath }>
-                <Text className={ styles.description }>
-                  ID: {id}{fullpath !== null && <> {'│'} {truncatePath(fullpath)}</>}
-                </Text>
-              </Tooltip>
-              )}
+          <PreviewItemDescription />
         </>
       )}
 
