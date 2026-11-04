@@ -3073,6 +3073,10 @@ saved-search.delete.success: Recherche enregistrée supprimée
 saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
 saved-search.menu-shortcut-group: Groupe de menu
 skip-to-content: Passer au contenu
+preview-mode.switch: Mode aperçu
+preview-mode.preview-item: Élément d'aperçu
+preview-mode.no-item: Aucun élément d'aperçu disponible
+preview-mode.preview: Aperçu
 tag-configuration.move-under: 'Déplacer sous'
 tag-configuration.move-search-placeholder: 'Rechercher un tag'
 tree.actions.edit-tag: Modifier
