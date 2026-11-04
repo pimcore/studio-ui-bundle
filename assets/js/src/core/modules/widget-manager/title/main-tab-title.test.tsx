@@ -8,132 +8,107 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/**
- * A double-click on the title of a main tab expands its tabset. FlexLayout's drag
- * handling swallows the dblclick event, so the second press of the double-click is the trigger.
- */
-
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { type TabNode } from 'flexlayout-react'
 import { MainTabTitle } from './main-tab-title'
-
-const mockDispatch = jest.fn()
-const mockMainWidgetContext = { nodeId: 'car' }
+import { type TabTitleLabelContext } from './tab-title-label-context'
+import { TabContextMenuContext } from '../hooks/use-context-menu'
 
 jest.mock('@sdk/app', () => ({
-  useAppDispatch: () => mockDispatch,
   useAppSelector: (selector: () => unknown) => selector()
 }))
 
 jest.mock('../widget-manager-slice', () => ({
-  expandMainWidget: (nodeId: string) => ({ type: 'expand', payload: nodeId }),
-  selectMainWidgetContext: () => mockMainWidgetContext
+  selectMainWidgetContext: () => ({ nodeId: 'car' })
+}))
+
+jest.mock('../hooks/use-context-menu', () => ({
+  TabContextMenuContext: jest.requireActual('react').createContext({ openTabId: null })
 }))
 
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   createStyles: () => () => ({ styles: new Proxy({}, { get: (_target, name) => String(name) }) })
 }))
 
+// the label part of TabTitleView, which takes the context props, next to the close button
 jest.mock('./tab-title-outer-container', () => ({
-  TabTitleOuterContainer: ({ node }: { node: TabNode }) => <span data-testid={ node.getId() }>{node.getId()}</span>
+  TabTitleOuterContainer: ({ node }: { node: TabNode }) => {
+    const { useContext } = jest.requireActual<typeof React>('react')
+    const labelProps = useContext(jest.requireActual('./tab-title-label-context').TabTitleLabelContext as typeof TabTitleLabelContext)
+
+    return (
+      <>
+        <span
+          { ...labelProps }
+          data-testid={ `label-${node.getId()}` }
+        >
+          {node.getId()}
+        </span>
+        <button data-testid={ `close-${node.getId()}` }>x</button>
+      </>
+    )
+  }
 }))
 
-describe('MainTabTitle', () => {
-  const node = { getId: () => 'title' } as unknown as TabNode
+const car = { getId: () => 'car' } as unknown as TabNode
+const bike = { getId: () => 'bike' } as unknown as TabNode
 
-  beforeEach(() => {
-    mockDispatch.mockClear()
+const renderTitles = (openTabId: string | null = null): jest.Mock => {
+  const openFromKeyboard = jest.fn()
+
+  render(
+    <TabContextMenuContext.Provider value={ { openTabId, openFromKeyboard } }>
+      <MainTabTitle node={ car } />
+      <MainTabTitle node={ bike } />
+    </TabContextMenuContext.Provider>
+  )
+
+  return openFromKeyboard
+}
+
+describe('MainTabTitle', () => {
+  it('makes the icon and name of the active tab, and only those, a menu button', () => {
+    renderTitles()
+
+    const label = screen.getByTestId('label-car')
+    expect(label.getAttribute('role')).toBe('button')
+    expect(label.getAttribute('tabindex')).toBe('0')
+    expect(label.getAttribute('aria-haspopup')).toBe('menu')
+    expect(label.getAttribute('aria-expanded')).toBe('false')
+
+    expect(screen.getByTestId('label-bike').hasAttribute('tabindex')).toBe(false)
+    expect(screen.getByTestId('label-bike').hasAttribute('role')).toBe(false)
   })
 
-  it('expands on the second press of a double-click', () => {
-    render(<MainTabTitle node={ node } />)
+  it('marks the menu button as expanded while its menu is open', () => {
+    renderTitles('car')
 
-    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
-    expect(mockDispatch).not.toHaveBeenCalled()
-
-    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'expand', payload: 'title' })
+    expect(screen.getByTestId('label-car').getAttribute('aria-expanded')).toBe('true')
   })
 
   it.each([
-    ['another tab title', 'car'],
-    ['a close button', 'close']
-  ])('ignores a double-click whose first press hit %s', (_, firstTarget) => {
-    render(
-      <>
-        <MainTabTitle node={ node } />
-        <MainTabTitle node={ { getId: () => 'car' } as unknown as TabNode } />
-        <button data-testid='close'>x</button>
-      </>
-    )
+    ['Enter', {}],
+    ['Space', { key: ' ' }],
+    ['the context menu key', { key: 'ContextMenu' }],
+    ['Shift+F10', { key: 'F10', shiftKey: true }]
+  ])('opens the tab menu from the keyboard with %s', (_, init) => {
+    const openFromKeyboard = renderTitles()
+    const label = screen.getByTestId('label-car')
 
-    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
-    fireEvent.mouseDown(screen.getByTestId(firstTarget), { button: 0, detail: 1 })
-    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
+    fireEvent.keyDown(label, { key: 'Enter', ...init })
 
-    expect(mockDispatch).not.toHaveBeenCalled()
+    expect(openFromKeyboard).toHaveBeenCalledWith(car, label)
   })
 
-  it('expands when the first press remounts the title, as selecting the tab beside an empty tabset does', () => {
-    const { unmount } = render(<MainTabTitle node={ node } />)
-    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
-    unmount()
+  it.each([
+    ['another key on the label', 'label-car', 'a'],
+    ['Enter on the close button', 'close-car', 'Enter']
+  ])('leaves %s alone', (_, target, key) => {
+    const openFromKeyboard = renderTitles()
 
-    render(<MainTabTitle node={ node } />)
-    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
+    fireEvent.keyDown(screen.getByTestId(target), { key })
 
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'expand', payload: 'title' })
-  })
-
-  it('ignores a middle-click double-click, which closes tabs', () => {
-    render(<MainTabTitle node={ node } />)
-
-    fireEvent.mouseDown(screen.getByTestId('title'), { button: 1, detail: 2 })
-
-    expect(mockDispatch).not.toHaveBeenCalled()
-  })
-
-  describe('keyboard access to the context menu', () => {
-    const contextMenu = jest.fn()
-
-    beforeEach(() => {
-      mockMainWidgetContext.nodeId = 'title'
-      contextMenu.mockClear()
-      document.addEventListener('contextmenu', contextMenu)
-    })
-
-    afterEach(() => {
-      mockMainWidgetContext.nodeId = 'car'
-      document.removeEventListener('contextmenu', contextMenu)
-    })
-
-    it('lets only the active tab take the focus', () => {
-      render(
-        <>
-          <MainTabTitle node={ node } />
-          <MainTabTitle node={ { getId: () => 'car' } as unknown as TabNode } />
-        </>
-      )
-
-      expect(screen.getByTestId('title').parentElement?.getAttribute('tabindex')).toBe('0')
-      expect(screen.getByTestId('car').parentElement?.hasAttribute('tabindex')).toBe(false)
-    })
-
-    it.each(['Enter', ' '])('opens the context menu of the focused active tab with "%s"', (key) => {
-      render(<MainTabTitle node={ node } />)
-
-      fireEvent.keyDown(screen.getByTestId('title').parentElement!, { key })
-
-      expect(contextMenu).toHaveBeenCalledTimes(1)
-    })
-
-    it('leaves Enter on an element inside the title, e.g. the close button, to that element', () => {
-      render(<MainTabTitle node={ node } />)
-
-      fireEvent.keyDown(screen.getByTestId('title'), { key: 'Enter' })
-
-      expect(contextMenu).not.toHaveBeenCalled()
-    })
+    expect(openFromKeyboard).not.toHaveBeenCalled()
   })
 })

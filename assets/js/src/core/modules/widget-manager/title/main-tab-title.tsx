@@ -8,82 +8,59 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { memo, useCallback, useEffect, type KeyboardEvent, type MouseEvent } from 'react'
+import React, { memo, useContext, useMemo, type HTMLAttributes, type KeyboardEvent } from 'react'
 import cn from 'classnames'
 import { type TabNode } from 'flexlayout-react'
-import { useAppDispatch, useAppSelector } from '@sdk/app'
-import { Box } from '@Pimcore/components/box/box'
+import { useAppSelector } from '@sdk/app'
 import { TabTitleOuterContainer } from './tab-title-outer-container'
-import { expandMainWidget, selectMainWidgetContext } from '../widget-manager-slice'
+import { TabTitleLabelContext } from './tab-title-label-context'
+import { selectMainWidgetContext } from '../widget-manager-slice'
+import { TabContextMenuContext } from '../hooks/use-context-menu'
 import { useStyles } from './main-tab-title.styles'
 
 export interface MainTabTitleProps {
   node: TabNode
 }
 
-// the browser counts clicks by position, so a press on another element (e.g. a close button) can come first;
-// kept by tab id for all titles, because selecting a tab can remount its title between the two presses
-const pressedTabIds: { previous?: string, current?: string } = {}
-let mountedTitles = 0
+const NO_LABEL_PROPS: HTMLAttributes<HTMLSpanElement> = {}
 
-const recordPress = (event: globalThis.MouseEvent): void => {
-  const title = event.target instanceof Element ? event.target.closest<HTMLElement>('.widget-manager__main-tab-title') : null
-  pressedTabIds.previous = pressedTabIds.current
-  pressedTabIds.current = title?.dataset.tabId
-}
-
-// opens the tab's context menu the way the context menu key does, below the title
-const openContextMenu = (event: KeyboardEvent<HTMLElement>): void => {
-  if (event.target !== event.currentTarget || (event.key !== 'Enter' && event.key !== ' ')) {
-    return
-  }
-
-  event.preventDefault()
-  const { left, bottom } = event.currentTarget.getBoundingClientRect()
-  event.currentTarget.dispatchEvent(new globalThis.MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: left, clientY: bottom }))
-}
+const opensMenu = (event: KeyboardEvent): boolean =>
+  ['Enter', ' ', 'ContextMenu'].includes(event.key) || (event.key === 'F10' && event.shiftKey)
 
 const MainTabTitleInner = ({ node }: MainTabTitleProps): React.JSX.Element => {
-  const dispatch = useAppDispatch()
   const { styles } = useStyles()
   const isActive = useAppSelector(selectMainWidgetContext)?.nodeId === node.getId()
+  const { openTabId, openFromKeyboard } = useContext(TabContextMenuContext)
+  const isMenuOpen = openTabId === node.getId()
 
-  useEffect(() => {
-    mountedTitles += 1
-
-    if (mountedTitles === 1) {
-      document.addEventListener('mousedown', recordPress, true)
+  const labelProps = useMemo((): HTMLAttributes<HTMLSpanElement> => {
+    if (!isActive) {
+      return NO_LABEL_PROPS
     }
 
-    return () => {
-      mountedTitles -= 1
-
-      if (mountedTitles === 0) {
-        document.removeEventListener('mousedown', recordPress, true)
+    return {
+      role: 'button',
+      tabIndex: 0,
+      'aria-haspopup': 'menu',
+      'aria-expanded': isMenuOpen,
+      onKeyDown: (event) => {
+        if (opensMenu(event)) {
+          event.preventDefault()
+          openFromKeyboard?.(node, event.currentTarget)
+        }
       }
     }
-  }, [])
-
-  // flexlayout's drag glass swallows the dblclick event, the second press carries the click count
-  const onMouseDown = useCallback((event: MouseEvent<HTMLElement>): void => {
-    if (event.button === 0 && event.detail === 2 && pressedTabIds.previous === node.getId()) {
-      dispatch(expandMainWidget(node.getId()))
-    }
-  }, [dispatch, node])
+  }, [isActive, isMenuOpen, node, openFromKeyboard])
 
   return (
-    <Box
-      aria-haspopup={ isActive ? 'menu' : undefined }
+    <span
       className={ cn('widget-manager__main-tab-title', styles.title) }
-      component='span'
       data-tab-id={ node.getId() }
-      onKeyDown={ isActive ? openContextMenu : undefined }
-      onMouseDown={ onMouseDown }
-      role={ isActive ? 'button' : undefined }
-      tabIndex={ isActive ? 0 : undefined }
     >
-      <TabTitleOuterContainer node={ node } />
-    </Box>
+      <TabTitleLabelContext.Provider value={ labelProps }>
+        <TabTitleOuterContainer node={ node } />
+      </TabTitleLabelContext.Provider>
+    </span>
   )
 }
 

@@ -10,20 +10,10 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ css }) => {
   return {
     title: css`
-      display: inline-flex;
-
-      &:focus-visible {
-        outline: 2px solid ${token.colorPrimaryBorder};
-        outline-offset: 2px;
-        border-radius: ${token.borderRadiusSM}px;
-      }
-
-      &:focus:not(:focus-visible) {
-        outline: none;
-      }
+      display: contents;
     `
   }
 })

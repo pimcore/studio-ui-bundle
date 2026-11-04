@@ -32,15 +32,12 @@ const findExpansion = (model: Model, nodeId: string): { tabset: TabSetNode, empt
 
 export const canExpandMainWidgetTabset = (model: Model, nodeId: string): boolean => !isUndefined(findExpansion(model, nodeId))
 
-/**
- * Lets the tabset of the given main widget take the space of an empty tabset. Only the main tabset
- * stays when emptied, so the tabs move into it and their own tabset is removed.
- */
-export const expandMainWidgetTabset = (model: Model, nodeId: string): void => {
+// only the main tabset stays when emptied, so the tabs move into it and FlexLayout removes their own tabset
+export const expandMainWidgetTabset = (model: Model, nodeId: string): boolean => {
   const expansion = findExpansion(model, nodeId)
 
   if (isUndefined(expansion)) {
-    return
+    return false
   }
 
   const { tabset, emptyTabset } = expansion
@@ -51,4 +48,5 @@ export const expandMainWidgetTabset = (model: Model, nodeId: string): void => {
   })
 
   model.doAction(Actions.selectTab(nodeId))
+  return true
 }

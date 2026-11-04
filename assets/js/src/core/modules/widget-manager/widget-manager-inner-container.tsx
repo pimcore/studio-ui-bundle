@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectInnerModel, selectMainWidgetContext, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { MainTabTitle } from './title/main-tab-title'
+import { useExpandOnDoubleClick } from './hooks/use-expand-on-double-click'
 import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
 import { isEqual } from 'lodash'
 
@@ -23,6 +24,8 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
   const mainWidgetContext = useAppSelector(selectMainWidgetContext)
   const dispatch = useAppDispatch()
+
+  useExpandOnDoubleClick()
 
   // keep a stable model instance: only recreate when the redux action
   // changes the JSON (e.g. openMainWidget, closeWidget).

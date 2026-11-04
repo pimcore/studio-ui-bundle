@@ -59,7 +59,7 @@ const openOuterWidget = (state: WidgetManagerState, tab: WidgetManagerTabConfig,
   const model = Model.fromJson(state.outerModel)
   const node = isUndefined(tab.id) ? undefined : model.getNodeById(tab.id)
 
-  if (node !== undefined) {
+  if (!isUndefined(node)) {
     model.doAction(Actions.selectTab(node.getId()))
   } else {
     model.doAction(Actions.addNode(tab, toNodeId, DockLocation.CENTER, -1, true))
@@ -122,9 +122,11 @@ const slice = createSlice({
 
     expandMainWidget: (state, action: PayloadAction<string>) => {
       const model = Model.fromJson(state.innerModel)
-      expandMainWidgetTabset(model, action.payload)
-      state.innerModel = restoreCollapsedRows(model.toJson())
-      state.mainWidgetContext = resolveMainWidgetContext(model)
+
+      if (expandMainWidgetTabset(model, action.payload)) {
+        state.innerModel = restoreCollapsedRows(model.toJson())
+        state.mainWidgetContext = resolveMainWidgetContext(model)
+      }
     },
 
     openMainWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {

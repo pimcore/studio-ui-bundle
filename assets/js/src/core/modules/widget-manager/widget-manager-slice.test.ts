@@ -127,13 +127,20 @@ describe('widget-manager-slice expand of a main widget tabset', () => {
     expect(tabsets(expanded.innerModel)).toEqual(['main_tabset:bike+scooter', 'car_tabset:car'])
   })
 
+  it('moves the tabs in a vertical split, where the tabsets sit in a nested row', () => {
+    const vertical = bikeTabsetBesideEmptyMainTabset()
+    const expanded = reducer(createState({ ...vertical, layout: { type: 'row', id: 'main', children: [{ ...vertical.layout, id: 'nested' }] } }), expandMainWidget('bike'))
+
+    expect(tabsets(expanded.innerModel)).toEqual(['main_tabset:bike+scooter'])
+  })
+
   it.each([
     ['without a split', singleTabset],
     ['when no tabset is empty', splitLayout]
-  ])('changes nothing %s', (_, layout) => {
-    const expanded = reducer(createState(layout), expandMainWidget('car'))
+  ])('leaves the state untouched %s', (_, layout) => {
+    const state = createState(layout)
 
-    expect(tabsets(expanded.innerModel)).toEqual(tabsets(layout))
+    expect(reducer(state, expandMainWidget('car'))).toBe(state)
   })
 
   it('gives a collapsed empty main tabset its width back', () => {
