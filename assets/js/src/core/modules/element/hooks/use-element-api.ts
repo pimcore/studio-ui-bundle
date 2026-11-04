@@ -81,7 +81,9 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
           trackError(new ApiError(response.error))
         }
 
-        updateAssetFieldValue(args.body.data[0].id, 'filename', args.body.data[0].key)
+        if (isUndefined(response.error)) {
+          updateAssetFieldValue(args.body.data[0].id, 'filename', args.body.data[0].key)
+        }
 
         return isUndefined(response.error)
       } else if (elementType === 'data-object') {
@@ -90,7 +92,9 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
           trackError(new ApiError(response.error))
         }
 
-        updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+        if (isUndefined(response.error)) {
+          updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+        }
 
         return isUndefined(response.error)
       } else if (elementType === 'document') {
@@ -113,7 +117,9 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
           trackError(new ApiError(response.error))
         }
 
-        updateDocumentFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+        if (isUndefined(response.error)) {
+          updateDocumentFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+        }
 
         return isUndefined(response.error)
       }
