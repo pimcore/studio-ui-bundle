@@ -237,7 +237,7 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
     }),
     columnHelper.accessor('description', {
       header: t('classification-store.columns.description'),
-      size: 300,
+      size: 200,
       meta: { type: 'input', editable: true }
     }),
     columnHelper.display({

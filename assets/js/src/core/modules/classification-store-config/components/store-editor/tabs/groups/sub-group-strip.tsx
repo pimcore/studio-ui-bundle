@@ -43,7 +43,7 @@ export const SubGroupStrip = ({
   return (
     <Flex
       gap="small"
-      style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+      style={ { padding: `${token.paddingXS}px 0` } }
       vertical
     >
       <Flex
