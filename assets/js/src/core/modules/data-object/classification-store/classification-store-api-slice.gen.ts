@@ -607,7 +607,7 @@ export type ClassificationStoreGetLayoutByGroupApiResponse =
     /** status 200 Layout definition */ ClassificationStoreGroupLayout2;
 export type ClassificationStoreGetLayoutByGroupApiArg = {
     /** object ID */
-    objectId: number;
+    objectId?: number;
     /** GroupId of the Group ID */
     groupId: number;
     /** Field Name */
