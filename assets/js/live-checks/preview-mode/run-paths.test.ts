@@ -9,6 +9,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-require-imports */
+export {} // a module, so these requires do not clash with the other test files' globals
 const { spawnSync } = require('node:child_process')
 const fs = require('node:fs')
 const os = require('node:os')
@@ -31,7 +32,7 @@ const hideChromium = (dir: string): string => {
   return file
 }
 
-const run = (args: string[], env: Record<string, string>, preload?: string) =>
+const run = (args: string[], env: Record<string, string>, preload?: string): { status: number, stdout: string } =>
   spawnSync(process.execPath, [...(preload ? ['--require', preload] : []), runMjs, ...args], {
     env: { PATH: '/nonexistent', ...env },
     encoding: 'utf8'
@@ -49,7 +50,7 @@ describe('preview-mode live check run.mjs paths', () => {
     fs.mkdirSync(tmp)
 
     const result = run([], { TMPDIR: tmp, CHROMIUM_BIN: fake })
-    const folder = /^out-dir: (.+)$/m.exec(result.stdout)?.[1] as string
+    const folder: string = /^out-dir: (.+)$/m.exec(result.stdout)![1]
 
     expect(result.status).toBe(1)
     expect(path.dirname(folder)).toBe(tmp)

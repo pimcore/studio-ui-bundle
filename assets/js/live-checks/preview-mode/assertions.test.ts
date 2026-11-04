@@ -10,6 +10,7 @@
 
 
 /* eslint-disable @typescript-eslint/no-require-imports */
+export {} // a module, so these requires do not clash with the other test files' globals
 const { spawnSync } = require('node:child_process')
 const fs = require('node:fs')
 const os = require('node:os')
