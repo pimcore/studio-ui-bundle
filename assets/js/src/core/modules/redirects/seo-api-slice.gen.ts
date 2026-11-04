@@ -207,6 +207,8 @@ export type BundleSeoRedirect = {
     userOwner: number | null;
     /** ID of the user who last modified the redirect */
     userModification: number | null;
+    /** Type of the element the target points to - 'document', 'asset' or 'object' */
+    targetType: string | null;
 };
 export type Error = {
     /** Message */
@@ -225,6 +227,8 @@ export type BundleSeoRedirectAdd = {
     source: string | null;
     /** Target URL */
     target: string | null;
+    /** Type of the element the target points to - 'document', 'asset' or 'object'. Detected from the target when omitted. */
+    targetType?: string | null;
 };
 export type BundleSeoRedirectUpdate = {
     /** Type of redirect */
@@ -237,6 +241,8 @@ export type BundleSeoRedirectUpdate = {
     targetSite: number | null;
     /** Target URL */
     target: string | null;
+    /** Type of the element the target points to - 'document', 'asset' or 'object'. Detected from the target when omitted. */
+    targetType?: string | null;
     /** Status code */
     statusCode: number;
     /** Priority */
