@@ -25,7 +25,8 @@ jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-relat
 
 /* eslint-disable import/first */
 import React, { useState } from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import { Form } from 'antd'
 import { Select, type SelectProps } from './select'
 
 const options = [
@@ -237,5 +238,35 @@ describe('Select "Select all"', () => {
     fireEvent.click(screen.getByText('select.select-all'))
 
     expect(onChange).toHaveBeenLastCalledWith(['AT', 'DE', 'FR'], options)
+  })
+
+  it.each([true, false])('shows an empty selection when the form value is reset to undefined (allowSelectAll=%s)', (allowSelectAll) => {
+    let formRef: ReturnType<typeof Form.useForm>[0] | undefined
+    const Wrapper = (): React.JSX.Element => {
+      const [form] = Form.useForm()
+      formRef = form
+      return (
+        <Form form={ form }>
+          <Form.Item name="f">
+            <Select
+              allowSelectAll={ allowSelectAll }
+              mode="multiple"
+              open
+              options={ options }
+            />
+          </Form.Item>
+        </Form>
+      )
+    }
+    render(<Wrapper />)
+    const picked = (): Array<string | null> => Array.from(document.querySelectorAll('.ant-select-selection-item-content')).map(node => node.textContent)
+
+    fireEvent.click(screen.getByText('Austria', { selector: '.ant-select-item-option-content' }))
+    fireEvent.click(screen.getByText('Germany', { selector: '.ant-select-item-option-content' }))
+    expect(picked()).toEqual(['Austria', 'Germany'])
+
+    act(() => { formRef?.setFieldValue('f', undefined) })
+
+    expect(picked()).toEqual([])
   })
 })

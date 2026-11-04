@@ -34,6 +34,15 @@ export const useSelectAllValue = ({ allowSelectAll, mode, value, onChange, loadi
   const isSelectAllEnabled = allowSelectAll && mode === 'multiple' && antdSelectProps.labelInValue !== true
   const isTrackingValue = isSelectAllEnabled && value === undefined
   const [innerValue, setInnerValue] = useState<unknown>(antdSelectProps.defaultValue)
+  const [wasControlled, setWasControlled] = useState(value !== undefined)
+
+  // A controlled value that returns to undefined (form reset) means an empty selection, not the last tracked one
+  if (wasControlled !== (value !== undefined)) {
+    setWasControlled(value !== undefined)
+    if (value === undefined) {
+      setInnerValue(undefined)
+    }
+  }
 
   const handleChange: NonNullable<SelectProps['onChange']> = (nextValue, option) => {
     if (isTrackingValue) {
