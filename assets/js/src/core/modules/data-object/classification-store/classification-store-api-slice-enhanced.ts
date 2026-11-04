@@ -10,19 +10,156 @@
 
 /* eslint-disable max-lines */
 
+import { type TypedUseMutation } from '@reduxjs/toolkit/query/react'
+import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import {
   api as baseApi,
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
   type ClassificationStoreConfigurationKeyCollectionApiResponse,
-  type ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
-  type ClassificationStoreConfigurationCollectionRelationCollectionApiArg
+  type ClassificationStoreConfigurationCollectionRelationCollectionApiArg,
+  type ClassificationStoreCollection2 as GeneratedKeyLayout,
+  type ClassificationStoreGroupLayout2 as GeneratedGroupLayout,
+  type ClassificationStoreConfigurationKeyGroupRelationCreate as GeneratedKeyGroupRelationCreate,
+  type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
-// Helper: scan all active query cache entries for a given endpoint name and patch each one
-type PatchFn<T> = (draft: T) => void
+const CONFIGURATION_PREFIX = '/pimcore-studio/api/classification-store/configuration'
+
+// ─── Hand-written sub-group contract ────────────────────────────────────────────
+// The sub-group endpoints and the `subGroup` field shipped after this client was last
+// generated. Each declaration below either adds a name the generated slice does not carry
+// or shadows a generated one, so the next regeneration supersedes this block by deleting it.
+
+export interface ClassificationStoreConfigurationSubGroupDetail {
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object
+  }
+  /** ID of the sub group */
+  id: number
+  /** Generated identifier of the sub group, the value a key-group relation stores */
+  identifier: string
+  /** Name of the sub group */
+  name: string
+  /** ID of the store this sub group belongs to */
+  storeId: number
+  /** Description of the sub group */
+  description: string | null
+  /** Creation date as Unix timestamp */
+  creationDate: number | null
+  /** Modification date as Unix timestamp */
+  modificationDate: number | null
+}
+
+export interface ClassificationStoreConfigurationSubGroupCreate {
+  /** Name of the sub group */
+  name: string
+  /** ID of the store this sub group belongs to */
+  storeId: number
+}
+
+export interface ClassificationStoreConfigurationSubGroupUpdate {
+  /** Name of the sub group */
+  name: string
+  /** Description of the sub group */
+  description: string | null
+}
+
+export interface ClassificationStoreConfigurationSubGroupCollectionApiResponse {
+  totalItems: number
+  items: ClassificationStoreConfigurationSubGroupDetail[]
+}
+
+export interface ClassificationStoreConfigurationSubGroupCollectionApiArg {
+  /** ID of the store to list sub groups for */
+  storeId: number
+  body: {
+    filters?: {
+      page?: number
+      pageSize?: number
+      columnFilters?: object
+      sortFilter?: object
+      additionalSortFilters?: object
+    }
+  }
+}
+
+export interface ClassificationStoreConfigurationSubGroupCreateApiArg {
+  classificationStoreConfigurationSubGroupCreate: ClassificationStoreConfigurationSubGroupCreate
+}
+
+export interface ClassificationStoreConfigurationSubGroupUpdateApiArg {
+  /** Id of the sub group configuration */
+  id: number
+  classificationStoreConfigurationSubGroupUpdate: ClassificationStoreConfigurationSubGroupUpdate
+}
+
+export interface ClassificationStoreConfigurationSubGroupDeleteApiArg {
+  /** Id of the sub group configuration */
+  id: number
+}
+
+/** A key-group relation, which now also stores the identifier of its sub group. */
+export interface ClassificationStoreConfigurationKeyGroupRelationDetail extends GeneratedKeyGroupRelationDetail {
+  /** Identifier of the sub group this key is assigned to in this group */
+  subGroup?: string | null
+}
+
+/**
+ * The create-or-upsert payload of a key-group relation. Only the pair is required: a property
+ * absent from the payload leaves the stored value alone, so a caller sends the fields it is
+ * changing and nothing else. An explicit null on `subGroup` clears the assignment; `sorter` and
+ * `mandatory` cannot be cleared and take 0 and false on a relation that does not exist yet.
+ *
+ * `sorter` and `mandatory` are re-declared optional: `KeyGroupRelationCreate` carries them as
+ * `AbsentValue::ABSENT` defaults outside `required: ['keyId', 'groupId']`, which the generated
+ * slice predates. The next regeneration reproduces them optional and this shadow goes with the
+ * rest of the block.
+ */
+export interface ClassificationStoreConfigurationKeyGroupRelationCreate
+  extends Omit<GeneratedKeyGroupRelationCreate, 'sorter' | 'mandatory'> {
+  /** Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation */
+  sorter?: number
+  /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
+  mandatory?: boolean
+  /** Identifier of the sub group to assign the key to in this group */
+  subGroup?: string | null
+}
+
+export interface ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse {
+  totalItems: number
+  items: ClassificationStoreConfigurationKeyGroupRelationDetail[]
+}
+
+/** The sub groups of a group layout, in the order of their first key. */
+export interface ClassificationStoreSubGroupLayout {
+  /** Identifier of the sub group */
+  identifier: string
+  /** Name of the sub group */
+  name: string
+  /** Description of the sub group */
+  description: string | null
+}
+
+export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
+  /** Identifier of the sub group this key is assigned to in its group */
+  subGroup?: string | null
+}
+
+export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
+  keys: ClassificationStoreCollection2[]
+  /** Sub groups the keys of this group are assigned to, ordered by their first key */
+  subGroups?: ClassificationStoreSubGroupLayout[]
+}
+
+// Helper: scan all active query cache entries for a given endpoint name and patch each one.
+// The patch is handed the entry's own cache key alongside the draft, because what it has to do
+// can differ per entry: a relation that already sits on the cached page 1 is simply missing from
+// the cached page 2, and only the entry that pushed it in has created anything.
+type PatchFn<T> = (draft: T, cacheKey: string) => void
 interface PatchResult { undo: () => void }
 
 function patchAllCacheEntries<T, A = unknown> (
@@ -42,7 +179,9 @@ function patchAllCacheEntries<T, A = unknown> (
       if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
         // @ts-expect-error — dynamic endpoint name not in the union
-        innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, patch))
+        innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
+          patch(draft, queryKey)
+        }))
       } catch {
         // Cache entry may have been garbage-collected — safe to ignore
       }
@@ -69,7 +208,9 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
       if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
         // @ts-expect-error — dynamic endpoint name not in the union
-        const result = innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, patch))
+        const result = innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
+          patch(draft, queryKey)
+        }))
         results.push(result)
       } catch {
         // Cache entry may have been garbage-collected — safe to ignore
@@ -274,42 +415,104 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationKeyGroupRelationCreate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
-        const { keyId, groupId, sorter, mandatory } = args.classificationStoreConfigurationKeyGroupRelationCreate
+        const create: ClassificationStoreConfigurationKeyGroupRelationCreate =
+          args.classificationStoreConfigurationKeyGroupRelationCreate
+        const { keyId, groupId, sorter, mandatory } = create
+        // Only what the payload carries is patched. An absent property means "leave the stored
+        // value alone" to the server, so patching it would blank the cell it belongs to for the
+        // length of the request — a sub-group assignment carries neither sorter nor mandatory.
+        const absentSafePatch = {
+          ...(sorter !== undefined ? { sorter } : {}),
+          ...(mandatory !== undefined ? { mandatory } : {}),
+          ...('subGroup' in create ? { subGroup: create.subGroup ?? null } : {})
+        }
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
         const matchesGroup = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg): boolean => a.groupId === groupId
+        // The cache entries this request inserted the row into, which decides how the response is
+        // confirmed below: a row this request brought into being has nothing older to preserve.
+        //
+        // Per entry and not per request. The group is paged, so several pages of it can be cached
+        // at once and a relation that already sits on page 1 is simply absent from page 2. A
+        // single flag let that page-local miss count as an insertion for every entry, and the
+        // confirmation then replaced the whole page-1 row — writing back the `subGroup` an older
+        // cell edit's response had never named, which is the exact staleness the field mask below
+        // exists to prevent.
+        const createdIn = new Set<string>()
         const patchResults = optimisticPatchAllCacheEntries<
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
         >(
           dispatch,
           'classificationStoreConfigurationKeyGroupRelationCollection',
-          (draft) => {
+          (draft, cacheKey) => {
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
-              // Upsert — update mandatory/sorter in-place
-              draft.items[idx] = { ...draft.items[idx], sorter, mandatory }
+              // Upsert — update in-place whatever the payload named
+              draft.items[idx] = { ...draft.items[idx], ...absentSafePatch }
             } else {
-              // New relation — keyName/keyDescription/groupName filled in by server overwrite below
-              draft.items.push({ keyId, groupId, sorter, mandatory, keyName: null, keyDescription: null, groupName: null })
+              // New relation — keyName/keyDescription/groupName filled in by server overwrite
+              // below, and an absent sorter or mandatory takes the value the server gives a new
+              // relation rather than leaving the cached row without one.
+              createdIn.add(cacheKey)
+              draft.items.push({
+                keyId,
+                groupId,
+                sorter: sorter ?? 0,
+                mandatory: mandatory ?? false,
+                keyName: null,
+                keyDescription: null,
+                groupName: null,
+                subGroup: create.subGroup ?? null
+              })
               draft.totalItems += 1
             }
           },
           matchesGroup
         )
         try {
-          const { data: updated } = await queryFulfilled
+          const { data } = await queryFulfilled
+          // The response carries `subGroup`, which the generated detail predates — the same
+          // shadow the rest of this hand-written block applies, and gone with it on the next
+          // regeneration.
+          const updated = data as ClassificationStoreConfigurationKeyGroupRelationDetail
+          // The response is confirmed through the same field mask the optimistic patch used,
+          // taking the server's own value for each field this request named. Replacing the whole
+          // row instead would write back the fields it did NOT name as the server held them while
+          // it ran, so a cell edit started before a sub-group assignment and answered after it
+          // restored the old `subGroup` — the server kept the assignment while the cache, the
+          // headings and the chips went stale with no way back short of a refetch.
+          const confirmed = {
+            ...(sorter !== undefined ? { sorter: updated.sorter } : {}),
+            ...(mandatory !== undefined ? { mandatory: updated.mandatory } : {}),
+            ...('subGroup' in create ? { subGroup: updated.subGroup ?? null } : {})
+          }
           patchAllCacheEntries<
             ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
             ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
           >(
             dispatch,
             'classificationStoreConfigurationKeyGroupRelationCollection',
-            (draft) => {
+            (draft, cacheKey) => {
               const idx = draft.items.findIndex(
                 (r) => r.keyId === updated.keyId && r.groupId === updated.groupId
               )
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx === -1) return
+
+              draft.items[idx] = createdIn.has(cacheKey)
+                // A relation this request created has no older state to keep, and its sorter and
+                // mandatory are whatever the server gave it. Only in the entries that actually
+                // inserted it: an entry that already held the row keeps the field mask.
+                ? updated
+                : {
+                    ...draft.items[idx],
+                    // Descriptive fields the server fills in and no mutation writes, so the
+                    // response is always the freshest value there is.
+                    keyName: updated.keyName,
+                    keyDescription: updated.keyDescription,
+                    groupName: updated.groupName,
+                    ...confirmed
+                  }
             },
             matchesGroup
           )
@@ -420,6 +623,69 @@ const api = baseApi.enhanceEndpoints({
       }
     }
   }
+}).injectEndpoints({
+  endpoints: (build) => ({
+
+    // ─── Sub groups ───────────────────────────────────────────────────────────
+
+    classificationStoreConfigurationSubGroupCollection: build.query<
+      ClassificationStoreConfigurationSubGroupCollectionApiResponse,
+      ClassificationStoreConfigurationSubGroupCollectionApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/stores/${queryArg.storeId}/sub-groups`,
+        method: 'POST',
+        body: queryArg.body
+      }),
+      providesTags: ['Classification Store']
+    }),
+
+    classificationStoreConfigurationSubGroupCreate: build.mutation<
+      ClassificationStoreConfigurationSubGroupDetail,
+      ClassificationStoreConfigurationSubGroupCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/sub-groups/add`,
+        method: 'POST',
+        body: queryArg.classificationStoreConfigurationSubGroupCreate
+      }),
+      // Invalidated rather than hand-patched. Which page a new sub group lands on, whether it
+      // matches a cached search and what each cached total becomes are all decided by the
+      // server's own filtering and ordering, so appending the row to every cached entry
+      // duplicated it across visited pages and corrupted filtered totals.
+      invalidatesTags: ['Classification Store']
+    }),
+
+    classificationStoreConfigurationSubGroupUpdate: build.mutation<
+      ClassificationStoreConfigurationSubGroupDetail,
+      ClassificationStoreConfigurationSubGroupUpdateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/sub-groups/${queryArg.id}`,
+        method: 'PUT',
+        body: queryArg.classificationStoreConfigurationSubGroupUpdate
+      }),
+      // Invalidated rather than hand-patched. A rename changes which cached searches the row
+      // belongs to and where the server sorts it, so patching the rows already present left a
+      // renamed sub group sitting in a search for its old name and absent from one for its new.
+      invalidatesTags: ['Classification Store']
+    }),
+
+    classificationStoreConfigurationSubGroupDelete: build.mutation<
+      unknown,
+      ClassificationStoreConfigurationSubGroupDeleteApiArg
+    >({
+      query: (queryArg) => ({
+        url: `${CONFIGURATION_PREFIX}/sub-groups/${queryArg.id}`,
+        method: 'DELETE'
+      }),
+      // Invalidated rather than hand-patched. The decrement was applied to every cached
+      // sub-group collection, including other stores and searches that never held the row, so
+      // a delete in one store shrank another store's pagination total while its rows stayed.
+      invalidatesTags: ['Classification Store']
+    })
+  }),
+  overrideExisting: false
 })
 
 export type * from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
@@ -444,11 +710,15 @@ export const {
   useClassificationStoreConfigurationKeyUpdateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
   // CRUD mutations — key-group relations
-  useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
   useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
   // CRUD mutations — collection-group relations
   useClassificationStoreConfigurationCollectionRelationCreateMutation,
   useClassificationStoreConfigurationCollectionRelationDeleteMutation,
+  // Sub groups
+  useClassificationStoreConfigurationSubGroupCollectionQuery,
+  useClassificationStoreConfigurationSubGroupCreateMutation,
+  useClassificationStoreConfigurationSubGroupUpdateMutation,
+  useClassificationStoreConfigurationSubGroupDeleteMutation,
   // Store / other queries (unchanged)
   useClassificationStoreConfigurationStoreTreeQuery,
   useClassificationStoreConfigurationStoreCreateMutation,
@@ -463,5 +733,25 @@ export const {
   useClassificationStoreGetLayoutByKeyQuery,
   useLazyClassificationStoreGetLayoutByKeyQuery
 } = api
+
+/**
+ * The create-or-upsert hook, typed to take the payload the shipped `KeyGroupRelationCreate`
+ * declares: every property but the pair optional, an absent one keeping its stored value. Only
+ * the argument is shadowed — the generated slice still requires `sorter` and `mandatory`, which
+ * it carried before they became `AbsentValue::ABSENT` defaults. Done here once so no call site
+ * has to cast, and removed with the rest of the hand-written block on the next regeneration.
+ *
+ * It is the generated hook itself, re-typed rather than wrapped: a zero-argument wrapper dropped
+ * the hook's own options, so no caller could pass `fixedCacheKey` or `selectFromResult` any more
+ * and a JavaScript caller had them silently ignored. `TypedUseMutation` is the shape the generated
+ * hook already has, so the options parameter and the `selectFromResult` return typing stay the
+ * generated ones and only the trigger's payload type differs.
+ */
+export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation =
+  api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation as unknown as TypedUseMutation<
+    ClassificationStoreConfigurationKeyGroupRelationDetail,
+    { classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate },
+    BaseQuery
+  >
 
 export { api }

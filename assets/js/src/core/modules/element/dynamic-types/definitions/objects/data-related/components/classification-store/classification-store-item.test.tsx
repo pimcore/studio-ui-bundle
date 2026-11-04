@@ -10,7 +10,9 @@
 
 /**
  * A group offers its delete action unless deleting is disallowed by the store,
- * and labels its keys by the title the layout carries for them.
+ * and labels its keys by the title the layout carries for them. When the layout carries sub
+ * groups, its keys render under their sub-group heading in the order the layout lists them,
+ * with the keys carrying none last.
  */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not
@@ -33,6 +35,7 @@ import { ClassificationStoreItem } from './classification-store-item'
 
 const mockConfirm = jest.fn()
 const mockObjectComponent = jest.fn()
+const mockGetValue = jest.fn()
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -47,7 +50,7 @@ jest.mock('@Pimcore/components/form/item/provider/item/use-item', () => ({
   useItem: () => ({ name: ['store', '1', 'default'] })
 }))
 jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value', () => ({
-  useKeyedListContext: () => ({ operations: { remove: jest.fn(), getValue: jest.fn() } })
+  useKeyedListContext: () => ({ operations: { remove: jest.fn(), getValue: mockGetValue } })
 }))
 jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
   useElementContext: () => ({ id: 42, elementType: 'data-object' })
@@ -83,10 +86,32 @@ const keyedGroupLayout = {
   ]
 }
 
+// The layout orders its sub groups itself; 'Weights' comes before 'Dimensions' here although
+// the first key belongs to 'Dimensions', so a client-side re-sort would be visible.
+const subGroupedLayout = {
+  id: 2,
+  name: 'Specs',
+  subGroups: [
+    { identifier: 'sg000002', name: 'Weights', description: null },
+    { identifier: 'sg000001', name: 'Dimensions', description: null }
+  ],
+  keys: [
+    { id: 21, name: 'ef000021', title: 'Height', subGroup: 'sg000001', definition: { datatype: 'data' } },
+    { id: 22, name: 'ef000022', title: 'Net weight', subGroup: 'sg000002', definition: { datatype: 'data' } },
+    { id: 23, name: 'ef000023', title: 'Note', subGroup: null, definition: { datatype: 'data' } },
+    { id: 24, name: 'ef000024', title: 'Width', subGroup: 'sg000001', definition: { datatype: 'data' } }
+  ]
+} as any
+
+const headings = (): Array<string | null> => [...document.querySelectorAll('h5')].map((heading) => heading.textContent)
+
+const renderedKeyIds = (): unknown[] => mockObjectComponent.mock.calls.map(([props]) => props.name)
+
 describe('ClassificationStoreItem', () => {
   beforeEach(() => {
     mockConfirm.mockClear()
     mockObjectComponent.mockClear()
+    mockGetValue.mockReset()
   })
 
   it('asks for confirmation when the group is deleted', async () => {
@@ -143,5 +168,47 @@ describe('ClassificationStoreItem', () => {
     expect(mockObjectComponent).toHaveBeenCalledWith(
       expect.objectContaining({ name: 12, title: 'ef000002' })
     )
+  })
+
+  it('renders the keys under their sub-group heading in the order of the layout', () => {
+    render(
+      <ClassificationStoreItem
+        currentLayoutData={ [subGroupedLayout] }
+        groupLayout={ subGroupedLayout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(headings()).toEqual(['Weights', 'Dimensions', 'classification-store.no-sub-group'])
+    expect(renderedKeyIds()).toEqual([22, 21, 24, 23])
+  })
+
+  it('renders no heading for a sub group whose keys are all hidden as empty', () => {
+    mockGetValue.mockReturnValue({ 22: 'heavy' })
+
+    render(
+      <ClassificationStoreItem
+        currentLayoutData={ [subGroupedLayout] }
+        groupLayout={ subGroupedLayout }
+        hideEmptyData
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(headings()).toEqual(['Weights'])
+    expect(renderedKeyIds()).toEqual([22])
+  })
+
+  it('renders a group layout without sub groups as one flat list', () => {
+    render(
+      <ClassificationStoreItem
+        currentLayoutData={ [keyedGroupLayout] }
+        groupLayout={ keyedGroupLayout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(headings()).toEqual([])
+    expect(renderedKeyIds()).toEqual([11, 12])
   })
 })

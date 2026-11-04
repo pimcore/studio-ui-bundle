@@ -2207,6 +2207,31 @@ classification-store.select-group: Select group
 classification-store.search-groups: Search groups…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Sub groups
+classification-store.add-sub-group: Add sub group
+classification-store.delete-sub-group: "Delete sub group \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: A sub group belongs to the store, so a new one becomes available to every group of this store.
+classification-store.delete-sub-group-in-use-hint: Unassign the keys from this sub group in the groups named above first, then delete it.
+classification-store.no-sub-groups: This store has no sub groups yet
+classification-store.select-sub-group: Select sub group
+classification-store.search-sub-groups: Search sub groups…
+classification-store.assign-sub-group: Assign sub group
+classification-store.unassign-sub-group: Unassign
+classification-store.select-keys-hint: Select at least one key first
+classification-store.no-sub-group: No sub group
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Unassigned ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Unassign the keys shown here
+classification-store.aria.unassign-sub-group-keys: "Unassign the keys shown here from sub group \"{{name}}\""
+classification-store.aria.delete-sub-group: "Delete sub group \"{{name}}\""
+classification-store.unassign-sub-group-confirm_one: "Unassign the 1 key shown here from sub group \"{{name}}\"? Keys of this group on other pages keep it."
+classification-store.unassign-sub-group-confirm_other: "Unassign the {{count}} keys shown here from sub group \"{{name}}\"? Keys of this group on other pages keep it."
+classification-store.sub-groups-strip-hint: These are the sub groups the keys of this group use. The store keeps the vocabulary.
+classification-store.manage-sub-groups: Manage sub groups
+classification-store.sub-group-unused: "No key of this group uses sub group \"{{name}}\" any more. It still exists in the store."
+classification-store.assign-sub-group-progress: "Assigning the sub group to {{done}} of {{total}} keys…"
+classification-store.assign-sub-group-failed: "The sub group could not be assigned to: {{keyNames}}"
+classification-store.assign-sub-group-running: Wait for the sub group assignment to finish
 home: Home
 preview.label: Preview
 preview.desktop: Desktop

@@ -15,9 +15,14 @@ import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { BaseView } from '../../../layout-related/views/base-view'
-import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import {
+  type ClassificationStoreCollection2,
+  type ClassificationStoreGroupLayout2
+} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+import { buildSubGroupSections } from '@Pimcore/modules/data-object/classification-store/utils/sub-group-sections'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Title } from '@Pimcore/components/title/title'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
@@ -25,6 +30,16 @@ import { useClassificationStore } from './provider'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { getKeyLabel } from './utils/key-label'
 import { useStyles } from './classification-store-item.styles'
+
+const renderKey = (item: ClassificationStoreCollection2): React.JSX.Element => (
+  <ObjectComponent
+    key={ item.id }
+    { ...item.definition }
+    name={ item.id }
+    technicalName={ item.name }
+    title={ getKeyLabel(item) }
+  />
+)
 
 export interface ClassificationStoreItemProps {
   groupLayout?: ClassificationStoreGroupLayout2
@@ -89,6 +104,36 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     return keys.filter((key) => !hiddenKeyIds.has(key.id))
   }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, operations, isNewGroup])
 
+  // The layout lists its sub groups in the order the backend put them in, which is the order
+  // their first key appears in; it is never re-sorted here. A group layout that carries none
+  // keeps rendering its keys as one flat list.
+  const subGroupSections = useMemo(() => {
+    const subGroups = groupLayout?.subGroups ?? []
+
+    if (subGroups.length === 0) {
+      return undefined
+    }
+
+    return buildSubGroupSections({
+      items: visibleKeys,
+      getSubGroup: (key) => key.subGroup,
+      order: subGroups.map((subGroup) => subGroup.identifier)
+    })
+  }, [groupLayout, visibleKeys])
+
+  const subGroupNames = useMemo(
+    () => new Map((groupLayout?.subGroups ?? []).map((subGroup) => [subGroup.identifier, subGroup.name])),
+    [groupLayout]
+  )
+
+  const headingOf = (identifier: string | null): string => {
+    if (identifier === null) {
+      return t('classification-store.no-sub-group')
+    }
+
+    return subGroupNames.get(identifier) ?? identifier
+  }
+
   const handleClose: (e: React.MouseEvent<HTMLButtonElement>) => void = (e) => {
     e.stopPropagation()
 
@@ -127,17 +172,16 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         title={ groupLayout?.name }
       >
         <Panel>
-          {visibleKeys.map((item) => (
-            <ObjectComponent
-              key={ item.id }
-              { ...item.definition }
-              name={ item.id }
-              technicalName={ item.name }
-              title={ getKeyLabel(item) }
-            />
-          ))}
+          { subGroupSections === undefined
+            ? visibleKeys.map(renderKey)
+            : subGroupSections.map((section) => (
+              <React.Fragment key={ section.identifier ?? '' }>
+                <Title level={ 5 }>{ headingOf(section.identifier) }</Title>
+                { section.items.map(renderKey) }
+              </React.Fragment>
+              )) }
         </Panel>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, disallowDelete])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete])
 }
