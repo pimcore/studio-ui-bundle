@@ -57,7 +57,14 @@ export const SubGroupStrip = ({
         { usages.map((usage) => (
           <Tag key={ usage.identifier }>
             { t('classification-store.sub-group-with-count', { name: usage.name, keyCount: usage.count }) }
+            { /*
+              The label names the sub group: `IconButton` takes its accessible name from an
+              explicit `aria-label` or from string children, never from `tooltip.title`, and a
+              row of identical "Unassign" chips tells a screen-reader user nothing about which
+              chip's keys they are about to unassign.
+            */ }
             <IconButton
+              aria-label={ t('classification-store.aria.unassign-sub-group-keys', { name: usage.name }) }
               disabled={ unassignDisabled }
               icon={ { value: 'close' } }
               onClick={ () => { onUnassign(usage) } }

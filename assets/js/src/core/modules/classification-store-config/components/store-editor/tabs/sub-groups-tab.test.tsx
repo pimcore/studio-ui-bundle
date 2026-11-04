@@ -212,6 +212,63 @@ const stubFetch = (items: unknown[]): void => {
   }) as unknown as typeof fetch
 }
 
+/**
+ * The same server, paginating: it answers the page its request asked for and reports the total
+ * of the whole list, so a page that has lost its last row comes back empty with a total that
+ * still names earlier pages.
+ */
+const stubPaginatedFetch = (items: Array<Record<string, unknown>>): void => {
+  const stored = [...items]
+
+  globalThis.fetch = jest.fn(async (input: Request) => {
+    let body: Record<string, unknown> | undefined
+
+    try {
+      body = JSON.parse(await input.clone().text())
+    } catch {
+      body = undefined
+    }
+
+    requests.push({ url: input.url, method: input.method, body })
+
+    if (input.url.endsWith(COLLECTION_URL)) {
+      const filters = (body?.filters ?? {}) as { page?: number, pageSize?: number }
+      const page = filters.page ?? 1
+      const pageSize = filters.pageSize ?? 20
+      const offset = (page - 1) * pageSize
+
+      return jsonResponse({ items: stored.slice(offset, offset + pageSize), totalItems: stored.length })
+    }
+
+    const id = Number(input.url.split('/').pop())
+
+    if (input.method === 'DELETE') {
+      const index = stored.findIndex((item) => item.id === id)
+      if (index !== -1) stored.splice(index, 1)
+
+      return jsonResponse({})
+    }
+
+    return jsonResponse({ ...stored.find((item) => item.id === id), ...body })
+  }) as unknown as typeof fetch
+}
+
+/** `count` sub groups, named and numbered so the page in front of the user is identifiable. */
+const manySubGroups = (count: number): Array<Record<string, unknown>> =>
+  Array.from({ length: count }, (_unused, index) => ({
+    id: index + 1,
+    identifier: `sg${String(index + 1).padStart(6, '0')}`,
+    name: `Sub group ${index + 1}`,
+    storeId: STORE_ID,
+    description: null,
+    creationDate: null,
+    modificationDate: null
+  }))
+
+/** The page each collection request asked for, in order. */
+const pagesRequested = (): number[] => collectionRequests()
+  .map((request) => ((request.body?.filters ?? {}) as { page?: number }).page ?? 1)
+
 /** No inter-event delay: the dialog is filled character by character. */
 const setupUser = (): UserEvent => userEvent.setup({ delay: null })
 
@@ -320,7 +377,8 @@ describe('SubGroupsTab', () => {
     renderTab()
     await screen.findByDisplayValue('Dimensions')
 
-    // The row action carries its label in a tooltip only, so it is the row's one button
+    // Addressed as the row's one button: its accessible name is the same for every row here,
+    // because the translation stand-in returns the key and drops the sub-group name in it.
     await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
     await user.click(await screen.findByRole('button', { name: 'OK' }))
 
@@ -407,6 +465,28 @@ describe('SubGroupsTab', () => {
 
     expect(writeRequests()[0].body).toEqual({ name: 'Measures', description: 'size related' })
     expect(writeRequests()[1].body).toEqual({ name: 'Measures', description: 'how big it is' })
+  })
+
+  it('steps back to the previous page when the last row of a page is deleted', async () => {
+    const user = setupUser()
+    // 41 rows at the default page size of 20, so the third page holds exactly one.
+    stubPaginatedFetch(manySubGroups(41))
+    renderTab()
+    await screen.findByDisplayValue('Sub group 1')
+
+    await user.click(screen.getByLabelText('pagination.last-page'))
+    expect(await screen.findByDisplayValue('Sub group 41')).toBeInTheDocument()
+
+    await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
+    await user.click(await screen.findByRole('button', { name: 'OK' }))
+
+    // Page two, the page that still has rows. Judged on the retained response of the page it had
+    // just left, the correction ran a second time and went straight on to page one.
+    expect(await screen.findByDisplayValue('Sub group 40')).toBeInTheDocument()
+
+    await waitFor(() => { expect(pagesRequested().at(-1)).toBe(2) })
+    // Page one was asked for once, on the initial load, and never reached by a correction.
+    expect(pagesRequested().filter((page) => page === 1)).toHaveLength(1)
   })
 
   it('re-describes a sub group with a single update carrying its name and description', async () => {

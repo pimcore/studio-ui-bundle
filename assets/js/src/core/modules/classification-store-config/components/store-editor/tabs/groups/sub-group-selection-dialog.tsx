@@ -21,6 +21,7 @@ import {
   useClassificationStoreConfigurationSubGroupCollectionQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { Flex } from '@Pimcore/components/flex/flex'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface ISubGroupSelectionDialogProps {
   open: boolean
@@ -44,10 +45,19 @@ export const SubGroupSelectionDialog = ({
 
   // The whole vocabulary of the store, so a sub group no key of this group carries yet
   // can be picked too. Creating one stays on the Sub groups tab of the store.
-  const { data, isLoading } = useClassificationStoreConfigurationSubGroupCollectionQuery(
+  const { data, error, isError, isLoading } = useClassificationStoreConfigurationSubGroupCollectionQuery(
     { storeId, body: { filters: { page: 1, pageSize: 9999 } } },
     { skip: !open }
   )
+
+  // A refused vocabulary request must say so: a 403 or a 500 left `data` undefined, which the
+  // empty default turned into a picker with nothing in it and Assign disabled, reading as a store
+  // whose vocabulary is empty rather than as a load that failed.
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   const allSubGroups = data?.items ?? []
 

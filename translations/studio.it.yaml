@@ -2218,6 +2218,8 @@ classification-store.no-sub-group: Nessun sottogruppo
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Non assegnate ({{keyCount}})"
 classification-store.unassign-sub-group-keys: Rimuovi l'assegnazione delle chiavi mostrate qui
+classification-store.aria.unassign-sub-group-keys: "Rimuovi l'assegnazione delle chiavi mostrate qui dal sottogruppo \"{{name}}\""
+classification-store.aria.delete-sub-group: "Elimina il sottogruppo \"{{name}}\""
 classification-store.unassign-sub-group-confirm_one: "Rimuovere l'assegnazione di 1 chiave mostrata qui dal sottogruppo \"{{name}}\"? Le chiavi di questo gruppo in altre pagine la mantengono."
 classification-store.unassign-sub-group-confirm_other: "Rimuovere l'assegnazione di {{count}} chiavi mostrate qui dal sottogruppo \"{{name}}\"? Le chiavi di questo gruppo in altre pagine la mantengono."
 classification-store.sub-groups-strip-hint: Questi sono i sottogruppi usati dalle chiavi di questo gruppo. Il vocabolario resta dello store.

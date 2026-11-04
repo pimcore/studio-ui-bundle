@@ -2218,6 +2218,8 @@ classification-store.no-sub-group: Sin subgrupo
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Sin asignar ({{keyCount}})"
 classification-store.unassign-sub-group-keys: Quitar la asignación de las claves mostradas aquí
+classification-store.aria.unassign-sub-group-keys: "Quitar la asignación de las claves mostradas aquí al subgrupo \"{{name}}\""
+classification-store.aria.delete-sub-group: "Eliminar el subgrupo \"{{name}}\""
 classification-store.unassign-sub-group-confirm_one: "¿Quitar la asignación de 1 clave mostrada aquí al subgrupo \"{{name}}\"? Las claves de este grupo en otras páginas la mantienen."
 classification-store.unassign-sub-group-confirm_other: "¿Quitar la asignación de {{count}} claves mostradas aquí al subgrupo \"{{name}}\"? Las claves de este grupo en otras páginas la mantienen."
 classification-store.sub-groups-strip-hint: Estos son los subgrupos que usan las claves de este grupo. El vocabulario pertenece al almacén.

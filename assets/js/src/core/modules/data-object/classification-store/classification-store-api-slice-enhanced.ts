@@ -10,6 +10,8 @@
 
 /* eslint-disable max-lines */
 
+import { type TypedUseMutation } from '@reduxjs/toolkit/query/react'
+import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import {
   api as baseApi,
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
@@ -420,6 +422,9 @@ const api = baseApi.enhanceEndpoints({
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
         const matchesGroup = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg): boolean => a.groupId === groupId
+        // Set when the relation did not exist yet, which decides how the response is confirmed
+        // below: a row this request brought into being has nothing older to preserve.
+        let created = false
         const patchResults = optimisticPatchAllCacheEntries<
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
@@ -435,6 +440,7 @@ const api = baseApi.enhanceEndpoints({
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new
               // relation rather than leaving the cached row without one.
+              created = true
               draft.items.push({
                 keyId,
                 groupId,
@@ -451,7 +457,22 @@ const api = baseApi.enhanceEndpoints({
           matchesGroup
         )
         try {
-          const { data: updated } = await queryFulfilled
+          const { data } = await queryFulfilled
+          // The response carries `subGroup`, which the generated detail predates — the same
+          // shadow the rest of this hand-written block applies, and gone with it on the next
+          // regeneration.
+          const updated = data as ClassificationStoreConfigurationKeyGroupRelationDetail
+          // The response is confirmed through the same field mask the optimistic patch used,
+          // taking the server's own value for each field this request named. Replacing the whole
+          // row instead would write back the fields it did NOT name as the server held them while
+          // it ran, so a cell edit started before a sub-group assignment and answered after it
+          // restored the old `subGroup` — the server kept the assignment while the cache, the
+          // headings and the chips went stale with no way back short of a refetch.
+          const confirmed = {
+            ...(sorter !== undefined ? { sorter: updated.sorter } : {}),
+            ...(mandatory !== undefined ? { mandatory: updated.mandatory } : {}),
+            ...('subGroup' in create ? { subGroup: updated.subGroup ?? null } : {})
+          }
           patchAllCacheEntries<
             ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
             ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
@@ -462,7 +483,21 @@ const api = baseApi.enhanceEndpoints({
               const idx = draft.items.findIndex(
                 (r) => r.keyId === updated.keyId && r.groupId === updated.groupId
               )
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx === -1) return
+
+              draft.items[idx] = created
+                // A relation this request created has no older state to keep, and its sorter and
+                // mandatory are whatever the server gave it.
+                ? updated
+                : {
+                    ...draft.items[idx],
+                    // Descriptive fields the server fills in and no mutation writes, so the
+                    // response is always the freshest value there is.
+                    keyName: updated.keyName,
+                    keyDescription: updated.keyDescription,
+                    groupName: updated.groupName,
+                    ...confirmed
+                  }
             },
             matchesGroup
           )
@@ -684,25 +719,24 @@ export const {
   useLazyClassificationStoreGetLayoutByKeyQuery
 } = api
 
-type GeneratedKeyGroupRelationCreateTrigger =
-  ReturnType<typeof api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation>[0]
-
 /**
- * The create-or-upsert trigger, taking the payload the shipped `KeyGroupRelationCreate`
+ * The create-or-upsert hook, typed to take the payload the shipped `KeyGroupRelationCreate`
  * declares: every property but the pair optional, an absent one keeping its stored value. Only
  * the argument is shadowed — the generated slice still requires `sorter` and `mandatory`, which
  * it carried before they became `AbsentValue::ABSENT` defaults. Done here once so no call site
  * has to cast, and removed with the rest of the hand-written block on the next regeneration.
+ *
+ * It is the generated hook itself, re-typed rather than wrapped: a zero-argument wrapper dropped
+ * the hook's own options, so no caller could pass `fixedCacheKey` or `selectFromResult` any more
+ * and a JavaScript caller had them silently ignored. `TypedUseMutation` is the shape the generated
+ * hook already has, so the options parameter and the `selectFromResult` return typing stay the
+ * generated ones and only the trigger's payload type differs.
  */
-export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation = (): [
-  (arg: {
-    classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate
-  }) => ReturnType<GeneratedKeyGroupRelationCreateTrigger>,
-  ReturnType<typeof api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation>[1]
-] => {
-  const [trigger, state] = api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation()
-
-  return [trigger, state]
-}
+export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation =
+  api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation as unknown as TypedUseMutation<
+    ClassificationStoreConfigurationKeyGroupRelationDetail,
+    { classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate },
+    BaseQuery
+  >
 
 export { api }

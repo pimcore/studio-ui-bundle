@@ -2218,6 +2218,8 @@ classification-store.no-sub-group: Ingen undergrupp
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Okopplade ({{keyCount}})"
 classification-store.unassign-sub-group-keys: Ta bort kopplingen för nycklarna som visas här
+classification-store.aria.unassign-sub-group-keys: "Ta bort kopplingen för nycklarna som visas här till undergruppen \"{{name}}\""
+classification-store.aria.delete-sub-group: "Ta bort undergruppen \"{{name}}\""
 classification-store.unassign-sub-group-confirm_one: "Ta bort kopplingen mellan 1 nyckel som visas här och undergruppen \"{{name}}\"? Nycklar i denna grupp på andra sidor behåller den."
 classification-store.unassign-sub-group-confirm_other: "Ta bort kopplingen mellan {{count}} nycklar som visas här och undergruppen \"{{name}}\"? Nycklar i denna grupp på andra sidor behåller den."
 classification-store.sub-groups-strip-hint: Detta är de undergrupper som nycklarna i denna grupp använder. Vokabulären tillhör lagret.

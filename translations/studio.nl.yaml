@@ -2218,6 +2218,8 @@ classification-store.no-sub-group: Geen subgroep
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Niet toegewezen ({{keyCount}})"
 classification-store.unassign-sub-group-keys: Toewijzing van de hier weergegeven sleutels opheffen
+classification-store.aria.unassign-sub-group-keys: "Toewijzing van de hier weergegeven sleutels aan subgroep \"{{name}}\" opheffen"
+classification-store.aria.delete-sub-group: "Subgroep \"{{name}}\" verwijderen"
 classification-store.unassign-sub-group-confirm_one: "Toewijzing van de 1 hier weergegeven sleutel aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
 classification-store.unassign-sub-group-confirm_other: "Toewijzing van de {{count}} hier weergegeven sleutels aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
 classification-store.sub-groups-strip-hint: Dit zijn de subgroepen die de sleutels van deze groep gebruiken. Het vocabulaire blijft bij de store.

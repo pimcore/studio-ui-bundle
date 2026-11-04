@@ -99,6 +99,7 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
 
   const {
     data,
+    currentData,
     error,
     isError,
     isLoading,
@@ -118,11 +119,17 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
     }
   }, [isError, error])
 
+  // Deleting the last row of a page steps back one page — judged on `currentData`, the response
+  // for the page being asked for, never on `data`, which keeps the previous page's response while
+  // the new one is in flight. On `data` the correction ran a second time against the page it had
+  // just left behind and walked straight down to page 1, skipping the page that had rows on it.
   useEffect(() => {
-    if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
+    if (isFetching || currentData === undefined) return
+
+    if (currentData.items.length === 0 && currentData.totalItems > 0 && page > 1) {
       setPage(page - 1)
     }
-  }, [data, page])
+  }, [currentData, isFetching, page])
 
   const [createSubGroup] = useClassificationStoreConfigurationSubGroupCreateMutation()
   const [updateSubGroup] = useClassificationStoreConfigurationSubGroupUpdateMutation()
@@ -301,8 +308,12 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
       id: 'actions',
       header: t('classification-store.columns.actions'),
       size: 60,
+      // The label names the row: `IconButton` takes its accessible name from an explicit
+      // `aria-label` or from string children, never from `tooltip.title`, so a column of
+      // identical "Delete" buttons would not say what each one deletes.
       cell: (info) => (
         <IconButton
+          aria-label={ t('classification-store.aria.delete-sub-group', { name: info.row.original.name }) }
           icon={ { value: 'trash' } }
           onClick={ () => { handleDeleteRef.current(info.row.original) } }
           tooltip={ { title: t('delete') } }
@@ -319,6 +330,7 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
             ? null
             : (
               <IconButton
+                aria-label={ t('refresh') }
                 icon={ { value: 'refresh' } }
                 loading={ isFetching }
                 onClick={ () => { void refetch() } }

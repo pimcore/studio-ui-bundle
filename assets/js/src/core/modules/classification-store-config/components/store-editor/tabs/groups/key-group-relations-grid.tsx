@@ -105,10 +105,23 @@ export const KeyGroupRelationsGrid = ({
 
   // The vocabulary is only read to label the headings and chips with a name instead of the
   // bare identifier the relation stores.
-  const { data: subGroupData } = useClassificationStoreConfigurationSubGroupCollectionQuery(
+  const {
+    data: subGroupData,
+    error: subGroupError,
+    isError: isSubGroupError
+  } = useClassificationStoreConfigurationSubGroupCollectionQuery(
     { storeId, body: { filters: { page: 1, pageSize: 9999 } } },
     { skip: groupId === undefined }
   )
+
+  // Same shape as the picker's: a 403 or a 500 leaves `subGroupData` undefined, which the empty
+  // default turns into a vocabulary with no names in it. The screen stays usable — every heading
+  // and chip falls back to the identifier — but the failure is reported rather than swallowed.
+  useEffect(() => {
+    if (isSubGroupError && subGroupError !== undefined) {
+      trackError(new ApiError(subGroupError))
+    }
+  }, [isSubGroupError, subGroupError])
 
   const subGroupNames = useMemo(
     () => new Map((subGroupData?.items ?? []).map((subGroup) => [subGroup.identifier, subGroup.name])),

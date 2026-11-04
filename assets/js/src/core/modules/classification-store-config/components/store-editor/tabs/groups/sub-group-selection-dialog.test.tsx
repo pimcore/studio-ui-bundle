@@ -11,8 +11,15 @@
 /**
  * The assign dialog offers the whole sub-group vocabulary of the store, including the sub groups
  * no key of the current group carries, and never creates one: the vocabulary is managed on the
- * Sub groups tab of the store.
+ * Sub groups tab of the store. A refused vocabulary request is reported rather than left to read
+ * as a store whose vocabulary is empty.
  */
+
+// trackError runs for real and ends at this service, which needs the application shell's modal
+// instance. Only the sink is replaced, so what is asserted is a reported error.
+jest.mock('@Pimcore/modules/app/error-handler/services/error-modal-service', () => ({
+  ErrorModalService: { setModalInstance: jest.fn(), showError: jest.fn() }
+}))
 
 // antd-style ships untranspiled ESM, which jest does not transform
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -64,11 +71,15 @@ import { Provider } from 'react-redux'
 // eslint-disable-next-line import/first
 import { configureStore } from '@reduxjs/toolkit'
 // eslint-disable-next-line import/first
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 // eslint-disable-next-line import/first
+import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
+// eslint-disable-next-line import/first
 import { SubGroupSelectionDialog } from './sub-group-selection-dialog'
+
+const showErrorMock = ErrorModalService.showError as unknown as jest.Mock
 
 const STORE_ID = 1
 const COLLECTION_URL = `/pimcore-studio/api/classification-store/configuration/stores/${STORE_ID}/sub-groups`
@@ -130,5 +141,30 @@ describe('SubGroupSelectionDialog', () => {
     expect(screen.getByText('Colours')).toBeInTheDocument()
 
     expect(screen.queryByText('classification-store.add-sub-group')).not.toBeInTheDocument()
+  })
+
+  it('reports a refused vocabulary request instead of showing an empty picker', async () => {
+    showErrorMock.mockClear()
+    globalThis.fetch = jest.fn(async () => new Response(JSON.stringify({ message: 'forbidden' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' }
+    })) as unknown as typeof fetch
+
+    render(
+      <Provider store={ createStore() }>
+        <App>
+          <SubGroupSelectionDialog
+            onCancel={ jest.fn() }
+            onConfirm={ jest.fn() }
+            open
+            storeId={ STORE_ID }
+          />
+        </App>
+      </Provider>
+    )
+
+    // Without this the spinner stops and the picker is empty with Assign disabled, which reads
+    // as a store that has no sub groups rather than as a load that failed.
+    await waitFor(() => { expect(showErrorMock).toHaveBeenCalledTimes(1) })
   })
 })

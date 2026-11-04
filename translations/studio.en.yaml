@@ -2222,6 +2222,8 @@ classification-store.no-sub-group: No sub group
 classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
 classification-store.unassigned-with-count: "Unassigned ({{keyCount}})"
 classification-store.unassign-sub-group-keys: Unassign the keys shown here
+classification-store.aria.unassign-sub-group-keys: "Unassign the keys shown here from sub group \"{{name}}\""
+classification-store.aria.delete-sub-group: "Delete sub group \"{{name}}\""
 classification-store.unassign-sub-group-confirm_one: "Unassign the 1 key shown here from sub group \"{{name}}\"? Keys of this group on other pages keep it."
 classification-store.unassign-sub-group-confirm_other: "Unassign the {{count}} keys shown here from sub group \"{{name}}\"? Keys of this group on other pages keep it."
 classification-store.sub-groups-strip-hint: These are the sub groups the keys of this group use. The store keeps the vocabulary.
