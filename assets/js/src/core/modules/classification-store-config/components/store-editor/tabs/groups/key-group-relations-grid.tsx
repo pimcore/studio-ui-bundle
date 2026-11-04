@@ -198,7 +198,13 @@ export const KeyGroupRelationsGrid = ({
 
     reportProgress(0)
 
-    for (const [index, relation] of targets.entries()) {
+    // The upserts are issued together rather than one after another — the same way adding
+    // several keys at once already does below — and the progress message advances as each one
+    // settles. Waiting for each request before sending the next made the whole assignment as
+    // slow as the sum of its round trips.
+    let completed = 0
+
+    const responses = await Promise.all(targets.map(async (relation) => {
       const payload: ClassificationStoreConfigurationKeyGroupRelationCreate = {
         keyId: relation.keyId,
         groupId: relation.groupId,
@@ -209,12 +215,21 @@ export const KeyGroupRelationsGrid = ({
 
       const response = await createRelation({ classificationStoreConfigurationKeyGroupRelationCreate: payload })
 
+      completed += 1
+      reportProgress(completed)
+
+      return response
+    }))
+
+    // Read back in the order the keys were selected in, so the failure message names them in
+    // that order rather than in whichever order the server answered.
+    for (const [index, response] of responses.entries()) {
       if ('error' in response) {
+        const relation = targets[index]
+
         failedNames.push(relation.keyName ?? String(relation.keyId))
         failedKeyIds.add(relation.keyId)
       }
-
-      reportProgress(index + 1)
     }
 
     messageApi.destroy(ASSIGN_PROGRESS_KEY)
