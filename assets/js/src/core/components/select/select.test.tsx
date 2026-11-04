@@ -197,7 +197,8 @@ describe('Select "Select all"', () => {
   it.each([
     ['without the prop', { allowSelectAll: false }],
     ['with maxCount', { maxCount: 2 }],
-    ['in single mode', { mode: undefined }]
+    ['in single mode', { mode: undefined }],
+    ['with labelInValue', { labelInValue: true }]
   ])('is not offered %s', (_name, props) => {
     render(<Controlled
       onChange={ jest.fn() }
@@ -205,5 +206,36 @@ describe('Select "Select all"', () => {
            />)
 
     expect(screen.queryByText('select.select-all')).toBeNull()
+  })
+
+  it('updates an uncontrolled select, honours defaultValue and passes options in value order', () => {
+    const onChange = jest.fn()
+    render(<Select
+      allowSelectAll
+      defaultValue={ ['FR'] }
+      mode="multiple"
+      onChange={ onChange }
+      open
+      options={ options }
+           />)
+
+    fireEvent.click(screen.getByText('select.select-all'))
+
+    expect(onChange).toHaveBeenLastCalledWith(['FR', 'AT', 'DE'], [options[2], options[0], options[1]])
+    expect(screen.queryByText('select.select-all')).toBeNull()
+    expect(document.querySelectorAll('.ant-select-selection-item')).toHaveLength(3)
+  })
+
+  it('passes the matching options for grouped options', () => {
+    const onChange = jest.fn()
+    const grouped = [{ label: 'EU', options: [options[0], options[1]] }, { label: 'Other', options: [options[2]] }]
+    render(<Controlled
+      onChange={ onChange }
+      options={ grouped }
+           />)
+
+    fireEvent.click(screen.getByText('select.select-all'))
+
+    expect(onChange).toHaveBeenLastCalledWith(['AT', 'DE', 'FR'], options)
   })
 })

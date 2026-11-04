@@ -19,7 +19,7 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
 import { SelectActionButton } from './select-action-button'
 import { useTrackedSearch } from './use-tracked-search'
-import { getSelectableOptions, getSelectAllValues } from './select-all-values'
+import { useSelectAllValue } from './use-select-all-value'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
@@ -38,7 +38,7 @@ export interface SelectProps extends AntdSelectProps {
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
   loadingSkeleton?: boolean
-  /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount`, hidden while `loading`). */
+  /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount` or `labelInValue`, hidden while `loading`). */
   allowSelectAll?: boolean
 }
 
@@ -64,6 +64,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   onDeselect,
   onFocus,
   onBlur,
+  onChange,
   ...antdSelectProps
 }, ref): React.JSX.Element => {
   const { t } = useTranslation()
@@ -82,6 +83,10 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   })
 
   useImperativeHandle(ref, () => selectRef.current!)
+
+  const { currentValue, handleChange, shouldShowSelectAll, handleSelectAll } = useSelectAllValue({
+    allowSelectAll, mode, value, onChange, loading, searchValue, antdSelectProps
+  })
 
   // Calculate width: explicit width prop takes precedence over fieldWidths
   const getComputedWidth = (): number | undefined => {
@@ -215,22 +220,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   }
 
   const isClearable = allowClear !== undefined && allowClear !== false
-  const shouldShowClearOption = isClearable && !isEmptyValue(value)
+  const shouldShowClearOption = isClearable && !isEmptyValue(currentValue)
 
   const handleClearSelection = (): void => {
     const clearedValue = mode === 'multiple' ? [] as string[] : undefined
-    antdSelectProps.onChange?.(clearedValue, [])
+    handleChange(clearedValue, [])
     selectRef.current?.blur()
   }
-  const { options, optionFilterProp, filterOption, maxCount, searchValue: customSearchValue } = antdSelectProps
-  const selectAllContext = { options, value, searchValue: customSearchValue ?? searchValue, optionFilterProp, filterOption }
-  const shouldShowSelectAll = allowSelectAll && !loading && mode === 'multiple' && maxCount === undefined && getSelectableOptions(selectAllContext).length > 0
-
-  const handleSelectAll = (): void => {
-    const values = getSelectAllValues(selectAllContext)
-    antdSelectProps.onChange?.(values, (options ?? []).filter(option => values.includes(option.value as string)))
-  }
-
   const dropdownRender = shouldShowClearOption || shouldShowSelectAll
     ? (menu: React.ReactElement): React.JSX.Element => (
       <div className={ styles.clearOptionWrapper }>
@@ -280,6 +276,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
             value={ 'alert-outline' }
           /> {t('no-data-available')}</Flex> }
         onBlur={ handleBlur }
+        onChange={ handleChange }
         onDeselect={ handleDeselect }
         onDropdownVisibleChange={ handleDropdownVisibleChange }
         onFocus={ handleFocus }
@@ -290,7 +287,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
         status={ status }
         style={ computedStyle }
         suffixIcon={ getSuffixIcon() }
-        value={ value }
+        value={ currentValue }
         { ...antdSelectProps }
       />
     </div>

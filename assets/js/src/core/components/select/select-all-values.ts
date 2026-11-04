@@ -21,7 +21,7 @@ interface SelectAllContext {
   filterOption?: FilterOption
 }
 
-const flattenOptions = (options: DefaultOptionType[] = []): DefaultOptionType[] => {
+export const flattenOptions = (options: DefaultOptionType[] = []): DefaultOptionType[] => {
   return options.flatMap(option => Array.isArray(option.options) ? flattenOptions(option.options as DefaultOptionType[]) : [option])
 }
 
@@ -38,6 +38,20 @@ const matchesSearch = (option: DefaultOptionType, { searchValue, optionFilterPro
   return String(candidate ?? '').toUpperCase().includes(searchValue.toUpperCase())
 }
 
+/**
+ * Antd's dropdown semantics: a group whose own label matches keeps all its children, otherwise only matching children stay.
+ */
+const filterLeaves = (options: DefaultOptionType[] = [], context: SelectAllContext): DefaultOptionType[] => {
+  return options.flatMap(option => {
+    if (!Array.isArray(option.options)) {
+      return matchesSearch(option, context) ? [option] : []
+    }
+
+    const children = option.options as DefaultOptionType[]
+    return matchesSearch(option, context) ? flattenOptions(children) : filterLeaves(children, context)
+  })
+}
+
 const isSelectValue = (value: unknown): value is SelectValue => typeof value === 'string' || typeof value === 'number'
 
 const toArray = (value: unknown): SelectValue[] => Array.isArray(value) ? value.filter(isSelectValue) : []
@@ -48,8 +62,8 @@ const toArray = (value: unknown): SelectValue[] => Array.isArray(value) ? value.
 export const getSelectableOptions = (context: SelectAllContext): DefaultOptionType[] => {
   const selected = new Set(toArray(context.value))
 
-  return flattenOptions(context.options).filter(option => {
-    return option.disabled !== true && isSelectValue(option.value) && !selected.has(option.value) && matchesSearch(option, context)
+  return filterLeaves(context.options, context).filter(option => {
+    return option.disabled !== true && isSelectValue(option.value) && !selected.has(option.value)
   })
 }
 
@@ -61,4 +75,13 @@ export const getSelectAllValues = (context: SelectAllContext): SelectValue[] => 
     ...toArray(context.value),
     ...getSelectableOptions(context).map(option => option.value!)
   ]
+}
+
+/**
+ * The option objects for the given values, in the same order (what Antd passes as second `onChange` argument).
+ */
+export const getOptionsForValues = (options: DefaultOptionType[] | undefined, values: SelectValue[]): DefaultOptionType[] => {
+  const byValue = new Map(flattenOptions(options).map(option => [option.value, option]))
+
+  return values.map(value => byValue.get(value) ?? { value })
 }

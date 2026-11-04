@@ -44,6 +44,12 @@ describe('getSelectAllValues', () => {
     expect(getSelectAllValues({ options: grouped })).toEqual(['AT', 'NO'])
   })
 
+  it('keeps all children of a group whose own label matches the search', () => {
+    const grouped = [{ label: 'Europe', options: [{ label: 'Austria', value: 'AT' }, { label: 'Spain', value: 'ES' }] }, { label: 'Other', options: [{ label: 'Norway', value: 'NO' }] }]
+    expect(getSelectAllValues({ options: grouped, searchValue: 'euro', optionFilterProp: 'label' })).toEqual(['AT', 'ES'])
+    expect(getSelectAllValues({ options: grouped, searchValue: 'nor', optionFilterProp: 'label' })).toEqual(['NO'])
+  })
+
   it('handles missing options and a non-array value', () => {
     expect(getSelectAllValues({})).toEqual([])
     expect(getSelectAllValues({ options, value: null })).toEqual(['AT', 'DE', 'FR'])
