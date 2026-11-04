@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { uniqueId } from 'lodash'
+import { isUndefined, uniqueId } from 'lodash'
 import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg?react'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
@@ -167,7 +167,11 @@ const checkLanguageFlagExists = async (flagCode: string): Promise<boolean> => {
   return exists
 }
 
-const resolveLanguageFlag = async (languageCode: string): Promise<{ flagCode: string, isLanguageFlag: boolean }> => {
+export const resolveLanguageFlag = async (
+  languageCode: string,
+  flagExists: (flagCode: string) => Promise<boolean> = checkFlagExists,
+  languageFlagExists: (flagCode: string) => Promise<boolean> = checkLanguageFlagExists
+): Promise<{ flagCode: string, isLanguageFlag: boolean }> => {
   const normalizedCode = languageCode.toLowerCase().replace('_', '-')
   const parts = normalizedCode.split('-')
   const languageOnly = parts[0]
@@ -177,19 +181,23 @@ const resolveLanguageFlag = async (languageCode: string): Promise<{ flagCode: st
     return { flagCode: languageCountryMapping[normalizedCode], isLanguageFlag: false }
   }
 
-  if (await checkLanguageFlagExists(normalizedCode)) {
+  if (await languageFlagExists(normalizedCode)) {
     return { flagCode: normalizedCode, isLanguageFlag: true }
   }
 
-  if (countryCode !== null && await checkFlagExists(countryCode)) {
+  if (countryCode !== null && await flagExists(countryCode)) {
     return { flagCode: countryCode, isLanguageFlag: false }
   }
 
-  if (languageOnly !== normalizedCode && await checkLanguageFlagExists(languageOnly)) {
+  if (languageOnly !== normalizedCode && await languageFlagExists(languageOnly)) {
     return { flagCode: languageOnly, isLanguageFlag: true }
   }
-  if (await checkFlagExists(normalizedCode)) {
+  if (await flagExists(normalizedCode)) {
     return { flagCode: normalizedCode, isLanguageFlag: false }
+  }
+
+  if (languageOnly !== normalizedCode && !isUndefined(languageCountryMapping[languageOnly])) {
+    return { flagCode: languageCountryMapping[languageOnly], isLanguageFlag: false }
   }
 
   return { flagCode: '_unknown', isLanguageFlag: false }
