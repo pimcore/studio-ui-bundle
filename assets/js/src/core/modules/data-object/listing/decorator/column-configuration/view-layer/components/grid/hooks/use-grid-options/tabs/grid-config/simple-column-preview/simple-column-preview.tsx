@@ -164,7 +164,13 @@ export const SimpleColumnPreview = ({ column }: SimpleColumnPreviewProps): React
             <Grid
               autoWidth
               columns={ [gridColumn] }
-              data={ [{ [accessor]: rowColumn.value }] }
+              data={ [{
+                id: row?.id,
+                isLocked: row?.isLocked,
+                permissions: row?.permissions,
+                [accessor]: rowColumn.value,
+                '__api-data': row
+              }] }
               hideColumnHeaders
             />
           </GridContentRenderer>
