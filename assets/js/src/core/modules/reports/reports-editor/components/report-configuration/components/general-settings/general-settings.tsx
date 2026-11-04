@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
@@ -16,7 +16,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
 import { Switch } from '@Pimcore/components/switch/switch'
 
-export const GeneralSettings = (): React.JSX.Element => {
+const GeneralSettingsComponent = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const renderInputItem = ({ label, name, disabled = false, tooltip }: { label: string, name: string, disabled?: boolean, tooltip?: string }): React.JSX.Element => (
@@ -57,3 +57,5 @@ export const GeneralSettings = (): React.JSX.Element => {
     </FormKit.Panel>
   )
 }
+
+export const GeneralSettings = memo(GeneralSettingsComponent)
