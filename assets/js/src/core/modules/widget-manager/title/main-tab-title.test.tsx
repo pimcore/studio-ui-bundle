@@ -101,6 +101,23 @@ describe('MainTabTitle', () => {
     expect(openFromKeyboard).toHaveBeenCalledWith(car, label)
   })
 
+  it('opens the tab menu for a click without a mouse press, which screen readers send', () => {
+    const openFromKeyboard = renderTitles()
+    const label = screen.getByTestId('label-car')
+
+    fireEvent.click(label, { detail: 0 })
+
+    expect(openFromKeyboard).toHaveBeenCalledWith(car, label)
+  })
+
+  it('leaves a mouse click on the label to the tab', () => {
+    const openFromKeyboard = renderTitles()
+
+    fireEvent.click(screen.getByTestId('label-car'), { detail: 1 })
+
+    expect(openFromKeyboard).not.toHaveBeenCalled()
+  })
+
   it.each([
     ['another key on the label', 'label-car', 'a'],
     ['Enter on the close button', 'close-car', 'Enter']

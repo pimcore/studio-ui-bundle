@@ -56,7 +56,7 @@ const model = Model.fromJson({
 
 const node = model.getNodeById('car') as TabNode
 
-// a main tab whose label opens the menu like MainTabTitle does; "Remount" stands for an action that rebuilds the tab
+// a main tab rendered like a custom title without `active`; "Remount" stands for an action that rebuilds the tab
 const Tab = (): React.JSX.Element => {
   const [generation, setGeneration] = useState(0)
   const { showContextMenu, dropdown, openFromKeyboard, openTabId } = useContextMenu(model, ({ closeContextMenu }) => [
@@ -66,8 +66,9 @@ const Tab = (): React.JSX.Element => {
 
   return (
     <>
-      <span className='widget-manager-tab-title--active-main'>
+      <span className='widget-manager-tab-title'>
         <button
+          aria-haspopup='menu'
           className='widget-manager-tab-title__label'
           data-open={ openTabId ?? 'none' }
           data-testid={ `label-${generation}` }

@@ -48,6 +48,12 @@ const MainTabTitleInner = ({ node }: MainTabTitleProps): React.JSX.Element => {
           event.preventDefault()
           openFromKeyboard?.(node, event.currentTarget)
         }
+      },
+      // screen readers press a button with a click that no mouse made
+      onClick: (event) => {
+        if (event.detail === 0) {
+          openFromKeyboard?.(node, event.currentTarget)
+        }
       }
     }
   }, [isActive, isMenuOpen, node, openFromKeyboard])

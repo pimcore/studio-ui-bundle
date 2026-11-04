@@ -10,7 +10,8 @@
 
 import { createContext, type HTMLAttributes } from 'react'
 
-export const ACTIVE_MAIN_TAB_LABEL = '.widget-manager-tab-title--active-main .widget-manager-tab-title__label'
+// MainTabTitle makes only the active main tab's label a menu button, also for custom titles without the `active` prop
+export const ACTIVE_MAIN_TAB_LABEL = '.widget-manager-tab-title__label[aria-haspopup="menu"]'
 
 /** Extra props for the icon and name of a tab title, e.g. to open the tab menu from the keyboard. */
 export const TabTitleLabelContext = createContext<HTMLAttributes<HTMLSpanElement>>({})
