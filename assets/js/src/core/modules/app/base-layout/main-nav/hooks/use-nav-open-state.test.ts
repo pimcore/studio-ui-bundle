@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type PointerEvent } from 'react'
+import { type MouseEvent, type PointerEvent } from 'react'
 import { act, renderHook } from '@testing-library/react'
 import { useNavOpenState } from './use-nav-open-state'
 
@@ -16,8 +16,15 @@ const pointerEvent = (pointerType: string): PointerEvent<HTMLLIElement> => (
   { pointerType } as unknown as PointerEvent<HTMLLIElement>
 )
 
+const clickEvent = (detail: number): MouseEvent<HTMLButtonElement> => (
+  { detail } as unknown as MouseEvent<HTMLButtonElement>
+)
+
 const MOUSE = pointerEvent('mouse')
 const TOUCH = pointerEvent('touch')
+
+const POINTER_CLICK = clickEvent(1)
+const KEYBOARD_CLICK = clickEvent(0)
 
 describe('useNavOpenState', () => {
   beforeEach(() => {
@@ -52,8 +59,8 @@ describe('useNavOpenState', () => {
   it('leaves the levels opened by click untouched when the open group is hovered again', () => {
     const { result } = renderHook(() => useNavOpenState(true))
 
-    act(() => { result.current.handleOpenState('1') })
-    act(() => { result.current.handleOpenState('1-0') })
+    act(() => { result.current.handleOpenState(POINTER_CLICK, '1') })
+    act(() => { result.current.handleOpenState(POINTER_CLICK, '1-0') })
     expect(result.current.openKeys).toEqual(['1', '1-0'])
 
     act(() => { result.current.handleItemPointerEnter(MOUSE, '1', true) })
@@ -65,7 +72,7 @@ describe('useNavOpenState', () => {
   it('closes the open group when a root item without children is hovered', () => {
     const { result } = renderHook(() => useNavOpenState(true))
 
-    act(() => { result.current.handleOpenState('1') })
+    act(() => { result.current.handleOpenState(POINTER_CLICK, '1') })
 
     act(() => { result.current.handleItemPointerEnter(MOUSE, '3', false) })
     act(() => { jest.advanceTimersByTime(150) })
@@ -92,22 +99,58 @@ describe('useNavOpenState', () => {
     expect(result.current.openKeys).toEqual([])
   })
 
-  it('still toggles a root group on click', () => {
+  it('keeps a hovered root group open when it is clicked', () => {
     const { result } = renderHook(() => useNavOpenState(true))
 
-    act(() => { result.current.handleOpenState('1') })
+    act(() => { result.current.handleItemPointerEnter(MOUSE, '1', true) })
+    act(() => { jest.advanceTimersByTime(150) })
     expect(result.current.openKeys).toEqual(['1'])
 
-    act(() => { result.current.handleOpenState('1') })
+    act(() => { result.current.handleOpenState(POINTER_CLICK, '1') })
+    expect(result.current.openKeys).toEqual(['1'])
+  })
+
+  it('opens a root group on a pointer click inside the preview delay and closes its open sibling', () => {
+    const { result } = renderHook(() => useNavOpenState(true))
+
+    act(() => { result.current.handleOpenState(POINTER_CLICK, '1') })
+
+    act(() => { result.current.handleItemPointerEnter(MOUSE, '2', true) })
+    act(() => { jest.advanceTimersByTime(80) })
+    act(() => { result.current.handleOpenState(POINTER_CLICK, '2') })
+    expect(result.current.openKeys).toEqual(['2'])
+
+    act(() => { jest.advanceTimersByTime(150) })
+    expect(result.current.openKeys).toEqual(['2'])
+  })
+
+  it('still toggles a root group on a keyboard click', () => {
+    const { result } = renderHook(() => useNavOpenState(true))
+
+    act(() => { result.current.handleOpenState(KEYBOARD_CLICK, '1') })
+    expect(result.current.openKeys).toEqual(['1'])
+
+    act(() => { result.current.handleOpenState(KEYBOARD_CLICK, '1') })
     expect(result.current.openKeys).toEqual([])
   })
+
+  it('closes a hovered root group on a keyboard click', () => {
+    const { result } = renderHook(() => useNavOpenState(true))
+
+    act(() => { result.current.handleItemPointerEnter(MOUSE, '1', true) })
+    act(() => { jest.advanceTimersByTime(150) })
+
+    act(() => { result.current.handleOpenState(KEYBOARD_CLICK, '1') })
+    expect(result.current.openKeys).toEqual([])
+  })
+
   it('ignores hover while the closed menu is still fading out', () => {
     const { result, rerender } = renderHook(
       ({ isMenuOpen }) => useNavOpenState(isMenuOpen),
       { initialProps: { isMenuOpen: true } }
     )
 
-    act(() => { result.current.handleOpenState('1') })
+    act(() => { result.current.handleOpenState(POINTER_CLICK, '1') })
     rerender({ isMenuOpen: false })
 
     act(() => { result.current.handleItemPointerEnter(MOUSE, '5', true) })
@@ -116,16 +159,16 @@ describe('useNavOpenState', () => {
     expect(result.current.openKeys).toEqual(['1'])
   })
 
-  it('does not let a pending preview undo a click that closed the group', () => {
+  it('does not let a pending preview undo a keyboard click that closed the group', () => {
     const { result } = renderHook(() => useNavOpenState(true))
 
-    act(() => { result.current.handleOpenState('1') })
+    act(() => { result.current.handleOpenState(KEYBOARD_CLICK, '1') })
     expect(result.current.openKeys).toEqual(['1'])
 
-    // pointer enters the row, then the click lands inside the preview delay
+    // the mouse enters the row, then the keyboard click lands inside the preview delay
     act(() => { result.current.handleItemPointerEnter(MOUSE, '1', true) })
     act(() => { jest.advanceTimersByTime(80) })
-    act(() => { result.current.handleOpenState('1') })
+    act(() => { result.current.handleOpenState(KEYBOARD_CLICK, '1') })
     expect(result.current.openKeys).toEqual([])
 
     act(() => { jest.advanceTimersByTime(150) })
@@ -134,7 +177,7 @@ describe('useNavOpenState', () => {
 
   describe('nested levels', () => {
     const openByClick = (result: { current: ReturnType<typeof useNavOpenState> }, ...keys: string[]): void => {
-      keys.forEach(key => { act(() => { result.current.handleOpenState(key) }) })
+      keys.forEach(key => { act(() => { result.current.handleOpenState(KEYBOARD_CLICK, key) }) })
     }
 
     it('opens a hovered nested group once the delay has passed and closes its open sibling', () => {
@@ -182,6 +225,18 @@ describe('useNavOpenState', () => {
       act(() => { result.current.handleItemPointerEnter(MOUSE, '1-0', true) })
       act(() => { jest.advanceTimersByTime(150) })
 
+      expect(result.current.openKeys).toEqual(['1', '1-0', '1-0-2'])
+    })
+
+    it('keeps the deeper levels when an open group is clicked with a pointer', () => {
+      const { result } = renderHook(() => useNavOpenState(true))
+
+      openByClick(result, '1', '1-0', '1-0-2')
+
+      act(() => { result.current.handleOpenState(POINTER_CLICK, '1-0') })
+      expect(result.current.openKeys).toEqual(['1', '1-0', '1-0-2'])
+
+      act(() => { result.current.handleOpenState(POINTER_CLICK, '1') })
       expect(result.current.openKeys).toEqual(['1', '1-0', '1-0-2'])
     })
 

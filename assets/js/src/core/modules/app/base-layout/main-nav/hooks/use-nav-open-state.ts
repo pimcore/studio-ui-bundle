@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type PointerEvent, useEffect, useRef, useState } from 'react'
+import { type MouseEvent, type PointerEvent, useEffect, useRef, useState } from 'react'
 
 const HOVER_PREVIEW_DELAY = 120
 
 interface IUseNavOpenStateReturn {
   openKeys: string[]
-  handleOpenState: (key: string) => void
+  handleOpenState: (event: MouseEvent<HTMLButtonElement>, key: string) => void
   handleItemPointerEnter: (event: PointerEvent<HTMLLIElement>, index: string, hasChildren: boolean) => void
   cancelHoverPreview: () => void
 }
@@ -54,9 +54,15 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
     }
   }
 
-  const handleOpenState = (key: string): void => {
+  const handleOpenState = (event: MouseEvent<HTMLButtonElement>, key: string): void => {
     // a click lands inside the preview delay of the pointer enter that preceded it
     cancelHoverPreview()
+
+    // only keyboard and screen reader clicks (detail 0) may close, a pointer click would undo its own hover
+    if (event.detail !== 0) {
+      setOpenKeys(getHoverPreviewOpenKeys(openKeys, key, true))
+      return
+    }
 
     if (!key.includes('-')) {
       setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
