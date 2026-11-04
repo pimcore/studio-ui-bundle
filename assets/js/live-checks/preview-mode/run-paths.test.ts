@@ -26,7 +26,7 @@ const hideChromium = (dir: string): string => {
     fs.existsSync = (p) => !hidden(p) && exists(p)
     const stat = fs.statSync
     fs.statSync = (p, ...rest) => { if (hidden(p)) throw new Error('ENOENT'); return stat(p, ...rest) }
-    fs.syncBuiltinESMExports()
+    require('node:module').syncBuiltinESMExports()
   `)
   return file
 }

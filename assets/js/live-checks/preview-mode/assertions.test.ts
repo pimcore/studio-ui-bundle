@@ -11,6 +11,9 @@
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 const { spawnSync } = require('node:child_process')
+const fs = require('node:fs')
+const os = require('node:os')
+const path = require('node:path')
 const { inspectModal, inspectCollapsed, checkCollapsed, checkState, checkTooltip, isForbiddenClick, consoleErrorMessage } = require('./assertions.cjs')
 
 const switchHtml = (on: boolean): string =>
@@ -93,10 +96,20 @@ describe('preview-mode live check assertions', () => {
   })
 
   it('AC2: a machine without Chromium exits 1 naming the step', () => {
-    const result = spawnSync(process.execPath, [`${__dirname}/run.mjs`, '/tmp/preview-mode-no-chromium'], {
-      env: { PATH: '/nonexistent' },
+    // preloaded: Chromium in the fixed folders looks absent, as on a machine without it
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'assertions-no-chromium-'))
+    const preload = path.join(dir, 'hide-chromium.cjs')
+    fs.writeFileSync(preload, `
+      const fs = require('node:fs')
+      const exists = fs.existsSync
+      fs.existsSync = (p) => !/^\\/(usr\\/bin|usr\\/local\\/bin|snap\\/bin)\\/chromium/.test(String(p)) && exists(p)
+      require('node:module').syncBuiltinESMExports()
+    `)
+    const result = spawnSync(process.execPath, ['--require', preload, `${__dirname}/run.mjs`, path.join(dir, 'shots')], {
+      env: { PATH: '/nonexistent', CHROMIUM_BIN: '/nonexistent/chromium' },
       encoding: 'utf8'
     })
+    fs.rmSync(dir, { recursive: true, force: true })
 
     expect(result.status).toBe(1)
     expect(result.stdout).toContain('FAIL at step "start": chromium is missing')

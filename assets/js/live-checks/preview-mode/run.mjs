@@ -2,16 +2,18 @@
 // modal and the Data Hub webhook `car-changes-webhook` schema modal (and its migration view), and takes screenshots
 // with preview mode off and on. Read-only: never clicks Save/Apply/Confirm. Exit 1 names the failed step.
 // Usage: node run.mjs [out-dir]   env: SCREENS_BASE_URL (default http://localhost), SCREENS_HOST_MAP ("MAP a b"),
-// SCREENS_STUDIO_USER / SCREENS_STUDIO_PASSWORD (default admin / admin); needs chromium, node >= 22.
+// SCREENS_STUDIO_USER / SCREENS_STUDIO_PASSWORD (default admin / admin), CHROMIUM_BIN (absolute path; else chromium
+// from /usr/bin, /usr/local/bin or /snap/bin); needs node >= 22. Without an out-dir a new folder under the OS temp
+// folder is made; an out-dir must lie inside the OS temp folder or the current folder.
 import { spawn, spawnSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const { consoleErrorMessage } = createRequire(import.meta.url)('./assertions.cjs')
-const out = process.argv[2] || '/tmp/preview-mode-live'
 const base = (process.env.SCREENS_BASE_URL || 'http://localhost').replace(/\/$/, '')
 const user = process.env.SCREENS_STUDIO_USER || 'admin'
 const password = process.env.SCREENS_STUDIO_PASSWORD || 'admin'
@@ -21,14 +23,14 @@ const port = 9344
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 let step = 'start'
-let chrome, prof, ws
+let chrome, prof, ws, out
 const consoleErrors = []
 
 const fail = async (message) => {
   console.log(`FAIL at step "${step}": ${message}`)
   try { await shot('failure') } catch {}
   if (process.env.PREVIEW_DEBUG) {
-    try { console.log(await evaluate(`Array.from(document.querySelectorAll('[data-testid^=tree-node-label]')).map((e) => e.textContent).join('\\n')`)) } catch {}
+    try { console.log(await evaluate(String.raw`Array.from(document.querySelectorAll('[data-testid^=tree-node-label]')).map((e) => e.textContent).join('\n')`)) } catch {}
   }
   await quit(1)
 }
@@ -43,21 +45,55 @@ async function quit (code) {
 }
 process.on('unhandledRejection', (e) => { void fail(String(e?.message || e)) })
 
-if (spawnSync('sh', ['-c', 'command -v chromium']).status !== 0) await fail('chromium is missing on this machine')
+const isInside = (dir, parent) => {
+  const rel = relative(parent, dir)
+  return rel === '' || (!rel.startsWith('..') && !isAbsolute(rel))
+}
+const isFile = (file) => existsSync(file) && statSync(file).isFile()
+const CHROMIUM_DIRS = ['/usr/bin', '/usr/local/bin', '/snap/bin']
+const findChromium = () => {
+  const given = process.env.CHROMIUM_BIN
+  if (given && isAbsolute(given) && isFile(given)) return given
+  return CHROMIUM_DIRS.flatMap((dir) => ['chromium', 'chromium-browser'].map((name) => join(dir, name))).find(isFile)
+}
+// The names a screenshot may have: one per modal and state, plus the failure shot.
+const SHOT_NAMES = new Set(['failure', ...['grid-config', 'schema', 'schema-migration']
+  .flatMap((prefix) => ['preview-off', 'preview-on', 'preview-collapsed'].map((state) => `${prefix}-${state}`))])
 
-mkdirSync(out, { recursive: true })
-prof = mkdtempSync('/tmp/preview-mode-live-')
+const requestedOut = process.argv[2] ? resolve(process.argv[2]) : null
+if (requestedOut && !isInside(requestedOut, tmpdir()) && !isInside(requestedOut, process.cwd())) {
+  await fail(`out-dir ${requestedOut} is outside the temp folder ${tmpdir()} and the current folder ${process.cwd()}`)
+}
+const chromiumBin = findChromium()
+if (!chromiumBin) await fail('chromium is missing on this machine')
+
+if (requestedOut) {
+  mkdirSync(requestedOut, { recursive: true })
+  out = requestedOut
+} else {
+  out = mkdtempSync(join(tmpdir(), 'preview-mode-live-'))
+}
+console.log(`out-dir: ${out}`)
+prof = mkdtempSync(join(tmpdir(), 'preview-mode-live-profile-'))
 const args = ['--headless=new', '--no-sandbox', '--disable-gpu', '--window-size=1600,1000', `--user-data-dir=${prof}`,
   `--remote-debugging-port=${port}`]
 if (hostMap) args.push(`--host-resolver-rules=${hostMap}`)
-chrome = spawn('chromium', [...args, 'about:blank'], { stdio: 'ignore' })
+chrome = spawn(chromiumBin, [...args, 'about:blank'], { stdio: 'ignore' })
 
 step = 'start chromium'
-let target
-for (let i = 0; i < 40 && !target; i++) {
-  await sleep(250)
-  try { target = (await (await fetch(`http://127.0.0.1:${port}/json`)).json()).find((t) => t.type === 'page') } catch {}
+// Probe until it returns something truthy or the deadline passes (null); an error counts as "not yet".
+const retry = async (probe, deadline, interval) => {
+  try {
+    const value = await probe()
+    if (value) return value
+  } catch {}
+  if (Date.now() >= deadline) return null
+  await sleep(interval)
+  return retry(probe, deadline, interval)
 }
+await sleep(250)
+const target = await retry(async () => (await (await fetch(`http://127.0.0.1:${port}/json`)).json()).find((t) => t.type === 'page'),
+  Date.now() + 39 * 250, 250)
 if (!target) await fail('chromium did not start')
 
 ws = new WebSocket(target.webSocketDebuggerUrl)
@@ -94,18 +130,15 @@ await evaluate('0') // page exists
 const installHelpers = () => evaluate(`window.__pm = (() => { const module = { exports: {} }; ${helperSource}; return module.exports })(); true`)
 
 const waitFor = async (what, expression, timeout = STEP_TIMEOUT) => {
-  const end = Date.now() + timeout
-  while (Date.now() < end) {
-    try { if (await evaluate(expression)) return } catch {}
-    await sleep(500)
-  }
+  if (await retry(() => evaluate(expression), Date.now() + timeout, 500)) return
   throw new Error(`timed out after ${timeout / 1000}s waiting for ${what}`)
 }
 const quiet = () => sleep(2500) // Studio is slow here: a quiet wait after each step
 
 // Click an element by CSS selector, optionally the one whose text matches; Save/Apply/Confirm are refused.
 const click = async (selector, { text } = {}) => {
-  await waitFor(`${selector}${text ? ` "${text}"` : ''}`, `(() => !!window.__pmFind(${JSON.stringify(selector)}, ${JSON.stringify(text || null)}))()`)
+  const what = text ? `${selector} "${text}"` : selector
+  await waitFor(what, `(() => !!window.__pmFind(${JSON.stringify(selector)}, ${JSON.stringify(text || null)}))()`)
   const result = await evaluate(`(() => {
     const el = window.__pmFind(${JSON.stringify(selector)}, ${JSON.stringify(text || null)})
     const label = (el.textContent || '').trim()
@@ -120,9 +153,11 @@ const fillInput = (selector, value) => evaluate(`(() => {
   Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(el, ${JSON.stringify(value)})
   el.dispatchEvent(new Event('input', { bubbles: true })); return true })()`)
 const shot = async (name) => {
+  if (!SHOT_NAMES.has(name)) throw new Error(`unknown screenshot name ${name}`)
+  const file = join(out, `${name}.png`)
   const r = await send('Page.captureScreenshot', { format: 'png' })
-  writeFileSync(join(out, `${name}.png`), Buffer.from(r.result.data, 'base64'))
-  console.log(`screenshot: ${join(out, `${name}.png`)}`)
+  writeFileSync(file, Buffer.from(r.result.data, 'base64'))
+  console.log(`screenshot: ${file}`)
 }
 const run = async (name, fn) => {
   step = name
@@ -214,7 +249,7 @@ try {
     await click('[data-testid^=tree-node-label-]', { text: '^sports car$' })
     await waitFor('the class select', `!!document.querySelector('[data-testid=listing-class-definition-select]')`)
     await sleep(2000)
-    const carSelected = await evaluate(`/\\bCar\\b/.test((document.querySelector('[data-testid=listing-class-definition-select]') || {}).textContent || '')`)
+    const carSelected = await evaluate(String.raw`/\bCar\b/.test((document.querySelector('[data-testid=listing-class-definition-select]') || {}).textContent || '')`)
     if (!carSelected) { // the grid opens on Car by itself when the tree folder holds only cars
       await click('[data-testid=listing-class-definition-select] .ant-select-selector')
       await click('.ant-select-item-option[name=Car]')
