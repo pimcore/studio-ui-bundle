@@ -268,6 +268,8 @@ import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.s
 import inlineHelp from '@Pimcore/assets/icons/inline-help.inline.svg?react'
 import innovation from '@Pimcore/assets/icons/innovation.inline.svg?react'
 import inputQuantityValue from '@Pimcore/assets/icons/input-quantity-value.inline.svg?react'
+import insertAbove from '@Pimcore/assets/icons/insert-above.inline.svg?react'
+import insertBelow from '@Pimcore/assets/icons/insert-below.inline.svg?react'
 import integration2 from '@Pimcore/assets/icons/integration-2.inline.svg?react'
 import integration from '@Pimcore/assets/icons/integration.inline.svg?react'
 import interactionAction from '@Pimcore/assets/icons/interaction-action.inline.svg?react'
@@ -425,6 +427,7 @@ import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
 import scissorsCut01 from '@Pimcore/assets/icons/scissors-cut-01.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
+import searchReplace from '@Pimcore/assets/icons/search-replace.inline.svg?react'
 import security from '@Pimcore/assets/icons/security.inline.svg?react'
 import seemode from '@Pimcore/assets/icons/seemode.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
@@ -1539,6 +1542,14 @@ moduleSystem.registerModule({
       component: inputQuantityValue
     })
     iconLibrary.register({
+      name: 'insert-above',
+      component: insertAbove
+    })
+    iconLibrary.register({
+      name: 'insert-below',
+      component: insertBelow
+    })
+    iconLibrary.register({
       name: 'integration-2',
       component: integration2
     })
@@ -2165,6 +2176,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'search',
       component: search
+    })
+    iconLibrary.register({
+      name: 'search-replace',
+      component: searchReplace
     })
     iconLibrary.register({
       name: 'security',

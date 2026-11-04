@@ -19,6 +19,7 @@ import cn from 'classnames'
 import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 import { AutoHideEmptyContent } from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
 import { useSuppressEmptyFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
+import { FieldLabelTechnicalNameProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label-technical-name-provider'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { RestoreInheritanceLabelExtraProvider } from '@Pimcore/modules/data-object/components/restore-inheritance-label-extra'
 import { isNonEmptyString } from '@sdk/utils'
@@ -28,9 +29,10 @@ interface DataComponentFormItemProps {
   objectDataType: DynamicTypeObjectDataAbstract
   _props: AbstractObjectDataDefinition
   formFieldName: Array<number | string>
+  technicalName: string
 }
 
-const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDataType, _props, formFieldName }: DataComponentFormItemProps) => {
+const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDataType, _props, formFieldName, technicalName }: DataComponentFormItemProps) => {
   const formItemProps = objectDataType.getObjectDataFormItemProps(_props)
   const objectDataComponent = objectDataType.getObjectDataComponent(_props)
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
@@ -57,17 +59,19 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
           emptyValue={ objectDataType.getEmptyValue() }
           readOnly={ _props.noteditable === true }
         >
-          <Form.Item
-            { ...effectiveFormItemProps }
-            className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle, { [styles.labelAfterControl]: objectDataType.labelAfterControl }) }
-            name={ formFieldName }
-          >
-            { objectDataComponent }
-          </Form.Item>
+          <FieldLabelTechnicalNameProvider technicalName={ technicalName }>
+            <Form.Item
+              { ...effectiveFormItemProps }
+              className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle, { [styles.labelAfterControl]: objectDataType.labelAfterControl }) }
+              name={ formFieldName }
+            >
+              { objectDataComponent }
+            </Form.Item>
+          </FieldLabelTechnicalNameProvider>
         </RestoreInheritanceLabelExtraProvider>
       </AutoHideEmptyContent>
     </ErrorBoundary>
-  ), [effectiveFormItemProps, inheritanceOverlayStyle, objectDataComponent])
+  ), [effectiveFormItemProps, inheritanceOverlayStyle, objectDataComponent, technicalName])
 }
 
 export default DataComponentFormItem

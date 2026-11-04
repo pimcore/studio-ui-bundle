@@ -9,7 +9,7 @@
  */
 
 /* eslint-disable max-lines */
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil, isNull, isUndefined } from 'lodash'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
@@ -80,6 +80,9 @@ export const useValue = (
   valueRef.current = value
   const displayedValueRef = useRef(displayedValue)
   displayedValueRef.current = displayedValue
+  // The toolbar debounces the search, so a search can run with a closure of an earlier render
+  const visibleFieldsValueRef = useRef(visibleFieldsValue)
+  visibleFieldsValueRef.current = visibleFieldsValue
 
   const { t } = useTranslation()
 
@@ -130,6 +133,16 @@ export const useValue = (
     updateDisplayValue(displayedValue)
   }, [])
 
+  // The search also matches visible field values, which can arrive after a search was entered.
+  // Serialized on purpose: callers may pass a new array on every render.
+  const visibleFieldsKey = useMemo(() => JSON.stringify(visibleFieldsValue ?? null), [visibleFieldsValue])
+
+  useEffect(() => {
+    if (currentSearchTerm.current !== '') {
+      updateDisplayValue(valueRef.current)
+    }
+  }, [visibleFieldsKey])
+
   const itemIsInValue = (id: number, type: string): boolean => {
     return value?.some(item => item.id === id && item.type === type) ?? false
   }
@@ -148,6 +161,7 @@ export const useValue = (
     if (searchTerm === '' && isUndefined(matchesColumnFilters)) return items
 
     const normalizedSearch = searchTerm.toLowerCase()
+    const visibleFieldsValue = visibleFieldsValueRef.current
     const hasVisibleFields = !isNil(visibleFieldsValue)
     const visibleFieldsMap = hasVisibleFields
       ? new Map(
