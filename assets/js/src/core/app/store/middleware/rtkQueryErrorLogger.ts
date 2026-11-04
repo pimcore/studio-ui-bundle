@@ -78,6 +78,9 @@ const isStudioApiRequest = (meta: unknown): boolean => {
   }
 }
 
+// The requests that ask whether a session exists: their 401 is their answer, not the end of a session
+const SESSION_CHECK_ENDPOINTS = new Set(['userGetCurrentInformation', 'sessionGetStatus'])
+
 const logOut = (dispatch: MiddlewareAPI['dispatch']): void => {
   dispatch({ type: 'auth/setUser', payload: initialState })
   dispatch({ type: 'authentication/setAuthState', payload: false })
@@ -92,7 +95,7 @@ export const rtkQueryErrorLogger: Middleware =
 
       // Handle the case when the user's session has expired and further requests return a 401 status.
       if (payload?.status === 401) {
-        if ('endpointName' in actionMetaArgs && actionMetaArgs.endpointName === 'userGetCurrentInformation') {
+        if ('endpointName' in actionMetaArgs && SESSION_CHECK_ENDPOINTS.has(String(actionMetaArgs.endpointName))) {
           return next(action)
         }
 

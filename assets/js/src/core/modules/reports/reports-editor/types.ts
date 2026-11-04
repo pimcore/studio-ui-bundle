@@ -13,7 +13,7 @@ import { type FormInstance } from 'antd'
 
 export interface IReportConfigurationSectionProps {
   currentData: ReportFormData
-  updateFormData?: (data: ReportFormData) => void
+  updateFormData?: (data: Partial<ReportFormData>) => void
   form?: FormInstance<any>
 }
 
