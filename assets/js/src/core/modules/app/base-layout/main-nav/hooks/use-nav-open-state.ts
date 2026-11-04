@@ -41,26 +41,35 @@ const getHoverPreviewOpenKeys = (currentOpenKeys: string[], index: string, hasCh
 export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => {
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const hoverPreviewTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const mouseOverKey = useRef<string | null>(null)
   const isMenuOpenRef = useRef(isMenuOpen)
 
   useEffect(() => {
     isMenuOpenRef.current = isMenuOpen
   }, [isMenuOpen])
 
-  const cancelHoverPreview = (): void => {
+  const clearHoverPreviewTimer = (): void => {
     if (hoverPreviewTimer.current !== null) {
       clearTimeout(hoverPreviewTimer.current)
       hoverPreviewTimer.current = null
     }
   }
 
+  const cancelHoverPreview = (): void => {
+    clearHoverPreviewTimer()
+    mouseOverKey.current = null
+  }
+
+  const isMouseOver = (key: string): boolean => (
+    mouseOverKey.current !== null && (mouseOverKey.current === key || mouseOverKey.current.startsWith(`${key}-`))
+  )
+
   const handleOpenState = (event: MouseEvent<HTMLButtonElement>, key: string): void => {
     // a click lands inside the preview delay of the pointer enter that preceded it
-    cancelHoverPreview()
+    clearHoverPreviewTimer()
 
-    // only keyboard and screen reader clicks (detail 0) may close, a pointer click would undo its own hover
-    if (event.detail !== 0) {
-      setOpenKeys(getHoverPreviewOpenKeys(openKeys, key, true))
+    // screen readers and touch click with detail 1 as well, so only the mouse position tells a hover apart
+    if (event.detail !== 0 && openKeys.includes(key) && isMouseOver(key)) {
       return
     }
 
@@ -73,7 +82,7 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
   }
 
   const scheduleHoverPreview = (index: string, hasChildren: boolean): void => {
-    cancelHoverPreview()
+    clearHoverPreviewTimer()
 
     hoverPreviewTimer.current = setTimeout(() => {
       setOpenKeys((currentOpenKeys) => getHoverPreviewOpenKeys(currentOpenKeys, index, hasChildren))
@@ -87,6 +96,7 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
       return
     }
 
+    mouseOverKey.current = index
     scheduleHoverPreview(index, hasChildren)
   }
 
