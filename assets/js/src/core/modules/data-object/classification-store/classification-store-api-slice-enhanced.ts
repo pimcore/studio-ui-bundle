@@ -155,8 +155,11 @@ export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
   subGroups?: ClassificationStoreSubGroupLayout[]
 }
 
-// Helper: scan all active query cache entries for a given endpoint name and patch each one
-type PatchFn<T> = (draft: T) => void
+// Helper: scan all active query cache entries for a given endpoint name and patch each one.
+// The patch is handed the entry's own cache key alongside the draft, because what it has to do
+// can differ per entry: a relation that already sits on the cached page 1 is simply missing from
+// the cached page 2, and only the entry that pushed it in has created anything.
+type PatchFn<T> = (draft: T, cacheKey: string) => void
 interface PatchResult { undo: () => void }
 
 function patchAllCacheEntries<T, A = unknown> (
@@ -176,7 +179,9 @@ function patchAllCacheEntries<T, A = unknown> (
       if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
         // @ts-expect-error — dynamic endpoint name not in the union
-        innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, patch))
+        innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
+          patch(draft, queryKey)
+        }))
       } catch {
         // Cache entry may have been garbage-collected — safe to ignore
       }
@@ -203,7 +208,9 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
       if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
         // @ts-expect-error — dynamic endpoint name not in the union
-        const result = innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, patch))
+        const result = innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
+          patch(draft, queryKey)
+        }))
         results.push(result)
       } catch {
         // Cache entry may have been garbage-collected — safe to ignore
@@ -422,16 +429,23 @@ const api = baseApi.enhanceEndpoints({
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
         const matchesGroup = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg): boolean => a.groupId === groupId
-        // Set when the relation did not exist yet, which decides how the response is confirmed
-        // below: a row this request brought into being has nothing older to preserve.
-        let created = false
+        // The cache entries this request inserted the row into, which decides how the response is
+        // confirmed below: a row this request brought into being has nothing older to preserve.
+        //
+        // Per entry and not per request. The group is paged, so several pages of it can be cached
+        // at once and a relation that already sits on page 1 is simply absent from page 2. A
+        // single flag let that page-local miss count as an insertion for every entry, and the
+        // confirmation then replaced the whole page-1 row — writing back the `subGroup` an older
+        // cell edit's response had never named, which is the exact staleness the field mask below
+        // exists to prevent.
+        const createdIn = new Set<string>()
         const patchResults = optimisticPatchAllCacheEntries<
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
         >(
           dispatch,
           'classificationStoreConfigurationKeyGroupRelationCollection',
-          (draft) => {
+          (draft, cacheKey) => {
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
               // Upsert — update in-place whatever the payload named
@@ -440,7 +454,7 @@ const api = baseApi.enhanceEndpoints({
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new
               // relation rather than leaving the cached row without one.
-              created = true
+              createdIn.add(cacheKey)
               draft.items.push({
                 keyId,
                 groupId,
@@ -479,15 +493,16 @@ const api = baseApi.enhanceEndpoints({
           >(
             dispatch,
             'classificationStoreConfigurationKeyGroupRelationCollection',
-            (draft) => {
+            (draft, cacheKey) => {
               const idx = draft.items.findIndex(
                 (r) => r.keyId === updated.keyId && r.groupId === updated.groupId
               )
               if (idx === -1) return
 
-              draft.items[idx] = created
+              draft.items[idx] = createdIn.has(cacheKey)
                 // A relation this request created has no older state to keep, and its sorter and
-                // mandatory are whatever the server gave it.
+                // mandatory are whatever the server gave it. Only in the entries that actually
+                // inserted it: an entry that already held the row keeps the field mask.
                 ? updated
                 : {
                     ...draft.items[idx],

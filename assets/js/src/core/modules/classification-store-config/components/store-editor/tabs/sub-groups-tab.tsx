@@ -246,6 +246,11 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
    * the name and then the description sent the second PUT with the old name, and whichever
    * answer landed last decided which of the two edits survived. The draft carries the pending
    * value forward and the chain keeps the two requests in the order they were made.
+   *
+   * A queued save carries only its own field and is rebased onto the draft at the moment it is
+   * sent, never at the moment it is queued. A payload captured at queue time still held the name
+   * of a rename that was refused in front of it, so a name the server had just rejected went out
+   * again and took the perfectly valid description edit behind it down with it.
    */
   const handleUpdate = useCallback((
     subGroup: ClassificationStoreConfigurationSubGroupDetail,
@@ -253,11 +258,14 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
   ): void => {
     const { id } = subGroup
     const stored: SubGroupDraft = { name: subGroup.name, description: subGroup.description ?? null }
-    const next: SubGroupDraft = { ...(draftsRef.current.get(id) ?? stored), ...change }
-
-    draftsRef.current.set(id, next)
 
     const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
+      // Rebased here, not above: a save in front of this one that failed drops the draft, so this
+      // change goes out over the row the server still holds rather than over the refused value.
+      const next: SubGroupDraft = { ...(draftsRef.current.get(id) ?? stored), ...change }
+
+      draftsRef.current.set(id, next)
+
       const response = await updateSubGroup({
         id,
         classificationStoreConfigurationSubGroupUpdate: next

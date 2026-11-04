@@ -467,6 +467,59 @@ describe('SubGroupsTab', () => {
     expect(writeRequests()[1].body).toEqual({ name: 'Measures', description: 'how big it is' })
   })
 
+  it('keeps a queued description edit when the rename in front of it is refused', async () => {
+    // The queued save carries only its own field and is rebased when it is sent. A payload
+    // captured at queue time still held the refused name, so the valid description edit was
+    // refused with it and the user lost an edit they had no way of retrying.
+    let releaseFirstPut: () => void = () => {}
+    const firstPut = new Promise<void>((resolve) => { releaseFirstPut = resolve })
+    let puts = 0
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      let body: Record<string, unknown> | undefined
+
+      try {
+        body = JSON.parse(await input.clone().text())
+      } catch {
+        body = undefined
+      }
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(COLLECTION_URL)) {
+        return jsonResponse({ items: [dimensions], totalItems: 1 })
+      }
+
+      puts += 1
+
+      // The rename is refused; the server keeps the name it already holds.
+      if (puts === 1) {
+        await firstPut
+
+        return jsonResponse({ message: 'name is not allowed' }, 422)
+      }
+
+      return jsonResponse({ ...dimensions, ...body })
+    }) as unknown as typeof fetch
+
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    fireEvent.change(screen.getByLabelText('name-0'), { target: { value: 'Measures' } })
+    await waitFor(() => { expect(writeRequests()).toHaveLength(1) })
+
+    fireEvent.change(screen.getByLabelText('description-0'), { target: { value: 'how big it is' } })
+    expect(writeRequests()).toHaveLength(1)
+
+    releaseFirstPut()
+
+    await waitFor(() => { expect(writeRequests()).toHaveLength(2) })
+
+    // Rebased onto the row the server still holds: the description edit goes out with the stored
+    // name rather than with the one the server has just rejected.
+    expect(writeRequests()[1].body).toEqual({ name: 'Dimensions', description: 'how big it is' })
+  })
+
   it('steps back to the previous page when the last row of a page is deleted', async () => {
     const user = setupUser()
     // 41 rows at the default page size of 20, so the third page holds exactly one.

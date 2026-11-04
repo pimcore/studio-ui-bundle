@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -41,6 +41,11 @@ import { KeySelectionDialog } from './key-selection-dialog'
 import { KeyRelationsSection } from './key-relations-section'
 import { SubGroupSelectionDialog } from './sub-group-selection-dialog'
 import { SubGroupStrip, type SubGroupUsage } from './sub-group-strip'
+import {
+  acquireSubGroupAssignLock,
+  releaseSubGroupAssignLock,
+  useSubGroupAssignLock
+} from './sub-group-assign-lock'
 
 interface IKeyGroupRelationsGridProps {
   storeId: number
@@ -71,25 +76,50 @@ export const KeyGroupRelationsGrid = ({
 
   const [keyDialogOpen, setKeyDialogOpen] = useState(false)
   const [subGroupDialogOpen, setSubGroupDialogOpen] = useState(false)
-  const [isAssigning, setIsAssigning] = useState(false)
-  // The same flag as isAssigning, readable synchronously: a second batch started before React
-  // has re-rendered with the disabled buttons still has to be refused.
-  const isAssigningRef = useRef(false)
+  // Held outside this component, keyed by store and group: the Groups tab remounts the grid per
+  // group, so a lock in component state was cleared by leaving the group and coming back while
+  // its batch was still in flight. See sub-group-assign-lock.ts.
+  const isAssigning = useSubGroupAssignLock(storeId, groupId)
   const [selectedRowsBySection, setSelectedRowsBySection] = useState<Record<string, RowSelectionState>>({})
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyGroupRelationCollectionQuery(
+  const {
+    data,
+    currentData,
+    error,
+    isError,
+    isLoading,
+    isFetching,
+    refetch
+  } = useClassificationStoreConfigurationKeyGroupRelationCollectionQuery(
     { groupId: groupId!, body: { filters: { page, pageSize } } },
     { skip: groupId === undefined }
   )
 
+  // `currentData` and not `data`: `data` keeps the response of the page the user has just left
+  // while the next one is in flight, and keeps it when that request fails outright. Assign,
+  // Unassign and the strip's unassign are all driven from these rows, so on `data` they stayed
+  // enabled against keys of the previous page while the grid was already rendering loading
+  // skeletons in their place. `currentData` is the response for the page actually being asked
+  // for, and nothing at all until it arrives.
   const relations: ClassificationStoreConfigurationKeyGroupRelationDetail[] = useMemo(
-    () => data?.items ?? [],
-    [data?.items]
+    () => currentData?.items ?? [],
+    [currentData?.items]
   )
 
+  // The total is a property of the group rather than of the page, so the retained one is the right
+  // thing for the pagination control: taking it from `currentData` would collapse the control to
+  // nothing on every page change and put it back when the response landed.
   const total = data?.totalItems ?? 0
+
+  // Withholding the previous page's rows means a refused request leaves an empty grid, so the
+  // refusal has to be reported rather than read as a page with nothing on it.
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   /** True when the grid holds the whole group, so a statement about the group can be made. */
   const holdsWholeGroup = total <= pageSize
@@ -199,14 +229,12 @@ export const KeyGroupRelationsGrid = ({
     targets: ClassificationStoreConfigurationKeyGroupRelationDetail[],
     subGroup: string | null
   ): Promise<void> => {
-    if (targets.length === 0) return
+    if (targets.length === 0 || groupId === undefined) return
     // Two batches in flight over the same keys would decide the assignment by whichever
     // response landed last, so a second one is refused while the first is still settling. The
-    // check reads a ref rather than the state so a second call in the same tick still sees it.
-    if (isAssigningRef.current) return
-
-    isAssigningRef.current = true
-    setIsAssigning(true)
+    // lock is taken synchronously, so a second call in the same tick still sees it, and it lives
+    // outside this component, so remounting the grid cannot drop it while the batch runs.
+    if (!acquireSubGroupAssignLock(storeId, groupId)) return
 
     const failedNames: string[] = []
     const failedKeyIds = new Set<number>()
@@ -228,39 +256,42 @@ export const KeyGroupRelationsGrid = ({
     // slow as the sum of its round trips.
     let completed = 0
 
-    const responses = await Promise.all(targets.map(async (relation) => {
-      // sorter and mandatory are deliberately omitted: KeyGroupRelationCreate leaves an absent
-      // property at its stored value, so sending the pair and the sub group alone is enough and
-      // the assignment can no longer write back a sorter or mandatory captured before an edit
-      // that is still in flight.
-      const payload: ClassificationStoreConfigurationKeyGroupRelationCreate = {
-        keyId: relation.keyId,
-        groupId: relation.groupId,
-        subGroup
+    try {
+      const responses = await Promise.all(targets.map(async (relation) => {
+        // sorter and mandatory are deliberately omitted: KeyGroupRelationCreate leaves an absent
+        // property at its stored value, so sending the pair and the sub group alone is enough and
+        // the assignment can no longer write back a sorter or mandatory captured before an edit
+        // that is still in flight.
+        const payload: ClassificationStoreConfigurationKeyGroupRelationCreate = {
+          keyId: relation.keyId,
+          groupId: relation.groupId,
+          subGroup
+        }
+
+        const response = await createRelation({ classificationStoreConfigurationKeyGroupRelationCreate: payload })
+
+        completed += 1
+        reportProgress(completed)
+
+        return response
+      }))
+
+      // Read back in the order the keys were selected in, so the failure message names them in
+      // that order rather than in whichever order the server answered.
+      for (const [index, response] of responses.entries()) {
+        if ('error' in response) {
+          const relation = targets[index]
+
+          failedNames.push(relation.keyName ?? String(relation.keyId))
+          failedKeyIds.add(relation.keyId)
+        }
       }
-
-      const response = await createRelation({ classificationStoreConfigurationKeyGroupRelationCreate: payload })
-
-      completed += 1
-      reportProgress(completed)
-
-      return response
-    }))
-
-    // Read back in the order the keys were selected in, so the failure message names them in
-    // that order rather than in whichever order the server answered.
-    for (const [index, response] of responses.entries()) {
-      if ('error' in response) {
-        const relation = targets[index]
-
-        failedNames.push(relation.keyName ?? String(relation.keyId))
-        failedKeyIds.add(relation.keyId)
-      }
+    } finally {
+      // The lock is released whatever happened, so a batch that threw cannot leave the group's
+      // delete and its cells disabled for the rest of the session.
+      messageApi.destroy(ASSIGN_PROGRESS_KEY)
+      releaseSubGroupAssignLock(storeId, groupId)
     }
-
-    messageApi.destroy(ASSIGN_PROGRESS_KEY)
-    isAssigningRef.current = false
-    setIsAssigning(false)
 
     if (failedNames.length > 0) {
       void messageApi.error(t('classification-store.assign-sub-group-failed', { keyNames: failedNames.join(', ') }))
@@ -272,7 +303,7 @@ export const KeyGroupRelationsGrid = ({
     if (subGroup === null) {
       reportEmptiedSubGroups(targets.filter((relation) => !failedKeyIds.has(relation.keyId)))
     }
-  }, [createRelation, messageApi, reportEmptiedSubGroups, t])
+  }, [createRelation, messageApi, reportEmptiedSubGroups, storeId, groupId, t])
 
   const handleRemove = useCallback((relation: ClassificationStoreConfigurationKeyGroupRelationDetail): void => {
     void modal.confirm({

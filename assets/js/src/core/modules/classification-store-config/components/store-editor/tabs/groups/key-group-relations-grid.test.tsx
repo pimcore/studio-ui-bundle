@@ -19,6 +19,12 @@
  * that could write the same relations is held.
  */
 
+// trackError runs for real and ends at this service, which needs the application shell's modal
+// instance. Only the sink is replaced, so what is asserted is a reported error.
+jest.mock('@Pimcore/modules/app/error-handler/services/error-modal-service', () => ({
+  ErrorModalService: { setModalInstance: jest.fn(), showError: jest.fn() }
+}))
+
 // antd-style ships untranspiled ESM, which jest does not transform
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   createStyles: () => () => ({ styles: {}, cx: () => '', theme: {} }),
@@ -97,7 +103,13 @@ import userEvent, { type UserEvent } from '@testing-library/user-event'
 // eslint-disable-next-line import/first
 import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 // eslint-disable-next-line import/first
+import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
+// eslint-disable-next-line import/first
 import { KeyGroupRelationsGrid } from './key-group-relations-grid'
+// eslint-disable-next-line import/first
+import { releaseSubGroupAssignLock } from './sub-group-assign-lock'
+
+const showErrorMock = ErrorModalService.showError as unknown as jest.Mock
 
 const STORE_ID = 1
 const GROUP_ID = 3
@@ -267,11 +279,15 @@ describe('KeyGroupRelationsGrid', () => {
   beforeEach(() => {
     requests.length = 0
     refusedKeyIds = []
+    showErrorMock.mockClear()
     stubFetch()
   })
 
   afterEach(() => {
     globalThis.fetch = originalFetch
+    // The assignment lock lives outside the component on purpose, so a test that left one held
+    // would hold the next test's buttons too.
+    releaseSubGroupAssignLock(STORE_ID, GROUP_ID)
   })
 
   it('asks for one page of the group and leaves the rest to the pagination control', async () => {
@@ -333,6 +349,58 @@ describe('KeyGroupRelationsGrid', () => {
         requests.filter((item) => item.url.endsWith(RELATIONS_URL)).map((item) => item.body!.filters.page)
       ).toEqual([1, 2])
     }, WAIT_BUDGET)
+  })
+
+  it('stops the sub-group actions acting on a selection made on the page it has left', async () => {
+    // The response of the previous page is retained while the next one is in flight, and again
+    // when that request fails, so the actions were enabled against keys the grid had replaced
+    // with loading skeletons. They are driven from the response for the page being asked for.
+    const user = setupUser()
+    let releasePage2: () => void = () => {}
+    const page2Gate = new Promise<void>((resolve) => { releasePage2 = resolve })
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        if ((body?.filters?.page ?? 1) > 1) {
+          await page2Gate
+
+          return jsonResponse({ message: 'nope' }, 500)
+        }
+
+        return jsonResponse({ items: relations, totalItems: 250 })
+      }
+
+      if (input.url.endsWith(SUB_GROUPS_URL)) {
+        return jsonResponse({ items: vocabulary, totalItems: vocabulary.length })
+      }
+
+      return jsonResponse({ items: [], totalItems: 0 })
+    }) as unknown as typeof fetch
+
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    await selectKeys(user, 'height')
+    expect(unassignButton()).toBeEnabled()
+
+    await user.click(screen.getByRole('button', { name: 'pagination.next-page' }))
+
+    // In flight: no row of page two has arrived, so there is nothing to assign or unassign
+    await waitFor(() => { expect(unassignButton()).toBeDisabled() }, WAIT_BUDGET)
+    expect(assignButton()).toBeDisabled()
+
+    releasePage2()
+
+    // Refused: page one does not come back as the page the user is on, and the refusal is
+    // reported rather than left looking like a page with no keys on it
+    await waitFor(() => { expect(showErrorMock).toHaveBeenCalled() }, WAIT_BUDGET)
+    expect(unassignButton()).toBeDisabled()
+    expect(assignButton()).toBeDisabled()
+    expect(upsertRequests()).toHaveLength(0)
   })
 
   it('suppresses the "no keys left" message while the grid holds only part of the group', async () => {
@@ -510,6 +578,71 @@ describe('KeyGroupRelationsGrid', () => {
     // and so are the cells the batch could overwrite
     expect(screen.getByLabelText('cell-mandatory-11')).toBeDisabled()
     expect(screen.getByLabelText('cell-sorter-11')).toBeDisabled()
+
+    releaseUpsert()
+
+    await waitFor(() => { expect(deleteButtons()[0]).toBeEnabled() }, WAIT_BUDGET)
+  })
+
+  it('keeps holding the delete when the grid is remounted while a batch is still settling', async () => {
+    // The Groups tab keys this grid on store and group, so leaving a group and coming back
+    // remounts it. A lock held in the component's own state went with it: the per-row delete and
+    // a second batch became available again while the first batch's upserts were still in flight,
+    // and an upsert that reached the server after a delete recreates the relation it removed.
+    const user = setupUser()
+    let releaseUpsert: () => void = () => {}
+    const upsertGate = new Promise<void>((resolve) => { releaseUpsert = resolve })
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        return jsonResponse({ items: relations, totalItems: relations.length })
+      }
+
+      if (input.url.endsWith(SUB_GROUPS_URL)) {
+        return jsonResponse({ items: vocabulary, totalItems: vocabulary.length })
+      }
+
+      await upsertGate
+
+      return jsonResponse({ ...relations.find((item) => item.keyId === body.keyId), ...body })
+    }) as unknown as typeof fetch
+
+    const store = createStore()
+    const mounted = (mountKey: string): React.JSX.Element => (
+      <Provider store={ store }>
+        <App>
+          <KeyGroupRelationsGrid
+            groupId={ GROUP_ID }
+            groupName="Dimensions group"
+            key={ mountKey }
+            storeId={ STORE_ID }
+          />
+        </App>
+      </Provider>
+    )
+
+    const { rerender } = render(mounted('visit-1'))
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    await selectKeys(user, 'height')
+    await user.click(unassignButton())
+
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    // The user switches group and comes back: the same grid, a fresh mount
+    rerender(mounted('visit-2'))
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    for (const button of deleteButtons()) {
+      expect(button).toBeDisabled()
+    }
+    expect(unassignButton()).toBeDisabled()
+    expect(assignButton()).toBeDisabled()
+    expect(screen.getByLabelText('cell-mandatory-11')).toBeDisabled()
 
     releaseUpsert()
 
