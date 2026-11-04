@@ -41,7 +41,7 @@ const matchesSearch = (option: DefaultOptionType, { searchValue, optionFilterPro
 /**
  * Antd's dropdown semantics: a group whose own label matches keeps all its children, otherwise only matching children stay.
  */
-const filterLeaves = (options: DefaultOptionType[] = [], context: SelectAllContext): DefaultOptionType[] => {
+const filterLeaves = (options: DefaultOptionType[], context: SelectAllContext): DefaultOptionType[] => {
   return options.flatMap(option => {
     if (!Array.isArray(option.options)) {
       return matchesSearch(option, context) ? [option] : []
@@ -62,7 +62,7 @@ const toArray = (value: unknown): SelectValue[] => Array.isArray(value) ? value.
 export const getSelectableOptions = (context: SelectAllContext): DefaultOptionType[] => {
   const selected = new Set(toArray(context.value))
 
-  return filterLeaves(context.options, context).filter(option => {
+  return filterLeaves(context.options ?? [], context).filter(option => {
     return option.disabled !== true && isSelectValue(option.value) && !selected.has(option.value)
   })
 }
