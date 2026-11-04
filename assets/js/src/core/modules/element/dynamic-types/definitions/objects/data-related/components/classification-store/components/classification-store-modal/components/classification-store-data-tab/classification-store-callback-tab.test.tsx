@@ -11,6 +11,7 @@
 /**
  * Applying a selection on the Group tab resolves the keys of every picked group through
  * layout-by-group, which the surfaces without an object in context call without an objectId.
+ * A layout request that fails is reported rather than rejecting out of the apply handler.
  */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not transform.
@@ -72,6 +73,16 @@ jest.mock('@Pimcore/modules/data-object/classification-store/classification-stor
   useLazyClassificationStoreGetLayoutByKeyQuery: () => [fetchLayoutByKey]
 }))
 
+const trackError = jest.fn()
+
+jest.mock('@Pimcore/modules/app/error-handler', () => ({
+  __esModule: true,
+  default: (...args: unknown[]) => trackError(...args),
+  ApiError: class { constructor (public readonly errorData: unknown) {} },
+  GeneralError: class { constructor (public readonly message: string) {} },
+  isApiErrorData: (error: unknown) => typeof error === 'object' && error !== null && !(error instanceof Error)
+}))
+
 // eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
@@ -116,6 +127,7 @@ describe('ClassificationStoreCallbackTab', () => {
     gridProps.mockClear()
     closeModal.mockClear()
     fireUpdateEvent.mockClear()
+    trackError.mockClear()
     fetchLayoutByGroup.mockReset()
     fetchLayoutByGroup.mockImplementation(({ groupId }: { groupId: number }) => ({
       unwrap: async () => layouts[groupId]
@@ -155,5 +167,34 @@ describe('ClassificationStoreCallbackTab', () => {
     expect(fetchLayoutByGroup).toHaveBeenNthCalledWith(1, { fieldName: FIELD_NAME, groupId: 3 })
     expect(fetchLayoutByGroup).toHaveBeenNthCalledWith(2, { fieldName: FIELD_NAME, groupId: 7 })
     expect(closeModal).toHaveBeenCalled()
+  })
+
+  it('reports a failed group layout request instead of applying a partial selection', async () => {
+    // A plain object, which is what unwrap() rejects with and what isApiErrorData accepts.
+    const failure: any = { status: 403, data: { errorKey: 'access_denied' } }
+
+    fetchLayoutByGroup.mockImplementation(({ groupId }: { groupId: number }) => ({
+      unwrap: async () => {
+        if (groupId === 7) {
+          throw failure
+        }
+
+        return layouts[groupId]
+      }
+    }))
+
+    renderTab(TabId.Group)
+
+    act(() => { gridProps.mock.calls[0][0].onSelectedRowsChange({ 3: true, 7: true }) })
+
+    await userEvent.click(screen.getByRole('button'))
+
+    await waitFor(() => {
+      expect(trackError).toHaveBeenCalledWith(expect.objectContaining({ errorData: failure }))
+    })
+
+    // No columns are added and the modal stays open, so the selection can be retried.
+    expect(fireUpdateEvent).not.toHaveBeenCalled()
+    expect(closeModal).not.toHaveBeenCalled()
   })
 })
