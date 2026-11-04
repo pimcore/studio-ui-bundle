@@ -265,7 +265,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
   return (
     <SplitLayout
       leftItem={ {
-        size: 35,
+        size: 40,
         minSize: 250,
         children: (
           <ContentLayout
@@ -363,8 +363,8 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
       } }
       resizeAble
       rightItem={ {
-        // The detail carries the strip, the headings and the widest grid, so it takes the larger share.
-        size: 65,
+        // Widest share that still leaves the groups list its own width; the key grid carries one column more.
+        size: 60,
         minSize: 300,
         children: activeGroup === undefined
           ? (

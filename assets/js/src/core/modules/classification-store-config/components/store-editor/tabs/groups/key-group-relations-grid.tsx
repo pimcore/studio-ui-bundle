@@ -345,10 +345,10 @@ export const KeyGroupRelationsGrid = ({
       size: 200,
       meta: { type: 'input' }
     }),
-    // The description absorbs what the fixed columns leave, so the table never outgrows the pane.
+    // Its size is the floor this column may shrink to, so the table fits panes narrower than its preferred width.
     columnHelper.accessor('keyDescription', {
       header: t('classification-store.columns.description'),
-      size: 150,
+      size: 80,
       meta: { type: 'input', autoWidth: true }
     }),
     columnHelper.accessor('mandatory', {
