@@ -142,7 +142,7 @@ describe('SimpleColumnPreview row', () => {
     renderRel(row)
 
     expect(gridData).toHaveBeenCalled()
-    const [original] = gridData.mock.calls[0][0]
+    const [original] = gridData.mock.calls[0][0] as Array<Record<string, unknown>>
     expect(original.id).toBe(42)
     expect(original.isLocked).toBe(false)
     expect(original.permissions).toEqual({ view: true })
