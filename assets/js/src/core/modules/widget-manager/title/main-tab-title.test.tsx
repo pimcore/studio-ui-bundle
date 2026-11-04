@@ -19,13 +19,16 @@ import { type TabNode } from 'flexlayout-react'
 import { MainTabTitle } from './main-tab-title'
 
 const mockDispatch = jest.fn()
+const mockMainWidgetContext = { nodeId: 'car' }
 
 jest.mock('@sdk/app', () => ({
-  useAppDispatch: () => mockDispatch
+  useAppDispatch: () => mockDispatch,
+  useAppSelector: (selector: () => unknown) => selector()
 }))
 
 jest.mock('../widget-manager-slice', () => ({
-  expandMainWidget: (nodeId: string) => ({ type: 'expand', payload: nodeId })
+  expandMainWidget: (nodeId: string) => ({ type: 'expand', payload: nodeId }),
+  selectMainWidgetContext: () => mockMainWidgetContext
 }))
 
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -89,5 +92,48 @@ describe('MainTabTitle', () => {
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 1, detail: 2 })
 
     expect(mockDispatch).not.toHaveBeenCalled()
+  })
+
+  describe('keyboard access to the context menu', () => {
+    const contextMenu = jest.fn()
+
+    beforeEach(() => {
+      mockMainWidgetContext.nodeId = 'title'
+      contextMenu.mockClear()
+      document.addEventListener('contextmenu', contextMenu)
+    })
+
+    afterEach(() => {
+      mockMainWidgetContext.nodeId = 'car'
+      document.removeEventListener('contextmenu', contextMenu)
+    })
+
+    it('lets only the active tab take the focus', () => {
+      render(
+        <>
+          <MainTabTitle node={ node } />
+          <MainTabTitle node={ { getId: () => 'car' } as unknown as TabNode } />
+        </>
+      )
+
+      expect(screen.getByTestId('title').parentElement?.getAttribute('tabindex')).toBe('0')
+      expect(screen.getByTestId('car').parentElement?.hasAttribute('tabindex')).toBe(false)
+    })
+
+    it.each(['Enter', ' '])('opens the context menu of the focused active tab with "%s"', (key) => {
+      render(<MainTabTitle node={ node } />)
+
+      fireEvent.keyDown(screen.getByTestId('title').parentElement!, { key })
+
+      expect(contextMenu).toHaveBeenCalledTimes(1)
+    })
+
+    it('leaves Enter on an element inside the title, e.g. the close button, to that element', () => {
+      render(<MainTabTitle node={ node } />)
+
+      fireEvent.keyDown(screen.getByTestId('title'), { key: 'Enter' })
+
+      expect(contextMenu).not.toHaveBeenCalled()
+    })
   })
 })

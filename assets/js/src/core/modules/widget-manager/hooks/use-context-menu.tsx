@@ -42,7 +42,7 @@ interface OpenContextMenuState extends ContextMenuState {
 const returnFocus = (opener: Element): void => {
   const target = opener.isConnected
     ? opener
-    : document.querySelector('.widget-manager-tab-title--active-main .widget-manager__tab-title-close-button')
+    : document.querySelector('.widget-manager__main-tab-title[tabindex="0"]')
 
   if (target instanceof HTMLElement) {
     target.focus()
