@@ -3050,6 +3050,7 @@ translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
 select.clear-selection: Fjern valg
+select.select-all: Velg alle
 asset.folder.preview.image-display: Bildevisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
