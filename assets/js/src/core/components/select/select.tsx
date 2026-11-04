@@ -17,6 +17,8 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
+import { SelectActionButton } from './select-action-button'
+import { getSelectableOptions, getSelectAllValues } from './select-all-values'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
@@ -35,6 +37,8 @@ export interface SelectProps extends AntdSelectProps {
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
   loadingSkeleton?: boolean
+  /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount`). */
+  allowSelectAll?: boolean
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({
@@ -50,9 +54,11 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   minWidth,
   theme = 'default',
   loadingSkeleton = false,
+  allowSelectAll = false,
   dataTestId,
   loading = false,
   onDropdownVisibleChange,
+  onSearch,
   onFocus,
   onBlur,
   ...antdSelectProps
@@ -63,6 +69,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
 
   useImperativeHandle(ref, () => selectRef.current!)
 
@@ -151,7 +158,15 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   // Compose internal dropdown/focus state with optional consumer handlers (don't override them).
   const handleDropdownVisibleChange = (open: boolean): void => {
     setIsActive(open)
+    if (!open) {
+      setSearchValue('')
+    }
     onDropdownVisibleChange?.(open)
+  }
+
+  const handleSearch = (search: string): void => {
+    setSearchValue(search)
+    onSearch?.(search)
   }
 
   const handleFocus = (event: React.FocusEvent<HTMLElement>): void => {
@@ -206,18 +221,35 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     selectRef.current?.blur()
   }
 
-  const dropdownRender = shouldShowClearOption
+  const { options, optionFilterProp, filterOption, maxCount } = antdSelectProps
+  const selectAllContext = { options, value, searchValue, optionFilterProp, filterOption }
+  const shouldShowSelectAll = allowSelectAll && mode === 'multiple' && maxCount === undefined && getSelectableOptions(selectAllContext).length > 0
+
+  const handleSelectAll = (): void => {
+    const values = getSelectAllValues(selectAllContext)
+    const selectedOptions = (options ?? []).filter(option => values.includes(option.value as string))
+    antdSelectProps.onChange?.(values, selectedOptions)
+  }
+
+  const dropdownRender = shouldShowClearOption || shouldShowSelectAll
     ? (menu: React.ReactElement): React.JSX.Element => (
       <div className={ styles.clearOptionWrapper }>
-        <button
-          className={ styles.clearOption }
-          onClick={ handleClearSelection }
-          onMouseDown={ (e) => { e.preventDefault() } }
-          type="button"
-        >
-          <Icon value={ 'trash' } />
-          <span>{t('select.clear-selection')}</span>
-        </button>
+        {shouldShowSelectAll && (
+          <SelectActionButton
+            className={ styles.clearOption }
+            icon={ 'checkmark' }
+            label={ t('select.select-all') }
+            onClick={ handleSelectAll }
+          />
+        )}
+        {shouldShowClearOption && (
+          <SelectActionButton
+            className={ styles.clearOption }
+            icon={ 'trash' }
+            label={ t('select.clear-selection') }
+            onClick={ handleClearSelection }
+          />
+        )}
         {menu}
       </div>
       )
@@ -250,6 +282,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
         onBlur={ handleBlur }
         onDropdownVisibleChange={ handleDropdownVisibleChange }
         onFocus={ handleFocus }
+        onSearch={ handleSearch }
         ref={ selectRef }
         status={ status }
         style={ computedStyle }

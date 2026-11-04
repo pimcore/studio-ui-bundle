@@ -3048,6 +3048,7 @@ translations.merger.title: "Scalanie tłumaczeń (domena: {{domain}})"
 translations.merger.column.language: Język
 translations.merger.items: elementy
 select.clear-selection: Wyczyść wybór
+select.select-all: Zaznacz wszystko
 asset.folder.preview.image-display: Wyświetlanie obrazów
 asset.folder.preview.image-display.small: Małe
 asset.folder.preview.image-display.large: Duże

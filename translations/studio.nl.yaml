@@ -3048,6 +3048,7 @@ translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
 translations.merger.column.language: Taal
 translations.merger.items: items
 select.clear-selection: Selectie wissen
+select.select-all: Alles selecteren
 asset.folder.preview.image-display: Afbeeldingsweergave
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groot
