@@ -124,7 +124,7 @@ describe('useTwoFactorAuthentication', () => {
 
     await result.current.confirmSetup('123456')
 
-    const active = { enabled: true, active: true, type: 'google' }
+    const active = { required: true, enabled: true, active: true, type: 'google' }
     expect(mockDispatch).toHaveBeenCalledWith({ type: 'user-management', payload: { id: CURRENT_USER_ID, twoFactorAuthentication: active } })
     expect(mockDispatch).toHaveBeenCalledWith({ type: 'profile', payload: active })
   })
