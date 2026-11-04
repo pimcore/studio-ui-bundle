@@ -13,10 +13,12 @@ import { Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { defineFilter, useFilterCommitOptional, type FilterControlProps } from '@Pimcore/components/filters'
 import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
+import { useStyles } from './checkbox-filter.styles'
 
 const DirectChildrenControl = ({ value, onChange }: FilterControlProps<boolean>): React.JSX.Element => {
   const { t } = useTranslation()
   const commit = useFilterCommitOptional()
+  const { styles } = useStyles()
 
   /**
    * Ticking the box is the whole interaction, so it applies itself instead of waiting for
@@ -30,6 +32,7 @@ const DirectChildrenControl = ({ value, onChange }: FilterControlProps<boolean>)
   return (
     <Checkbox
       checked={ value }
+      className={ styles.checkbox }
       onChange={ (e) => { onCheckboxChange(e.target.checked) } }
     >
       {t('element.sidebar.filter.only-direct-children')}

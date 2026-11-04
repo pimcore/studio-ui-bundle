@@ -35,10 +35,8 @@ export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConf
       return item
     })
 
-    updateFormData?.({
-      ...currentData,
-      columnConfigurations: updatedColumnConfigurations
-    })
+    // updateFormData merges into the latest state, so edits made elsewhere in the meantime are kept
+    updateFormData?.({ columnConfigurations: updatedColumnConfigurations })
   }
 
   const handleDragEnd = (event: DragEndEvent): void => {
@@ -52,10 +50,7 @@ export const ColumnConfiguration = ({ currentData, updateFormData }: IReportConf
 
       const reorderedColumnConfigurations = arrayMove(columnConfigurationsData, oldIndex, newIndex)
 
-      updateFormData?.({
-        ...currentData,
-        columnConfigurations: reorderedColumnConfigurations
-      })
+      updateFormData?.({ columnConfigurations: reorderedColumnConfigurations })
     }
   }
 

@@ -10,7 +10,7 @@
 
 import React, { useCallback } from 'react'
 import { type AreablockManager } from '../utils/areablock-manager'
-import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
+import { type AreaInsertPosition, type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { SortableAreablockToolbar } from '../components/sortable-areablock-toolbar/sortable-areablock-toolbar'
@@ -23,7 +23,7 @@ export interface UseAreablockControlsParams {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
-  onAddArea: (element: HTMLElement | null, areaType?: string) => Promise<void>
+  onAddArea: (element: HTMLElement | null, areaType?: string, position?: AreaInsertPosition) => Promise<void>
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
@@ -89,8 +89,8 @@ export const useAreablockControls = ({
     }
   })
 
-  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
-    await onAddArea(element, areaType)
+  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string, position?: AreaInsertPosition) => {
+    await onAddArea(element, areaType, position)
     refreshDropzones()
   }, [onAddArea, refreshDropzones])
 
@@ -159,7 +159,6 @@ export const useAreablockControls = ({
 
       const sortableToolbar = (
         <SortableAreablockToolbar
-          areaTypes={ areaTypes }
           config={ config }
           element={ areaEntry }
           hasDialogBox={ hasDialogBox }

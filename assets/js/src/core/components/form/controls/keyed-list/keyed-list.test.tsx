@@ -295,6 +295,126 @@ describe('KeyedList', () => {
       expect(onChange).toHaveBeenCalledWith({ existing: { name: 'a' }, added: { name: 'b' } })
     })
 
+    it('add() reports the default registered by a field of the added entry (regression #15682)', () => {
+      // an object brick added in the editor whose only content is the prefilled field default
+      const onChange = jest.fn()
+      const props = { value: { existing: { name: 'a' } }, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      flushDebounce()
+      onChange.mockClear()
+
+      rerender(keyedListUi(props, <RegisteringField
+        initialValue="hello"
+        name={ ['attributes', 'added', 'name'] }
+                                  />))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith({ existing: { name: 'a' }, added: { name: 'hello' } })
+    })
+
+    it('add() reports the default registered together with the added entry (regression #15682)', () => {
+      const onChange = jest.fn()
+      const props = { value: {}, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      rerender(keyedListUi(props, <RegisteringField
+        initialValue="hello"
+        name={ ['attributes', 'added', 'name'] }
+                                  />))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith({ added: { name: 'hello' } })
+    })
+
+    it('add() stops exempting registrations once the parent echoes the value back (regression #15682)', () => {
+      const onChange = jest.fn()
+      const first = (
+        <RegisteringField
+          initialValue="hello"
+          name={ ['attributes', 'added', 'name'] }
+        />
+      )
+      const both = (
+        <>
+          {first}
+          <RegisteringField
+            initialValue="x"
+            name={ ['attributes', 'added', 'extra'] }
+          />
+        </>
+      )
+      const props = { value: { existing: { name: 'a' } }, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      rerender(keyedListUi(props, first))
+      flushDebounce()
+
+      const echoedProps = { value: { existing: { name: 'a' }, added: { name: 'hello' } }, onChange }
+      rerender(keyedListUi(echoedProps, first))
+      flushDebounce()
+      onChange.mockClear()
+
+      // a field mounting later under the saved entry is part of the loaded state, not a change
+      rerender(keyedListUi(echoedProps, both))
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
+    it('add() only exempts the added key, registrations of loaded entries stay baseline (regression #15682)', () => {
+      const onChange = jest.fn()
+      const props = { value: { existing: { name: 'a' } }, onChange }
+
+      const { rerender } = renderKeyedList(props)
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      flushDebounce()
+
+      rerender(keyedListUi(props, <RegisteringField
+        initialValue="x"
+        name={ ['attributes', 'existing', 'other'] }
+                                  />))
+      flushDebounce()
+      onChange.mockClear()
+
+      // the added entry was reported, so removing it again before any echo is a change to report
+      act(() => { operations.remove('added') })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenLastCalledWith({ existing: { name: 'a', other: 'x' } })
+    })
+
+    it('add() then remove() before any echo reports the removal; an unreported addition stays silent (regression #15682)', () => {
+      const onChange = jest.fn()
+      renderKeyedList({ value: { existing: { name: 'a' } }, onChange })
+      flushDebounce()
+
+      act(() => { operations.add('added', {}) })
+      flushDebounce()
+      expect(onChange).toHaveBeenCalledTimes(1)
+
+      act(() => { operations.remove('added') })
+      flushDebounce()
+      expect(onChange).toHaveBeenCalledTimes(2)
+      expect(onChange).toHaveBeenLastCalledWith({ existing: { name: 'a' } })
+
+      // nothing further to report
+      flushDebounce()
+      expect(onChange).toHaveBeenCalledTimes(2)
+    })
+
     it('add() does not overwrite an existing key', () => {
       const onChange = jest.fn()
 
@@ -368,9 +488,8 @@ describe('KeyedList', () => {
       expect(onChange).toHaveBeenCalledWith({ myBrick: { localizedfields: { rel: { en: [4] } } } })
     })
 
-    it('remove() of the last remaining entry is not reported (empty values stay silent)', () => {
-      // the empty-value guard also suppresses this case — consumers handling deletions
-      // (like ObjectBrick) track them through their own deletion markers instead
+    it('remove() of the last remaining entry is reported as an empty value', () => {
+      // consumers like ObjectBrick derive their deletion markers from this change
       const onChange = jest.fn()
 
       renderKeyedList({ value: { only: { name: 'a' } }, onChange })
@@ -379,8 +498,31 @@ describe('KeyedList', () => {
       act(() => { operations.remove('only') })
       flushDebounce()
 
-      expect(onChange).not.toHaveBeenCalled()
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenCalledWith({})
       expect(operations.getValue(['attributes', 'only'])).toBeUndefined()
+    })
+
+    it('does not report an empty list that was empty from the start', () => {
+      const onChange = jest.fn()
+
+      renderKeyedList({ value: {}, onChange })
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
+    it('does not report an empty list when a registered entry is removed again', () => {
+      // the registration extends the baseline of a list that came in empty; removing it must stay silent
+      const onChange = jest.fn()
+
+      renderKeyedList({ value: {}, onChange }, <RegisteringField name={ ['attributes', 'late', 'name'] } />)
+      flushDebounce()
+
+      act(() => { operations.remove('late') })
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
     })
 
     it('getValue() resolves names relative to the item name', () => {

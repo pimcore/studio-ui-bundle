@@ -12,7 +12,7 @@ import React from 'react'
 import { defaultProps, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Menu } from '@Pimcore/components/menu/menu'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
-import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { useTreeContextMenuItems } from '@Pimcore/modules/element/tree/context-menu/use-tree-context-menu-items'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
@@ -20,7 +20,7 @@ export interface DataObjectTreeContextMenuProps {
 
 export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps): React.JSX.Element => {
   const node = props.node ?? defaultProps
-  const items = useContextMenuSlot('data-object.tree', { target: node, onComplete: () => {} })
+  const items = useTreeContextMenuItems('data-object.tree', node)
 
   return (
     <Menu

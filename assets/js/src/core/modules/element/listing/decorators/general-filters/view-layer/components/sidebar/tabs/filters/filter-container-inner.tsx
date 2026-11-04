@@ -66,14 +66,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
           </ColumnPickerPopover>
 
           <Flex gap='extra-small'>
-            <IconTextButton
+            <Button
               data-testid="listing-filter-clear-button"
-              icon={ { value: 'close' } }
               onClick={ onClearAllClick }
               type='link'
             >
               {t('clear-all')}
-            </IconTextButton>
+            </Button>
 
             <Button
               data-testid="listing-filter-apply-button"
@@ -86,7 +85,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+      >
         <Flex
           align='center'
           justify='space-between'
@@ -132,7 +134,15 @@ export const FilterContainerInner = (): React.JSX.Element => {
         </Title>
 
         { filters.length === 0
-          ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+          ? (
+            <Flex
+              align='center'
+              justify='center'
+              style={ { flex: 1 } }
+            >
+              <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+            </Flex>
+            )
           : (
             <MultiValueFilterSupportProvider supported>
               <FieldFilters

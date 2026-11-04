@@ -91,6 +91,10 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
     return false
   }, [rules])
 
+  // Only hiding is set inline, so a field's own class can still lay the item out
+  // (for example a checkbox with its label after it).
+  const wrapperStyle = hidden === true ? { display: 'none' } : undefined
+
   const wrapperClassName = [
     className,
     styles.virtualItem,
@@ -108,7 +112,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
     <ItemProvider item={ itemWithValidation }>
       <div
         className={ wrapperClassName }
-        style={ { display: hidden === true ? 'none' : 'block' } }
+        style={ wrapperStyle }
       >
         {label !== undefined && (
           <div className="virtual-item__label">

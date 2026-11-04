@@ -15,10 +15,10 @@ export const useStyles = createStyles(({ token, css }) => {
     header: css`
       display: flex;
       width: 100%;
-      height: 32px;
-      min-height: 32px;
+      height: ${token.controlHeight}px;
+      min-height: ${token.controlHeight}px;
       align-items: center;
-      gap: 8px;
+      gap: ${token.marginXS}px;
 
       .header__title {
           font-weight: 600;

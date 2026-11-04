@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { SidebarTitle } from '@Pimcore/components/sidebar/title'
+import { Title } from '@Pimcore/components/title/title'
 import { AreablockTypesList } from './components/areablock-types-list/areablock-types-list'
 import { Content } from '@sdk/components'
 
@@ -18,10 +18,11 @@ export const AreablockTypesSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
-    <Content>
-      <SidebarTitle withBorder>
-        {t('add-areas')}
-      </SidebarTitle>
+    <Content
+      padded
+      padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+    >
+      <Title>{t('add-areas')}</Title>
       <AreablockTypesList />
     </Content>
   )

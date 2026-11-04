@@ -116,6 +116,8 @@ areablock.move-below: Sposta giù
 areablock.show: Mostra
 areablock.hide: Nascondi
 areablock.new: Nuovo
+areablock.insert-above: Inserisci sopra
+areablock.insert-below: Inserisci sotto
 areablock.copy: Copia
 areablock.paste: Incolla
 areablock.cut: Taglia
@@ -390,6 +392,7 @@ grid.advanced-column.advancedColumns.group.date: Data
 grid.advanced-column.advancedColumns.group.string: Stringa
 grid.advanced-column.advancedColumns.group.other: Altro
 grid.advanced-column.title.placeholder: Aggiungi un titolo
+grid.advanced-column.expand: Espandi
 grid.advanced-column.advancedColumns: Campo sorgente
 grid.advanced-column.advancedColumns.add: Aggiungi un campo sorgente
 grid.advanced-column.transformers: Trasformatori
@@ -1246,10 +1249,15 @@ batch-edit.no-content: Non sono ancora state aggiunte colonne
 batch-edit.modal-footer.apply-changes: Applica modifiche
 batch-edit.modal-footer.discard-all-changes: Scarta tutte le modifiche
 batch-edit.modal-footer.add-a-column: Aggiungi una colonna
+batch-edit.system-boolean.publish: "Pubblica"
+batch-edit.system-boolean.unpublish: "Annulla pubblicazione"
+batch-edit.system-boolean.placeholder: "Seleziona un'azione"
+batch-edit.system-boolean.required: "Scegli Pubblica o Annulla pubblicazione"
 batch-edit.append-mode.replace: Sostituzione in blocco
 batch-edit.append-mode.add: Aggiunta in blocco
 batch-edit.append-mode.remove: Rimozione in blocco
 batch-delete.job-title: Elimina
+element-move.job-title: Sposta
 export-csv-form.modal-title: Esporta CSV
 export-csv-form.export-notice: Si prega di notare che l'esportazione non supporta alcuni campi (es. anteprima, dimensione). Premere OK per continuare con l'esportazione.
 export-csv-form.form-field.delimiter: Delimitatore
@@ -1314,6 +1322,18 @@ element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
 element.tree.cut-success-description: '{{elementType}} "{{name}}" è stato tagliato ed è pronto per incollare'
 element.tree.paste-cut: Incolla elemento tagliato
+element.tree.cut-multiple: 'Taglia {{count}} elementi'
+element.tree.cut-multiple-success-description: '{{count}} elementi sono stati tagliati e sono pronti per essere incollati'
+element.tree.paste-cut-multiple: 'Incolla {{count}} elementi tagliati'
+element.tree.selection.count_one: '{{count}} elemento selezionato'
+element.tree.selection.count_other: '{{count}} elementi selezionati'
+element.tree.selection.clear: Cancella selezione
+element.tree.selection.limit-reached: 'Massimo di {{limit}} elementi raggiunto'
+element.tree.drag.elements_one: '{{count}} elemento'
+element.tree.drag.elements_other: '{{count}} elementi'
+element.tree.drag.elements-partial: '{{count}} di {{selected}} elementi'
+element.tree.move.skipped-elements_one: '1 elemento non è stato spostato: è bloccato o non puoi modificarlo.'
+element.tree.move.skipped-elements_other: '{{count}} elementi non sono stati spostati: sono bloccati o non puoi modificarli.'
 element.lock: Blocca
 element.lock-and-propagate-to-children: Blocca e propaga ai figli
 element.unlock: Sblocca
@@ -1334,10 +1354,13 @@ element.tree.refresh: Aggiorna
 element.new-folder: Nuova cartella
 element.new-folder.validation: Inserire un nome valido
 element.rename: Rinomina
+element.rename-folder: Rinomina cartella
 element.rename.label: Inserire il nuovo nome
 element.rename.validation: Inserire un nome valido
 element.share-via-notification: Condividi tramite notifiche
 element.delete: Elimina
+element.delete-folder: Elimina cartella
+element.delete-multiple: 'Elimina {{count}} elementi'
 element.delete.confirmation.title: Elimina elemento
 element.delete.confirmation.text: Eliminare questo elemento?
 element.delete.confirmation.ok: Elimina definitivamente
@@ -1432,9 +1455,13 @@ relations.create-object.name: Nome
 relations.create-object.parent: Elemento padre
 relations.create-object.parent.placeholder: Seleziona un elemento padre
 relations.create-object.class: Classe
+relations.visible-fields.loading-progress: 'Caricamento dei campi visibili… ({{loaded}} di {{total}})'
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
 asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.
+relation.drop.not-allowed-elements-skipped_one: '1 elemento non è stato aggiunto: questo campo non consente il suo tipo.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elementi non sono stati aggiunti: questo campo non consente i loro tipi.'
+drag-and-drop.drop.single-element-only: 'Qui è possibile rilasciare un solo elemento.'
 actions: Azioni
 asset: Asset
 data-object: Data Object
@@ -1489,7 +1516,6 @@ tree.actions.user: Utente
 tree.actions.add-folder: Nuova cartella
 tree.actions.add-tag: Nuovo tag
 tree.actions.delete-tag: Elimina
-tree.actions.rename-tag: Rinomina
 tree.actions.role: Ruolo
 tree.actions.add-role: Aggiungi ruolo
 tree.actions.clone-role: Clona ruolo
@@ -1501,7 +1527,6 @@ tag-configuration.name: Nome
 tag-configuration.parent-tag: Tag genitore
 tag-configuration.create: Crea
 tag-configuration.save: Salva
-tag-configuration.rename: Rinomina tag
 tag-configuration.successful-add: Tag aggiunto con successo
 tag-configuration.successful-update: Tag aggiornato con successo
 tag-configuration.successful-deletion: Tag eliminato con successo
@@ -2238,6 +2263,7 @@ user-menu.notification.modal.form.validation.provide-title: Fornire un titolo
 user-menu.notification.modal.form.validation.provide-message: Fornire un messaggio
 reports.reports-title: Report
 reports.select-report-name: Selezionare il nome del report
+reports.report-load-failed: Impossibile caricare il report.
 reports.select-report: Seleziona report
 reports.export: Esporta
 reports.csv-export: Esportazione CSV
@@ -2262,6 +2288,7 @@ reports.editor.general-settings.report-class-label: Classe report
 reports.editor.general-settings.group-icon-class-label: Icon Class del gruppo
 reports.editor.general-settings.shortcut-menu-label: Crea scorciatoia nel menu
 reports.editor.source-definition.title: Definizione sorgente
+reports.editor.source-definition.not-available: La definizione della fonte di questo rapporto non è disponibile. Il Bundle che la fornisce potrebbe non essere installato.
 reports.editor.source-definition.no-content: Nessun campo disponibile ancora. Iniziare aggiungendo un campo.
 reports.editor.source-definition.select-source-definition: Selezionare una definizione sorgente
 reports.editor.source-definition.sql-select-field: SELECT (es. a,b,c)*
@@ -3051,3 +3078,9 @@ saved-search.delete.success: Ricerca salvata eliminata
 saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
 saved-search.menu-shortcut-group: Gruppo di menu
 skip-to-content: Vai al contenuto
+tag-configuration.move-under: 'Sposta sotto'
+tag-configuration.move-search-placeholder: 'Cerca un tag'
+tree.actions.edit-tag: Modifica
+tag-configuration.edit-tag: 'Modifica "{{name}}"'
+tag-configuration.name-required: 'Inserire un nome per il tag'
+tag-configuration.move-targets-failed: "Non è stato possibile caricare l'elenco dei tag, quindi è possibile modificare solo il nome"

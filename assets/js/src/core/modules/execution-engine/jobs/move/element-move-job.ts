@@ -1,0 +1,163 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { isNil, isUndefined } from 'lodash'
+import { t } from 'i18next'
+import { store } from '@Pimcore/app/store'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { api as documentApi } from '@Pimcore/modules/document/document-api-slice.gen'
+import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type JobInterface, type JobRunOptions } from '../job-interface'
+import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
+import { api as executionEngineApi } from '../../execution-engine-api-slice.gen'
+
+export interface ElementMoveJobItem {
+  id: number
+  parentId: number
+  /** Position among the new siblings; data objects and documents, only when sorting. */
+  index?: number
+}
+
+export interface ElementMoveJobOptions {
+  elementType: ElementType
+  items: ElementMoveJobItem[]
+  onFinish?: () => Promise<void>
+}
+
+/**
+ * Moves several elements into a new parent in one job run.
+ *
+ * The patch endpoint turns a request with more than one element into a job that
+ * continues past failures, so progress and the per element error list come from
+ * the execution engine.
+ *
+ * Not rehydratable: the backend runs a move as a plain element patch job
+ * (studio_ee_job_patch_elements), and a running job carries nothing that tells
+ * it apart from a batch edit. After a reload it is restored by the batch edit
+ * job, so it shows its progress instead of staying quiet - nothing is lost.
+ */
+export class ElementMoveJob implements JobInterface {
+  private readonly elementType: ElementType
+  private readonly items: ElementMoveJobItem[]
+  private readonly onFinish?: () => Promise<void>
+
+  constructor (options: ElementMoveJobOptions) {
+    this.elementType = options.elementType
+    this.items = options.items
+    this.onFinish = options.onFinish
+  }
+
+  async run (options: JobRunOptions): Promise<void> {
+    const { messageBus } = options
+
+    try {
+      const jobRunId = await this.executeMoveRequest()
+
+      if (isNil(jobRunId)) {
+        // Nothing to track: either the request failed, or the backend applied a
+        // single element synchronously.
+        await this.handleCompletion()
+        return
+      }
+
+      messageBus.registerHandler(ElementMoveJob.buildHandler({
+        jobRunId,
+        onJobCompletion: async (data: JobCompletionData) => {
+          // Elements that could not be moved are reported by the job itself; the
+          // refresh puts both sides of the move back in sync either way.
+          await this.handleCompletion()
+
+          // isFinished covers finished_with_errors as well, so success is the only
+          // case that may be cleaned up - a run that reported errors has to stay
+          // visible, including after a reload.
+          if (!data.isSuccessful) {
+            if (!data.isFinished) {
+              console.error(`Element move job ended with status: ${data.status}`)
+            }
+
+            return
+          }
+
+          // Nobody was shown this job, so there is nothing to dismiss: its run is
+          // hidden instead of waiting in the job list until someone clears it.
+          await store.dispatch(
+            executionEngineApi.endpoints.executionEngineHideJobRuns.initiate({ body: { jobRunIds: [jobRunId] } })
+          )
+        },
+        onRetry: async () => {
+          await this.run(options)
+        }
+      }))
+    } catch (error: any) {
+      await this.handleCompletion()
+      trackError(new GeneralError(error.message as string))
+    }
+  }
+
+  /**
+   * Each element type has its own patch endpoint. An unknown type fails instead of
+   * falling through to another type's endpoint, which would patch unrelated
+   * elements that happen to share the ids.
+   */
+  private async dispatchPatch (data: ElementMoveJobItem[]): Promise<{ data?: { jobRunId?: number } | null, error?: ApiErrorData }> {
+    switch (this.elementType) {
+      case elementTypes.asset:
+        return await store.dispatch(assetApi.endpoints.assetPatchById.initiate({ body: { data } }))
+      case elementTypes.dataObject:
+        return await store.dispatch(dataObjectApi.endpoints.dataObjectPatchById.initiate({ body: { data } }))
+      case elementTypes.document:
+        return await store.dispatch(documentApi.endpoints.documentPatchById.initiate({ body: { data } }))
+      default:
+        throw new Error(`Moving elements of type "${String(this.elementType)}" is not supported`)
+    }
+  }
+
+  private async executeMoveRequest (): Promise<number | null> {
+    const data = this.items.map(item => isUndefined(item.index)
+      ? { id: item.id, parentId: item.parentId }
+      : { id: item.id, parentId: item.parentId, index: item.index })
+
+    const response = await this.dispatchPatch(data)
+
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return null
+    }
+
+    return response.data?.jobRunId ?? null
+  }
+
+  private async handleCompletion (): Promise<void> {
+    if (!isUndefined(this.onFinish)) {
+      await this.onFinish()
+    }
+  }
+
+  private static buildHandler (options: {
+    jobRunId: number
+    onJobCompletion?: (data: JobCompletionData) => Promise<void>
+    onRetry?: () => Promise<void>
+  }): MessageBusJobHandler {
+    return new MessageBusJobHandler({
+      jobRunId: options.jobRunId,
+      title: t('element-move.job-title'),
+      // Moving is not something to report on: the tree updating is the feedback.
+      // The job only becomes visible when elements could not be moved.
+      notifyOnErrorOnly: true,
+      progressCalculator: new BatchedStepProgressCalculator(),
+      onJobCompletion: options.onJobCompletion,
+      onRetry: options.onRetry
+    })
+  }
+}

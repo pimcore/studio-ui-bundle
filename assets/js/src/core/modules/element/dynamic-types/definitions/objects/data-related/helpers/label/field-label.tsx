@@ -21,6 +21,7 @@ import { useItemOptional } from '@Pimcore/components/form/item/provider/item/use
 import { InheritanceButton } from '@Pimcore/modules/data-object/components/inheritance-button'
 import { isNonEmptyString } from '@sdk/utils'
 import { isUndefined } from 'lodash'
+import { useFieldLabelTechnicalName } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label-technical-name-provider'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
@@ -33,6 +34,8 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
   const inheritanceStateContext = useInheritanceState()
   const inheritanceState = inheritanceStateContext?.getInheritanceState(itemContext?.name ?? props.name)
   const { t } = useTranslation()
+  const technicalName = useFieldLabelTechnicalName()
+  const labelText = <span>{isNonEmptyString(props.label) ? t(props.label) : props.label}</span>
 
   return (
     <Flex
@@ -56,7 +59,9 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
         </Tooltip>
       ) }
       { props.additionalIcons }
-      <span>{isNonEmptyString(props.label) ? t(props.label) : props.label}</span>
+      { isNonEmptyString(technicalName)
+        ? <Tooltip title={ technicalName }>{ labelText }</Tooltip>
+        : labelText }
     </Flex>
   )
 }

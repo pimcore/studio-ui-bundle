@@ -116,6 +116,8 @@ areablock.move-below: Przenieś niżej
 areablock.show: Pokaż
 areablock.hide: Ukryj
 areablock.new: Nowy
+areablock.insert-above: Wstaw powyżej
+areablock.insert-below: Wstaw poniżej
 areablock.copy: Kopiuj
 areablock.paste: Wklej
 areablock.cut: Wytnij
@@ -390,6 +392,7 @@ grid.advanced-column.advancedColumns.group.date: Data
 grid.advanced-column.advancedColumns.group.string: Tekst
 grid.advanced-column.advancedColumns.group.other: Pozostałe
 grid.advanced-column.title.placeholder: Dodaj tytuł
+grid.advanced-column.expand: Rozwiń
 grid.advanced-column.advancedColumns: Pole źródłowe
 grid.advanced-column.advancedColumns.add: Dodaj pole źródłowe
 grid.advanced-column.transformers: Transformacje
@@ -1246,10 +1249,15 @@ batch-edit.no-content: Nie dodano jeszcze żadnych kolumn
 batch-edit.modal-footer.apply-changes: Zastosuj zmiany
 batch-edit.modal-footer.discard-all-changes: Odrzuć wszystkie zmiany
 batch-edit.modal-footer.add-a-column: Dodaj kolumnę
+batch-edit.system-boolean.publish: "Opublikuj"
+batch-edit.system-boolean.unpublish: "Cofnij publikację"
+batch-edit.system-boolean.placeholder: "Wybierz akcję"
+batch-edit.system-boolean.required: "Wybierz Opublikuj lub Cofnij publikację"
 batch-edit.append-mode.replace: Zamień zbiorczo
 batch-edit.append-mode.add: Dodaj zbiorczo
 batch-edit.append-mode.remove: Usuń zbiorczo
 batch-delete.job-title: Usuń
+element-move.job-title: "Przenoszenie"
 export-csv-form.modal-title: Eksport CSV
 export-csv-form.export-notice: "Uwaga: eksport nie obsługuje niektórych pól (np. podgląd, rozmiar). Naciśnij OK, aby kontynuować eksport."
 export-csv-form.form-field.delimiter: Separator
@@ -1314,6 +1322,18 @@ element.tree.paste-only-contents: Wklej tutaj tylko treść
 element.tree.cut: Wytnij
 element.tree.cut-success-description: '{{elementType}} "{{name}}" został wycięty i jest gotowy do wklejenia'
 element.tree.paste-cut: Wklej wycięty element
+element.tree.cut-multiple: "Wytnij {{count}} elementów"
+element.tree.cut-multiple-success-description: "{{count}} elementów zostało wyciętych i można je wkleić"
+element.tree.paste-cut-multiple: "Wklej {{count}} wyciętych elementów"
+element.tree.selection.count_one: "{{count}} element zaznaczony"
+element.tree.selection.count_other: "{{count}} elementów zaznaczonych"
+element.tree.selection.clear: "Wyczyść zaznaczenie"
+element.tree.selection.limit-reached: "Osiągnięto maksimum {{limit}} elementów"
+element.tree.drag.elements_one: "{{count}} element"
+element.tree.drag.elements_other: "{{count}} elementów"
+element.tree.drag.elements-partial: "{{count}} z {{selected}} elementów"
+element.tree.move.skipped-elements_one: "1 element nie został przeniesiony: jest zablokowany lub nie masz uprawnień do jego edycji."
+element.tree.move.skipped-elements_other: "{{count}} elementów nie zostało przeniesionych: są zablokowane lub nie masz uprawnień do ich edycji."
 element.lock: Zablokuj
 element.lock-and-propagate-to-children: Zablokuj i przekaż elementom podrzędnym
 element.unlock: Odblokuj
@@ -1334,10 +1354,13 @@ element.tree.refresh: Odśwież
 element.new-folder: Nowy folder
 element.new-folder.validation: Wprowadź prawidłową nazwę
 element.rename: Zmień nazwę
+element.rename-folder: Zmień nazwę folderu
 element.rename.label: Wprowadź nową nazwę
 element.rename.validation: Wprowadź prawidłową nazwę
 element.share-via-notification: Udostępnij przez powiadomienia
 element.delete: Usuń
+element.delete-folder: Usuń folder
+element.delete-multiple: "Usuń {{count}} elementów"
 element.delete.confirmation.title: Usuń element
 element.delete.confirmation.text: Czy na pewno chcesz usunąć ten element?
 element.delete.confirmation.ok: Usuń trwale
@@ -1432,9 +1455,13 @@ relations.create-object.name: Nazwa
 relations.create-object.parent: Nadrzędny
 relations.create-object.parent.placeholder: Wybierz element nadrzędny
 relations.create-object.class: Klasa
+relations.visible-fields.loading-progress: 'Ładowanie widocznych pól… ({{loaded}} z {{total}})'
 relation: relacja
 items-limit-reached: "Osiągnięto maksymalną liczbę elementów ({{maxItems}})."
 asset-upload-type-not-allowed: Typ przesłanego assetu nie jest dozwolony dla tego pola.
+relation.drop.not-allowed-elements-skipped_one: "1 element nie został dodany: to pole nie dopuszcza tego typu."
+relation.drop.not-allowed-elements-skipped_other: "{{count}} elementów nie zostało dodanych: to pole nie dopuszcza tych typów."
+drag-and-drop.drop.single-element-only: 'Tutaj można upuścić tylko jeden element.'
 actions: Akcje
 asset: Asset
 data-object: Obiekt danych
@@ -1489,7 +1516,6 @@ tree.actions.user: Użytkownik
 tree.actions.add-folder: Nowy folder
 tree.actions.add-tag: Nowy tag
 tree.actions.delete-tag: Usuń
-tree.actions.rename-tag: Zmień nazwę
 tree.actions.role: Rola
 tree.actions.add-role: Dodaj rolę
 tree.actions.clone-role: Klonuj rolę
@@ -1501,7 +1527,6 @@ tag-configuration.name: Nazwa
 tag-configuration.parent-tag: Tag nadrzędny
 tag-configuration.create: Utwórz
 tag-configuration.save: Zapisz
-tag-configuration.rename: Zmień nazwę tagu
 tag-configuration.successful-add: Tag dodany pomyślnie
 tag-configuration.successful-update: Tag zaktualizowany pomyślnie
 tag-configuration.successful-deletion: Tag usunięty pomyślnie
@@ -2238,6 +2263,7 @@ user-menu.notification.modal.form.validation.provide-title: Podaj tytuł
 user-menu.notification.modal.form.validation.provide-message: Podaj wiadomość
 reports.reports-title: Raporty
 reports.select-report-name: Wybierz nazwę raportu
+reports.report-load-failed: Nie udało się załadować raportu.
 reports.select-report: Wybierz raport
 reports.export: Eksportuj
 reports.csv-export: Eksportuj CSV
@@ -2262,6 +2288,7 @@ reports.editor.general-settings.report-class-label: Klasa raportu
 reports.editor.general-settings.group-icon-class-label: Klasa ikony grupy
 reports.editor.general-settings.shortcut-menu-label: Utwórz skrót w menu
 reports.editor.source-definition.title: Definicja źródła
+reports.editor.source-definition.not-available: Definicja źródła tego raportu nie jest dostępna. Pakiet, który ją dostarcza, może nie być zainstalowany.
 reports.editor.source-definition.no-content: Brak dostępnych pól. Zacznij od dodania pola.
 reports.editor.source-definition.select-source-definition: Wybierz definicję źródła
 reports.editor.source-definition.sql-select-field: SELECT (np. a,b,c)*
@@ -3051,3 +3078,9 @@ saved-search.delete.success: Zapisane wyszukiwanie usunięte
 saved-search.shared-modified.info: Wprowadzono zmiany w oryginalnej konfiguracji. Ponieważ jej właścicielem jest ktoś inny, możesz zapisać ją jako nowe wyszukiwanie.
 saved-search.menu-shortcut-group: Grupa menu
 skip-to-content: Przejdź do treści
+tag-configuration.move-under: 'Przenieś pod'
+tag-configuration.move-search-placeholder: 'Wyszukaj tag'
+tree.actions.edit-tag: Edytuj
+tag-configuration.edit-tag: 'Edytuj "{{name}}"'
+tag-configuration.name-required: 'Wprowadź nazwę tagu'
+tag-configuration.move-targets-failed: 'Nie udało się wczytać listy tagów, dlatego można zmienić tylko nazwę'

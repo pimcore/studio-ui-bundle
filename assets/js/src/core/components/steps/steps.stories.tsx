@@ -129,6 +129,24 @@ export const Small = {
   }
 }
 
+// Back on an earlier step after reaching a later one: the later step is finished, and its
+// checkmark has to stay visible on the filled icon, also while hovered.
+export const SmallRevisited = {
+  args: {
+    current: 0,
+    size: 'small' as const,
+    items: [
+      {
+        title: 'Merge'
+      },
+      {
+        title: 'Finish',
+        status: 'finish' as const
+      }
+    ]
+  }
+}
+
 export const NavigationSmall = (): React.JSX.Element => {
   return (
     <div style={ { width: '900px' } }>

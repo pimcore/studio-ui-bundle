@@ -30,6 +30,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { convertColumnToAdvanced, findColumnConversion } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/convert-column-to-advanced'
 import { isSearchModeDraftColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
 import { SearchModeColumnBadge } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/search-mode-column-badge/search-mode-column-badge'
+import { type PipelineItemPosition, PipelineItemExpandProvider } from '@Pimcore/components/pipeline/provider/pipeline-item-expand/pipeline-item-expand-provider'
 
 function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
   if (element === null || element === document.documentElement) return null
@@ -49,7 +50,17 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
   items: ColumnStackListItemProps[]
 }
 
-export const GridConfigList = (): React.JSX.Element => {
+export interface GridConfigPipelineItem extends PipelineItemPosition {
+  columnId: string
+}
+
+// the sidebar offers expanding a pipeline item into the modal, which then scrolls to that item
+export interface GridConfigListProps {
+  onExpandPipelineItem?: (item: GridConfigPipelineItem) => void
+  focusedPipelineItem?: GridConfigPipelineItem
+}
+
+export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: GridConfigListProps): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -129,10 +140,15 @@ export const GridConfigList = (): React.JSX.Element => {
       ...(column.key === 'advanced'
         ? {
             body: (
-              <AdvancedColumnForm
-                column={ column }
-                onChange={ (newColumn) => { onAdvancedColumnChange(newColumn, uniqueId) } }
-              />
+              <PipelineItemExpandProvider
+                focusedItem={ focusedPipelineItem?.columnId === uniqueId ? focusedPipelineItem : undefined }
+                onExpandItem={ onExpandPipelineItem === undefined ? undefined : (position) => { onExpandPipelineItem({ ...position, columnId: uniqueId }) } }
+              >
+                <AdvancedColumnForm
+                  column={ column }
+                  onChange={ (newColumn) => { onAdvancedColumnChange(newColumn, uniqueId) } }
+                />
+              </PipelineItemExpandProvider>
             )
           }
         : {}),
@@ -163,7 +179,7 @@ export const GridConfigList = (): React.JSX.Element => {
           </Space>
           )
     }
-  }), [columns, advancedColumnTemplate, sourceFieldTypes])
+  }), [columns, advancedColumnTemplate, sourceFieldTypes, onExpandPipelineItem, focusedPipelineItem])
 
   return (
     <>

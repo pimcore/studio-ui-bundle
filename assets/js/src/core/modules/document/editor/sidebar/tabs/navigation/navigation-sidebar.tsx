@@ -10,9 +10,8 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SidebarTitle } from '@Pimcore/components/sidebar/title'
+import { Title } from '@Pimcore/components/title/title'
 import { Content } from '@sdk/components'
-import { Box } from '@Pimcore/components/box/box'
 import { usePropertiesInitialization } from '@Pimcore/modules/element/hooks/use-properties-initialization'
 import { isUndefined } from 'lodash'
 import { NavigationForm } from './navigation-form'
@@ -45,16 +44,16 @@ export const NavigationSidebar = (): React.JSX.Element => {
   const isDataReady = !isLoadingProperties && !isUndefined(propertiesData)
 
   return (
-    <Content loading={ !isDataReady }>
-      <SidebarTitle withBorder>
-        {t('navigation.sidebar-title')}
-      </SidebarTitle>
+    <Content
+      loading={ !isDataReady }
+      padded
+      padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+    >
+      <Title>{t('navigation.sidebar-title')}</Title>
 
-      <Box padding={ { x: 'extra-small', bottom: 'small' } }>
-        <NavigationForm
-          initialValues={ initialValues }
-        />
-      </Box>
+      <NavigationForm
+        initialValues={ initialValues }
+      />
     </Content>
   )
 }
