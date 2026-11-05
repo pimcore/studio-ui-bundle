@@ -49,7 +49,7 @@ const latin1PercentDecoded = (value: string): string | undefined => {
       return undefined
     }
 
-    decoded += String.fromCharCode(parseInt(escape.slice(1), 16))
+    decoded += String.fromCodePoint(Number.parseInt(escape.slice(1), 16))
     cursor += 3
   }
 
