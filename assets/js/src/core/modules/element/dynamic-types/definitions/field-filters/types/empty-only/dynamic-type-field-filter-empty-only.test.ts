@@ -85,6 +85,12 @@ describe('field filter types and the empty operator', () => {
       )
     })
 
+    it('keeps the type of a metadata column, which tells it from a system column of the same name', () => {
+      const result = type.transformOperatorFilterToApiRequest(filter({ key: 'filename', type: 'metadata.input', operator: 'empty' }))
+
+      expect(result).toEqual(expect.objectContaining({ key: 'filename', type: 'metadata.input', operator: 'empty' }))
+    })
+
     it('uses the configured filter key', () => {
       const result = type.transformOperatorFilterToApiRequest(
         filter({ meta: { translationKey: 'Category', filters: { key: 'sku_index' } } })

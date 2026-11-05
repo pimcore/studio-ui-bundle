@@ -39,8 +39,9 @@ const SYSTEM_FILTER_TYPES = new Set([SEARCH_TERM_FILTER_TYPE, 'system.pql', 'sys
 // use-data-query-helper.ts), so class-attribute field filters silently stop matching too.
 const TYPE_FILTER_KEY = 'type'
 const TYPE_FILTER_VALUE_TYPE = 'system.string'
+// A filter on the `type` column that carries an operator is a field filter like any other, not the type selection.
 const isTypeSelectEntry = (entry: ColumnFilterEntry): boolean =>
-  entry.key === TYPE_FILTER_KEY && entry.type === TYPE_FILTER_VALUE_TYPE
+  entry.key === TYPE_FILTER_KEY && entry.type === TYPE_FILTER_VALUE_TYPE && entry.operator === undefined
 
 interface ColumnFilterEntry {
   key?: string

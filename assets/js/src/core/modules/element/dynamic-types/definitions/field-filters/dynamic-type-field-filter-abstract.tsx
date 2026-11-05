@@ -64,12 +64,15 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
 
   /**
    * The request for a filter that carries an operator. It has no value, only the type (it tells text fields apart,
-   * where an empty string counts as no value as well).
+   * where an empty string counts as no value as well). The type of a metadata column stays as it is: it also tells
+   * the field from a system column of the same name.
    */
   transformOperatorFilterToApiRequest (filter: FieldFilter): FieldFilter {
+    const filterType = this.getFieldFilterType()
+
     return {
       key: filter.meta?.filters?.key ?? filter.key,
-      type: this.getFieldFilterType() !== '' ? this.getFieldFilterType() : filter.type,
+      type: filterType !== '' && !filter.type.startsWith('metadata.') ? filterType : filter.type,
       operator: filter.operator,
       locale: filter.locale,
       filterValue: null,

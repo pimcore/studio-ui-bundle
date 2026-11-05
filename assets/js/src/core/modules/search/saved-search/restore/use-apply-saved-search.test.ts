@@ -94,6 +94,21 @@ describe('useApplySavedSearch', () => {
     }))
   })
 
+  it('restores an empty / not empty filter on the `type` column as a field filter, next to the saved type selection', () => {
+    const configuration = buildConfiguration([
+      { key: 'type', type: 'system.string', operator: 'notEmpty', filterValue: null },
+      { key: 'type', type: 'system.string', filterValue: 'object' }
+    ])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setType).toHaveBeenCalledWith('object')
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({
+      fieldFilters: [expect.objectContaining({ key: 'type', operator: 'notEmpty' })]
+    }))
+  })
+
   it('resets the type select to null when no type filter was saved, so a previous search does not leak in', () => {
     const configuration = buildConfiguration([])
 
