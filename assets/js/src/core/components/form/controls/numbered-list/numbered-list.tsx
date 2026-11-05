@@ -154,7 +154,14 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     })
   }, [itemName])
 
-  const move: NumberedListData['operations']['move'] = useCallback((from, to) => {
+  const move: NumberedListData['operations']['move'] = useCallback((fromIndex, toIndex) => {
+    const from = fromIndex
+    // the destination is an index in the list after the removal, so it cannot exceed the last position
+    const to = Math.max(0, Math.min(toIndex, lengthRef.current - 1))
+    if (from === to) {
+      return
+    }
+
     addedIndexesRef.current = new Set([...addedIndexesRef.current].map((index) => {
       if (index === from) {
         return to
@@ -184,7 +191,8 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     const differsFromBaseline = !isEqual(value, baselineValue.current)
     const revertsReported = lastReportedRef.current !== null && !isEqual(value, lastReportedRef.current)
     if (differsFromBaseline || revertsReported) {
-      lastReportedRef.current = cloneDeep(value)
+      // a return to baseline is reported once; keeping its snapshot would turn a later registration into a change
+      lastReportedRef.current = differsFromBaseline ? cloneDeep(value) : null
       onChange(value)
     }
   }, [bufferedValue])

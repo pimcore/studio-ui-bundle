@@ -355,6 +355,42 @@ describe('NumberedList', () => {
       expect(onChange).toHaveBeenLastCalledWith([])
     })
 
+    it('keeps the added marker in place when the last entry is moved down', () => {
+      const onChange = jest.fn()
+      const props = { value: [], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      act(() => { operations.move(0, 1) })
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith([{ title: null }])
+    })
+
+    it('does not report a registration after an add/remove cycle', () => {
+      const onChange = jest.fn()
+      const props = { value: [{ name: 'a' }], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      flushDebounce()
+      act(() => { operations.remove(1) })
+      flushDebounce()
+      expect(onChange).toHaveBeenLastCalledWith([{ name: 'a' }])
+      onChange.mockClear()
+
+      // a loaded field registers late, before the parent echoes the value back
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
     it('forgets the added entries when the parent echoes the value back', () => {
       const onChange = jest.fn()
       const { rerender } = renderNumberedList({ value: [], onChange })
