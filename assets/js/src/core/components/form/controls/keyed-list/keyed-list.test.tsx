@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { act, render, screen } from '@testing-library/react'
 import { KeyedList, type KeyedListProps } from './keyed-list'
 import { type KeyedListData } from './provider/keyed-list/keyed-list-provider'
@@ -46,6 +46,35 @@ const RegisteringField = ({ name, initialValue }: { name: string[], initialValue
   }, [value])
 
   return null
+}
+
+// mimics dynamic-type-object-data-quantity-value's handleDefaultValue: a quantity
+// value field registers its default unit whenever the stored value is *empty*, which
+// includes a persisted NULL — not only an absent key, as RegisteringField assumes
+const DefaultUnitField = ({ name, unitId }: { name: string[], unitId: string }): null => {
+  const { operations } = useKeyedList()
+  const value = operations.getValue(name)
+
+  useEffect(() => {
+    if (value === undefined || value === null) {
+      operations.update(name, { value: null, unitId }, true)
+    }
+  }, [value])
+
+  return null
+}
+
+// mounts its children a tick later, the way the editor mounts a brick's fields once
+// their dynamic type has resolved rather than together with the list
+const DeferredMount = ({ delay, children }: { delay: number, children: React.ReactNode }): React.JSX.Element | null => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    const handler = setTimeout(() => { setMounted(true) }, delay)
+    return () => { clearTimeout(handler) }
+  }, [delay])
+
+  return mounted ? <>{children}</> : null
 }
 
 // renders the group name path the iterated children are scoped to
@@ -130,6 +159,45 @@ describe('KeyedList', () => {
 
       expect(onChange).not.toHaveBeenCalled()
       expect(operations.getValue(['attributes', 'myBrick', 'cargoCapacity'])).toEqual({ value: null, unitId: 'l' })
+    })
+
+    it('does not report a registration landing in the commit the compare debounce flushes in (PEES-1928)', () => {
+      // `length` was saved NULL/NULL and the default unit was introduced on the brick
+      // afterwards, so the unit the field registers necessarily differs from what is
+      // stored — that is what makes the baseline move at all. The brick is attached, so
+      // `initialValue` is non-empty and the empty-list guard does not apply.
+      const onChange = jest.fn()
+      const props = { value: { myBrick: { length: null, note: 'repro note' } }, onChange }
+
+      // `topSpeed` registers on mount. Before the fix that advanced baselineValue.current
+      // synchronously while the compare effect still read the `value` of that render,
+      // whose setValue had not committed yet: the baseline sat a registration ahead of
+      // the value and the list reported — harmlessly on its own, the content still equals
+      // what came in, but lastReportedRef is armed by it. The quantity value field is
+      // still resolving and mounts a tick later; its default unit only ever belongs to
+      // the baseline, yet against an armed lastReportedRef it came back out as a report
+      // carrying content nobody entered.
+      renderKeyedList(props, (
+        <>
+          <RegisteringField name={ ['attributes', 'myBrick', 'topSpeed'] } />
+          <DeferredMount delay={ 10 }>
+            <DefaultUnitField
+              name={ ['attributes', 'myBrick', 'length'] }
+              unitId="cm"
+            />
+          </DeferredMount>
+        </>
+      ))
+
+      act(() => { jest.advanceTimersByTime(10) })
+      flushDebounce()
+
+      // same contract as the mount-time case above: a residual content-equal report is
+      // tolerated, a report carrying the registered default unit is the object being
+      // marked modified without anyone touching it
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ myBrick: { length: null, note: 'repro note' } })
+      })
     })
 
     it('normalizes an empty array value to an object and stays silent on mount', () => {

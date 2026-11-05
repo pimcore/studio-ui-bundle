@@ -47,6 +47,11 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
+  // registrations whose value has not been committed yet. The baseline must never run
+  // ahead of the value: it is a ref and moves synchronously, the value is state and
+  // moves a commit later, and the compare effect in between would read the difference
+  // as something the user typed. They are applied once the value carrying them lands.
+  const pendingRegistrations = useRef<Array<{ path: string[], value: any, queuedAgainst: KeyedListData['values'] }>>([])
   const previousInitialValue = useRef(initialValue)
   // keys added through add() since the last incoming value: their field registrations (e.g. prefilled
   // defaults) are content the user brought in, not part of the loaded state, so they stay a change
@@ -77,6 +82,8 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     previousInitialValue.current = initialValue
     addedKeysRef.current.clear()
     lastReportedRef.current = null
+    // queued registrations describe the value that is being replaced
+    pendingRegistrations.current = []
 
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -134,9 +141,17 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     if (isInitialValue && !addedKeysRef.current.has(nameDifference[0])) {
-      const newBaseline = cloneDeep(baselineValue.current)
-      setWith(newBaseline, nameDifference, newSubValue, setAsObject)
-      baselineValue.current = newBaseline
+      const committed = nameDifference.length === 0 ? valueRef.current : get(valueRef.current, nameDifference)
+
+      if (isEqual(committed, newSubValue)) {
+        // the value already carries this registration, so taking it into the baseline
+        // now moves the baseline towards the value and can never get ahead of it
+        const newBaseline = cloneDeep(baselineValue.current)
+        setWith(newBaseline, nameDifference, newSubValue, setAsObject)
+        baselineValue.current = newBaseline
+      } else {
+        pendingRegistrations.current.push({ path: nameDifference, value: newSubValue, queuedAgainst: valueRef.current })
+      }
     }
 
     setValue((currentValue) => {
@@ -153,6 +168,27 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       return newValue
     })
   }, [itemName])
+
+  // Absorb the registrations the current value has caught up with. A registration is
+  // queued against the value of the commit it was made in, so a value that is still
+  // that one does not carry it yet — only once the reference has moved on is taking it
+  // into the baseline guaranteed not to put the baseline ahead. Declared above the
+  // compare effect on purpose: effects run in order, so the baseline is up to date by
+  // the time the comparison below reads it.
+  useEffect(() => {
+    const landed = pendingRegistrations.current.filter(({ queuedAgainst }) => queuedAgainst !== value)
+    if (landed.length === 0) {
+      return
+    }
+
+    pendingRegistrations.current = pendingRegistrations.current.filter(({ queuedAgainst }) => queuedAgainst === value)
+
+    const newBaseline = cloneDeep(baselineValue.current)
+    landed.forEach(({ path, value: registered }) => {
+      setWith(newBaseline, path, registered, (obj) => isUndefined(obj) ? {} : obj)
+    })
+    baselineValue.current = newBaseline
+  }, [value])
 
   // Trigger onChange when value changes, but outside of setState
   useEffect(() => {
