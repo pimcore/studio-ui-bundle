@@ -47,6 +47,16 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
   const previousInitialValue = useRef(initialValue)
+  // indexes of the entries added through add() since the last incoming value: their field registrations
+  // (null or prefilled defaults) are content the user brought in, not part of the loaded state, so they
+  // stay a change (an added entry whose fields all register null would otherwise look unchanged)
+  const addedIndexesRef = useRef<Set<number>>(new Set())
+  // current number of entries, kept in step with add() and remove() calls that are not rendered yet
+  const lengthRef = useRef(value.length)
+  lengthRef.current = value.length
+  // the last value handed to onChange since the last incoming value: reverting to the baseline after that
+  // report still has to be reported, otherwise the consumer keeps the reported state
+  const lastReportedRef = useRef<NumberedListData['values'] | null>(null)
   const { name: tempItemName } = useItem()
   const bufferedValue = useDebounce(value, 10)
 
@@ -74,6 +84,8 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     }
 
     previousInitialValue.current = initialValue
+    addedIndexesRef.current.clear()
+    lastReportedRef.current = null
 
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -81,7 +93,16 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     baselineValue.current = cloneDeep(initialValue)
   }, [baseValue])
 
+  const shiftAddedIndexes = useCallback((from: number, delta: 1 | -1): void => {
+    addedIndexesRef.current = new Set([...addedIndexesRef.current].map((index) => index >= from ? index + delta : index))
+  }, [])
+
   const add: NumberedListData['operations']['add'] = useCallback((newValue, key) => {
+    const addedKey = key ?? lengthRef.current
+    shiftAddedIndexes(addedKey, 1)
+    addedIndexesRef.current.add(addedKey)
+    lengthRef.current += 1
+
     setValue((currentValue) => {
       const currentKey = key ?? currentValue.length
       const _newValue = cloneDeep(currentValue)
@@ -91,6 +112,10 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   }, [])
 
   const remove: NumberedListData['operations']['remove'] = useCallback((key) => {
+    addedIndexesRef.current.delete(key)
+    shiftAddedIndexes(key + 1, -1)
+    lengthRef.current -= 1
+
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       newValue.splice(key, 1)
@@ -111,7 +136,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
     if (!isInitialValue) {
       onFieldChangeRef.current?.(currentSubFieldname, newSubValue)
-    } else {
+    } else if (!addedIndexesRef.current.has(Number(nameDifference[0]))) {
       const newBaseline = cloneDeep(baselineValue.current)
       set(newBaseline, nameDifference, newSubValue)
       baselineValue.current = newBaseline
@@ -140,7 +165,14 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
   // Trigger onChange when value changes, but outside of setState
   useEffect(() => {
-    if (!isEqual(value, baselineValue.current) && !isUndefined(value)) {
+    if (isUndefined(value)) {
+      return
+    }
+
+    const differsFromBaseline = !isEqual(value, baselineValue.current)
+    const revertsReported = lastReportedRef.current !== null && !isEqual(value, lastReportedRef.current)
+    if (differsFromBaseline || revertsReported) {
+      lastReportedRef.current = cloneDeep(value)
       onChange(value)
     }
   }, [bufferedValue])
