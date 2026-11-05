@@ -30,7 +30,7 @@ jest.mock('@Pimcore/components/content/content-config-provider', () => ({
   ContentConfigProvider: ({ children }: any) => <div>{children}</div>
 }))
 
-jest.mock('@Pimcore/components/split-layout/components/divider/divider', () => ({
+jest.mock('@Pimcore/components/page-layout/components/split/divider', () => ({
   Divider: () => <div data-testid="divider" />
 }))
 
