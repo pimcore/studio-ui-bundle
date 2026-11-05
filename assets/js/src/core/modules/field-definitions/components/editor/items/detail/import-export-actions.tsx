@@ -36,6 +36,31 @@ const getExportFilename = (response: Response, itemId: number | string): string 
   return isNil(match) ? `export-${String(itemId)}.json` : match[1]
 }
 
+/** The refusal the response carries, or the status-carrying message a body that is not JSON gets. */
+const getExportRefusal = async (response: Response): Promise<ApiError> => {
+  const body = await response.text()
+
+  try {
+    return new ApiError({ data: JSON.parse(body) })
+  } catch (error) {
+    return new ApiError({
+      status: 'PARSING_ERROR',
+      originalStatus: response.status,
+      data: body,
+      error: String(error)
+    })
+  }
+}
+
+/** trackError re-throws a GeneralError by design, and a click handler has nothing to catch it. */
+const reportExportFailure = (error: any): void => {
+  try {
+    trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError(error?.message as string))
+  } catch {
+    // The error surface has already been shown.
+  }
+}
+
 export interface ImportExportActionsViewProps {
   config: ImportExportConfig
   itemId: number | string | undefined
@@ -60,6 +85,7 @@ export const ImportExportActionsView = ({
   const dispatch = useAppDispatch()
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
 
   const {
     getExportUrl,
@@ -73,25 +99,30 @@ export const ImportExportActionsView = ({
   } = config
 
   const handleExport = async (): Promise<void> => {
-    if (isNil(itemId)) {
+    if (isNil(itemId) || isExporting) {
       return
     }
+
+    setIsExporting(true)
 
     try {
       const response = await fetch(getExportUrl(itemId))
 
       if (!response.ok) {
-        trackError(new ApiError({ data: await response.json() }))
+        trackError(await getExportRefusal(response))
 
         return
       }
 
       downloadFile(getExportFilename(response, itemId), await response.blob())
     } catch (error: any) {
-      trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError(error?.message as string))
+      reportExportFailure(error)
+    } finally {
+      setIsExporting(false)
     }
   }
 
+  // The one success report: the modal is told not to add its own generic one.
   const handleImportSuccess = (): void => {
     void messageApi.success(t(successMessageKey))
     setIsImportModalOpen(false)
@@ -107,13 +138,15 @@ export const ImportExportActionsView = ({
     ? getImportUrl(itemId)
     : ''
 
+  // The import's own in-flight state is the modal's: it disables its upload while it posts.
   const actions = [
-    { key: EXPORT_ACTION, icon: EXPORT_ACTION, onClick: () => { void handleExport() } },
-    { key: IMPORT_ACTION, icon: 'upload-import', onClick: () => { setIsImportModalOpen(true) } }
+    { key: EXPORT_ACTION, icon: EXPORT_ACTION, inFlight: isExporting, onClick: () => { void handleExport() } },
+    { key: IMPORT_ACTION, icon: 'upload-import', inFlight: false, onClick: () => { setIsImportModalOpen(true) } }
   ]
 
-  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, onClick }) => ({
+  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, inFlight, onClick }) => ({
     key,
+    disabled: inFlight,
     icon: <Icon value={ icon } />,
     label: t(key),
     onClick
@@ -124,10 +157,12 @@ export const ImportExportActionsView = ({
       {inline
         ? (
           <ButtonGroup
-            items={ actions.map(({ key, icon, onClick }) => (
+            items={ actions.map(({ key, icon, inFlight, onClick }) => (
               <IconTextButton
+                disabled={ inFlight }
                 icon={ { value: icon } }
                 key={ key }
+                loading={ inFlight }
                 onClick={ onClick }
                 type="link"
               >
@@ -155,6 +190,7 @@ export const ImportExportActionsView = ({
         onOpenChange={ setIsImportModalOpen }
         onUploadSuccess={ handleImportSuccess }
         open={ isImportModalOpen }
+        showSuccessMessage={ false }
         title={ t(importModalTitleKey) }
         uploadButtonLabel={ t(IMPORT_ACTION) }
         validateFile={ validateFile }

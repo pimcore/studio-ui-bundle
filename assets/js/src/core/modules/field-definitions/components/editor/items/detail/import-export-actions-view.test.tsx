@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
@@ -20,6 +22,9 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 const ITEM_ID = 7
 const EXPORT_URL = `/export/${ITEM_ID}`
+const EXPORT_LABEL = 'export'
+const IMPORT_LABEL = 'import'
+const IMPORT_MODAL = 'import-modal'
 const SERVER_FILENAME = 'classification-store-7-export.json'
 const REFUSAL = 'Store 7 carries no identifier, so it cannot be exported.'
 
@@ -60,21 +65,34 @@ jest.mock('@Pimcore/modules/app/utils/download', () => ({
 
 // The real error classes are kept - what the error surface shows is what getContent() returns -
 // but they are taken from their own modules, because the index imports the handler it exports.
-jest.mock('@Pimcore/modules/app/error-handler', () => ({
-  __esModule: true,
-  default: (error: unknown) => trackError(error),
-  ApiError: jest.requireActual('@Pimcore/modules/app/error-handler/classes/api-error').default,
-  GeneralError: jest.requireActual('@Pimcore/modules/app/error-handler/classes/general-error').default,
-  isApiErrorData: jest.requireActual('@Pimcore/modules/app/error-handler/classes/api-error').isApiErrorData
-}))
+// The stub also keeps the handler's contract of re-throwing a GeneralError after showing it.
+jest.mock('@Pimcore/modules/app/error-handler', () => {
+  const apiErrorModule = jest.requireActual('@Pimcore/modules/app/error-handler/classes/api-error')
+  const generalError = jest.requireActual('@Pimcore/modules/app/error-handler/classes/general-error').default
 
-// The real modal pulls antd's untranspiled ESM and an axios upload; only the success callback
-// and whether the modal is open matter here.
+  return {
+    __esModule: true,
+    default: (error: unknown) => {
+      trackError(error)
+
+      if (error instanceof generalError) {
+        throw new Error('re-thrown by trackError')
+      }
+    },
+    ApiError: apiErrorModule.default,
+    GeneralError: generalError,
+    isApiErrorData: apiErrorModule.isApiErrorData
+  }
+})
+
+// The real modal pulls antd's untranspiled ESM and an axios upload; only the success callback,
+// whether the modal is open and whether it reports success itself matter here.
 jest.mock('@Pimcore/components/import-modal/import-modal', () => ({
-  ImportModal: ({ onUploadSuccess, open, title }: any) => (
+  ImportModal: ({ onUploadSuccess, open, showSuccessMessage, title }: any) => (
     <button
       data-open={ String(open) }
-      data-testid="import-modal"
+      data-show-success-message={ String(showSuccessMessage) }
+      data-testid={ IMPORT_MODAL }
       data-title={ title }
       onClick={ () => { onUploadSuccess(report) } }
     >
@@ -87,7 +105,15 @@ jest.mock('@sdk/components', () => ({
   ButtonGroup: ({ items }: any) => <div>{items}</div>,
   Dropdown: ({ children }: any) => <div>{children}</div>,
   Icon: ({ value }: any) => <i>{value}</i>,
-  IconTextButton: ({ children, onClick }: any) => <button onClick={ onClick }>{children}</button>,
+  IconTextButton: ({ children, disabled, loading, onClick }: any) => (
+    <button
+      data-loading={ String(loading) }
+      disabled={ disabled }
+      onClick={ onClick }
+    >
+      {children}
+    </button>
+  ),
   useMessage: () => ({ success })
 }))
 
@@ -97,6 +123,7 @@ jest.mock('react-i18next', () => ({
 
 const { ImportExportActionsView } = jest.requireActual('./import-export-actions')
 const { default: ApiError } = jest.requireActual('@Pimcore/modules/app/error-handler/classes/api-error')
+const { default: GeneralError } = jest.requireActual('@Pimcore/modules/app/error-handler/classes/general-error')
 
 // Every count the report carries, so none of them can reach the screen unnoticed.
 const report = {
@@ -122,7 +149,7 @@ const respondWith = (body: BodyInit, init: ResponseInit): void => {
   globalThis.fetch = jest.fn(async () => new Response(body, init)) as unknown as typeof fetch
 }
 
-const exportIsTriggered = async (): Promise<void> => {
+const renderActions = (): void => {
   render(
     <ImportExportActionsView
       config={ config }
@@ -130,8 +157,12 @@ const exportIsTriggered = async (): Promise<void> => {
       itemId={ ITEM_ID }
     />
   )
+}
 
-  fireEvent.click(screen.getByText('export'))
+const exportIsTriggered = async (): Promise<void> => {
+  renderActions()
+
+  fireEvent.click(screen.getByText(EXPORT_LABEL))
 
   await waitFor(() => { expect(globalThis.fetch).toHaveBeenCalledWith(EXPORT_URL) })
 }
@@ -151,16 +182,10 @@ describe('import export actions view', () => {
   })
 
   it('offers both actions without a dropdown to hunt through', () => {
-    render(
-      <ImportExportActionsView
-        config={ config }
-        inline
-        itemId={ ITEM_ID }
-      />
-    )
+    renderActions()
 
-    expect(screen.getByText('export')).toBeInTheDocument()
-    expect(screen.getByText('import')).toBeInTheDocument()
+    expect(screen.getByText(EXPORT_LABEL)).toBeInTheDocument()
+    expect(screen.getByText(IMPORT_LABEL)).toBeInTheDocument()
   })
 
   it('saves the export under the name the response asks for', async () => {
@@ -199,22 +224,85 @@ describe('import export actions view', () => {
     expect(downloadFile).not.toHaveBeenCalled()
   })
 
+  it('reports a refusal whose body is not JSON as the status it came with', async () => {
+    respondWith('<!DOCTYPE html><html lang="en"><body>Bad gateway</body></html>', {
+      status: 502,
+      headers: { 'Content-Type': 'text/html' }
+    })
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(trackError).toHaveBeenCalled() })
+
+    const error = trackError.mock.calls[0][0]
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.getContent()).toStrictEqual({
+      errorKey: 'error_response_not_json_with_status',
+      params: { status: 502 }
+    })
+    expect(downloadFile).not.toHaveBeenCalled()
+  })
+
+  it('reports a request that never answered without rejecting the click', async () => {
+    const rejections: unknown[] = []
+    const record = (reason: unknown): void => { rejections.push(reason) }
+
+    process.on('unhandledRejection', record)
+    globalThis.fetch = jest.fn(async () => { throw new TypeError('Failed to fetch') }) as unknown as typeof fetch
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(trackError).toHaveBeenCalled() })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    process.off('unhandledRejection', record)
+
+    expect(trackError.mock.calls[0][0]).toBeInstanceOf(GeneralError)
+    expect(rejections).toStrictEqual([])
+  })
+
+  it('refuses a second export while the first one is still running', async () => {
+    let answer = (): void => {}
+
+    globalThis.fetch = jest.fn(async () => await new Promise<Response>((resolve) => {
+      answer = () => { resolve(new Response('{}', { status: 200 })) }
+    })) as unknown as typeof fetch
+
+    renderActions()
+
+    const exportAction = screen.getByText(EXPORT_LABEL)
+
+    fireEvent.click(exportAction)
+
+    await waitFor(() => { expect(exportAction).toBeDisabled() })
+
+    expect(exportAction).toHaveAttribute('data-loading', 'true')
+
+    fireEvent.click(exportAction)
+    answer()
+
+    await waitFor(() => { expect(downloadFile).toHaveBeenCalledTimes(1) })
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1)
+  })
+
   it('reports a successful import with the static message and nothing of the report', () => {
-    render(
-      <ImportExportActionsView
-        config={ config }
-        inline
-        itemId={ ITEM_ID }
-      />
-    )
+    renderActions()
 
-    fireEvent.click(screen.getByTestId('import-modal'))
+    fireEvent.click(screen.getByTestId(IMPORT_MODAL))
 
+    expect(success).toHaveBeenCalledTimes(1)
     expect(success).toHaveBeenCalledWith('classification-store.import-success')
-    expect(screen.getByTestId('import-modal')).toHaveAttribute('data-open', 'false')
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-open', 'false')
 
     Object.values(report)
       .filter((count) => typeof count === 'number')
       .forEach((count) => { expect(screen.queryByText(String(count))).not.toBeInTheDocument() })
+  })
+
+  it('leaves the modal no second success message to report', () => {
+    renderActions()
+
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-show-success-message', 'false')
   })
 })
