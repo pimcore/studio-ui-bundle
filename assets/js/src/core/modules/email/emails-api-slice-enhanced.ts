@@ -61,7 +61,7 @@ export const api = baseApi.enhanceEndpoints({
   }
 }).injectEndpoints({
   endpoints: (build) => ({
-    emailLogSearch: build.query<EmailLogGetCollectionApiResponse, EmailLogSearchApiArg>({
+    emailLogSearchList: build.query<EmailLogGetCollectionApiResponse, EmailLogSearchApiArg>({
       query: ({ page, pageSize, email }) => ({
         url: `${getPrefix()}/emails/search`,
         method: 'POST',
@@ -76,6 +76,12 @@ export const api = baseApi.enhanceEndpoints({
       providesTags: providingTags.EMAIL_LOG()
     })
   }),
+  // Named apart from the generated `emailLogSearch` on purpose. The backend
+  // exposes the search as POST, which the generator renders as a mutation,
+  // and the log view needs query semantics over it: cached results, `skip`
+  // while the search box is empty, and isLoading/isFetching. Reusing the
+  // generated name only collides — the hand-written query is discarded and
+  // the hook resolves to the mutation's types.
   overrideExisting: false
 })
 
@@ -85,7 +91,7 @@ export const {
   useEmailBlocklistAddMutation,
   useEmailBlocklistDeleteMutation,
   useEmailLogGetCollectionQuery,
-  useEmailLogSearchQuery,
+  useEmailLogSearchListQuery,
   useEmailLogGetByIdQuery,
   useEmailLogDeleteMutation,
   useEmailLogGetHtmlQuery,

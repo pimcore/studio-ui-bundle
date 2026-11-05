@@ -691,6 +691,8 @@ export type DataObject = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes: CustomAttributes;
+    /** Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search */
+    score?: number | null;
     /** Key */
     key: string;
     /** Class name */
