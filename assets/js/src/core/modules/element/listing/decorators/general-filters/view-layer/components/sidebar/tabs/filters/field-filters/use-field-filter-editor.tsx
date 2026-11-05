@@ -24,22 +24,7 @@ import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dyn
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { useFilterableColumns } from '../../../../../../search-modes/use-filterable-columns'
 import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
-
-const toFieldFilterType = (type: unknown): DynamicTypeFieldFilterAbstract | null => {
-  if (type === null || type === undefined) {
-    return null
-  }
-
-  if (type instanceof DynamicTypeFieldFilterAbstract) {
-    return type
-  }
-
-  if (typeof type === 'object' && 'dynamicTypeFieldFilterType' in type) {
-    return type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-  }
-
-  return null
-}
+import { toFieldFilterType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/to-field-filter-type'
 
 export interface UseFieldFilterEditorProps {
   /**

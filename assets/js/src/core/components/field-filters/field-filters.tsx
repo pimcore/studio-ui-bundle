@@ -22,7 +22,7 @@ import { Select } from '../select/select'
 import { type FilterOperator } from '../dynamic-filter/filter-operator'
 import { useEmptyFilterSupport } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/empty-filter-support'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
+import { toFieldFilterType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/to-field-filter-type'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -94,9 +94,9 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
       return { empty: false, value: true }
     }
 
-    const fieldFilterType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [filter.type, filter.frontendType ?? ''] })
+    const fieldFilterType = toFieldFilterType(getType({ target: 'FIELD_FILTER', dynamicTypeIds: [filter.type, filter.frontendType ?? ''] }))
 
-    if (!(fieldFilterType instanceof DynamicTypeFieldFilterAbstract)) {
+    if (fieldFilterType === null) {
       return { empty: false, value: true }
     }
 

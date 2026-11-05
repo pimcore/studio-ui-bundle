@@ -175,6 +175,23 @@ describe('FieldFilters operator', () => {
     expect(screen.getByTestId('value-filter')).toBeTruthy()
   })
 
+  it('offers the operator for a field whose filter type comes wrapped, e.g. asset metadata', () => {
+    mockGetType.mockReturnValue({ dynamicTypeFieldFilterType: new ValueFilterType() })
+
+    renderFilters([filter({ type: 'metadata.input', frontendType: 'input' })], true)
+
+    expect(screen.getByRole('combobox')).toBeTruthy()
+    expect(screen.getByTestId('value-filter')).toBeTruthy()
+  })
+
+  it('does not offer the operator for a wrapped filter type that cannot be searched for no value', () => {
+    mockGetType.mockReturnValue({ dynamicTypeFieldFilterType: new NoEmptyFilterType() })
+
+    renderFilters([filter({ type: 'metadata.input' })], true)
+
+    expect(screen.queryByRole('combobox')).toBeNull()
+  })
+
   it('does not offer the operator for a filter type it cannot resolve', () => {
     mockGetType.mockReturnValue(null)
 
