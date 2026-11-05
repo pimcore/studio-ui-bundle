@@ -2228,6 +2228,8 @@ classification-store.sub-group-unused: "Nessuna chiave di questo gruppo usa più
 classification-store.assign-sub-group-progress: "Assegnazione del sottogruppo a {{done}} di {{total}} chiavi…"
 classification-store.assign-sub-group-failed: "Non è stato possibile assegnare il sottogruppo a: {{keyNames}}"
 classification-store.assign-sub-group-running: Attendere il termine dell'assegnazione del sottogruppo
+classification-store.import: Importa la configurazione dello store
+classification-store.import-success: Configurazione dello store importata correttamente
 home: Home
 preview.label: Anteprima
 preview.desktop: Desktop

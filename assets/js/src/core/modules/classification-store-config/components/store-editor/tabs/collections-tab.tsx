@@ -42,6 +42,7 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { CollectionGroupRelationsGrid } from './collections/collection-group-relations-grid'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
+import { useStoreImport } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
 
 interface ICollectionsTabProps {
   storeId: number
@@ -122,6 +123,18 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
       description: activeCollection?.description ?? ''
     })
   }, [activeCollection?.id])
+
+  // An import rewrites names and descriptions under the selection, and the sync above only runs
+  // when the selected ID changes — so the form would keep the pre-import values and the next edit
+  // would write them back. Drop the selection: the form clears, and re-selecting reads the
+  // refreshed row.
+  const { importCount } = useStoreImport()
+
+  useEffect(() => {
+    if (importCount === 0) return
+
+    setSelectedRows({})
+  }, [importCount])
 
   const handleDetailChange = useCallback((changedValues: Partial<ICollectionDetailFormValues>) => {
     const collection = activeCollectionRef.current

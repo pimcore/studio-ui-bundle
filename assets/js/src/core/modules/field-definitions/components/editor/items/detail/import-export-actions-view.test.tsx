@@ -1,0 +1,430 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+/* eslint-disable max-lines */
+
+import React from 'react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+
+/**
+ * The presentational half of the shared actions, which a configuration screen that is not a
+ * field-definitions Editor renders directly. Export fetches the artifact instead of navigating
+ * an anchor, so the name the response asks for is the name the file is saved under, and a
+ * refusal reaches the shared error surface rather than a browser error page.
+ */
+
+const ITEM_ID = 7
+const EXPORT_URL = `/export/${ITEM_ID}`
+const EXPORT_LABEL = 'export'
+const IMPORT_LABEL = 'import'
+const IMPORT_MODAL = 'import-modal'
+const SERVER_FILENAME = 'classification-store-7-export.json'
+const REFUSAL = 'Store 7 carries no identifier, so it cannot be exported.'
+
+const dispatch = jest.fn()
+const downloadFile = jest.fn()
+const trackError = jest.fn()
+const success = jest.fn()
+
+// antd-style ships untranspiled ESM, which jest does not transform.
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
+  createStyles: () => () => ({ styles: {}, cx: () => '', theme: {} }),
+  css: () => '',
+  cx: () => '',
+  keyframes: () => ''
+}))
+
+jest.mock('@Pimcore/app/store', () => ({
+  useAppDispatch: () => dispatch
+}))
+
+// The three Editor contexts the adapter reads: stubbed away because their providers drag the
+// whole app in, and the extracted view is precisely the half that does without them.
+jest.mock('@Pimcore/modules/field-definitions/components/editor/settings-provider', () => ({
+  useSettings: () => ({})
+}))
+
+jest.mock('@Pimcore/modules/field-definitions/components/editor/items/provider', () => ({
+  useItems: () => ({})
+}))
+
+jest.mock('@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider', () => ({
+  useRefresh: () => ({ refreshLayout: jest.fn() })
+}))
+
+jest.mock('@Pimcore/modules/app/utils/download', () => ({
+  downloadFile: (...args: unknown[]) => downloadFile(...args)
+}))
+
+// The real error classes are kept - what the error surface shows is what getContent() returns -
+// but they are taken from their own modules, because the index imports the handler it exports.
+// The stub also keeps the handler's contract of re-throwing a GeneralError after showing it.
+jest.mock('@Pimcore/modules/app/error-handler', () => {
+  const apiErrorModule = jest.requireActual('@Pimcore/modules/app/error-handler/classes/api-error')
+  const generalError = jest.requireActual('@Pimcore/modules/app/error-handler/classes/general-error').default
+
+  return {
+    __esModule: true,
+    default: (error: unknown) => {
+      trackError(error)
+
+      if (error instanceof generalError) {
+        throw new Error('re-thrown by trackError')
+      }
+    },
+    ApiError: apiErrorModule.default,
+    GeneralError: generalError,
+    isApiErrorData: apiErrorModule.isApiErrorData
+  }
+})
+
+// The real modal pulls antd's untranspiled ESM and an axios upload; only the success callback,
+// whether the modal is open and whether it reports success itself matter here.
+jest.mock('@Pimcore/components/import-modal/import-modal', () => ({
+  ImportModal: ({ onUploadSuccess, open, showSuccessMessage, title }: any) => (
+    <button
+      data-open={ String(open) }
+      data-show-success-message={ String(showSuccessMessage) }
+      data-testid={ IMPORT_MODAL }
+      data-title={ title }
+      onClick={ () => { onUploadSuccess(report) } }
+    >
+      upload
+    </button>
+  )
+}))
+
+jest.mock('@sdk/components', () => ({
+  ButtonGroup: ({ items }: any) => <div>{items}</div>,
+  Dropdown: ({ children }: any) => <div>{children}</div>,
+  Icon: ({ value }: any) => <i>{value}</i>,
+  IconTextButton: ({ children, disabled, loading, onClick }: any) => (
+    <button
+      data-loading={ String(loading) }
+      disabled={ disabled }
+      onClick={ onClick }
+    >
+      {children}
+    </button>
+  ),
+  useMessage: () => ({ success })
+}))
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key })
+}))
+
+const { ImportExportActionsView } = jest.requireActual('./import-export-actions')
+const { default: ApiError } = jest.requireActual('@Pimcore/modules/app/error-handler/classes/api-error')
+const { default: GeneralError } = jest.requireActual('@Pimcore/modules/app/error-handler/classes/general-error')
+
+// Every count the report carries, so none of them can reach the screen unnoticed.
+const report = {
+  created: 11,
+  updated: 12,
+  adopted: 13,
+  matchedUnchanged: 14,
+  targetOnly: 15,
+  createdEntries: [],
+  updatedEntries: [],
+  adoptedEntries: [],
+  targetOnlyEntries: [],
+  conflicts: []
+}
+
+const config = {
+  getExportUrl: () => EXPORT_URL,
+  getImportUrl: (id: number) => `/import/${id}`,
+  successMessageKey: 'classification-store.import-success'
+}
+
+const respondWith = (body: BodyInit, init: ResponseInit): void => {
+  globalThis.fetch = jest.fn(async () => new Response(body, init)) as unknown as typeof fetch
+}
+
+const renderActions = (extraActions?: unknown[]): void => {
+  render(
+    <ImportExportActionsView
+      config={ config }
+      extraActions={ extraActions }
+      inline
+      itemId={ ITEM_ID }
+    />
+  )
+}
+
+const exportIsTriggered = async (): Promise<void> => {
+  renderActions()
+
+  fireEvent.click(screen.getByText(EXPORT_LABEL))
+
+  await waitFor(() => { expect(globalThis.fetch).toHaveBeenCalledWith(EXPORT_URL) })
+}
+
+describe('import export actions view', () => {
+  const originalFetch = globalThis.fetch
+
+  beforeEach(() => {
+    dispatch.mockClear()
+    downloadFile.mockClear()
+    trackError.mockClear()
+    success.mockClear()
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('offers both actions without a dropdown to hunt through', () => {
+    renderActions()
+
+    expect(screen.getByText(EXPORT_LABEL)).toBeInTheDocument()
+    expect(screen.getByText(IMPORT_LABEL)).toBeInTheDocument()
+  })
+
+  it('saves the export under the name the response asks for', async () => {
+    respondWith('{}', {
+      status: 200,
+      headers: { 'Content-Disposition': `attachment; filename="${SERVER_FILENAME}"` }
+    })
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(downloadFile).toHaveBeenCalledWith(SERVER_FILENAME, expect.anything()) })
+  })
+
+  it('still downloads under a deterministic name when the response names none', async () => {
+    respondWith('{}', { status: 200 })
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(downloadFile).toHaveBeenCalledWith(`export-${ITEM_ID}.json`, expect.anything()) })
+  })
+
+  // RFC 6266: `filename*` carries the real name and wins wherever it sits in the header, its
+  // percent-encoding is decoded, and a quoted name runs to its closing quote rather than to the
+  // first semicolon inside it. A header that names nothing usable still falls back.
+  it.each([
+    {
+      form: 'a percent-encoded filename*',
+      header: "attachment; filename*=UTF-8''Gr%C3%B6%C3%9Fen%20export.json",
+      saved: 'Größen export.json'
+    },
+    {
+      form: 'a filename* that follows the ASCII fallback',
+      header: 'attachment; filename="groessen-export.json"; filename*=UTF-8\'\'Gr%C3%B6%C3%9Fen.json',
+      saved: 'Größen.json'
+    },
+    {
+      form: 'a filename* that precedes the ASCII fallback',
+      header: 'attachment; filename*=UTF-8\'\'Gr%C3%B6%C3%9Fen.json; filename="groessen-export.json"',
+      saved: 'Größen.json'
+    },
+    {
+      // RFC 6266 allows whitespace on either side of the `=`, so this pins that the parameter
+      // name is still recognised once it is trimmed and the value still starts after the gap.
+      form: 'a filename* spaced out around its equals sign',
+      header: "attachment; filename* =  UTF-8''Gr%C3%B6%C3%9Fen.json",
+      saved: 'Größen.json'
+    },
+    {
+      // The parameter name is the whole token in front of the `=`, so a longer name that merely
+      // ends in `filename` is a different parameter and never supplies the download name.
+      form: 'another parameter whose name ends in filename',
+      header: 'attachment; x-filename="wrong.json"; filename="store-7.json"',
+      saved: 'store-7.json'
+    },
+    {
+      // A quoted value is consumed whole, so the `filename*=` sitting inside it is part of the
+      // name rather than a parameter of its own, and the real filename* after it still wins.
+      form: 'a quoted name holding what looks like a filename*',
+      header: 'attachment; filename="sales; filename*=UTF-8\'\'Q4.json"; filename*=UTF-8\'\'correct.json',
+      saved: 'correct.json'
+    },
+    {
+      form: 'a quoted name holding what looks like a filename* and no real one',
+      header: 'attachment; filename="sales; filename*=UTF-8\'\'Q4.json"',
+      saved: "sales; filename*=UTF-8''Q4.json"
+    },
+    {
+      form: 'a quoted name holding a semicolon',
+      header: 'attachment; filename="store 7; groups.json"',
+      saved: 'store 7; groups.json'
+    },
+    {
+      form: 'a quoted name holding an escaped quote',
+      header: 'attachment; filename="store \\"7\\".json"',
+      saved: 'store "7".json'
+    },
+    {
+      form: 'an unquoted name',
+      header: 'attachment; filename=store-7.json',
+      saved: 'store-7.json'
+    },
+    {
+      form: 'a name carrying a path',
+      header: 'attachment; filename="../../etc/store-7.json"',
+      saved: 'store-7.json'
+    },
+    {
+      // RFC 6266 takes its extended form from RFC 5987, which allows ISO-8859-1 as well as UTF-8,
+      // and `%E9` is `é` there while it is not valid UTF-8 at all — so decoding has to follow the
+      // declared charset rather than assume one.
+      form: 'a filename* declaring ISO-8859-1',
+      header: "attachment; filename*=ISO-8859-1''caf%E9.json",
+      saved: 'café.json'
+    },
+    {
+      form: 'a filename* declaring ISO-8859-1 in lower case beside an ASCII fallback',
+      header: 'attachment; filename="cafe.json"; filename*=iso-8859-1\'\'caf%E9.json',
+      saved: 'café.json'
+    },
+    {
+      // A charset this parser cannot decode is not guessed at: the plain name is used instead.
+      form: 'a filename* declaring a charset that cannot be decoded',
+      header: "attachment; filename*=Shift_JIS''%83t%83%40%83C%83%8B.json; filename=\"store-7.json\"",
+      saved: 'store-7.json'
+    },
+    {
+      form: 'a filename* whose percent-encoding is broken',
+      header: "attachment; filename*=UTF-8''%E0%A4%A; filename=\"store-7.json\"",
+      saved: 'store-7.json'
+    },
+    {
+      // The same truncated escape under ISO-8859-1, where decoding is by byte and so has its own
+      // rejection path rather than decodeURIComponent's.
+      form: 'an ISO-8859-1 filename* whose percent-encoding is truncated',
+      header: 'attachment; filename*=ISO-8859-1\'\'caf%E; filename="store-7.json"',
+      saved: 'store-7.json'
+    },
+    {
+      form: 'a header naming nothing usable',
+      header: 'attachment; filename=""',
+      saved: `export-${ITEM_ID}.json`
+    }
+  ])('saves the export under the right name given $form', async ({ header, saved }) => {
+    respondWith('{}', { status: 200, headers: { 'Content-Disposition': header } })
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(downloadFile).toHaveBeenCalledWith(saved, expect.anything()) })
+  })
+
+  it('offers a surface its own further actions beside export and import', () => {
+    const onClick = jest.fn()
+
+    renderActions([{ key: 'delete', icon: 'trash', label: 'delete', onClick }])
+
+    fireEvent.click(screen.getByText('delete'))
+
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(screen.getByText(EXPORT_LABEL)).toBeInTheDocument()
+    expect(screen.getByText(IMPORT_LABEL)).toBeInTheDocument()
+  })
+
+  it('shows a refused export through the shared error surface and downloads nothing', async () => {
+    respondWith(JSON.stringify({ message: REFUSAL }), {
+      status: 409,
+      headers: { 'Content-Type': 'application/json' }
+    })
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(trackError).toHaveBeenCalled() })
+
+    const error = trackError.mock.calls[0][0]
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.getContent()).toBe(REFUSAL)
+    expect(downloadFile).not.toHaveBeenCalled()
+  })
+
+  it('reports a refusal whose body is not JSON as the status it came with', async () => {
+    respondWith('<!DOCTYPE html><html lang="en"><body>Bad gateway</body></html>', {
+      status: 502,
+      headers: { 'Content-Type': 'text/html' }
+    })
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(trackError).toHaveBeenCalled() })
+
+    const error = trackError.mock.calls[0][0]
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.getContent()).toStrictEqual({
+      errorKey: 'error_response_not_json_with_status',
+      params: { status: 502 }
+    })
+    expect(downloadFile).not.toHaveBeenCalled()
+  })
+
+  it('reports a request that never answered without rejecting the click', async () => {
+    const rejections: unknown[] = []
+    const record = (reason: unknown): void => { rejections.push(reason) }
+
+    process.on('unhandledRejection', record)
+    globalThis.fetch = jest.fn(async () => { throw new TypeError('Failed to fetch') }) as unknown as typeof fetch
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(trackError).toHaveBeenCalled() })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    process.off('unhandledRejection', record)
+
+    expect(trackError.mock.calls[0][0]).toBeInstanceOf(GeneralError)
+    expect(rejections).toStrictEqual([])
+  })
+
+  it('refuses a second export while the first one is still running', async () => {
+    let answer = (): void => {}
+
+    globalThis.fetch = jest.fn(async () => await new Promise<Response>((resolve) => {
+      answer = () => { resolve(new Response('{}', { status: 200 })) }
+    })) as unknown as typeof fetch
+
+    renderActions()
+
+    const exportAction = screen.getByText(EXPORT_LABEL)
+
+    fireEvent.click(exportAction)
+
+    await waitFor(() => { expect(exportAction).toBeDisabled() })
+
+    expect(exportAction).toHaveAttribute('data-loading', 'true')
+
+    fireEvent.click(exportAction)
+    answer()
+
+    await waitFor(() => { expect(downloadFile).toHaveBeenCalledTimes(1) })
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('reports a successful import with the static message and nothing of the report', () => {
+    renderActions()
+
+    fireEvent.click(screen.getByTestId(IMPORT_MODAL))
+
+    expect(success).toHaveBeenCalledTimes(1)
+    expect(success).toHaveBeenCalledWith('classification-store.import-success')
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-open', 'false')
+
+    Object.values(report)
+      .filter((count) => typeof count === 'number')
+      .forEach((count) => { expect(screen.queryByText(String(count))).not.toBeInTheDocument() })
+  })
+
+  it('leaves the modal no second success message to report', () => {
+    renderActions()
+
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-show-success-message', 'false')
+  })
+})

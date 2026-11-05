@@ -36,6 +36,21 @@ describe('ApiErrorViewUI', () => {
     expect(t).not.toHaveBeenCalled()
   })
 
+  // A body carrying only `message` reaches the view as a bare string, and that string is still
+  // the server's composition of names and entered values — markup in it is data, not markup.
+  it('renders a server message that arrived as a bare string as text, not as markup', () => {
+    const message = 'The file describes store "<b>Technical</b>" and this is store "Marketing".'
+    const content = new ApiError({ data: { message } }).getContent()
+
+    expect(content).toBe(message)
+
+    const { container } = render(<ApiErrorViewUI errorContent={ content } />)
+
+    expect(container.textContent).toBe(message)
+    expect(container.querySelector('b')).toBeNull()
+    expect(t).not.toHaveBeenCalled()
+  })
+
   it('renders a translated error key as sanitized HTML', () => {
     const { container } = render(<ApiErrorViewUI errorContent={ { errorKey: 'error_permission_denied' } } />)
 

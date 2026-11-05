@@ -2228,6 +2228,8 @@ classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker und
 classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
 classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
 classification-store.assign-sub-group-running: Vent til tilknytningen av undergruppen er ferdig
+classification-store.import: Importer store-konfigurasjon
+classification-store.import-success: Store-konfigurasjonen ble importert
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord

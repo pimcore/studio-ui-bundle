@@ -41,6 +41,7 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { KeyGroupRelationsGrid } from './groups/key-group-relations-grid'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
+import { useStoreImport } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
 
 interface IGroupsTabProps {
   storeId: number
@@ -130,6 +131,18 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
       description: activeGroup?.description ?? ''
     })
   }, [activeGroup?.id])
+
+  // An import rewrites names and descriptions under the selection, and the sync above only runs
+  // when the selected ID changes — so the form would keep the pre-import values and the next edit
+  // would write them back. Drop the selection: the form clears, and re-selecting reads the
+  // refreshed row.
+  const { importCount } = useStoreImport()
+
+  useEffect(() => {
+    if (importCount === 0) return
+
+    setSelectedRows({})
+  }, [importCount])
 
   const handleDetailChange = useCallback((changedValues: Partial<IGroupDetailFormValues>) => {
     const group = activeGroupRef.current

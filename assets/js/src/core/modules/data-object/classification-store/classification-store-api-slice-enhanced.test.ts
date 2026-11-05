@@ -17,6 +17,7 @@
  */
 
 import { configureStore } from '@reduxjs/toolkit'
+import { waitFor } from '@testing-library/react'
 import { api } from './classification-store-api-slice-enhanced'
 
 const STORE_ID = 1
@@ -346,5 +347,54 @@ describe('classification store key-group relation upsert cache patch', () => {
       keyName: 'colour',
       subGroup: 'electrical'
     }))
+  })
+})
+
+/**
+ * A store import posts its file outside RTK Query, so the editor invalidates the tag by hand.
+ * The four tab collections provide it, which is what makes the applied configuration show up
+ * without the store being closed and reopened.
+ */
+describe('invalidating the classification store tag', () => {
+  const originalFetch = globalThis.fetch
+
+  const collectionEndpoints = [
+    'classificationStoreConfigurationKeyCollection',
+    'classificationStoreConfigurationGroupCollection',
+    'classificationStoreConfigurationCollectionCollection',
+    'classificationStoreConfigurationSubGroupCollection'
+  ]
+
+  const requestedUrls = (): string[] => (globalThis.fetch as jest.Mock).mock.calls.map(([request]) => request.url)
+
+  beforeEach(() => {
+    globalThis.fetch = jest.fn(async () => new Response(JSON.stringify({ items: [], totalItems: 0 }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    })) as unknown as typeof fetch
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('refetches the keys, groups, collections and sub groups of the store', async () => {
+    const store = createStore()
+
+    for (const endpointName of collectionEndpoints) {
+      await store.dispatch((api.endpoints as any)[endpointName].initiate(queryArgs))
+    }
+
+    const before = requestedUrls()
+
+    expect(before).toHaveLength(collectionEndpoints.length)
+
+    store.dispatch(api.util.invalidateTags(['Classification Store']))
+    await waitFor(() => { expect(requestedUrls()).toHaveLength(before.length * 2) })
+
+    const after = requestedUrls()
+
+
+    before.forEach((url) => { expect(after.filter((requested) => requested === url)).toHaveLength(2) })
   })
 })

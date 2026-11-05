@@ -2228,6 +2228,8 @@ classification-store.sub-group-unused: "Aucune clé de ce groupe n'utilise plus 
 classification-store.assign-sub-group-progress: "Affectation du sous-groupe à {{done}} clé(s) sur {{total}}…"
 classification-store.assign-sub-group-failed: "Le sous-groupe n'a pas pu être affecté à : {{keyNames}}"
 classification-store.assign-sub-group-running: Attendez la fin de l'affectation du sous-groupe
+classification-store.import: Importer la configuration du store
+classification-store.import-success: Configuration du store importée avec succès
 home: Accueil
 preview.label: Aperçu
 preview.desktop: Bureau

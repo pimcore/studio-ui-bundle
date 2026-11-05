@@ -2232,6 +2232,8 @@ classification-store.sub-group-unused: "No key of this group uses sub group \"{{
 classification-store.assign-sub-group-progress: "Assigning the sub group to {{done}} of {{total}} keys…"
 classification-store.assign-sub-group-failed: "The sub group could not be assigned to: {{keyNames}}"
 classification-store.assign-sub-group-running: Wait for the sub group assignment to finish
+classification-store.import: Import store configuration
+classification-store.import-success: Store configuration imported successfully
 home: Home
 preview.label: Preview
 preview.desktop: Desktop

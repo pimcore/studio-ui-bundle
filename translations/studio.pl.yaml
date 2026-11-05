@@ -2228,6 +2228,8 @@ classification-store.sub-group-unused: "Żaden klucz tej grupy nie używa już p
 classification-store.assign-sub-group-progress: "Przypisywanie podgrupy do {{done}} z {{total}} kluczy…"
 classification-store.assign-sub-group-failed: "Nie udało się przypisać podgrupy do: {{keyNames}}"
 classification-store.assign-sub-group-running: Poczekaj na zakończenie przypisywania podgrupy
+classification-store.import: Importuj konfigurację store
+classification-store.import-success: Konfiguracja store została zaimportowana
 home: Strona główna
 preview.label: Podgląd
 preview.desktop: Komputer
