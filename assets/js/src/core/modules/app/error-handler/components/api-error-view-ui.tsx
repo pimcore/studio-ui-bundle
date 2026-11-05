@@ -10,13 +10,12 @@
 
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import i18n from 'i18next'
 import { isEmpty, isString, isUndefined } from 'lodash'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 import { getErrorMessage } from '@Pimcore/modules/app/error-handler/utils/get-error-message'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { DEFAULT_ERROR_CONTENT } from '@Pimcore/modules/app/error-handler/classes/api-error'
-import { getMissingValidationKeys, validationErrorToText } from '@Pimcore/modules/app/error-handler/utils/format-validation-error'
+import { reportMissingValidationKeys, validationErrorToText } from '@Pimcore/modules/app/error-handler/utils/format-validation-error'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 const MAX_VALIDATION_ROWS = 10
@@ -30,12 +29,9 @@ export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JS
 
   const validationErrors = isString(errorContent) ? undefined : errorContent?.validationErrors
 
-  // Register unknown message keys (never the messages) so admins can translate them. Goes through the
-  // missingKey event like i18n-api.ts, because importing the store here would create an import cycle.
+  // Register unknown message keys (never the messages) so admins can translate them.
   useEffect(() => {
-    getMissingValidationKeys(validationErrors ?? []).forEach(key => {
-      i18n.emit('missingKey', [i18n.language], 'translation', key, key)
-    })
+    reportMissingValidationKeys(validationErrors ?? [])
   }, [validationErrors])
 
   // The aggregated `message` is intentionally not shown here: it is the joined form of these rows.

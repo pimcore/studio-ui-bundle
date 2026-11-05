@@ -24,8 +24,13 @@ describe('resolveValidationMessage with real i18next', () => {
             'validation.slug': 'The URL slug {{value}} in {{field}} is already in use',
             'validation.custom': '{{min-length}} / {{größe}} / {{field}}',
             'validation.empty': '',
-            'validation.same': 'validation.same'
+            'validation.same': 'validation.same',
+            'validation.fallback': 'English {{field}}',
+            'validation.min': '{{field}} must be at least {{min}}, got {{value}}'
           }
+        },
+        de: {
+          translation: { 'validation.fallback': '' }
         }
       }
     })
@@ -84,5 +89,23 @@ describe('resolveValidationMessage with real i18next', () => {
   it.each(['validation.empty', 'validation.same', 'validation.unknown'])('falls back to the message for %s', key => {
     expect(resolveValidationMessage({ message: 'Plain', messageKey: key }, 'Title'))
       .toEqual({ text: 'Plain', includesLabel: false })
+  })
+
+  it('uses the fallback language when the current language has an empty entry', async () => {
+    await i18n.changeLanguage('de')
+    i18n.options.fallbackLng = ['en']
+    await i18n.reloadResources?.()
+    await i18n.changeLanguage('de')
+
+    const result = resolveValidationMessage({ message: 'm', messageKey: 'validation.fallback' }, 'Title')
+    await i18n.changeLanguage('en')
+
+    expect(result).toEqual({ text: 'English Title', includesLabel: true })
+  })
+
+  it('keeps the plain message when a referenced parameter was redacted', () => {
+    const result = resolveValidationMessage({ message: 'Power too low', messageKey: 'validation.min', parameters: {} }, 'Power')
+
+    expect(result).toEqual({ text: 'Power too low', includesLabel: false })
   })
 })

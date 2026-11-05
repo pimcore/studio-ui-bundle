@@ -51,6 +51,10 @@ const stringify = (value: unknown): string => {
 const interpolate = (template: string, values: Record<string, unknown>): string =>
   template.replace(PLACEHOLDER, (_match, name: string) => stringify(values[name]))
 
+// The backend clears the parameters of languages the user cannot view: a template is only usable when it gets all of them.
+const hasAllParameters = (template: string, values: Record<string, unknown>): boolean =>
+  [...template.matchAll(PLACEHOLDER)].every(match => !isNil(values[match[1]]))
+
 // Walks the current language and its fallbacks. Deliberately no import from app/i18n or the store:
 // this module is part of the error handler, which those modules import themselves.
 const findResource = (key: string): unknown => {
@@ -64,11 +68,19 @@ const findResource = (key: string): unknown => {
   return undefined
 }
 
-/** A real translation: a non-empty resource that is not just the key (missingKey handler / empty DB rows). */
+/**
+ * The first real translation along the language chain: a non-empty resource that is not just the key (missingKey
+ * handler / empty DB rows). An unusable entry in the current language does not hide a valid fallback.
+ */
 const findTranslation = (key: string): string | undefined => {
-  const resource = findResource(key)
+  for (const language of i18n.languages ?? [i18n.language]) {
+    const resource: unknown = i18n.getResource(language, NAMESPACE, key)
+    if (isNonEmptyString(resource) && resource !== key) {
+      return resource
+    }
+  }
 
-  return isNonEmptyString(resource) && resource !== key ? resource : undefined
+  return undefined
 }
 
 /** Unique message keys without any resource. Only the fixed keys are returned, never a message. */
@@ -77,6 +89,13 @@ export const getMissingValidationKeys = (errors: IValidationError[]): string[] =
   const keys = errors.map(error => error.messageKey).filter(isNonEmptyString).filter(key => MESSAGE_KEY.test(key))
 
   return [...new Set(keys)].filter(key => isNil(findResource(key)))
+}
+
+/** Registers unknown message keys (never the messages) so admins can translate them: through the missingKey event, as i18n-api.ts does. */
+export const reportMissingValidationKeys = (errors: IValidationError[]): void => {
+  getMissingValidationKeys(errors).forEach(key => {
+    i18n.emit('missingKey', [i18n.language], NAMESPACE, key, key)
+  })
 }
 
 /**
@@ -89,8 +108,10 @@ export const resolveValidationMessage = (error: IValidationError, fieldLabel: st
   const key = error.messageKey
   const template = isNonEmptyString(key) ? findTranslation(key) : undefined
 
-  if (isNonEmptyString(key) && template !== undefined) {
-    const translated = interpolate(template, { ...error.parameters, field: fieldLabel })
+  const values = { ...error.parameters, field: fieldLabel }
+
+  if (isNonEmptyString(key) && template !== undefined && hasAllParameters(template, values)) {
+    const translated = interpolate(template, values)
 
     const usesField = FIELD_PLACEHOLDER.test(template)
     // a template that names the field cannot be used for an error without field

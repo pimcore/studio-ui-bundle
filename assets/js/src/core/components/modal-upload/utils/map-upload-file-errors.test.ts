@@ -12,8 +12,11 @@ import type { UploadFile } from 'antd/es/upload/interface'
 import { mapUploadFileErrors } from './map-upload-file-errors'
 
 jest.mock('@Pimcore/modules/app/error-handler/utils/format-validation-error', () => ({
-  validationErrorToText: (error: { message: string }) => `row: ${error.message}`
+  validationErrorToText: (error: { message: string }) => `row: ${error.message}`,
+  reportMissingValidationKeys: (...args: unknown[]) => reportMissing(...args)
 }))
+
+const reportMissing = jest.fn()
 
 const options = {
   t: ((key: string) => key) as unknown as Parameters<typeof mapUploadFileErrors>[1]['t'],
@@ -32,6 +35,13 @@ describe('mapUploadFileErrors', () => {
     })], options)
 
     expect(file.response).toBe('row: too large')
+  })
+
+  it('reports the validation errors so unknown keys reach the missing translations', () => {
+    const validationErrors = [{ message: 'x', messageKey: 'validation.custom_unknown' }]
+    mapUploadFileErrors([failedFile({ errorKey: 'error_element_validation_failed', message: 'm', validationErrors })], options)
+
+    expect(reportMissing).toHaveBeenCalledWith(validationErrors)
   })
 
   it('keeps the plain message without validation rows', () => {

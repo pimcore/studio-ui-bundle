@@ -25,8 +25,11 @@ const emit = jest.fn()
 
 jest.mock('i18next', () => ({ __esModule: true, default: { language: 'de', emit: (...args: unknown[]) => emit(...args) } }))
 jest.mock('@Pimcore/modules/app/error-handler/utils/format-validation-error', () => ({
-  getMissingValidationKeys: (errors: Array<{ messageKey?: string }>) =>
-    [...new Set(errors.map(e => e.messageKey).filter(Boolean))],
+  reportMissingValidationKeys: (errors: Array<{ messageKey?: string }>) => {
+    [...new Set(errors.map(e => e.messageKey).filter(Boolean))].forEach(key => {
+      emit('missingKey', ['de'], 'translation', key, key)
+    })
+  },
   validationErrorToText: (error: { message: string, parameters?: Record<string, string> }) => error.message
 }))
 

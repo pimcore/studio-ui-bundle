@@ -13,7 +13,7 @@ import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import type { TFunction } from '@sdk/app'
 import { ApiError, getErrorMessage } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@sdk/modules/app'
-import { validationErrorToText } from '@Pimcore/modules/app/error-handler/utils/format-validation-error'
+import { reportMissingValidationKeys, validationErrorToText } from '@Pimcore/modules/app/error-handler/utils/format-validation-error'
 
 const MAX_TOOLTIP_ROWS = 10
 
@@ -33,6 +33,9 @@ const formatErrorMessage = (errorData: unknown, t: TFunction): string => {
 
   // e.g. "image too large": the translated rows instead of the server's plain (HTML) message
   if (!isString(content) && !isEmpty(content.validationErrors)) {
+    // this flow bypasses ApiErrorViewUI, which reports the unknown keys otherwise
+    reportMissingValidationKeys(content.validationErrors!)
+
     const rows = [...new Set(content.validationErrors!.map(validationErrorToText))]
 
     const shown = rows.slice(0, MAX_TOOLTIP_ROWS)
