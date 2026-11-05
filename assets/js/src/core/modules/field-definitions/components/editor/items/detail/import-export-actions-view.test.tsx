@@ -228,11 +228,30 @@ describe('import export actions view', () => {
       saved: 'Größen.json'
     },
     {
-      // The charset and language classes stop at whitespace, so this pins that the spaces the
-      // header is allowed to put around `=` are still read by the `\s*` that precedes them.
+      // RFC 6266 allows whitespace on either side of the `=`, so this pins that the parameter
+      // name is still recognised once it is trimmed and the value still starts after the gap.
       form: 'a filename* spaced out around its equals sign',
       header: "attachment; filename* =  UTF-8''Gr%C3%B6%C3%9Fen.json",
       saved: 'Größen.json'
+    },
+    {
+      // The parameter name is the whole token in front of the `=`, so a longer name that merely
+      // ends in `filename` is a different parameter and never supplies the download name.
+      form: 'another parameter whose name ends in filename',
+      header: 'attachment; x-filename="wrong.json"; filename="store-7.json"',
+      saved: 'store-7.json'
+    },
+    {
+      // A quoted value is consumed whole, so the `filename*=` sitting inside it is part of the
+      // name rather than a parameter of its own, and the real filename* after it still wins.
+      form: 'a quoted name holding what looks like a filename*',
+      header: 'attachment; filename="sales; filename*=UTF-8\'\'Q4.json"; filename*=UTF-8\'\'correct.json',
+      saved: 'correct.json'
+    },
+    {
+      form: 'a quoted name holding what looks like a filename* and no real one',
+      header: 'attachment; filename="sales; filename*=UTF-8\'\'Q4.json"',
+      saved: "sales; filename*=UTF-8''Q4.json"
     },
     {
       form: 'a quoted name holding a semicolon',

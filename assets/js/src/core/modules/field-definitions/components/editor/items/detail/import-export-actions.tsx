@@ -14,6 +14,7 @@ import { type ImportExportConfig, useSettings } from '@Pimcore/modules/field-def
 import { ButtonGroup, Dropdown, type DropdownMenuProps, Icon, IconTextButton, useMessage } from '@sdk/components'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { downloadFile } from '@Pimcore/modules/app/utils/download'
+import { parseContentDispositionFilename } from '@Pimcore/modules/app/utils/content-disposition'
 import trackError, { ApiError, GeneralError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 import { isNil } from 'lodash'
 import React, { useState } from 'react'
@@ -26,57 +27,6 @@ const defaultValidateFile = (file: File): boolean => {
 
 const EXPORT_ACTION = 'export'
 const IMPORT_ACTION = 'import'
-
-// RFC 6266: `filename*` carries charset'language'percent-encoded-value, `filename` is either a
-// quoted string — which may contain a semicolon — or an unquoted token ending at the next one.
-//
-// The charset and language classes exclude whitespace so that neither can claim a space the
-// `\s*` in front of it could also claim. With the overlap, a header ending after `filename*=`
-// gave the engine every way of splitting its trailing spaces between the two, each retried
-// against the mandatory `'`, which is quadratic in the length of the header.
-const CONTENT_DISPOSITION_EXTENDED = /filename\*\s*=\s*[^';\s]*'[^';\s]*'([^;\s]+)/i
-const CONTENT_DISPOSITION_QUOTED = /filename\s*=\s*"((?:[^"\\]|\\.)*)"/i
-const CONTENT_DISPOSITION_BARE = /filename\s*=\s*([^;"]+)/i
-
-/** The percent-decoded value, or nothing when the header's encoding is malformed. */
-const percentDecoded = (value: string): string | undefined => {
-  try {
-    return decodeURIComponent(value)
-  } catch {
-    return undefined
-  }
-}
-
-/** A name a download can be saved under: its last path segment, or nothing when that is unusable. */
-const saveableFilename = (value: string | undefined): string | undefined => {
-  if (isNil(value)) {
-    return undefined
-  }
-
-  const name = value.trim().split(/[/\\]/).pop()?.trim() ?? ''
-
-  return name === '' || name === '.' || name === '..' ? undefined : name
-}
-
-/**
- * The name the response asks to be saved under, read per RFC 6266: the extended `filename*`
- * form wins over the plain one wherever each appears in the header, its percent-encoding is
- * decoded, and a quoted name keeps any semicolon that sits inside the quotes. Undefined when
- * the header names nothing a file can be saved under, so the caller's own name is used.
- */
-const parseContentDispositionFilename = (header: string): string | undefined => {
-  const extended = CONTENT_DISPOSITION_EXTENDED.exec(header)
-  const quoted = CONTENT_DISPOSITION_QUOTED.exec(header)
-  const bare = CONTENT_DISPOSITION_BARE.exec(header)
-
-  const candidates = [
-    isNil(extended) ? undefined : percentDecoded(extended[1]),
-    isNil(quoted) ? undefined : quoted[1].replace(/\\(.)/g, '$1'),
-    isNil(bare) ? undefined : bare[1]
-  ]
-
-  return candidates.map(saveableFilename).find((name) => !isNil(name))
-}
 
 /** the name the response asks for, or a deterministic one when it names none */
 const getExportFilename = (response: Response, itemId: number | string): string => {
