@@ -13,8 +13,9 @@ import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-
 import cn from 'classnames'
 import { Popconfirm } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import React, { memo, useCallback, useState, type MouseEvent } from 'react'
+import React, { memo, useCallback, useContext, useState, type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
+import { TabTitleLabelContext } from './tab-title-label-context'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { Filename } from '@Pimcore/components/filename/filename'
@@ -35,6 +36,7 @@ interface TabTitleViewProps {
 
 const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup, active = false, detached = false, unpublished = false }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const labelProps = useContext(TabTitleLabelContext)
   const { t } = useTranslation()
   const { user } = useUserDraft()
   const [isOpen, setIsOpen] = useState(false)
@@ -76,19 +78,24 @@ const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconCo
       onMouseDown={ handleSpaceMouseDown }
       size='mini'
     >
-      <Icon
-        iconColorGroup={ iconColorGroup }
-        options={ { width: 16, height: 16 } }
-        { ...icon }
-        className={ cn({ [styles.unpublishedIcon]: unpublished }) }
-        subIconName={ unpublished ? 'eye-off' : undefined }
-      />
+      <span
+        { ...labelProps }
+        className={ cn('widget-manager-tab-title__label', styles.label) }
+      >
+        <Icon
+          iconColorGroup={ iconColorGroup }
+          options={ { width: 16, height: 16 } }
+          { ...icon }
+          className={ cn({ [styles.unpublishedIcon]: unpublished }) }
+          subIconName={ unpublished ? 'eye-off' : undefined }
+        />
 
-      <Filename
-        ellipsis
-        style={ { maxWidth: '300px', color: 'inherit' } }
-        value={ title }
-      />
+        <Filename
+          ellipsis
+          style={ { maxWidth: '300px', color: 'inherit' } }
+          value={ title }
+        />
+      </span>
 
       {onClose !== undefined && onConfirm !== undefined && (
         <Popconfirm

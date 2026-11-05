@@ -1295,6 +1295,7 @@ close-tab: Lukk fane
 close-others: Lukk andre
 close-unmodified: Lukk uendrede
 close-all: Lukk alle
+use-full-space: Bruk hele området
 asset.tree.context-menu.download: Last ned
 asset.tree.context-menu.download-as-zip: Last ned som ZIP
 element-selector.title.single: Velg element

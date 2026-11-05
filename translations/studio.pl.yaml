@@ -1295,6 +1295,7 @@ close-tab: Zamknij kartę
 close-others: Zamknij pozostałe
 close-unmodified: Zamknij niezmienione
 close-all: Zamknij wszystko
+use-full-space: Użyj całej przestrzeni
 asset.tree.context-menu.download: Pobierz
 asset.tree.context-menu.download-as-zip: Pobierz jako ZIP
 element-selector.title.single: Wybierz element
