@@ -228,6 +228,13 @@ describe('import export actions view', () => {
       saved: 'Größen.json'
     },
     {
+      // The charset and language classes stop at whitespace, so this pins that the spaces the
+      // header is allowed to put around `=` are still read by the `\s*` that precedes them.
+      form: 'a filename* spaced out around its equals sign',
+      header: "attachment; filename* =  UTF-8''Gr%C3%B6%C3%9Fen.json",
+      saved: 'Größen.json'
+    },
+    {
       form: 'a quoted name holding a semicolon',
       header: 'attachment; filename="store 7; groups.json"',
       saved: 'store 7; groups.json'

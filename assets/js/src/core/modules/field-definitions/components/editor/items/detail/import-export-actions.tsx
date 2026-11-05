@@ -29,7 +29,12 @@ const IMPORT_ACTION = 'import'
 
 // RFC 6266: `filename*` carries charset'language'percent-encoded-value, `filename` is either a
 // quoted string — which may contain a semicolon — or an unquoted token ending at the next one.
-const CONTENT_DISPOSITION_EXTENDED = /filename\*\s*=\s*[^';]*'[^';]*'([^;\s]+)/i
+//
+// The charset and language classes exclude whitespace so that neither can claim a space the
+// `\s*` in front of it could also claim. With the overlap, a header ending after `filename*=`
+// gave the engine every way of splitting its trailing spaces between the two, each retried
+// against the mandatory `'`, which is quadratic in the length of the header.
+const CONTENT_DISPOSITION_EXTENDED = /filename\*\s*=\s*[^';\s]*'[^';\s]*'([^;\s]+)/i
 const CONTENT_DISPOSITION_QUOTED = /filename\s*=\s*"((?:[^"\\]|\\.)*)"/i
 const CONTENT_DISPOSITION_BARE = /filename\s*=\s*([^;"]+)/i
 
