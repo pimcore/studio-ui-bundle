@@ -14,7 +14,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { type ElementTreeWidget } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { isArray, isUndefined } from 'lodash'
 import React, { useCallback, useMemo } from 'react'
@@ -87,6 +87,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
         <Toolbar justify="space-between">
           <div>
             <IconButton
+              aria-label={ t('toolbar.reload') }
               data-testid="widget-form-refresh-button"
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
@@ -102,10 +103,13 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
                   })
                 }
               } }
-              title={ t('refresh') }
+              tooltip={ { title: t('toolbar.reload') } }
             />
 
-            <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
+            <Tooltip
+              mouseEnterDelay={ actionTooltipDelay }
+              title={ isWriteable ? '' : t('config_not_writeable') }
+            >
               <IconButton
                 data-testid="widget-form-delete-button"
                 disabled={ isLoading || !isWriteable }

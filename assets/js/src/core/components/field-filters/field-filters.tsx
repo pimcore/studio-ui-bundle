@@ -17,6 +17,7 @@ import { Tag } from '../tag/tag'
 import { Flex } from '../flex/flex'
 import { Tooltip } from '../tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
+import { useTranslation } from 'react-i18next'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -25,6 +26,7 @@ export interface FieldFiltersProps {
 }
 
 export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const [_data, _setData] = useState(data)
 
   const setData = (data: IDynamicFilter[]): void => {
@@ -117,9 +119,11 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
             />
           )}
           <IconButton
+            aria-label={ t('remove') }
             icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => { onRemoveClick(filter) } }
+            tooltip={ { title: t('remove') } }
           />
         </Flex>
       )

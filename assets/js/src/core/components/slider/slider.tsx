@@ -16,6 +16,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { t } from 'i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export type SliderValue = number
 
@@ -66,7 +67,10 @@ export const Slider = (props: SliderProps): React.JSX.Element => {
 
         {props.allowClear === true && value !== null && props.disabled !== true && (
         <Box padding={ { x: 'mini' } }>
-          <Tooltip title={ t('set-to-null') }>
+          <Tooltip
+            mouseEnterDelay={ actionTooltipDelay }
+            title={ t('set-to-null') }
+          >
             <IconButton
               icon={ { value: 'trash' } }
               onClick={ () => { props.onChange?.(null) } }

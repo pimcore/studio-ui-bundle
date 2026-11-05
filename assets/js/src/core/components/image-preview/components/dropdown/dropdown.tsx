@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyle } from './dropdown.styles'
@@ -19,6 +20,7 @@ export interface ImagePreviewDropdownProps {
 
 export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JSX.Element => {
   const { styles } = useStyle()
+  const { t } = useTranslation()
 
   if (props.dropdownItems === undefined || props.dropdownItems.length === 0) {
     return <></>
@@ -33,6 +35,7 @@ export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JS
       trigger={ ['click'] }
     >
       <IconButton
+        aria-label={ t('more-actions') }
         className={ styles.dotsButton }
         icon={ { value: 'more' } }
         onClick={ (e) => {

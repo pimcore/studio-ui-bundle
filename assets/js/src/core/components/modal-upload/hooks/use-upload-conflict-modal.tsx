@@ -179,7 +179,7 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
         icon: (
           <Icon
             options={ { width: 24, height: 24 } }
-            value="warning-circle"
+            value="alert-outline"
           />
         ),
         content: (

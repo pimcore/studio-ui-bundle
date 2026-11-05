@@ -53,6 +53,9 @@ export const SearchResultList = ({ data, isLoading, errorText, onPageChange, res
     return selectedItem?.id === item.id && selectedItem?.elementType === item.elementType
   }
 
+  // One tab stop in the list: the active item, or the first one while no listed item is active
+  const hasActiveItem = data?.items.some(detectItemActivity) === true
+
   if (isLoading) {
     return <Content loading />
   }
@@ -74,11 +77,13 @@ export const SearchResultList = ({ data, isLoading, errorText, onPageChange, res
                 <Flex
                   className='w-full h-full'
                   gap={ 0 }
+                  role="listbox"
                   vertical
                 >
-                  {data?.items.map((item) => (
+                  {data?.items.map((item, index) => (
                     <SearchResultItem
                       active={ detectItemActivity(item) }
+                      first={ index === 0 && !hasActiveItem }
                       item={ item }
                       key={ `${item.id}-${item.elementType}` }
                       onMouseEnter={ () => { setSelectedItemQuery(item) } }

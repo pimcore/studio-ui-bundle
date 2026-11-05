@@ -174,5 +174,9 @@ describe('ElementTree: locate in tree', () => {
 
     const nodeContent = screen.getByTestId('tree-node-data-object-30').querySelector('.tree-node__content')
     expect(nodeContent).toHaveClass('tree-node__content--selected')
+
+    // the located node is briefly highlighted, so the eye finds it
+    await waitFor(() => { expect(nodeContent).toHaveClass('tree-node__content--highlighted') })
+    await waitFor(() => { expect(nodeContent).not.toHaveClass('tree-node__content--highlighted') }, { timeout: 3000 })
   })
 })

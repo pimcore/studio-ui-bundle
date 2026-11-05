@@ -20,6 +20,7 @@ import { PreviewValue } from './preview-value'
 import { Text } from '@Pimcore/components/text/text'
 import { usePreviewItem } from './preview-item-provider'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
 import { ApiError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 
 export interface PreviewProps {
@@ -37,7 +38,9 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
 
   const { data: gridData } = useData()
   const { item } = usePreviewItem()
-  const { currentLanguage } = useLanguageSelection()
+  const { currentLanguage: selectedLanguage } = useLanguageSelection()
+  const { language: previewLanguage } = usePreviewModeOptional()
+  const currentLanguage = previewLanguage ?? selectedLanguage
 
   const firstItem = gridData.items[0]
   // Only the live/persisted pipeline value (never `column.config`, the "fields to add" schema

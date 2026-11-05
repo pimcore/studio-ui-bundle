@@ -65,7 +65,12 @@ export const FilterTabContainer = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+      >
+        <Title>{t('application-logger.sidebar.search-parameter')}</Title>
+
         <Form
           form={ form }
           layout="vertical"
@@ -75,8 +80,6 @@ export const FilterTabContainer = (): React.JSX.Element => {
             size="none"
             style={ { width: '100%' } }
           >
-            <Title>{t('application-logger.sidebar.search-parameter')}</Title>
-
             <Form.Item
               label={ t('application-logger.filter.date-from') }
               name="dateFrom"

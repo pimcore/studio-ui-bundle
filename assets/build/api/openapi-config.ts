@@ -212,7 +212,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/thumbnails/i)
     },
     '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/(login|logout)/i)
+      filterEndpoints: pathMatcher(/\/api\/(login|logout|session)/i)
     },
     '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/class\//i)
@@ -270,6 +270,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/oauth/oauth-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/oauth\//i)
+    },
+    '../../js/src/core/modules/mcp-servers/mcp-servers-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/mcp\//i)
     }
   },
   exportName: 'api',

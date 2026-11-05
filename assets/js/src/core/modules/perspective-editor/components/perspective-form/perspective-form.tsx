@@ -24,7 +24,7 @@ import { AllowedMenuEntriesPanel } from './components/allowed-menu-entries-panel
 import { GeneralPanel } from './components/general-panel/general-panel'
 import { SpecificPanel } from './components/specific-panel/specific-panel'
 import { type ExtendedWidgetConfig } from './components/widget-configurator/context/widget-configurator-provider'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export interface PerspectiveFormProps {
   perspective: PerspectiveConfigDetail
@@ -99,6 +99,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
         <Toolbar justify="space-between">
           <div>
             <IconButton
+              aria-label={ t('toolbar.reload') }
               data-testid="perspective-form-refresh-button"
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
@@ -106,10 +107,13 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
                 form.resetFields()
                 form.setFieldsValue(initialValues)
               } }
-              title={ t('refresh') }
+              tooltip={ { title: t('toolbar.reload') } }
             />
 
-            <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
+            <Tooltip
+              mouseEnterDelay={ actionTooltipDelay }
+              title={ isWriteable ? '' : t('config_not_writeable') }
+            >
               <IconButton
                 data-testid="perspective-form-delete-button"
                 disabled={ isLoading || !isWriteable }

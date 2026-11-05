@@ -16,8 +16,11 @@ import { Button } from '@Pimcore/components/button/button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type AbstractGridCellDefinition } from '../../dynamic-type-grid-cell-abstract'
 import { isUndefined } from 'lodash'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { useTranslation } from 'react-i18next'
 
 export const OpenElementCell = (props: AbstractGridCellDefinition): React.JSX.Element => {
+  const { t } = useTranslation()
   const { styles } = useStyle()
   const { openElement, mapToElementType } = useElementHelper()
   const elementType = mapToElementType(props.row.original.type as string)
@@ -34,12 +37,18 @@ export const OpenElementCell = (props: AbstractGridCellDefinition): React.JSX.El
     }
 
     return (
-      <Button
-        icon={ <Icon value={ 'open-folder' } /> }
-        onClick={ onClick }
-        onKeyDown={ onKeyEnterExecuteClick }
-        type={ 'link' }
-      />
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('open') }
+      >
+        <Button
+          aria-label={ t('open') }
+          icon={ <Icon value={ 'open-folder' } /> }
+          onClick={ onClick }
+          onKeyDown={ onKeyEnterExecuteClick }
+          type={ 'link' }
+        />
+      </Tooltip>
     )
   }
 

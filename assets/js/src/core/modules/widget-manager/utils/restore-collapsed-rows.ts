@@ -10,6 +10,7 @@
 
 import { type IJsonModel, type IJsonRowNode, type IJsonTabSetNode } from 'flexlayout-react'
 import { isUndefined } from 'lodash'
+import { TAB_SET_MIN_SIZE } from './widget-manager-inner-model'
 
 const DEFAULT_WEIGHT = 100
 
@@ -46,4 +47,14 @@ export const restoreCollapsedRows = (json: IJsonModel): IJsonModel => {
   const layout = restoreRow(json.layout)
 
   return layout === json.layout ? json : { ...json, layout }
+}
+
+// layouts saved before the min size existed would otherwise drop it on restore
+export const normalizeInnerModel = (json: IJsonModel): IJsonModel => {
+  const model = restoreCollapsedRows(json)
+
+  return {
+    ...model,
+    global: { ...model.global, tabSetMinWidth: TAB_SET_MIN_SIZE, tabSetMinHeight: TAB_SET_MIN_SIZE }
+  }
 }

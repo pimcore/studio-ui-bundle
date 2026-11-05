@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
-import { type ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef, type RowSelectionState } from '@tanstack/react-table'
 import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { enrichRowData, visibleFieldsToColumnDefinitions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
@@ -72,6 +72,10 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
   hint?: React.ReactNode | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   className?: string
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  extraToolbarItems?: React.ReactNode
 }
 
 const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
@@ -151,7 +155,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     locale: col.localizable ? userLanguage : undefined
   })), [visibleFieldDefinitions, userLanguage])
 
-  const { data: gridFullData, isLoading: isGridFullDataLoading, isError: isGridFullDataError, refetchAll } = useDataObjectGrids({
+  const { data: gridFullData, isLoading: isGridFullDataLoading, isError: isGridFullDataError, refetchAll, loadedCount, totalCount } = useDataObjectGrids({
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
@@ -235,10 +239,18 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   )
 
   // The rows come with the object data; the visible field values follow in their own request, so the
-  // field shows the rows right away and only tells while the values are loading or when they failed.
+  // field shows the rows right away and only tells while the values are loading or when they failed. The
+  // values arrive in chunks, so once the first one is there the hint says how far it is; the counts only
+  // feed the text, whether it is still loading is up to isLoading alone.
   let visibleFieldsStatus: React.ReactNode = null
   if (isGridFullDataLoading) {
-    visibleFieldsStatus = <Text type="secondary">{ t('relations.visible-fields.loading') }</Text>
+    visibleFieldsStatus = (
+      <Text type="secondary">
+        { loadedCount > 0
+          ? t('relations.visible-fields.loading-progress', { loaded: loadedCount, total: totalCount })
+          : t('relations.visible-fields.loading') }
+      </Text>
+    )
   } else if (isGridFullDataError) {
     visibleFieldsStatus = <Text type="danger">{ t('relations.visible-fields.error') }</Text>
   }

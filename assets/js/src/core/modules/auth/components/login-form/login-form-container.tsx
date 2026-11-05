@@ -8,27 +8,95 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
-import React, { useState } from 'react'
+import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
+import React, { useEffect, useState } from 'react'
+import { type TwoFactorChallenge, useTwoFactorAuthentication, type TwoFactorStep } from '../../hooks/use-two-factor-authentication'
 import { ForgotPasswordForm } from '../forgot-password-form/forgot-password-form'
+import { TwoFactorForm } from '../two-factor-form/two-factor-form'
+import { TwoFactorSetupForm } from '../two-factor-setup-form/two-factor-setup-form'
 import { LoginForm } from './login-form'
 
-export const LoginFormContainer = (): React.JSX.Element => {
+type LoginStep = 'login' | 'forgot-password' | TwoFactorStep
+
+export interface LoginFormContainerProps {
+  pendingTwoFactor?: TwoFactorChallenge
+}
+
+export const LoginFormContainer = ({ pendingTwoFactor }: LoginFormContainerProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
+  const user = useUser()
+  const [step, setStep] = useState<LoginStep>(pendingTwoFactor?.step ?? 'login')
+  const [digits, setDigits] = useState<number | undefined>(pendingTwoFactor?.digits)
+  const [logout] = useLogoutMutation()
+  const { verifyCode, loadSetup } = useTwoFactorAuthentication()
+
+  const openTwoFactorStep = (challenge: TwoFactorChallenge): void => {
+    setDigits(challenge.digits)
+    setStep(challenge.step)
+  }
+
+  useEffect(() => {
+    if (pendingTwoFactor !== undefined) {
+      openTwoFactorStep(pendingTwoFactor)
+    }
+  }, [pendingTwoFactor])
+
+  const completeLogin = async (): Promise<void> => {
+    await sendStatistics(user.isAdmin)
+    globalThis.location.reload()
+  }
+
+  // The setup step sends its first code to the same login endpoint as the verify step
+  const handleVerify = async (code: string): Promise<void> => {
+    await verifyCode(code)
+    await completeLogin()
+  }
+
+  // A failed logout still returns to the password form: a new password login starts over
+  const handleCancelTwoFactor = (): void => {
+    void logout()
+      .then((result) => {
+        if (result.error !== undefined) {
+          trackError(new ApiError(result.error))
+        }
+      })
+      .finally(() => { setStep('login') })
+  }
 
   return (
     <div className={ styles.form }>
-      {showForgotPassword && (
-      <ForgotPasswordForm
-        onGetBack={ () => { setShowForgotPassword(false) } }
-      />
+      {step === 'forgot-password' && (
+        <ForgotPasswordForm
+          onGetBack={ () => { setStep('login') } }
+        />
       )}
 
-      {!showForgotPassword && (
-      <LoginForm
-        onPasswordForgotten={ () => { setShowForgotPassword(true) } }
-      />
+      {step === 'verify' && digits !== undefined && (
+        <TwoFactorForm
+          digits={ digits }
+          onGetBack={ handleCancelTwoFactor }
+          onVerify={ handleVerify }
+        />
+      )}
+
+      {step === 'setup' && (
+        <TwoFactorSetupForm
+          layout="login"
+          loadSetup={ loadSetup }
+          onConfirm={ handleVerify }
+          onGetBack={ handleCancelTwoFactor }
+        />
+      )}
+
+      {step === 'login' && (
+        <LoginForm
+          onPasswordForgotten={ () => { setStep('forgot-password') } }
+          onTwoFactorRequired={ openTwoFactorStep }
+        />
       )}
     </div>
   )

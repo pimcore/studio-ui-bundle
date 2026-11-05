@@ -20,6 +20,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useBatchEdit } from './hooks/use-batch-edit'
+import { useApplyEnabled } from './hooks/use-apply-enabled'
 import { BatchEditListContainer } from './batch-edit-list-container'
 import { Form } from '@Pimcore/components/form/form'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
@@ -75,6 +76,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
   const { availableColumns } = useAvailableColumns()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
+  const { applyEnabled, onRowMount } = useApplyEnabled(form, batchEdits)
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -251,6 +253,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                   {t('batch-edit.modal-footer.discard-all-changes')}
                 </IconTextButton>
                 <Button
+                  disabled={ !applyEnabled }
                   onClick={ handleApplyChanges }
                   type='primary'
                 >
@@ -291,7 +294,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                 form={ form }
                 onFinish={ onFormFinish }
               >
-                <BatchEditListContainer />
+                <BatchEditListContainer onRowMount={ onRowMount } />
               </Form>
             </div>
           </Flex>

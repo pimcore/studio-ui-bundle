@@ -15,6 +15,7 @@ import { Split } from '@Pimcore/components/split/split'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { Form } from '@Pimcore/components/form/form'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface BlockToolStripProps {
   field: number
@@ -26,6 +27,7 @@ export interface BlockToolStripProps {
 }
 
 export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder, itemValue, getItemTitle }: BlockToolStripProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { operations } = useNumberedListContext()
 
   // Use Form.useWatch to get the real-time form values for this specific item
@@ -65,33 +67,41 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
       >
         <Space size="mini">
           <IconButton
+            aria-label={ t('add') }
             data-testid={ `block-tool-strip-${field}-add` }
             disabled={ disallowAdd }
             icon={ { value: 'new' } }
             onClick={ handleAdd }
             size='small'
+            tooltip={ { title: t('add') } }
           />
 
           <IconButton
+            aria-label={ t('move-down') }
             disabled={ disallowReorder }
             icon={ { value: 'chevron-down' } }
             onClick={ handleMoveDown }
             size='small'
+            tooltip={ { title: t('move-down') } }
           />
 
           <IconButton
+            aria-label={ t('move-up') }
             disabled={ disallowReorder }
             icon={ { value: 'chevron-up' } }
             onClick={ handleMoveUp }
             size='small'
+            tooltip={ { title: t('move-up') } }
           />
         </Space>
 
         <IconButton
+          aria-label={ t('delete') }
           disabled={ disallowDelete }
           icon={ { value: 'trash' } }
           onClick={ handleDelete }
           size='small'
+          tooltip={ { title: t('delete') } }
         />
       </Split>
     </ToolStrip>

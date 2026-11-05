@@ -161,6 +161,26 @@ describe('useRename', () => {
     expect(lastModalConfig().initialValue).toBe('car')
   })
 
+  it('labels the action as a folder rename when the toolbar target is a folder', () => {
+    const { result } = renderHook(() => useRename('data-object'))
+
+    const folderItem = result.current.renameContextMenuItem({ ...buildDataObject(), type: 'folder' } as unknown as Element)
+    const objectItem = result.current.renameContextMenuItem(buildDataObject())
+
+    expect(folderItem).toHaveProperty('label', 'element.rename-folder')
+    expect(objectItem).toHaveProperty('label', 'element.rename')
+  })
+
+  it('labels the action as a folder rename when the tree node is a folder', () => {
+    const { result } = renderHook(() => useRename('data-object'))
+
+    const folderItem = result.current.renameTreeContextMenuItem(buildTreeNode({ type: 'folder' }))
+    const objectItem = result.current.renameTreeContextMenuItem(buildTreeNode({ type: 'object' }))
+
+    expect(folderItem).toHaveProperty('label', 'element.rename-folder')
+    expect(objectItem).toHaveProperty('label', 'element.rename')
+  })
+
   it('does not persist the custom attribute key when the pre-filled value is confirmed unchanged', async () => {
     const { result } = renderHook(() => useRename('data-object'))
 

@@ -132,10 +132,12 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
                 justify='center'
               >
                 <IconButton
+                  aria-label={ t('delete') }
                   icon={ { value: 'trash' } }
                   onClick={ () => {
                     removeCustomMetadata(info.row.original)
                   } }
+                  tooltip={ { title: t('delete') } }
                   type="link"
                 />
               </Flex>

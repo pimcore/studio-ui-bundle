@@ -30,6 +30,7 @@ import { type DynamicTypeGridCellNumber } from './definitions/grid-cell/types/nu
 import { type DynamicTypeGridCellSelect } from './definitions/grid-cell/types/select/dynamic-type-grid-cell-select'
 import { type DynamicTypeGridCellMultiSelect } from './definitions/grid-cell/types/multi-select/dynamic-type-grid-cell-multi-select'
 import { type DynamicTypeGridCellCheckbox } from './definitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
+import { type DynamicTypeGridCellRadio } from './definitions/grid-cell/types/radio/dynamic-type-grid-cell-radio'
 import { type DynamicTypeGridCellDate } from './definitions/grid-cell/types/date/dynamic-type-grid-cell-date'
 import { type DynamicTypeGridCellTime } from './definitions/grid-cell/types/time/dynamic-type-grid-cell-time'
 import { type DynamicTypeGridCellDateTime } from './definitions/grid-cell/types/date-time/dynamic-type-grid-cell-date-time'
@@ -130,6 +131,7 @@ import { type DynamicTypeBatchEditTextArea } from '@Pimcore/modules/element/dyna
 import { type DynamicTypeBatchEditDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/datetime/dynamic-type-batch-edit-datetime'
 import { type DynamicTypeBatchEditSelect } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/select/dynamic-type-batch-edit-select'
 import { type DynamicTypeBatchEditCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/checkbox/dynamic-type-batch-edit-checkbox'
+import { type DynamicTypeBatchEditSystemBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/system-boolean/dynamic-type-batch-edit-system-boolean'
 import { type DynamicTypeBatchEditElementDropzone } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/element-dropzone/dynamic-type-batch-edit-element-dropzone'
 import { type DynamicTypeGridCellLanguageSelect } from './definitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
 import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
@@ -265,6 +267,7 @@ moduleSystem.registerModule({
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDatetime>(serviceIds['DynamicTypes/BatchEdit/Datetime']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditSelect>(serviceIds['DynamicTypes/BatchEdit/Select']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditCheckbox>(serviceIds['DynamicTypes/BatchEdit/Checkbox']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditSystemBoolean>(serviceIds['DynamicTypes/BatchEdit/SystemBoolean']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditElementDropzone>(serviceIds['DynamicTypes/BatchEdit/ElementDropzone']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditClassificationStore>(serviceIds['DynamicTypes/BatchEdit/ClassificationStore']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
@@ -284,6 +287,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellMultiSelect>(serviceIds['DynamicTypes/GridCell/MultiSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellBoolean>(serviceIds['DynamicTypes/GridCell/Boolean']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellCheckbox>(serviceIds['DynamicTypes/GridCell/Checkbox']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellRadio>(serviceIds['DynamicTypes/GridCell/Radio']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDate>(serviceIds['DynamicTypes/GridCell/Date']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTime>(serviceIds['DynamicTypes/GridCell/Time']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDateTime>(serviceIds['DynamicTypes/GridCell/DateTime']))

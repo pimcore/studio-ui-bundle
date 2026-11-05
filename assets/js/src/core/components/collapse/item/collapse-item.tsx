@@ -45,8 +45,8 @@ export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | '
 export const ExpandIcon = ({ isActive }: { isActive: boolean }): React.ReactElement => {
   return (
     <Icon
-      className='expand-icon'
-      value={ isActive ? 'chevron-up' : 'chevron-down' }
+      className={ cn('expand-icon', { 'expand-icon--open': isActive }) }
+      value='chevron-down'
     />
   )
 }

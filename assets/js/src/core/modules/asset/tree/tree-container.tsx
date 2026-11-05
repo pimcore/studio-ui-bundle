@@ -28,6 +28,7 @@ import { useAppDispatch } from '@sdk/app'
 import { useTreeNodeOpenPermission } from '@Pimcore/modules/element/tree/hooks/use-tree-node-open-permission'
 import { withDndUpload } from './node/with-dnd-upload'
 import { withContextMenu } from './node/with-context-menu'
+import { useTranslation } from 'react-i18next'
 
 export interface TreeContainerProps {
   id: number
@@ -37,6 +38,7 @@ export interface TreeContainerProps {
 export const AssetTreeNode = withDroppableStyling(withDroppable((withDndUpload(withActionStates(withDraggable(withContextMenu(TreeNodeComponent)))))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
   const dispatch = useAppDispatch()
@@ -69,6 +71,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
 
   return (
     <ElementTree
+      ariaLabel={ t('asset.asset-tree.title') }
       contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
       onSelect={ onSelect }
@@ -77,6 +80,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       renderNodeContent={ defaultTreeProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
+      selectionMode="multiple"
       showRoot={ showRoot }
       tooltipSlotName={ componentConfig.asset.tree.tooltip.name }
     />

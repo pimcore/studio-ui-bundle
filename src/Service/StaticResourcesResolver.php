@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Service;
 
-use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntryPointsJsonException;
-use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager;
+use Pimcore\Bundle\StudioUiBundle\Webpack\EntryPointCatalog;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderDocumentEditorIframe;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
@@ -31,7 +30,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
     private ArrayOfStrings $additionalJsFiles;
 
     public function __construct(
-        private WebpackEntryPointManager $webpackEntryPointManager,
+        private EntryPointCatalog $entryPointCatalog,
         array $additionalCssFiles = [],
         array $additionalJsFiles = []
     ) {
@@ -87,7 +86,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
     private function getFilesFromEntryPointsJson(string $type, bool $fromStudioCore = false): array
     {
         $entryPointProviders = array_filter(
-            $this->webpackEntryPointManager->getProviders(),
+            $this->entryPointCatalog->getProviders(),
             fn ($provider) => $fromStudioCore === $this->isStudioCoreProvider($provider)
         );
 
@@ -95,8 +94,11 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
         foreach ($entryPointProviders as $entryPointProvider) {
             $entryPointJsonContents = [];
 
-            foreach ($entryPointProvider->getEntryPointsJsonLocations() as $entryPointsJsonLocation) {
-                $entryPointJsonContents[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
+            foreach ($this->entryPointCatalog->getEntryPointsJsonLocations($entryPointProvider) as $location) {
+                $entryPointJsonContents[] = $this->entryPointCatalog->getEntryPointsJson(
+                    $entryPointProvider,
+                    $location
+                );
             }
 
             foreach ($this->getEntryPoints($entryPointProvider) as $entryPointName) {
@@ -121,7 +123,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
                             'Entry point "%s" for entry point provider "%s" not found in any of the entry points JSON files: %s',
                             $entryPointName,
                             get_class($entryPointProvider),
-                            implode(', ', $entryPointProvider->getEntryPointsJsonLocations())
+                            implode(', ', $this->entryPointCatalog->getEntryPointsJsonLocations($entryPointProvider))
                         )
                     );
                 }
@@ -144,43 +146,6 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
     private function isEntryPointOptional(WebpackEntryPointProviderInterface $entryPointProvider, string $entryPointName): bool
     {
         return  in_array($entryPointName, $entryPointProvider->getOptionalEntryPoints(), true);
-    }
-
-    /**
-     * @throws InvalidEntryPointsJsonException
-     */
-    private function getEntryPointsJsonContent(string $entryPointsJsonLocation): array
-    {
-        if (file_exists($entryPointsJsonLocation)) {
-
-            try {
-                return json_decode(
-                    file_get_contents($entryPointsJsonLocation),
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR
-                );
-
-            } catch (Exception $e) {
-                throw new InvalidEntryPointsJsonException(
-                    sprintf(
-                        'Error parsing entry points JSON file %s: %s',
-                        $entryPointsJsonLocation,
-                        $e->getMessage()
-                    ),
-                    0,
-                    $e
-                );
-            }
-
-        }
-
-        throw new InvalidEntryPointsJsonException(
-            sprintf(
-                'Entry points JSON file not found: %s',
-                $entryPointsJsonLocation
-            )
-        );
     }
 
     private function isStudioCoreProvider(WebpackEntryPointProviderInterface $entryPointProvider): bool

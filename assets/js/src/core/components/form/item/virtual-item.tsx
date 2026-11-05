@@ -11,6 +11,7 @@
 import { type FormItemProps } from 'antd'
 import React, { useCallback, useEffect, useId, useMemo, useRef } from 'react'
 import { ItemProvider } from './provider/item/item-provider'
+import { LabelExtra } from './provider/label-extra/label-extra-provider'
 import { useStyles } from './virtual-item.styles'
 import { Space } from '@Pimcore/components/space/space'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
@@ -90,6 +91,10 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
     return false
   }, [rules])
 
+  // Only hiding is set inline, so a field's own class can still lay the item out
+  // (for example a checkbox with its label after it).
+  const wrapperStyle = hidden === true ? { display: 'none' } : undefined
+
   const wrapperClassName = [
     className,
     styles.virtualItem,
@@ -107,7 +112,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
     <ItemProvider item={ itemWithValidation }>
       <div
         className={ wrapperClassName }
-        style={ { display: hidden === true ? 'none' : 'block' } }
+        style={ wrapperStyle }
       >
         {label !== undefined && (
           <div className="virtual-item__label">
@@ -126,7 +131,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
                         : (
                           <Icon
                             options={ { width: 14, height: 14 } }
-                            value="info-circle"
+                            value="info-outline"
                           />
                           )}
                     </Tooltip>
@@ -135,6 +140,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
               </label>
               {isRequired && <span className="required-indicator">*</span>}
             </Space>
+            <LabelExtra />
           </div>
         )}
 

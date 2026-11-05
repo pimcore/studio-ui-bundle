@@ -48,6 +48,8 @@ export interface AreablockEntry {
 
 export type AreablockValue = AreablockEntry[]
 
+export type AreaInsertPosition = 'above' | 'below'
+
 export type AreablockRenderTrigger = ReturnType<typeof useLazyDocumentPageSnippetAreaBlockRenderQuery>[0]
 
 export interface AreablockEditableProps {

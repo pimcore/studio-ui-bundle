@@ -79,8 +79,9 @@ describe('ManyToManyRelationGrid', () => {
     const handleOrderChange = jest.fn()
     render(<ManyToManyRelationGrid { ...gridProps({ handleOrderChange, enrichRowData: (row) => ({ ...row, name: `Car ${row.id}` }) }) } />)
 
+    // Rows are identified by their position, which allows the same element to be assigned twice
     act(() => {
-      lastGridProps().handleDragEnd({ active: { id: 2 }, over: { id: 1 } })
+      lastGridProps().handleDragEnd({ active: { id: '1' }, over: { id: '0' } })
     })
 
     expect(handleOrderChange.mock.calls[0][0].map((row: any) => [row.id, row.name])).toEqual([[2, 'Car 2'], [1, 'Car 1']])

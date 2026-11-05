@@ -38,6 +38,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type GridConfigColumnPayload, prepareGridConfigColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/prepare-grid-config-column'
 import { Form } from '@sdk/components'
+import { applyColumnConfigurationDraft, buildColumnConfigurationDraft, withoutSearchModeDraftColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
 
 enum ViewState {
   Edit = 'edit',
@@ -46,13 +47,13 @@ enum ViewState {
 }
 
 const prepareColumns = (columns: AvailableColumn[]): GridConfigColumnPayload[] => {
-  return columns.map(prepareGridConfigColumn)
+  return withoutSearchModeDraftColumns(columns).map(prepareGridConfigColumn)
 }
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { useElementId } = useSettings()
   const { getAvailableColumnsTree, getAdvancedColumnTemplate } = useAvailableColumns()
-  const { selectedColumns, setSelectedColumns } = useSelectedColumns()
+  const { visibleColumns, setSelectedColumns, isSearchModeColumn, updateSearchModeColumnPlacements } = useSelectedColumns()
   const { columns, setColumns, addColumn } = useTabGridConfig()
   const { getId } = useElementId()
   const userData = useUser()
@@ -123,15 +124,14 @@ export const GridConfigInner = (): React.JSX.Element => {
     return []
   }, [data])
 
+  // re-syncs on apply and when the applied search mode adds or drops its columns
   useEffect(() => {
-    setColumns(selectedColumns.map(column => {
-      return {
-        ...column.originalApiDefinition!,
-        locale: column?.locale,
-        width: column.width
-      }
-    }) as AvailableColumn[])
-  }, [selectedColumns])
+    setColumns(buildColumnConfigurationDraft(visibleColumns, isSearchModeColumn, (column): AvailableColumn => ({
+      ...column.originalApiDefinition as AvailableColumn,
+      locale: column?.locale,
+      width: column.width
+    })))
+  }, [visibleColumns])
 
   const onColumnClick = (column: AvailableColumn): void => {
     addColumn(column)
@@ -234,10 +234,12 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
   }
 
-  const onCancelClick = (): void => { setColumns(selectedColumns.map(column => ({ ...column.originalApiDefinition!, width: column.width })) as AvailableColumn[]) }
+  const onCancelClick = (): void => {
+    setColumns(buildColumnConfigurationDraft(visibleColumns, isSearchModeColumn, (column): AvailableColumn => ({ ...column.originalApiDefinition as AvailableColumn, width: column.width })))
+  }
 
   const onApplyClick = (): void => {
-    setSelectedColumns(columns.map(column => {
+    applyColumnConfigurationDraft(columns, column => {
       return {
         key: column.key,
         locale: column.locale,
@@ -252,7 +254,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         width: column.width,
         originalApiDefinition: column
       }
-    }))
+    }, setSelectedColumns, updateSearchModeColumnPlacements)
   }
 
   if (gridConfigIsLoading || isDeleting) {

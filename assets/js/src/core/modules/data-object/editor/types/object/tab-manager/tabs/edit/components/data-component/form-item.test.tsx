@@ -9,72 +9,131 @@
  */
 
 import React from 'react'
-import { render } from '@testing-library/react'
 import { HIDE_BOUNDARY_SELECTOR } from '@Pimcore/modules/app/utils/auto-hide-empty-content/hide-boundary'
+import { render, screen } from '@testing-library/react'
+import {
+  type AbstractObjectDataDefinition,
+  type DynamicTypeObjectDataAbstract
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
+import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
+import DataComponentFormItem from './form-item'
 
-// Everything this component pulls in reaches antd-style's untranspiled ESM, which
-// jest cannot parse. Only the hide helper's props are under test here, so the rest
-// are passthrough stand-ins.
+// The real Form, providers and styles pull in antd-style (untranspiled ESM), which jest cannot
+// load; the item only needs to show the class and label it is given.
+jest.mock('@Pimcore/components/form/form', () => ({
+  Form: {
+    Item: ({ className, label, children }: { className?: string, label?: React.ReactNode, children?: React.ReactNode }) => (
+      <div
+        className={ className }
+        data-testid="form-item"
+      >
+        { label }
+        { children }
+      </div>
+    )
+  }
+}))
+jest.mock('@Pimcore/modules/app/error-boundary/error-boundary', () => ({
+  __esModule: true,
+  default: ({ children }: { children?: React.ReactNode }) => <>{ children }</>
+}))
 const autoHideProps: Array<Record<string, unknown>> = []
-
 jest.mock('@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content', () => ({
   AutoHideEmptyContent: (
     { children, ...props }: { children?: React.ReactNode } & Record<string, unknown>
   ) => {
     autoHideProps.push(props)
-    return <div>{children}</div>
+    return <>{ children }</>
   }
 }))
-
-jest.mock('@Pimcore/components/form/form', () => ({
-  Form: { Item: ({ children }: any) => <div>{children}</div> }
+jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-label-extra', () => ({
+  RestoreInheritanceLabelExtraProvider: ({ children }: { children?: React.ReactNode }) => <>{ children }</>
 }))
-
-jest.mock('@Pimcore/modules/app/error-boundary/error-boundary', () => ({
-  __esModule: true,
-  default: ({ children }: any) => <div>{children}</div>
-}))
-
 jest.mock('@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style', () => ({
-  useInheritanceOverlayStyle: () => ''
+  useInheritanceOverlayStyle: () => undefined
 }))
-
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider', () => ({
   useSuppressEmptyFieldLabel: () => false
 }))
-
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state', () => ({
-  useInheritanceState: () => null
+  useInheritanceState: () => undefined
 }))
-
 jest.mock('@sdk/utils', () => ({
-  isNonEmptyString: (value: unknown) => typeof value === 'string' && value.trim() !== ''
+  isNonEmptyString: (value: unknown) => typeof value === 'string' && value !== ''
+}))
+jest.mock('./form-item.styles', () => ({
+  useStyles: () => ({ styles: { labelAfterControl: 'label-after-control' } })
+}))
+jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: true }) }))
+jest.mock('@Pimcore/modules/data-object/components/inheritance-button', () => ({
+  InheritanceButton: () => <span />
+}))
+jest.mock('@Pimcore/components/icon/icon', () => ({
+  Icon: () => <span />
+}))
+jest.mock('@Pimcore/components/flex/flex', () => ({
+  Flex: ({ children }: { children?: React.ReactNode }) => <span>{ children }</span>
+}))
+jest.mock('@Pimcore/components/tooltip/tooltip', () => ({
+  Tooltip: ({ title, children }: { title: string, children?: React.ReactNode }) => <span data-tooltip={ title }>{ children }</span>
 }))
 
-// eslint-disable-next-line import/first
-import DataComponentFormItem from './form-item'
+const objectDataType = (labelAfterControl: boolean): DynamicTypeObjectDataAbstract => ({
+  labelAfterControl,
+  inheritedMaskOverlay: false,
+  getObjectDataFormItemProps: (props: AbstractObjectDataDefinition) => ({
+    className: 'w-full',
+    label: (
+      <FieldLabel
+        label={ props.title }
+        name={ props.name }
+      />
+    )
+  }),
+  getObjectDataComponent: () => <input type="checkbox" />,
+  getEmptyValue: () => null
+}) as unknown as DynamicTypeObjectDataAbstract
+
+const renderItem = (labelAfterControl: boolean): HTMLElement => {
+  render(
+    <DataComponentFormItem
+      _props={ { name: 'active', title: 'Active' } as unknown as AbstractObjectDataDefinition }
+      formFieldName={ ['active'] }
+      objectDataType={ objectDataType(labelAfterControl) }
+      technicalName="active"
+    />
+  )
+
+  return screen.getByTestId('form-item')
+}
 
 describe('DataComponentFormItem', () => {
+  it('lays the label out after the control for a type that asks for it', () => {
+    const item = renderItem(true)
+
+    expect(item).toHaveClass('w-full')
+    expect(item).toHaveClass('label-after-control')
+  })
+
+  it('keeps the label above the control for every other type', () => {
+    expect(renderItem(false)).not.toHaveClass('label-after-control')
+  })
+
+  it('shows the technical field name when hovering the label', () => {
+    renderItem(false)
+
+    expect(screen.getByText('Active').closest('[data-tooltip]')).toHaveAttribute('data-tooltip', 'active')
+  })
+
   // A container that lays out its own children renders no `.ant-space-item`, so
-  // the helper has to accept their opt-in boundary too. Hardcoding antd's class
-  // here let closest() walk past such a container and collapse an outer Space
-  // item holding populated siblings.
+  // the hide helper has to accept their opt-in boundary too. Hardcoding antd's
+  // class here let closest() walk past such a container and collapse an outer
+  // Space item that still held populated siblings.
   it('collapses on the shared hide boundary, not only on an antd Space item', () => {
     autoHideProps.length = 0
 
-    const objectDataType = {
-      getObjectDataFormItemProps: () => ({}),
-      getObjectDataComponent: () => <input />,
-      inheritedMaskOverlay: false
-    } as any
-
-    render(
-      <DataComponentFormItem
-        _props={ { name: 'firstname' } as any }
-        formFieldName={ ['firstname'] }
-        objectDataType={ objectDataType }
-      />
-    )
+    renderItem(false)
 
     expect(autoHideProps).toHaveLength(1)
     expect(autoHideProps[0].parentSelector).toBe(HIDE_BOUNDARY_SELECTOR)

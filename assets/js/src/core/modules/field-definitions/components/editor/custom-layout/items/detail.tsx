@@ -24,8 +24,10 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const ItemDetail = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { activeConfiguration, setDetailView } = useItems()
   const { guard } = useUnsavedChanges()
   const configuration = activeConfiguration!
@@ -126,8 +128,10 @@ export const ItemDetail = (): React.JSX.Element => {
                 <Flex gap={ 'mini' }>
                   <Flex gap={ 'mini' }>
                     <IconButton
+                      aria-label={ t('toolbar.reload') }
                       icon={ { value: 'refresh' } }
                       onClick={ () => { guard(() => { void refreshLayout() }) } }
+                      tooltip={ { title: t('toolbar.reload') } }
                     />
 
                     {customLayouts?.ModalContent !== undefined && <CustomLayout />}

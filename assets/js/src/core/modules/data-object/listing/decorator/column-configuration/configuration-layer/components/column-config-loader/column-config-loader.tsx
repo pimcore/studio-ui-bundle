@@ -41,6 +41,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
+  const applied = useRef<{ columns?: unknown, configuration?: unknown }>({})
   const appliedFiltersStore = useAppliedFiltersOptional()
   // Which grid configuration the filters below were last restored from. The effect
   // runs for two reasons and only one of them is a configuration load.
@@ -50,6 +51,15 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     if (data === undefined || initialConfigurationData === undefined) {
       return
     }
+
+    // apply each response pair once: StrictMode's second pass and a refetch RTK answers with the
+    // cached result carry the same objects, and re-applying the defaults then would overwrite a
+    // column set installed since (a restored saved search). A changed response applies — and
+    // currentData stays empty while the arguments change, so two classes' answers never mix
+    if (applied.current.columns === data && applied.current.configuration === initialConfigurationData) {
+      return
+    }
+    applied.current = { columns: data, configuration: initialConfigurationData }
 
     const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)

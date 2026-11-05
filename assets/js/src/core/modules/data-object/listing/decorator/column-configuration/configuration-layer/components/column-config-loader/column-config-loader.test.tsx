@@ -36,6 +36,9 @@ let configurationData: unknown = configuration
 let staleAvailableColumnsData: unknown
 
 const setValue = jest.fn()
+const setSelectedColumns = jest.fn()
+const setAvailableColumns = jest.fn()
+const setGridConfig = jest.fn()
 
 jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
   useSettings: () => ({
@@ -55,11 +58,11 @@ jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => (
 }))
 
 jest.mock('@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns', () => ({
-  useSelectedColumns: () => ({ selectedColumns: [{ key: 'name' }], setSelectedColumns: jest.fn() })
+  useSelectedColumns: () => ({ selectedColumns: [{ key: 'name' }], setSelectedColumns })
 }))
 
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns', () => ({
-  useAvailableColumns: () => ({ setAvailableColumns: jest.fn() })
+  useAvailableColumns: () => ({ setAvailableColumns })
 }))
 
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id', () => ({
@@ -67,7 +70,7 @@ jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuratio
 }))
 
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config', () => ({
-  useGridConfig: () => ({ setGridConfig: jest.fn() })
+  useGridConfig: () => ({ setGridConfig })
 }))
 
 jest.mock('@Pimcore/modules/element/listing/decorators/general-filters/element-filters', () => ({
@@ -89,8 +92,7 @@ const renderLoader = (): ReturnType<typeof render> =>
 
 describe('column config loader', () => {
   beforeEach(() => {
-    setValue.mockClear()
-    restoreFieldFilters.mockClear()
+    jest.clearAllMocks()
     classId = 'Product'
     availableColumnsData = columnsV1
     configurationData = configuration
@@ -152,5 +154,42 @@ describe('column config loader', () => {
     renderLoader()
 
     expect(setValue).not.toHaveBeenCalled()
+  })
+})
+
+describe('column config loader response pairs', () => {
+  const columns = { columns: [{ key: 'id', type: 'input', config: {} }, { key: 'color', type: 'input', config: {} }] }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    classId = 'Product'
+    availableColumnsData = columns
+    configurationData = { columns: [{ key: 'id' }], saveFilter: false }
+    staleAvailableColumnsData = undefined
+  })
+
+  it('applies a response pair once, however often it re-renders with it', () => {
+    const view = renderLoader()
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
+
+    expect(setSelectedColumns).toHaveBeenCalledTimes(1)
+  })
+
+  it('applies a changed response for the same arguments, such as the favourite after a delete', () => {
+    const view = renderLoader()
+    configurationData = { columns: [{ key: 'color' }], saveFilter: false }
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
+
+    expect(setSelectedColumns).toHaveBeenCalledTimes(2)
+    expect(setSelectedColumns.mock.calls[1][0].map((column: { key: string }) => column.key)).toEqual(['color'])
+    expect(setGridConfig).toHaveBeenLastCalledWith(configurationData)
+  })
+
+  it('applies nothing while one answer for the current arguments is still missing', () => {
+    configurationData = undefined
+    renderLoader()
+
+    expect(setSelectedColumns).not.toHaveBeenCalled()
+    expect(setAvailableColumns).not.toHaveBeenCalled()
   })
 })

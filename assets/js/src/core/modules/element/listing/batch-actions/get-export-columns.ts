@@ -15,6 +15,26 @@ import {
 } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 
 const ADVANCED_COLUMN_TYPE = 'dataobject.advanced'
+const CLASSIFICATION_STORE_COLUMN_TYPE = 'dataobject.classificationstore'
+
+const normalizeLocale = (locale?: string | null): string | null => locale === undefined || locale === 'default' ? null : locale
+
+// A selected column without a locale follows the current language, so any request locale fits it;
+// a fixed locale must match, or a same-key column of another locale (e.g. from a search mode) is exported too.
+const matchesLocale = (column: GridColumnRequest, selectedColumn: SelectedColumn): boolean =>
+  selectedColumn.locale === undefined || selectedColumn.locale === null ||
+  normalizeLocale(selectedColumn.locale) === normalizeLocale(column.locale)
+
+// Classification store siblings share the field key; the store key and group tell them apart.
+const matchesClassificationStoreKey = (column: GridColumnRequest, selectedColumn: SelectedColumn): boolean => {
+  if (column.type !== CLASSIFICATION_STORE_COLUMN_TYPE) {
+    return true
+  }
+
+  const config = column.config as { keyId?: unknown, groupId?: unknown } | undefined
+
+  return config?.keyId === selectedColumn.config?.keyId && config?.groupId === selectedColumn.config?.groupId
+}
 
 // The grid request sends an advanced column under its per-instance `__meta.uniqueId` instead of its
 // shared 'advanced' key, so sibling advanced columns can be told apart (see use-data-query-helper.ts).
@@ -29,7 +49,11 @@ const findSelectedColumn = (
     )
   }
 
-  return selectedColumns.find((selectedColumn) => selectedColumn.key === column.key)
+  return selectedColumns.find((selectedColumn) =>
+    selectedColumn.key === column.key &&
+    matchesLocale(column, selectedColumn) &&
+    matchesClassificationStoreKey(column, selectedColumn)
+  )
 }
 
 /**

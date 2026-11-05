@@ -111,10 +111,11 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
           )}
           {isDocumentType && (
             <IconButton
-              aria-label={ t('aria.version.delete') }
+              aria-label={ t('open') }
               icon={ { value: 'open-folder' } }
               loading={ isLoading }
               onClick={ () => { !isNull(url) && window.open(url, '_blank') } }
+              tooltip={ { title: t('open') } }
               type={ 'default' }
             />
           )}
@@ -124,6 +125,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
             icon={ { value: 'trash' } }
             loading={ isLoadingDeleteVersion }
             onClick={ handleDeleteVersion }
+            tooltip={ { title: t('delete') } }
             type={ 'default' }
           />
         </Space>

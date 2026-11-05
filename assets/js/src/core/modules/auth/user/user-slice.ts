@@ -84,6 +84,13 @@ const slice = createSlice({
       }
     },
 
+    twoFactorAuthenticationChanged: (state, { payload }: PayloadAction<Partial<UserInformation['twoFactorAuthentication']>>) => {
+      return {
+        ...state,
+        twoFactorAuthentication: { ...state.twoFactorAuthentication, ...payload }
+      }
+    },
+
     setPerspectives: (state, { payload }: PayloadAction<UserInformation['perspectives']>) => {
       return {
         ...state,
@@ -104,6 +111,7 @@ export const {
   userProfileUpdated,
   userProfileImageUpdated,
   setPerspectives,
+  twoFactorAuthenticationChanged,
   resetChanges,
   setModifiedCells
 } = slice.actions

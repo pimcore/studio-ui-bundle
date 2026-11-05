@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ReactNode } from 'react'
+import React, { type ReactNode } from 'react'
 import { renderHook } from '@testing-library/react'
 import { useStudioModal, withDraggableModals } from './use-studio-modal'
 
@@ -34,6 +34,10 @@ jest.mock('@Pimcore/app/public-api/helpers/api-helper', () => ({
   getPimcoreStudioApi: () => mockGetApi()
 }))
 
+jest.mock('@Pimcore/components/icon/icon', () => ({
+  Icon: ({ value }: { value: string }) => <span data-testid={ `icon-${value}` } />
+}))
+
 // The real wrapper renders a component that owns hooks, which is exactly what must never
 // cross a React boundary: the stub only marks the render function it produced.
 jest.mock('@Pimcore/components/modal/hooks/draggable-modal-render', () => ({
@@ -45,6 +49,7 @@ jest.mock('@Pimcore/components/modal/hooks/draggable-modal-render', () => ({
 
 interface PassedConfig {
   title?: string
+  icon?: unknown
   modalRender?: { isDraggable?: boolean, existingRender?: unknown }
 }
 
@@ -79,6 +84,43 @@ describe('useStudioModal', () => {
       expect(passed.title).toBe('Remove')
       expect(isDraggable(passed)).toBe(true)
     })
+  })
+
+  it('gives a confirmation without an icon the studio one', () => {
+    const { result } = renderHook(() => useStudioModal())
+
+    result.current.modal.confirm({ content: 'sure?' })
+
+    expect(firstConfig(mockLocalModal.confirm).icon).toBeDefined()
+  })
+
+  /**
+   * `icon` is a ReactNode, so null is a caller saying "no icon" - the form-style dialogs pass it
+   * to suppress the glyph. Defaulting it away would put an icon back on every rename prompt.
+   */
+  it('leaves an explicitly suppressed icon suppressed', () => {
+    const { result } = renderHook(() => useStudioModal())
+
+    result.current.modal.confirm({ content: 'rename', icon: null })
+
+    expect(firstConfig(mockLocalModal.confirm).icon).toBeNull()
+  })
+
+  it('leaves a caller-supplied icon alone', () => {
+    const icon = <span data-testid='custom' />
+    const { result } = renderHook(() => useStudioModal())
+
+    result.current.modal.confirm({ content: 'sure?', icon })
+
+    expect(firstConfig(mockLocalModal.confirm).icon).toBe(icon)
+  })
+
+  it.each(['info', 'success', 'error', 'warning'] as const)('does not add an icon to %s', (method) => {
+    const { result } = renderHook(() => useStudioModal())
+
+    result.current.modal[method]({ content: 'hello' })
+
+    expect(firstConfig(mockLocalModal[method]).icon).toBeUndefined()
   })
 
   it.each(METHODS)('hands %s to the parent window modal untouched inside an iframe', (method) => {

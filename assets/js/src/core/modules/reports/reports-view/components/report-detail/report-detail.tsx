@@ -103,8 +103,10 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       justify='flex-start'
     >
       <IconButton
+        aria-label={ t('open') }
         icon={ { value: 'open-folder' } }
         onClick={ () => { handleElementOpen({ id: Number(id), actionType }) } }
+        tooltip={ { title: t('open') } }
         type="link"
       />
     </Flex>

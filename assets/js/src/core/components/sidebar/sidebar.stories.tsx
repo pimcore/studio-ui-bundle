@@ -28,6 +28,7 @@ const config: Meta = {
         <Sidebar
           buttons={ args.buttons }
           collapsible={ args.collapsible }
+          defaultActiveTab={ args.defaultActiveTab }
           entries={ args.entries }
           highlights={ args.highlights }
           resizable={ args.resizable }
@@ -56,6 +57,7 @@ It can be used in two ways:
 - Manually resizable width: a resize handle appears when hovering the left edge of the
   expanded sidebar — drag it (or focus it and use the arrow keys); the width of the
   current size acts as the minimum
+- Opened on a given tab with \`defaultActiveTab\`; without it the sidebar starts collapsed
 - Pinned open with \`collapsible={false}\` — the active tab can be switched but not closed
 - Container-sized with \`resizable={false}\` — no handle of its own, the panel fills the
   space a resizable parent such as \`SplitLayout\` gives it
@@ -85,6 +87,10 @@ It can be used in two ways:
     },
     highlights: {
       description: 'Array of entry keys to highlight'
+    },
+    defaultActiveTab: {
+      control: { type: 'text' },
+      description: 'Key of the entry to open on mount; empty starts collapsed'
     },
     collapsible: {
       control: { type: 'boolean' },
@@ -290,6 +296,20 @@ export const _default = {
     docs: {
       description: {
         story: 'Basic sidebar with one tab. Click the details icon to expand the sidebar.'
+      }
+    }
+  }
+}
+
+export const DefaultActiveTab = {
+  args: {
+    ...demoData,
+    defaultActiveTab: 'details'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Opens on the details tab. It still collapses like any other tab.'
       }
     }
   }

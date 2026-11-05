@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { isEqual, isNull } from 'lodash'
 import { type ElementIcon } from '@Pimcore/components/icon/icon'
 import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
@@ -38,16 +38,16 @@ export const useReportFormState = (): IUseReportFormStateReturn => {
   const [initialData, setInitialData] = useState<ReportFormData | null>(null)
   const [currentData, setCurrentData] = useState<ReportFormData | null>(null)
 
-  const initializeForm = (data: BundleCustomReportsDetails): void => {
+  const initializeForm = useCallback((data: BundleCustomReportsDetails): void => {
     const normalizedData = normalizeReportFormData(data)
 
     setInitialData({ ...normalizedData })
     setCurrentData({ ...normalizedData })
-  }
+  }, [])
 
-  const updateFormData = (data: Partial<ReportFormData>): void => {
+  const updateFormData = useCallback((data: Partial<ReportFormData>): void => {
     setCurrentData(prev => !isNull(prev) ? { ...prev, ...data } : null)
-  }
+  }, [])
 
   const markFormSaved = (): void => {
     !isNull(currentData) && setInitialData({ ...currentData })

@@ -81,7 +81,14 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
           trackError(new ApiError(response.error))
         }
 
-        updateAssetFieldValue(args.body.data[0].id, 'filename', args.body.data[0].key)
+        // Every patched element needs its cache entry updated, not just the first - but
+        // only for what the patch actually carries: a move sends no key, and writing it
+        // would blank the cached filename.
+        args.body.data.forEach(item => {
+          if (!isUndefined(item.key)) {
+            updateAssetFieldValue(item.id, 'filename', item.key)
+          }
+        })
 
         return isUndefined(response.error)
       } else if (elementType === 'data-object') {
@@ -90,7 +97,12 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
           trackError(new ApiError(response.error))
         }
 
-        updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+        // Every patched element needs its cache entry updated, not just the first.
+        args.body.data.forEach(item => {
+          if (!isUndefined(item.key)) {
+            updateDataObjectFieldValue(item.id, 'key', item.key)
+          }
+        })
 
         return isUndefined(response.error)
       } else if (elementType === 'document') {
@@ -125,7 +137,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
 
   const getElementById = async (id: number): Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined> => {
     if (elementType === 'asset') {
-      const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+      const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }, { subscribe: false }))
 
       if (data !== undefined) {
         if ('error' in data) {
@@ -140,7 +152,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
     }
 
     if (elementType === 'data-object') {
-      const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }))
+      const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }, { subscribe: false }))
 
       if (data !== undefined) {
         if ('error' in data) {

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -24,8 +24,9 @@ import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from '../../report-configuration.styles'
+import { createSectionPropsComparator, PERMISSION_FIELDS } from '../../helpers'
 
-export const Permissions = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
+const PermissionsComponent = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -58,7 +59,6 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
       .filter(name => !isUndefined(name))
 
     updateFormData?.({
-      ...currentData,
       sharedUserNames: updatedSharedUsers,
       sharedRoleNames: updatedSharedRoles
     })
@@ -157,3 +157,5 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
     </FormKit.Panel>
   )
 }
+
+export const Permissions = memo(PermissionsComponent, createSectionPropsComparator(PERMISSION_FIELDS, 'only'))

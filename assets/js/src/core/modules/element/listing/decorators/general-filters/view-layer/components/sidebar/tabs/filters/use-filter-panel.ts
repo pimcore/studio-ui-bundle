@@ -16,6 +16,7 @@ import { SearchContext } from '@Pimcore/modules/search/provider/search-provider'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { FULLTEXT_SEARCH_MODE_ID } from '../../../../../search-modes/search-mode-abstract'
 import { useSearchMode } from '../../../../../search-modes/use-search-mode'
+import { useDropVanishedModeColumnFilters } from '../../../../../search-modes/use-drop-vanished-mode-column-filters'
 import { elementFilterDefaults, readElementFilterValues, useAppliedFilters, useDraftFilterValues } from '../../../../../element-filters'
 import { useFieldFilterEditor, type UseFieldFilterEditorReturn } from './field-filters/use-field-filter-editor'
 import { buildAppliedValues } from './build-applied-values'
@@ -44,6 +45,7 @@ export const useFilterPanel = (): UseFilterPanelReturn => {
 
   const draft = useDraftFilterValues()
   const searchMode = useSearchMode('draft')
+  useDropVanishedModeColumnFilters()
   // Present inside the search modal only, where the term and mode are shared across its tabs.
   const searchContext = useContext(SearchContext)
 

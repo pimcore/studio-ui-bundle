@@ -138,6 +138,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
           </Flex>
           <Flex>
             <IconButton
+              aria-label={ t('toolbar.reload') }
               disabled={ isLoading || isRTKFetching }
               icon={ { value: 'refresh' } }
               onClick={ () => {
@@ -145,6 +146,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
                 refreshData()
                 setIsLoading(false)
               } }
+              tooltip={ { title: t('toolbar.reload') } }
             />
             {total > 0 && (
               <>

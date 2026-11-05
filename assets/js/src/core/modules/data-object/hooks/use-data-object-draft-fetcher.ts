@@ -33,7 +33,7 @@ export const useDataObjectDraftFetcher = (): UseDataObjectDraftFetcherReturn => 
 
     fetchingDrafts.set(id, true)
     try {
-      const { data: dataObjectData, error } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }, { forceRefetch }))
+      const { data: dataObjectData, error } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }, { forceRefetch, subscribe: false }))
 
       if (!isUndefined(error)) {
         trackError(new ApiError(error))

@@ -8,38 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useMemo, useState } from 'react'
+import { usePreviewMode } from '@Pimcore/components/preview-mode/preview-mode-provider'
 
-export interface IPreviewItemContext {
-  item: any
-  setItem: (item: any) => void
-}
-
-export const PreviewItemContext = createContext<IPreviewItemContext>({
-  item: null,
-  setItem: () => {}
-})
-
-export interface IPreviewItemProviderProps {
-  children?: React.ReactNode
-}
-
-export const PreviewItemProvider = ({ children }: IPreviewItemProviderProps): React.JSX.Element => {
-  const [item, setItem] = useState<any>(null)
-
-  return useMemo(() => (
-    <PreviewItemContext.Provider value={ { item, setItem } }>
-      {children}
-    </PreviewItemContext.Provider>
-  ), [item, children])
-}
-
-export interface UsePreviewItemReturn extends IPreviewItemContext {}
-
-export const usePreviewItem = (): UsePreviewItemReturn => {
-  const context = React.useContext(PreviewItemContext)
-  if (context === undefined) {
-    throw new Error('usePreviewItem must be used within a PreviewItemProvider')
-  }
-  return context
+/** Adapter: the picked item now lives in the shared preview-mode module */
+export const usePreviewItem = (): { item: any, setItem: (item: any) => void } => {
+  const { item, setItem } = usePreviewMode()
+  return { item, setItem }
 }

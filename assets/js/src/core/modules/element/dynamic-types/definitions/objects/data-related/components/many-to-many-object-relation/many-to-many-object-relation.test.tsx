@@ -18,7 +18,9 @@ jest.mock('@Pimcore/components/language-selection', () => ({
 }))
 
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key })
+  useTranslation: () => ({
+    t: (key: string, options?: Record<string, unknown>) => options === undefined ? key : `${key} ${JSON.stringify(options)}`
+  })
 }))
 
 const mockManyToManyRelation = jest.fn((props: any) => null)
@@ -73,7 +75,7 @@ interface GridQueryArgs {
   columns: Array<{ key: string, locale?: string }>
 }
 
-let gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn() }
+let gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn(), loadedCount: 0, totalCount: 0 }
 const mockUseDataObjectGrids = jest.fn((args: GridQueryArgs) => gridResult)
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids', () => ({
@@ -179,7 +181,7 @@ describe('ManyToManyObjectRelation visible field loading', () => {
   beforeEach(() => {
     mockManyToManyRelation.mockClear()
     availableGridColumnsLoading = false
-    gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn() }
+    gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn(), loadedCount: 0, totalCount: 0 }
   })
 
   // The relation rows are part of the object data and must not wait for the visible field values.
@@ -201,6 +203,50 @@ describe('ManyToManyObjectRelation visible field loading', () => {
     render(<>{ renderRelation().hint }</>)
 
     expect(screen.getByText('relations.visible-fields.loading')).toBeTruthy()
+  })
+
+  it('shows how many visible field values are loaded once a part of them is there', () => {
+    gridResult = { ...gridResult, isLoading: true, loadedCount: 100, totalCount: 250 }
+
+    render(<>{ renderRelation().hint }</>)
+
+    expect(screen.getByText('relations.visible-fields.loading-progress {"loaded":100,"total":250}')).toBeTruthy()
+    expect(screen.queryByText('relations.visible-fields.loading')).toBeNull()
+  })
+
+  it('keeps showing the progress while the values reload and every id still has a value', () => {
+    gridResult = { ...gridResult, isLoading: true, loadedCount: 250, totalCount: 250 }
+
+    render(<>{ renderRelation().hint }</>)
+
+    expect(screen.getByText('relations.visible-fields.loading-progress {"loaded":250,"total":250}')).toBeTruthy()
+  })
+
+  it('shows the plain loading hint while no visible field value is loaded yet', () => {
+    gridResult = { ...gridResult, isLoading: true, loadedCount: 0, totalCount: 250 }
+
+    render(<>{ renderRelation().hint }</>)
+
+    expect(screen.getByText('relations.visible-fields.loading')).toBeTruthy()
+    expect(screen.queryByText(/loading-progress/)).toBeNull()
+  })
+
+  it('shows no progress hint once loading has finished', () => {
+    gridResult = { ...gridResult, isLoading: false, loadedCount: 250, totalCount: 250 }
+
+    expect(renderRelation().hint).toBeUndefined()
+  })
+
+  it('hands the values that are already loaded to the relation while the rest is still loading', () => {
+    gridResult = {
+      ...gridResult,
+      isLoading: true,
+      loadedCount: 1,
+      totalCount: 2,
+      data: [{ id: 5, columns: [{ key: 'name', value: 'Golf' }] }] as any
+    }
+
+    expect(renderRelation().visibleFieldsValue).toEqual([{ name: 'Golf' }])
   })
 
   it('shows an error hint when the visible field values could not be loaded', () => {

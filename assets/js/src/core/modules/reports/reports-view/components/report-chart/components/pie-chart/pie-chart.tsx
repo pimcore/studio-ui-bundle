@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { Pie } from '@ant-design/plots'
-import { isEmpty, merge } from 'lodash'
+import { isEmpty, merge, toNumber } from 'lodash'
 import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -25,6 +25,9 @@ export interface IChartPieDataItem extends IChartDataItem {
 const CHART_FIELD_TYPE_KEY = 'type'
 const CHART_FIELD_VALUE_KEY = 'value'
 const CHART_FIELD_COLOR_KEY = 'color'
+// Significant digits kept in the displayed total: drops float addition noise (10.1 + 20.2 = 30.299999999999997)
+// without cutting real decimals or small values
+const TOTAL_DISPLAY_DIGITS = 12
 
 export const PieChart = ({ reportData, chartData, chartConfig, showLegend = true }: IChartProps): React.JSX.Element => {
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
@@ -35,7 +38,7 @@ export const PieChart = ({ reportData, chartData, chartConfig, showLegend = true
   const reportChartData: IChartPieDataItem[] = useMemo(() => {
     return chartData.map((item, index) => ({
       [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
-      [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
+      [CHART_FIELD_VALUE_KEY]: toNumber(item?.[pieColumn]),
       [CHART_FIELD_COLOR_KEY]: colorList[index]
     }))
   }, [chartData, pieLabelColumn, pieColumn, colorList])
@@ -60,6 +63,10 @@ export const PieChart = ({ reportData, chartData, chartConfig, showLegend = true
       0
     )
   }, [visibleChartData])
+
+  const displayTotal = useMemo(() => {
+    return toNumber(totalCount.toPrecision(TOTAL_DISPLAY_DIGITS))
+  }, [totalCount])
 
   useEffect(() => {
     if (chartRef === null) return
@@ -104,7 +111,7 @@ export const PieChart = ({ reportData, chartData, chartConfig, showLegend = true
         type: 'text',
         data: [],
         style: {
-          text: totalCount.toString(),
+          text: displayTotal.toString(),
           x: '50%',
           y: '50%',
           textAlign: 'center',

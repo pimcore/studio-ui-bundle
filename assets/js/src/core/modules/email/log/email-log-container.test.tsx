@@ -62,7 +62,13 @@ jest.mock('@Pimcore/components/title/title', () => ({
 }))
 
 jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: () => null
+  IconButton: ({ 'aria-label': ariaLabel, tooltip }: { 'aria-label'?: string, tooltip?: { title?: string } }) => (
+    <button
+      aria-label={ ariaLabel }
+      data-tooltip={ tooltip?.title }
+      type="button"
+    />
+  )
 }))
 
 jest.mock('@Pimcore/components/pagination/pagination', () => ({
@@ -102,37 +108,42 @@ const failedEmail: EmailLog = {
   subject: 'Failed message'
 }
 
+const collectionData = { totalItems: 1, items: [regularEmail] }
+const collectionResult: ReturnType<typeof useEmailLogGetCollectionQuery> = {
+  data: collectionData,
+  currentData: collectionData,
+  status: QueryStatus.fulfilled,
+  isUninitialized: false,
+  isLoading: false,
+  isFetching: false,
+  isSuccess: true,
+  isError: false,
+  refetch: jest.fn()
+}
+
+const searchData = { totalItems: 1, items: [failedEmail] }
+const searchResult: ReturnType<typeof useEmailLogSearchQuery> = {
+  data: searchData,
+  currentData: searchData,
+  status: QueryStatus.fulfilled,
+  isUninitialized: false,
+  isLoading: false,
+  isFetching: false,
+  isSuccess: true,
+  isError: false,
+  refetch: jest.fn()
+}
+
 describe('EmailLogContainer', () => {
-  it('switches from the collection endpoint to email search results', () => {
-    const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
-    const searchQuery = jest.mocked(useEmailLogSearchQuery)
-    const collectionData = { totalItems: 1, items: [regularEmail] }
-    const collectionResult: ReturnType<typeof useEmailLogGetCollectionQuery> = {
-      data: collectionData,
-      currentData: collectionData,
-      status: QueryStatus.fulfilled,
-      isUninitialized: false,
-      isLoading: false,
-      isFetching: false,
-      isSuccess: true,
-      isError: false,
-      refetch: jest.fn()
-    }
-    const searchData = { totalItems: 1, items: [failedEmail] }
-    const searchResult: ReturnType<typeof useEmailLogSearchQuery> = {
-      data: searchData,
-      currentData: searchData,
-      status: QueryStatus.fulfilled,
-      isUninitialized: false,
-      isLoading: false,
-      isFetching: false,
-      isSuccess: true,
-      isError: false,
-      refetch: jest.fn()
-    }
+  const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
+  const searchQuery = jest.mocked(useEmailLogSearchQuery)
+
+  beforeEach(() => {
     collectionQuery.mockReturnValue(collectionResult)
     searchQuery.mockReturnValue(searchResult)
+  })
 
+  it('switches from the collection endpoint to email search results', () => {
     render(<EmailLogContainer />)
 
     expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: false })
@@ -151,5 +162,11 @@ describe('EmailLogContainer', () => {
     )
     expect(screen.getByTestId('email-log-items').textContent).toBe('2')
     expect(screen.getByTestId('email-log-total').textContent).toBe('1')
+  })
+
+  it('labels the refresh button and gives it the Reload tooltip', () => {
+    render(<EmailLogContainer />)
+
+    expect(screen.getByRole('button', { name: 'toolbar.reload' })).toHaveAttribute('data-tooltip', 'toolbar.reload')
   })
 })

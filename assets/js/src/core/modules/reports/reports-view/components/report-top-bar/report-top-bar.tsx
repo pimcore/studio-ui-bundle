@@ -18,6 +18,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
+import { useReportTab } from '@Pimcore/modules/reports/reports-view/hooks/use-report-tab'
 
 interface IReportTopBarProps {
   currentReport: string | null
@@ -31,8 +32,14 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
 
   const { resetFilters } = useGridFilterContext()
   const { resetData } = useReportDataContext()
+  const { openReportInTab } = useReportTab()
 
   const handleReportChange = (value: string): void => {
+    // The tab remounts with the new report, or focuses the report's existing tab
+    if (openReportInTab(value)) {
+      return
+    }
+
     resetData()
     resetFilters()
 

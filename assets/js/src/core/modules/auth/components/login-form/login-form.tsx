@@ -15,18 +15,21 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
+import { getTwoFactorChallenge, type TwoFactorChallenge } from '@Pimcore/modules/auth/hooks/use-two-factor-authentication'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
 import { Checkbox, Input } from 'antd'
+import { isUndefined } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
   onPasswordForgotten?: () => void
+  onTwoFactorRequired?: (challenge: TwoFactorChallenge) => void
 }
 
-export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
+export const LoginForm = ({ onPasswordForgotten, onTwoFactorRequired }: ILoginFormProps): React.JSX.Element => {
   const user = useUser()
   const { styles } = useStyle()
   const messageApi = useMessage()
@@ -58,6 +61,14 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+      }
+
+      const twoFactor = response.error === undefined ? getTwoFactorChallenge(response.data) : undefined
+
+      if (!isUndefined(twoFactor)) {
+        setIsLoginLoading(false)
+        onTwoFactorRequired?.(twoFactor)
+        return
       }
 
       if (response.error === undefined) {

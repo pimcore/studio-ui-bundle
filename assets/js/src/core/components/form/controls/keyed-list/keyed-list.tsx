@@ -23,9 +23,11 @@ export interface KeyedListProps {
   onChange?: (value: KeyedListData['values']) => void
   onFieldChange?: (field: NamePath, value: any) => void
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
+  /** Counterpart of onFieldChange: puts a field back to the value it was loaded with. */
+  onFieldRestore?: (field: NamePath) => void
 }
 
-const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
+const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps, onFieldRestore }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
   // Mirror of the current value, kept in sync during render so the (referentially
@@ -44,10 +46,19 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   onFieldChangeRef.current = onFieldChange
   const getAdditionalComponentPropsRef = useRef(getAdditionalComponentProps)
   getAdditionalComponentPropsRef.current = getAdditionalComponentProps
+  const onFieldRestoreRef = useRef(onFieldRestore)
+  onFieldRestoreRef.current = onFieldRestore
+  const supportsFieldRestore = !isUndefined(onFieldRestore)
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
   const previousInitialValue = useRef(initialValue)
+  // keys added through add() since the last incoming value: their field registrations (e.g. prefilled
+  // defaults) are content the user brought in, not part of the loaded state, so they stay a change
+  const addedKeysRef = useRef<Set<string>>(new Set())
+  // the last value handed to onChange since the last incoming value: reverting to the baseline after that
+  // report still has to be reported, otherwise the consumer keeps the reported state
+  const lastReportedRef = useRef<KeyedListData['values'] | null>(null)
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
@@ -69,6 +80,8 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     previousInitialValue.current = initialValue
+    addedKeysRef.current.clear()
+    lastReportedRef.current = null
 
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -82,6 +95,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
         return currentValue
       }
 
+      addedKeysRef.current.add(key)
       const _newValue = cloneDeep(currentValue)
       _newValue[key] = newValue
       return _newValue
@@ -93,6 +107,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       const newValue = cloneDeep(currentValue)
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete newValue[key]
+      addedKeysRef.current.delete(key)
       return newValue
     })
   }, [])
@@ -123,7 +138,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       return obj
     }
 
-    if (isInitialValue) {
+    if (isInitialValue && !addedKeysRef.current.has(nameDifference[0])) {
       const newBaseline = cloneDeep(baselineValue.current)
       setWith(newBaseline, nameDifference, newSubValue, setAsObject)
       baselineValue.current = newBaseline
@@ -149,7 +164,10 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     // a list that came in empty and is still empty has nothing to report: registrations of
     // mounting fields only touch the baseline. Emptying a list that came in with entries (removing its last
     // entry) is a real change, consumers derive their deletion markers from it.
-    if (!isEqual(value, baselineValue.current) && !(isEmpty(value) && isEmpty(initialValue))) {
+    const differsFromBaseline = !isEqual(value, baselineValue.current) && !(isEmpty(value) && isEmpty(initialValue))
+    const revertsReported = lastReportedRef.current !== null && !isEqual(value, lastReportedRef.current)
+    if (differsFromBaseline || revertsReported) {
+      lastReportedRef.current = cloneDeep(value)
       onChange(value)
     }
   }, [bufferedValue])
@@ -176,6 +194,11 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     []
   )
 
+  const stableOnFieldRestore = useCallback(
+    (field: NamePath): void => { onFieldRestoreRef.current?.(field) },
+    []
+  )
+
   // Stable external store: subscribers (per-field via useKeyedListValue) read the
   // current value through getSnapshot and are notified whenever it changes.
   const store = useMemo(() => ({
@@ -197,6 +220,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   return (
     <KeyedListProvider
       getAdditionalComponentProps={ stableGetAdditionalComponentProps }
+      onFieldRestore={ supportsFieldRestore ? stableOnFieldRestore : undefined }
       operations={ operations }
       store={ store }
     >

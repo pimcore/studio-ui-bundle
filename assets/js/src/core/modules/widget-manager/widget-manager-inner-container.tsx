@@ -15,7 +15,8 @@ import { Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode } 
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectInnerModel, selectMainWidgetContext, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
-import { TabTitleOuterContainer } from './title/tab-title-outer-container'
+import { MainTabTitle } from './title/main-tab-title'
+import { useExpandOnDoubleClick } from './hooks/use-expand-on-double-click'
 import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
 import { isEqual } from 'lodash'
 
@@ -23,6 +24,8 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
   const mainWidgetContext = useAppSelector(selectMainWidgetContext)
   const dispatch = useAppDispatch()
+
+  useExpandOnDoubleClick()
 
   // keep a stable model instance: only recreate when the redux action
   // changes the JSON (e.g. openMainWidget, closeWidget).
@@ -79,7 +82,7 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   }, [dispatch])
 
   const onRenderTab = useCallback((node: TabNode, renderValues: ITabRenderValues): void => {
-    renderValues.content = <TabTitleOuterContainer node={ node } />
+    renderValues.content = <MainTabTitle node={ node } />
     renderValues.leading = <></>
   }, [])
 

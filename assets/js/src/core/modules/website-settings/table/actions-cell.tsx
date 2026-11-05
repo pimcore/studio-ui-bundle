@@ -14,6 +14,7 @@ import { Flex, IconButton } from '@sdk/components'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { type WebsiteSettingRow } from '../website-settings-container'
 import { type WebsiteSettingEnrichedWithActions } from './table'
+import { useTranslation } from 'react-i18next'
 
 interface ActionsCellProps {
   info: CellContext<WebsiteSettingEnrichedWithActions, React.ReactNode>
@@ -21,6 +22,7 @@ interface ActionsCellProps {
 }
 
 export const ActionsCell = ({ info, setWebsiteSettingRows }: ActionsCellProps): JSX.Element => {
+  const { t } = useTranslation()
   const row = info.row.original
   const id = row.id
   const { deleteSettingById, deleteLoading } = useWebsiteSetting()
@@ -39,9 +41,11 @@ export const ActionsCell = ({ info, setWebsiteSettingRows }: ActionsCellProps): 
       justify="center"
     >
       <IconButton
+        aria-label={ t('delete') }
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
         onClick={ handleDelete }
+        tooltip={ { title: t('delete') } }
         type="link"
       />
     </Flex>

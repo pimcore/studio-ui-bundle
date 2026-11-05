@@ -9,6 +9,7 @@
  */
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
+import { arrowTurnTransition } from '@Pimcore/utils/motion'
 
 export const useStyles = createStyles(({ css, token }) => {
   const themeToken = {
@@ -25,25 +26,40 @@ export const useStyles = createStyles(({ css, token }) => {
         background: transparent;
         border: none;
 
+        /* the expand arrow turns when opening and closing, and highlights on hover and while pressed */
         .expand-icon {
-          color: ${token.colorIcon}
+          color: ${token.colorIcon};
+          ${arrowTurnTransition(`color ${token.motionDurationFast} ${token.motionEaseOut}`)}
+
+          &.expand-icon--open {
+            transform: rotate(180deg);
+          }
+
+          &:hover {
+            color: ${token.colorPrimaryHover};
+          }
+
+          &:active {
+            color: ${token.colorPrimaryActive};
+          }
         }
 
         &.ant-collapse-small >.ant-collapse-item >.ant-collapse-header {
           display: flex;
-          min-height: 38px;
+          min-height: 40px;
           padding: ${token.paddingXXS}px ${token.paddingSM}px;
           align-items: center;
+
+          /* an action button sits on the content separator: the header row is moved down
+             as a whole, so the title, the expand icon and the button stay vertically aligned */
+          &:has(.button--type-action) {
+            padding-top: ${token.paddingXS}px;
+            padding-bottom: 0;
+          }
         }
 
         &.ant-collapse-small:not(.collapse-item--theme-card-with-highlight) .collapse-header__title {
           font-weight: 400;
-        }
-
-        &>.ant-collapse-item >.ant-collapse-header {
-          .button--type-action {
-            margin-bottom: -4px;
-          }
         }
 
         .collapse-header__title-container {
@@ -80,7 +96,7 @@ export const useStyles = createStyles(({ css, token }) => {
           }
         }
 
-        .collapse-item--theme-border-highlight {
+        &.collapse-item--theme-border-highlight {
           background-color: ${themeToken.colorBgContainer};
           border-left: 3px solid #D5CFDA;
           border-radius: 0;

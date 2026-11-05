@@ -22,10 +22,13 @@ import { Button } from '@Pimcore/components/button/button'
 import {
   useIsElementSelectorListing
 } from '@Pimcore/modules/element/element-selector/provider/is-element-selector-listing/use-is-element-selector-listing'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { useTranslation } from 'react-i18next'
 
 type PreviewContainerProps = CellContext<Asset, string | undefined> | undefined
 
 const AssetPreviewCell = (props: PreviewContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { styles } = useStyle()
   const { openAsset } = useAssetHelper()
   const { isElementSelector } = useIsElementSelectorListing()
@@ -64,12 +67,18 @@ const AssetPreviewCell = (props: PreviewContainerProps): React.JSX.Element => {
       }
 
       return (
-        <Button
-          icon={ icon }
-          onClick={ openAssetWidget }
-          onKeyDown={ onKeyEnterExecuteClick }
-          type={ 'link' }
-        />
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('open') }
+        >
+          <Button
+            aria-label={ t('open') }
+            icon={ icon }
+            onClick={ openAssetWidget }
+            onKeyDown={ onKeyEnterExecuteClick }
+            type={ 'link' }
+          />
+        </Tooltip>
       )
     }
 

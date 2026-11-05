@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import React, { useCallback, useMemo } from 'react'
 import { type SelectedColumn } from '../../../configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useSelectedColumns } from '../../../configuration-layer/provider/selected-columns/use-selected-columns'
@@ -17,11 +17,12 @@ import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-t
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnResizeEndEvent } from '@Pimcore/types/components/types'
 import { useSettings } from '../../../settings/use-settings'
+import { getColumnIdentity } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-columns'
 
 export const GridContainer = (): React.JSX.Element => {
   const { dataQueryResult, dataLoadingState } = useData()
   const { isLoading, isFetching, data } = dataQueryResult!
-  const { selectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier, shouldMapDataToColumn } = useSelectedColumns()
+  const { selectedColumns, visibleColumns, setSelectedColumns, isSearchModeColumn, updateSearchModeColumnPlacements, encodeColumnIdentifier, decodeColumnIdentifier, shouldMapDataToColumn } = useSelectedColumns()
   const { useGridOptions } = useSettings()
   const { getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
   const columnHelper = createColumnHelper()
@@ -29,14 +30,14 @@ export const GridContainer = (): React.JSX.Element => {
   const gridColumnDefinition = useMemo(() => {
     const columns: Array<AccessorKeyColumnDef<unknown, never>> = []
 
-    selectedColumns.forEach((column) => {
+    visibleColumns.forEach((column) => {
       columns.push(
         columnHelper.accessor(encodeColumnIdentifier(column), transformGridColumn(column))
       )
     })
 
     return transformGridColumnDefinition(columns)
-  }, [selectedColumns])
+  }, [visibleColumns])
 
   const gridData = useMemo(() => {
     if (data === undefined) {
@@ -82,7 +83,7 @@ export const GridContainer = (): React.JSX.Element => {
     }
 
     return memoizedData
-  }, [data, selectedColumns])
+  }, [data, visibleColumns])
 
   const handleColumnResizeEnd = useCallback((event: ColumnResizeEndEvent): void => {
     const widthByColumn = new Map<SelectedColumn, number>()
@@ -102,6 +103,19 @@ export const GridContainer = (): React.JSX.Element => {
       widthByColumn.set(resizedColumn, Math.round(event.width))
     }
 
+    // search mode column widths stay in the session placements; they are never persisted
+    const modeColumnWidths: Record<string, { width: number }> = {}
+
+    widthByColumn.forEach((width, column) => {
+      if (isSearchModeColumn(column) && column.width !== width) {
+        modeColumnWidths[getColumnIdentity(column)] = { width }
+      }
+    })
+
+    if (!isEmpty(modeColumnWidths)) {
+      updateSearchModeColumnPlacements(modeColumnWidths)
+    }
+
     let hasChanges = false
     const newSelectedColumns = selectedColumns.map((column) => {
       const width = widthByColumn.get(column)
@@ -117,7 +131,7 @@ export const GridContainer = (): React.JSX.Element => {
     if (hasChanges) {
       setSelectedColumns(newSelectedColumns)
     }
-  }, [selectedColumns, decodeColumnIdentifier, setSelectedColumns])
+  }, [selectedColumns, decodeColumnIdentifier, setSelectedColumns, isSearchModeColumn, updateSearchModeColumnPlacements])
 
   return useMemo(() => (
     <Grid

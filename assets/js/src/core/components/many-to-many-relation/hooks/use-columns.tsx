@@ -26,6 +26,7 @@ import { isValidPathFormatterConfig } from '../utils/path-formatter'
 import { renderFullPathCell } from '../utils/full-path-cell-renderer'
 import { ColumnHeaderFilter, useRelationFilterColumns } from '@Pimcore/components/many-to-many-relation'
 import { getColumnId } from '../filters/utils/filter-columns'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 interface UseColumnsReturn {
   columns: Array<ColumnDef<any>>
@@ -93,6 +94,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
         buttons.push(
           <Tooltip
             key="open"
+            mouseEnterDelay={ actionTooltipDelay }
             title={ t('open') }
           >
             <IconButton
@@ -115,6 +117,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
         buttons.push(
           <Tooltip
             key="download"
+            mouseEnterDelay={ actionTooltipDelay }
             title={ t('download') }
           >
             <IconButton
@@ -135,6 +138,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
         buttons.push(
           <Tooltip
             key="remove"
+            mouseEnterDelay={ actionTooltipDelay }
             title={ t('remove') }
           >
             <IconButton

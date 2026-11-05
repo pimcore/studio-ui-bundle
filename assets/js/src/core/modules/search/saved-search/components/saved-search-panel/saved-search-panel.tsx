@@ -45,12 +45,14 @@ import { useSavedSearchMetaDirty } from './use-saved-search-meta-dirty'
 interface SavedSearchPanelProps {
   elementType?: ElementType
   supportsLoadedState: boolean
+  /** hide the write actions: the panel shows what the search is, saving happens elsewhere */
+  readOnly?: boolean
 }
 
 interface LiveArgs { classId?: string, body?: { filters?: unknown } }
 type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
 
-export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSearchPanelProps): React.JSX.Element => {
+export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = false }: SavedSearchPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
   const user = useUser()
   const { modal } = useStudioModal()
@@ -148,7 +150,9 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     })
   }
 
-  const renderActions = (): React.JSX.Element => {
+  const renderActions = (): React.JSX.Element | null => {
+    if (readOnly) return null
+
     if (isNil(loaded)) {
       return (
         <Button
@@ -223,7 +227,10 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'extra-small' } }
+      >
         <Flex
           gap='small'
           vertical
@@ -255,6 +262,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
           )}
 
           <SavedSearchForm
+            elementType={ elementType }
             form={ form }
             isSharedGlobally={ isSharedGlobally }
             onSharedGloballyChange={ setIsSharedGlobally }

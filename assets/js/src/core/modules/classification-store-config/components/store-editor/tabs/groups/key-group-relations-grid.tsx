@@ -194,10 +194,11 @@ export const KeyGroupRelationsGrid = ({
               ? null
               : (
                 <IconButton
+                  aria-label={ t('toolbar.reload') }
                   icon={ { value: 'refresh' } }
                   loading={ isFetching }
                   onClick={ () => { void refetch() } }
-                  tooltip={ { title: t('refresh') } }
+                  tooltip={ { title: t('toolbar.reload') } }
                 />
                 ) }
             <Pagination

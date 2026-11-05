@@ -44,6 +44,10 @@ export const AreablockDialog = ({
     handleReloadOnClose()
   }
 
+  const handleCancelDialog = (): void => {
+    onClose?.()
+  }
+
   if (!hasDialog) {
     return null
   }
@@ -56,6 +60,7 @@ export const AreablockDialog = ({
     <EditableDialog
       config={ dialogConfig! }
       editableDefinitions={ mergedEditableDefinitions }
+      onCancel={ handleCancelDialog }
       onClose={ handleCloseDialog }
       visible={ isOpen }
     />

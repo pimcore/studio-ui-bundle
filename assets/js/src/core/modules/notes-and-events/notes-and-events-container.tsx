@@ -46,6 +46,7 @@ const NotesAndEventsView = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
+            aria-label={ t('toolbar.reload') }
             disabled={ isFetching }
             icon={ { value: 'refresh' } }
             onClick={ () => {
@@ -55,6 +56,7 @@ const NotesAndEventsView = (): React.JSX.Element => {
                 )
               )
             } }
+            tooltip={ { title: t('toolbar.reload') } }
           />
 
           {notesAndEvents.length !== 0 && (

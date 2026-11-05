@@ -25,6 +25,10 @@ jest.mock('@Pimcore/modules/element/dynamic-types/definitions/field-filters/comp
   DynamicTypeFieldFilterBooleanSelectComponent: () => null
 }))
 
+jest.mock('@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-string-component', () => ({
+  DynamicTypeFieldFilterStringComponent: () => null
+}))
+
 /* eslint-disable import/first */
 import { columnsFilterDescriptor } from './columns-filter-descriptor'
 import { type IDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/dynamic-filter-provider'

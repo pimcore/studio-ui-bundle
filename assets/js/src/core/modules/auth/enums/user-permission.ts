@@ -42,5 +42,6 @@ export enum UserPermission {
   SelectOptions = 'selectoptions',
   QuantityValues = 'quantityValueUnits',
   AssetMetadata = 'asset_metadata',
-  ClearCache = 'clear_cache'
+  ClearCache = 'clear_cache',
+  McpServers = 'mcp_servers'
 }
