@@ -32,10 +32,12 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
     return key !== '' ? key : nodeName
   }
 
+  // TabTitleContainer is memoised: pass the resolved name as a prop, node.getName() is mutated in place
   return (
     <TabTitleContainer
       modified={ document?.modified ?? false }
       node={ node }
+      title={ node.getName() }
     />
   )
 }
