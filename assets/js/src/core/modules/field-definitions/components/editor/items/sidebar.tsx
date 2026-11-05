@@ -168,8 +168,10 @@ export const ItemsSidebar = (): React.JSX.Element => {
         renderToolbar={
           <Toolbar>
             <IconButton
+              aria-label={ t('toolbar.reload') }
               icon={ { value: 'refresh' } }
               onClick={ refetch }
+              tooltip={ { title: t('toolbar.reload') } }
             />
 
             { canCreate && (
