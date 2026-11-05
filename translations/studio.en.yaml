@@ -3087,3 +3087,43 @@ tree.actions.edit-tag: Edit
 tag-configuration.edit-tag: 'Edit "{{name}}"'
 tag-configuration.name-required: 'Please enter a tag name'
 tag-configuration.move-targets-failed: 'The list of tags could not be loaded, so only the name can be changed'
+navigation.service-users: Service Users
+widget.service-user-management: Service Users
+service-users.create: New
+service-users.create.title: New service user
+service-users.create.ok: Create
+service-users.create-from-user: From user
+service-users.create-from-user.title: New service user from a user
+service-users.create-from-user.description: 'Copies the permissions, roles and workspaces of the user. The user is not changed and admin rights are never copied.'
+service-users.field.name: Name
+service-users.field.name.fixed: 'The name cannot be changed, because MCP server access is granted by name.'
+service-users.field.name.invalid: 'Use up to 64 letters, digits, dots, hyphens or underscores, starting with a letter or a digit, for example svc-erp-sync.'
+service-users.field.email: Contact email
+service-users.field.source-user: User to copy from
+service-users.filter.unused-days: Unused for more than N days
+service-users.status.inactive: Inactive
+service-users.dormancy.never-used: Never used
+service-users.dormancy.warning: Unused for 90 days
+service-users.dormancy.dormant: Dormant
+service-users.tab.settings: Settings
+service-users.tab.permissions: Permissions
+service-users.tab.roles: Roles
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roles
+service-users.save.success: Service user saved
+service-users.deactivate: Deactivate
+service-users.deactivate.confirm: 'Deactivate service user "{{name}}"? Its credentials stop working with the next request.'
+service-users.delete: Delete
+service-users.delete.confirm: 'Delete service user "{{name}}" permanently? Its OAuth client, its tokens and its MCP server access are removed. This cannot be undone.'
+service-users.credentials.title: Credentials
+service-users.credentials.client-id: Client ID
+service-users.credentials.last-used: Last used
+service-users.credentials.never-used: Never
+service-users.credentials.no-client: No OAuth client
+service-users.credentials.rotate: Rotate secret
+service-users.credentials.rotate.confirm: 'Create a new client secret for "{{name}}"? The current secret stops working at once.'
+service-users.secret.title: Client secret
+service-users.secret.client-secret: Client secret
+service-users.secret.warning: 'Copy the secret now. It is shown only once and cannot be displayed again.'
+service-users.secret.copy: Copy secret
+service-users.secret.close: Close

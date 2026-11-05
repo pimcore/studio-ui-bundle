@@ -11,6 +11,7 @@
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ManagementContainer } from '@Pimcore/modules/user/management/management-container'
 import { RoleContainer } from '@Pimcore/modules/user/roles/container'
+import { ServiceUsersContainer } from '@Pimcore/modules/user/service-users/service-users-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -40,6 +41,18 @@ export const ROLES_WIDGET: WidgetManagerTabConfig = {
   component: 'role-management',
   config: {
     translationKey: 'widget.role-management',
+    icon: {
+      type: 'name',
+      value: 'user'
+    }
+  }
+}
+export const SERVICE_USERS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Service Users',
+  id: 'service-user-management',
+  component: 'service-user-management',
+  config: {
+    translationKey: 'widget.service-user-management',
     icon: {
       type: 'name',
       value: 'user'
@@ -79,6 +92,15 @@ moduleSystem.registerModule({
       widgetConfig: ROLES_WIDGET
     })
 
+    mainNavRegistryService.registerMainNavItem({
+      path: 'System/User & Roles/Service Users',
+      label: 'navigation.service-users',
+      order: 300,
+      permission: UserPermission.Users,
+      perspectivePermission: NavPermission.Users,
+      widgetConfig: SERVICE_USERS_WIDGET
+    })
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget({
@@ -89,6 +111,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'role-management',
       component: RoleContainer
+    })
+
+    widgetRegistryService.registerWidget({
+      name: 'service-user-management',
+      component: ServiceUsersContainer
     })
 
     widgetRegistryService.registerWidget(UserProfileWidget)
