@@ -13,7 +13,7 @@ import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useMaintenanceModeActivateMutation } from '../maintenance-mode-api-slice-enhanced'
 
@@ -25,7 +25,7 @@ interface UseActivateMaintenanceModeReturn {
 
 export const useActivateMaintenanceMode = (): UseActivateMaintenanceModeReturn => {
   const { t } = useTranslation()
-  const { modal } = useStudioModal()
+  const modal = useFormModal()
   const [activate] = useMaintenanceModeActivateMutation()
 
   const activateWithConfirmation = (): void => {

@@ -18,8 +18,8 @@ const mockDeactivate = jest.fn()
 const mockState: { data: { active: boolean } | undefined } = { data: undefined }
 const mockTrackError = jest.fn()
 
-jest.mock('@Pimcore/components/modal/hooks/use-studio-modal', () => ({
-  useStudioModal: () => ({ modal: { confirm: mockConfirm } })
+jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
+  useFormModal: () => ({ confirm: mockConfirm })
 }))
 jest.mock('../maintenance-mode-api-slice-enhanced', () => ({
   useMaintenanceModeGetQuery: () => ({ data: mockState.data }),

@@ -12,7 +12,7 @@ import React from 'react'
 import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
@@ -20,7 +20,7 @@ import { useMaintenanceModeDeactivateMutation, useMaintenanceModeGetQuery } from
 
 export const MaintenanceModeIndicator = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { modal } = useStudioModal()
+  const modal = useFormModal()
   const { data } = useMaintenanceModeGetQuery(undefined, { skip: !isAllowed(UserPermission.MaintenanceMode) })
   const [deactivate] = useMaintenanceModeDeactivateMutation()
 

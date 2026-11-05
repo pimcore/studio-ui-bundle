@@ -16,8 +16,8 @@ const mockConfirm = jest.fn()
 const mockActivate = jest.fn()
 const mockTrackError = jest.fn()
 
-jest.mock('@Pimcore/components/modal/hooks/use-studio-modal', () => ({
-  useStudioModal: () => ({ modal: { confirm: mockConfirm } })
+jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
+  useFormModal: () => ({ confirm: mockConfirm })
 }))
 jest.mock('../maintenance-mode-api-slice-enhanced', () => ({
   useMaintenanceModeActivateMutation: () => [mockActivate]
