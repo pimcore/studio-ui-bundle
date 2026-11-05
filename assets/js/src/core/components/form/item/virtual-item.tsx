@@ -36,7 +36,7 @@ function toNamePath (name: FormItemProps['name']): Array<string | number> {
 }
 
 export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX.Element => {
-  const { label, className, hidden, id, rules, validateTrigger, name } = props
+  const { label, className, hidden, id, rules, validateTrigger, name, required } = props
   const { styles } = useStyles()
   const formInstance = useFormInstance()
   const registry = useVirtualValidatorRegistry()
@@ -83,12 +83,17 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
     }
   }, [registry, fieldName, mountId, rules])
 
+  // Same precedence as antd's Form.Item: an explicit `required` prop (e.g. a mandatory
+  // data object field) wins, otherwise the marker is derived from the rules.
   const isRequired = useMemo(() => {
+    if (required !== undefined) {
+      return required
+    }
     if (rules !== undefined && Array.isArray(rules)) {
       return rules.some(rule => 'required' in rule && rule.required)
     }
     return false
-  }, [rules])
+  }, [required, rules])
 
   const wrapperClassName = [
     className,
