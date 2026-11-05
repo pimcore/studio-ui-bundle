@@ -25,21 +25,22 @@ export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JS
   const { t } = useTranslation()
 
   // Server-composed messages can contain entered values: render them as text, never as markup.
-  if (!isString(errorContent) && isNonEmptyString(errorContent?.message)) {
+  // That covers both shapes the server message arrives in — a bare string, which is what
+  // ApiError returns for a body carrying only `message`, and the object form below. Only a
+  // translated error key goes on through SanitizeHtml, because a translation may carry markup.
+  if (isString(errorContent)) {
+    return <div>{ errorContent }</div>
+  }
+
+  if (isNonEmptyString(errorContent?.message)) {
     return <div>{ errorContent.message }</div>
   }
 
-  const getErrorKeyValue = (): string => {
-    if (!isString(errorContent) && !isUndefined(errorContent?.errorKey)) {
-      return getErrorMessage(errorContent, t)
-    }
-
-    return DEFAULT_ERROR_CONTENT
-  }
-
-  const textValue: string = isString(errorContent) ? errorContent : getErrorKeyValue()
+  const errorKeyValue = isUndefined(errorContent?.errorKey)
+    ? DEFAULT_ERROR_CONTENT
+    : getErrorMessage(errorContent, t)
 
   return (
-    <SanitizeHtml html={ textValue } />
+    <SanitizeHtml html={ errorKeyValue } />
   )
 }

@@ -16,6 +16,7 @@ import { GroupsTab } from '@Pimcore/modules/classification-store-config/componen
 import { KeysTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/keys-tab'
 import { CollectionsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/collections-tab'
 import { SubGroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/sub-groups-tab'
+import { StoreImportProvider } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
 import { useStyles } from '@Pimcore/modules/classification-store-config/classification-store-config.styles'
 
 interface IStoreEditorProps {
@@ -72,14 +73,17 @@ export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps)
     }
   ]
 
+  // The actions are rendered inside the provider, so the tabs hear about an import they trigger.
   return (
-    <Tabs
-      activeKey={ activeKey }
-      className={ styles.storeEditorTabsContainer }
-      items={ tabItems }
-      noTabBarMargin
-      onChange={ setActiveKey }
-      tabBarExtraContent={ importExportActions }
-    />
+    <StoreImportProvider>
+      <Tabs
+        activeKey={ activeKey }
+        className={ styles.storeEditorTabsContainer }
+        items={ tabItems }
+        noTabBarMargin
+        onChange={ setActiveKey }
+        tabBarExtraContent={ importExportActions }
+      />
+    </StoreImportProvider>
   )
 }

@@ -27,13 +27,56 @@ const defaultValidateFile = (file: File): boolean => {
 const EXPORT_ACTION = 'export'
 const IMPORT_ACTION = 'import'
 
-const CONTENT_DISPOSITION_FILENAME = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i
+// RFC 6266: `filename*` carries charset'language'percent-encoded-value, `filename` is either a
+// quoted string — which may contain a semicolon — or an unquoted token ending at the next one.
+const CONTENT_DISPOSITION_EXTENDED = /filename\*\s*=\s*[^';]*'[^';]*'([^;\s]+)/i
+const CONTENT_DISPOSITION_QUOTED = /filename\s*=\s*"((?:[^"\\]|\\.)*)"/i
+const CONTENT_DISPOSITION_BARE = /filename\s*=\s*([^;"]+)/i
+
+/** The percent-decoded value, or nothing when the header's encoding is malformed. */
+const percentDecoded = (value: string): string | undefined => {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return undefined
+  }
+}
+
+/** A name a download can be saved under: its last path segment, or nothing when that is unusable. */
+const saveableFilename = (value: string | undefined): string | undefined => {
+  if (isNil(value)) {
+    return undefined
+  }
+
+  const name = value.trim().split(/[/\\]/).pop()?.trim() ?? ''
+
+  return name === '' || name === '.' || name === '..' ? undefined : name
+}
+
+/**
+ * The name the response asks to be saved under, read per RFC 6266: the extended `filename*`
+ * form wins over the plain one wherever each appears in the header, its percent-encoding is
+ * decoded, and a quoted name keeps any semicolon that sits inside the quotes. Undefined when
+ * the header names nothing a file can be saved under, so the caller's own name is used.
+ */
+const parseContentDispositionFilename = (header: string): string | undefined => {
+  const extended = CONTENT_DISPOSITION_EXTENDED.exec(header)
+  const quoted = CONTENT_DISPOSITION_QUOTED.exec(header)
+  const bare = CONTENT_DISPOSITION_BARE.exec(header)
+
+  const candidates = [
+    isNil(extended) ? undefined : percentDecoded(extended[1]),
+    isNil(quoted) ? undefined : quoted[1].replace(/\\(.)/g, '$1'),
+    isNil(bare) ? undefined : bare[1]
+  ]
+
+  return candidates.map(saveableFilename).find((name) => !isNil(name))
+}
 
 /** the name the response asks for, or a deterministic one when it names none */
 const getExportFilename = (response: Response, itemId: number | string): string => {
-  const match = CONTENT_DISPOSITION_FILENAME.exec(response.headers.get('content-disposition') ?? '')
-
-  return isNil(match) ? `export-${String(itemId)}.json` : match[1]
+  return parseContentDispositionFilename(response.headers.get('content-disposition') ?? '') ??
+    `export-${String(itemId)}.json`
 }
 
 /** The refusal the response carries, or the status-carrying message a body that is not JSON gets. */
@@ -61,6 +104,15 @@ const reportExportFailure = (error: any): void => {
   }
 }
 
+/** an action a surface adds beside export and import — rendered the same way they are */
+export interface ImportExportExtraAction {
+  key: string
+  icon: string
+  label: string
+  inFlight?: boolean
+  onClick: () => void
+}
+
 export interface ImportExportActionsViewProps {
   config: ImportExportConfig
   itemId: number | string | undefined
@@ -68,6 +120,8 @@ export interface ImportExportActionsViewProps {
   onImported?: () => void
   /** render both actions as buttons instead of putting them behind the 'More' dropdown */
   inline?: boolean
+  /** further actions of the owning surface, shown after export and import */
+  extraActions?: ImportExportExtraAction[]
 }
 
 /**
@@ -78,7 +132,8 @@ export const ImportExportActionsView = ({
   config,
   itemId,
   onImported,
-  inline = false
+  inline = false,
+  extraActions = []
 }: ImportExportActionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const messageApi = useMessage()
@@ -139,16 +194,29 @@ export const ImportExportActionsView = ({
     : ''
 
   // The import's own in-flight state is the modal's: it disables its upload while it posts.
-  const actions = [
-    { key: EXPORT_ACTION, icon: EXPORT_ACTION, inFlight: isExporting, onClick: () => { void handleExport() } },
-    { key: IMPORT_ACTION, icon: 'upload-import', inFlight: false, onClick: () => { setIsImportModalOpen(true) } }
+  const actions: ImportExportExtraAction[] = [
+    {
+      key: EXPORT_ACTION,
+      icon: EXPORT_ACTION,
+      label: t(EXPORT_ACTION),
+      inFlight: isExporting,
+      onClick: () => { void handleExport() }
+    },
+    {
+      key: IMPORT_ACTION,
+      icon: 'upload-import',
+      label: t(IMPORT_ACTION),
+      inFlight: false,
+      onClick: () => { setIsImportModalOpen(true) }
+    },
+    ...extraActions
   ]
 
-  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, inFlight, onClick }) => ({
+  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, label, inFlight, onClick }) => ({
     key,
-    disabled: inFlight,
+    disabled: inFlight === true,
     icon: <Icon value={ icon } />,
-    label: t(key),
+    label,
     onClick
   }))
 
@@ -157,16 +225,16 @@ export const ImportExportActionsView = ({
       {inline
         ? (
           <ButtonGroup
-            items={ actions.map(({ key, icon, inFlight, onClick }) => (
+            items={ actions.map(({ key, icon, label, inFlight, onClick }) => (
               <IconTextButton
-                disabled={ inFlight }
+                disabled={ inFlight === true }
                 icon={ { value: icon } }
                 key={ key }
-                loading={ inFlight }
+                loading={ inFlight === true }
                 onClick={ onClick }
                 type="link"
               >
-                {t(key)}
+                {label}
               </IconTextButton>
             )) }
           />

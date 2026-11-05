@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { act, render, screen, renderHook } from '@testing-library/react'
+import { act, render, renderHook } from '@testing-library/react'
 
 /**
  * A refused import reports no success and shows the server's refusal verbatim: the server's own
@@ -50,7 +50,10 @@ const ACTION = '/pimcore-studio/api/classification-store/configuration/stores/7/
 const refusals = [
   { status: 409, message: 'The file describes store "Technical" and this is store "Marketing".' },
   { status: 409, message: 'The configuration could not be applied and was rolled back: group "size", key "width".' },
-  { status: 422, message: 'The file is not a store configuration artifact.' }
+  { status: 422, message: 'The file is not a store configuration artifact.' },
+  // A store name is entered text and can look like markup. Verbatim means the name reads as the
+  // name: the refusal must not render the tags a user typed into it.
+  { status: 409, message: 'The file describes store "<b>Technical</b>" and this is store "Marketing".' }
 ]
 
 const onUploadSuccess = jest.fn()
@@ -86,8 +89,9 @@ describe('a refused import', () => {
   it.each(refusals)('renders the server wording unaltered for $status', async ({ status, message }) => {
     await uploadIsRefused(status, message)
 
-    render(<ApiErrorViewUI errorContent={ trackError.mock.calls[0][0].getContent() } />)
+    const { container } = render(<ApiErrorViewUI errorContent={ trackError.mock.calls[0][0].getContent() } />)
 
-    expect(screen.getByText(message)).toBeInTheDocument()
+    expect(container.textContent).toBe(message)
+    expect(container.querySelector('b')).toBeNull()
   })
 })

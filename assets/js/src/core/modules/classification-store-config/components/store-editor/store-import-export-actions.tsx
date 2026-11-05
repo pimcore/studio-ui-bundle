@@ -11,6 +11,7 @@
 import React from 'react'
 import { ImportExportActionsView } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
 import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { useStoreImport } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
 import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -30,6 +31,8 @@ const storeImportExportConfig: ImportExportConfig = {
 }
 
 export const StoreImportExportActions = ({ storeId }: IStoreImportExportActionsProps): React.JSX.Element => {
+  const { notifyImported } = useStoreImport()
+
   if (!isAllowed(UserPermission.ClassificationStore)) {
     return <></>
   }
@@ -39,6 +42,7 @@ export const StoreImportExportActions = ({ storeId }: IStoreImportExportActionsP
       config={ storeImportExportConfig }
       inline
       itemId={ storeId }
+      onImported={ notifyImported }
     />
   )
 }

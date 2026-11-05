@@ -149,10 +149,11 @@ const respondWith = (body: BodyInit, init: ResponseInit): void => {
   globalThis.fetch = jest.fn(async () => new Response(body, init)) as unknown as typeof fetch
 }
 
-const renderActions = (): void => {
+const renderActions = (extraActions?: unknown[]): void => {
   render(
     <ImportExportActionsView
       config={ config }
+      extraActions={ extraActions }
       inline
       itemId={ ITEM_ID }
     />
@@ -205,6 +206,75 @@ describe('import export actions view', () => {
     await exportIsTriggered()
 
     await waitFor(() => { expect(downloadFile).toHaveBeenCalledWith(`export-${ITEM_ID}.json`, expect.anything()) })
+  })
+
+  // RFC 6266: `filename*` carries the real name and wins wherever it sits in the header, its
+  // percent-encoding is decoded, and a quoted name runs to its closing quote rather than to the
+  // first semicolon inside it. A header that names nothing usable still falls back.
+  it.each([
+    {
+      form: 'a percent-encoded filename*',
+      header: "attachment; filename*=UTF-8''Gr%C3%B6%C3%9Fen%20export.json",
+      saved: 'Größen export.json'
+    },
+    {
+      form: 'a filename* that follows the ASCII fallback',
+      header: 'attachment; filename="groessen-export.json"; filename*=UTF-8\'\'Gr%C3%B6%C3%9Fen.json',
+      saved: 'Größen.json'
+    },
+    {
+      form: 'a filename* that precedes the ASCII fallback',
+      header: 'attachment; filename*=UTF-8\'\'Gr%C3%B6%C3%9Fen.json; filename="groessen-export.json"',
+      saved: 'Größen.json'
+    },
+    {
+      form: 'a quoted name holding a semicolon',
+      header: 'attachment; filename="store 7; groups.json"',
+      saved: 'store 7; groups.json'
+    },
+    {
+      form: 'a quoted name holding an escaped quote',
+      header: 'attachment; filename="store \\"7\\".json"',
+      saved: 'store "7".json'
+    },
+    {
+      form: 'an unquoted name',
+      header: 'attachment; filename=store-7.json',
+      saved: 'store-7.json'
+    },
+    {
+      form: 'a name carrying a path',
+      header: 'attachment; filename="../../etc/store-7.json"',
+      saved: 'store-7.json'
+    },
+    {
+      form: 'a filename* whose percent-encoding is broken',
+      header: "attachment; filename*=UTF-8''%E0%A4%A; filename=\"store-7.json\"",
+      saved: 'store-7.json'
+    },
+    {
+      form: 'a header naming nothing usable',
+      header: 'attachment; filename=""',
+      saved: `export-${ITEM_ID}.json`
+    }
+  ])('saves the export under the right name given $form', async ({ header, saved }) => {
+    respondWith('{}', { status: 200, headers: { 'Content-Disposition': header } })
+
+    await exportIsTriggered()
+
+    await waitFor(() => { expect(downloadFile).toHaveBeenCalledWith(saved, expect.anything()) })
+  })
+
+  it('offers a surface its own further actions beside export and import', () => {
+    const onClick = jest.fn()
+
+    renderActions([{ key: 'delete', icon: 'trash', label: 'delete', onClick }])
+
+    fireEvent.click(screen.getByText('delete'))
+
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(screen.getByText(EXPORT_LABEL)).toBeInTheDocument()
+    expect(screen.getByText(IMPORT_LABEL)).toBeInTheDocument()
   })
 
   it('shows a refused export through the shared error surface and downloads nothing', async () => {
