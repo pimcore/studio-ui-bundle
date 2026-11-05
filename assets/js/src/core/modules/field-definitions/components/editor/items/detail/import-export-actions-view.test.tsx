@@ -274,8 +274,34 @@ describe('import export actions view', () => {
       saved: 'store-7.json'
     },
     {
+      // RFC 6266 takes its extended form from RFC 5987, which allows ISO-8859-1 as well as UTF-8,
+      // and `%E9` is `é` there while it is not valid UTF-8 at all — so decoding has to follow the
+      // declared charset rather than assume one.
+      form: 'a filename* declaring ISO-8859-1',
+      header: "attachment; filename*=ISO-8859-1''caf%E9.json",
+      saved: 'café.json'
+    },
+    {
+      form: 'a filename* declaring ISO-8859-1 in lower case beside an ASCII fallback',
+      header: 'attachment; filename="cafe.json"; filename*=iso-8859-1\'\'caf%E9.json',
+      saved: 'café.json'
+    },
+    {
+      // A charset this parser cannot decode is not guessed at: the plain name is used instead.
+      form: 'a filename* declaring a charset that cannot be decoded',
+      header: "attachment; filename*=Shift_JIS''%83t%83%40%83C%83%8B.json; filename=\"store-7.json\"",
+      saved: 'store-7.json'
+    },
+    {
       form: 'a filename* whose percent-encoding is broken',
       header: "attachment; filename*=UTF-8''%E0%A4%A; filename=\"store-7.json\"",
+      saved: 'store-7.json'
+    },
+    {
+      // The same truncated escape under ISO-8859-1, where decoding is by byte and so has its own
+      // rejection path rather than decodeURIComponent's.
+      form: 'an ISO-8859-1 filename* whose percent-encoding is truncated',
+      header: 'attachment; filename*=ISO-8859-1\'\'caf%E; filename="store-7.json"',
       saved: 'store-7.json'
     },
     {

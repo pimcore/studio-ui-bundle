@@ -16,13 +16,66 @@ interface ContentDispositionParameter {
   value: string
 }
 
-/** The percent-decoded value, or nothing when the header's encoding is malformed. */
-const percentDecoded = (value: string): string | undefined => {
+/** A single percent-escape, used to reject a truncated or non-hexadecimal one. */
+const PERCENT_ESCAPE = /^%[\dA-Fa-f]{2}$/
+
+/** The percent-decoded value read as UTF-8, or nothing when that encoding is malformed. */
+const utf8PercentDecoded = (value: string): string | undefined => {
   try {
     return decodeURIComponent(value)
   } catch {
     return undefined
   }
+}
+
+/**
+ * The percent-decoded value read as ISO-8859-1, where every byte is the code point of the same
+ * value — so it cannot fail on a byte sequence the way UTF-8 can, only on a malformed escape.
+ */
+const latin1PercentDecoded = (value: string): string | undefined => {
+  let decoded = ''
+  let cursor = 0
+
+  while (cursor < value.length) {
+    if (value[cursor] !== '%') {
+      decoded += value[cursor]
+      cursor += 1
+      continue
+    }
+
+    const escape = value.slice(cursor, cursor + 3)
+
+    if (!PERCENT_ESCAPE.test(escape)) {
+      return undefined
+    }
+
+    decoded += String.fromCharCode(parseInt(escape.slice(1), 16))
+    cursor += 3
+  }
+
+  return decoded
+}
+
+/**
+ * The value decoded with the charset its `filename*` declares, rather than with UTF-8 regardless:
+ * RFC 6266 §4.1 takes its extended form from RFC 5987, whose charset is `UTF-8` or `ISO-8859-1`,
+ * and the two disagree on every byte above 0x7F. A charset neither names cannot be decoded, so the
+ * extended form is dropped and the plain `filename` supplies the name instead. An absent charset
+ * is malformed — the production is `charset'language'value` — and is read as UTF-8 rather than
+ * discarded, because that is what a sender omitting it means.
+ */
+const decodedWithCharset = (charset: string, value: string): string | undefined => {
+  const declared = charset.trim().toLowerCase()
+
+  if (declared === '' || declared === 'utf-8') {
+    return utf8PercentDecoded(value)
+  }
+
+  if (declared === 'iso-8859-1') {
+    return latin1PercentDecoded(value)
+  }
+
+  return undefined
 }
 
 /** Where the value starts: RFC 6266 allows whitespace on either side of the `=`. */
@@ -115,13 +168,14 @@ const contentDispositionParameters = (header: string): ContentDispositionParamet
 }
 
 /**
- * The name an extended `filename*` carries: `charset'language'percent-encoded-value`, decoded.
- * Undefined when either mandatory quote is missing or the encoding is malformed.
+ * The name an extended `filename*` carries: `charset'language'percent-encoded-value`, decoded with
+ * the charset it declares. Undefined when either mandatory quote is missing, the charset is one
+ * this parser cannot decode, or the encoding is malformed.
  */
 const extendedFilename = (value: string): string | undefined => {
   const parts = value.split("'")
 
-  return parts.length < 3 ? undefined : percentDecoded(parts.slice(2).join("'"))
+  return parts.length < 3 ? undefined : decodedWithCharset(parts[0], parts.slice(2).join("'"))
 }
 
 /** A name a download can be saved under: its last path segment, or nothing when that is unusable. */
@@ -138,7 +192,8 @@ const saveableFilename = (value: string | undefined): string | undefined => {
 /**
  * The name the response asks to be saved under, read per RFC 6266: the extended `filename*`
  * form wins over the plain one wherever each appears in the header, its percent-encoding is
- * decoded, and a quoted name keeps any semicolon that sits inside the quotes. Undefined when
+ * decoded with the charset it declares, and a quoted name keeps any semicolon that sits inside
+ * the quotes. Undefined when
  * the header names nothing a file can be saved under, so the caller's own name is used.
  */
 export const parseContentDispositionFilename = (header: string): string | undefined => {
