@@ -160,4 +160,42 @@ describe('rtkQueryErrorLogger', () => {
     expect(next).toHaveBeenCalledWith(action)
     expect(dispatch).not.toHaveBeenCalled()
   })
+
+  describe('maintenance mode', () => {
+    const LOCKED_OUT = { type: 'maintenance-mode/setLockedOut', payload: true }
+    const STUDIO_URL = 'http://localhost/pimcore-studio/api/documents/tree'
+
+    const htmlAnswer = (originalStatus: number, url: string): Record<string, unknown> => ({
+      ...rejected(originalStatus, url),
+      payload: { status: 'PARSING_ERROR', originalStatus, data: '<html></html>', error: 'SyntaxError' }
+    })
+
+    it('reports the lock-out on an HTML 503 from the Studio API and passes the error on', () => {
+      const action = htmlAnswer(503, STUDIO_URL)
+
+      const { dispatch, next } = run(action)
+
+      expect(dispatch).toHaveBeenCalledWith(LOCKED_OUT)
+      expect(next).toHaveBeenCalledWith(action)
+    })
+
+    it('does not take a JSON 503 for the maintenance page', () => {
+      const { dispatch } = run(rejected(503, STUDIO_URL))
+
+      expect(dispatch).not.toHaveBeenCalled()
+    })
+
+    it('does not take an HTML 502 for the maintenance page', () => {
+      const { dispatch } = run(htmlAnswer(502, STUDIO_URL))
+
+      expect(dispatch).not.toHaveBeenCalled()
+    })
+
+    it('ignores an HTML 503 from another origin', () => {
+      const { dispatch, next } = run(htmlAnswer(503, 'https://other.example/pimcore-studio/api/documents/tree'))
+
+      expect(dispatch).not.toHaveBeenCalled()
+      expect(next).toHaveBeenCalled()
+    })
+  })
 })

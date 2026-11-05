@@ -20,6 +20,7 @@ import { ModalsProvider } from './modals-provider'
 import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 import { TreeCopyPasteProvider } from '../element/actions/copy-paste/tree-copy-paste-context'
 import { ReloadOnSessionEnd } from '@Pimcore/modules/auth/components/reload-on-session-end/reload-on-session-end'
+import { LockedOutNotice } from '@Pimcore/modules/maintenance-mode/components/locked-out-notice'
 
 export interface AppViewProps {
   themeId?: string
@@ -35,6 +36,7 @@ export const AppView = ({ themeId }: AppViewProps = {}): React.JSX.Element => {
             <TreeCopyPasteProvider>
               <ModalsProvider>
                 { <ApiGateway /> }
+                <LockedOutNotice />
                 <DateTimeConfig>
                   <AppLoader>
                     <RouterProvider router={ router } />

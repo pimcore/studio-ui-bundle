@@ -54,6 +54,7 @@ export enum NavPermission {
   Roles = 'system.users_roles',
   PerspectiveEditor = 'system.perspectiveEditor',
   WidgetEditor = 'system.widgetEditor',
+  MaintenanceMode = 'system.maintenanceMode',
   ApplicationLogger = 'system.applicationLogger',
   About = 'system.about',
   SystemSettings = 'system.systemSettings',
