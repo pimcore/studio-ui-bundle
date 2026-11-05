@@ -31,7 +31,7 @@ jest.mock('@Pimcore/modules/app/error-handler/services/error-modal-service', () 
 }))
 jest.mock('@Pimcore/components/modal/modal', () => ({
   Modal: ({ open, children, footer }: { open: boolean, children: React.ReactNode, footer: React.ReactNode }) => (
-    open ? <div>{children}{footer}</div> : <></>
+    <>{open ? <div>{children}{footer}</div> : null}</>
   )
 }))
 jest.mock('@Pimcore/components/modal/footer/modal-footer', () => ({
