@@ -134,6 +134,8 @@ areablock.move-below: Flytta ner
 areablock.show: Visa
 areablock.hide: Dölj
 areablock.new: Ny
+areablock.insert-above: Infoga ovanför
+areablock.insert-below: Infoga nedanför
 areablock.copy: Kopiera
 areablock.paste: Klistra in
 areablock.cut: Klipp ut
@@ -341,6 +343,10 @@ custom-layout.empty-state.edit: Välj en befintlig anpassad layout för att bör
 example-prefix: Exempelprefix
 pagination.show-total: Totalt {{total}} objekt
 pagination.page: Sida
+pagination.first-page: Första sidan
+pagination.previous-page: Föregående sida
+pagination.next-page: Nästa sida
+pagination.last-page: Sista sidan
 pagination.showing-x-of-y: Visar {{loaded}} av {{total}}
 preview-card.locate-in-tree: Hitta i träd
 preview-card.rename: Byt namn
@@ -381,6 +387,7 @@ grid.filter.to: Till
 grid.filter.is: Är
 grid.filter.less: Mindre än
 grid.filter.more: Mer än
+grid.filter.string.placeholder: Sök eller klistra in en lista med ett värde per rad för att matcha någon av dem exakt
 grid.filter.column: 'Filtrera {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -403,6 +410,7 @@ grid.advanced-column.advancedColumns.group.date: Datum
 grid.advanced-column.advancedColumns.group.string: Sträng
 grid.advanced-column.advancedColumns.group.other: Övrigt
 grid.advanced-column.title.placeholder: Lägg till en titel
+grid.advanced-column.expand: Expandera
 grid.advanced-column.advancedColumns: Källfält
 grid.advanced-column.advancedColumns.add: Lägg till ett källfält
 grid.advanced-column.transformers: Transformerare
@@ -612,6 +620,9 @@ listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
 listing.actions.delete: Ta bort
+listing.actions.delete-all: Ta bort alla
+listing.actions.delete-all.not-allowed: "Vissa objekt i mappen är låsta eller så har du inte behörighet att ta bort dem."
+listing.actions.delete-all.empty: "Mappen innehåller inga objekt att ta bort."
 listing.actions.export: Exportera
 reports.csv-export-modal.title: CSV-exportalternativ
 reports.csv-export-modal.include-headers: Inkludera kolumnrubriker
@@ -1256,10 +1267,15 @@ batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar
 batch-edit.modal-footer.discard-all-changes: Kassera alla ändringar
 batch-edit.modal-footer.add-a-column: Lägg till en kolumn
+batch-edit.system-boolean.publish: "Publicera"
+batch-edit.system-boolean.unpublish: "Avpublicera"
+batch-edit.system-boolean.placeholder: "Välj en åtgärd"
+batch-edit.system-boolean.required: "Välj Publicera eller Avpublicera"
 batch-edit.append-mode.replace: Massersättning
 batch-edit.append-mode.add: Masstillägg
 batch-edit.append-mode.remove: Massborttagning
 batch-delete.job-title: Ta bort
+element-move.job-title: Flytta
 export-csv-form.modal-title: Exportera CSV
 export-csv-form.export-notice: Observera att exporten inte stöder vissa fält (t.ex. förhandsvisning, storlek). Tryck OK för att fortsätta med exporten.
 export-csv-form.form-field.delimiter: Avgränsare
@@ -1302,6 +1318,7 @@ close-tab: Stäng flik
 close-others: Stäng andra
 close-unmodified: Stäng oförändrade
 close-all: Stäng alla
+use-full-space: Använd hela ytan
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
 element-selector.title.single: Välj ett element
@@ -1324,6 +1341,18 @@ element.tree.paste-only-contents: Klistra bara in innehåll här
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" har klippts ut och är redo att klistras in'
 element.tree.paste-cut: Klistra in utklippt element
+element.tree.cut-multiple: 'Klipp ut {{count}} element'
+element.tree.cut-multiple-success-description: '{{count}} element har klippts ut och kan klistras in'
+element.tree.paste-cut-multiple: 'Klistra in {{count}} utklippta element'
+element.tree.selection.count_one: '{{count}} element valt'
+element.tree.selection.count_other: '{{count}} element valda'
+element.tree.selection.clear: Rensa markering
+element.tree.selection.limit-reached: 'Maximalt {{limit}} element uppnått'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} element'
+element.tree.drag.elements-partial: '{{count}} av {{selected}} element'
+element.tree.move.skipped-elements_one: '1 element flyttades inte: det är låst eller du kan inte redigera det.'
+element.tree.move.skipped-elements_other: '{{count}} element flyttades inte: de är låsta eller du kan inte redigera dem.'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
@@ -1344,10 +1373,13 @@ element.tree.refresh: Uppdatera
 element.new-folder: Ny mapp
 element.new-folder.validation: Ange ett giltigt namn
 element.rename: Byt namn
+element.rename-folder: Byt namn på mapp
 element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
 element.share-via-notification: Dela via aviseringar
 element.delete: Ta bort
+element.delete-folder: Ta bort mapp
+element.delete-multiple: 'Ta bort {{count}} element'
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
 element.delete.confirmation.ok: Ta bort permanent
@@ -1392,6 +1424,7 @@ system-information.type: Typ
 system-information.class-id: Klass-ID
 system-information.class: Klass
 system-information.file-size: Filstorlek
+system-information.checksum: Kontrollsumma
 system-information.modification-date: Ändringsdatum
 system-information.creation-date: Skapandedatum
 system-information.user-modification: Ändrad av
@@ -1442,9 +1475,13 @@ relations.create-object.name: Namn
 relations.create-object.parent: Överordnad
 relations.create-object.parent.placeholder: Välj en överordnad
 relations.create-object.class: Klass
+relations.visible-fields.loading-progress: 'Läser in synliga fält… ({{loaded}} av {{total}})'
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
 asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
+relation.drop.not-allowed-elements-skipped_one: '1 element lades inte till: det här fältet tillåter inte dess typ.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} element lades inte till: det här fältet tillåter inte deras typer.'
+drag-and-drop.drop.single-element-only: 'Bara ett element kan släppas här.'
 actions: Åtgärder
 asset: Asset
 data-object: Data Object
@@ -1499,7 +1536,6 @@ tree.actions.user: Användare
 tree.actions.add-folder: Ny mapp
 tree.actions.add-tag: Ny tagg
 tree.actions.delete-tag: Ta bort
-tree.actions.rename-tag: Byt namn
 tree.actions.role: Roll
 tree.actions.add-role: Lägg till roll
 tree.actions.clone-role: Klona roll
@@ -1511,7 +1547,6 @@ tag-configuration.name: Namn
 tag-configuration.parent-tag: Överordnad tagg
 tag-configuration.create: Skapa
 tag-configuration.save: Spara
-tag-configuration.rename: Byt namn på tagg
 tag-configuration.successful-add: Taggen har lagts till
 tag-configuration.successful-update: Taggen har uppdaterats
 tag-configuration.successful-deletion: Taggen har tagits bort
@@ -1617,6 +1652,11 @@ user-management.settings.language.abbreviation: Förkortning
 user-management.settings.language.view: Visa
 user-management.settings.language.edit: Redigera
 user-management.two-factor-authentication: Tvåfaktorsautentisering
+user-management.two-factor-authentication.reset: Återställ tvåfaktorsautentisering
+user-management.two-factor-authentication.reset.confirmation.title: Återställ tvåfaktorsautentisering
+user-management.two-factor-authentication.reset.confirmation.text: Användarens autentiseringsapp fungerar inte längre för det här kontot. Om tvåfaktorsautentisering krävs måste användaren konfigurera den igen vid nästa inloggning.
+user-management.two-factor-authentication.reset.success: Tvåfaktorsautentisering har återställts
+user-management.two-factor-authentication.reset.error: Tvåfaktorsautentisering kunde inte återställas
 user-management.workspaces.documents: Dokument
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects
@@ -2242,6 +2282,7 @@ user-menu.notification.modal.form.validation.provide-title: Ange en titel
 user-menu.notification.modal.form.validation.provide-message: Ange ett meddelande
 reports.reports-title: Rapporter
 reports.select-report-name: Välj rapportens namn
+reports.report-load-failed: Rapporten kunde inte laddas.
 reports.select-report: Välj rapport
 reports.export: Exportera
 reports.csv-export: CSV-export
@@ -2266,6 +2307,7 @@ reports.editor.general-settings.report-class-label: Rapportklass
 reports.editor.general-settings.group-icon-class-label: Grupp Icon Class
 reports.editor.general-settings.shortcut-menu-label: Skapa genväg i menyn
 reports.editor.source-definition.title: Källdefinition
+reports.editor.source-definition.not-available: Källdefinitionen för denna rapport är inte tillgänglig. Bundlet som tillhandahåller den kanske inte är installerat.
 reports.editor.source-definition.no-content: Inga tillgängliga fält ännu. Börja med att lägga till ett fält.
 reports.editor.source-definition.select-source-definition: Välj en källdefinition
 reports.editor.source-definition.sql-select-field: SELECT (t.ex. a,b,c)*
@@ -2358,8 +2400,23 @@ user-profile.password-old: Gammalt lösenord
 user-profile.password-new: Nytt lösenord
 user-profile.password-repeat: Upprepa lösenord
 user-profile.password-repeat-error: Lösenorden matchar inte
+user-profile.two-factor-authentication: Tvåfaktorsautentisering
+user-profile.two-factor-authentication.status.active: Tvåfaktorsautentisering är aktiv för ditt konto.
+user-profile.two-factor-authentication.status.inactive: Tvåfaktorsautentisering är inte konfigurerad för ditt konto.
+user-profile.two-factor-authentication.required-hint: Tvåfaktorsautentisering krävs för ditt konto och kan därför inte inaktiveras.
+user-profile.two-factor-authentication.setup: Konfigurera tvåfaktorsautentisering
+user-profile.two-factor-authentication.renew: Förnya autentiseringsnyckel
+user-profile.two-factor-authentication.setup.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta.
+user-profile.two-factor-authentication.renew.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta. Din nuvarande nyckel fungerar tills den nya har bekräftats.
+user-profile.two-factor-authentication.setup.success: Tvåfaktorsautentisering har konfigurerats
+user-profile.two-factor-authentication.disable: Inaktivera tvåfaktorsautentisering
+user-profile.two-factor-authentication.disable.confirmation.title: Inaktivera tvåfaktorsautentisering
+user-profile.two-factor-authentication.disable.confirmation.text: Du loggar då bara in med ditt användarnamn och lösenord. Du kan konfigurera tvåfaktorsautentisering igen när som helst.
+user-profile.two-factor-authentication.disable.success: Tvåfaktorsautentisering har inaktiverats
+user-profile.two-factor-authentication.disable.error: Tvåfaktorsautentisering kunde inte inaktiveras
 creatable-select.add-custom-option: Lägg till anpassat alternativ
-creatable-select.add: Lägg till
+creatable-select.press-enter-to-add: Tryck Enter för att lägga till
+creatable-select.option-added: '{{label}} tillagt'
 creatable-select.option-already-exists: Alternativet finns redan
 creatable-select.invalid-option: Ogiltigt alternativ
 drag-snippet-here: Dra ett kodavsnitt hit
@@ -2795,6 +2852,19 @@ forgot-password-form.username.placeholder: Användarnamn
 forgot-password-form.reset-password: Återställ lösenord
 forgot-password-form.success-message: En tillfällig inloggningslänk har skickats till din e-postadress. Kontrollera din inkorg.
 forgot-password-form.back: Tillbaka till inloggning
+two-factor-form.description: Ange den {{digits}}-siffriga koden från din autentiseringsapp
+two-factor-form.code.placeholder: Autentiseringskod
+two-factor-form.code.required: Ange autentiseringskoden
+two-factor-form.code.invalid-format: Koden måste bestå av {{digits}} siffror
+two-factor-form.verify: Verifiera
+two-factor-form.error: Koden kunde inte verifieras. Försök igen.
+two-factor-form.too-many-attempts: För många försök. Vänta några minuter innan du försöker igen.
+two-factor-form.back: Tillbaka till inloggning
+two-factor-setup-form.description: Tvåfaktorsautentisering krävs för ditt konto. Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta.
+two-factor-setup-form.manual-entry: Eller ange den här nyckeln manuellt
+two-factor-setup-form.confirm: Aktivera
+two-factor-setup-form.load-error: Tvåfaktorsautentisering kunde inte konfigureras. Försök igen senare.
+two-factor-setup-form.expired: Konfigurationen har gått ut. Skanna den nya QR-koden och ange koden som visas.
 subscription-details.community-edition: Läs mer om Pimcore-utgåvor
 config_not_writeable: Inte skrivbar, detta kan ha flera orsaker. Se dokumentationen för detaljer.
 navigation.about: Om
@@ -3005,6 +3075,7 @@ translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
 select.clear-selection: Rensa val
+select.select-all: Välj alla
 asset.folder.preview.image-display: Bildvisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
@@ -3027,3 +3098,13 @@ saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
 skip-to-content: Hoppa till innehållet
+preview-mode.switch: Förhandsvisningsläge
+preview-mode.preview-item: Förhandsvisningsobjekt
+preview-mode.no-item: Inget förhandsvisningsobjekt tillgängligt
+preview-mode.preview: Förhandsgranskning
+tag-configuration.move-under: 'Flytta under'
+tag-configuration.move-search-placeholder: 'Sök efter en tagg'
+tree.actions.edit-tag: Redigera
+tag-configuration.edit-tag: 'Redigera "{{name}}"'
+tag-configuration.name-required: 'Ange ett taggnamn'
+tag-configuration.move-targets-failed: 'Listan över taggar kunde inte läsas in, så endast namnet kan ändras'

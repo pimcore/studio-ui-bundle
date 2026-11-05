@@ -74,6 +74,17 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
   }
 
   /**
+   * Whether the reload requested by {@link reloadOnChange} may be held back and performed later by
+   * the owner of the editable (e.g. the editable dialog reloads once on save instead of on every change).
+   * Return false when the editable needs the reloaded markup right away, e.g. structural editables
+   * that derive their row keys and positions from the rendered DOM.
+   * @param props The editable props
+   */
+  canDeferReloadOnChange (props: AbstractDocumentEditableDefinition): boolean {
+    return true
+  }
+
+  /**
    * Determines if the current value is empty for validation purposes.
    * Base implementation only checks for null and undefined.
    * Each editable type should override this method to implement type-specific empty checks.

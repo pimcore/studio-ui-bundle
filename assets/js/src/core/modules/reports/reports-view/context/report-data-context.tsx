@@ -23,7 +23,7 @@ export interface ISorting {
   sortOrder: 'ASC' | 'DESC'
 }
 
-interface IReportDataContext extends IUseReportDataReturn {
+export interface IReportDataContext extends IUseReportDataReturn {
   page: number
   setPage: (page: number) => void
   pageSize: number

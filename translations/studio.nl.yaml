@@ -134,6 +134,8 @@ areablock.move-below: Eronder verplaatsen
 areablock.show: Weergeven
 areablock.hide: Verbergen
 areablock.new: Nieuw
+areablock.insert-above: Erboven invoegen
+areablock.insert-below: Eronder invoegen
 areablock.copy: Kopiëren
 areablock.paste: Plakken
 areablock.cut: Knippen
@@ -341,6 +343,10 @@ custom-layout.empty-state.edit: Selecteer een bestaande Custom Layout om te bewe
 example-prefix: Voorbeeldprefix
 pagination.show-total: "Totaal {{total}} items"
 pagination.page: Pagina
+pagination.first-page: Eerste pagina
+pagination.previous-page: Vorige pagina
+pagination.next-page: Volgende pagina
+pagination.last-page: Laatste pagina
 pagination.showing-x-of-y: "{{loaded}} van {{total}} weergegeven"
 preview-card.locate-in-tree: In boom zoeken
 preview-card.rename: Hernoemen
@@ -381,6 +387,7 @@ grid.filter.to: Tot
 grid.filter.is: Is
 grid.filter.less: Minder dan
 grid.filter.more: Meer dan
+grid.filter.string.placeholder: Zoeken of een lijst met één waarde per regel plakken om exact één van deze waarden te vinden
 grid.filter.column: "Filter {{column}}"
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -403,6 +410,7 @@ grid.advanced-column.advancedColumns.group.date: Datum
 grid.advanced-column.advancedColumns.group.string: Tekst
 grid.advanced-column.advancedColumns.group.other: Overige
 grid.advanced-column.title.placeholder: Titel toevoegen
+grid.advanced-column.expand: Uitvouwen
 grid.advanced-column.advancedColumns: Bronveld
 grid.advanced-column.advancedColumns.add: Bronveld toevoegen
 grid.advanced-column.transformers: Transformaties
@@ -612,6 +620,9 @@ listing.actions: Op selectie toepassen
 listing.non-selected.actions: Op alles toepassen
 listing.actions.zip-download: ZIP downloaden
 listing.actions.delete: Verwijderen
+listing.actions.delete-all: Alles verwijderen
+listing.actions.delete-all.not-allowed: "Sommige items in deze map zijn vergrendeld of je mag ze niet verwijderen."
+listing.actions.delete-all.empty: "Deze map bevat geen items om te verwijderen."
 listing.actions.export: Exporteren
 reports.csv-export-modal.title: CSV-exportopties
 reports.csv-export-modal.include-headers: Kolomkoppen opnemen
@@ -1256,10 +1267,15 @@ batch-edit.no-content: Er zijn nog geen kolommen toegevoegd
 batch-edit.modal-footer.apply-changes: Wijzigingen toepassen
 batch-edit.modal-footer.discard-all-changes: Alle wijzigingen verwerpen
 batch-edit.modal-footer.add-a-column: Een kolom toevoegen
+batch-edit.system-boolean.publish: "Publiceren"
+batch-edit.system-boolean.unpublish: "Publicatie ongedaan maken"
+batch-edit.system-boolean.placeholder: "Selecteer een actie"
+batch-edit.system-boolean.required: "Kies Publiceren of Publicatie ongedaan maken"
 batch-edit.append-mode.replace: Batch vervangen
 batch-edit.append-mode.add: Batch toevoegen
 batch-edit.append-mode.remove: Batch verwijderen
 batch-delete.job-title: Verwijderen
+element-move.job-title: "Verplaatsen"
 export-csv-form.modal-title: CSV exporteren
 export-csv-form.export-notice: "Let op: de export ondersteunt sommige velden niet (bijv. voorbeeld, grootte). Druk op OK om door te gaan met de export."
 export-csv-form.form-field.delimiter: Scheidingsteken
@@ -1302,6 +1318,7 @@ close-tab: Tabblad sluiten
 close-others: Overige sluiten
 close-unmodified: Ongewijzigde sluiten
 close-all: Alles sluiten
+use-full-space: Volledige ruimte gebruiken
 asset.tree.context-menu.download: Downloaden
 asset.tree.context-menu.download-as-zip: Downloaden als ZIP
 element-selector.title.single: Element selecteren
@@ -1324,6 +1341,18 @@ element.tree.paste-only-contents: Alleen inhoud hier plakken
 element.tree.cut: Knippen
 element.tree.cut-success-description: '{{elementType}} "{{name}}" is geknipt en klaar om te plakken'
 element.tree.paste-cut: Geknipt element plakken
+element.tree.cut-multiple: "{{count}} elementen knippen"
+element.tree.cut-multiple-success-description: "{{count}} elementen zijn geknipt en kunnen worden geplakt"
+element.tree.paste-cut-multiple: "{{count}} geknipte elementen plakken"
+element.tree.selection.count_one: "{{count}} element geselecteerd"
+element.tree.selection.count_other: "{{count}} elementen geselecteerd"
+element.tree.selection.clear: "Selectie wissen"
+element.tree.selection.limit-reached: "Maximum van {{limit}} elementen bereikt"
+element.tree.drag.elements_one: "{{count}} element"
+element.tree.drag.elements_other: "{{count}} elementen"
+element.tree.drag.elements-partial: "{{count}} van {{selected}} elementen"
+element.tree.move.skipped-elements_one: "1 element is niet verplaatst: het is vergrendeld of u kunt het niet bewerken."
+element.tree.move.skipped-elements_other: "{{count}} elementen zijn niet verplaatst: ze zijn vergrendeld of u kunt ze niet bewerken."
 element.lock: Vergrendelen
 element.lock-and-propagate-to-children: Vergrendelen en doorgeven aan onderliggende items
 element.unlock: Ontgrendelen
@@ -1344,10 +1373,13 @@ element.tree.refresh: Vernieuwen
 element.new-folder: Nieuwe map
 element.new-folder.validation: Voer een geldige naam in
 element.rename: Hernoemen
+element.rename-folder: Map hernoemen
 element.rename.label: Voer de nieuwe naam in
 element.rename.validation: Voer een geldige naam in
 element.share-via-notification: Delen via meldingen
 element.delete: Verwijderen
+element.delete-folder: Map verwijderen
+element.delete-multiple: "{{count}} elementen verwijderen"
 element.delete.confirmation.title: Item verwijderen
 element.delete.confirmation.text: Weet je echt zeker dat je dit item wilt verwijderen?
 element.delete.confirmation.ok: Definitief verwijderen
@@ -1392,6 +1424,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Bestandsgrootte
+system-information.checksum: Checksum
 system-information.modification-date: Wijzigingsdatum
 system-information.creation-date: Aanmaakdatum
 system-information.user-modification: Gebruiker wijziging
@@ -1442,9 +1475,13 @@ relations.create-object.name: Naam
 relations.create-object.parent: Bovenliggend
 relations.create-object.parent.placeholder: Selecteer een bovenliggend element
 relations.create-object.class: Klasse
+relations.visible-fields.loading-progress: 'Zichtbare velden laden… ({{loaded}} van {{total}})'
 relation: relatie
 items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
 asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
+relation.drop.not-allowed-elements-skipped_one: "1 element is niet toegevoegd: dit veld staat dit type niet toe."
+relation.drop.not-allowed-elements-skipped_other: "{{count}} elementen zijn niet toegevoegd: dit veld staat deze typen niet toe."
+drag-and-drop.drop.single-element-only: 'Hier kan maar één element worden neergezet.'
 actions: Acties
 asset: Asset
 data-object: Gegevensobject
@@ -1499,7 +1536,6 @@ tree.actions.user: Gebruiker
 tree.actions.add-folder: Nieuwe map
 tree.actions.add-tag: Nieuwe tag
 tree.actions.delete-tag: Verwijderen
-tree.actions.rename-tag: Hernoemen
 tree.actions.role: Rol
 tree.actions.add-role: Rol toevoegen
 tree.actions.clone-role: Rol klonen
@@ -1511,7 +1547,6 @@ tag-configuration.name: Naam
 tag-configuration.parent-tag: Bovenliggende tag
 tag-configuration.create: Aanmaken
 tag-configuration.save: Opslaan
-tag-configuration.rename: Tag hernoemen
 tag-configuration.successful-add: Tag succesvol toegevoegd
 tag-configuration.successful-update: Tag succesvol bijgewerkt
 tag-configuration.successful-deletion: Tag succesvol verwijderd
@@ -1617,6 +1652,11 @@ user-management.settings.language.abbreviation: Afkorting
 user-management.settings.language.view: Weergave
 user-management.settings.language.edit: Bewerken
 user-management.two-factor-authentication: Tweefactorauthenticatie
+user-management.two-factor-authentication.reset: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.title: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.text: De authenticatie-app van de gebruiker werkt niet meer voor dit account. Als tweefactorauthenticatie verplicht is, moet de gebruiker deze bij de volgende keer inloggen opnieuw instellen.
+user-management.two-factor-authentication.reset.success: Tweefactorauthenticatie is gereset
+user-management.two-factor-authentication.reset.error: Tweefactorauthenticatie kon niet worden gereset
 user-management.workspaces.documents: Documenten
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Gegevensobjecten
@@ -2242,6 +2282,7 @@ user-menu.notification.modal.form.validation.provide-title: Geef een titel op
 user-menu.notification.modal.form.validation.provide-message: Geef een bericht op
 reports.reports-title: Rapporten
 reports.select-report-name: Selecteer de naam van het rapport
+reports.report-load-failed: Het rapport kon niet worden geladen.
 reports.select-report: Rapport selecteren
 reports.export: Exporteren
 reports.csv-export: CSV exporteren
@@ -2266,6 +2307,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Groepspictogramklasse
 reports.editor.general-settings.shortcut-menu-label: Snelkoppeling in menu aanmaken
 reports.editor.source-definition.title: Brondefinitie
+reports.editor.source-definition.not-available: De brondefinitie van dit rapport is niet beschikbaar. De bundle die deze levert, is mogelijk niet geïnstalleerd.
 reports.editor.source-definition.no-content: Nog geen velden beschikbaar. Begin met het toevoegen van een veld.
 reports.editor.source-definition.select-source-definition: Selecteer een brondefinitie
 reports.editor.source-definition.sql-select-field: SELECT (bijv. a,b,c)*
@@ -2358,8 +2400,23 @@ user-profile.password-old: Oud wachtwoord
 user-profile.password-new: Nieuw wachtwoord
 user-profile.password-repeat: Wachtwoord herhalen
 user-profile.password-repeat-error: Wachtwoorden komen niet overeen
+user-profile.two-factor-authentication: Tweefactorauthenticatie
+user-profile.two-factor-authentication.status.active: Tweefactorauthenticatie is actief voor je account.
+user-profile.two-factor-authentication.status.inactive: Tweefactorauthenticatie is niet ingesteld voor je account.
+user-profile.two-factor-authentication.required-hint: Tweefactorauthenticatie is verplicht voor je account en kan daarom niet worden uitgeschakeld.
+user-profile.two-factor-authentication.setup: Tweefactorauthenticatie instellen
+user-profile.two-factor-authentication.renew: Authenticatiesleutel vernieuwen
+user-profile.two-factor-authentication.setup.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen.
+user-profile.two-factor-authentication.renew.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen. Je huidige sleutel blijft werken totdat de nieuwe is bevestigd.
+user-profile.two-factor-authentication.setup.success: Tweefactorauthenticatie is ingesteld
+user-profile.two-factor-authentication.disable: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.title: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.text: Je logt dan alleen nog in met je gebruikersnaam en wachtwoord. Je kunt tweefactorauthenticatie op elk moment opnieuw instellen.
+user-profile.two-factor-authentication.disable.success: Tweefactorauthenticatie is uitgeschakeld
+user-profile.two-factor-authentication.disable.error: Tweefactorauthenticatie kon niet worden uitgeschakeld
 creatable-select.add-custom-option: Aangepaste optie toevoegen
-creatable-select.add: Toevoegen
+creatable-select.press-enter-to-add: Druk op Enter om toe te voegen
+creatable-select.option-added: '{{label}} toegevoegd'
 creatable-select.option-already-exists: Optie bestaat al
 creatable-select.invalid-option: Ongeldige optie
 drag-snippet-here: Sleep hier een fragment
@@ -2795,6 +2852,19 @@ forgot-password-form.username.placeholder: Gebruikersnaam
 forgot-password-form.reset-password: Wachtwoord herstellen
 forgot-password-form.success-message: Er is een tijdelijke inloglink verstuurd naar je e-mailadres. Controleer je postvak.
 forgot-password-form.back: Terug naar inloggen
+two-factor-form.description: Voer de {{digits}}-cijferige code uit je authenticatie-app in
+two-factor-form.code.placeholder: Authenticatiecode
+two-factor-form.code.required: Voer de authenticatiecode in
+two-factor-form.code.invalid-format: De code moet uit {{digits}} cijfers bestaan
+two-factor-form.verify: Verifiëren
+two-factor-form.error: De code kon niet worden geverifieerd. Probeer het opnieuw.
+two-factor-form.too-many-attempts: Te veel pogingen. Wacht een paar minuten voordat je het opnieuw probeert.
+two-factor-form.back: Terug naar inloggen
+two-factor-setup-form.description: Tweefactorauthenticatie is verplicht voor je account. Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen.
+two-factor-setup-form.manual-entry: Of voer deze sleutel handmatig in
+two-factor-setup-form.confirm: Activeren
+two-factor-setup-form.load-error: Tweefactorauthenticatie kon niet worden ingesteld. Probeer het later opnieuw.
+two-factor-setup-form.expired: De instelling is verlopen. Scan de nieuwe QR-code en voer de getoonde code in.
 subscription-details.community-edition: Meer informatie over Pimcore-edities
 config_not_writeable: Niet schrijfbaar; dit kan meerdere oorzaken hebben. Zie de documentatie voor details.
 navigation.about: Over
@@ -3005,6 +3075,7 @@ translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
 translations.merger.column.language: Taal
 translations.merger.items: items
 select.clear-selection: Selectie wissen
+select.select-all: Alles selecteren
 asset.folder.preview.image-display: Afbeeldingsweergave
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groot
@@ -3027,3 +3098,13 @@ saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
 saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
 saved-search.menu-shortcut-group: Menugroep
 skip-to-content: Naar de inhoud
+preview-mode.switch: Voorbeeldmodus
+preview-mode.preview-item: Voorbeelditem
+preview-mode.no-item: Geen voorbeelditem beschikbaar
+preview-mode.preview: Voorbeeld
+tag-configuration.move-under: 'Verplaatsen onder'
+tag-configuration.move-search-placeholder: 'Zoek een tag'
+tree.actions.edit-tag: Bewerken
+tag-configuration.edit-tag: '"{{name}}" bewerken'
+tag-configuration.name-required: 'Voer een tagnaam in'
+tag-configuration.move-targets-failed: 'De lijst met tags kon niet worden geladen, dus alleen de naam kan worden gewijzigd'

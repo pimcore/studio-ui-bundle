@@ -12,6 +12,7 @@ import React from 'react'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import ContentEditable from '../components/content-editable/content-editable'
+import { ColorInputEditable } from '../components/color-input-editable/color-input-editable'
 
 export type InputEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -20,6 +21,8 @@ export type InputEditableDefinition = Omit<AbstractDocumentEditableDefinition, '
     nowrap?: boolean
     class?: string
     required?: boolean
+    /** Draw the value as a colour picker: a swatch with its hex code. The value stays the hex text. */
+    color?: boolean
   }
 }
 
@@ -27,6 +30,16 @@ export class DynamicTypeDocumentEditableInput extends DynamicTypeDocumentEditabl
   id: string = 'input'
 
   getEditableDataComponent (props: InputEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+    if (props.config?.color === true) {
+      return (
+        <ColorInputEditable
+          className={ props.config?.class }
+          inherited={ props.inherited }
+          placeholder={ props.config?.placeholder }
+        />
+      )
+    }
+
     return (
       <ContentEditable
         className={ props.config?.class }

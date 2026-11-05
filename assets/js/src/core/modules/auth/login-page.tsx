@@ -40,7 +40,7 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
   const dispatch = useAppDispatch()
 
   const user = useUser()
-  const { isAuthenticated } = useIsAuthenticated()
+  const { isAuthenticated, twoFactor } = useIsAuthenticated()
   const { loginWithToken } = useAuthentication()
   const { customLogoSmall, loginScreenCustomBackgroundImage } = useAdminThumbnails()
   const { styles } = useStyle({ backgroundImageUrl: loginScreenCustomBackgroundImage })
@@ -59,7 +59,7 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
 
         // Preserve the original query string (e.g. the OAuth `authorization_id`)
         // so deep links that carry state survive the login round-trip.
-        navigate(
+        void navigate(
           !isUndefined(redirectPath)
             ? { pathname: redirectPath, search: from?.search ?? '' }
             : routes.root
@@ -87,11 +87,11 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
       void loginWithToken(
         token,
         async () => {
-          navigate(routes.root)
+          void navigate(routes.root)
           dispatch(setAuthState(true))
         },
         () => {
-          navigate(routes.login)
+          void navigate(routes.login)
         }
       )
     }
@@ -108,7 +108,7 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
           data-testid="login-page-logo"
           src={ customLogoSmall }
         />
-        <LoginFormContainer />
+        <LoginFormContainer pendingTwoFactor={ twoFactor } />
       </div>
     </div>
   )

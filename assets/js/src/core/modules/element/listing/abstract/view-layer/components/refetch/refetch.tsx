@@ -35,11 +35,11 @@ export const Refetch = (): React.JSX.Element => {
 
   return (
     <IconButton
-      aria-label={ t('refresh') }
+      aria-label={ t('toolbar.reload') }
       data-testid="listing-reload-button"
       icon={ { value: 'refresh' } }
       onClick={ async () => await refetch() }
-      tooltip={ { title: t('refresh') } }
+      tooltip={ { title: t('toolbar.reload') } }
     />
   )
 }

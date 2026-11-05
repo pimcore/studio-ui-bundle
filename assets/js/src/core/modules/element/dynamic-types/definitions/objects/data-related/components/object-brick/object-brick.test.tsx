@@ -198,6 +198,14 @@ const BrickBlock = ({ name }: { name: string[] }): React.JSX.Element => {
   )
 }
 
+let brickOperations: ReturnType<typeof useKeyedListContext>['operations']
+
+/** Hands out the keyed list operations, as the brick's add and remove actions use them. */
+const CaptureOperations = (): null => {
+  brickOperations = useKeyedListContext().operations
+  return null
+}
+
 const brickName = ['bricks']
 const nameField = ['bricks', 'MyBrick', 'name']
 const colorField = ['bricks', 'MyBrick', 'color']
@@ -393,5 +401,34 @@ describe('ObjectBrick', () => {
     expect(valueOf(colorField)).toBe('blue')
     expect(stateOf(colorField)).toBe('false')
     expect(lastPayload()).toEqual({ MyBrick: { name: null, color: 'blue' } })
+  })
+
+  describe('removing bricks', () => {
+    beforeEach(() => { mockDataObject.inheritanceData.metaData = {} })
+
+    it('reports a deletion marker when the only remaining brick is removed', () => {
+      mockDataObject.objectData = { bricks: { BrickA: { input: 'a' } } }
+      renderBrick(<CaptureOperations />)
+      flushChanges()
+      expect(onChange).not.toHaveBeenCalled()
+
+      act(() => { brickOperations.remove('BrickA') })
+      flushChanges()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(lastPayload()).toEqual({ BrickA: { action: 'deleted' } })
+    })
+
+    it('reports the deletion marker next to the remaining brick when one of two is removed', () => {
+      mockDataObject.objectData = { bricks: { BrickA: { input: 'a' }, BrickB: { input: 'b' } } }
+      renderBrick(<CaptureOperations />)
+      flushChanges()
+
+      act(() => { brickOperations.remove('BrickA') })
+      flushChanges()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(lastPayload()).toEqual({ BrickA: { action: 'deleted' }, BrickB: { input: 'b' } })
+    })
   })
 })

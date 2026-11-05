@@ -21,7 +21,7 @@ import { Button, Flex } from 'antd'
 const FINISHED_STATUSES = new Set([JobStatus.SUCCESS, JobStatus.FINISHED_WITH_ERRORS, JobStatus.FAILED])
 
 const JobListHeader = (): React.JSX.Element => {
-  const { jobs, removeJob } = useJobs()
+  const { visibleJobs: jobs, removeJob } = useJobs()
   const { t } = useTranslation()
   const [hideJobRuns] = useExecutionEngineHideJobRunsMutation()
   const [isHidingAll, setIsHidingAll] = useState(false)
@@ -72,7 +72,7 @@ const JobListHeader = (): React.JSX.Element => {
 }
 
 export const Notification = (): React.JSX.Element => {
-  const { jobs } = useJobs()
+  const { visibleJobs: jobs } = useJobs()
   const hasJobs = jobs.length > 0
   const [notificationApi] = useNotification()
 

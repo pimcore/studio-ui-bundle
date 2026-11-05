@@ -107,28 +107,19 @@ class DocumentApiImpl implements DocumentApi {
     void this.performAutoSaveAndReload(documentId)
   }
 
+  // Requested by editables that need a re-render after an interaction, e.g. closing a dialog box
+  // configured with reload_on_close or pasting an area. Only saves when there is something to
+  // save: on an untouched document the autosave would wait on the still-armed edit-lock gate
+  // (resolved on the first edit) and the iframe would stay on the reloading overlay forever
+  // (platform-version #458 / #344).
   triggerSaveAndReload (documentId: number): void {
-    void this.performAutoSaveAndReload(documentId)
+    this.saveIfEditedAndReload(documentId)
   }
 
   // Refresh the editor iframe when the rendered editable is stale but the document state did
   // not change on its own (e.g. a video thumbnail finished converting).
-  // If the user has edited this document, flush the current values first so the reload does not
-  // drop them — once edited, the edit-lock gate is (or is about to be) resolved, so that autosave
-  // resolves rather than hanging, and saveDocument reads the live editable values at save time.
-  // Otherwise reload directly, bypassing the autosave path (whose edit-lock gate holds autosaves
-  // until the first edit and would otherwise hang this poll-triggered refresh).
   reloadIframe (documentId: number): void {
-    if (this.editedDocuments.has(documentId)) {
-      void this.performAutoSaveAndReload(documentId)
-
-      return
-    }
-
-    const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
-    if (!isNil(iframeRef?.current)) {
-      iframeRef.current.reload()
-    }
+    this.saveIfEditedAndReload(documentId)
   }
 
   notifyIframeReady (documentId: number): void {
@@ -174,6 +165,24 @@ class DocumentApiImpl implements DocumentApi {
 
   onReady (documentId: number, callback: () => void): void {
     iframeDocumentEditorRegistry.onReady(documentId, callback)
+  }
+
+  // If the user has edited this document, flush the current values first so the reload does not
+  // drop them — once edited, the edit-lock gate is (or is about to be) resolved, so that autosave
+  // resolves rather than hanging, and saveDocument reads the live editable values at save time.
+  // Otherwise reload directly, bypassing the autosave path (whose edit-lock gate holds autosaves
+  // until the first edit and would otherwise hang the refresh).
+  private saveIfEditedAndReload (documentId: number): void {
+    if (this.editedDocuments.has(documentId)) {
+      void this.performAutoSaveAndReload(documentId)
+
+      return
+    }
+
+    const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
+    if (!isNil(iframeRef?.current)) {
+      iframeRef.current.reload()
+    }
   }
 
   private async performAutoSave (documentId: number): Promise<void> {

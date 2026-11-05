@@ -22,6 +22,11 @@ export interface MessageBusJob extends AbstractJob {
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
   messages?: string[]
+  /**
+   * Keeps the job out of the notification list while it is running and while it
+   * succeeds; it appears only once it failed or finished with errors.
+   */
+  notifyOnErrorOnly?: boolean
   jobRunId: number
   ancestorJobRunIds?: number[]
 }
@@ -44,4 +49,6 @@ export interface MessageBusJobHandlerOptions {
   onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
+  /** See MessageBusJob.notifyOnErrorOnly. */
+  notifyOnErrorOnly?: boolean
 }

@@ -38,6 +38,10 @@ jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuratio
 jest.mock('@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns', () => ({
   useSelectedColumns: () => ({ selectedColumns: world.selected, setSelectedColumns: (selected: Column[]) => { set({ selected }) } })
 }))
+// the asset grid columns request settled without columns: the asset tab falls back to its static ones
+jest.mock('@Pimcore/modules/asset/asset-api-slice-enhanced', () => ({
+  useAssetGetAvailableGridColumnsQuery: () => ({ data: undefined, isLoading: false, isError: false, error: undefined })
+}))
 jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
   useSettings: () => ({ useDataQueryHelper: () => ({ setDataLoadingState: () => {} }) })
 }))

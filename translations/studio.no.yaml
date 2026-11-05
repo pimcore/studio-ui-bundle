@@ -134,6 +134,8 @@ areablock.move-below: Flytt ned
 areablock.show: Vis
 areablock.hide: Skjul
 areablock.new: Ny
+areablock.insert-above: Sett inn over
+areablock.insert-below: Sett inn under
 areablock.copy: Kopier
 areablock.paste: Lim inn
 areablock.cut: Klipp ut
@@ -341,6 +343,10 @@ custom-layout.empty-state.edit: Velg en eksisterende custom layout for å begynn
 example-prefix: Eksempel-prefiks
 pagination.show-total: Totalt {{total}} elementer
 pagination.page: Side
+pagination.first-page: Første side
+pagination.previous-page: Forrige side
+pagination.next-page: Neste side
+pagination.last-page: Siste side
 pagination.showing-x-of-y: Viser {{loaded}} av {{total}}
 preview-card.locate-in-tree: Finn i treet
 preview-card.rename: Gi nytt navn
@@ -381,6 +387,7 @@ grid.filter.to: Til
 grid.filter.is: Er
 grid.filter.less: Mindre enn
 grid.filter.more: Mer enn
+grid.filter.string.placeholder: Søk eller lim inn en liste med en verdi per linje for å få nøyaktig match med en av dem
 grid.filter.column: 'Filtrer {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -403,6 +410,7 @@ grid.advanced-column.advancedColumns.group.date: Dato
 grid.advanced-column.advancedColumns.group.string: Tekst
 grid.advanced-column.advancedColumns.group.other: Annet
 grid.advanced-column.title.placeholder: Legg til en tittel
+grid.advanced-column.expand: Utvid
 grid.advanced-column.advancedColumns: Kildefelt
 grid.advanced-column.advancedColumns.add: Legg til et kildefelt
 grid.advanced-column.transformers: Transformere
@@ -612,6 +620,9 @@ listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
 listing.actions.delete: Slett
+listing.actions.delete-all: Slett alle
+listing.actions.delete-all.not-allowed: "Noen elementer i denne mappen er låst, eller du har ikke tillatelse til å slette dem."
+listing.actions.delete-all.empty: "Denne mappen inneholder ingen elementer å slette."
 listing.actions.export: Eksporter
 reports.csv-export-modal.title: CSV-eksportalternativer
 reports.csv-export-modal.include-headers: Inkluder kolonneoverskrifter
@@ -1256,10 +1267,15 @@ batch-edit.no-content: Ingen kolonner lagt til ennå
 batch-edit.modal-footer.apply-changes: Bruk endringer
 batch-edit.modal-footer.discard-all-changes: Forkast alle endringer
 batch-edit.modal-footer.add-a-column: Legg til en kolonne
+batch-edit.system-boolean.publish: "Publiser"
+batch-edit.system-boolean.unpublish: "Avpubliser"
+batch-edit.system-boolean.placeholder: "Velg en handling"
+batch-edit.system-boolean.required: "Velg Publiser eller Avpubliser"
 batch-edit.append-mode.replace: Masseerstatt
 batch-edit.append-mode.add: Masselegg til
 batch-edit.append-mode.remove: Massefjerning
 batch-delete.job-title: Slett
+element-move.job-title: Flytt
 export-csv-form.modal-title: Eksporter CSV
 export-csv-form.export-notice: Vær oppmerksom på at eksporten ikke støtter noen felt (f.eks. forhåndsvisning, størrelse). Trykk OK for å fortsette med eksporten.
 export-csv-form.form-field.delimiter: Skilletegn
@@ -1302,6 +1318,7 @@ close-tab: Lukk fane
 close-others: Lukk andre
 close-unmodified: Lukk uendrede
 close-all: Lukk alle
+use-full-space: Bruk hele området
 asset.tree.context-menu.download: Last ned
 asset.tree.context-menu.download-as-zip: Last ned som ZIP
 element-selector.title.single: Velg element
@@ -1324,6 +1341,18 @@ element.tree.paste-only-contents: Lim inn kun innhold her
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" er klippet ut og klar til å limes inn'
 element.tree.paste-cut: Lim inn utklippet element
+element.tree.cut-multiple: 'Klipp ut {{count}} elementer'
+element.tree.cut-multiple-success-description: '{{count}} elementer er klippet ut og kan limes inn'
+element.tree.paste-cut-multiple: 'Lim inn {{count}} utklippede elementer'
+element.tree.selection.count_one: '{{count}} element valgt'
+element.tree.selection.count_other: '{{count}} elementer valgt'
+element.tree.selection.clear: Fjern valg
+element.tree.selection.limit-reached: 'Maksimalt {{limit}} elementer nådd'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} elementer'
+element.tree.drag.elements-partial: '{{count}} av {{selected}} elementer'
+element.tree.move.skipped-elements_one: '1 element ble ikke flyttet: det er låst eller du kan ikke redigere det.'
+element.tree.move.skipped-elements_other: '{{count}} elementer ble ikke flyttet: de er låst eller du kan ikke redigere dem.'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås og propager til underelementer
 element.unlock: Lås opp
@@ -1344,10 +1373,13 @@ element.tree.refresh: Oppdater
 element.new-folder: Ny mappe
 element.new-folder.validation: Vennligst oppgi et gyldig navn
 element.rename: Gi nytt navn
+element.rename-folder: Gi nytt navn til mappe
 element.rename.label: Vennligst oppgi det nye navnet
 element.rename.validation: Vennligst oppgi et gyldig navn
 element.share-via-notification: Del via varsler
 element.delete: Slett
+element.delete-folder: Slett mappe
+element.delete-multiple: 'Slett {{count}} elementer'
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?
 element.delete.confirmation.ok: Slett permanent
@@ -1392,6 +1424,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Filstørrelse
+system-information.checksum: Kontrollsum
 system-information.modification-date: Endringsdato
 system-information.creation-date: Opprettelsesdato
 system-information.user-modification: Endret av bruker
@@ -1442,9 +1475,13 @@ relations.create-object.name: Navn
 relations.create-object.parent: Overordnet
 relations.create-object.parent.placeholder: Velg et overordnet element
 relations.create-object.class: Klasse
+relations.visible-fields.loading-progress: 'Laster synlige felt… ({{loaded}} av {{total}})'
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
 asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
+relation.drop.not-allowed-elements-skipped_one: '1 element ble ikke lagt til: dette feltet tillater ikke typen.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elementer ble ikke lagt til: dette feltet tillater ikke typene.'
+drag-and-drop.drop.single-element-only: 'Bare ett element kan slippes her.'
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object
@@ -1499,7 +1536,6 @@ tree.actions.user: Bruker
 tree.actions.add-folder: Ny mappe
 tree.actions.add-tag: Ny tagg
 tree.actions.delete-tag: Slett
-tree.actions.rename-tag: Gi nytt navn
 tree.actions.role: Rolle
 tree.actions.add-role: Legg til rolle
 tree.actions.clone-role: Klon rolle
@@ -1511,7 +1547,6 @@ tag-configuration.name: Navn
 tag-configuration.parent-tag: Overordnet tagg
 tag-configuration.create: Opprett
 tag-configuration.save: Lagre
-tag-configuration.rename: Gi nytt navn til tagg
 tag-configuration.successful-add: Tagg lagt til
 tag-configuration.successful-update: Tagg oppdatert
 tag-configuration.successful-deletion: Tagg slettet
@@ -1617,6 +1652,11 @@ user-management.settings.language.abbreviation: Forkortelse
 user-management.settings.language.view: Visning
 user-management.settings.language.edit: Rediger
 user-management.two-factor-authentication: Tofaktorautentisering
+user-management.two-factor-authentication.reset: Tilbakestill tofaktorautentisering
+user-management.two-factor-authentication.reset.confirmation.title: Tilbakestill tofaktorautentisering
+user-management.two-factor-authentication.reset.confirmation.text: Brukerens autentiseringsapp vil ikke lenger fungere for denne kontoen. Hvis tofaktorautentisering er påkrevd, må brukeren sette den opp på nytt ved neste innlogging.
+user-management.two-factor-authentication.reset.success: Tofaktorautentisering er tilbakestilt
+user-management.two-factor-authentication.reset.error: Tofaktorautentisering kunne ikke tilbakestilles
 user-management.workspaces.documents: Dokumenter
 user-management.workspaces.assets: Ressurser
 user-management.workspaces.objects: Data Objects
@@ -2242,6 +2282,7 @@ user-menu.notification.modal.form.validation.provide-title: Vennligst oppgi en t
 user-menu.notification.modal.form.validation.provide-message: Vennligst oppgi en melding
 reports.reports-title: Rapporter
 reports.select-report-name: Velg rapportens navn
+reports.report-load-failed: Rapporten kunne ikke lastes.
 reports.select-report: Velg rapport
 reports.export: Eksporter
 reports.csv-export: CSV-eksport
@@ -2266,6 +2307,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Gruppeikon-klasse
 reports.editor.general-settings.shortcut-menu-label: Opprett snarvei i menyen
 reports.editor.source-definition.title: Kildedefinisjon
+reports.editor.source-definition.not-available: Kildedefinisionen for denne rapporten er ikke tilgjengelig. Bundlen som gir den, er kanskje ikke installert.
 reports.editor.source-definition.no-content: Ingen tilgjengelige felt ennå. Begynn med å legge til et felt.
 reports.editor.source-definition.select-source-definition: Velg en kildedefinisjon
 reports.editor.source-definition.sql-select-field: SELECT (f.eks. a,b,c)*
@@ -2358,8 +2400,23 @@ user-profile.password-old: Gammelt passord
 user-profile.password-new: Nytt passord
 user-profile.password-repeat: Gjenta passord
 user-profile.password-repeat-error: Passordene samsvarer ikke
+user-profile.two-factor-authentication: Tofaktorautentisering
+user-profile.two-factor-authentication.status.active: Tofaktorautentisering er aktiv for kontoen din.
+user-profile.two-factor-authentication.status.inactive: Tofaktorautentisering er ikke satt opp for kontoen din.
+user-profile.two-factor-authentication.required-hint: Tofaktorautentisering er påkrevd for kontoen din, så den kan ikke deaktiveres.
+user-profile.two-factor-authentication.setup: Sett opp tofaktorautentisering
+user-profile.two-factor-authentication.renew: Forny autentiseringsnøkkel
+user-profile.two-factor-authentication.setup.description: Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte.
+user-profile.two-factor-authentication.renew.description: Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte. Den nåværende nøkkelen din fungerer til den nye er bekreftet.
+user-profile.two-factor-authentication.setup.success: Tofaktorautentisering er satt opp
+user-profile.two-factor-authentication.disable: Deaktiver tofaktorautentisering
+user-profile.two-factor-authentication.disable.confirmation.title: Deaktiver tofaktorautentisering
+user-profile.two-factor-authentication.disable.confirmation.text: Du logger da bare inn med brukernavn og passord. Du kan sette opp tofaktorautentisering igjen når som helst.
+user-profile.two-factor-authentication.disable.success: Tofaktorautentisering er deaktivert
+user-profile.two-factor-authentication.disable.error: Tofaktorautentisering kunne ikke deaktiveres
 creatable-select.add-custom-option: Legg til egendefinert alternativ
-creatable-select.add: Legg til
+creatable-select.press-enter-to-add: Trykk Enter for å legge til
+creatable-select.option-added: '{{label}} lagt til'
 creatable-select.option-already-exists: Alternativet finnes allerede
 creatable-select.invalid-option: Ugyldig alternativ
 drag-snippet-here: Dra en snippet hit
@@ -2795,6 +2852,19 @@ forgot-password-form.username.placeholder: Brukernavn
 forgot-password-form.reset-password: Tilbakestill passord
 forgot-password-form.success-message: En midlertidig innloggingslenke er sendt til e-postadressen din. Vennligst sjekk innboksen din.
 forgot-password-form.back: Tilbake til innlogging
+two-factor-form.description: Skriv inn den {{digits}}-sifrede koden fra autentiseringsappen din
+two-factor-form.code.placeholder: Autentiseringskode
+two-factor-form.code.required: Skriv inn autentiseringskoden
+two-factor-form.code.invalid-format: Koden må bestå av {{digits}} sifre
+two-factor-form.verify: Bekreft
+two-factor-form.error: Koden kunne ikke bekreftes. Prøv igjen.
+two-factor-form.too-many-attempts: For mange forsøk. Vent noen minutter før du prøver igjen.
+two-factor-form.back: Tilbake til innlogging
+two-factor-setup-form.description: Tofaktorautentisering er påkrevd for kontoen din. Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte.
+two-factor-setup-form.manual-entry: Eller skriv inn denne nøkkelen manuelt
+two-factor-setup-form.confirm: Aktiver
+two-factor-setup-form.load-error: Tofaktorautentisering kunne ikke settes opp. Prøv igjen senere.
+two-factor-setup-form.expired: Oppsettet er utløpt. Skann den nye QR-koden og skriv inn koden som vises.
 subscription-details.community-edition: Lær mer om Pimcore-utgaver
 config_not_writeable: Ikke skrivbar, dette kan ha flere årsaker. For detaljer se dokumentasjonen.
 navigation.about: Om
@@ -3005,6 +3075,7 @@ translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
 select.clear-selection: Fjern valg
+select.select-all: Velg alle
 asset.folder.preview.image-display: Bildevisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
@@ -3027,3 +3098,13 @@ saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
 skip-to-content: Hopp til innhold
+preview-mode.switch: Forhåndsvisningsmodus
+preview-mode.preview-item: Forhåndsvisningselement
+preview-mode.no-item: Ingen forhåndsvisningselement tilgjengelig
+preview-mode.preview: Forhåndsvisning
+tag-configuration.move-under: 'Flytt under'
+tag-configuration.move-search-placeholder: 'Søk etter en tagg'
+tree.actions.edit-tag: Rediger
+tag-configuration.edit-tag: 'Rediger "{{name}}"'
+tag-configuration.name-required: 'Skriv inn et taggnavn'
+tag-configuration.move-targets-failed: 'Listen over tagger kunne ikke lastes inn, så bare navnet kan endres'

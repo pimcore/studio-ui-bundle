@@ -15,10 +15,10 @@ import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynam
 import { DraftFiltersProvider, elementFilterDefinitions, useAppliedFilters, useDraftFilters } from '../../../../../element-filters'
 
 const DraftSync = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
-  const { values } = useAppliedFilters()
+  const { values, writeCounts } = useAppliedFilters()
   const draftStore = useDraftFilters()
 
-  useDraftSync(values, draftStore)
+  useDraftSync(values, draftStore, writeCounts)
 
   return <>{children}</>
 }

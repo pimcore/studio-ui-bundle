@@ -127,8 +127,8 @@ moduleSystem.registerModule({
       priority: config.priority.pasteCut,
       useMenuItem: (context: DataObjectTreeContextMenuProps) => {
         const { pasteCutContextMenuItem } = useCopyPaste('data-object')
-        const { isPasteHiddenForClass } = useTreeClassRestriction()
-        const item = pasteCutContextMenuItem(context.target)
+        const { isClassAllowed, isPasteHiddenForClass } = useTreeClassRestriction()
+        const item = pasteCutContextMenuItem(context.target, isClassAllowed)
 
         if (item === null) {
           return null

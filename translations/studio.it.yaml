@@ -134,6 +134,8 @@ areablock.move-below: Sposta giù
 areablock.show: Mostra
 areablock.hide: Nascondi
 areablock.new: Nuovo
+areablock.insert-above: Inserisci sopra
+areablock.insert-below: Inserisci sotto
 areablock.copy: Copia
 areablock.paste: Incolla
 areablock.cut: Taglia
@@ -341,6 +343,10 @@ custom-layout.empty-state.edit: Seleziona un layout personalizzato esistente per
 example-prefix: Prefisso di esempio
 pagination.show-total: Totale {{total}} elementi
 pagination.page: Pagina
+pagination.first-page: Prima pagina
+pagination.previous-page: Pagina precedente
+pagination.next-page: Prossima pagina
+pagination.last-page: Ultima pagina
 pagination.showing-x-of-y: Mostrando {{loaded}} di {{total}}
 preview-card.locate-in-tree: Individua nell'albero
 preview-card.rename: Rinomina
@@ -381,6 +387,7 @@ grid.filter.to: A
 grid.filter.is: È
 grid.filter.less: Minore di
 grid.filter.more: Maggiore di
+grid.filter.string.placeholder: Cerca o incolla un elenco con un valore per riga per trovare esattamente una di queste opzioni
 grid.filter.column: 'Filtra {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -403,6 +410,7 @@ grid.advanced-column.advancedColumns.group.date: Data
 grid.advanced-column.advancedColumns.group.string: Stringa
 grid.advanced-column.advancedColumns.group.other: Altro
 grid.advanced-column.title.placeholder: Aggiungi un titolo
+grid.advanced-column.expand: Espandi
 grid.advanced-column.advancedColumns: Campo sorgente
 grid.advanced-column.advancedColumns.add: Aggiungi un campo sorgente
 grid.advanced-column.transformers: Trasformatori
@@ -612,6 +620,9 @@ listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
 listing.actions.zip-download: Download ZIP
 listing.actions.delete: Elimina
+listing.actions.delete-all: Elimina tutto
+listing.actions.delete-all.not-allowed: "Alcuni elementi di questa cartella sono bloccati oppure non hai il permesso di eliminarli."
+listing.actions.delete-all.empty: "Questa cartella non contiene elementi da eliminare."
 listing.actions.export: Esporta
 reports.csv-export-modal.title: Opzioni esportazione CSV
 reports.csv-export-modal.include-headers: Includi intestazioni colonne
@@ -1256,10 +1267,15 @@ batch-edit.no-content: Non sono ancora state aggiunte colonne
 batch-edit.modal-footer.apply-changes: Applica modifiche
 batch-edit.modal-footer.discard-all-changes: Scarta tutte le modifiche
 batch-edit.modal-footer.add-a-column: Aggiungi una colonna
+batch-edit.system-boolean.publish: "Pubblica"
+batch-edit.system-boolean.unpublish: "Annulla pubblicazione"
+batch-edit.system-boolean.placeholder: "Seleziona un'azione"
+batch-edit.system-boolean.required: "Scegli Pubblica o Annulla pubblicazione"
 batch-edit.append-mode.replace: Sostituzione in blocco
 batch-edit.append-mode.add: Aggiunta in blocco
 batch-edit.append-mode.remove: Rimozione in blocco
 batch-delete.job-title: Elimina
+element-move.job-title: Sposta
 export-csv-form.modal-title: Esporta CSV
 export-csv-form.export-notice: Si prega di notare che l'esportazione non supporta alcuni campi (es. anteprima, dimensione). Premere OK per continuare con l'esportazione.
 export-csv-form.form-field.delimiter: Delimitatore
@@ -1302,6 +1318,7 @@ close-tab: Chiudi scheda
 close-others: Chiudi altre
 close-unmodified: Chiudi non modificate
 close-all: Chiudi tutte
+use-full-space: Usa tutto lo spazio
 asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Scarica come ZIP
 element-selector.title.single: Seleziona elemento
@@ -1324,6 +1341,18 @@ element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
 element.tree.cut-success-description: '{{elementType}} "{{name}}" è stato tagliato ed è pronto per incollare'
 element.tree.paste-cut: Incolla elemento tagliato
+element.tree.cut-multiple: 'Taglia {{count}} elementi'
+element.tree.cut-multiple-success-description: '{{count}} elementi sono stati tagliati e sono pronti per essere incollati'
+element.tree.paste-cut-multiple: 'Incolla {{count}} elementi tagliati'
+element.tree.selection.count_one: '{{count}} elemento selezionato'
+element.tree.selection.count_other: '{{count}} elementi selezionati'
+element.tree.selection.clear: Cancella selezione
+element.tree.selection.limit-reached: 'Massimo di {{limit}} elementi raggiunto'
+element.tree.drag.elements_one: '{{count}} elemento'
+element.tree.drag.elements_other: '{{count}} elementi'
+element.tree.drag.elements-partial: '{{count}} di {{selected}} elementi'
+element.tree.move.skipped-elements_one: '1 elemento non è stato spostato: è bloccato o non puoi modificarlo.'
+element.tree.move.skipped-elements_other: '{{count}} elementi non sono stati spostati: sono bloccati o non puoi modificarli.'
 element.lock: Blocca
 element.lock-and-propagate-to-children: Blocca e propaga ai figli
 element.unlock: Sblocca
@@ -1344,10 +1373,13 @@ element.tree.refresh: Aggiorna
 element.new-folder: Nuova cartella
 element.new-folder.validation: Inserire un nome valido
 element.rename: Rinomina
+element.rename-folder: Rinomina cartella
 element.rename.label: Inserire il nuovo nome
 element.rename.validation: Inserire un nome valido
 element.share-via-notification: Condividi tramite notifiche
 element.delete: Elimina
+element.delete-folder: Elimina cartella
+element.delete-multiple: 'Elimina {{count}} elementi'
 element.delete.confirmation.title: Elimina elemento
 element.delete.confirmation.text: Eliminare questo elemento?
 element.delete.confirmation.ok: Elimina definitivamente
@@ -1392,6 +1424,7 @@ system-information.type: Tipo
 system-information.class-id: ID classe
 system-information.class: Classe
 system-information.file-size: Dimensione file
+system-information.checksum: Checksum
 system-information.modification-date: Data di modifica
 system-information.creation-date: Data di creazione
 system-information.user-modification: Utente modifica
@@ -1442,9 +1475,13 @@ relations.create-object.name: Nome
 relations.create-object.parent: Elemento padre
 relations.create-object.parent.placeholder: Seleziona un elemento padre
 relations.create-object.class: Classe
+relations.visible-fields.loading-progress: 'Caricamento dei campi visibili… ({{loaded}} di {{total}})'
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
 asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.
+relation.drop.not-allowed-elements-skipped_one: '1 elemento non è stato aggiunto: questo campo non consente il suo tipo.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elementi non sono stati aggiunti: questo campo non consente i loro tipi.'
+drag-and-drop.drop.single-element-only: 'Qui è possibile rilasciare un solo elemento.'
 actions: Azioni
 asset: Asset
 data-object: Data Object
@@ -1499,7 +1536,6 @@ tree.actions.user: Utente
 tree.actions.add-folder: Nuova cartella
 tree.actions.add-tag: Nuovo tag
 tree.actions.delete-tag: Elimina
-tree.actions.rename-tag: Rinomina
 tree.actions.role: Ruolo
 tree.actions.add-role: Aggiungi ruolo
 tree.actions.clone-role: Clona ruolo
@@ -1511,7 +1547,6 @@ tag-configuration.name: Nome
 tag-configuration.parent-tag: Tag genitore
 tag-configuration.create: Crea
 tag-configuration.save: Salva
-tag-configuration.rename: Rinomina tag
 tag-configuration.successful-add: Tag aggiunto con successo
 tag-configuration.successful-update: Tag aggiornato con successo
 tag-configuration.successful-deletion: Tag eliminato con successo
@@ -1617,6 +1652,11 @@ user-management.settings.language.abbreviation: Abbreviazione
 user-management.settings.language.view: Visualizza
 user-management.settings.language.edit: Modifica
 user-management.two-factor-authentication: Autenticazione a due fattori
+user-management.two-factor-authentication.reset: Reimposta autenticazione a due fattori
+user-management.two-factor-authentication.reset.confirmation.title: Reimposta autenticazione a due fattori
+user-management.two-factor-authentication.reset.confirmation.text: L'app di autenticazione dell'utente non funzionerà più per questo account. Se l'autenticazione a due fattori è obbligatoria, l'utente dovrà configurarla di nuovo al prossimo accesso.
+user-management.two-factor-authentication.reset.success: L'autenticazione a due fattori è stata reimpostata
+user-management.two-factor-authentication.reset.error: Impossibile reimpostare l'autenticazione a due fattori
 user-management.workspaces.documents: Documenti
 user-management.workspaces.assets: Asset
 user-management.workspaces.objects: Data Objects
@@ -2242,6 +2282,7 @@ user-menu.notification.modal.form.validation.provide-title: Fornire un titolo
 user-menu.notification.modal.form.validation.provide-message: Fornire un messaggio
 reports.reports-title: Report
 reports.select-report-name: Selezionare il nome del report
+reports.report-load-failed: Impossibile caricare il report.
 reports.select-report: Seleziona report
 reports.export: Esporta
 reports.csv-export: Esportazione CSV
@@ -2266,6 +2307,7 @@ reports.editor.general-settings.report-class-label: Classe report
 reports.editor.general-settings.group-icon-class-label: Icon Class del gruppo
 reports.editor.general-settings.shortcut-menu-label: Crea scorciatoia nel menu
 reports.editor.source-definition.title: Definizione sorgente
+reports.editor.source-definition.not-available: La definizione della fonte di questo rapporto non è disponibile. Il Bundle che la fornisce potrebbe non essere installato.
 reports.editor.source-definition.no-content: Nessun campo disponibile ancora. Iniziare aggiungendo un campo.
 reports.editor.source-definition.select-source-definition: Selezionare una definizione sorgente
 reports.editor.source-definition.sql-select-field: SELECT (es. a,b,c)*
@@ -2358,8 +2400,23 @@ user-profile.password-old: Vecchia password
 user-profile.password-new: Nuova password
 user-profile.password-repeat: Ripeti password
 user-profile.password-repeat-error: Le password non corrispondono
+user-profile.two-factor-authentication: Autenticazione a due fattori
+user-profile.two-factor-authentication.status.active: L'autenticazione a due fattori è attiva per il Suo account.
+user-profile.two-factor-authentication.status.inactive: L'autenticazione a due fattori non è configurata per il Suo account.
+user-profile.two-factor-authentication.required-hint: L'autenticazione a due fattori è obbligatoria per il Suo account, quindi non può essere disattivata.
+user-profile.two-factor-authentication.setup: Configura autenticazione a due fattori
+user-profile.two-factor-authentication.renew: Rinnova chiave di autenticazione
+user-profile.two-factor-authentication.setup.description: Scansioni il codice QR con la Sua app di autenticazione e inserisca il codice a {{digits}} cifre per confermare.
+user-profile.two-factor-authentication.renew.description: Scansioni il codice QR con la Sua app di autenticazione e inserisca il codice a {{digits}} cifre per confermare. La chiave attuale resta valida finché la nuova non viene confermata.
+user-profile.two-factor-authentication.setup.success: L'autenticazione a due fattori è stata configurata
+user-profile.two-factor-authentication.disable: Disattiva autenticazione a due fattori
+user-profile.two-factor-authentication.disable.confirmation.title: Disattiva autenticazione a due fattori
+user-profile.two-factor-authentication.disable.confirmation.text: Accederà solo con nome utente e password. Può configurare di nuovo l'autenticazione a due fattori in qualsiasi momento.
+user-profile.two-factor-authentication.disable.success: L'autenticazione a due fattori è stata disattivata
+user-profile.two-factor-authentication.disable.error: Impossibile disattivare l'autenticazione a due fattori
 creatable-select.add-custom-option: Aggiungi opzione personalizzata
-creatable-select.add: Aggiungi
+creatable-select.press-enter-to-add: Premere Invio per aggiungere
+creatable-select.option-added: '{{label}} aggiunto'
 creatable-select.option-already-exists: Opzione già esistente
 creatable-select.invalid-option: Opzione non valida
 drag-snippet-here: Trascina uno snippet qui
@@ -2795,6 +2852,19 @@ forgot-password-form.username.placeholder: Nome utente
 forgot-password-form.reset-password: Reimposta password
 forgot-password-form.success-message: Un link di accesso temporaneo è stato inviato al Suo indirizzo email. Controllare la casella di posta.
 forgot-password-form.back: Torna al login
+two-factor-form.description: Inserisca il codice a {{digits}} cifre della Sua app di autenticazione
+two-factor-form.code.placeholder: Codice di autenticazione
+two-factor-form.code.required: Inserisca il codice di autenticazione
+two-factor-form.code.invalid-format: Il codice deve essere composto da {{digits}} cifre
+two-factor-form.verify: Verifica
+two-factor-form.error: Impossibile verificare il codice. Riprovi.
+two-factor-form.too-many-attempts: Troppi tentativi. Attenda qualche minuto prima di riprovare.
+two-factor-form.back: Torna al login
+two-factor-setup-form.description: L'autenticazione a due fattori è obbligatoria per il Suo account. Scansioni il codice QR con la Sua app di autenticazione e inserisca il codice a {{digits}} cifre per confermare.
+two-factor-setup-form.manual-entry: Oppure inserisca questa chiave manualmente
+two-factor-setup-form.confirm: Attiva
+two-factor-setup-form.load-error: Impossibile configurare l'autenticazione a due fattori. Riprovi più tardi.
+two-factor-setup-form.expired: La configurazione è scaduta. Scansioni il nuovo codice QR e inserisca il codice visualizzato.
 subscription-details.community-edition: Scopri di più sulle edizioni Pimcore
 config_not_writeable: Non scrivibile, questo può avere diverse cause. Per dettagli consultare la documentazione.
 navigation.about: Informazioni
@@ -3005,6 +3075,7 @@ translations.merger.title: "Unisci traduzioni (Dominio: {{domain}})"
 translations.merger.column.language: Lingua
 translations.merger.items: elementi
 select.clear-selection: Cancella selezione
+select.select-all: Seleziona tutto
 asset.folder.preview.image-display: Visualizzazione immagini
 asset.folder.preview.image-display.small: Piccolo
 asset.folder.preview.image-display.large: Grande
@@ -3027,3 +3098,13 @@ saved-search.delete.success: Ricerca salvata eliminata
 saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
 saved-search.menu-shortcut-group: Gruppo di menu
 skip-to-content: Vai al contenuto
+preview-mode.switch: Modalità anteprima
+preview-mode.preview-item: Elemento di anteprima
+preview-mode.no-item: Nessun elemento di anteprima disponibile
+preview-mode.preview: Anteprima
+tag-configuration.move-under: 'Sposta sotto'
+tag-configuration.move-search-placeholder: 'Cerca un tag'
+tree.actions.edit-tag: Modifica
+tag-configuration.edit-tag: 'Modifica "{{name}}"'
+tag-configuration.name-required: 'Inserire un nome per il tag'
+tag-configuration.move-targets-failed: "Non è stato possibile caricare l'elenco dei tag, quindi è possibile modificare solo il nome"

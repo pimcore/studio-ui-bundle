@@ -29,6 +29,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type ClassDefinitionListItem, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useAssetCustomSettingsGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export type ISystemInfoModalData = Element & {
   elementType: ElementType
@@ -60,6 +61,11 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
   const { openMainWidget } = useWidgetManager()
   const { data: classDefinitionData } = useClassDefinitionCollectionQuery()
   const { asset_frontend_prefix: assetFrontendPrefix } = useSettings()
+
+  // Core stores the checksum as a custom setting of every asset except folders
+  const hasChecksum = data?.elementType === elementTypes.asset && data?.type !== 'folder'
+  const { data: customSettings } = useAssetCustomSettingsGetByIdQuery({ id: data?.id }, { skip: !hasChecksum })
+  const checksum: unknown = hasChecksum ? get(customSettings, ['items', 'dynamicCustomSettings', 'checksum']) : undefined
 
   if (isNil(data)) {
     return <></>
@@ -185,6 +191,11 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
         {!isUndefined(data.fileSize) && data.fileSize > 0 && renderInputItem({
           label: t('system-information.file-size'),
           value: formatDataUnit(data.fileSize)
+        })}
+
+        {isString(checksum) && !isEmpty(checksum) && renderInputItem({
+          label: t('system-information.checksum'),
+          value: checksum
         })}
 
         {!isNil(modificationDate) && renderInputItem({

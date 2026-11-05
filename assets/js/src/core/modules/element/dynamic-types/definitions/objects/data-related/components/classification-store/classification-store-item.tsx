@@ -131,6 +131,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
               key={ item.id }
               { ...item.definition }
               name={ item.id }
+              technicalName={ item.name }
             />
           ))}
         </Panel>

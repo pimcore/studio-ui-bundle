@@ -184,9 +184,11 @@ export const QuantityValueContainer = (): React.JSX.Element => {
               <Split>
                 <Flex align='center'>
                   <IconButton
+                    aria-label={ t('toolbar.reload') }
                     disabled={ isFetching }
                     icon={ { value: 'refresh' } }
                     onClick={ handleRefetch }
+                    tooltip={ { title: t('toolbar.reload') } }
                     variant='minimal'
                   />
                 </Flex>
@@ -202,9 +204,11 @@ export const QuantityValueContainer = (): React.JSX.Element => {
             : (
               <Flex align='center'>
                 <IconButton
+                  aria-label={ t('toolbar.reload') }
                   disabled={ isFetching }
                   icon={ { value: 'refresh' } }
                   onClick={ handleRefetch }
+                  tooltip={ { title: t('toolbar.reload') } }
                 />
               </Flex>
               )}

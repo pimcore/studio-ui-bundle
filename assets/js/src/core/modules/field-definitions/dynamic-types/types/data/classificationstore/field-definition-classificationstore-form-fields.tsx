@@ -57,6 +57,7 @@ export const FieldDefinitionClassificationstoreFormFields = (props: FieldDefinit
           <Form.Item
             label={ t('store') }
             name="storeId"
+            rules={ [{ required: true, message: t('form.validation.required') }] }
           >
             <Select
               loadingSkeleton={ isLoading }

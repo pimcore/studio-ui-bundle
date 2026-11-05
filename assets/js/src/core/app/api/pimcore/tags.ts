@@ -31,6 +31,7 @@ export const tagNames = {
   DATA_OBJECT_DETAIL: 'DATA_OBJECT_DETAIL',
   DATA_OBJECT_TREE: 'DATA_OBJECT_TREE',
   DATA_OBJECT_GRID: 'DATA_OBJECT_GRID',
+  DATA_OBJECT_GRID_COLUMNS: 'DATA_OBJECT_GRID_COLUMNS',
   DATA_OBJECT_GRID_CONFIGURATION: 'DATA_OBJECT_GRID_CONFIGURATION',
   DATA_OBJECT_GRID_CONFIGURATION_LIST: 'DATA_OBJECT_GRID_CONFIGURATION_LIST',
   DATA_OBJECT_GRID_CONFIGURATION_DETAIL: 'DATA_OBJECT_GRID_CONFIGURATION_DETAIL',
@@ -122,6 +123,8 @@ export const providingTags = {
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_GRID, id }],
+  // Available grid columns of a class; they carry the serialized class definition field settings.
+  DATA_OBJECT_GRID_COLUMNS_ID: (classId?: string) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_GRID_COLUMNS, id: classId }],
   DATA_OBJECT_GRID_CONFIGURATION: () => [tagNames.DATA_OBJECT_GRID_CONFIGURATION],
   DATA_OBJECT_GRID_CONFIGURATION_LIST: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_GRID_CONFIGURATION, { type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST }],
   DATA_OBJECT_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_DETAIL }, tagNames.DATA_OBJECT_GRID_CONFIGURATION, { type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL, id: configurationId }],
@@ -214,6 +217,9 @@ export const invalidatingTags = {
   DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID: () => [tagNames.DATA_OBJECT_GRID],
   DATA_OBJECT_GRID_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_GRID, id }],
+  // Without a class id every class is affected, e.g. when an object brick or field collection changes.
+  DATA_OBJECT_GRID_COLUMNS: () => [tagNames.DATA_OBJECT_GRID_COLUMNS],
+  DATA_OBJECT_GRID_COLUMNS_ID: (classId: string) => [{ type: tagNames.DATA_OBJECT_GRID_COLUMNS, id: classId }],
   DATA_OBJECT_GRID_CONFIGURATION: () => [tagNames.DATA_OBJECT_GRID_CONFIGURATION],
   DATA_OBJECT_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL, id: configurationId }, tagNames.DATA_OBJECT_GRID_CONFIGURATION],
   DATA_OBJECT_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST }],

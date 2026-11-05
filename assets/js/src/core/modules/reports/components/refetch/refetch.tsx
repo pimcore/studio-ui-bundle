@@ -31,10 +31,10 @@ export const Refetch = ({ isFetching, refetch }: RefetchProps): React.JSX.Elemen
 
   return (
     <IconButton
-      aria-label={ t('refresh') }
+      aria-label={ t('toolbar.reload') }
       icon={ { value: 'refresh' } }
       onClick={ async () => { refetch() } }
-      tooltip={ { title: t('refresh') } }
+      tooltip={ { title: t('toolbar.reload') } }
     />
   )
 }

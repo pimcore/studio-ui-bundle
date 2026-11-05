@@ -14,6 +14,14 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
+            documentBatchDelete: build.mutation<DocumentBatchDeleteApiResponse, DocumentBatchDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/batch-delete`,
+                    method: "DELETE",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
             documentClone: build.mutation<DocumentCloneApiResponse, DocumentCloneApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/${queryArg.id}/clone/${queryArg.parentId}`,
@@ -138,6 +146,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Documents"],
             }),
+            documentPatchById: build.mutation<DocumentPatchByIdApiResponse, DocumentPatchByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents`, method: "PATCH", body: queryArg.body }),
+                invalidatesTags: ["Documents"],
+            }),
             documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/renderlet/render`,
@@ -245,6 +257,16 @@ export type DocumentAddApiArg = {
     /** ParentId of the document */
     parentId: number;
     documentAddParameters: DocumentAdd;
+};
+export type DocumentBatchDeleteApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DocumentBatchDeleteApiArg = {
+    body: {
+        ids?: number[];
+    };
 };
 export type DocumentCloneApiResponse =
     /** status 201 Successfully copied parent document and created <strong>jobRun</strong> for copying children */ {
@@ -365,6 +387,24 @@ export type DocumentPageSnippetAreaBlockRenderApiArg = {
         blockStateStack: object | null;
         areaBlockConfig?: object | null;
         areaBlockData?: object | null;
+    };
+};
+export type DocumentPatchByIdApiResponse =
+    /** status 201 Successfully created jobRun for patching multiple documents */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DocumentPatchByIdApiArg = {
+    body: {
+        data: {
+            /** Document ID */
+            id: number;
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            published?: boolean | null;
+        }[];
     };
 };
 export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
@@ -835,6 +875,7 @@ export type DocumentTranslationParent = {
 };
 export const {
     useDocumentAddMutation,
+    useDocumentBatchDeleteMutation,
     useDocumentCloneMutation,
     useDocumentConvertMutation,
     useDocumentDocTypeAddMutation,
@@ -851,6 +892,7 @@ export const {
     useDocumentAvailableTemplatesListQuery,
     useDocumentPageSnippetChangeMainDocumentMutation,
     useDocumentPageSnippetAreaBlockRenderQuery,
+    useDocumentPatchByIdMutation,
     useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
     useDocumentsListAvailableSitesQuery,

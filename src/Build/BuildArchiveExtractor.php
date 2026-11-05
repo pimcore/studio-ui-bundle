@@ -288,6 +288,8 @@ final readonly class BuildArchiveExtractor
 
         if (!@rename($tmpDir, $targetDir)) {
             // Restore the previous build if the swap failed.
+            // PHPStan keeps the is_dir() result from above, but the renames in between changed the file system
+            // @phpstan-ignore booleanNot.alwaysFalse, booleanAnd.alwaysFalse
             if ($backup !== null && !is_dir($targetDir)) {
                 @rename($backup, $targetDir);
             }

@@ -136,6 +136,8 @@ areablock.move-below: Move below
 areablock.show: Show
 areablock.hide: Hide
 areablock.new: New
+areablock.insert-above: Insert above
+areablock.insert-below: Insert below
 areablock.copy: Copy
 areablock.paste: Paste
 areablock.cut: Cut
@@ -343,6 +345,10 @@ custom-layout.empty-state.edit: Select an existing custom layout to start editin
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
+pagination.first-page: First page
+pagination.previous-page: Previous page
+pagination.next-page: Next page
+pagination.last-page: Last page
 pagination.showing-x-of-y: Showing {{loaded}} of {{total}}
 preview-card.locate-in-tree: Locate in Tree
 preview-card.rename: Rename
@@ -383,6 +389,7 @@ grid.filter.to: To
 grid.filter.is: Is
 grid.filter.less: Less than
 grid.filter.more: More than
+grid.filter.string.placeholder: Search, or paste a list with one value per line to match any of them exactly
 grid.filter.column: 'Filter {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -405,6 +412,7 @@ grid.advanced-column.advancedColumns.group.date: Date
 grid.advanced-column.advancedColumns.group.string: String
 grid.advanced-column.advancedColumns.group.other: Other
 grid.advanced-column.title.placeholder: Add a title
+grid.advanced-column.expand: Expand
 grid.advanced-column.advancedColumns: Source Field
 grid.advanced-column.advancedColumns.add: Add a source
 grid.advanced-column.transformers: Transformers
@@ -614,6 +622,9 @@ listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.delete: Delete
+listing.actions.delete-all: Delete all
+listing.actions.delete-all.not-allowed: "Some items in this folder are locked or you are not allowed to delete them."
+listing.actions.delete-all.empty: "This folder contains no items to delete."
 listing.actions.export: Export
 reports.csv-export-modal.title: CSV Export Options
 reports.csv-export-modal.include-headers: Include column headers
@@ -1258,10 +1269,15 @@ batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
 batch-edit.modal-footer.discard-all-changes: Discard all changes
 batch-edit.modal-footer.add-a-column: Add a column
+batch-edit.system-boolean.publish: "Publish"
+batch-edit.system-boolean.unpublish: "Unpublish"
+batch-edit.system-boolean.placeholder: "Select an action"
+batch-edit.system-boolean.required: "Choose Publish or Unpublish"
 batch-edit.append-mode.replace: Batch replace
 batch-edit.append-mode.add: Batch add
 batch-edit.append-mode.remove: Batch remove
 batch-delete.job-title: Delete
+element-move.job-title: Move
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -1304,6 +1320,7 @@ close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+use-full-space: Use Full Space
 asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
 element-selector.title.single: Select Element
@@ -1326,6 +1343,18 @@ element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" has been cut and is ready to paste'
 element.tree.paste-cut: Paste cut-out element
+element.tree.cut-multiple: 'Cut {{count}} elements'
+element.tree.cut-multiple-success-description: '{{count}} elements have been cut and are ready to paste'
+element.tree.paste-cut-multiple: 'Paste {{count}} cut elements'
+element.tree.selection.count_one: '{{count}} element selected'
+element.tree.selection.count_other: '{{count}} elements selected'
+element.tree.selection.clear: Clear selection
+element.tree.selection.limit-reached: 'Maximum of {{limit}} elements reached'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} elements'
+element.tree.drag.elements-partial: '{{count}} of {{selected}} elements'
+element.tree.move.skipped-elements_one: '1 element was not moved: it is locked or you cannot edit it.'
+element.tree.move.skipped-elements_other: '{{count}} elements were not moved: they are locked or you cannot edit them.'
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
@@ -1346,10 +1375,13 @@ element.tree.refresh: Refresh
 element.new-folder: New Folder
 element.new-folder.validation: Please enter a valid name
 element.rename: Rename
+element.rename-folder: Rename Folder
 element.rename.label: Please enter the new name
 element.rename.validation: Please enter a valid name
 element.share-via-notification: Share via Notifications
 element.delete: Delete
+element.delete-folder: Delete Folder
+element.delete-multiple: 'Delete {{count}} elements'
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
@@ -1394,6 +1426,7 @@ system-information.type: Type
 system-information.class-id: Class ID
 system-information.class: Class
 system-information.file-size: File Size
+system-information.checksum: Checksum
 system-information.modification-date: Modification Date
 system-information.creation-date: Creation Date
 system-information.user-modification: User Modification
@@ -1444,9 +1477,15 @@ relations.create-object.name: Name
 relations.create-object.parent: Parent
 relations.create-object.parent.placeholder: Select a parent
 relations.create-object.class: Class
+relations.visible-fields.loading: Loading visible fields…
+relations.visible-fields.loading-progress: 'Loading visible fields… ({{loaded}} of {{total}})'
+relations.visible-fields.error: The visible fields could not be loaded.
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
+relation.drop.not-allowed-elements-skipped_one: '1 element was not added: this field does not allow its type.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elements were not added: this field does not allow their type.'
+drag-and-drop.drop.single-element-only: 'Only one element can be dropped here.'
 actions: Actions
 asset: Asset
 data-object: Data Object
@@ -1501,7 +1540,6 @@ tree.actions.user: User
 tree.actions.add-folder: New Folder
 tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
-tree.actions.rename-tag: Rename
 tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone role
@@ -1513,7 +1551,6 @@ tag-configuration.name: Name
 tag-configuration.parent-tag: Parent Tag
 tag-configuration.create: Create
 tag-configuration.save: Save
-tag-configuration.rename: Rename tag
 tag-configuration.successful-add: Tag has been added successfully
 tag-configuration.successful-update: Tag has been updated successfully
 tag-configuration.successful-deletion: Tag has been deleted successfully
@@ -1619,6 +1656,11 @@ user-management.settings.language.abbreviation: Abbreviation
 user-management.settings.language.view: View
 user-management.settings.language.edit: Edit
 user-management.two-factor-authentication: Two Factor Authentication
+user-management.two-factor-authentication.reset: Reset two-factor authentication
+user-management.two-factor-authentication.reset.confirmation.title: Reset two-factor authentication
+user-management.two-factor-authentication.reset.confirmation.text: The user's authenticator app will no longer work for this account. If two-factor authentication is required, the user has to set it up again at the next login.
+user-management.two-factor-authentication.reset.success: Two-factor authentication has been reset
+user-management.two-factor-authentication.reset.error: Two-factor authentication could not be reset
 user-management.workspaces.documents: Documents
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects
@@ -2244,6 +2286,7 @@ user-menu.notification.modal.form.validation.provide-title: Please provide a tit
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
 reports.reports-title: Reports
 reports.select-report-name: Select the name of the report
+reports.report-load-failed: The report could not be loaded.
 reports.select-report: Select report
 reports.export: Export
 reports.csv-export: CSV Export
@@ -2268,6 +2311,7 @@ reports.editor.general-settings.report-class-label: Report Class
 reports.editor.general-settings.group-icon-class-label: Group Icon Class
 reports.editor.general-settings.shortcut-menu-label: Create shortcut in menu
 reports.editor.source-definition.title: Source Definition
+reports.editor.source-definition.not-available: The source definition of this report is not available. The bundle that provides it may not be installed.
 reports.editor.source-definition.no-content: No available fields yet. Start by adding a field.
 reports.editor.source-definition.select-source-definition: Select a source definition
 reports.editor.source-definition.sql-select-field: SELECT (eg. a,b,c)*
@@ -2360,8 +2404,23 @@ user-profile.password-old: Old Password
 user-profile.password-new: New Password
 user-profile.password-repeat: Repeat Password
 user-profile.password-repeat-error: Passwords do not match
+user-profile.two-factor-authentication: Two-Factor Authentication
+user-profile.two-factor-authentication.status.active: Two-factor authentication is active for your account.
+user-profile.two-factor-authentication.status.inactive: Two-factor authentication is not set up for your account.
+user-profile.two-factor-authentication.required-hint: Two-factor authentication is required for your account, so it cannot be disabled.
+user-profile.two-factor-authentication.setup: Set up two-factor authentication
+user-profile.two-factor-authentication.renew: Renew authenticator key
+user-profile.two-factor-authentication.setup.description: Scan the QR code with your authenticator app and enter the {{digits}}-digit code to confirm.
+user-profile.two-factor-authentication.renew.description: Scan the QR code with your authenticator app and enter the {{digits}}-digit code to confirm. Your current key keeps working until the new one is confirmed.
+user-profile.two-factor-authentication.setup.success: Two-factor authentication has been set up
+user-profile.two-factor-authentication.disable: Disable two-factor authentication
+user-profile.two-factor-authentication.disable.confirmation.title: Disable two-factor authentication
+user-profile.two-factor-authentication.disable.confirmation.text: You will log in with your username and password only. You can set up two-factor authentication again at any time.
+user-profile.two-factor-authentication.disable.success: Two-factor authentication has been disabled
+user-profile.two-factor-authentication.disable.error: Two-factor authentication could not be disabled
 creatable-select.add-custom-option: Add custom option
-creatable-select.add: Add
+creatable-select.press-enter-to-add: Press Enter to add
+creatable-select.option-added: '{{label}} added'
 creatable-select.option-already-exists: Option already exists
 creatable-select.invalid-option: Invalid option
 drag-snippet-here: Drag a snippet here
@@ -2797,6 +2856,19 @@ forgot-password-form.username.placeholder: Username
 forgot-password-form.reset-password: Reset password
 forgot-password-form.success-message: A temporary login link has been sent to your email address. Please check your mailbox.
 forgot-password-form.back: Back to login
+two-factor-form.description: Enter the {{digits}}-digit code from your authenticator app
+two-factor-form.code.placeholder: Authentication code
+two-factor-form.code.required: Please enter the authentication code
+two-factor-form.code.invalid-format: The code must consist of {{digits}} digits
+two-factor-form.verify: Verify
+two-factor-form.error: The code could not be verified. Please try again.
+two-factor-form.too-many-attempts: Too many attempts. Please wait a few minutes before you try again.
+two-factor-form.back: Back to login
+two-factor-setup-form.description: Two-factor authentication is required for your account. Scan the QR code with your authenticator app and enter the {{digits}}-digit code to confirm.
+two-factor-setup-form.manual-entry: Or enter this key manually
+two-factor-setup-form.confirm: Activate
+two-factor-setup-form.load-error: Two-factor authentication could not be set up. Please try again later.
+two-factor-setup-form.expired: The setup has expired. Scan the new QR code and enter the code it shows.
 subscription-details.community-edition: Learn more about Pimcore Editions
 config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.
 navigation.about: About
@@ -3007,6 +3079,7 @@ translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
 select.clear-selection: Clear selection
+select.select-all: Select all
 asset.folder.preview.image-display: Image display
 asset.folder.preview.image-display.small: Small
 asset.folder.preview.image-display.large: Large
@@ -3029,3 +3102,13 @@ saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
 skip-to-content: Skip to content
+preview-mode.switch: Preview mode
+preview-mode.preview-item: Preview item
+preview-mode.no-item: No preview item available
+preview-mode.preview: Preview
+tag-configuration.move-under: 'Move under'
+tag-configuration.move-search-placeholder: 'Search for a tag'
+tree.actions.edit-tag: Edit
+tag-configuration.edit-tag: 'Edit "{{name}}"'
+tag-configuration.name-required: 'Please enter a tag name'
+tag-configuration.move-targets-failed: 'The list of tags could not be loaded, so only the name can be changed'

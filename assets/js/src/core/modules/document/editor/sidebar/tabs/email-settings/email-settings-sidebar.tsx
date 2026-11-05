@@ -10,9 +10,8 @@
 
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SidebarTitle } from '@Pimcore/components/sidebar/title'
+import { Title } from '@Pimcore/components/title/title'
 import { Content } from '@sdk/components'
-import { Box } from '@Pimcore/components/box/box'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { isUndefined } from 'lodash'
@@ -51,20 +50,20 @@ export const EmailSettingsSidebar = (): React.JSX.Element => {
   const isDataReady = !isUndefined(document)
 
   return (
-    <Content loading={ !isDataReady }>
-      <SidebarTitle withBorder>
-        {t('email-settings.sidebar-title')}
-      </SidebarTitle>
+    <Content
+      loading={ !isDataReady }
+      padded
+      padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+    >
+      <Title>{t('email-settings.sidebar-title')}</Title>
 
-      <Box padding={ { x: 'extra-small', bottom: 'small' } }>
-        {isDataReady && (
-          <EmailSettingsForm
-            documentId={ id }
-            hasSavePermission={ hasSavePermission }
-            initialValues={ initialValues }
-          />
-        )}
-      </Box>
+      {isDataReady && (
+        <EmailSettingsForm
+          documentId={ id }
+          hasSavePermission={ hasSavePermission }
+          initialValues={ initialValues }
+        />
+      )}
     </Content>
   )
 }

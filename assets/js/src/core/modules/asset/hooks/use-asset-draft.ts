@@ -20,6 +20,7 @@ import {
   removePropertyFromAsset,
   removeScheduleFromAsset,
   resetChanges,
+  resetChangesForTypes,
   resetSchedulesChangesForAsset,
   selectAssetById,
   setActiveTabForAsset,
@@ -89,7 +90,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const trackableChangesActions = useTrackableChangesDraft(
     id,
     resetChanges,
-    setModifiedCells
+    setModifiedCells,
+    resetChangesForTypes
   )
 
   const propertyActions = usePropertiesDraft(

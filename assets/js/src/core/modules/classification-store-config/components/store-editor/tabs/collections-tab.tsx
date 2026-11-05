@@ -267,10 +267,11 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                   ? null
                   : (
                     <IconButton
+                      aria-label={ t('toolbar.reload') }
                       icon={ { value: 'refresh' } }
                       loading={ isFetching }
                       onClick={ () => { void refetch() } }
-                      tooltip={ { title: t('refresh') } }
+                      tooltip={ { title: t('toolbar.reload') } }
                     />
                     ) }
                 <Pagination
