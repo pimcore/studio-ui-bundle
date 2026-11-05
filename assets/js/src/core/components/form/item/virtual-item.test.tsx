@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { render } from '@testing-library/react'
+import { isNull } from 'lodash'
 import { VirtualItem } from './virtual-item'
 
 // the styling and layout helpers transitively import antd-style (untranspiled ESM);
@@ -31,7 +32,7 @@ jest.mock('@Pimcore/components/form/use-form', () => ({
 }))
 
 const hasRequiredMarker = (container: HTMLElement): boolean =>
-  container.querySelector('.required-indicator') !== null
+  !isNull(container.querySelector('.required-indicator'))
 
 describe('VirtualItem required marker', () => {
   it('shows the marker for an explicit required prop (mandatory field in a field collection / object brick)', () => {

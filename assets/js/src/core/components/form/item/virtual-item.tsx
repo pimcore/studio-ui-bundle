@@ -86,13 +86,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
   // Same precedence as antd's Form.Item: an explicit `required` prop (e.g. a mandatory
   // data object field) wins, otherwise the marker is derived from the rules.
   const isRequired = useMemo(() => {
-    if (required !== undefined) {
-      return required
-    }
-    if (rules !== undefined && Array.isArray(rules)) {
-      return rules.some(rule => 'required' in rule && rule.required)
-    }
-    return false
+    return required ?? (Array.isArray(rules) && rules.some(rule => 'required' in rule && rule.required === true))
   }, [required, rules])
 
   const wrapperClassName = [
