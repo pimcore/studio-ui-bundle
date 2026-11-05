@@ -155,6 +155,18 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   }, [itemName])
 
   const move: NumberedListData['operations']['move'] = useCallback((from, to) => {
+    addedIndexesRef.current = new Set([...addedIndexesRef.current].map((index) => {
+      if (index === from) {
+        return to
+      }
+
+      if (from < to && index > from && index <= to) {
+        return index - 1
+      }
+
+      return from > to && index >= to && index < from ? index + 1 : index
+    }))
+
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       const [removed] = newValue.splice(from, 1)

@@ -315,6 +315,27 @@ describe('NumberedList', () => {
       expect(onChange).toHaveBeenLastCalledWith([{ title: null }, { title: null }])
     })
 
+    it('follows the added entry when it is moved before the fields register', () => {
+      const onChange = jest.fn()
+      const props = { value: [{ name: 'a' }], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      act(() => { operations.move(1, 0) })
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+      onChange.mockClear()
+
+      // the registration of the moved entry must not have reached the baseline of the loaded one
+      rerender(numberedListUi(props))
+      act(() => { operations.remove(0) })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith([{ name: 'a' }])
+    })
+
     it('reports the removal of an already reported added entry', () => {
       const onChange = jest.fn()
       const props = { value: [], onChange }
