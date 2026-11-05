@@ -188,8 +188,8 @@ describe('ObjectLocalizedFields', () => {
     const container = renderLocalizedFields({ children: defaultChildren, width: 400, height: 200 })
 
     expect(sizedElements(container, '400px', '200px').length).toBeGreaterThan(0)
-    expect(screen.queryByText('firstname')).not.toBeNull()
-    expect(screen.queryByText('lastname')).not.toBeNull()
+    expect(screen.getByText('firstname')).toBeInTheDocument()
+    expect(screen.getByText('lastname')).toBeInTheDocument()
   })
 
   // BaseView wraps the children in a card once a title or border is set, and
@@ -255,7 +255,7 @@ describe('ObjectLocalizedFields', () => {
     renderLocalizedFields({ children: defaultChildren, layout })
 
     expect(screen.queryByTestId('flex-item')).toBeNull()
-    expect(screen.queryByTestId('children')).not.toBeNull()
+    expect(screen.getByTestId('children')).toBeInTheDocument()
   })
 
   // Localizedfields inherits Layout\Traits\LabelTrait, whose defaults are
@@ -272,6 +272,6 @@ describe('ObjectLocalizedFields', () => {
 
     expect(container.querySelector('[data-testid="label-layout"]')).toBeNull()
     expect(container.innerHTML).not.toContain('100px')
-    expect(screen.queryByText('firstname')).not.toBeNull()
+    expect(screen.getByText('firstname')).toBeInTheDocument()
   })
 })
