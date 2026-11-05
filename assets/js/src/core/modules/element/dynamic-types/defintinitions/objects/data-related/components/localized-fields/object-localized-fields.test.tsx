@@ -100,20 +100,6 @@ jest.mock('@Pimcore/components/flex/flex', () => ({
   )
 }))
 
-// The provider itself is covered by label-layout-provider.test.tsx; here it only
-// has to show which values the container hands it.
-jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/label-layout-provider', () => ({
-  LabelLayoutProvider: ({ children, labelAlign, labelWidth }: any) => (
-    <div
-      data-label-align={ labelAlign ?? '' }
-      data-label-width={ labelWidth ?? '' }
-      data-testid='label-layout'
-    >
-      {children}
-    </div>
-  )
-}))
-
 // Localizedfields::$width and ::$height are offered in the class editor and are
 // spread into the component with the rest of the definition node — the props
 // interface does not declare them yet, so the test carries the types.
@@ -121,6 +107,7 @@ interface ContainerSettingsProps {
   width?: number | string | null
   height?: number | string | null
   layout?: string | null
+  // Sent by every class definition and deliberately not consumed, see below.
   labelWidth?: number | null
   labelAlign?: string | null
 }
@@ -271,29 +258,20 @@ describe('ObjectLocalizedFields', () => {
     expect(screen.queryByTestId('children')).not.toBeNull()
   })
 
-  // Localizedfields::$labelWidth and ::$labelAlign are container settings that
-  // have to reach the fields inside it, which is what the provider is for.
-  it('publishes the configured label layout to its children', () => {
-    renderLocalizedFields({ children: defaultChildren, labelWidth: 150, labelAlign: 'left' })
+  // Localizedfields inherits Layout\Traits\LabelTrait, whose defaults are
+  // labelWidth 100 and labelAlign 'left', so every class definition sends those
+  // two values even when nobody configured them. Honouring them would re-lay out
+  // the labels of every existing object, so the container ignores them entirely
+  // and the class editor marks them instead. See the discussion on #704.
+  it('ignores the label settings the class definition always sends', () => {
+    const container = renderLocalizedFields({
+      children: defaultChildren,
+      labelAlign: 'left',
+      labelWidth: 100
+    })
 
-    const provider = screen.getByTestId('label-layout')
-
-    expect(provider.dataset.labelWidth).toBe('150')
-    expect(provider.dataset.labelAlign).toBe('left')
+    expect(container.querySelector('[data-testid="label-layout"]')).toBeNull()
+    expect(container.innerHTML).not.toContain('100px')
     expect(screen.queryByText('firstname')).not.toBeNull()
-  })
-
-  it('publishes a top alignment as well', () => {
-    renderLocalizedFields({ children: defaultChildren, labelAlign: 'top' })
-
-    expect(screen.getByTestId('label-layout').dataset.labelAlign).toBe('top')
-  })
-
-  // Nothing configured must not change how a field's label is rendered, so the
-  // container does not wrap its children in a provider at all.
-  it('does not publish a label layout when neither setting is configured', () => {
-    renderLocalizedFields({ children: defaultChildren })
-
-    expect(screen.queryByTestId('label-layout')).toBeNull()
   })
 })

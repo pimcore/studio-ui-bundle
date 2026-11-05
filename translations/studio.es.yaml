@@ -1337,6 +1337,7 @@ success: Éxito
 no-value-set: No se ha establecido ningún valor
 set-to-null: Vacío (establecer como nulo)
 setting-without-effect-in-studio: "Sin efecto en Studio: se muestra un idioma a la vez y se elige con el selector global. El ajuste se mantiene porque la misma definición de clase sigue controlando la interfaz de administración clásica."
+label-setting-without-effect-in-studio: "Sin efecto en Studio: las etiquetas de los campos siguen el diseño de formulario propio de Studio y siempre se muestran encima del campo. El ajuste se mantiene porque la misma definición de clase sigue controlando la interfaz de administración clásica."
 remove: Eliminar
 delete: Eliminar
 clone: Clonar

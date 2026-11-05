@@ -66,9 +66,21 @@ describe('FieldDefinitionLocalizedfieldsFormFields', () => {
     expect(tooltipFor(label)).toBe(expected)
   })
 
+  // The label settings carry their own marking, with a different reason: Studio
+  // renders every field label above its control, and Localizedfields inherits
+  // Layout\Traits\LabelTrait, whose defaults are labelWidth 100 and labelAlign
+  // 'left'. Every class definition therefore sends those two values whether or
+  // not anyone ever opened this form, so an unset container is indistinguishable
+  // from a configured one and the setting cannot be honoured without silently
+  // re-laying out every existing object. See the discussion on #704.
   it.each([
     ['label-width'],
-    ['label-align'],
+    ['label-align']
+  ])('marks %s as having no effect in Studio', (label) => {
+    expect(tooltipFor(label)).toBe('label-setting-without-effect-in-studio')
+  })
+
+  it.each([
     ['region'],
     ['layout']
   ])('does not mark %s, which Studio applies', (label) => {

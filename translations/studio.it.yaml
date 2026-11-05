@@ -1337,6 +1337,7 @@ success: Successo
 no-value-set: Nessun valore impostato
 set-to-null: Vuoto (imposta a null)
 setting-without-effect-in-studio: "Nessun effetto in Studio: viene visualizzata una lingua alla volta, scelta tramite il selettore globale. L'impostazione viene mantenuta perché la stessa definizione di classe governa ancora la vecchia interfaccia di amministrazione."
+label-setting-without-effect-in-studio: "Nessun effetto in Studio: le etichette dei campi seguono il layout dei moduli di Studio e vengono sempre visualizzate sopra il campo. L'impostazione viene mantenuta perché la stessa definizione di classe governa ancora la vecchia interfaccia di amministrazione."
 remove: Rimuovi
 delete: Elimina
 clone: Clona

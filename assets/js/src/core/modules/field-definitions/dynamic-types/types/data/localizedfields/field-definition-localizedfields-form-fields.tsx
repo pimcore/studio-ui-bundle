@@ -112,6 +112,7 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item
         label={ t('label-width') }
         name="labelWidth"
+        tooltip={ t('label-setting-without-effect-in-studio') }
       >
         <InputNumber
           min={ 0 }
@@ -122,6 +123,7 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item
         label={ t('label-align') }
         name="labelAlign"
+        tooltip={ t('label-setting-without-effect-in-studio') }
       >
         <Select
           options={ [

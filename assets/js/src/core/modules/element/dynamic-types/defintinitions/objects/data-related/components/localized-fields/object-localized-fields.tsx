@@ -19,9 +19,6 @@ import { useLanguageSelection } from '@Pimcore/components/language-selection/pro
 import { Form } from '@Pimcore/components/form/form'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 import { Flex } from '@Pimcore/components/flex/flex'
-import {
-  LabelLayoutProvider
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/label-layout-provider'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
@@ -32,12 +29,10 @@ export interface ObjectLocalizedFieldsProps extends AbstractObjectDataDefinition
   width?: number | string | null
   height?: number | string | null
   layout?: string | null
-  labelWidth?: number | null
-  labelAlign?: string | null
 }
 
 // Legacy ObjectLocalizedFields component - supports object definition arrays
-export const ObjectLocalizedFields = ({ children, noteditable, className, title, border, width, height, layout, labelWidth, labelAlign }: ObjectLocalizedFieldsProps): React.JSX.Element => {
+export const ObjectLocalizedFields = ({ children, noteditable, className, title, border, width, height, layout }: ObjectLocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
   const isParentNotEditable = noteditable === true
@@ -52,10 +47,6 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
   // is the legacy ExtJS layout whose children fill the container, which the
   // sibling FieldContainer already expresses as flex-1 items.
   const isFit = layout === 'fit'
-
-  // Only wrap when something was actually configured: a field outside a
-  // configured container must keep antd's own label defaults.
-  const hasLabelLayout = (typeof labelWidth === 'number' && labelWidth > 0) || isNonEmptyString(labelAlign)
 
   // BaseView wraps the children in a card once a title or a border is
   // configured, and that card — not the stack inside it — is the container the
@@ -121,17 +112,6 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
       </Space>
       )
 
-  const content = hasLabelLayout
-    ? (
-      <LabelLayoutProvider
-        labelAlign={ labelAlign }
-        labelWidth={ labelWidth }
-      >
-        { container }
-      </LabelLayoutProvider>
-      )
-    : container
-
   return (
     <LocalizedFieldsProvider locales={ [currentLanguage] }>
       <CombinedFieldNameProvider combinedFieldNameParent={ ['localizedfields'] }>
@@ -144,7 +124,7 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
             theme='default'
             title={ title }
           >
-            { content }
+            { container }
           </BaseView>
         </Form.Group>
       </CombinedFieldNameProvider>

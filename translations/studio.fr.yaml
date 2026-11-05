@@ -1337,6 +1337,7 @@ success: Succès
 no-value-set: Aucune valeur définie
 set-to-null: Vide (défini à null)
 setting-without-effect-in-studio: "Sans effet dans Studio : une seule langue est affichée à la fois et elle est choisie via le sélecteur global. Le paramètre est conservé car la même définition de classe pilote encore l'ancienne interface d'administration."
+label-setting-without-effect-in-studio: "Sans effet dans Studio : les libellés des champs suivent la mise en page de formulaire propre à Studio et sont toujours affichés au-dessus du champ. Le paramètre est conservé car la même définition de classe pilote encore l'ancienne interface d'administration."
 remove: Supprimer
 delete: Supprimer
 clone: Cloner
