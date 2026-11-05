@@ -16,7 +16,6 @@ import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useDraftFilterValues } from '../../../../../../element-filters'
 import { type FieldFilter } from '../../../../../../context-layer/provider/field-filters/field-filters-provider'
-import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
