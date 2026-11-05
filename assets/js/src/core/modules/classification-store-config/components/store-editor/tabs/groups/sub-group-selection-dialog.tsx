@@ -21,6 +21,7 @@ import {
   useClassificationStoreConfigurationSubGroupCollectionQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { hasIdentifier } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface ISubGroupSelectionDialogProps {
@@ -70,7 +71,9 @@ export const SubGroupSelectionDialog = ({
   }, [open])
 
   const availableSubGroups = useMemo(() => {
-    return allSubGroups.filter((s) => {
+    // Only sub groups the server has given an identifier: that is the value a key-group
+    // relation stores, so one without it cannot be assigned and must not be offered.
+    return allSubGroups.filter(hasIdentifier).filter((s) => {
       if (searchTerm.trim() === '') return true
       const term = searchTerm.trim().toLowerCase()
       return (

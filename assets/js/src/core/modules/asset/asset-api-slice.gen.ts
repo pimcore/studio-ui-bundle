@@ -1182,6 +1182,8 @@ export type Asset = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes: CustomAttributes;
+    /** Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search */
+    score?: number | null;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
     /** Has children */
@@ -1454,7 +1456,7 @@ export type AssetUploadBatchInfo = {
     exists: boolean;
     /** Id of existing asset */
     assetId: number | null;
-    /** True if an asset with that name exists but the current user may not view it. The name is therefore reported as not existing, since no ID can be handed out. */
+    /** True if an asset with that name exists but the current user may not view it */
     accessDenied: boolean;
 };
 export type VideoThumbnailStatus = {

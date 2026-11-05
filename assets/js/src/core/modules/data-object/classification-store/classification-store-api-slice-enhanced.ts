@@ -23,6 +23,7 @@ import {
   type ClassificationStoreCollection2 as GeneratedKeyLayout,
   type ClassificationStoreGroupLayout2 as GeneratedGroupLayout,
   type ClassificationStoreConfigurationKeyGroupRelationCreate as GeneratedKeyGroupRelationCreate,
+  type ClassificationStoreConfigurationSubGroupDetail as GeneratedSubGroupDetail,
   type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
@@ -33,26 +34,21 @@ const CONFIGURATION_PREFIX = '/pimcore-studio/api/classification-store/configura
 // generated. Each declaration below either adds a name the generated slice does not carry
 // or shadows a generated one, so the next regeneration supersedes this block by deleting it.
 
-export interface ClassificationStoreConfigurationSubGroupDetail {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object
-  }
-  /** ID of the sub group */
-  id: number
-  /** Generated identifier of the sub group, the value a key-group relation stores */
-  identifier: string
-  /** Name of the sub group */
-  name: string
-  /** ID of the store this sub group belongs to */
-  storeId: number
-  /** Description of the sub group */
-  description: string | null
-  /** Creation date as Unix timestamp */
-  creationDate: number | null
-  /** Modification date as Unix timestamp */
-  modificationDate: number | null
-}
+/**
+ * The generated `ClassificationStoreConfigurationSubGroupDetail` marks `identifier` optional
+ * and nullable. The UI cannot act on a sub group without one — it is the value a key-group
+ * relation stores, so a sub group lacking it cannot be assigned, unassigned or counted. This
+ * narrows that one field; `hasIdentifier` below is the only way in.
+ */
+export type ClassificationStoreConfigurationSubGroupDetail =
+  Omit<GeneratedSubGroupDetail, 'identifier'> & { identifier: string }
+
+/** A sub group the UI can act on: one the server has given an identifier. */
+export const hasIdentifier = (
+  subGroup: GeneratedSubGroupDetail
+): subGroup is ClassificationStoreConfigurationSubGroupDetail =>
+  typeof subGroup.identifier === 'string' && subGroup.identifier !== ''
+
 
 export interface ClassificationStoreConfigurationSubGroupCreate {
   /** Name of the sub group */
@@ -119,15 +115,12 @@ export interface ClassificationStoreConfigurationKeyGroupRelationDetail extends 
  * slice predates. The next regeneration reproduces them optional and this shadow goes with the
  * rest of the block.
  */
-export interface ClassificationStoreConfigurationKeyGroupRelationCreate
-  extends Omit<GeneratedKeyGroupRelationCreate, 'sorter' | 'mandatory'> {
-  /** Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation */
-  sorter?: number
-  /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
-  mandatory?: boolean
-  /** Identifier of the sub group to assign the key to in this group */
-  subGroup?: string | null
-}
+/**
+ * Retired 2026-11-05 with the OpenAPI refresh, exactly as the note above said it would be: the
+ * regenerated slice now carries `sorter`, `mandatory` and `subGroup` itself, optional and
+ * nullable. Kept as an alias so call sites keep their name.
+ */
+export type ClassificationStoreConfigurationKeyGroupRelationCreate = GeneratedKeyGroupRelationCreate
 
 export interface ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse {
   totalItems: number
@@ -360,7 +353,9 @@ const api = baseApi.enhanceEndpoints({
                 // for the length of the request and let it come back with the response.
                 ...(update.title !== undefined && update.title !== null ? { title: update.title } : {}),
                 ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
-                description: update.description
+                // `description` is optional in the payload now, so an absent one must not be
+                // written: it would blank the cached cell for the length of the request.
+                ...(update.description !== undefined ? { description: update.description } : {})
                 // `definition` intentionally excluded: a null definition means "leave the stored
                 // one alone" to the server, so spreading it would wipe the cached definition.
               }
@@ -411,6 +406,24 @@ const api = baseApi.enhanceEndpoints({
       providesTags: ['Classification Store']
     },
 
+    // ─── Sub groups ───────────────────────────────────────────────────────────
+    // Defined by the generated slice since the 2026-11-05 snapshot refresh; only the
+    // cache rules are ours. They are invalidations rather than hand patches: which page a
+    // sub group lands on, which cached searches it belongs to and what each total becomes
+    // are the server's decisions, and patching them corrupted pages, searches and totals.
+    classificationStoreConfigurationSubGroupCollection: {
+      providesTags: ['Classification Store']
+    },
+    classificationStoreConfigurationSubGroupCreate: {
+      invalidatesTags: ['Classification Store']
+    },
+    classificationStoreConfigurationSubGroupUpdate: {
+      invalidatesTags: ['Classification Store']
+    },
+    classificationStoreConfigurationSubGroupDelete: {
+      invalidatesTags: ['Classification Store']
+    },
+
     // create is also used as upsert (update mandatory/sorter) — patch cache in-place
     classificationStoreConfigurationKeyGroupRelationCreate: {
       invalidatesTags: () => [],
@@ -421,9 +434,12 @@ const api = baseApi.enhanceEndpoints({
         // Only what the payload carries is patched. An absent property means "leave the stored
         // value alone" to the server, so patching it would blank the cell it belongs to for the
         // length of the request — a sub-group assignment carries neither sorter nor mandatory.
+        // null as well as undefined: the refreshed contract types both as
+        // `AbsentValue::ABSENT`, and the server reads either as "leave the stored
+        // value alone". Patching a null would blank the cached cell instead.
         const absentSafePatch = {
-          ...(sorter !== undefined ? { sorter } : {}),
-          ...(mandatory !== undefined ? { mandatory } : {}),
+          ...(sorter !== undefined && sorter !== null ? { sorter } : {}),
+          ...(mandatory !== undefined && mandatory !== null ? { mandatory } : {}),
           ...('subGroup' in create ? { subGroup: create.subGroup ?? null } : {})
         }
         // Cache entries are keyed by groupId — only patch entries for the affected group,
@@ -623,69 +639,6 @@ const api = baseApi.enhanceEndpoints({
       }
     }
   }
-}).injectEndpoints({
-  endpoints: (build) => ({
-
-    // ─── Sub groups ───────────────────────────────────────────────────────────
-
-    classificationStoreConfigurationSubGroupCollection: build.query<
-      ClassificationStoreConfigurationSubGroupCollectionApiResponse,
-      ClassificationStoreConfigurationSubGroupCollectionApiArg
-    >({
-      query: (queryArg) => ({
-        url: `${CONFIGURATION_PREFIX}/stores/${queryArg.storeId}/sub-groups`,
-        method: 'POST',
-        body: queryArg.body
-      }),
-      providesTags: ['Classification Store']
-    }),
-
-    classificationStoreConfigurationSubGroupCreate: build.mutation<
-      ClassificationStoreConfigurationSubGroupDetail,
-      ClassificationStoreConfigurationSubGroupCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `${CONFIGURATION_PREFIX}/sub-groups/add`,
-        method: 'POST',
-        body: queryArg.classificationStoreConfigurationSubGroupCreate
-      }),
-      // Invalidated rather than hand-patched. Which page a new sub group lands on, whether it
-      // matches a cached search and what each cached total becomes are all decided by the
-      // server's own filtering and ordering, so appending the row to every cached entry
-      // duplicated it across visited pages and corrupted filtered totals.
-      invalidatesTags: ['Classification Store']
-    }),
-
-    classificationStoreConfigurationSubGroupUpdate: build.mutation<
-      ClassificationStoreConfigurationSubGroupDetail,
-      ClassificationStoreConfigurationSubGroupUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `${CONFIGURATION_PREFIX}/sub-groups/${queryArg.id}`,
-        method: 'PUT',
-        body: queryArg.classificationStoreConfigurationSubGroupUpdate
-      }),
-      // Invalidated rather than hand-patched. A rename changes which cached searches the row
-      // belongs to and where the server sorts it, so patching the rows already present left a
-      // renamed sub group sitting in a search for its old name and absent from one for its new.
-      invalidatesTags: ['Classification Store']
-    }),
-
-    classificationStoreConfigurationSubGroupDelete: build.mutation<
-      unknown,
-      ClassificationStoreConfigurationSubGroupDeleteApiArg
-    >({
-      query: (queryArg) => ({
-        url: `${CONFIGURATION_PREFIX}/sub-groups/${queryArg.id}`,
-        method: 'DELETE'
-      }),
-      // Invalidated rather than hand-patched. The decrement was applied to every cached
-      // sub-group collection, including other stores and searches that never held the row, so
-      // a delete in one store shrank another store's pagination total while its rows stayed.
-      invalidatesTags: ['Classification Store']
-    })
-  }),
-  overrideExisting: false
 })
 
 export type * from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
