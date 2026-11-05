@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
+import { isEmpty } from 'lodash'
 import { LocalizedFieldsProvider } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
 import { type AbstractObjectDataDefinition } from '../../../../../definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../../../definitions/objects/layout-related/dynamic-type-object-layout-abstract'
@@ -21,6 +22,12 @@ import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/t
 import { Flex } from '@Pimcore/components/flex/flex'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { HIDE_BOUNDARY_CLASS } from '@Pimcore/modules/app/utils/auto-hide-empty-content/hide-boundary'
+
+// `invisible` lives on the data definitions only, so a layout child simply never
+// reports one.
+const isInvisibleChild = (child: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition): boolean =>
+  'invisible' in child && child.invisible === true
 
 // Props for the legacy object definitions version
 export interface ObjectLocalizedFieldsProps extends AbstractObjectDataDefinition {
@@ -50,8 +57,11 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
 
   // BaseView wraps the children in a card once a title or a border is
   // configured, and that card — not the stack inside it — is the container the
-  // class definition is describing. The same condition BaseView itself uses.
-  const isPadded = border === true || isNonEmptyString(title)
+  // class definition is describing. This has to be the *same* predicate BaseView
+  // uses (views/base-view.tsx), lodash isEmpty and not a trimmed-string check:
+  // `title` is a ReactNode, so a JSX title or a whitespace-only one still yields
+  // a card, and sizing the inner stack instead would leave that card unsized.
+  const isPadded = border === true || !isEmpty(title)
 
   // Exactly one element carries the dimensions. Applying them to both would
   // compound a percentage width, and would give the inner stack the card's full
@@ -93,8 +103,14 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
       >
         {children?.map((child, index) => (
           <Flex
+            className={ HIDE_BOUNDARY_CLASS }
             flex={ 1 }
             key={ index }
+            // `invisible` becomes Form.Item `hidden`, which hides the form item
+            // but not this wrapper — a flex: 1 item would keep reserving its
+            // share of the container. The child stays mounted, so the form still
+            // holds its value.
+            style={ isInvisibleChild(child) ? { display: 'none' } : undefined }
           >
             { renderChild(child, index) }
           </Flex>

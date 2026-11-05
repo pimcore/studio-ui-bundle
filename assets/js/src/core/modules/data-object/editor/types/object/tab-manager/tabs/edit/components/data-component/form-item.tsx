@@ -18,6 +18,7 @@ import {
 import cn from 'classnames'
 import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 import { AutoHideEmptyContent } from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
+import { HIDE_BOUNDARY_SELECTOR } from '@Pimcore/modules/app/utils/auto-hide-empty-content/hide-boundary'
 import { useSuppressEmptyFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { isNonEmptyString } from '@sdk/utils'

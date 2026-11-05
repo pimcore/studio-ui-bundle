@@ -8,8 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { HIDE_BOUNDARY_CLASS } from '@Pimcore/modules/app/utils/auto-hide-empty-content/hide-boundary'
 import { ObjectLocalizedFields, type ObjectLocalizedFieldsProps } from './object-localized-fields'
 
 // The providers and the Form barrel transitively import antd-style (untranspiled
@@ -256,6 +259,56 @@ describe('ObjectLocalizedFields', () => {
 
     expect(screen.queryByTestId('flex-item')).toBeNull()
     expect(screen.getByTestId('children')).toBeInTheDocument()
+  })
+
+  // BaseView decides on a card with lodash isEmpty, so the sizing must use the
+  // same predicate. A trimmed-string check disagreed on both of these and sized
+  // the inner stack while a card was on screen, leaving the card itself unsized.
+  it.each([
+    ['whitespace-only', '   '],
+    ['a JSX node', <span key='t'>Titled</span>]
+  ])('sizes the card when the title is %s', (_name, title) => {
+    const container = renderLocalizedFields({
+      children: defaultChildren,
+      height: 200,
+      title: title as any,
+      width: 400
+    })
+
+    expect(screen.getByTestId('card-view')).toBeInTheDocument()
+    expect(sizedElements(container, '400px', '200px')).toHaveLength(1)
+    expect(screen.getByTestId('card-view').style.width).toBe('400px')
+  })
+
+  // A fit item replaces the `.ant-space-item` that DataComponentFormItem's hide
+  // helper collapses. Without a boundary of its own, closest() walks past the
+  // container to an outer Space — hiding populated siblings with it.
+  it('gives every fit item its own hide boundary', () => {
+    renderLocalizedFields({ children: defaultChildren, layout: 'fit' })
+
+    const items = screen.getAllByTestId('flex-item')
+
+    expect(items).toHaveLength(2)
+    items.forEach((item) => {
+      expect(item.className).toContain(HIDE_BOUNDARY_CLASS)
+    })
+  })
+
+  // `invisible` becomes Form.Item `hidden`, which hides the form item but not the
+  // flex wrapper around it, so an invisible field kept reserving its flex share.
+  it('does not reserve fit space for an invisible field', () => {
+    renderLocalizedFields({
+      children: [child('firstname'), { ...child('secret'), invisible: true }],
+      layout: 'fit'
+    })
+
+    const items = screen.getAllByTestId('flex-item')
+
+    expect(items).toHaveLength(2)
+    expect(items[0].style.display).toBe('')
+    expect(items[1].style.display).toBe('none')
+    // still mounted, so the form keeps its value
+    expect(screen.getByText('secret')).toBeInTheDocument()
   })
 
   // Localizedfields inherits Layout\Traits\LabelTrait, whose defaults are
