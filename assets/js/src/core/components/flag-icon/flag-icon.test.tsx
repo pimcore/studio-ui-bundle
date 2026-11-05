@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type AppConfig } from '@Pimcore/app/config/app-config'
+
 jest.mock('@sdk/modules/app', () => ({
   GeneralError: class GeneralError extends Error {},
   trackError: jest.fn()
@@ -18,9 +20,9 @@ jest.mock('@Pimcore/app/config/app-config', () => ({
 }))
 
 // eslint-disable-next-line import/first
-import { appConfig } from '@Pimcore/app/config/app-config'
-// eslint-disable-next-line import/first
 import { resolveLanguageFlag } from './flag-icon'
+
+const { appConfig } = jest.requireMock<{ appConfig: Pick<AppConfig, 'languageFlagMapping'> }>('@Pimcore/app/config/app-config')
 
 describe('resolveLanguageFlag', () => {
   const existingCountryFlags = new Set(['es', 'us', 'de', 'gb'])
