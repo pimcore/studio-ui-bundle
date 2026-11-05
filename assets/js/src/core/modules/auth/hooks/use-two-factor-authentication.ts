@@ -52,9 +52,10 @@ export interface UseTwoFactorAuthenticationReturn {
 
 type RequestError = FetchBaseQueryError | SerializedError
 
-type TwoFactorState = Pick<TwoFactorAuthenticationData, 'enabled' | 'active' | 'type'>
+type TwoFactorState = Pick<TwoFactorAuthenticationData, 'enabled' | 'active' | 'type'> & Partial<Pick<TwoFactorAuthenticationData, 'required'>>
 
-const ACTIVE: TwoFactorState = { enabled: true, active: true, type: 'google' }
+// A confirmed setup makes 2FA required: the login asks for a code only while it is
+const ACTIVE: TwoFactorState = { required: true, enabled: true, active: true, type: 'google' }
 const INACTIVE: TwoFactorState = { enabled: false, active: false, type: '' }
 
 // Both the login answer and the 401 of a login waiting for its code carry the step and the code's digit count
