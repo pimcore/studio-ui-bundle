@@ -9,8 +9,9 @@
  */
 
 import React from 'react'
-import { isUndefined, uniqueId } from 'lodash'
+import { isUndefined, mapKeys, mapValues, toLower, uniqueId } from 'lodash'
 import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg?react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
 interface IFlagIconProps {
@@ -126,6 +127,13 @@ const languageCountryMapping: Record<string, string> = {
   fil: 'ph'
 }
 
+const normalizeLanguageCode = (languageCode: string): string => languageCode.toLowerCase().replace('_', '-')
+
+const getLanguageCountryMapping = (): Record<string, string> => {
+  const configured = mapKeys(appConfig.languageFlagMapping, (_countryCode, languageCode) => normalizeLanguageCode(languageCode))
+  return { ...languageCountryMapping, ...mapValues(configured, toLower) }
+}
+
 const importFlag = async (flagCode: string): Promise<React.ReactElement | null> => {
   try {
     const module = await import(`@Pimcore/assets/images/flags/${flagCode}.inline.svg?react`)
@@ -172,13 +180,14 @@ export const resolveLanguageFlag = async (
   flagExists: (flagCode: string) => Promise<boolean> = checkFlagExists,
   languageFlagExists: (flagCode: string) => Promise<boolean> = checkLanguageFlagExists
 ): Promise<{ flagCode: string, isLanguageFlag: boolean }> => {
-  const normalizedCode = languageCode.toLowerCase().replace('_', '-')
+  const normalizedCode = normalizeLanguageCode(languageCode)
   const parts = normalizedCode.split('-')
   const languageOnly = parts[0]
   const countryCode = parts.length > 1 ? parts[parts.length - 1] : null
+  const mapping = getLanguageCountryMapping()
 
-  if (languageCountryMapping[normalizedCode] !== undefined) {
-    return { flagCode: languageCountryMapping[normalizedCode], isLanguageFlag: false }
+  if (mapping[normalizedCode] !== undefined) {
+    return { flagCode: mapping[normalizedCode], isLanguageFlag: false }
   }
 
   if (await languageFlagExists(normalizedCode)) {
@@ -196,8 +205,8 @@ export const resolveLanguageFlag = async (
     return { flagCode: normalizedCode, isLanguageFlag: false }
   }
 
-  if (languageOnly !== normalizedCode && !isUndefined(languageCountryMapping[languageOnly])) {
-    return { flagCode: languageCountryMapping[languageOnly], isLanguageFlag: false }
+  if (languageOnly !== normalizedCode && !isUndefined(mapping[languageOnly])) {
+    return { flagCode: mapping[languageOnly], isLanguageFlag: false }
   }
 
   return { flagCode: '_unknown', isLanguageFlag: false }

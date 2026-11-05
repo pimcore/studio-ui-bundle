@@ -13,6 +13,12 @@ jest.mock('@sdk/modules/app', () => ({
   trackError: jest.fn()
 }))
 
+jest.mock('@Pimcore/app/config/app-config', () => ({
+  appConfig: { languageFlagMapping: {} }
+}))
+
+// eslint-disable-next-line import/first
+import { appConfig } from '@Pimcore/app/config/app-config'
 // eslint-disable-next-line import/first
 import { resolveLanguageFlag } from './flag-icon'
 
@@ -22,6 +28,10 @@ describe('resolveLanguageFlag', () => {
 
   const flagExists = async (flagCode: string): Promise<boolean> => existingCountryFlags.has(flagCode)
   const languageFlagExists = async (flagCode: string): Promise<boolean> => existingLanguageFlags.has(flagCode)
+
+  afterEach(() => {
+    appConfig.languageFlagMapping = {}
+  })
 
   it('resolves a mapped language code to its country flag', async () => {
     expect(await resolveLanguageFlag('de', flagExists, languageFlagExists))
@@ -50,5 +60,55 @@ describe('resolveLanguageFlag', () => {
   it('returns the unknown flag when nothing can be resolved', async () => {
     expect(await resolveLanguageFlag('xx_YY', flagExists, languageFlagExists))
       .toEqual({ flagCode: '_unknown', isLanguageFlag: false })
+  })
+
+  describe('with pimcore_studio_ui.language_flag_mapping', () => {
+    // https://github.com/pimcore/platform-version/issues/462: en meaning American English showed the Union Jack
+    it('lets a configured entry override the built-in mapping', async () => {
+      appConfig.languageFlagMapping = { en: 'us' }
+
+      expect(await resolveLanguageFlag('en', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'us', isLanguageFlag: false })
+      expect(await resolveLanguageFlag('en_GB', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'gb', isLanguageFlag: false })
+    })
+
+    it('normalises configured language codes written as locales', async () => {
+      appConfig.languageFlagMapping = { en_GB: 'gb-eng' }
+
+      expect(await resolveLanguageFlag('en_GB', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'gb-eng', isLanguageFlag: false })
+      expect(await resolveLanguageFlag('en-gb', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'gb-eng', isLanguageFlag: false })
+      expect(await resolveLanguageFlag('en', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'gb', isLanguageFlag: false })
+    })
+
+    it('accepts configured country codes in upper case', async () => {
+      appConfig.languageFlagMapping = { en: 'US' }
+
+      expect(await resolveLanguageFlag('en', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'us', isLanguageFlag: false })
+    })
+
+    it('uses a configured language for the fallback of a locale without a country flag', async () => {
+      appConfig.languageFlagMapping = { en: 'us' }
+
+      expect(await resolveLanguageFlag('en_ZZ', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'us', isLanguageFlag: false })
+    })
+
+    it('keeps resolving unconfigured codes as before', async () => {
+      appConfig.languageFlagMapping = { en: 'us' }
+
+      expect(await resolveLanguageFlag('de', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'de', isLanguageFlag: false })
+      expect(await resolveLanguageFlag('es_US', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'us', isLanguageFlag: false })
+      expect(await resolveLanguageFlag('ca', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'ca', isLanguageFlag: true })
+      expect(await resolveLanguageFlag('es_IC', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'es', isLanguageFlag: false })
+    })
   })
 })

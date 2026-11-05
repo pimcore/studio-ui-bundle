@@ -137,6 +137,38 @@ final class ConfigurationTest extends Unit
         $this->process(['pagination' => ['max_page_size' => 0]]);
     }
 
+    public function testLanguageFlagMappingIsEmptyByDefault(): void
+    {
+        $config = $this->process([]);
+
+        $this->assertSame([], $config['language_flag_mapping']);
+    }
+
+    public function testLanguageFlagMappingKeepsLanguageCodesAsWritten(): void
+    {
+        $config = $this->process(['language_flag_mapping' => [
+            'en' => 'us',
+            'en_GB' => 'gb',
+            'en-CA' => 'ca',
+        ]]);
+
+        $this->assertSame(['en' => 'us', 'en_GB' => 'gb', 'en-CA' => 'ca'], $config['language_flag_mapping']);
+    }
+
+    public function testLanguageFlagMappingRejectsEmptyCountryCodes(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->process(['language_flag_mapping' => ['en' => '']]);
+    }
+
+    public function testLanguageFlagMappingRejectsNonStringCountryCodes(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->process(['language_flag_mapping' => ['en' => true]]);
+    }
+
     /**
      * @param array<string, mixed> $config
      *
