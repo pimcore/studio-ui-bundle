@@ -22,8 +22,8 @@ const initialState: MaintenanceModeState = {
 
 // The store middleware dispatches `maintenance-mode/setLockedOut` by its type, as it cannot import this slice
 export const maintenanceModeSlice = createSlice({
-  name: 'maintenance-mode',
   initialState,
+  name: 'maintenance-mode',
   reducers: {
     setLockedOut (state, action: PayloadAction<boolean>) {
       state.isLockedOut = action.payload

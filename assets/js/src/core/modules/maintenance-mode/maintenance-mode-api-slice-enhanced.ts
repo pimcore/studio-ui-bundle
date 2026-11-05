@@ -8,20 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './maintenance-mode-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.MAINTENANCE_MODE],
   endpoints: {
     maintenanceModeGet: {
-      providesTags: () => providingTags.MAINTENANCE_MODE()
+      providesTags: () => [tagNames.MAINTENANCE_MODE]
     },
     maintenanceModeActivate: {
-      invalidatesTags: () => invalidatingTags.MAINTENANCE_MODE()
+      invalidatesTags: () => [tagNames.MAINTENANCE_MODE]
     },
     maintenanceModeDeactivate: {
-      invalidatesTags: () => invalidatingTags.MAINTENANCE_MODE()
+      invalidatesTags: () => [tagNames.MAINTENANCE_MODE]
     }
   }
 })

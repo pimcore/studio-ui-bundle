@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { render, renderHook, screen } from '@testing-library/react'
+import { DISABLE_COMMAND, useActivateMaintenanceMode } from './use-activate-maintenance-mode'
+
 const mockConfirm = jest.fn()
 const mockActivate = jest.fn()
 const mockTrackError = jest.fn()
@@ -30,13 +34,6 @@ jest.mock('@Pimcore/components/text/text', () => ({
   Text: ({ children }: { children: React.ReactNode }) => <span>{children}</span>
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
-
-// eslint-disable-next-line import/first
-import React from 'react'
-// eslint-disable-next-line import/first
-import { render, renderHook, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { DISABLE_COMMAND, useActivateMaintenanceMode } from './use-activate-maintenance-mode'
 
 interface ConfirmConfig {
   title: string

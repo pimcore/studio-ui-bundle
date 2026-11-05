@@ -167,7 +167,7 @@ describe('rtkQueryErrorLogger', () => {
 
     const htmlAnswer = (originalStatus: number, url: string): Record<string, unknown> => ({
       ...rejected(originalStatus, url),
-      payload: { status: 'PARSING_ERROR', originalStatus, data: '<html></html>', error: 'SyntaxError' }
+      payload: { originalStatus, status: 'PARSING_ERROR', data: '<html></html>', error: 'SyntaxError' }
     })
 
     it('reports the lock-out on an HTML 503 from the Studio API and passes the error on', () => {

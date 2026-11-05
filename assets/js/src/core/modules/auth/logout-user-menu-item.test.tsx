@@ -8,6 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { renderHook } from '@testing-library/react'
+import { logoutUserMenuItemProvider } from './logout-user-menu-item'
+
 const mockLogout = jest.fn()
 const mockCheckLogout = jest.fn()
 
@@ -17,18 +20,13 @@ jest.mock('./authorization-api-slice.gen', () => ({
 jest.mock('@Pimcore/modules/maintenance-mode/hooks/use-logout-check', () => ({
   useLogoutCheck: () => mockCheckLogout
 }))
-jest.mock('@Pimcore/components/icon/icon', () => ({ Icon: () => null }))
+jest.mock('@Pimcore/components/icon/icon', () => ({ Icon: jest.fn() }))
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
   default: jest.fn(),
   ApiError: jest.fn()
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
-
-// eslint-disable-next-line import/first
-import { renderHook } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { logoutUserMenuItemProvider } from './logout-user-menu-item'
 
 describe('logoutUserMenuItemProvider', () => {
   beforeEach(() => {

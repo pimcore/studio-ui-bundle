@@ -8,6 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { Provider } from 'react-redux'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import { store } from '@Pimcore/app/store'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { setLockedOut } from '../maintenance-mode-slice'
+import { LockedOutNotice, PING_INTERVAL } from './locked-out-notice'
+
 const mockReloadPage = jest.fn()
 const mockShowError = jest.fn()
 
@@ -23,7 +31,7 @@ jest.mock('@Pimcore/modules/app/error-handler/services/error-modal-service', () 
 }))
 jest.mock('@Pimcore/components/modal/modal', () => ({
   Modal: ({ open, children, footer }: { open: boolean, children: React.ReactNode, footer: React.ReactNode }) => (
-    open ? <div>{children}{footer}</div> : null
+    open ? <div>{children}{footer}</div> : <></>
   )
 }))
 jest.mock('@Pimcore/components/modal/footer/modal-footer', () => ({
@@ -33,21 +41,6 @@ jest.mock('@Pimcore/components/button/button', () => ({
   Button: ({ children, onClick }: { children: React.ReactNode, onClick: () => void }) => <button onClick={ onClick }>{children}</button>
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
-
-// eslint-disable-next-line import/first
-import React from 'react'
-// eslint-disable-next-line import/first
-import { Provider } from 'react-redux'
-// eslint-disable-next-line import/first
-import { act, fireEvent, render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { store } from '@Pimcore/app/store'
-// eslint-disable-next-line import/first
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-// eslint-disable-next-line import/first
-import { setLockedOut } from '../maintenance-mode-slice'
-// eslint-disable-next-line import/first
-import { LockedOutNotice, PING_INTERVAL } from './locked-out-notice'
 
 const NOTICE = 'maintenance-mode-locked-out-notice'
 const MAINTENANCE_PAGE = {

@@ -8,6 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { renderHook } from '@testing-library/react'
+import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
+import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
+import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator'
+import './index'
+
 const mockRegisterToSlot = jest.fn()
 const mockActivateWithConfirmation = jest.fn()
 const mockAllowed = { user: true, perspective: true }
@@ -48,25 +55,12 @@ jest.mock('@Pimcore/modules/perspectives/active-perspective-slice', () => ({ sel
 jest.mock('react-redux', () => ({ useSelector: () => ({ id: 'studio_default_perspective' }) }))
 
 jest.mock('./components/maintenance-mode-indicator', () => ({
-  MaintenanceModeIndicator: () => null
+  MaintenanceModeIndicator: jest.fn()
 }))
 
 jest.mock('./hooks/use-activate-maintenance-mode', () => ({
   useActivateMaintenanceMode: () => ({ activateWithConfirmation: mockActivateWithConfirmation })
 }))
-
-// eslint-disable-next-line import/first
-import { renderHook } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-// eslint-disable-next-line import/first
-import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
-// eslint-disable-next-line import/first
-import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
-// eslint-disable-next-line import/first
-import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator'
-// eslint-disable-next-line import/first
-import './index'
 
 const findEntry = (): IMainNavItem | undefined => {
   const { result } = renderHook(() => useMainNav())

@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react'
+import { useLogoutCheck } from './use-logout-check'
+
 const mockConfirm = jest.fn()
 const mockDestroy = jest.fn()
 const mockDeactivate = jest.fn()
@@ -34,13 +38,6 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   ApiError: jest.fn()
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
-
-// eslint-disable-next-line import/first
-import React from 'react'
-// eslint-disable-next-line import/first
-import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { useLogoutCheck } from './use-logout-check'
 
 const runCheck = (logout: jest.Mock): void => {
   const { result } = renderHook(() => useLogoutCheck())

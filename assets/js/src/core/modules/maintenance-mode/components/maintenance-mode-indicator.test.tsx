@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { MaintenanceModeIndicator } from './maintenance-mode-indicator'
+
 const mockConfirm = jest.fn()
 const mockDeactivate = jest.fn()
 const mockUseGetQuery = jest.fn()
@@ -37,13 +41,6 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   ApiError: jest.fn()
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
-
-// eslint-disable-next-line import/first
-import React from 'react'
-// eslint-disable-next-line import/first
-import { fireEvent, render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { MaintenanceModeIndicator } from './maintenance-mode-indicator'
 
 const INDICATOR = 'maintenance-mode-indicator'
 

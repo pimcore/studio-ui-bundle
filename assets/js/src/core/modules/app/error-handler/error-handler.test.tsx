@@ -8,20 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import trackError from './error-handler'
+import ApiError from './classes/api-error'
+import GeneralError from './classes/general-error'
+import type { ApiErrorData } from './types'
+
 const mockState = { 'maintenance-mode': { isLockedOut: false } }
 
 jest.mock('@Pimcore/app/store', () => ({
   store: { getState: () => mockState }
 }))
-
-// eslint-disable-next-line import/first
-import trackError from './error-handler'
-// eslint-disable-next-line import/first
-import ApiError from './classes/api-error'
-// eslint-disable-next-line import/first
-import GeneralError from './classes/general-error'
-// eslint-disable-next-line import/first
-import type { ApiErrorData } from './types'
 
 const apiError = (errorData: object): ApiError => new ApiError(errorData as ApiErrorData)
 
