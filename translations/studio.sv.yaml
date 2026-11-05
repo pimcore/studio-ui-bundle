@@ -2228,6 +2228,8 @@ classification-store.sub-group-unused: "Ingen nyckel i denna grupp använder und
 classification-store.assign-sub-group-progress: "Kopplar undergruppen till {{done}} av {{total}} nycklar…"
 classification-store.assign-sub-group-failed: "Undergruppen kunde inte kopplas till: {{keyNames}}"
 classification-store.assign-sub-group-running: Vänta tills undergruppstilldelningen är klar
+classification-store.import: Importera store-konfiguration
+classification-store.import-success: Store-konfigurationen har importerats
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator

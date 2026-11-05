@@ -20,11 +20,13 @@ import { useStyles } from '@Pimcore/modules/classification-store-config/classifi
 
 interface IStoreEditorProps {
   storeId: number
+  /** the store's own export and import actions, rendered next to the tabs */
+  importExportActions?: React.ReactNode
 }
 
 const SUB_GROUPS_TAB_KEY = 'sub-groups'
 
-export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element => {
+export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -77,6 +79,7 @@ export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element =
       items={ tabItems }
       noTabBarMargin
       onChange={ setActiveKey }
+      tabBarExtraContent={ importExportActions }
     />
   )
 }

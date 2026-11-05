@@ -2228,6 +2228,8 @@ classification-store.sub-group-unused: "Kein Schlüssel dieser Gruppe verwendet 
 classification-store.assign-sub-group-progress: "Die Untergruppe wird {{done}} von {{total}} Schlüsseln zugeordnet…"
 classification-store.assign-sub-group-failed: "Die Untergruppe konnte folgenden Schlüsseln nicht zugeordnet werden: {{keyNames}}"
 classification-store.assign-sub-group-running: Warten, bis die Zuordnung der Untergruppe abgeschlossen ist
+classification-store.import: Store-Konfiguration importieren
+classification-store.import-success: Store-Konfiguration erfolgreich importiert
 home: Startseite
 preview.label: Vorschau
 preview.desktop: Desktop
