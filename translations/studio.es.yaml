@@ -1401,6 +1401,7 @@ system-information.type: Tipo
 system-information.class-id: ID de clase
 system-information.class: Clase
 system-information.file-size: Tamaño de archivo
+system-information.checksum: Suma de comprobación
 system-information.modification-date: Fecha de modificación
 system-information.creation-date: Fecha de creación
 system-information.user-modification: Modificado por

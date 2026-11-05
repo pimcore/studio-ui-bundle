@@ -1403,6 +1403,7 @@ system-information.type: Type
 system-information.class-id: Class ID
 system-information.class: Class
 system-information.file-size: File Size
+system-information.checksum: Checksum
 system-information.modification-date: Modification Date
 system-information.creation-date: Creation Date
 system-information.user-modification: User Modification
