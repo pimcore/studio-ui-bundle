@@ -49,7 +49,7 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
     <ErrorBoundary>
       <AutoHideEmptyContent
         contentSelector=".ant-form-item-control-input-content"
-        parentSelector=".ant-space-item"
+        parentSelector={ HIDE_BOUNDARY_SELECTOR }
       >
         <Form.Item
           { ...effectiveFormItemProps }
