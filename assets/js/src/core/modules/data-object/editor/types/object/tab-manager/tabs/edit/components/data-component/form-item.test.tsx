@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { HIDE_BOUNDARY_SELECTOR } from '@Pimcore/modules/app/utils/auto-hide-empty-content/hide-boundary'
 import { render, screen } from '@testing-library/react'
 import {
   type AbstractObjectDataDefinition,
@@ -36,8 +37,14 @@ jest.mock('@Pimcore/modules/app/error-boundary/error-boundary', () => ({
   __esModule: true,
   default: ({ children }: { children?: React.ReactNode }) => <>{ children }</>
 }))
+const autoHideProps: Array<Record<string, unknown>> = []
 jest.mock('@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content', () => ({
-  AutoHideEmptyContent: ({ children }: { children?: React.ReactNode }) => <>{ children }</>
+  AutoHideEmptyContent: (
+    { children, ...props }: { children?: React.ReactNode } & Record<string, unknown>
+  ) => {
+    autoHideProps.push(props)
+    return <>{ children }</>
+  }
 }))
 jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-label-extra', () => ({
   RestoreInheritanceLabelExtraProvider: ({ children }: { children?: React.ReactNode }) => <>{ children }</>
@@ -117,5 +124,19 @@ describe('DataComponentFormItem', () => {
     renderItem(false)
 
     expect(screen.getByText('Active').closest('[data-tooltip]')).toHaveAttribute('data-tooltip', 'active')
+  })
+
+  // A container that lays out its own children renders no `.ant-space-item`, so
+  // the hide helper has to accept their opt-in boundary too. Hardcoding antd's
+  // class here let closest() walk past such a container and collapse an outer
+  // Space item that still held populated siblings.
+  it('collapses on the shared hide boundary, not only on an antd Space item', () => {
+    autoHideProps.length = 0
+
+    renderItem(false)
+
+    expect(autoHideProps).toHaveLength(1)
+    expect(autoHideProps[0].parentSelector).toBe(HIDE_BOUNDARY_SELECTOR)
+    expect(autoHideProps[0].parentSelector).toContain('.ant-space-item')
   })
 })
