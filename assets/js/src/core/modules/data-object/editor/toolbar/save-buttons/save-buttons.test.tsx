@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { isUndefined } from 'lodash'
 import { EditorToolbarSaveButtons } from './save-buttons'
 
 interface MockPermissions {
@@ -147,7 +148,7 @@ const createDataObject = (published: boolean, permissions: MockPermissions): Moc
 const triggerKeyBinding = async (actionName: string): Promise<void> => {
   const callback = mockKeyBindings.get(actionName)
 
-  if (callback === undefined) {
+  if (isUndefined(callback)) {
     throw new Error(`No key binding registered for "${actionName}"`)
   }
 
