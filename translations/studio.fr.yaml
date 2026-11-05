@@ -3085,3 +3085,21 @@ tree.actions.edit-tag: Modifier
 tag-configuration.edit-tag: 'Modifier "{{name}}"'
 tag-configuration.name-required: 'Saisissez un nom de tag'
 tag-configuration.move-targets-failed: "La liste des tags n'a pas pu être chargée, seul le nom peut donc être modifié"
+navigation.maintenance-mode: Mode maintenance
+maintenance-mode.activate.title: Activer le mode maintenance?
+maintenance-mode.activate.text: "Tous les services, y compris le site web, passent en maintenance. Seule cette session de navigateur conserve l'accès."
+maintenance-mode.activate.lock-out: "Si vous vous déconnectez, fermez le navigateur ou si votre session expire, vous perdez également l'accès."
+maintenance-mode.activate.disable-command: 'Pour le désactiver sans Studio, exécutez:'
+maintenance-mode.activate.background-jobs: 'Les tâches en arrière-plan et les consommateurs de messages ne démarrent pas tant que le mode maintenance est actif.'
+maintenance-mode.activate.ok: Activer
+maintenance-mode.indicator.tooltip: 'Le mode maintenance est actif. Cliquez pour le désactiver'
+maintenance-mode.deactivate.title: Désactiver le mode maintenance?
+maintenance-mode.deactivate.text: "Toutes les sessions retrouvent l'accès."
+maintenance-mode.deactivate.ok: Désactiver
+maintenance-mode.logout.title: Désactiver d'abord le mode maintenance?
+maintenance-mode.logout.text: "Le mode maintenance est actif et seule cette session y a accès. Après la déconnexion, il ne pourra être désactivé qu'en ligne de commande."
+maintenance-mode.logout.deactivate-and-log-out: Désactiver et se déconnecter
+maintenance-mode.logout.log-out-anyway: Se déconnecter quand même
+maintenance-mode.locked-out.title: Maintenance
+maintenance-mode.locked-out.text: "Le système est en mode maintenance ou temporairement indisponible. Votre dernière action n'a pas été enregistrée. Ce message se fermera automatiquement dès que le système sera de nouveau disponible."
+maintenance-mode.locked-out.reload: Recharger
