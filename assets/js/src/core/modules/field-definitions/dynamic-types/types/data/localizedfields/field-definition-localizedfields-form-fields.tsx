@@ -75,7 +75,6 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item
         label={ t('tab-position') }
         name="tabPosition"
-        tooltip={ t('setting-without-effect-in-studio') }
       >
         <Select
           options={ [
@@ -90,7 +89,6 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item
         label={ t('maximum-tabs') }
         name="maxTabs"
-        tooltip={ t('setting-without-effect-in-studio') }
       >
         <InputNumber
           min={ 0 }
@@ -101,7 +99,6 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item
         label={ t('hide-labels-when-tabs-reached') }
         name="hideLabelsWhenTabsReached"
-        tooltip={ t('setting-without-effect-in-studio') }
       >
         <InputNumber
           min={ 0 }
@@ -112,7 +109,6 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item
         label={ t('label-width') }
         name="labelWidth"
-        tooltip={ t('label-setting-without-effect-in-studio') }
       >
         <InputNumber
           min={ 0 }
@@ -123,7 +119,6 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
       <Form.Item
         label={ t('label-align') }
         name="labelAlign"
-        tooltip={ t('label-setting-without-effect-in-studio') }
       >
         <Select
           options={ [

@@ -1336,8 +1336,6 @@ info: Info
 success: Succes
 no-value-set: Geen waarde ingesteld
 set-to-null: Leeg (instellen op null)
-setting-without-effect-in-studio: "Geen effect in Studio: er wordt één taal tegelijk weergegeven, gekozen met de globale taalkiezer. De instelling blijft behouden omdat dezelfde klassedefinitie nog steeds de klassieke Admin-UI aanstuurt."
-label-setting-without-effect-in-studio: "Geen effect in Studio: veldlabels volgen de eigen formulierlay-out van Studio en worden altijd boven het veld weergegeven. De instelling blijft behouden omdat dezelfde klassedefinitie nog steeds de klassieke Admin-UI aanstuurt."
 remove: Verwijderen
 delete: Verwijderen
 clone: Klonen

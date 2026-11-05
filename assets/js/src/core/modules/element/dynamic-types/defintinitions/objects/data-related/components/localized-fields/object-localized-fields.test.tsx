@@ -314,8 +314,8 @@ describe('ObjectLocalizedFields', () => {
   // Localizedfields inherits Layout\Traits\LabelTrait, whose defaults are
   // labelWidth 100 and labelAlign 'left', so every class definition sends those
   // two values even when nobody configured them. Honouring them would re-lay out
-  // the labels of every existing object, so the container ignores them entirely
-  // and the class editor marks them instead. See the discussion on #704.
+  // the labels of every existing object, so the container ignores them entirely.
+  // See the discussion on #704.
   it('ignores the label settings the class definition always sends', () => {
     const container = renderLocalizedFields({
       children: defaultChildren,
