@@ -43,6 +43,9 @@ const {
 
 const SHARED_TOGGLES = ['mandatory', 'index', 'unique', 'noteditable', 'invisible', 'visibleGridView', 'visibleSearch']
 
+// `indexed` is the Classification Store search index, a separate option from `index` above it.
+const INSPECTED_ITEMS = [...SHARED_TOGGLES, 'indexed']
+
 const renderWithArea = (area: string[]): string[] => {
   render(
     <FieldDefinitionDataFormFields
@@ -54,15 +57,20 @@ const renderWithArea = (area: string[]): string[] => {
 
   return screen.getAllByTestId('form-item')
     .map((element) => element.getAttribute('data-name') ?? '')
-    .filter((name) => SHARED_TOGGLES.includes(name))
+    .filter((name) => INSPECTED_ITEMS.includes(name))
 }
 
 describe('FieldDefinitionDataFormFields shared toggles', () => {
   it('offers a Classification Store key only the options it reads', () => {
-    expect(renderWithArea(['classification-store'])).toEqual(['noteditable', 'invisible'])
+    // `indexed` is offered and `index` is not: one control, and not the object query index
+    expect(renderWithArea(['classification-store'])).toEqual(['indexed', 'noteditable', 'invisible'])
   })
 
-  it('keeps all seven toggles for a class field', () => {
+  it('keeps all seven toggles for a class field and offers it no index control', () => {
     expect(renderWithArea(['class'])).toEqual(SHARED_TOGGLES)
+  })
+
+  it('offers a custom layout field no index control either', () => {
+    expect(renderWithArea(['custom-layout'])).not.toContain('indexed')
   })
 })

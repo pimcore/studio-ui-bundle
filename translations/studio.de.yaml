@@ -2207,6 +2207,8 @@ classification-store.tabs.sub-groups: Untergruppen
 classification-store.add-sub-group: Untergruppe hinzufügen
 classification-store.delete-sub-group: "Untergruppe \"{{subGroupName}}\" löschen?"
 classification-store.add-sub-group-store-hint: Eine Untergruppe gehört zum Store, eine neue steht daher jeder Gruppe dieses Stores zur Verfügung.
+classification-store.key-indexed: In den Suchindex des Classification Store aufnehmen
+classification-store.key-indexed-hint: Ein ausgeschlossener Schlüssel kann nicht sortiert, gefiltert oder durchsucht werden, und sein Wert verschwindet auch aus dem gespeicherten Suchdokument. Der Index wird über die Warteschlange angeglichen, die Änderung wirkt daher nicht sofort.
 classification-store.delete-sub-group-in-use-hint: Heben Sie die Zuordnung der Schlüssel zu dieser Untergruppe zuerst in den oben genannten Gruppen auf und löschen Sie sie dann.
 classification-store.no-sub-groups: Dieser Store hat noch keine Untergruppen
 classification-store.select-sub-group: Untergruppe auswählen

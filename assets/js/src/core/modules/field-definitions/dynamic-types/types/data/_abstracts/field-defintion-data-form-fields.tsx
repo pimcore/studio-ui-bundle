@@ -15,7 +15,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { kebabCase } from 'lodash'
 
-// A Classification Store key reads none of these options, so its key dialog does not offer them.
+// A Classification Store key reads none of these options; the one it does read is `indexed` below.
 const CLASSIFICATION_STORE_HIDDEN_OPTIONS: Partial<FieldDefinitionContext> = {
   hideMandatory: true,
   hideIndex: true,
@@ -28,7 +28,8 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
   useSyncTitleFromName()
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
-  const context = props.context.area.includes('classification-store')
+  const isClassificationStore = props.context.area.includes('classification-store')
+  const context = isClassificationStore
     ? { ...props.context, ...CLASSIFICATION_STORE_HIDDEN_OPTIONS }
     : props.context
   const typeTranslation = t('field-definition.' + kebabCase(props.type))
@@ -72,6 +73,17 @@ export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractForm
           disabled={ context.disableIndex }
           labelRight={ t('index') }
         />
+      </Form.Item>
+      )}
+
+      {isClassificationStore && (
+      // The Classification Store search index, not the object query index the hidden `index` drives.
+      <Form.Item
+        extra={ t('classification-store.key-indexed-hint') }
+        name="indexed"
+        valuePropName="checked"
+      >
+        <Switch labelRight={ t('classification-store.key-indexed') } />
       </Form.Item>
       )}
 

@@ -20,8 +20,10 @@ import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-
 import { serviceIds, useInjection } from '@sdk/app'
 import {
   type ClassificationStoreConfigurationKeyDetail,
+  type ClassificationStoreConfigurationKeyUpdate,
+  type ClassificationStoreKeyDefinition,
   useClassificationStoreConfigurationKeyUpdateMutation
-} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 
 interface IKeyDefinitionModalProps {
@@ -108,17 +110,19 @@ export const KeyDefinitionModal = ({
     if (keyDetail === undefined || getLayoutRef.current === null) return
     const layout = getLayoutRef.current()
 
+    const update: ClassificationStoreConfigurationKeyUpdate = {
+      name: keyDetail.name,
+      // Saving a definition must not touch the configured title, which is a column of its
+      // own: the title carried inside the definition blob is a different value.
+      title: keyDetail.title ?? null,
+      description: keyDetail.description,
+      type: keyDetail.type,
+      definition: (layout as ClassificationStoreKeyDefinition | null | undefined) ?? null
+    }
+
     const response = await updateKey({
       id: keyDetail.id,
-      classificationStoreConfigurationKeyUpdate: {
-        name: keyDetail.name,
-        // Saving a definition must not touch the configured title, which is a column of its
-        // own: the title carried inside the definition blob is a different value.
-        title: keyDetail.title ?? null,
-        description: keyDetail.description,
-        type: keyDetail.type,
-        definition: (layout as Record<string, unknown> | null | undefined) ?? null
-      }
+      classificationStoreConfigurationKeyUpdate: update
     })
 
     if ('error' in response) {
@@ -152,6 +156,8 @@ export const KeyDefinitionModal = ({
       collapsed: false,
       bodyStyle: null,
       locked: false,
+      // An absent `indexed` is indexed: a definition stored before the flag existed is not excluded.
+      indexed: true,
       children: [],
       icon: null,
       labelAlign: 'left',

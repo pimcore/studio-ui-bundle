@@ -10,8 +10,8 @@
 
 import React from 'react'
 import { StyleProvider } from '@ant-design/cssinjs'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { type ClassificationStoreConfigurationKeyDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { type ClassificationStoreConfigurationKeyDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { FieldDefinitionDataFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/field-defintion-data-form-fields'
 import { KeyDefinitionModal } from './key-definition-modal'
 
@@ -34,7 +34,16 @@ jest.mock('@sdk/components', () => {
     Form: AntForm,
     FormKit,
     Input: AntInput,
-    Switch: () => null,
+    // The index control is read and toggled here, so the switch stands in as a labelled checkbox.
+    Switch: ({ checked, disabled, labelRight, onChange }: any) => (
+      <input
+        aria-label={ String(labelRight ?? '') }
+        checked={ checked === true }
+        disabled={ disabled === true }
+        onChange={ (event) => { onChange?.(event.target.checked) } }
+        type="checkbox"
+      />
+    ),
     TextArea: AntInput.TextArea
   }
 })
@@ -68,7 +77,7 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   ApiError: class ApiError extends Error {}
 }))
 
-jest.mock('@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen', () => ({
+jest.mock('@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced', () => ({
   useClassificationStoreConfigurationKeyUpdateMutation: () => [updateKey]
 }))
 
@@ -125,12 +134,25 @@ const keyDetail = {
   }
 } as unknown as ClassificationStoreConfigurationKeyDetail
 
-const renderModal = (): void => {
+/** The same key, with the index flag set as given or carrying none at all. */
+const keyIndexed = (indexed?: boolean): ClassificationStoreConfigurationKeyDetail => {
+  const definition: Record<string, unknown> = { ...keyDetail.definition }
+
+  if (indexed === undefined) {
+    delete definition.indexed
+  } else {
+    definition.indexed = indexed
+  }
+
+  return { ...keyDetail, definition } as unknown as ClassificationStoreConfigurationKeyDetail
+}
+
+const renderModal = (detail: ClassificationStoreConfigurationKeyDetail = keyDetail): void => {
   // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
   render(
     <StyleProvider container={ document.createElement('div') }>
       <KeyDefinitionModal
-        keyDetail={ keyDetail }
+        keyDetail={ detail }
         onClose={ jest.fn() }
         onSaved={ jest.fn() }
         open
@@ -138,6 +160,8 @@ const renderModal = (): void => {
     </StyleProvider>
   )
 }
+
+const indexedControl = (): HTMLElement => screen.getByLabelText('classification-store.key-indexed')
 
 const savedDefinition = async (): Promise<Record<string, unknown>> => {
   fireEvent.click(screen.getByText('save'))
@@ -176,5 +200,56 @@ describe('KeyDefinitionModal', () => {
 
     expect(definition).toMatchObject(STORED_OPTIONS)
     expect(definition.tooltip).toBe('The height in mm')
+  })
+
+  it('opens a key excluded from the search index with the control off', () => {
+    renderModal(keyIndexed(false))
+
+    expect(indexedControl()).not.toBeChecked()
+  })
+
+  it('opens a key included in the search index with the control on', () => {
+    renderModal(keyIndexed(true))
+
+    expect(indexedControl()).toBeChecked()
+  })
+
+  it('opens a key whose definition carries no flag with the control on', () => {
+    renderModal(keyIndexed())
+
+    expect(indexedControl()).toBeChecked()
+  })
+
+  it('sends the flag as indexed inside the definition, losing nothing else it held', async () => {
+    renderModal()
+
+    fireEvent.click(indexedControl())
+
+    const definition = await savedDefinition()
+
+    expect(definition.indexed).toBe(false)
+    expect(definition).toMatchObject(STORED_OPTIONS)
+    expect(definition.tooltip).toBe('The height in cm')
+  })
+
+  it('shows the flag the update answered with, not the one the form was left on', async () => {
+    // The update replaces the cached key wholesale and keys-tab re-derives the dialog's keyDetail
+    // from that cache, so the reopened dialog reads the returned flag and not the local edit.
+    updateKey.mockResolvedValue({ data: keyIndexed(true) })
+
+    renderModal(keyIndexed(true))
+
+    fireEvent.click(indexedControl())
+
+    expect(await savedDefinition()).toMatchObject({ indexed: false })
+
+    const response: { data: ClassificationStoreConfigurationKeyDetail } =
+      await updateKey.mock.results[0].value
+
+    // `destroyOnClose` drops the form, so reopening builds the layout from the key it is handed.
+    cleanup()
+    renderModal(response.data)
+
+    expect(indexedControl()).toBeChecked()
   })
 })

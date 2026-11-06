@@ -2207,6 +2207,8 @@ classification-store.tabs.sub-groups: Podgrupy
 classification-store.add-sub-group: Dodaj podgrupę
 classification-store.delete-sub-group: "Usunąć podgrupę \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: Podgrupa należy do magazynu, więc nowa staje się dostępna dla każdej grupy tego magazynu.
+classification-store.key-indexed: Uwzględnij w indeksie wyszukiwania Classification Store
+classification-store.key-indexed-hint: Wykluczonego klucza nie można sortować, filtrować ani wyszukiwać, a jego wartość znika również z zapisanego dokumentu wyszukiwania. Indeks jest uzgadniany przez kolejkę, więc zmiana nie jest natychmiastowa.
 classification-store.delete-sub-group-in-use-hint: Najpierw usuń przypisanie kluczy do tej podgrupy w wymienionych powyżej grupach, a następnie ją usuń.
 classification-store.no-sub-groups: Ten magazyn nie ma jeszcze podgrup
 classification-store.select-sub-group: Wybierz podgrupę

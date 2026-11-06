@@ -23,6 +23,8 @@ import {
   type ClassificationStoreCollection2 as GeneratedKeyLayout,
   type ClassificationStoreGroupLayout2 as GeneratedGroupLayout,
   type ClassificationStoreConfigurationKeyGroupRelationCreate as GeneratedKeyGroupRelationCreate,
+  type ClassificationStoreConfigurationKeyDetail as GeneratedKeyDetail,
+  type ClassificationStoreConfigurationKeyUpdate as GeneratedKeyUpdate,
   type ClassificationStoreConfigurationSubGroupDetail as GeneratedSubGroupDetail,
   type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
@@ -96,6 +98,31 @@ export interface ClassificationStoreConfigurationSubGroupUpdateApiArg {
 export interface ClassificationStoreConfigurationSubGroupDeleteApiArg {
   /** Id of the sub group configuration */
   id: number
+}
+
+/**
+ * The part of a key's definition blob the Classification Store search index reads. An absent
+ * `indexed` means the key is indexed, so a key stored before the flag existed is not reported
+ * as excluded. It is not the field definition's `index`, which drives the object query index.
+ *
+ * Unlike the rest of this block, a regeneration does not supersede the two shadows below: the
+ * schema declares `definition` as free-form JSON, so no generated client ever names what is in it.
+ */
+export type ClassificationStoreKeyDefinition = object & {
+  /** Whether this key reaches the Classification Store search index */
+  indexed?: boolean
+}
+
+/** A key, whose definition blob carries the Classification Store index flag. */
+export interface ClassificationStoreConfigurationKeyDetail extends Omit<GeneratedKeyDetail, 'definition'> {
+  /** Definition of the key */
+  definition: ClassificationStoreKeyDefinition | null
+}
+
+/** The key update payload, whose definition blob carries the Classification Store index flag. */
+export interface ClassificationStoreConfigurationKeyUpdate extends Omit<GeneratedKeyUpdate, 'definition'> {
+  /** Values for object brick definition metadata */
+  definition: ClassificationStoreKeyDefinition | null
 }
 
 /** A key-group relation, which now also stores the identifier of its sub group. */
