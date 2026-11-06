@@ -14,6 +14,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type ContextMenuItemProvider } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
+import { useLogoutCheck } from '@Pimcore/modules/maintenance-mode/hooks/use-logout-check'
 import { useLogoutMutation } from './authorization-api-slice.gen'
 
 export const logoutUserMenuItemProvider: ContextMenuItemProvider = {
@@ -22,16 +23,19 @@ export const logoutUserMenuItemProvider: ContextMenuItemProvider = {
   useMenuItem: () => {
     const { t } = useTranslation()
     const [logout] = useLogoutMutation()
+    const checkLogout = useLogoutCheck()
 
     return {
       key: 'logout',
       label: t('user-menu.log-out'),
       icon: <Icon value={ 'log-out' } />,
       onClick: () => {
-        logout().then(() => {
-          window.location.reload()
-        }).catch((error: Error) => {
-          trackError(new ApiError(error))
+        checkLogout(() => {
+          logout().then(() => {
+            window.location.reload()
+          }).catch((error: Error) => {
+            trackError(new ApiError(error))
+          })
         })
       }
     }

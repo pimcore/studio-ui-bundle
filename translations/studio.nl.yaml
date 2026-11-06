@@ -3085,3 +3085,21 @@ tree.actions.edit-tag: Bewerken
 tag-configuration.edit-tag: '"{{name}}" bewerken'
 tag-configuration.name-required: 'Voer een tagnaam in'
 tag-configuration.move-targets-failed: 'De lijst met tags kon niet worden geladen, dus alleen de naam kan worden gewijzigd'
+navigation.maintenance-mode: Onderhoudsmodus
+maintenance-mode.activate.title: Onderhoudsmodus activeren?
+maintenance-mode.activate.text: 'Alle services, inclusief de website, gaan in onderhoud. Alleen deze browsersessie behoudt toegang.'
+maintenance-mode.activate.lock-out: 'Als je uitlogt, de browser sluit of je sessie verloopt, word je ook buitengesloten.'
+maintenance-mode.activate.disable-command: 'Om de onderhoudsmodus zonder Studio uit te schakelen, voer je dit uit:'
+maintenance-mode.activate.background-jobs: 'Achtergrondtaken en message consumers starten niet zolang de onderhoudsmodus actief is.'
+maintenance-mode.activate.ok: Activeren
+maintenance-mode.indicator.tooltip: 'De onderhoudsmodus is actief. Klik om deze te deactiveren'
+maintenance-mode.deactivate.title: Onderhoudsmodus deactiveren?
+maintenance-mode.deactivate.text: 'Alle sessies krijgen weer toegang.'
+maintenance-mode.deactivate.ok: Deactiveren
+maintenance-mode.logout.title: Onderhoudsmodus eerst deactiveren?
+maintenance-mode.logout.text: 'De onderhoudsmodus is actief en alleen deze sessie heeft toegang. Na het uitloggen kan deze alleen nog via de opdrachtregel worden uitgeschakeld.'
+maintenance-mode.logout.deactivate-and-log-out: Deactiveren en uitloggen
+maintenance-mode.logout.log-out-anyway: Toch uitloggen
+maintenance-mode.locked-out.title: Onderhoud
+maintenance-mode.locked-out.text: 'Het systeem is in onderhoudsmodus of tijdelijk niet beschikbaar. Je laatste actie is niet opgeslagen. Deze melding sluit automatisch zodra het systeem weer beschikbaar is.'
+maintenance-mode.locked-out.reload: Herladen

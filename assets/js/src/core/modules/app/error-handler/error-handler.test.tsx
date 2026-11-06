@@ -13,6 +13,12 @@ import ApiError from './classes/api-error'
 import GeneralError from './classes/general-error'
 import type { ApiErrorData } from './types'
 
+const mockState = { 'maintenance-mode': { isLockedOut: false } }
+
+jest.mock('@Pimcore/app/store', () => ({
+  store: { getState: () => mockState }
+}))
+
 const apiError = (errorData: object): ApiError => new ApiError(errorData as ApiErrorData)
 
 const parseError = (originalStatus: number): ApiError => apiError({
@@ -71,5 +77,40 @@ describe('trackError', () => {
 
   it('keeps throwing for a general error', () => {
     expect(() => { trackError(new GeneralError('boom'), jest.fn()) }).toThrow('boom')
+  })
+
+  describe('while the maintenance notice is open', () => {
+    beforeEach(() => {
+      mockState['maintenance-mode'].isLockedOut = true
+    })
+
+    afterEach(() => {
+      mockState['maintenance-mode'].isLockedOut = false
+    })
+
+    it('leaves an HTML 503 to the notice', () => {
+      const handler = jest.fn()
+
+      trackError(parseError(503), handler)
+
+      expect(handler).not.toHaveBeenCalled()
+    })
+
+    it('still shows other errors', () => {
+      const handler = jest.fn()
+
+      trackError(parseError(502), handler)
+      trackError(apiError({ status: 503, data: { message: 'Service unavailable' } }), handler)
+
+      expect(handler).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  it('shows an HTML 503 while no maintenance notice is open', () => {
+    const handler = jest.fn()
+
+    trackError(parseError(503), handler)
+
+    expect(handler).toHaveBeenCalledTimes(1)
   })
 })
