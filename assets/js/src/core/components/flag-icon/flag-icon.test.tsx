@@ -26,7 +26,7 @@ const { appConfig } = jest.requireMock<{ appConfig: Pick<AppConfig, 'languageFla
 
 describe('resolveLanguageFlag', () => {
   const existingCountryFlags = new Set(['es', 'us', 'de', 'gb'])
-  const existingLanguageFlags = new Set(['ca'])
+  const existingLanguageFlags = new Set(['ca', 'ar'])
 
   const flagExists = async (flagCode: string): Promise<boolean> => existingCountryFlags.has(flagCode)
   const languageFlagExists = async (flagCode: string): Promise<boolean> => existingLanguageFlags.has(flagCode)
@@ -100,6 +100,15 @@ describe('resolveLanguageFlag', () => {
         .toEqual({ flagCode: 'us', isLanguageFlag: false })
     })
 
+    it('prefers a configured language over its language flag for a locale without a country flag', async () => {
+      appConfig.languageFlagMapping = { ar: 'sa' }
+
+      expect(await resolveLanguageFlag('ar_001', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'sa', isLanguageFlag: false })
+      expect(await resolveLanguageFlag('ar', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'sa', isLanguageFlag: false })
+    })
+
     it('keeps resolving unconfigured codes as before', async () => {
       appConfig.languageFlagMapping = { en: 'us' }
 
@@ -109,6 +118,8 @@ describe('resolveLanguageFlag', () => {
         .toEqual({ flagCode: 'us', isLanguageFlag: false })
       expect(await resolveLanguageFlag('ca', flagExists, languageFlagExists))
         .toEqual({ flagCode: 'ca', isLanguageFlag: true })
+      expect(await resolveLanguageFlag('ar_001', flagExists, languageFlagExists))
+        .toEqual({ flagCode: 'ar', isLanguageFlag: true })
       expect(await resolveLanguageFlag('es_IC', flagExists, languageFlagExists))
         .toEqual({ flagCode: 'es', isLanguageFlag: false })
     })

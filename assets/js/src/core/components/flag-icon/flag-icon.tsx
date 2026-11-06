@@ -198,7 +198,7 @@ export const resolveLanguageFlag = async (
     return { flagCode: countryCode, isLanguageFlag: false }
   }
 
-  if (languageOnly !== normalizedCode && await languageFlagExists(languageOnly)) {
+  if (languageOnly !== normalizedCode && isUndefined(mapping[languageOnly]) && await languageFlagExists(languageOnly)) {
     return { flagCode: languageOnly, isLanguageFlag: true }
   }
   if (await flagExists(normalizedCode)) {

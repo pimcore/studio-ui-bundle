@@ -25,7 +25,7 @@ export interface AppConfig {
   /** Upper bound for page sizes a user may enter in the page-size changer. */
   maxPageSize: number
   /** Country flag per language code, merged over the built-in language to flag mapping. */
-  languageFlagMapping: Record<string, string>
+  languageFlagMapping?: Record<string, string>
 }
 
 /** Kept in sync with pimcore_studio_ui.asset_upload.max_parallel_uploads. */
