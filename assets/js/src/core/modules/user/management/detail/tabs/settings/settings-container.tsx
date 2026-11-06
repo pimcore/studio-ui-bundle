@@ -206,7 +206,13 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           <CustomisationAccordion isAdmin={ openedUser?.admin } />
         </Col>
         <Col span={ 16 }>
-          <AdminAccordion isDisabled={ user?.id === openedUser?.id } />
+          <AdminAccordion
+            email={ openedUser?.email }
+            hasUnsavedChanges={ openedUser?.modified === true }
+            isDisabled={ user?.id === openedUser?.id }
+            lastLogin={ openedUser?.lastLogin }
+            userId={ id }
+          />
         </Col>
 
         {openedUser?.admin === false
