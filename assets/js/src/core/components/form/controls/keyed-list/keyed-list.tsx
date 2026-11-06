@@ -25,6 +25,15 @@ export interface KeyedListProps {
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
+// one registration can overwrite what another wrote when either path contains the
+// other: `myBrick` covers `myBrick.length`, and writing one after the other is not
+// the same as writing them the other way round
+const pathsOverlap = (a: string[], b: string[]): boolean => {
+  const [shorter, longer] = a.length <= b.length ? [a, b] : [b, a]
+
+  return isEqual(shorter, longer.slice(0, shorter.length))
+}
+
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
@@ -141,18 +150,20 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     if (isInitialValue && !addedKeysRef.current.has(nameDifference[0])) {
-      // a registration for a path supersedes one for the same path that has not
-      // landed yet. The two branches below apply on different schedules — one now,
-      // one once the value commits — so without this an earlier queued registration
-      // is written into the baseline after a later immediate one and puts it back to
-      // a value the field has already moved off
-      pendingRegistrations.current = pendingRegistrations.current.filter(
-        ({ path }) => !isEqual(path, nameDifference)
+      // registrations that can overwrite one another have to reach the baseline in
+      // the order they were made. The two branches below apply on different
+      // schedules — one now, one once the value commits — so a registration
+      // overlapping one that is already waiting joins the queue instead of
+      // overtaking it. Without that the earlier queued one lands after the later
+      // immediate one and puts the baseline back to a value the field has already
+      // moved off, which the compare effect then reads as content somebody typed.
+      const overlapsPending = pendingRegistrations.current.some(
+        ({ path }) => pathsOverlap(path, nameDifference)
       )
 
       const committed = nameDifference.length === 0 ? valueRef.current : get(valueRef.current, nameDifference)
 
-      if (isEqual(committed, newSubValue)) {
+      if (!overlapsPending && isEqual(committed, newSubValue)) {
         // the value already carries this registration, so taking it into the baseline
         // now moves the baseline towards the value and can never get ahead of it
         const newBaseline = cloneDeep(baselineValue.current)

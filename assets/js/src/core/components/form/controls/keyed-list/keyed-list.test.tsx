@@ -233,6 +233,32 @@ describe('KeyedList', () => {
       })
     })
 
+    it('lets a parent registration stand against an older queued child (review of #4317)', () => {
+      // The overlapping-path form of the case above, and the reason ordering is
+      // decided by whether the paths overlap rather than by whether they are equal.
+      // The child registration differs from the committed NULL so it queues; the
+      // parent matches the committed subtree so it would otherwise be applied
+      // straight away — and the queued child then lands on top of it, putting back
+      // the unit the parent had just cleared.
+      const onChange = jest.fn()
+      renderKeyedList({ value: { myBrick: { length: null } }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', 'myBrick'], { length: null }, true)
+      })
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+      })
+      flushDebounce()
+
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ myBrick: { length: null } })
+      })
+    })
+
     it('normalizes an empty array value to an object and stays silent on mount', () => {
       // the API sends [] when no brick is set yet
       const onChange = jest.fn()
