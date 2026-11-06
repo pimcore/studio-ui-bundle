@@ -179,6 +179,8 @@ export const createElementSelectorAreas = (config: IRelationAllowedTypesDataComp
 }
 
 export const createElementSelectorConfig = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['config'] => {
+  const fieldName = 'combinedFieldName' in config ? (config as { combinedFieldName?: string }).combinedFieldName ?? null : null
+
   return {
     assets: {
       allowedTypes: config.allowedAssetTypes
@@ -188,7 +190,8 @@ export const createElementSelectorConfig = (config: IRelationAllowedTypesDataCom
     },
     objects: {
       allowedTypes: config.allowedDataObjectTypes,
-      allowedClasses: config.allowedClasses
+      allowedClasses: config.allowedClasses,
+      fieldName
     }
   }
 }
