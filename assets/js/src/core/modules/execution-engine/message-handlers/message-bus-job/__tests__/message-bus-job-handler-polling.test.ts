@@ -250,6 +250,16 @@ describe('status=finished', () => {
     await sendPollingUpdate({ status: 'finished', jobRun: jobRunFixture({ state: 'finished' }) })
     expect(mockMessageBus.unregisterHandler).toHaveBeenCalledWith(1)
   })
+
+  it('polling update does not pass the completion message of the engine on as job messages', async () => {
+    const onJobCompletion = jest.fn()
+    makeHandler({ onJobCompletion })
+    await sendPollingUpdate({ status: 'finished', currentMessage: '{"key":"gee_job_finished","params":{"%job_run_id%":1},"domain":"admin"}', jobRun: jobRunFixture({ state: 'finished' }) })
+    expect(onJobCompletion.mock.calls[0][0].payload.messages).toBeUndefined()
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ status: JobStatus.SUCCESS, messages: undefined })
+    }))
+  })
 })
 
 // ─── Status: finished_with_errors ─────────────────────────────────────────────
@@ -279,6 +289,14 @@ describe('status=finished_with_errors', () => {
       isFinished: true,
       isFailed: false,
       status: JobStatus.FINISHED_WITH_ERRORS
+    }))
+  })
+
+  it('polling update keeps the current message as the job message', async () => {
+    makeHandler()
+    await sendPollingUpdate({ status: 'finished_with_errors', currentMessage: 'Item 3 could not be restored', jobRun: jobRunFixture({ state: 'finished_with_errors' }) })
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ messages: ['Item 3 could not be restored'] })
     }))
   })
 })
@@ -311,6 +329,14 @@ describe('status=failed', () => {
       isFinished: false,
       isFailed: true,
       status: JobStatus.FAILED
+    }))
+  })
+
+  it('polling update keeps the current message as the job message', async () => {
+    makeHandler()
+    await sendPollingUpdate({ status: 'failed', currentMessage: 'Item 3 could not be restored', jobRun: jobRunFixture({ state: 'failed' }) })
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ messages: ['Item 3 could not be restored'] })
     }))
   })
 })

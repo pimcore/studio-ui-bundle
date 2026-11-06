@@ -2501,6 +2501,10 @@ recycle-bin.actions.delete: Usuń
 recycle-bin.actions.delete.title: Usuń elementy z kosza
 recycle-bin.actions.restore: Przywróć
 recycle-bin.actions.restore.title: Przywróć elementy z kosza
+recycle-bin.actions.restore.relocated_one: Element umieszczono w __restored
+recycle-bin.actions.restore.relocated_few: "{{count}} elementy umieszczono w __restored"
+recycle-bin.actions.restore.relocated_many: "{{count}} elementów umieszczono w __restored"
+recycle-bin.actions.restore.relocated_other: "{{count}} elementu umieszczono w __restored"
 ownership-management.title: Zarządzanie własnością
 ownership-management.show-deleted-owners: Pokaż elementy usuniętych użytkowników
 ownership-management.deleted-user: Usunięty użytkownik

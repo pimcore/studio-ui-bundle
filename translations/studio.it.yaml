@@ -2501,6 +2501,8 @@ recycle-bin.actions.delete: Elimina
 recycle-bin.actions.delete.title: Eliminazione elementi cestino
 recycle-bin.actions.restore: Ripristina
 recycle-bin.actions.restore.title: Ripristino elementi cestino
+recycle-bin.actions.restore.relocated_one: Elemento collocato in __restored
+recycle-bin.actions.restore.relocated_other: "{{count}} elementi collocati in __restored"
 ownership-management.title: Gestione della proprietà
 ownership-management.show-deleted-owners: Mostra elementi di utenti eliminati
 ownership-management.deleted-user: Utente eliminato
