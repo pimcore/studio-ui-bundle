@@ -8,9 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
+
 export interface ColumnFilter {
   type: string
   filterValue: any
+  operator?: FilterOperator
 }
 
 export interface DateFromColumnFilter extends ColumnFilter {

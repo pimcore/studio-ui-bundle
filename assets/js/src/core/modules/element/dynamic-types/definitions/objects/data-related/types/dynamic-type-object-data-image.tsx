@@ -21,11 +21,15 @@ import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-ove
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type ImageObjectDataDefinition = AbstractObjectDataDefinition & ImageProps
 
 export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
   id: string = 'image'
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/EmptyOnly'])
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {

@@ -9,12 +9,14 @@
  */
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
+import { type FilterOperator } from '../filter-operator'
 
 export interface IDynamicFilter {
   id: string
   translationKey: string
   type: string
   data: any
+  operator?: FilterOperator
   frontendType?: string
   filterType?: string
   config?: any

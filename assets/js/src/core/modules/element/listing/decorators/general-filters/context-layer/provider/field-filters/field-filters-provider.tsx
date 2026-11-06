@@ -9,11 +9,13 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
+import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
 
 export interface FieldFilter {
   key: string
   type: string
   filterValue: any
+  operator?: FilterOperator
   locale: string | null | undefined
   filterType?: string
   meta: {
