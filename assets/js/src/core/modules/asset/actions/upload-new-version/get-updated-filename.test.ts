@@ -8,17 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { getFileExtension, getUpdatedFilename } from './get-updated-filename'
+import { getUpdatedFilename } from './get-updated-filename'
 
-describe('getFileExtension', () => {
-  it('returns the part after the last dot', () => {
-    expect(getFileExtension('archive.tar.gz')).toBe('gz')
-  })
-
-  it('returns an empty string for a name without a dot', () => {
-    expect(getFileExtension('README')).toBe('')
-  })
-})
+jest.mock('@sdk/utils', () => ({
+  getFileExtension: jest.requireActual('@Pimcore/utils/files').getFileExtension,
+  replaceFileEnding: jest.requireActual('@Pimcore/utils/files').replaceFileEnding
+}))
 
 describe('getUpdatedFilename', () => {
   it('keeps the filename when the extension stays the same', () => {

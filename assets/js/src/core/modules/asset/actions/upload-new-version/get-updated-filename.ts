@@ -9,12 +9,7 @@
  */
 
 import { trim } from 'lodash'
-
-export const getFileExtension = (filename: string): string => {
-  const dotIndex = filename.lastIndexOf('.')
-
-  return dotIndex === -1 ? '' : filename.slice(dotIndex + 1)
-}
+import { getFileExtension, replaceFileEnding } from '@sdk/utils'
 
 // Mirrors the replace endpoint; a name without extension gets a copy name there that cannot be predicted.
 export const getUpdatedFilename = (currentFilename: string, uploadedFilename: string): string => {
@@ -25,5 +20,5 @@ export const getUpdatedFilename = (currentFilename: string, uploadedFilename: st
     return currentFilename
   }
 
-  return currentFilename.slice(0, -currentExtension.length) + uploadedExtension
+  return replaceFileEnding(currentFilename, uploadedExtension)
 }

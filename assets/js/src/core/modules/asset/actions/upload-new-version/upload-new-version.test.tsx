@@ -31,12 +31,14 @@ jest.mock('react-i18next', () => ({
   })
 }))
 
-jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
-  useFormModal: () => ({ confirm })
+jest.mock('@sdk/components', () => ({
+  useFormModal: () => ({ confirm }),
+  useMessage: () => ({ warning })
 }))
 
-jest.mock('@Pimcore/components/message/useMessage', () => ({
-  useMessage: () => ({ warning })
+jest.mock('@sdk/utils', () => ({
+  getFileExtension: jest.requireActual('@Pimcore/utils/files').getFileExtension,
+  replaceFileEnding: jest.requireActual('@Pimcore/utils/files').replaceFileEnding
 }))
 
 jest.mock('@Pimcore/components/modal-upload/provider/upload-modal-provider/use-upload-modal-context', () => ({
@@ -127,6 +129,7 @@ describe('useUploadNewVersion', () => {
     expect(lastConfirmConfig().content).toBe(
       'asset.upload-new-version.rename-confirmation.message extension=jpg newFilename=example.jpg oldFilename=example.png'
     )
+    expect(lastConfirmConfig()).toMatchObject({ okText: 'yes', cancelText: 'no' })
     lastConfirmConfig().onOk()
     await expect(shouldUpload).resolves.toBe(true)
   })

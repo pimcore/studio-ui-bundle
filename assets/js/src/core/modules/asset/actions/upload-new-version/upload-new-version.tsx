@@ -26,10 +26,10 @@ import { useAppDispatch } from '@sdk/app'
 import { updateNodeData, setNodeFetchingInAllTrees } from '@Pimcore/components/element-tree/element-tree-slice'
 import { transformApiDataToNode } from '@Pimcore/modules/asset/tree/utils/transform-api-data-to-node'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useFormModal, useMessage } from '@sdk/components'
+import { getFileExtension } from '@sdk/utils'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
-import { getFileExtension, getUpdatedFilename } from './get-updated-filename'
+import { getUpdatedFilename } from './get-updated-filename'
 
 export interface UseUploadNewVersionReturn {
   /** Pass the asset's current `filename` to confirm a rename before the upload and report it afterwards. */
@@ -104,6 +104,8 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
           oldFilename: filename,
           interpolation: { escapeValue: false }
         }),
+        okText: t('yes'),
+        cancelText: t('no'),
         onOk: () => { resolve(true) },
         onCancel: () => { resolve(false) }
       })

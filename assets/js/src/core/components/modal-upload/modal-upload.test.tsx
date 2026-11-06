@@ -15,13 +15,14 @@ import type { RcFile } from 'antd/es/upload/interface'
 import { ModalUpload, type ModalUploadPropsBase } from './modal-upload'
 
 const setIsModalOpen = jest.fn()
+const setCheckProgress = jest.fn()
 const resolveConflicts = jest.fn()
 const uploadContext = {
   setIsModalOpen,
   setShowProcessing: jest.fn(),
   setShowUploadError: jest.fn(),
   setFileList: jest.fn(),
-  setCheckProgress: jest.fn(),
+  setCheckProgress,
   cancelCheckRef: { current: null },
   fileList: []
 }
@@ -96,6 +97,7 @@ const renderBeforeUpload = (props: Pick<ModalUploadPropsBase, 'shouldUploadFile'
 describe('ModalUpload shouldUploadFile', () => {
   beforeEach(() => {
     setIsModalOpen.mockReset()
+    setCheckProgress.mockReset()
     resolveConflicts.mockReset().mockResolvedValue(false)
   })
 
@@ -117,5 +119,38 @@ describe('ModalUpload shouldUploadFile', () => {
     const beforeUpload = renderBeforeUpload({ skipConflictCheck: true })
 
     await expect(beforeUpload(file, [file])).resolves.toBe(true)
+  })
+
+  it('asks file by file once per batch and keeps dropped files out of the batch start and the conflict check', async () => {
+    const batch = ['a.jpg', 'b.jpg', 'c.jpg'].map((name, index) => ({ uid: `rc-batch-${index}`, name, size: 10 }) as unknown as RcFile)
+    let pending = 0
+    let maxPending = 0
+    const shouldUploadFile = jest.fn(async (candidate: RcFile) => {
+      maxPending = Math.max(maxPending, ++pending)
+      await Promise.resolve()
+      pending--
+      return candidate !== batch[0]
+    })
+    const beforeUpload = renderBeforeUpload({ shouldUploadFile })
+
+    await expect(Promise.all(batch.map(async (candidate) => await beforeUpload(candidate, batch))))
+      .resolves.toEqual([Upload.LIST_IGNORE, true, true])
+    expect(shouldUploadFile).toHaveBeenCalledTimes(3)
+    expect(maxPending).toBe(1)
+    expect(setIsModalOpen).toHaveBeenCalledTimes(1)
+    expect(setIsModalOpen).toHaveBeenCalledWith(true)
+    expect(setCheckProgress).toHaveBeenCalledWith({ done: 0, total: 2 })
+    expect(resolveConflicts).toHaveBeenCalledWith([batch[1], batch[2]], expect.any(Function))
+  })
+
+  it('asks again for the next batch', async () => {
+    const shouldUploadFile = jest.fn(async () => true)
+    const beforeUpload = renderBeforeUpload({ shouldUploadFile, skipConflictCheck: true })
+    const nextFile = { uid: 'rc-2', name: 'other.jpg', size: 10 } as unknown as RcFile
+
+    await beforeUpload(file, [file])
+    await beforeUpload(nextFile, [nextFile])
+
+    expect(shouldUploadFile).toHaveBeenCalledTimes(2)
   })
 })

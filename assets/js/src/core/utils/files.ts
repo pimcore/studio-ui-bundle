@@ -14,6 +14,12 @@ export function replaceFileEnding (name: string, ending: string): string {
   return extensionP.join('.')
 }
 
+export function getFileExtension (name: string): string {
+  const dotIndex = name.lastIndexOf('.')
+
+  return dotIndex === -1 ? '' : name.slice(dotIndex + 1)
+}
+
 export function saveFileLocal (url: string, name?: string): void {
   const a = document.createElement('a')
   a.download = name ?? ''
