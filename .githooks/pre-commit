@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Studio UI translations check — refuses commits whose studio.{locale}.yaml files are out of sync
+# with studio.en.yaml. The check itself lives in the pimcore-studio Claude Code plugin
+# (skill pimcore-studio-ui-i18n-translation-workflow); this file only finds and runs it.
+#
+#   Enable once per clone:   git config core.hooksPath .githooks
+#   Skip once:               git commit --no-verify
+#   When it blocks:          run `/translate studio-ui-bundle` in Claude Code, stage, commit again.
+set -u
+
+TRANSLATIONS_DIR="translations"   # the only line that differs between bundles
+
+# Plugins root as Claude Code resolves it: CLAUDE_CODE_PLUGIN_CACHE_DIR, else <config dir>/plugins.
+PLUGINS_ROOT="${CLAUDE_CODE_PLUGIN_CACHE_DIR:-${CLAUDE_CONFIG_DIR:-${HOME:-}/.claude}/plugins}"
+SKILL_REL="skills/pimcore-studio-ui-i18n-translation-workflow"
+
+SKILL_DIR=$(python3 - "$PLUGINS_ROOT/installed_plugins.json" "$SKILL_REL" <<'PY' 2>/dev/null
+import json, pathlib, sys
+try:
+    plugins = json.load(open(sys.argv[1], encoding="utf-8"))["plugins"]
+    for entry in plugins.get("pimcore-studio@pimcore", []):
+        skill = pathlib.Path(entry["installPath"]) / sys.argv[2]
+        if (skill / "scripts" / "precommit_check.py").is_file():
+            print(skill)
+            break
+except Exception:
+    pass
+PY
+)
+
+if [ -z "$SKILL_DIR" ]; then
+  {
+    echo "translations check skipped: pimcore-studio Claude Code plugin not found or outdated."
+    echo "  Install:  claude plugin marketplace add pimcore/claude-code && claude plugin install pimcore-studio@pimcore"
+    echo "  Update:   claude plugin update pimcore-studio@pimcore"
+  } >&2
+  exit 0
+fi
+
+exec python3 "$SKILL_DIR/scripts/precommit_check.py" --dir "$TRANSLATIONS_DIR"
