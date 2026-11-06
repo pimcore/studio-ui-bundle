@@ -75,6 +75,8 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
         foreach ($config['pagination'] as $key => $value) {
             $container->setParameter('pimcore_studio_ui.pagination.' . $key, $value);
         }
+
+        $container->setParameter('pimcore_studio_ui.language_flag_mapping', $config['language_flag_mapping']);
     }
 
     /**

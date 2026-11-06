@@ -130,9 +130,32 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
             ->end()
-            ->append($this->createPaginationNode());
+            ->append($this->createPaginationNode())
+            ->append($this->createLanguageFlagMappingNode());
 
         return $treeBuilder;
+    }
+
+    /**
+     * Country flag shown for a language, merged over the built-in language to flag mapping of the UI.
+     */
+    private function createLanguageFlagMappingNode(): NodeDefinition
+    {
+        $node = (new TreeBuilder('language_flag_mapping'))->getRootNode();
+
+        $node
+            ->info(
+                'Country flag shown for a language, keyed by language code (en, en_GB or en-GB). ' .
+                'Overrides the built-in mapping, which shows gb for en.'
+            )
+            ->example(['en' => 'us'])
+            ->useAttributeAsKey('language')
+            ->normalizeKeys(false)
+            ->stringPrototype()
+                ->cannotBeEmpty()
+            ->end();
+
+        return $node;
     }
 
     /**

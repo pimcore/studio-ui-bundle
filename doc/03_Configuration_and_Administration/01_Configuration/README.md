@@ -15,3 +15,4 @@ Pimcore Studio configuration options:
 - [Parallel Asset Uploads](./06_Parallel_Asset_Uploads.md)
 - [OAuth Consent Screen](./07_OAuth_Consent_Screen.md)
 - [Pagination](./08_Pagination.md)
+- [Language Flags](./09_Language_Flags.md)
