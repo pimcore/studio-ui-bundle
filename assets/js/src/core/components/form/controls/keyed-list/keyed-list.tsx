@@ -27,11 +27,16 @@ export interface KeyedListProps {
 
 // one registration can overwrite what another wrote when either path contains the
 // other: `myBrick` covers `myBrick.length`, and writing one after the other is not
-// the same as writing them the other way round
-const pathsOverlap = (a: string[], b: string[]): boolean => {
+// the same as writing them the other way round.
+//
+// Segments are compared as strings because a NamePath permits numbers and lodash
+// addresses `1` and `'1'` as one property. Comparing them as written would let the
+// same path spelled two ways look like two paths, which is exactly the overlap this
+// has to catch.
+const pathsOverlap = (a: NamePath[], b: NamePath[]): boolean => {
   const [shorter, longer] = a.length <= b.length ? [a, b] : [b, a]
 
-  return isEqual(shorter, longer.slice(0, shorter.length))
+  return shorter.every((segment, index) => String(segment) === String(longer[index]))
 }
 
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
@@ -167,7 +172,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
         // the value already carries this registration, so taking it into the baseline
         // now moves the baseline towards the value and can never get ahead of it
         const newBaseline = cloneDeep(baselineValue.current)
-        setWith(newBaseline, nameDifference, newSubValue, setAsObject)
+        // cloned for the same reason the queued branch clones: the baseline must not
+        // end up holding an object the caller can still write to
+        setWith(newBaseline, nameDifference, cloneDeep(newSubValue), setAsObject)
         baselineValue.current = newBaseline
       } else {
         pendingRegistrations.current.push({ path: nameDifference, value: newSubValue, queuedAgainst: valueRef.current })
@@ -205,7 +212,11 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
 
     const newBaseline = cloneDeep(baselineValue.current)
     landed.forEach(({ path, value: registered }) => {
-      setWith(newBaseline, path, registered, (obj) => isUndefined(obj) ? {} : obj)
+      // cloned on the way in: inserting by reference would put the caller's own
+      // object into the baseline, and writing a child path later in this same loop
+      // would then reach back into it — altering both what the field still holds and
+      // the registration it is about to make again
+      setWith(newBaseline, path, cloneDeep(registered), (obj) => isUndefined(obj) ? {} : obj)
     })
     baselineValue.current = newBaseline
   }, [value])

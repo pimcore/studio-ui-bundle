@@ -259,6 +259,53 @@ describe('KeyedList', () => {
       })
     })
 
+    it('treats a numeric and a string path segment as the same path (review of #4317)', () => {
+      // `update` takes a NamePath, which permits numeric segments, and lodash
+      // addresses `1` and `'1'` as one property — so two registrations spelled
+      // differently reach the same place. Comparing the segments as written makes
+      // the overlap invisible and the older queued registration lands on top of the
+      // newer one again, which is the ordering bug through a third door.
+      const onChange = jest.fn()
+      renderKeyedList({ value: { 1: { length: null } }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 1, 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', '1', 'length'], null, true)
+      })
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', 1, 'length'], { value: null, unitId: 'cm' }, true)
+      })
+      flushDebounce()
+
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ 1: { length: null } })
+      })
+    })
+
+    it('does not mutate a registered value while replaying the queue (review of #4317)', () => {
+      // A registration goes into the baseline by reference, so writing a child path
+      // afterwards reaches into the object the caller still holds. A field that
+      // registers the same object twice — which is what re-running one effect does —
+      // then finds its own last registration altered by the child that came between.
+      const onChange = jest.fn()
+      const parent = { length: null }
+      renderKeyedList({ value: { other: 'untouched' }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 'myBrick'], parent, true)
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', 'myBrick'], parent, true)
+      })
+      flushDebounce()
+
+      // the caller's object is the reviewer's point: nothing the list does while
+      // catching its baseline up may reach back into what was handed to it
+      expect(parent).toEqual({ length: null })
+      expect(operations.getValue(['attributes', 'myBrick'])).toEqual({ length: null })
+    })
+
     it('normalizes an empty array value to an object and stays silent on mount', () => {
       // the API sends [] when no brick is set yet
       const onChange = jest.fn()
