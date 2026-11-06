@@ -215,12 +215,22 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     [mergedGridFullData]
   )
 
+  // The visible field values of a row are correlated to it by the id of the grid item they were
+  // loaded for - the search looks them up by it. `id` need not be among the
+  // visible fields, and the grid items arrive per allowed class, so neither a column value nor the
+  // position in this list identifies a row: the item's own id has to be carried along.
   const visibleFieldsValue = useMemo(() => {
     return mergedGridFullData.map(item => {
-      return item?.columns?.reduce<Record<string, any>>((acc, col) => {
+      if (isNil(item?.id)) {
+        return undefined
+      }
+
+      const values = (item?.columns ?? []).reduce<Record<string, any>>((acc, col) => {
         acc[col.key!] = col.value
         return acc
       }, {})
+
+      return { ...values, id: item.id }
     })
   }, [mergedGridFullData])
 

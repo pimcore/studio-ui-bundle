@@ -10,6 +10,8 @@
 
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import type { DisplayManyToManyRelationValueItem } from '@Pimcore/components/many-to-many-relation/hooks/use-value'
+import type { IUseDataObjectGridsReturn } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
 
 let currentLanguage = 'de'
 
@@ -73,7 +75,7 @@ interface GridQueryArgs {
   columns: Array<{ key: string, locale?: string }>
 }
 
-let gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn() }
+let gridResult: IUseDataObjectGridsReturn = { data: [], isLoading: false, isError: false, refetchAll: jest.fn() }
 const mockUseDataObjectGrids = jest.fn((args: GridQueryArgs) => gridResult)
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids', () => ({
@@ -222,5 +224,50 @@ describe('ManyToManyObjectRelation visible field loading', () => {
 
   it('passes only the hint of the field definition when the visible field values are loaded', () => {
     expect(renderRelation({ hint: 'Field hint' }).hint).toBe('Field hint')
+  })
+})
+
+describe('ManyToManyObjectRelation visible field values', () => {
+  const chair: DisplayManyToManyRelationValueItem = { id: 5, type: 'object', subtype: 'Car', fullPath: '/cars/5', isPublished: true }
+  const table: DisplayManyToManyRelationValueItem = { id: 7, type: 'object', subtype: 'Car', fullPath: '/cars/7', isPublished: true }
+
+  beforeEach(() => {
+    mockManyToManyRelation.mockClear()
+    availableGridColumnsLoading = false
+    gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn() }
+  })
+
+  // The relation mock is untyped, so the one prop this test reads is narrowed here instead of
+  // handing an `any` to the assertions.
+  const lastVisibleFieldsValue = (): Array<Record<string, any> | undefined> | undefined => {
+    const calls = mockManyToManyRelation.mock.calls
+    const lastProps = calls[calls.length - 1][0] as { visibleFieldsValue?: Array<Record<string, any> | undefined> }
+
+    return lastProps.visibleFieldsValue
+  }
+
+  // The toolbar search finds the visible field values of a row by `field.id`. The visible fields
+  // need not contain `id`, so the entry has to carry the id of the grid item it was loaded for. The
+  // grid items arrive per allowed class and in their own order, so their position says nothing.
+  it('carries the grid item id on each visible field entry when id is not a visible field', () => {
+    gridResult = {
+      ...gridResult,
+      data: [
+        { id: table.id, columns: [{ key: 'name', value: 'Oak table' }] },
+        { id: chair.id, columns: [{ key: 'name', value: 'Wooden chair' }] }
+      ]
+    }
+
+    render(
+      <ManyToManyObjectRelation
+        { ...defaultProps }
+        value={ [chair, table] }
+      />
+    )
+
+    const entriesById = new Map((lastVisibleFieldsValue() ?? []).map(entry => [entry?.id, entry]))
+
+    expect(entriesById.get(chair.id)?.name).toBe('Wooden chair')
+    expect(entriesById.get(table.id)?.name).toBe('Oak table')
   })
 })

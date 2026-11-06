@@ -154,6 +154,8 @@ export const useValue = (
     const normalizedSearch = searchTerm.toLowerCase()
     const visibleFieldsValue = visibleFieldsValueRef.current
     const hasVisibleFields = !isNil(visibleFieldsValue)
+    // `field.id` is the id of the element the values were loaded for, carried on the entry by its
+    // producer - not the value of an `id` column, which the visible fields need not contain.
     const visibleFieldsMap = hasVisibleFields
       ? new Map(
           (visibleFieldsValue ?? [])
