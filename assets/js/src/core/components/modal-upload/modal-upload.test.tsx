@@ -19,10 +19,10 @@ const setCheckProgress = jest.fn()
 const resolveConflicts = jest.fn()
 const uploadContext = {
   setIsModalOpen,
+  setCheckProgress,
   setShowProcessing: jest.fn(),
   setShowUploadError: jest.fn(),
   setFileList: jest.fn(),
-  setCheckProgress,
   cancelCheckRef: { current: null },
   fileList: []
 }
@@ -122,11 +122,12 @@ describe('ModalUpload shouldUploadFile', () => {
   })
 
   it('asks file by file once per batch and keeps dropped files out of the batch start and the conflict check', async () => {
-    const batch = ['a.jpg', 'b.jpg', 'c.jpg'].map((name, index) => ({ uid: `rc-batch-${index}`, name, size: 10 }) as unknown as RcFile)
+    const batch = ['a.jpg', 'b.jpg', 'c.jpg'].map((name, index) => ({ name, uid: `rc-batch-${index}`, size: 10 }) as unknown as RcFile)
     let pending = 0
     let maxPending = 0
     const shouldUploadFile = jest.fn(async (candidate: RcFile) => {
-      maxPending = Math.max(maxPending, ++pending)
+      pending++
+      maxPending = Math.max(maxPending, pending)
       await Promise.resolve()
       pending--
       return candidate !== batch[0]
