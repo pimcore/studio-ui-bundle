@@ -48,6 +48,20 @@ export abstract class DynamicTypeFieldDefinitionAbstract extends DynamicTypeAbst
     return [this.id]
   }
 
+  /**
+   * The editor areas this type may be offered in, or null for every area.
+   *
+   * Null by default so no registered type changes behaviour: a type is
+   * offered wherever its tags match, exactly as before. A type that belongs
+   * to one editor overrides this, which is what keeps it out of the others —
+   * the registry is global and shared with every bundle that registers into
+   * it, so a type that is only meaningful in one place has no other way to
+   * say so.
+   */
+  getAllowedAreas (props: FieldDefinitionContext): string[] | null {
+    return null
+  }
+
   getAllowedChildTags (props: FieldDefinitionContext): string[] {
     return []
   }
