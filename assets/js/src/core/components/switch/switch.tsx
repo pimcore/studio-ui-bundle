@@ -13,13 +13,14 @@ import type { SwitchProps as AntdSwitchProps } from 'antd/es/switch/index'
 import { Switch as AntdSwitch } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TooltipIcon, type TooltipIconProps } from '@Pimcore/components/tooltip-icon/tooltip-icon'
-import { isNil } from 'lodash'
+import { isNil, isString } from 'lodash'
 
 export interface SwitchProps extends AntdSwitchProps {
   labelLeft?: ReactNode
   labelRight?: ReactNode
   tooltip?: ReactNode
   tooltipPlacement?: TooltipIconProps['placement']
+  'aria-label'?: string
 }
 
 export const Switch = ({
@@ -27,8 +28,12 @@ export const Switch = ({
   labelRight,
   tooltip,
   tooltipPlacement = 'right',
+  'aria-label': ariaLabel,
   ...props
 }: SwitchProps): React.JSX.Element => {
+  // The labels are siblings of the switch, which renders as a button and cannot be labelled by one.
+  const accessibleName = ariaLabel ?? [labelLeft, labelRight].find(isString)
+
   return (
     <Flex
       align={ 'center' }
@@ -37,6 +42,7 @@ export const Switch = ({
       {labelLeft}
       <AntdSwitch
         { ...props }
+        aria-label={ accessibleName }
       />
       {labelRight}
       {!isNil(tooltip) && (

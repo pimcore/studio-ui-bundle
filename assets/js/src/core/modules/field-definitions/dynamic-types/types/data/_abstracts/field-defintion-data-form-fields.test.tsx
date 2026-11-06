@@ -14,12 +14,15 @@ import { render, screen } from '@testing-library/react'
 // The @sdk/components barrel reaches antd-style's untranspiled ESM; the stand-in Form.Item exposes its name.
 jest.mock('@sdk/components', () => ({
   Form: {
-    Item: ({ children, name }: any) => (
+    // `extra` is the slot AntD renders below the control, so what it holds is visible text
+    Item: ({ children, extra, name, valuePropName }: any) => (
       <div
         data-name={ typeof name === 'string' ? name : '' }
         data-testid='form-item'
+        data-value-prop-name={ valuePropName ?? '' }
       >
         {children}
+        {extra}
       </div>
     ),
     useFormInstance: () => ({ getFieldValue: () => undefined, setFieldValue: jest.fn() }),
@@ -29,7 +32,8 @@ jest.mock('@sdk/components', () => ({
     Panel: ({ children }: any) => <div>{children}</div>
   },
   Input: () => null,
-  Switch: () => null,
+  // The real one renders its label beside the control and takes its accessible name from it
+  Switch: ({ labelRight }: any) => <span aria-label={ String(labelRight ?? '') } />,
   TextArea: () => null
 }))
 
@@ -72,5 +76,22 @@ describe('FieldDefinitionDataFormFields shared toggles', () => {
 
   it('offers a custom layout field no index control either', () => {
     expect(renderWithArea(['custom-layout'])).not.toContain('indexed')
+  })
+
+  it('names the control after the search index and states what excluding a key costs', () => {
+    renderWithArea(['classification-store'])
+
+    // Visible text beside the control, and a label of its own rather than the hidden `index`
+    expect(screen.getByText('classification-store.key-indexed-hint')).toBeInTheDocument()
+    expect(screen.getByLabelText('classification-store.key-indexed')).toBeInTheDocument()
+    expect(screen.queryByLabelText('index')).not.toBeInTheDocument()
+  })
+
+  it('binds the control to the stored flag rather than to the form value', () => {
+    renderWithArea(['classification-store'])
+
+    const item = screen.getAllByTestId('form-item').find((element) => element.getAttribute('data-name') === 'indexed')
+
+    expect(item).toHaveAttribute('data-value-prop-name', 'checked')
   })
 })

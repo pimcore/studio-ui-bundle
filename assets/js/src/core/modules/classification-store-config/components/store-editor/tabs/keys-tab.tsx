@@ -229,7 +229,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         title: newTitle.trim() === '' ? null : newTitle,
         description: key.description ?? null,
         type: key.type,
-        definition: key.definition
+        // Null leaves the stored definition alone; echoing the row's blob back reverts one saved meanwhile.
+        definition: null
       }
     })
 
@@ -393,6 +394,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             manualSorting
             onSortingChange={ onSortingChange }
             onUpdateCellData={ ({ columnId, value, rowData }) => {
+              // No cell edit carries a definition: null leaves the stored one alone (see handleTitleChange).
               const typedRow = rowData as KeyRow
               if (columnId === 'name') {
                 const newName = (value as string).trim()
@@ -404,7 +406,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                     title: typedRow.title ?? null,
                     description: typedRow.description ?? null,
                     type: typedRow.type,
-                    definition: typedRow.definition
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               } else if (columnId === 'title') {
@@ -419,7 +421,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                     title: typedRow.title ?? null,
                     description: (value as string).trim() === '' ? null : (value as string),
                     type: typedRow.type,
-                    definition: typedRow.definition
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               }

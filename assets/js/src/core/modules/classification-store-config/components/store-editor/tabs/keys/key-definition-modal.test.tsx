@@ -49,10 +49,13 @@ jest.mock('@sdk/components', () => {
 })
 
 jest.mock('@sdk/utils', () => {
+  const { useRef } = jest.requireActual('react')
   let nextId = 0
 
   return {
-    useDebounce: (value: unknown) => value,
+    // The dialog is driven inside the debounce window: the form holds the edit and the layout
+    // provider has not been written yet, which is the state a save pressed right away reads.
+    useDebounce: (value: unknown) => useRef(value).current,
     uuid: () => `node-${++nextId}`
   }
 })
@@ -147,18 +150,20 @@ const keyIndexed = (indexed?: boolean): ClassificationStoreConfigurationKeyDetai
   return { ...keyDetail, definition } as unknown as ClassificationStoreConfigurationKeyDetail
 }
 
-const renderModal = (detail: ClassificationStoreConfigurationKeyDetail = keyDetail): void => {
+const modal = (detail: ClassificationStoreConfigurationKeyDetail | undefined, open = true): React.JSX.Element => (
   // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
-  render(
-    <StyleProvider container={ document.createElement('div') }>
-      <KeyDefinitionModal
-        keyDetail={ detail }
-        onClose={ jest.fn() }
-        onSaved={ jest.fn() }
-        open
-      />
-    </StyleProvider>
-  )
+  <StyleProvider container={ document.createElement('div') }>
+    <KeyDefinitionModal
+      keyDetail={ detail }
+      onClose={ jest.fn() }
+      onSaved={ jest.fn() }
+      open={ open }
+    />
+  </StyleProvider>
+)
+
+const renderModal = (detail: ClassificationStoreConfigurationKeyDetail = keyDetail): void => {
+  render(modal(detail))
 }
 
 const indexedControl = (): HTMLElement => screen.getByLabelText('classification-store.key-indexed')
@@ -230,6 +235,43 @@ describe('KeyDefinitionModal', () => {
     expect(definition.indexed).toBe(false)
     expect(definition).toMatchObject(STORED_OPTIONS)
     expect(definition.tooltip).toBe('The height in cm')
+  })
+
+  it('sends an edit saved inside the debounce window, which the layout provider has not seen', async () => {
+    renderModal(keyIndexed(true))
+
+    fireEvent.change(screen.getByLabelText('tooltip'), { target: { value: 'The height in mm' } })
+    fireEvent.click(indexedControl())
+
+    const definition = await savedDefinition()
+
+    expect(definition.indexed).toBe(false)
+    expect(definition.tooltip).toBe('The height in mm')
+    expect(definition).toMatchObject(STORED_OPTIONS)
+  })
+
+  it('opens a key whose definition carries an explicit null flag with the control on', () => {
+    renderModal({
+      ...keyDetail,
+      definition: { ...keyDetail.definition, indexed: null }
+    } as unknown as ClassificationStoreConfigurationKeyDetail)
+
+    expect(indexedControl()).toBeChecked()
+  })
+
+  it('does not carry the flag of the key edited before into the next one', async () => {
+    // The dialog stays mounted between openings while its body does not, so each opening reads
+    // the key it is handed rather than the form the previous key was left on.
+    const { rerender } = render(modal(keyIndexed(true)))
+
+    fireEvent.click(indexedControl())
+    expect(indexedControl()).not.toBeChecked()
+
+    rerender(modal(undefined, false))
+    rerender(modal(keyIndexed(true)))
+
+    expect(indexedControl()).toBeChecked()
+    expect(await savedDefinition()).toMatchObject({ indexed: true })
   })
 
   it('shows the flag the update answered with, not the one the form was left on', async () => {
