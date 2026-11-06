@@ -8,6 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { renderHook } from '@testing-library/react'
+import type { RcFile } from 'antd/es/upload/interface'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { useUploadNewVersion } from './upload-new-version'
+
 const triggerUpload = jest.fn()
 const confirm = jest.fn()
 const warning = jest.fn()
@@ -15,7 +21,13 @@ const dispatch = jest.fn()
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string, values?: Record<string, unknown>) => [key, ...Object.values(values ?? {}).filter(value => typeof value === 'string')].join(' ')
+    t: (key: string, values: Record<string, unknown> = {}) => [
+      key,
+      ...Object.entries(values)
+        .filter(([, value]) => typeof value === 'string')
+        .map(([name, value]) => `${name}=${value as string}`)
+        .sort((a, b) => a.localeCompare(b))
+    ].join(' ')
   })
 }))
 
@@ -61,19 +73,8 @@ jest.mock('@Pimcore/app/api/pimcore/route', () => ({
 }))
 
 jest.mock('@Pimcore/components/icon/icon', () => ({
-  Icon: () => null
+  Icon: jest.fn(() => null)
 }))
-
-// eslint-disable-next-line import/first
-import { renderHook } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { useUploadNewVersion } from './upload-new-version'
-// eslint-disable-next-line import/first
-import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
-// eslint-disable-next-line import/first
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-// eslint-disable-next-line import/first
-import { type RcFile } from 'antd/es/upload/interface'
 
 interface UploadProps {
   action: string
@@ -123,7 +124,9 @@ describe('useUploadNewVersion', () => {
 
     const shouldUpload = lastUploadProps().shouldUploadFile?.(file('photo.jpg'))
 
-    expect(lastConfirmConfig().content).toBe('asset.upload-new-version.rename-confirmation.message jpg example.png example.jpg')
+    expect(lastConfirmConfig().content).toBe(
+      'asset.upload-new-version.rename-confirmation.message extension=jpg newFilename=example.jpg oldFilename=example.png'
+    )
     lastConfirmConfig().onOk()
     await expect(shouldUpload).resolves.toBe(true)
   })
@@ -152,7 +155,7 @@ describe('useUploadNewVersion', () => {
 
     await lastUploadProps().onSuccess([{ response: { data: 'example_copy.jpg' } }])
 
-    expect(warning).toHaveBeenCalledWith('asset.upload-new-version.renamed example.png example_copy.jpg')
+    expect(warning).toHaveBeenCalledWith('asset.upload-new-version.renamed newFilename=example_copy.jpg oldFilename=example.png')
   })
 
   it('does not warn when the filename stayed the same', async () => {

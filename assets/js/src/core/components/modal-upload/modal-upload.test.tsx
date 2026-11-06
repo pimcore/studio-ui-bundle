@@ -8,6 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { render } from '@testing-library/react'
+import { Upload, type UploadProps } from 'antd'
+import type { RcFile } from 'antd/es/upload/interface'
+import { ModalUpload, type ModalUploadPropsBase } from './modal-upload'
+
 const setIsModalOpen = jest.fn()
 const resolveConflicts = jest.fn()
 const uploadContext = {
@@ -65,24 +71,13 @@ jest.mock('./utils/resolve-upload-action', () => ({ resolveUploadAction: jest.fn
 
 jest.mock('@Pimcore/modules/app/error-handler', () => ({ __esModule: true, default: jest.fn(), ApiError: jest.fn() }))
 
-// eslint-disable-next-line import/first
-import React from 'react'
-// eslint-disable-next-line import/first
-import { render } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { Upload, type UploadProps } from 'antd'
-// eslint-disable-next-line import/first
-import { type RcFile } from 'antd/es/upload/interface'
-// eslint-disable-next-line import/first
-import { ModalUpload, type ModalUploadPropsBase } from './modal-upload'
-
 type BeforeUpload = NonNullable<UploadProps['beforeUpload']>
 
 const file = { uid: 'rc-1', name: 'photo.jpg', size: 10 } as unknown as RcFile
 
 const renderBeforeUpload = (props: Pick<ModalUploadPropsBase, 'shouldUploadFile' | 'skipConflictCheck'>): BeforeUpload => {
   let captured: UploadProps = {}
-  const CaptureUpload = (uploadProps: UploadProps): null => {
+  const captureUpload = (uploadProps: UploadProps): null => {
     captured = uploadProps
     return null
   }
@@ -90,7 +85,7 @@ const renderBeforeUpload = (props: Pick<ModalUploadPropsBase, 'shouldUploadFile'
   render(
     <ModalUpload
       action="/assets/7/replace"
-      uploadComponent={ CaptureUpload }
+      uploadComponent={ captureUpload }
       { ...props }
     />
   )

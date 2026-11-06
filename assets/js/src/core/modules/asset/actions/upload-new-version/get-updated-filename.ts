@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { trim } from 'lodash'
+
 export const getFileExtension = (filename: string): string => {
   const dotIndex = filename.lastIndexOf('.')
 
@@ -17,7 +19,7 @@ export const getFileExtension = (filename: string): string => {
 // Mirrors the replace endpoint; a name without extension gets a copy name there that cannot be predicted.
 export const getUpdatedFilename = (currentFilename: string, uploadedFilename: string): string => {
   const currentExtension = getFileExtension(currentFilename)
-  const uploadedExtension = getFileExtension(uploadedFilename.trim().replace(/^[. ]+|[. ]+$/g, ''))
+  const uploadedExtension = getFileExtension(trim(uploadedFilename.trim(), '. '))
 
   if (currentExtension === '' || currentExtension === uploadedExtension) {
     return currentFilename

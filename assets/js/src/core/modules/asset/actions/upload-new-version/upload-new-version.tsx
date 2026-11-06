@@ -99,9 +99,9 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       modal.confirm({
         title: t('asset.upload-new-version.rename-confirmation.title'),
         content: t('asset.upload-new-version.rename-confirmation.message', {
+          newFilename,
           extension: getFileExtension(newFilename),
           oldFilename: filename,
-          newFilename,
           interpolation: { escapeValue: false }
         }),
         onOk: () => { resolve(true) },
@@ -122,8 +122,8 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
 
         if (!isNil(filename) && isString(newFilename) && newFilename !== filename) {
           void messageApi.warning(t('asset.upload-new-version.renamed', {
-            oldFilename: filename,
             newFilename,
+            oldFilename: filename,
             interpolation: { escapeValue: false }
           }))
         }
