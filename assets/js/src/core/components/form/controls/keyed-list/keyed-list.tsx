@@ -16,6 +16,7 @@ import { KeyedListIterator } from './iterator/keyed-list-iterator'
 import { cloneDeep, isArray, isEqual, isNil, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
+import { pathsOverlap } from './utils/paths-overlap'
 
 export interface KeyedListProps {
   children: React.ReactNode
@@ -25,20 +26,6 @@ export interface KeyedListProps {
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
   /** Counterpart of onFieldChange: puts a field back to the value it was loaded with. */
   onFieldRestore?: (field: NamePath) => void
-}
-
-// one registration can overwrite what another wrote when either path contains the
-// other: `myBrick` covers `myBrick.length`, and writing one after the other is not
-// the same as writing them the other way round.
-//
-// Segments are compared as strings because a NamePath permits numbers and lodash
-// addresses `1` and `'1'` as one property. Comparing them as written would let the
-// same path spelled two ways look like two paths, which is exactly the overlap this
-// has to catch.
-const pathsOverlap = (a: NamePath[], b: NamePath[]): boolean => {
-  const [shorter, longer] = a.length <= b.length ? [a, b] : [b, a]
-
-  return shorter.every((segment, index) => String(segment) === String(longer[index]))
 }
 
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps, onFieldRestore }: KeyedListProps): React.JSX.Element => {
