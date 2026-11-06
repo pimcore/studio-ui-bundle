@@ -23,6 +23,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useUploadModalContext } from './provider/upload-modal-provider/use-upload-modal-context'
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 import { useUploadConflictHandler } from './hooks/use-upload-conflict-handler'
+import { useUploadFileGate } from './hooks/use-upload-file-gate'
 import { resolveUploadAction } from './utils/resolve-upload-action'
 import { type UploadRequest } from './utils/create-upload-queue'
 import { uploadQueue } from './utils/upload-queue'
@@ -80,6 +81,11 @@ export interface ModalUploadPropsBase {
   skipConflictCheck?: boolean | React.RefObject<boolean>
   /** Set `current` to `false` inside `onSuccess` to suppress the upload success toast. */
   showSuccessMessage?: React.MutableRefObject<boolean>
+  /**
+   * Resolve to `false` to drop a file before its batch is checked or uploaded, e.g. when the user cancels a prompt.
+   * Asked file by file. Not `beforeUpload`: its return value has always been ignored, honouring it would change callers.
+   */
+  shouldUploadFile?: (file: RcFile) => boolean | Promise<boolean>
 }
 
 interface ModalUploadPropsWithAction extends ModalUploadPropsBase {
@@ -124,6 +130,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     cleanupProcessedFiles,
     getCheckError
   } = useUploadConflictHandler({ targetFolderId })
+  const { filterUploadableFiles } = useUploadFileGate()
 
   const uploadProps: AntUploadProps = {
     // Queued rather than sent straight away. The transport is read on every call
@@ -151,7 +158,10 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     maxCount: props.maxItems,
     openFileDialogOnClick: props.openFileDialogOnClick,
     fileList,
-    beforeUpload: async (file: RcFile, fileList) => {
+    beforeUpload: async (file: RcFile, selectedFiles) => {
+      const fileList = isNil(props.shouldUploadFile) ? selectedFiles : await filterUploadableFiles(selectedFiles, props.shouldUploadFile)
+      if (!fileList.includes(file)) return AntUpload.LIST_IGNORE
+
       const isBatchStart = file.uid === fileList[0].uid
 
       const shouldSkipCheck = typeof props.skipConflictCheck === 'object' && !isNil(props.skipConflictCheck)

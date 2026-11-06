@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Chemin complet
 asset.asset-editor-tabs.list.columns.creationDate: Date de création
 asset.asset-editor-tabs.list.columns.modificationDate: Date de modification
 asset.tree.context-menu.upload-new-version: Téléverser une nouvelle version
+asset.upload-new-version.rename-confirmation.title: L'asset va être renommé
+asset.upload-new-version.rename-confirmation.message: 'Le nouveau fichier est de type .{{extension}} — l''asset sera renommé de "{{oldFilename}}" en "{{newFilename}}" et son URL publique changera. Continuer?'
+asset.upload-new-version.renamed: 'L''asset a été renommé de "{{oldFilename}}" en "{{newFilename}}". Son URL publique a changé.'
 asset.copy-info: Copier et infos
 asset.upload: Téléverser
 asset.upload.label: Sélectionner un fichier
