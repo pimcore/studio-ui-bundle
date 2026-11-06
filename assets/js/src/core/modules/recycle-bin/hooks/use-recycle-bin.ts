@@ -19,6 +19,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { RecycleBinDeleteJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-delete-job'
 import { RecycleBinRestoreJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-restore-job'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useTranslation } from 'react-i18next'
 import { api, type RecycleBin, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
 
 interface UseRecycleBinHookReturn {
@@ -32,13 +34,23 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
   const dispatch = useAppDispatch()
   const [recycleBinFlushMutation] = useRecycleBinFlushMutation()
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
+  const messageApi = useMessage()
+  const { t } = useTranslation()
+
+  const showRelocation = (count: number): void => {
+    void messageApi.info({
+      content: t('recycle-bin.actions.restore.relocated', { count }),
+      duration: 6
+    })
+  }
 
   const restoreItems = async (items: Array<Pick<RecycleBin, 'id' | 'type'>>, onFinish?: () => void): Promise<void> => {
     try {
       const job = new RecycleBinRestoreJob({
         itemIds: items.map(item => item.id),
         elementTypes: items.map(item => mapToElementType(item.type)!),
-        onFinish
+        onFinish,
+        onRelocated: showRelocation
       })
 
       await executionEngine.runJob(job)

@@ -2501,6 +2501,8 @@ recycle-bin.actions.delete: Eliminar
 recycle-bin.actions.delete.title: Eliminando elementos de la papelera de reciclaje
 recycle-bin.actions.restore: Restaurar
 recycle-bin.actions.restore.title: Restaurando elementos de la papelera de reciclaje
+recycle-bin.actions.restore.relocated_one: Elemento ubicado en __restored
+recycle-bin.actions.restore.relocated_other: "{{count}} elementos ubicados en __restored"
 ownership-management.title: Gestión de propiedad
 ownership-management.show-deleted-owners: Mostrar elementos de usuarios eliminados
 ownership-management.deleted-user: Usuario eliminado
