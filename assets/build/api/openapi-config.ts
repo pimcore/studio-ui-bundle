@@ -262,6 +262,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
     },
+    '../../js/src/core/modules/index-sync/index-sync-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/index-sync\/?/i)
+    },
     '../../js/src/core/modules/application-logger/application-logger-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/bundle\/application-logger/i)
     },
