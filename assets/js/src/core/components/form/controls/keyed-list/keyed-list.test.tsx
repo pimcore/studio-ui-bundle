@@ -200,6 +200,39 @@ describe('KeyedList', () => {
       })
     })
 
+    it('lets the later of two registrations for one path win (review of #4317)', () => {
+      // The same path registered twice before either setValue commits. The first
+      // differs from the committed NULL so it is queued; the second equals it so it
+      // is taken into the baseline straight away. Those are two different schedules,
+      // and the queued one lands afterwards — so without ordering the superseded
+      // registration is written over the newer one and the baseline ends up holding
+      // a unit the field has already moved off. That arms lastReportedRef, and the
+      // field's next registration then comes back out as a change nobody made.
+      //
+      // Driven through `operations` rather than through mounted fields: what matters
+      // is two registrations for one path in a single batch, and the operations say
+      // exactly that without a component arrangement standing in for it.
+      const onChange = jest.fn()
+      renderKeyedList({ value: { myBrick: { length: null } }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', 'myBrick', 'length'], null, true)
+      })
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+      })
+      flushDebounce()
+
+      // same contract as the cases above: a content-equal report is tolerated, one
+      // carrying the registered default unit is the object being marked modified
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ myBrick: { length: null } })
+      })
+    })
+
     it('normalizes an empty array value to an object and stays silent on mount', () => {
       // the API sends [] when no brick is set yet
       const onChange = jest.fn()

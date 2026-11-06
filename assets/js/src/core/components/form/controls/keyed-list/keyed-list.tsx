@@ -141,6 +141,15 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     if (isInitialValue && !addedKeysRef.current.has(nameDifference[0])) {
+      // a registration for a path supersedes one for the same path that has not
+      // landed yet. The two branches below apply on different schedules — one now,
+      // one once the value commits — so without this an earlier queued registration
+      // is written into the baseline after a later immediate one and puts it back to
+      // a value the field has already moved off
+      pendingRegistrations.current = pendingRegistrations.current.filter(
+        ({ path }) => !isEqual(path, nameDifference)
+      )
+
       const committed = nameDifference.length === 0 ? valueRef.current : get(valueRef.current, nameDifference)
 
       if (isEqual(committed, newSubValue)) {
