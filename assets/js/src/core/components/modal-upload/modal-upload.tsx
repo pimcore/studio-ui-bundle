@@ -80,6 +80,8 @@ export interface ModalUploadPropsBase {
   skipConflictCheck?: boolean | React.RefObject<boolean>
   /** Set `current` to `false` inside `onSuccess` to suppress the upload success toast. */
   showSuccessMessage?: React.MutableRefObject<boolean>
+  /** Resolve to `false` to drop the file before it is checked or uploaded, e.g. when the user cancels a prompt. */
+  shouldUploadFile?: (file: RcFile) => boolean | Promise<boolean>
 }
 
 interface ModalUploadPropsWithAction extends ModalUploadPropsBase {
@@ -152,6 +154,10 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     openFileDialogOnClick: props.openFileDialogOnClick,
     fileList,
     beforeUpload: async (file: RcFile, fileList) => {
+      if (await props.shouldUploadFile?.(file) === false) {
+        return AntUpload.LIST_IGNORE
+      }
+
       const isBatchStart = file.uid === fileList[0].uid
 
       const shouldSkipCheck = typeof props.skipConflictCheck === 'object' && !isNil(props.skipConflictCheck)
