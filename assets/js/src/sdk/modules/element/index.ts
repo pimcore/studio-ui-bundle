@@ -346,6 +346,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
 
 export type { AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+export { buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
 /**
  * Apply a stored saved-search configuration to the listing the caller is mounted in — the same
