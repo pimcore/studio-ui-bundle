@@ -10,7 +10,7 @@
 
 // The row only decides which controls to show; everything it renders around them is replaced by a plain stand-in.
 jest.mock('../dynamic-filter/dynamic-filter', () => ({
-  DynamicFilter: () => <div data-testid="value-filter" />
+  DynamicFilter: () => <input data-testid="value-filter" />
 }))
 
 jest.mock('../select/select', () => ({
@@ -140,11 +140,22 @@ describe('FieldFilters operator', () => {
     expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ id: 'sku', operator: 'empty', data: 'abc' })])
   })
 
-  it('shows the picked operator and no value filter for a filter that has one', () => {
+  it('shows the picked operator and hides the value filter for a filter that has one', () => {
     renderFilters([filter({ operator: 'notEmpty' })], true)
 
     expect(screen.getByRole<HTMLSelectElement>('combobox').value).toBe('notEmpty')
-    expect(screen.queryByTestId('value-filter')).toBeNull()
+    expect(screen.getByTestId('value-filter')).not.toBeVisible()
+  })
+
+  it('keeps what was entered in the value filter while an operator is picked', () => {
+    renderFilters([filter()], true)
+
+    fireEvent.change(screen.getByTestId('value-filter'), { target: { value: 'abc' } })
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'empty' } })
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'value' } })
+
+    expect(screen.getByTestId('value-filter')).toBeVisible()
+    expect(screen.getByTestId<HTMLInputElement>('value-filter').value).toBe('abc')
   })
 
   it('goes back to filtering by value when the operator is removed', () => {

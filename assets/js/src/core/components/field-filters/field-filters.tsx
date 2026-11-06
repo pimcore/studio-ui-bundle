@@ -144,7 +144,13 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
           value={ filter.operator ?? VALUE_MODE }
         />
 
-        {filter.operator === undefined && operatorSupport.value && dynamicFilter}
+        {operatorSupport.value && (
+          // Stays mounted while an operator is picked, so what the editor holds (e.g. selected relations) is still
+          // there when going back to the value.
+          <div style={ filter.operator === undefined ? undefined : { display: 'none' } }>
+            {dynamicFilter}
+          </div>
+        )}
       </Flex>
     )
   }
