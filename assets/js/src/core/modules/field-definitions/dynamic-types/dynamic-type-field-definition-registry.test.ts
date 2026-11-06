@@ -73,13 +73,17 @@ const { DynamicTypeFieldDefinitionRegistry } = jest.requireActual<{
  * `allowedAreas` defaults to null rather than being left off, because every
  * real type inherits that default from DynamicTypeFieldDefinitionAbstract.
  */
-const stubType = (id: string, allowedAreas: string[] | null = null): StubType => ({
+const stubType = (
+  id: string,
+  allowedAreas: string[] | null = null,
+  convertibleTags: string[] = []
+): StubType => ({
   id,
   getTags: () => ['group:root'],
   getGroup: () => ['data'],
   getIcon: () => ({ type: 'name', value: 'questionmark' }),
   getValidDropdownTags: () => ['group:root'],
-  getValidConvertibleTags: () => [],
+  getValidConvertibleTags: () => convertibleTags,
   getAllowedAreas: () => allowedAreas
 })
 
@@ -130,5 +134,36 @@ describe('DynamicTypeFieldDefinitionRegistry dropdown scoping', () => {
     )
 
     expect(keys).toContain('add-asset')
+  })
+
+  it('does not offer a type scoped to another area as a conversion', () => {
+    // Convert is a second picker on the same registry, reached only on a
+    // non-root field. Filtering Add alone left it open: choosing the type
+    // there replaces the field with one restricted to another editor.
+    const registry = new DynamicTypeFieldDefinitionRegistry()
+    registry.registerDynamicType(stubType('panel', null, ['group:root']))
+    registry.registerDynamicType(stubType('asset', ['panel']))
+
+    const keys = actionKeys(registry.getDropdownActions({
+      area: ['class'],
+      path: ['root', 'child'],
+      fieldDefinitions: { root: { fieldtype: 'panel' }, child: { fieldtype: 'panel' } }
+    }))
+
+    expect(keys).not.toContain('convert-asset')
+  })
+
+  it('still offers an unrestricted type as a conversion', () => {
+    const registry = new DynamicTypeFieldDefinitionRegistry()
+    registry.registerDynamicType(stubType('panel', null, ['group:root']))
+    registry.registerDynamicType(stubType('input'))
+
+    const keys = actionKeys(registry.getDropdownActions({
+      area: ['class'],
+      path: ['root', 'child'],
+      fieldDefinitions: { root: { fieldtype: 'panel' }, child: { fieldtype: 'panel' } }
+    }))
+
+    expect(keys).toContain('convert-input')
   })
 })

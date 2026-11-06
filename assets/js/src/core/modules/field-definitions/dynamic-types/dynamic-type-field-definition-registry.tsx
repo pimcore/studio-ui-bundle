@@ -276,7 +276,7 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     if (!isRoot) {
       if (!isCustomLayout) {
         const convertibleTagTypes = this.getTypesByTags(dynType.getValidConvertibleTags(context), context)
-        const convertibleActions = this.buildGroupedActions(convertibleTagTypes, 'convert-')
+        const convertibleActions = this.buildGroupedActions(filterTypesByArea(convertibleTagTypes, context), 'convert-')
 
         if ((convertibleActions?.length ?? 0) > 0) {
           actions?.push({
