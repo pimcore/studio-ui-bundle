@@ -23,7 +23,7 @@ interface OpenDocumentWidgetProps {
 
 interface UseDocumentReturn {
   openDocument: (props: OpenDocumentWidgetProps) => Promise<void>
-  executeDocumentTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
+  executeDocumentTask: (id: number, task: SaveTaskType, onFinish?: (isSuccessful: boolean) => void) => Promise<void>
 }
 
 export const useDocumentHelper = (): UseDocumentReturn => {
@@ -36,7 +36,7 @@ export const useDocumentHelper = (): UseDocumentReturn => {
     await element.openDocument(config.id)
   }
 
-  const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {
+  const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: (isSuccessful: boolean) => void): Promise<void> => {
     const updateTask = update({
       id,
       body: {
@@ -46,38 +46,35 @@ export const useDocumentHelper = (): UseDocumentReturn => {
       }
     })
 
-    updateTask.catch((error: Error) => {
-      trackError(new ApiError(error))
-    })
+    let isSuccessful = false
 
     try {
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: true }))
       const response = (await updateTask)
 
       if (response.error !== undefined) {
-        dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: false }))
         trackError(new ApiError(response.error))
-        onFinish?.()
-        return
-      }
+      } else {
+        if (task === SaveTaskType.Unpublish) {
+          dispatch(unpublishDraft({ id }))
+        }
 
-      if (task === SaveTaskType.Unpublish) {
-        dispatch(unpublishDraft({ id }))
-      }
+        if (task === SaveTaskType.Publish) {
+          dispatch(publishDraft({ id }))
+        }
 
-      if (task === SaveTaskType.Publish) {
-        dispatch(publishDraft({ id }))
-      }
+        if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
+          dispatch(setNodePublished({ nodeId: String(id), elementType: 'document', isPublished: task === 'publish' }))
+        }
 
-      if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
-        dispatch(setNodePublished({ nodeId: String(id), elementType: 'document', isPublished: task === 'publish' }))
+        isSuccessful = true
       }
-
-      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: false }))
-      onFinish?.()
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
     }
+
+    dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: false }))
+    onFinish?.(isSuccessful)
   }
 
   return { openDocument, executeDocumentTask }
