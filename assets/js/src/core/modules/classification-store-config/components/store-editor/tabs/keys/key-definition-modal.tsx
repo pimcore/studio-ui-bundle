@@ -158,7 +158,8 @@ export const KeyDefinitionModal = ({
         description: keyDetail.description,
         type: keyDetail.type,
         definition: (layout as Record<string, unknown> | null | undefined) ?? null,
-        localized: localizedValueOf(localization)
+        // Sent only when the control moved: an absent member leaves the stored flag alone, a null clears it.
+        ...(localization !== storedLocalization ? { localized: localizedValueOf(localization) } : {})
       }
     })
 

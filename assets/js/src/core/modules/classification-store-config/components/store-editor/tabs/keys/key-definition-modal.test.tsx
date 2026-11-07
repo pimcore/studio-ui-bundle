@@ -142,6 +142,8 @@ const keyDetail = {
   }
 } as unknown as ClassificationStoreConfigurationKeyDetail
 
+const EDITED_TOOLTIP = 'The height in mm'
+
 const INHERIT = 'classification-store.key-localization.inherit'
 const LOCALIZED = 'classification-store.key-localization.localized'
 const NOT_LOCALIZED = 'classification-store.key-localization.not-localized'
@@ -187,6 +189,19 @@ const savedDefinition = async (): Promise<Record<string, unknown>> => {
   return (await savedPayload()).definition as Record<string, unknown>
 }
 
+/** Whether the payload carries the member at all: an absent one and an explicit null differ. */
+const sendsLocalized = (payload: Record<string, unknown>): boolean => 'localized' in payload
+
+/** Saves, confirming the warning when the transition raised one; which ones do is asserted below. */
+const saveConfirmingWarning = async (): Promise<void> => {
+  save()
+  await flush()
+
+  if (confirmWarning.mock.calls.length > 0) {
+    await confirmWarning.mock.calls[0][0].onOk()
+  }
+}
+
 describe('KeyDefinitionModal', () => {
   beforeEach(() => {
     updateKey.mockReset()
@@ -209,12 +224,12 @@ describe('KeyDefinitionModal', () => {
   it('keeps those options when a still-visible field is edited', async () => {
     renderModal()
 
-    fireEvent.change(screen.getByLabelText('tooltip'), { target: { value: 'The height in mm' } })
+    fireEvent.change(screen.getByLabelText('tooltip'), { target: { value: EDITED_TOOLTIP } })
 
     const definition = await savedDefinition()
 
     expect(definition).toMatchObject(STORED_OPTIONS)
-    expect(definition.tooltip).toBe('The height in mm')
+    expect(definition.tooltip).toBe(EDITED_TOOLTIP)
   })
 
   it.each([
@@ -232,20 +247,19 @@ describe('KeyDefinitionModal', () => {
   })
 
   it.each([
-    [INHERIT, null],
-    [LOCALIZED, true],
-    [NOT_LOCALIZED, false]
-  ])('sends the state of the localization control as %s', async (selected, expected) => {
-    // Seeded from not localized, which is the one state no transition warns about, so each of
-    // the three saves reaches the mutation without a confirmation in between.
-    renderModal(false)
+    [NOT_LOCALIZED, INHERIT, null],
+    [INHERIT, LOCALIZED, true],
+    [LOCALIZED, NOT_LOCALIZED, false]
+  ])('sends the state of the localization control from %s to %s', async (from, selected, expected) => {
+    // Each row moves the control, because an unchanged control sends no member at all.
+    renderModal(STORED_LOCALIZED[from])
 
     fireEvent.click(option(selected))
-    save()
+    await saveConfirmingWarning()
 
     const payload = await savedPayload()
 
-    expect('localized' in payload).toBe(true)
+    expect(sendsLocalized(payload)).toBe(true)
     expect(payload.localized).toBe(expected)
     // the definition and the key's own columns ride along unchanged
     expect(payload).toEqual(expect.objectContaining({
@@ -254,6 +268,37 @@ describe('KeyDefinitionModal', () => {
       type: KEY_TYPE
     }))
     expect(payload.definition).toMatchObject(STORED_OPTIONS)
+  })
+
+  // A save that did not touch the control must leave the stored flag alone, and only an absent
+  // member does that: a member sent as null clears it to inherit.
+  it.each([
+    ['an absent flag', undefined],
+    ['a null flag', null],
+    ['a true flag', true],
+    ['a false flag', false]
+  ])('omits the localized member when the control is untouched, with %s stored', async (_name, localized) => {
+    renderModal(localized)
+
+    fireEvent.change(screen.getByLabelText('tooltip'), { target: { value: EDITED_TOOLTIP } })
+    save()
+
+    const payload = await savedPayload()
+
+    expect(sendsLocalized(payload)).toBe(false)
+    expect(payload.definition).toMatchObject({ tooltip: EDITED_TOOLTIP })
+    expect(confirmWarning).not.toHaveBeenCalled()
+  })
+
+  it('omits the localized member again when the control is moved back to the stored state', async () => {
+    renderModal(true)
+
+    fireEvent.click(option(NOT_LOCALIZED))
+    fireEvent.click(option(LOCALIZED))
+    save()
+
+    expect(sendsLocalized(await savedPayload())).toBe(false)
+    expect(confirmWarning).not.toHaveBeenCalled()
   })
 
   // The three transitions that can leave values in other languages unreachable warn; the other
@@ -275,7 +320,7 @@ describe('KeyDefinitionModal', () => {
     save()
 
     if (!warns) {
-      expect(await savedPayload()).toEqual(expect.objectContaining({ localized: STORED_LOCALIZED[to] }))
+      await waitFor(() => { expect(updateKey).toHaveBeenCalledTimes(1) })
       expect(confirmWarning).not.toHaveBeenCalled()
 
       return
