@@ -339,10 +339,10 @@ describe('ClassificationStoreItem', () => {
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
   })
 
-  it('renders no indicator when no key of the group resolves to localized', () => {
+  it('marks only the key flagged localized itself on a field that is not localized', () => {
     renderMixedGroup(false, LANGUAGE)
 
-    // only the key flagged localized itself carries one
+    // the two that inherit and the explicit false one resolve to not localized, so they carry none
     expect(screen.getAllByLabelText(LOCALIZED_INDICATOR)).toHaveLength(1)
   })
 

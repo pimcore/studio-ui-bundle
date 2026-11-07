@@ -61,7 +61,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
 
   const { openModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
   const { groupKeys, activeGroups, groupCollectionMapping } = useKeyedListSelector(selectStructure)
-  const { currentLanguage } = useLanguageSelection()
+  const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
   const isLanguageIndependentValuePermitted = useLanguageIndependentValuePermission()
 
@@ -78,6 +78,13 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   // A non localized store only ever has the language independent column, so no language
   // permission applies to it.
   const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValuePermitted
+
+  // The same condition raises the editor's language selector: offering a current-language mode
+  // the user has no language picker for is worse than not offering it at all. Not on mount: a key
+  // flagged localized only becomes known once the layout arrives.
+  useEffect(() => {
+    if (isLocalizable && !hasLocalizedFields) setHasLocalizedFields(true)
+  }, [isLocalizable, hasLocalizedFields])
 
   const [selectedLocalizationMode, setSelectedLocalizationMode] = useState<string>(LANGUAGE_INDEPENDENT_MODE)
   // Derived rather than seeded: whether the language independent value may be shown also depends

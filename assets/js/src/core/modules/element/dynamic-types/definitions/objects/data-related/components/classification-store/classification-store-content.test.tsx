@@ -18,7 +18,8 @@
  * It offers exactly one field level language control, and it offers it whenever any key of the
  * field can hold a value in a language other than the language independent one: the field's own
  * localized flag, which every key without one inherits, or a key of its store flagged localized.
- * The answer is read off the layout the editor already has, so no request is made for it.
+ * The answer is read off the layout the editor already has, so no request is made for it, and the
+ * editor's own language selector is raised by that same answer.
  */
 
 /* eslint-disable max-lines */
@@ -49,6 +50,7 @@ let mockLanguageIndependentValuePermitted = true
 const mockOpenModal = jest.fn()
 const mockItem = jest.fn()
 const mockUpdateCurrentLayoutData = jest.fn()
+const mockSetHasLocalizedFields = jest.fn()
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -80,7 +82,11 @@ jest.mock('./provider', () => ({
   })
 }))
 jest.mock('@Pimcore/components/language-selection/provider/use-language-selection', () => ({
-  useLanguageSelection: () => ({ currentLanguage: 'en' })
+  useLanguageSelection: () => ({
+    currentLanguage: 'en',
+    hasLocalizedFields: false,
+    setHasLocalizedFields: mockSetHasLocalizedFields
+  })
 }))
 jest.mock('./hooks/use-language-independent-value-permission', () => ({
   useLanguageIndependentValuePermission: () => mockLanguageIndependentValuePermitted
@@ -147,6 +153,7 @@ describe('ClassificationStoreContent', () => {
     mockOpenModal.mockClear()
     mockItem.mockClear()
     mockUpdateCurrentLayoutData.mockClear()
+    mockSetHasLocalizedFields.mockClear()
     // Resolving a key's localization must cost no request: the layout already carries the flag.
     globalThis.fetch = jest.fn() as unknown as typeof fetch
   })
@@ -256,6 +263,9 @@ describe('ClassificationStoreContent', () => {
 
     // exactly one per field, never one per group and never one per key
     expect(localizationSwitches()).toHaveLength(offered ? 1 : 0)
+    // and the editor's own language selector is raised by the very same condition: a
+    // current-language mode the user has no language picker for is not a mode they can act on
+    expect(mockSetHasLocalizedFields).toHaveBeenCalledTimes(offered ? 1 : 0)
     expect(globalThis.fetch).not.toHaveBeenCalled()
   })
 
