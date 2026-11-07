@@ -290,8 +290,9 @@ describe('KeyDefinitionModal', () => {
   })
 
   it('shows the flag the update answered with, not the one the form was left on', async () => {
-    // The update replaces the cached key wholesale and keys-tab re-derives the dialog's keyDetail
-    // from that cache, so the reopened dialog reads the returned flag and not the local edit.
+    // The update writes the server's answer into the cache for the fields it named — `definition`
+    // among them — and keys-tab re-derives the dialog's keyDetail from that cache, so the reopened
+    // dialog reads the returned flag and not the local edit.
     updateKey.mockResolvedValue({ data: keyIndexed(true) })
 
     renderModal(keyIndexed(true))

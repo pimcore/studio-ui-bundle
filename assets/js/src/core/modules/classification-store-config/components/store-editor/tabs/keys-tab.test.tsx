@@ -110,12 +110,15 @@ import { configureStore } from '@reduxjs/toolkit'
 // eslint-disable-next-line import/first
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 // eslint-disable-next-line import/first
+import userEvent from '@testing-library/user-event'
+// eslint-disable-next-line import/first
 import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 // eslint-disable-next-line import/first
 import { KeysTab } from './keys-tab'
 
 const STORE_ID = 1
 const COLLECTION_URL = `/pimcore-studio/api/classification-store/configuration/stores/${STORE_ID}/keys`
+const CREATE_URL = '/pimcore-studio/api/classification-store/configuration/keys/add'
 const KEY_ID = 8
 
 /** The definition blob of the key both writers of the last test touch. */
@@ -143,6 +146,27 @@ const width = {
   title: 'Width',
   description: 'the width',
   definition: WIDTH_DEFINITION,
+  creationDate: null,
+  modificationDate: null
+}
+
+/**
+ * The key the create endpoint answers with. It already carries a type and a definition the
+ * server chose, so echoing either back from the response is visible in what the key is left
+ * holding — which is what the description the add dialog applies afterwards must not do.
+ */
+/** The description the add dialog applies after the create, which is all that update may name. */
+const NEW_DESCRIPTION = 'the depth in cm'
+
+const created = {
+  id: 9,
+  name: 'depth',
+  storeId: STORE_ID,
+  type: 'input',
+  enabled: true,
+  title: 'Depth',
+  description: null,
+  definition: { name: 'depth', fieldtype: 'input', indexed: true },
   creationDate: null,
   modificationDate: null
 }
@@ -214,6 +238,12 @@ const stubFetch = (items: Array<Record<string, unknown>>, holdFirstUpdate = fals
       return jsonResponse({ items: stored, totalItems: stored.length })
     }
 
+    if (input.url.endsWith(CREATE_URL)) {
+      stored.push({ ...created })
+
+      return jsonResponse(created)
+    }
+
     if (gate !== null) {
       const held = gate
       gate = null
@@ -243,6 +273,9 @@ const stubFetch = (items: Array<Record<string, unknown>>, holdFirstUpdate = fals
 
 const updateRequests = (): RecordedRequest[] =>
   requests.filter((request) => request.method === 'PUT')
+
+const createRequests = (): RecordedRequest[] =>
+  requests.filter((request) => request.url.endsWith(CREATE_URL))
 
 const storedKey = (id: number): Record<string, unknown> =>
   stored.find((item) => item.id === id)!
@@ -366,5 +399,56 @@ describe('KeysTab cell edits', () => {
     }, WAIT_BUDGET)
 
     expect(storedKey(KEY_ID).definition).toMatchObject({ indexed: false })
+  })
+})
+
+describe('KeysTab key creation', () => {
+  const originalFetch = globalThis.fetch
+
+  beforeEach(() => {
+    requests.length = 0
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('creates a key with its name and store, then applies the description and nothing else', async () => {
+    const user = userEvent.setup({ delay: null })
+    stubFetch([height])
+    renderTab()
+
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'classification-store.add-key' }))
+    // The required marker is part of the label text, so the match cannot be exact
+    const nameField = await screen.findByLabelText('classification-store.columns.name', { exact: false })
+    const descriptionField = screen.getByLabelText('classification-store.columns.description', { exact: false })
+
+    // Filled in one event per field: typing character by character re-renders the grid behind
+    // the dialog on every keystroke, which is what makes this test slow.
+    fireEvent.change(nameField, { target: { value: created.name } })
+    fireEvent.change(descriptionField, { target: { value: NEW_DESCRIPTION } })
+
+    await user.click(screen.getByRole('button', { name: 'OK' }))
+
+    await waitFor(() => {
+      expect(updateRequests()).toHaveLength(1)
+    }, WAIT_BUDGET)
+
+    expect(createRequests()).toHaveLength(1)
+    expect(createRequests()[0].body).toEqual({ name: created.name, storeId: STORE_ID })
+
+    // The description is the only thing this update means to set, so it is the only thing it
+    // names: the title, the type and the definition the create answered with are not echoed back.
+    expect(Object.keys(updateRequests()[0].body!).sort()).toEqual(['definition', 'description', 'name', 'type'])
+    expect(updateRequests()[0].body).toMatchObject({ definition: null, type: null })
+
+    expect(storedKey(created.id)).toMatchObject({
+      description: NEW_DESCRIPTION,
+      title: created.title,
+      type: created.type,
+      definition: created.definition
+    })
   })
 })
