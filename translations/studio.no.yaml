@@ -2208,7 +2208,7 @@ classification-store.add-sub-group: Legg til undergruppe
 classification-store.delete-sub-group: "Slette undergruppen \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: En undergruppe hører til butikken, så en ny blir tilgjengelig for alle grupper i denne butikken.
 classification-store.key-indexed: Ta med i søkeindeksen til Classification Store
-classification-store.key-indexed-hint: Slå av dette for å utelate nøkkelen fra søkeindeksen. En utelatt nøkkel kan ikke sorteres, filtreres eller søkes i, og verdien forsvinner også fra det lagrede søkedokumentet. Indeksen oppdateres via køen, så endringen skjer ikke umiddelbart.
+classification-store.key-indexed-hint: Så lenge dette er slått av, kan denne nøkkelen ikke sorteres, filtreres eller søkes i, og verdien fjernes fra det lagrede søkedokumentet. Indeksen oppdateres via køen, så endringer skjer ikke umiddelbart.
 classification-store.delete-sub-group-in-use-hint: Fjern først tilknytningen av nøklene til denne undergruppen i gruppene nevnt over, og slett den deretter.
 classification-store.no-sub-groups: Denne butikken har ingen undergrupper ennå
 classification-store.select-sub-group: Velg undergruppe

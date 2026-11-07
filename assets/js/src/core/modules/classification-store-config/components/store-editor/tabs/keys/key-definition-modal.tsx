@@ -223,9 +223,7 @@ export const KeyDefinitionModal = ({
       onCancel={ onClose }
       onOk={ () => { void handleSave() } }
       open={ open }
-      // The body ends in a bare switch, which the hint below the index control pushes further
-      // down: the trailing space keeps it off the footer edge once the body is scrolled to it.
-      styles={ { body: { maxHeight: '65vh', overflowY: 'auto', paddingBottom: 16 } } }
+      styles={ { body: { maxHeight: '65vh', overflowY: 'auto' } } }
       title={ keyDetail !== undefined ? t('classification-store.edit-key-definition', { keyName: keyDetail.name }) : '' }
       width={ 900 }
     >

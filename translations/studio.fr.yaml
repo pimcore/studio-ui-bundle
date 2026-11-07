@@ -2208,7 +2208,7 @@ classification-store.add-sub-group: Ajouter un sous-groupe
 classification-store.delete-sub-group: "Supprimer le sous-groupe \"{{subGroupName}}\" ?"
 classification-store.add-sub-group-store-hint: Un sous-groupe appartient au magasin ; un nouveau sous-groupe devient donc disponible pour tous les groupes de ce magasin.
 classification-store.key-indexed: "Inclure dans l'index de recherche du Classification Store"
-classification-store.key-indexed-hint: Désactivez cette option pour exclure la clé de l'index de recherche. Une clé exclue ne peut être ni triée, ni filtrée, ni recherchée, et sa valeur disparaît également du document de recherche stocké. L'index converge via la file d'attente, le changement n'est donc pas immédiat.
+classification-store.key-indexed-hint: Tant que cette option est désactivée, cette clé ne peut être ni triée, ni filtrée, ni recherchée, et sa valeur est retirée du document de recherche stocké. L'index converge via la file d'attente, les modifications ne sont donc pas immédiates.
 classification-store.delete-sub-group-in-use-hint: Retirez d'abord l'affectation des clés à ce sous-groupe dans les groupes nommés ci-dessus, puis supprimez-le.
 classification-store.no-sub-groups: Ce magasin n'a encore aucun sous-groupe
 classification-store.select-sub-group: Sélectionner un sous-groupe

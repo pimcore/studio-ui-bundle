@@ -23,6 +23,10 @@ const NEW_KEYS = ['classification-store.key-indexed', 'classification-store.key-
 /** A key that carries real text in all nine files today, so a wrong path fails loudly. */
 const ANCHOR_KEY = 'classification-store.add-sub-group-store-hint'
 
+/** The decided English hint: it describes the state the control is in, it does not instruct. */
+const ENGLISH_HINT = 'While off, this key cannot be sorted, filtered or searched on, and its value is ' +
+  'removed from the stored search document. The index converges through the queue, so changes are not immediate.'
+
 const messages = (locale: string): Record<string, string> => yaml.load(
   fs.readFileSync(path.join(TRANSLATIONS_DIR, `studio.${locale}.yaml`), 'utf8')
 ) as Record<string, string>
@@ -34,6 +38,10 @@ describe('Classification Store index control translations', () => {
     ).toEqual(LOCALES.map((locale) => `studio.${locale}.yaml`).sort())
 
     expect(messages('en')[ANCHOR_KEY]).toEqual(expect.any(String))
+  })
+
+  it('states the three consequences of the off state in English', () => {
+    expect(messages('en')['classification-store.key-indexed-hint']).toBe(ENGLISH_HINT)
   })
 
   it.each(LOCALES)('carries every new key with a non-empty value in %s', (locale) => {
