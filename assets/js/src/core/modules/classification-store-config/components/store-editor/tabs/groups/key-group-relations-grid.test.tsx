@@ -242,6 +242,12 @@ const renderedColumnIds = (keyId: number): string[] => screen.getAllByRole('row'
   .filter((label) => label.startsWith('cell-') && label.endsWith(`-${keyId}`))
   .map((label) => label.replace(/^cell-/, '').replace(/-\d+$/, ''))
 
+/** Every property name a payload carries, nested ones included: a `metadata.indexed` counts too. */
+const propertyNames = (value: unknown): string[] =>
+  value === null || typeof value !== 'object'
+    ? []
+    : Object.entries(value).flatMap(([name, nested]) => [name, ...propertyNames(nested)])
+
 /** Payload property names that would carry an index decision into a relation. */
 const indexish = (name: string): boolean => /index/i.test(name)
 
@@ -487,7 +493,7 @@ describe('KeyGroupRelationsGrid', () => {
     await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
 
     expect(
-      upsertRequests().flatMap((request) => Object.keys(request.body!)).filter(indexish)
+      upsertRequests().flatMap((request) => propertyNames(request.body)).filter(indexish)
     ).toEqual([])
   })
 
