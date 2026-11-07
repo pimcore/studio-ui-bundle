@@ -16,7 +16,6 @@ import {
   api as baseApi,
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
-  type ClassificationStoreConfigurationKeyCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiArg,
@@ -24,7 +23,9 @@ import {
   type ClassificationStoreGroupLayout2 as GeneratedGroupLayout,
   type ClassificationStoreConfigurationKeyGroupRelationCreate as GeneratedKeyGroupRelationCreate,
   type ClassificationStoreConfigurationSubGroupDetail as GeneratedSubGroupDetail,
-  type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail
+  type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail,
+  type ClassificationStoreConfigurationKeyDetail as GeneratedKeyDetail,
+  type ClassificationStoreConfigurationKeyUpdate as GeneratedKeyUpdate
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 const CONFIGURATION_PREFIX = '/pimcore-studio/api/classification-store/configuration'
@@ -140,12 +141,51 @@ export interface ClassificationStoreSubGroupLayout {
 export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
   /** Identifier of the sub group this key is assigned to in its group */
   subGroup?: string | null
+  /** Whether this key is localized; null inherits the class field's flag */
+  localized?: boolean | null
 }
 
 export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
   keys: ClassificationStoreCollection2[]
   /** Sub groups the keys of this group are assigned to, ordered by their first key */
   subGroups?: ClassificationStoreSubGroupLayout[]
+}
+
+// ─── Hand-written per-key localization contract ─────────────────────────────────
+// The `localized` member of a classification store key shipped after this client was last
+// generated, on the key detail, on the key update payload and on the key layout above. Each
+// declaration below shadows a generated one, so the next regeneration supersedes this block
+// by deleting it.
+
+/**
+ * The key detail, which now also reports whether the key holds a value per language. The member
+ * is a tri-state: `true` and `false` are the key's own decision, `null` inherits the flag of the
+ * class definition field the store is used in.
+ */
+export interface ClassificationStoreConfigurationKeyDetail extends GeneratedKeyDetail {
+  /** Whether the key is localized; null inherits the class field's flag */
+  localized?: boolean | null
+}
+
+/**
+ * The key update payload, which now also carries the localization tri-state. Absent leaves the
+ * stored value alone, `true` and `false` store that value, and an explicit null stores NULL,
+ * which means the key inherits the class field's flag again.
+ */
+export interface ClassificationStoreConfigurationKeyUpdate extends GeneratedKeyUpdate {
+  /** Whether the key is localized; null inherits the class field's flag */
+  localized?: boolean | null
+}
+
+export interface ClassificationStoreConfigurationKeyCollectionApiResponse {
+  totalItems: number
+  items: ClassificationStoreConfigurationKeyDetail[]
+}
+
+export interface ClassificationStoreConfigurationKeyUpdateApiArg {
+  /** Id of the key configuration */
+  id: number
+  classificationStoreConfigurationKeyUpdate: ClassificationStoreConfigurationKeyUpdate
 }
 
 // Helper: scan all active query cache entries for a given endpoint name and patch each one.
@@ -336,6 +376,7 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationKeyUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const update: ClassificationStoreConfigurationKeyUpdate = args.classificationStoreConfigurationKeyUpdate
         // Optimistically apply the update payload to the cache immediately so the
         // UI reflects the change without waiting for the server round-trip.
         const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
@@ -344,7 +385,6 @@ const api = baseApi.enhanceEndpoints({
           (draft) => {
             const idx = draft.items.findIndex((k) => k.id === args.id)
             if (idx !== -1) {
-              const update = args.classificationStoreConfigurationKeyUpdate
               draft.items[idx] = {
                 ...draft.items[idx],
                 name: update.name,
@@ -355,7 +395,10 @@ const api = baseApi.enhanceEndpoints({
                 ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
                 // `description` is optional in the payload now, so an absent one must not be
                 // written: it would blank the cached cell for the length of the request.
-                ...(update.description !== undefined ? { description: update.description } : {})
+                ...(update.description !== undefined ? { description: update.description } : {}),
+                // `localized` is a tri-state, so a present null is a value and not an absence:
+                // it stores NULL, which means the key inherits the class field's flag again.
+                ...('localized' in update ? { localized: update.localized ?? null } : {})
                 // `definition` intentionally excluded: a null definition means "leave the stored
                 // one alone" to the server, so spreading it would wipe the cached definition.
               }
@@ -371,7 +414,15 @@ const api = baseApi.enhanceEndpoints({
             'classificationStoreConfigurationKeyCollection',
             (draft) => {
               const idx = draft.items.findIndex((k) => k.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx === -1) return
+
+              // `localized` is written by the key definition dialog alone, and every other writer
+              // of this row omits it. A response that did not name it may therefore not write it
+              // back: a cell edit answered after a localization save would restore the flag the
+              // dialog had just replaced, and the dialog reads the key out of this cache.
+              draft.items[idx] = 'localized' in update
+                ? updated
+                : { ...updated, localized: draft.items[idx].localized }
             }
           )
         } catch {
@@ -660,7 +711,6 @@ export const {
   useClassificationStoreConfigurationCollectionDeleteMutation,
   // CRUD mutations — keys
   useClassificationStoreConfigurationKeyCreateMutation,
-  useClassificationStoreConfigurationKeyUpdateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
   // CRUD mutations — key-group relations
   useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
@@ -704,6 +754,18 @@ export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation =
   api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation as unknown as TypedUseMutation<
     ClassificationStoreConfigurationKeyGroupRelationDetail,
     { classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate },
+    BaseQuery
+  >
+
+/**
+ * The key update hook, re-typed to take the `localized` tri-state the shipped payload declares.
+ * Re-typed rather than wrapped for the same reason as the hook above: a wrapper drops the hook's
+ * own options. Removed with the rest of the hand-written block on the next regeneration.
+ */
+export const useClassificationStoreConfigurationKeyUpdateMutation =
+  api.useClassificationStoreConfigurationKeyUpdateMutation as unknown as TypedUseMutation<
+    ClassificationStoreConfigurationKeyDetail,
+    ClassificationStoreConfigurationKeyUpdateApiArg,
     BaseQuery
   >
 

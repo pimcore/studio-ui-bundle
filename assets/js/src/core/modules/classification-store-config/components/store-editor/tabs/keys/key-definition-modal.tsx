@@ -8,9 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { Text } from '@Pimcore/components/text/text'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { AreaProvider } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { SettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
@@ -21,7 +25,7 @@ import { serviceIds, useInjection } from '@sdk/app'
 import {
   type ClassificationStoreConfigurationKeyDetail,
   useClassificationStoreConfigurationKeyUpdateMutation
-} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 
 interface IKeyDefinitionModalProps {
@@ -35,6 +39,32 @@ interface IKeyDefinitionModalProps {
  * Stable module-level area constant to avoid creating a new array reference on every render.
  */
 const AREA = ['classification-store']
+
+const INHERIT = 'inherit'
+const LOCALIZED = 'localized'
+const NOT_LOCALIZED = 'not-localized'
+
+type KeyLocalization = typeof INHERIT | typeof LOCALIZED | typeof NOT_LOCALIZED
+
+/** The stored tri-state as the control shows it: a null or absent flag inherits the class field's. */
+const localizationOf = (localized: boolean | null | undefined): KeyLocalization => {
+  if (localized === true) return LOCALIZED
+  if (localized === false) return NOT_LOCALIZED
+
+  return INHERIT
+}
+
+/** What the control sends: an explicit null for inherit, so the stored flag is cleared. */
+const localizedValueOf = (localization: KeyLocalization): boolean | null => {
+  if (localization === LOCALIZED) return true
+  if (localization === NOT_LOCALIZED) return false
+
+  return null
+}
+
+/** Whether a transition can leave values in other languages unreachable. */
+const putsOtherLanguagesAtRisk = (from: KeyLocalization, to: KeyLocalization): boolean =>
+  to !== from && to !== LOCALIZED && from !== NOT_LOCALIZED
 
 /**
  * Inner component that sets currentFieldDefinitionId once structure is ready
@@ -93,9 +123,19 @@ export const KeyDefinitionModal = ({
 }: IKeyDefinitionModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()
+  const modal = useFormModal()
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(
     serviceIds['DynamicTypes/FieldDefinitionRegistry']
   )
+
+  const storedLocalization = localizationOf(keyDetail?.localized)
+  const [localization, setLocalization] = useState<KeyLocalization>(storedLocalization)
+
+  // Seeded per key, not per mount: the dialog stays mounted between keys, so a key opened after
+  // another one would otherwise show the state of the previous one.
+  useEffect(() => {
+    setLocalization(localizationOf(keyDetail?.localized))
+  }, [keyDetail?.id])
 
   // Ref to the getLayout function — updated by KeyDefinitionFormBridge
   const getLayoutRef = useRef<(() => Layout | undefined) | null>(null)
@@ -104,7 +144,7 @@ export const KeyDefinitionModal = ({
     getLayoutRef.current = fn
   }, [])
 
-  const handleSave = async (): Promise<void> => {
+  const saveKey = async (): Promise<void> => {
     if (keyDetail === undefined || getLayoutRef.current === null) return
     const layout = getLayoutRef.current()
 
@@ -117,7 +157,8 @@ export const KeyDefinitionModal = ({
         title: keyDetail.title ?? null,
         description: keyDetail.description,
         type: keyDetail.type,
-        definition: (layout as Record<string, unknown> | null | undefined) ?? null
+        definition: (layout as Record<string, unknown> | null | undefined) ?? null,
+        localized: localizedValueOf(localization)
       }
     })
 
@@ -128,6 +169,30 @@ export const KeyDefinitionModal = ({
 
     onSaved()
   }
+
+  const handleSave = (): void => {
+    if (keyDetail === undefined || getLayoutRef.current === null) return
+
+    if (!putsOtherLanguagesAtRisk(storedLocalization, localization)) {
+      void saveKey()
+      return
+    }
+
+    modal.confirm({
+      content: (
+        <span>{t('classification-store.key-localization-confirm')}</span>
+      ),
+      okText: t('yes'),
+      cancelText: t('no'),
+      onOk: () => { void saveKey() }
+    })
+  }
+
+  const localizationOptions = [
+    { value: INHERIT, label: t('classification-store.key-localization.inherit') },
+    { value: LOCALIZED, label: t('classification-store.key-localization.localized') },
+    { value: NOT_LOCALIZED, label: t('classification-store.key-localization.not-localized') }
+  ]
 
   /**
    * Build a Layout-compatible object from the key's stored definition.
@@ -187,31 +252,46 @@ export const KeyDefinitionModal = ({
       destroyOnClose
       okText={ t('save') }
       onCancel={ onClose }
-      onOk={ () => { void handleSave() } }
+      onOk={ handleSave }
       open={ open }
       styles={ { body: { maxHeight: '65vh', overflowY: 'auto' } } }
       title={ keyDetail !== undefined ? t('classification-store.edit-key-definition', { keyName: keyDetail.name }) : '' }
       width={ 900 }
     >
       {keyDetail !== undefined && (
-        <AreaProvider area={ AREA }>
-          <SettingsProvider
-            GeneralSettingsFormFields={ NoFormFields }
-            useDetailGeneralSettingsQuery={ useStubQuery }
-            useDetailUpdateMutation={ useStubMutation }
-            useItemsQuery={ useStubQuery }
+        <>
+          {/* outside the definition form on purpose: it is a column of the key, not part of the blob */}
+          <Flex
+            align='center'
+            gap='small'
           >
-            <LayoutProvider
-              key={ keyDetail.type ?? 'unknown' }
-              layout={ layout }
+            <Text>{t('classification-store.key-localization')}</Text>
+            <Segmented
+              onChange={ (value) => { setLocalization(value as KeyLocalization) } }
+              options={ localizationOptions }
+              value={ localization }
+            />
+          </Flex>
+
+          <AreaProvider area={ AREA }>
+            <SettingsProvider
+              GeneralSettingsFormFields={ NoFormFields }
+              useDetailGeneralSettingsQuery={ useStubQuery }
+              useDetailUpdateMutation={ useStubMutation }
+              useItemsQuery={ useStubQuery }
             >
-              <KeyDefinitionFormBridge
-                noPadding
-                onGetLayout={ handleGetLayout }
-              />
-            </LayoutProvider>
-          </SettingsProvider>
-        </AreaProvider>
+              <LayoutProvider
+                key={ keyDetail.type ?? 'unknown' }
+                layout={ layout }
+              >
+                <KeyDefinitionFormBridge
+                  noPadding
+                  onGetLayout={ handleGetLayout }
+                />
+              </LayoutProvider>
+            </SettingsProvider>
+          </AreaProvider>
+        </>
       )}
     </Modal>
   )

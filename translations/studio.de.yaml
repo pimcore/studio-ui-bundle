@@ -2228,6 +2228,13 @@ classification-store.sub-group-unused: "Kein Schlüssel dieser Gruppe verwendet 
 classification-store.assign-sub-group-progress: "Die Untergruppe wird {{done}} von {{total}} Schlüsseln zugeordnet…"
 classification-store.assign-sub-group-failed: "Die Untergruppe konnte folgenden Schlüsseln nicht zugeordnet werden: {{keyNames}}"
 classification-store.assign-sub-group-running: Warten, bis die Zuordnung der Untergruppe abgeschlossen ist
+classification-store.key-localization: "Lokalisierung"
+classification-store.key-localization.inherit: "Erben"
+classification-store.key-localization.localized: "Lokalisiert"
+classification-store.key-localization.not-localized: "Nicht lokalisiert"
+classification-store.key-localization-confirm: "Werte, die dieser Schlüssel in anderen Sprachen hält, werden möglicherweise nicht mehr angezeigt oder gespeichert. Trotzdem speichern?"
+classification-store.key-localized: "Lokalisierter Schlüssel"
+classification-store.key-localized-tooltip: "Dieser Schlüssel hält einen eigenen Wert pro Sprache."
 classification-store.import: Store-Konfiguration importieren
 classification-store.import-success: Store-Konfiguration erfolgreich importiert
 home: Startseite

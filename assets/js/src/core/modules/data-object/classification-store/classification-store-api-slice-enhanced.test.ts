@@ -18,7 +18,10 @@
 
 import { configureStore } from '@reduxjs/toolkit'
 import { waitFor } from '@testing-library/react'
-import { api } from './classification-store-api-slice-enhanced'
+import {
+  api,
+  type ClassificationStoreConfigurationKeyUpdate
+} from './classification-store-api-slice-enhanced'
 
 const STORE_ID = 1
 const KEY_ID = 5
@@ -35,7 +38,8 @@ const storedKey = {
   description: null,
   definition: null,
   creationDate: null,
-  modificationDate: null
+  modificationDate: null,
+  localized: true
 }
 
 const queryArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 } } }
@@ -55,8 +59,15 @@ const flush = async (): Promise<void> => { await new Promise((resolve) => setTim
 describe('classification store key update cache patch', () => {
   const originalFetch = globalThis.fetch
   let respondToUpdate: (key: Record<string, unknown>) => void
+  /** The update requests the slice sent, so what reaches the wire can be asserted. */
+  let updateRequests: Array<{ url: string, body: Record<string, unknown> }>
+  /** One resolver per update request, in the order the requests were made. */
+  let pendingUpdates: Array<(key: Record<string, unknown>) => void>
 
   beforeEach(() => {
+    updateRequests = []
+    pendingUpdates = []
+
     globalThis.fetch = jest.fn(async (input: Request) => {
       if (input.url.endsWith(KEYS_URL)) {
         return new Response(JSON.stringify({ items: [storedKey], totalItems: 1 }), {
@@ -64,6 +75,8 @@ describe('classification store key update cache patch', () => {
           headers: { 'Content-Type': 'application/json' }
         })
       }
+
+      updateRequests.push({ url: input.url, body: JSON.parse(await input.clone().text()) })
 
       // The update answer is held back so the optimistic window can be asserted.
       return await new Promise<Response>((resolve) => {
@@ -73,6 +86,7 @@ describe('classification store key update cache patch', () => {
             headers: { 'Content-Type': 'application/json' }
           }))
         }
+        pendingUpdates.push(respondToUpdate)
       })
     }) as unknown as typeof fetch
   })
@@ -86,17 +100,27 @@ describe('classification store key update cache patch', () => {
     expect(cachedKey(store)).toEqual(expect.objectContaining({ title: 'Weight' }))
   }
 
-  const updateKey = async (store: ReturnType<typeof createStore>, title: string | null): Promise<unknown> =>
+  /** Typed on purpose: the payload only compiles while the hand-written `localized` shadow exists. */
+  const keyUpdate = (payload: Partial<ClassificationStoreConfigurationKeyUpdate>): ClassificationStoreConfigurationKeyUpdate => ({
+    name: storedKey.name,
+    title: null,
+    description: null,
+    type: storedKey.type,
+    definition: null,
+    ...payload
+  })
+
+  const dispatchUpdate = async (
+    store: ReturnType<typeof createStore>,
+    update: ClassificationStoreConfigurationKeyUpdate
+  ): Promise<unknown> =>
     await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyUpdate.initiate({
       id: KEY_ID,
-      classificationStoreConfigurationKeyUpdate: {
-        name: storedKey.name,
-        title,
-        description: null,
-        type: storedKey.type,
-        definition: null
-      }
+      classificationStoreConfigurationKeyUpdate: update
     }))
+
+  const updateKey = async (store: ReturnType<typeof createStore>, title: string | null): Promise<unknown> =>
+    await dispatchUpdate(store, keyUpdate({ title }))
 
   it('keeps the cached title while an update that does not change it is pending', async () => {
     const store = createStore()
@@ -124,6 +148,81 @@ describe('classification store key update cache patch', () => {
 
     respondToUpdate({ ...storedKey, title: 'Shipping weight' })
     await pending
+  })
+
+  it('sends the localized member of the payload to the key endpoint', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const pending = dispatchUpdate(store, keyUpdate({ localized: false }))
+    await flush()
+
+    expect(updateRequests).toHaveLength(1)
+    expect(updateRequests[0].url.endsWith(KEY_URL)).toBe(true)
+    expect(updateRequests[0].body).toEqual(expect.objectContaining({ localized: false }))
+
+    respondToUpdate({ ...storedKey, localized: false })
+    await pending
+  })
+
+  it('keeps the cached localized flag while an update that does not carry it is pending', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const pending = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: true }))
+
+    respondToUpdate({ ...storedKey, title: 'Shipping weight' })
+    await pending
+  })
+
+  it('shows an explicit null localized flag while the update is pending and takes the answer', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const pending = dispatchUpdate(store, keyUpdate({ localized: null }))
+    await flush()
+
+    // A present null is a value here, not an absence: it clears the stored flag.
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: null }))
+
+    respondToUpdate({ ...storedKey, localized: null })
+    await pending
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: null }))
+  })
+
+  it('keeps a saved localization when an older cell edit answers last', async () => {
+    // The keys grid and the key definition dialog write disjoint members of the same row, and
+    // the dialog reads the key back out of this cache. A response that replaced the whole row
+    // would write back the flag the server held while the older request ran.
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // A title edit goes out first and carries no localized member at all.
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    // The dialog's save follows while the cell edit is still in flight.
+    const dialogSave = dispatchUpdate(store, keyUpdate({ localized: false }))
+    await flush()
+
+    expect(pendingUpdates).toHaveLength(2)
+
+    pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', localized: false })
+    await dialogSave
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: false }))
+
+    // The cell edit answers last, carrying the flag as it was before the dialog's save.
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', localized: true })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      title: 'Shipping weight',
+      localized: false
+    }))
   })
 })
 

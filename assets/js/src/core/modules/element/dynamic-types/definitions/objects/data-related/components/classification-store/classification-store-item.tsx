@@ -22,24 +22,23 @@ import {
 import { buildSubGroupSections } from '@Pimcore/modules/data-object/classification-store/utils/sub-group-sections'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Form } from '@Pimcore/components/form/form'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { Title } from '@Pimcore/components/title/title'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
+import {
+  RestoreInheritanceLocaleContext
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/hooks/restore-inheritance-locale-context'
 import { useClassificationStore } from './provider'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { getKeyLabel } from './utils/key-label'
 import { useStyles } from './classification-store-item.styles'
 
-const renderKey = (item: ClassificationStoreCollection2): React.JSX.Element => (
-  <ObjectComponent
-    key={ item.id }
-    { ...item.definition }
-    name={ item.id }
-    technicalName={ item.name }
-    title={ getKeyLabel(item) }
-  />
-)
+/** The language independent slot every key that is not localized is bound to. */
+const LANGUAGE_INDEPENDENT = 'default'
 
 export interface ClassificationStoreItemProps {
   groupLayout?: ClassificationStoreGroupLayout2
@@ -51,6 +50,8 @@ export interface ClassificationStoreItemProps {
   hideEmptyDataRevision?: number
   /** Localization the group is currently edited in ('default' or a language). */
   localizationGroup?: string
+  /** Localized flag of the class definition field, which every key without its own inherits. */
+  fieldLocalized?: boolean
   /** Hides the delete button, e.g. when the store is not editable. */
   disallowDelete?: boolean
 }
@@ -62,7 +63,8 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     updateCurrentLayoutData,
     hideEmptyData = false,
     hideEmptyDataRevision = 0,
-    localizationGroup = 'default',
+    localizationGroup = LANGUAGE_INDEPENDENT,
+    fieldLocalized = false,
     disallowDelete = false
   } = props
 
@@ -76,6 +78,17 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { t } = useTranslation()
 
   const fieldName: string = isArray(name) ? name[name.length - 1] : name
+
+  // True and false are the key's own decision; a null or absent flag inherits the field's.
+  const isKeyLocalized = (key: ClassificationStoreCollection2): boolean => {
+    if (key.localized === true) return true
+    if (key.localized === false) return false
+
+    return fieldLocalized
+  }
+
+  const slotOf = (key: ClassificationStoreCollection2): string =>
+    isKeyLocalized(key) ? localizationGroup : LANGUAGE_INDEPENDENT
 
   const handleItemDelete = (): void => {
     const updatedLayout = currentLayoutData.filter(item => item.id !== groupLayout?.id)
@@ -96,13 +109,17 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
       return keys
     }
 
-    const hiddenKeyIds = getHiddenKeyIds({
-      keys,
-      groupValue: operations.getValue([String(groupId), localizationGroup])
-    })
+    // Keys of one group can sit in two slots at once, so each is checked against the values of
+    // the slot it is bound to: reading one slot for all of them hid the keys of the other.
+    const hiddenKeyIds = new Set(
+      [LANGUAGE_INDEPENDENT, localizationGroup].flatMap((slot) => [...getHiddenKeyIds({
+        keys: keys.filter((key) => slotOf(key) === slot),
+        groupValue: operations.getValue([String(groupId), slot])
+      })])
+    )
 
     return keys.filter((key) => !hiddenKeyIds.has(key.id))
-  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, operations, isNewGroup])
+  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, fieldLocalized, operations, isNewGroup])
 
   // The layout lists its sub groups in the order the backend put them in, which is the order
   // their first key appears in; it is never re-sorted here. A group layout that carries none
@@ -132,6 +149,54 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     }
 
     return subGroupNames.get(identifier) ?? identifier
+  }
+
+  /** Read-only marker that this key holds a value per language; it cannot change the flag. */
+  const localizedIndicator = (
+    <Tooltip title={ t('classification-store.key-localized-tooltip') }>
+      <span aria-label={ t('classification-store.key-localized') }>
+        <Icon value='translate' />
+      </span>
+    </Tooltip>
+  )
+
+  const labelOf = (item: ClassificationStoreCollection2): React.ReactNode => {
+    if (!isKeyLocalized(item)) {
+      return getKeyLabel(item)
+    }
+
+    return (
+      <Flex
+        align='center'
+        gap='extra-small'
+      >
+        { getKeyLabel(item) }
+        { localizedIndicator }
+      </Flex>
+    )
+  }
+
+  // Each key carries its own slot, so a key that is not localized stays on the language
+  // independent one whichever localization the field level control shows.
+  const renderKey = (item: ClassificationStoreCollection2): React.JSX.Element => {
+    const slot = slotOf(item)
+
+    return (
+      <Form.Group
+        key={ item.id }
+        name={ [slot] }
+      >
+        {/* the restore permission check reads the locale of the key it is offered for */}
+        <RestoreInheritanceLocaleContext.Provider value={ slot === LANGUAGE_INDEPENDENT ? undefined : slot }>
+          <ObjectComponent
+            { ...item.definition }
+            name={ item.id }
+            technicalName={ item.name }
+            title={ labelOf(item) }
+          />
+        </RestoreInheritanceLocaleContext.Provider>
+      </Form.Group>
+    )
   }
 
   const handleClose: (e: React.MouseEvent<HTMLButtonElement>) => void = (e) => {
@@ -183,5 +248,5 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         </Panel>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized])
 }

@@ -11,14 +11,25 @@
 import React from 'react'
 import { StyleProvider } from '@ant-design/cssinjs'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { type ClassificationStoreConfigurationKeyDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import {
+  type ClassificationStoreConfigurationKeyDetail
+} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { FieldDefinitionDataFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/field-defintion-data-form-fields'
 import { KeyDefinitionModal } from './key-definition-modal'
 
 const updateKey = jest.fn()
+const confirmWarning = jest.fn()
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
+}))
+
+// antd-style ships untranspiled ESM, which jest does not transform
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
+  createStyles: () => () => ({ styles: {}, cx: () => '', theme: {} }),
+  css: () => '',
+  cx: () => '',
+  keyframes: () => ''
 }))
 
 // The @sdk/components barrel reaches antd-style's untranspiled ESM, so the AntD controls it wraps stand in for it.
@@ -68,8 +79,12 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   ApiError: class ApiError extends Error {}
 }))
 
-jest.mock('@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen', () => ({
+jest.mock('@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced', () => ({
   useClassificationStoreConfigurationKeyUpdateMutation: () => [updateKey]
+}))
+
+jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
+  useFormModal: () => ({ confirm: confirmWarning })
 }))
 
 const KEY_TYPE = 'input'
@@ -125,12 +140,23 @@ const keyDetail = {
   }
 } as unknown as ClassificationStoreConfigurationKeyDetail
 
-const renderModal = (): void => {
+const INHERIT = 'classification-store.key-localization.inherit'
+const LOCALIZED = 'classification-store.key-localization.localized'
+const NOT_LOCALIZED = 'classification-store.key-localization.not-localized'
+
+/** The three stored tri-states, by the option each of them selects. */
+const STORED_LOCALIZED: Record<string, boolean | null> = {
+  [INHERIT]: null,
+  [LOCALIZED]: true,
+  [NOT_LOCALIZED]: false
+}
+
+const renderModal = (localized: boolean | null = null): void => {
   // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
   render(
     <StyleProvider container={ document.createElement('div') }>
       <KeyDefinitionModal
-        keyDetail={ keyDetail }
+        keyDetail={ { ...keyDetail, localized } }
         onClose={ jest.fn() }
         onSaved={ jest.fn() }
         open
@@ -139,20 +165,29 @@ const renderModal = (): void => {
   )
 }
 
-const savedDefinition = async (): Promise<Record<string, unknown>> => {
-  fireEvent.click(screen.getByText('save'))
+const option = (name: string): HTMLElement => screen.getByRole('radio', { name })
 
+const save = (): void => { fireEvent.click(screen.getByText('save')) }
+
+const savedPayload = async (): Promise<Record<string, unknown>> => {
   await waitFor(() => {
     expect(updateKey).toHaveBeenCalled()
   })
 
-  return updateKey.mock.calls[0][0].classificationStoreConfigurationKeyUpdate.definition
+  return updateKey.mock.calls[0][0].classificationStoreConfigurationKeyUpdate
+}
+
+const savedDefinition = async (): Promise<Record<string, unknown>> => {
+  save()
+
+  return (await savedPayload()).definition as Record<string, unknown>
 }
 
 describe('KeyDefinitionModal', () => {
   beforeEach(() => {
     updateKey.mockReset()
     updateKey.mockResolvedValue({ data: {} })
+    confirmWarning.mockReset()
   })
 
   it('opens a key that carries the options the dialog no longer offers', () => {
@@ -176,5 +211,80 @@ describe('KeyDefinitionModal', () => {
 
     expect(definition).toMatchObject(STORED_OPTIONS)
     expect(definition.tooltip).toBe('The height in mm')
+  })
+
+  it.each([
+    ['an absent flag', undefined, INHERIT],
+    ['a null flag', null, INHERIT],
+    ['a true flag', true, LOCALIZED],
+    ['a false flag', false, NOT_LOCALIZED]
+  ])('seeds the localization control from %s', (_name, localized, expected) => {
+    renderModal(localized)
+
+    expect(option(expected)).toBeChecked()
+    expect(option(INHERIT)).toBeInTheDocument()
+    expect(option(LOCALIZED)).toBeInTheDocument()
+    expect(option(NOT_LOCALIZED)).toBeInTheDocument()
+  })
+
+  it.each([
+    [INHERIT, null],
+    [LOCALIZED, true],
+    [NOT_LOCALIZED, false]
+  ])('sends the state of the localization control as %s', async (selected, expected) => {
+    // Seeded from not localized, which is the one state no transition warns about, so each of
+    // the three saves reaches the mutation without a confirmation in between.
+    renderModal(false)
+
+    fireEvent.click(option(selected))
+    save()
+
+    const payload = await savedPayload()
+
+    expect('localized' in payload).toBe(true)
+    expect(payload.localized).toBe(expected)
+    // the definition and the key's own columns ride along unchanged
+    expect(payload).toEqual(expect.objectContaining({
+      name: KEY_NAME,
+      title: 'Height',
+      type: KEY_TYPE
+    }))
+    expect(payload.definition).toMatchObject(STORED_OPTIONS)
+  })
+
+  // The three transitions that can leave values in other languages unreachable warn; the other
+  // three do not, and neither does leaving the state as it is.
+  it.each([
+    [LOCALIZED, NOT_LOCALIZED, true],
+    [LOCALIZED, INHERIT, true],
+    [INHERIT, NOT_LOCALIZED, true],
+    [INHERIT, LOCALIZED, false],
+    [NOT_LOCALIZED, LOCALIZED, false],
+    [NOT_LOCALIZED, INHERIT, false],
+    [LOCALIZED, LOCALIZED, false],
+    [INHERIT, INHERIT, false],
+    [NOT_LOCALIZED, NOT_LOCALIZED, false]
+  ])('warns on %s to %s: %s', async (from, to, warns) => {
+    renderModal(STORED_LOCALIZED[from])
+
+    fireEvent.click(option(to))
+    save()
+
+    if (!warns) {
+      expect(await savedPayload()).toEqual(expect.objectContaining({ localized: STORED_LOCALIZED[to] }))
+      expect(confirmWarning).not.toHaveBeenCalled()
+
+      return
+    }
+
+    await waitFor(() => { expect(confirmWarning).toHaveBeenCalledTimes(1) })
+
+    // cancelling is not confirming: nothing is written
+    expect(updateKey).not.toHaveBeenCalled()
+
+    confirmWarning.mock.calls[0][0].onOk()
+
+    expect(await savedPayload()).toEqual(expect.objectContaining({ localized: STORED_LOCALIZED[to] }))
+    expect(updateKey).toHaveBeenCalledTimes(1)
   })
 })
