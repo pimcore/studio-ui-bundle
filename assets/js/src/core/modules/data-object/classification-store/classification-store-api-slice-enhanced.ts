@@ -398,7 +398,9 @@ const api = baseApi.enhanceEndpoints({
                 ...(update.description !== undefined ? { description: update.description } : {}),
                 // `localized` is a tri-state, so a present null is a value and not an absence:
                 // it stores NULL, which means the key inherits the class field's flag again.
-                ...('localized' in update ? { localized: update.localized ?? null } : {})
+                // Keyed off `undefined` and not off `in`, because an undefined member is dropped
+                // on the way to the wire and would patch a null the server never hears about.
+                ...(update.localized !== undefined ? { localized: update.localized } : {})
                 // `definition` intentionally excluded: a null definition means "leave the stored
                 // one alone" to the server, so spreading it would wipe the cached definition.
               }
@@ -416,13 +418,22 @@ const api = baseApi.enhanceEndpoints({
               const idx = draft.items.findIndex((k) => k.id === updated.id)
               if (idx === -1) return
 
-              // `localized` is written by the key definition dialog alone, and every other writer
-              // of this row omits it. A response that did not name it may therefore not write it
-              // back: a cell edit answered after a localization save would restore the flag the
-              // dialog had just replaced, and the dialog reads the key out of this cache.
-              draft.items[idx] = 'localized' in update
-                ? updated
-                : { ...updated, localized: draft.items[idx].localized }
+              // The response is confirmed through the same field mask the optimistic patch used.
+              // Replacing the whole row would write back the members this request did NOT write as
+              // the server held them while it ran, so a cell edit started before a definition or
+              // localization save and answered after it restored the values that save had just
+              // replaced — and both the grid and the dialog read the key out of this cache.
+              const cached = draft.items[idx]
+              draft.items[idx] = {
+                ...updated,
+                ...(update.title === undefined || update.title === null ? { title: cached.title } : {}),
+                ...(update.type === undefined || update.type === null ? { type: cached.type } : {}),
+                ...(update.description === undefined ? { description: cached.description } : {}),
+                ...(update.localized === undefined ? { localized: cached.localized } : {}),
+                ...(update.definition === undefined || update.definition === null
+                  ? { definition: cached.definition }
+                  : {})
+              }
             }
           )
         } catch {

@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React from 'react'
 import { StyleProvider } from '@ant-design/cssinjs'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -169,6 +171,8 @@ const option = (name: string): HTMLElement => screen.getByRole('radio', { name }
 
 const save = (): void => { fireEvent.click(screen.getByText('save')) }
 
+const flush = async (): Promise<void> => { await new Promise((resolve) => setTimeout(resolve, 0)) }
+
 const savedPayload = async (): Promise<Record<string, unknown>> => {
   await waitFor(() => {
     expect(updateKey).toHaveBeenCalled()
@@ -282,9 +286,33 @@ describe('KeyDefinitionModal', () => {
     // cancelling is not confirming: nothing is written
     expect(updateKey).not.toHaveBeenCalled()
 
-    confirmWarning.mock.calls[0][0].onOk()
+    await confirmWarning.mock.calls[0][0].onOk()
 
     expect(await savedPayload()).toEqual(expect.objectContaining({ localized: STORED_LOCALIZED[to] }))
     expect(updateKey).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the warning open until the confirmed save has answered', async () => {
+    // The confirmation is handed the save to wait for: closing on its own would let the dialog
+    // behind it be closed or saved again while the request it confirmed is still in flight.
+    let answer: (value: unknown) => void = () => {}
+    updateKey.mockReturnValue(new Promise((resolve) => { answer = resolve }))
+
+    renderModal(true)
+
+    fireEvent.click(option(NOT_LOCALIZED))
+    save()
+
+    await waitFor(() => { expect(confirmWarning).toHaveBeenCalledTimes(1) })
+
+    const settled = jest.fn()
+    void (confirmWarning.mock.calls[0][0].onOk() as Promise<void>).then(settled)
+    await flush()
+
+    expect(settled).not.toHaveBeenCalled()
+
+    answer({ data: {} })
+
+    await waitFor(() => { expect(settled).toHaveBeenCalled() })
   })
 })

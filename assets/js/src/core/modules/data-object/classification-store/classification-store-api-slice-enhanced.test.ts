@@ -42,6 +42,9 @@ const storedKey = {
   localized: true
 }
 
+/** A definition blob only the key definition dialog writes; every cell edit leaves it alone. */
+const DEFINITION = { fieldtype: 'input', title: 'Weight' }
+
 const queryArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 } } }
 
 const createStore = (): ReturnType<typeof configureStore> => configureStore({
@@ -192,6 +195,55 @@ describe('classification store key update cache patch', () => {
     await pending
 
     expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: null }))
+  })
+
+  it('leaves the cached localized flag alone when the member is sent as undefined', async () => {
+    // An undefined member is dropped on the way to the wire, so the server never hears about it
+    // and the cache may not patch one either: present-as-undefined is not an explicit null.
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const pending = dispatchUpdate(store, keyUpdate({ localized: undefined }))
+    await flush()
+
+    expect(updateRequests[0].body).not.toHaveProperty('localized')
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: true }))
+
+    respondToUpdate({ ...storedKey })
+    await pending
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: true }))
+  })
+
+  it('keeps a saved definition when an older cell edit answers last', async () => {
+    // The dialog writes the definition and the grid's cell edits leave it alone, and the dialog
+    // reads the key back out of this cache. A response that replaced the whole row would write
+    // back the definition the server held while the older request ran.
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // A title edit goes out first; its null definition means "leave the stored one alone".
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    // The dialog's definition save follows while the cell edit is still in flight.
+    const dialogSave = dispatchUpdate(store, keyUpdate({ title: storedKey.title, definition: DEFINITION }))
+    await flush()
+
+    expect(pendingUpdates).toHaveLength(2)
+
+    pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', definition: DEFINITION })
+    await dialogSave
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: DEFINITION }))
+
+    // The cell edit answers last, carrying the definition as it was before the dialog's save.
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', definition: null })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      title: 'Shipping weight',
+      definition: DEFINITION
+    }))
   })
 
   it('keeps a saved localization when an older cell edit answers last', async () => {

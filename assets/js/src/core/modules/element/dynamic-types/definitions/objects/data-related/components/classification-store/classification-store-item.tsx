@@ -165,12 +165,13 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
       return getKeyLabel(item)
     }
 
+    // Translated here: the field label only translates a plain string, so a node would render raw.
     return (
       <Flex
         align='center'
         gap='extra-small'
       >
-        { getKeyLabel(item) }
+        { t(getKeyLabel(item)) }
         { localizedIndicator }
       </Flex>
     )

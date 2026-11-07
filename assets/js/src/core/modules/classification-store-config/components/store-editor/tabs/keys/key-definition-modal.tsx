@@ -184,7 +184,8 @@ export const KeyDefinitionModal = ({
       ),
       okText: t('yes'),
       cancelText: t('no'),
-      onOk: () => { void saveKey() }
+      // Awaited, so the warning stays up until the save has answered and cannot close over it.
+      onOk: async () => { await saveKey() }
     })
   }
 

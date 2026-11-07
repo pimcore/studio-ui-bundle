@@ -45,8 +45,12 @@ const mockConfirm = jest.fn()
 const mockObjectComponent = jest.fn()
 const mockGetValue = jest.fn()
 
+// A configured key title can be a translation key itself, so the label has to be looked up;
+// everything without a translation comes back unchanged, as the other cases assert.
+const mockTranslations: Record<string, string> = { 'classification-store.color.blue': 'Blue' }
+
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key })
+  useTranslation: () => ({ t: (key: string) => mockTranslations[key] ?? key })
 }))
 
 // icons resolve through the dependency injection container, which is not set up here
@@ -139,6 +143,19 @@ const mixedLayout = {
   id: GROUP_ID,
   name: 'Mixed',
   keys: MIXED_KEYS.map((key) => ({ ...key, definition: { datatype: 'data' } }))
+} as any
+
+const TRANSLATED_TITLE = 'classification-store.color.blue'
+
+// Two keys configured with the same title, which is a translation key: one resolves to localized
+// and one does not, so the label of each is composed by a different branch.
+const translatedTitleLayout = {
+  id: 5,
+  name: 'Colors',
+  keys: [
+    { id: 51, name: 'ef000051', title: TRANSLATED_TITLE, localized: true, definition: { datatype: 'data' } },
+    { id: 52, name: 'ef000052', title: TRANSLATED_TITLE, localized: false, definition: { datatype: 'data' } }
+  ]
 } as any
 
 const headings = (): Array<string | null> => [...document.querySelectorAll('h5')].map((heading) => heading.textContent)
@@ -337,6 +354,25 @@ describe('ClassificationStoreItem', () => {
     expect(screen.queryByRole('button', { name: LOCALIZED_INDICATOR })).not.toBeInTheDocument()
     expect(screen.queryByRole('switch')).not.toBeInTheDocument()
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
+  })
+
+  it('translates the label it renders beside the indicator, as the field label does the plain one', () => {
+    render(
+      <ClassificationStoreItem
+        currentLayoutData={ [translatedTitleLayout] }
+        fieldLocalized
+        groupLayout={ translatedTitleLayout }
+        localizationGroup={ LANGUAGE }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    // the localized key's label is a node, so the lookup can only happen while composing it
+    expect(screen.getByText('Blue')).toBeInTheDocument()
+    expect(screen.getByLabelText(LOCALIZED_INDICATOR)).toBeInTheDocument()
+
+    // the key that is not localized stays a plain string, which the field label translates itself
+    expect(propsOfKey(52).title).toBe(TRANSLATED_TITLE)
   })
 
   it('marks only the key flagged localized itself on a field that is not localized', () => {
