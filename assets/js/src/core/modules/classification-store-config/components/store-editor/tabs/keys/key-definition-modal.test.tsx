@@ -61,10 +61,13 @@ jest.mock('@sdk/utils', () => {
   }
 })
 
+// The stub button stays enabled whatever confirmLoading says, so a second press reaches the
+// dialog's own in-flight guard instead of being swallowed by the stub.
 jest.mock('@Pimcore/components/modal/modal', () => ({
-  Modal: ({ children, onOk, okText }: any) => (
+  Modal: ({ children, onOk, okText, confirmLoading }: any) => (
     <div>
       {children}
+      <span data-testid='confirm-loading'>{String(confirmLoading)}</span>
       <button
         onClick={ onOk }
         type="button"
@@ -82,7 +85,23 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
 }))
 
 jest.mock('@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced', () => ({
-  useClassificationStoreConfigurationKeyUpdateMutation: () => [updateKey]
+  // Stands in for the RTK Query mutation hook: isLoading is true from the trigger call until the
+  // request it returned has answered, which is the flag the dialog's in-flight guard reads.
+  useClassificationStoreConfigurationKeyUpdateMutation: () => {
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const trigger = async (arg: unknown): Promise<unknown> => {
+      setIsLoading(true)
+
+      try {
+        return await updateKey(arg)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    return [trigger, { isLoading }]
+  }
 }))
 
 jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
@@ -155,18 +174,25 @@ const STORED_LOCALIZED: Record<string, boolean | null> = {
   [NOT_LOCALIZED]: false
 }
 
-const renderModal = (localized: boolean | null = null): void => {
-  // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
-  render(
+/** Hands the dialog a new stored flag, the way the optimistic cache patch does mid-save. */
+type PatchCache = (localized: boolean | null) => void
+
+const renderModal = (localized: boolean | null = null): PatchCache => {
+  const tree = (stored: boolean | null): React.JSX.Element => (
     <StyleProvider container={ document.createElement('div') }>
       <KeyDefinitionModal
-        keyDetail={ { ...keyDetail, localized } }
+        keyDetail={ { ...keyDetail, localized: stored } }
         onClose={ jest.fn() }
         onSaved={ jest.fn() }
         open
       />
     </StyleProvider>
   )
+
+  // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
+  const { rerender } = render(tree(localized))
+
+  return (stored) => { rerender(tree(stored)) }
 }
 
 const option = (name: string): HTMLElement => screen.getByRole('radio', { name })
@@ -191,6 +217,22 @@ const savedDefinition = async (): Promise<Record<string, unknown>> => {
 
 /** Whether the payload carries the member at all: an absent one and an explicit null differ. */
 const sendsLocalized = (payload: Record<string, unknown>): boolean => 'localized' in payload
+
+/** Holds the next save in flight until the returned function answers it. */
+const saveInFlight = (): ((response: unknown) => void) => {
+  let answer: (response: unknown) => void = () => {}
+
+  updateKey.mockReturnValue(new Promise((resolve) => { answer = resolve }))
+
+  return (response) => { answer(response) }
+}
+
+/** The busy state the dialog hands the modal, which disables its OK button. */
+const expectBusy = async (busy: boolean): Promise<void> => {
+  await waitFor(() => {
+    expect(screen.getByTestId('confirm-loading')).toHaveTextContent(String(busy))
+  })
+}
 
 /** Saves, confirming the warning when the transition raised one; which ones do is asserted below. */
 const saveConfirmingWarning = async (): Promise<void> => {
@@ -359,5 +401,77 @@ describe('KeyDefinitionModal', () => {
     answer({ data: {} })
 
     await waitFor(() => { expect(settled).toHaveBeenCalled() })
+  })
+
+  it('reports the save as in flight while it runs', async () => {
+    const answer = saveInFlight()
+
+    renderModal()
+    await expectBusy(false)
+
+    save()
+    await expectBusy(true)
+
+    answer({ data: {} })
+    await expectBusy(false)
+  })
+
+  // A second save would recompute the stored state from the patch the first one's optimistic
+  // update already wrote into the cached key, and so omit the very member it had just sent.
+  it('ignores a second save while the first is in flight, patched cache and all', async () => {
+    const answer = saveInFlight()
+    const patchCache = renderModal(null)
+
+    fireEvent.click(option(LOCALIZED))
+    save()
+
+    expect((await savedPayload()).localized).toBe(true)
+    await expectBusy(true)
+
+    patchCache(true)
+    save()
+
+    expect(updateKey).toHaveBeenCalledTimes(1)
+
+    answer({ data: {} })
+    await expectBusy(false)
+  })
+
+  // The other outcome of a save: a guard that stayed closed on a failed one would lock the dialog.
+  it('takes a further save once a failed one has answered', async () => {
+    updateKey.mockResolvedValue({ error: { status: 500 } })
+
+    renderModal()
+    save()
+
+    await expectBusy(true)
+    await expectBusy(false)
+
+    save()
+
+    await waitFor(() => { expect(updateKey).toHaveBeenCalledTimes(2) })
+  })
+
+  // The same guard on the other arm of handleSave: the one that defers the save to a confirmation.
+  it('ignores a second save while a confirmed save is in flight', async () => {
+    const answer = saveInFlight()
+
+    renderModal(true)
+
+    fireEvent.click(option(NOT_LOCALIZED))
+    save()
+
+    await waitFor(() => { expect(confirmWarning).toHaveBeenCalledTimes(1) })
+
+    void (confirmWarning.mock.calls[0][0].onOk() as Promise<void>)
+    await expectBusy(true)
+
+    save()
+
+    expect(updateKey).toHaveBeenCalledTimes(1)
+    expect(confirmWarning).toHaveBeenCalledTimes(1)
+
+    answer({ data: {} })
+    await expectBusy(false)
   })
 })

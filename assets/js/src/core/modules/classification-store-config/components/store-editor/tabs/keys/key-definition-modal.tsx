@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -122,7 +124,7 @@ export const KeyDefinitionModal = ({
   onSaved
 }: IKeyDefinitionModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()
+  const [updateKey, { isLoading: isSaving }] = useClassificationStoreConfigurationKeyUpdateMutation()
   const modal = useFormModal()
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(
     serviceIds['DynamicTypes/FieldDefinitionRegistry']
@@ -173,6 +175,8 @@ export const KeyDefinitionModal = ({
 
   const handleSave = (): void => {
     if (keyDetail === undefined || getLayoutRef.current === null) return
+    // One save at a time: a second one recomputes the stored state from the patch the first wrote.
+    if (isSaving) return
 
     if (!putsOtherLanguagesAtRisk(storedLocalization, localization)) {
       void saveKey()
@@ -251,6 +255,7 @@ export const KeyDefinitionModal = ({
 
   return (
     <Modal
+      confirmLoading={ isSaving }
       destroyOnClose
       okText={ t('save') }
       onCancel={ onClose }
