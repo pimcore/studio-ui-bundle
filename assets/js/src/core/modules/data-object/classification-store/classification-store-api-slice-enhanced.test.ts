@@ -11,9 +11,12 @@
 /* eslint-disable max-lines */
 
 /**
- * The key update patches the cached key while the request is pending, but only with the
- * fields it actually sends: a null title means "leave the stored one alone" to the server,
- * so it must not blank the cached title for the length of the request.
+ * The key update patches the cached key while the request is pending, but only with the fields
+ * it actually names: a title the payload does not carry must not blank the cached title for the
+ * length of the request, while one carried as null is a clear and shows at once. The response is
+ * confirmed through the same mask, because the fields a request did not name come back as the
+ * server held them while it ran — the grid's cells and the key definition dialog write disjoint
+ * fields of the same row, so a whole-row replacement reverts whichever of them answered first.
  */
 
 import { configureStore } from '@reduxjs/toolkit'
@@ -33,7 +36,7 @@ const storedKey = {
   enabled: true,
   title: 'Weight',
   description: null,
-  definition: null,
+  definition: { name: 'weight', fieldtype: 'input', indexed: true },
   creationDate: null,
   modificationDate: null
 }
@@ -54,9 +57,12 @@ const flush = async (): Promise<void> => { await new Promise((resolve) => setTim
 
 describe('classification store key update cache patch', () => {
   const originalFetch = globalThis.fetch
-  let respondToUpdate: (key: Record<string, unknown>) => void
+  /** One resolver per update request, in the order the requests were made. */
+  let pendingUpdates: Array<(key: Record<string, unknown>) => void>
 
   beforeEach(() => {
+    pendingUpdates = []
+
     globalThis.fetch = jest.fn(async (input: Request) => {
       if (input.url.endsWith(KEYS_URL)) {
         return new Response(JSON.stringify({ items: [storedKey], totalItems: 1 }), {
@@ -65,14 +71,15 @@ describe('classification store key update cache patch', () => {
         })
       }
 
-      // The update answer is held back so the optimistic window can be asserted.
+      // Every update answer is held back, so the optimistic window can be asserted and the
+      // test decides the order the answers land in.
       return await new Promise<Response>((resolve) => {
-        respondToUpdate = (key) => {
+        pendingUpdates.push((key) => {
           resolve(new Response(JSON.stringify(key), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
           }))
-        }
+        })
       })
     }) as unknown as typeof fetch
   })
@@ -86,44 +93,119 @@ describe('classification store key update cache patch', () => {
     expect(cachedKey(store)).toEqual(expect.objectContaining({ title: 'Weight' }))
   }
 
-  const updateKey = async (store: ReturnType<typeof createStore>, title: string | null): Promise<unknown> =>
+  /** The payload as a writer sends it: `name`, `type` and `definition` always, the rest named or not. */
+  const updateKey = async (
+    store: ReturnType<typeof createStore>,
+    payload: Record<string, unknown>
+  ): Promise<unknown> =>
     await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyUpdate.initiate({
       id: KEY_ID,
       classificationStoreConfigurationKeyUpdate: {
         name: storedKey.name,
-        title,
-        description: null,
-        type: storedKey.type,
-        definition: null
+        type: null,
+        definition: null,
+        ...payload
       }
     }))
 
-  it('keeps the cached title while an update that does not change it is pending', async () => {
+  it('keeps the cached title while an update that does not name it is pending', async () => {
     const store = createStore()
     await subscribeToKeys(store)
 
-    const pending = updateKey(store, null)
+    const pending = updateKey(store, { description: 'Shipping' })
     await flush()
 
     expect(cachedKey(store)).toEqual(expect.objectContaining({ title: 'Weight' }))
 
-    respondToUpdate({ ...storedKey })
+    pendingUpdates[0]({ ...storedKey, description: 'Shipping' })
     await pending
 
-    expect(cachedKey(store)).toEqual(expect.objectContaining({ title: 'Weight' }))
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ title: 'Weight', description: 'Shipping' }))
+  })
+
+  it('blanks the cached title while an update that clears it is pending', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const pending = updateKey(store, { title: null })
+    await flush()
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ title: null }))
+
+    pendingUpdates[0]({ ...storedKey, title: null })
+    await pending
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ title: null }))
   })
 
   it('shows a new title while the update is still pending', async () => {
     const store = createStore()
     await subscribeToKeys(store)
 
-    const pending = updateKey(store, 'Shipping weight')
+    const pending = updateKey(store, { title: 'Shipping weight' })
     await flush()
 
     expect(cachedKey(store)).toEqual(expect.objectContaining({ title: 'Shipping weight' }))
 
-    respondToUpdate({ ...storedKey, title: 'Shipping weight' })
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight' })
     await pending
+  })
+
+  it('keeps a saved definition when an older cell edit answers last', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // A title cell edit goes out first and names no definition at all.
+    const cellEdit = updateKey(store, { title: 'Shipping weight' })
+    await flush()
+    // The key definition dialog saves while it is still in flight, and names no title.
+    const dialogSave = updateKey(store, { definition: { ...storedKey.definition, indexed: false } })
+    await flush()
+
+    expect(pendingUpdates).toHaveLength(2)
+
+    // The server applied the title first, then the definition: its answer to the dialog carries
+    // both, its answer to the cell edit carries the definition as it was before.
+    pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', definition: { ...storedKey.definition, indexed: false } })
+    await dialogSave
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      title: 'Shipping weight',
+      definition: { ...storedKey.definition, indexed: false }
+    }))
+
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight' })
+    await cellEdit
+
+    // The cell edit confirms its own title and leaves the definition it never named alone.
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      title: 'Shipping weight',
+      definition: { ...storedKey.definition, indexed: false }
+    }))
+  })
+
+  it('keeps a cell edit when an older definition save answers last', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const dialogSave = updateKey(store, { definition: { ...storedKey.definition, indexed: false } })
+    await flush()
+    const cellEdit = updateKey(store, { description: 'the shipping weight' })
+    await flush()
+
+    pendingUpdates[1]({
+      ...storedKey,
+      description: 'the shipping weight',
+      definition: { ...storedKey.definition, indexed: false }
+    })
+    await cellEdit
+
+    pendingUpdates[0]({ ...storedKey, definition: { ...storedKey.definition, indexed: false } })
+    await dialogSave
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      description: 'the shipping weight',
+      definition: { ...storedKey.definition, indexed: false }
+    }))
   })
 })
 

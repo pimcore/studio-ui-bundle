@@ -363,6 +363,19 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationKeyUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const update = args.classificationStoreConfigurationKeyUpdate
+        // Only what the payload names is patched. `title` and `description` are optional, so they
+        // carry three states: absent leaves the stored value alone, a null clears it, a string
+        // sets it. `type` and `definition` cannot be absent from the payload, so a null is their
+        // "leave the stored one alone" and writing it would wipe the cached value instead.
+        // `definition` is left out either way: no cached cell shows it, and the key definition
+        // dialog reads it back from the response below.
+        const namedFields = {
+          name: update.name,
+          ...(update.title !== undefined ? { title: update.title } : {}),
+          ...(update.description !== undefined ? { description: update.description } : {}),
+          ...(update.type !== undefined && update.type !== null ? { type: update.type } : {})
+        }
         // Optimistically apply the update payload to the cache immediately so the
         // UI reflects the change without waiting for the server round-trip.
         const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
@@ -371,34 +384,35 @@ const api = baseApi.enhanceEndpoints({
           (draft) => {
             const idx = draft.items.findIndex((k) => k.id === args.id)
             if (idx !== -1) {
-              const update = args.classificationStoreConfigurationKeyUpdate
-              draft.items[idx] = {
-                ...draft.items[idx],
-                name: update.name,
-                // A null title means "leave the stored one alone" to the server, just like a
-                // null type does, so writing it into the cache would blank the Title cell
-                // for the length of the request and let it come back with the response.
-                ...(update.title !== undefined && update.title !== null ? { title: update.title } : {}),
-                ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
-                // `description` is optional in the payload now, so an absent one must not be
-                // written: it would blank the cached cell for the length of the request.
-                ...(update.description !== undefined ? { description: update.description } : {})
-                // `definition` intentionally excluded: a null definition means "leave the stored
-                // one alone" to the server, so spreading it would wipe the cached definition.
-              }
+              draft.items[idx] = { ...draft.items[idx], ...namedFields }
             }
           }
         )
 
         try {
-          // Once confirmed, overwrite with the canonical server-returned value.
           const { data: updated } = await queryFulfilled
           patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
             dispatch,
             'classificationStoreConfigurationKeyCollection',
             (draft) => {
               const idx = draft.items.findIndex((k) => k.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx === -1) return
+
+              // Once confirmed, the server's answer is taken for the fields this request named
+              // and the cached value kept for the ones it did not. Replacing the whole row wrote
+              // those back as the server held them while the request ran, so a cell edit answered
+              // last reverted the definition the key definition dialog had already saved — and a
+              // dialog save answered last reverted the cell edit.
+              const cached = draft.items[idx]
+              draft.items[idx] = {
+                ...updated,
+                ...(update.title === undefined ? { title: cached.title } : {}),
+                ...(update.description === undefined ? { description: cached.description } : {}),
+                ...(update.type === undefined || update.type === null ? { type: cached.type } : {}),
+                ...(update.definition === undefined || update.definition === null
+                  ? { definition: cached.definition }
+                  : {})
+              }
             }
           )
         } catch {

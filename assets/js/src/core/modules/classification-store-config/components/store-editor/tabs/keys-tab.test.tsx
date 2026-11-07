@@ -12,9 +12,10 @@
 
 /**
  * The keys tab lists the keys of a store and edits name, title, type and description in the
- * grid. None of those cells owns the key's definition, so none of them carries one: a null
- * definition leaves the stored blob alone, where echoing back the blob the row was read with
- * would revert whatever the key definition dialog saved into it meanwhile.
+ * grid. Each cell owns one field, so each edit names one field: an absent title or description
+ * leaves the stored one alone, and a null type or definition does the same for the two the
+ * payload cannot omit. Echoing a value back from the row the edit was read on reverts whatever
+ * another writer — another cell, or the key definition dialog — saved into that field meanwhile.
  */
 
 // trackError runs for real and ends at this service, which needs the application shell's modal
@@ -186,9 +187,9 @@ const renderTab = (): void => {
 
 /**
  * A server that keeps what it is written and answers with it, so what a later request reverts
- * is visible. An update applies the fields it carries a value for: a null title, type or
- * definition means "leave the stored one alone", which is what the type change of the grid and
- * the cell edits rely on.
+ * is visible. An update applies the fields the payload names: an absent title or description
+ * leaves the stored one alone and a null clears it, while a null type or definition — the two
+ * the payload cannot omit — means "leave the stored one alone".
  */
 const stubFetch = (items: Array<Record<string, unknown>>, holdFirstUpdate = false): void => {
   stored = items.map((item) => ({ ...item }))
@@ -222,13 +223,16 @@ const stubFetch = (items: Array<Record<string, unknown>>, holdFirstUpdate = fals
     const id = Number(input.url.split('/').pop())
     const index = stored.findIndex((item) => item.id === id)
     const current = stored[index]
+    const payload = body ?? {}
     const updated = {
       ...current,
-      name: body?.name ?? current.name,
-      description: body?.description ?? null,
-      title: body?.title ?? current.title,
-      type: body?.type ?? current.type,
-      definition: body?.definition ?? current.definition
+      name: payload.name ?? current.name,
+      ...('title' in payload ? { title: payload.title } : {}),
+      ...('description' in payload ? { description: payload.description } : {}),
+      ...(payload.type !== undefined && payload.type !== null ? { type: payload.type } : {}),
+      ...(payload.definition !== undefined && payload.definition !== null
+        ? { definition: payload.definition }
+        : {})
     }
 
     stored[index] = updated
@@ -277,11 +281,14 @@ describe('KeysTab cell edits', () => {
     globalThis.fetch = originalFetch
   })
 
+  // The name is the one field the update payload requires, so every edit carries it; `type` and
+  // `definition` cannot be omitted either and go as null. Nothing else is named.
   it.each([
-    ['name', 'depth'],
-    ['title', 'Depth'],
-    ['description', 'the depth']
-  ])('sends no definition when the %s cell is edited', async (columnId, value) => {
+    ['name', 'depth', ['definition', 'name', 'type']],
+    ['title', 'Depth', ['definition', 'name', 'title', 'type']],
+    ['description', 'the depth', ['definition', 'description', 'name', 'type']],
+    ['type', 'textarea', ['definition', 'name', 'type']]
+  ])('sends only the field the %s cell changed', async (columnId, value, expectedKeys) => {
     stubFetch([height])
     renderTab()
 
@@ -292,8 +299,38 @@ describe('KeysTab cell edits', () => {
       expect(updateRequests()).toHaveLength(1)
     }, WAIT_BUDGET)
 
+    expect(Object.keys(updateRequests()[0].body!).sort()).toEqual(expectedKeys)
     expect(updateRequests()[0].body).toMatchObject({ definition: null })
     expect(storedKey(7).definition).toEqual(height.definition)
+  })
+
+  it('keeps a title cleared by one cell when an older cell edit answers last', async () => {
+    stubFetch([height], true)
+    renderTab()
+
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    // The description edit goes first and is held, so the title is cleared while it is in flight
+    editCell('description', 0, 'the depth')
+
+    await waitFor(() => {
+      expect(updateRequests()).toHaveLength(1)
+    }, WAIT_BUDGET)
+
+    editCell('title', 0, '')
+
+    await waitFor(() => {
+      expect(storedKey(7).title).toBeNull()
+    }, WAIT_BUDGET)
+
+    release!()
+
+    await waitFor(() => {
+      expect(storedKey(7).description).toBe('the depth')
+    }, WAIT_BUDGET)
+
+    // The held edit named no title, so the clear it never saw is still there
+    expect(storedKey(7).title).toBeNull()
   })
 
   it('leaves an index flag saved meanwhile in place when the cell edit lands after it', async () => {
@@ -309,14 +346,13 @@ describe('KeysTab cell edits', () => {
       expect(updateRequests()).toHaveLength(1)
     }, WAIT_BUDGET)
 
-    // What the key definition dialog sends: the whole blob, with the key excluded from the index
+    // What the key definition dialog sends: the whole blob, with the key excluded from the index,
+    // and nothing else about the key — the fields the grid's cells own are not named.
     await reduxStore.dispatch(api.endpoints.classificationStoreConfigurationKeyUpdate.initiate({
       id: KEY_ID,
       classificationStoreConfigurationKeyUpdate: {
         name: width.name,
-        title: width.title,
-        description: width.description,
-        type: width.type,
+        type: null,
         definition: { ...WIDTH_DEFINITION, indexed: false }
       }
     }) as any)

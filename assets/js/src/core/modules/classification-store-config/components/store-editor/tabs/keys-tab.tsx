@@ -174,10 +174,9 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             id: createdKey.id,
             classificationStoreConfigurationKeyUpdate: {
               name: createdKey.name,
-              title: createdKey.title ?? null,
               description,
-              type: createdKey.type,
-              definition: createdKey.definition
+              type: null,
+              definition: null
             }
           })
 
@@ -218,6 +217,11 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     })
   }
 
+  // Every writer below sends the one field its cell changed and nothing else. An absent title or
+  // description leaves the stored one alone, and a null type or definition does the same for the
+  // two the payload cannot omit; echoing a value back from the row the edit was read on reverts
+  // whatever another writer saved into that field meanwhile. `name` is the one field the payload
+  // requires, and the cache carries this request's own name from the moment it is sent.
   const handleTitleChange = useCallback(async (
     key: KeyRow,
     newTitle: string
@@ -227,9 +231,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       classificationStoreConfigurationKeyUpdate: {
         name: key.name,
         title: newTitle.trim() === '' ? null : newTitle,
-        description: key.description ?? null,
-        type: key.type,
-        // Null leaves the stored definition alone; echoing the row's blob back reverts one saved meanwhile.
+        type: null,
         definition: null
       }
     })
@@ -247,8 +249,6 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       id: key.id,
       classificationStoreConfigurationKeyUpdate: {
         name: key.name,
-        title: key.title ?? null,
-        description: key.description ?? null,
         type: newType,
         definition: null
       }
@@ -394,7 +394,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             manualSorting
             onSortingChange={ onSortingChange }
             onUpdateCellData={ ({ columnId, value, rowData }) => {
-              // No cell edit carries a definition: null leaves the stored one alone (see handleTitleChange).
+              // Each branch sends its own field only (see handleTitleChange).
               const typedRow = rowData as KeyRow
               if (columnId === 'name') {
                 const newName = (value as string).trim()
@@ -403,9 +403,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: newName,
-                    title: typedRow.title ?? null,
-                    description: typedRow.description ?? null,
-                    type: typedRow.type,
+                    type: null,
                     definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
@@ -418,9 +416,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: typedRow.name,
-                    title: typedRow.title ?? null,
                     description: (value as string).trim() === '' ? null : (value as string),
-                    type: typedRow.type,
+                    type: null,
                     definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })

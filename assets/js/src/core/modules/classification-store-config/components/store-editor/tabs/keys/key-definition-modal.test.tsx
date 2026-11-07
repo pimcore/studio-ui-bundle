@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React from 'react'
 import { StyleProvider } from '@ant-design/cssinjs'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -242,6 +244,21 @@ describe('KeyDefinitionModal', () => {
     expect(definition.indexed).toBe(false)
     expect(definition).toMatchObject(STORED_OPTIONS)
     expect(definition.tooltip).toBe('The height in cm')
+  })
+
+  it('names the definition and nothing else the grid also writes', async () => {
+    // The title, description and type cells of the keys grid write the same row. Echoing them
+    // back from the key this dialog was opened with reverts a cell edit made while it was open,
+    // so the payload leaves the optional two out and sends the type it cannot omit as null.
+    renderModal()
+
+    await savedDefinition()
+
+    const update: Record<string, unknown> =
+      updateKey.mock.calls[0][0].classificationStoreConfigurationKeyUpdate
+
+    expect(Object.keys(update).sort()).toEqual(['definition', 'name', 'type'])
+    expect(update).toMatchObject({ name: KEY_NAME, type: null })
   })
 
   it('sends an edit saved inside the debounce window, which the layout provider has not seen', async () => {

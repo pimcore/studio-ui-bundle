@@ -136,13 +136,14 @@ export const KeyDefinitionModal = ({
       ? null
       : { ...layout, ...formRef.current.getFieldsValue(true) }
 
+    // This dialog owns the definition and nothing else on the key, so the payload names nothing
+    // else. The configured title, the description and the type are left out rather than echoed
+    // back from the key the dialog was opened with: an absent title or description keeps the
+    // stored one and a null type does the same, where echoing them reverts a grid cell edit made
+    // while the dialog was open. The title inside the definition blob is a different value.
     const update: ClassificationStoreConfigurationKeyUpdate = {
       name: keyDetail.name,
-      // Saving a definition must not touch the configured title, which is a column of its
-      // own: the title carried inside the definition blob is a different value.
-      title: keyDetail.title ?? null,
-      description: keyDetail.description,
-      type: keyDetail.type,
+      type: null,
       definition
     }
 
