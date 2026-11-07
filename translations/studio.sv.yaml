@@ -2208,7 +2208,7 @@ classification-store.add-sub-group: Lägg till undergrupp
 classification-store.delete-sub-group: "Ta bort undergruppen \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: En undergrupp hör till lagret, så en ny blir tillgänglig för alla grupper i detta lager.
 classification-store.key-indexed: Inkludera i Classification Store-sökindexet
-classification-store.key-indexed-hint: En utesluten nyckel kan inte sorteras, filtreras eller sökas på, och värdet försvinner även från det lagrade sökdokumentet. Indexet uppdateras via kön, så ändringen sker inte omedelbart.
+classification-store.key-indexed-hint: Stäng av det här för att utesluta nyckeln från sökindexet. En utesluten nyckel kan inte sorteras, filtreras eller sökas på, och värdet försvinner även från det lagrade sökdokumentet. Indexet uppdateras via kön, så ändringen sker inte omedelbart.
 classification-store.delete-sub-group-in-use-hint: Ta först bort kopplingen mellan nycklarna och denna undergrupp i grupperna som nämns ovan, och ta sedan bort den.
 classification-store.no-sub-groups: Detta lager har inga undergrupper än
 classification-store.select-sub-group: Välj undergrupp

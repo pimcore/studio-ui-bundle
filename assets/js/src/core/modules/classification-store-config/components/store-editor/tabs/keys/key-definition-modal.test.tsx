@@ -137,6 +137,10 @@ const keyDetail = {
   }
 } as unknown as ClassificationStoreConfigurationKeyDetail
 
+/** The same key, with its stored definition replaced wholesale. */
+const keyWithDefinition = (definition: unknown): ClassificationStoreConfigurationKeyDetail =>
+  ({ ...keyDetail, definition }) as unknown as ClassificationStoreConfigurationKeyDetail
+
 /** The same key, with the index flag set as given or carrying none at all. */
 const keyIndexed = (indexed?: boolean): ClassificationStoreConfigurationKeyDetail => {
   const definition: Record<string, unknown> = { ...keyDetail.definition }
@@ -147,8 +151,17 @@ const keyIndexed = (indexed?: boolean): ClassificationStoreConfigurationKeyDetai
     definition.indexed = indexed
   }
 
-  return { ...keyDetail, definition } as unknown as ClassificationStoreConfigurationKeyDetail
+  return keyWithDefinition(definition)
 }
+
+/** Every stored shape that means indexed: the flag set, absent, explicitly null, no definition at all. */
+const INDEXED_KEYS: Array<[string, ClassificationStoreConfigurationKeyDetail]> = [
+  ['an explicit true', keyIndexed(true)],
+  ['no flag', keyIndexed()],
+  ['an explicit null flag', keyWithDefinition({ ...keyDetail.definition, indexed: null })],
+  // The state a freshly created key is in, so the dialog must not report it as excluded either
+  ['no definition at all', keyWithDefinition(null)]
+]
 
 const modal = (detail: ClassificationStoreConfigurationKeyDetail | undefined, open = true): React.JSX.Element => (
   // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
@@ -213,14 +226,8 @@ describe('KeyDefinitionModal', () => {
     expect(indexedControl()).not.toBeChecked()
   })
 
-  it('opens a key included in the search index with the control on', () => {
-    renderModal(keyIndexed(true))
-
-    expect(indexedControl()).toBeChecked()
-  })
-
-  it('opens a key whose definition carries no flag with the control on', () => {
-    renderModal(keyIndexed())
+  it.each(INDEXED_KEYS)('opens a key that carries %s with the control on', (_label, detail) => {
+    renderModal(detail)
 
     expect(indexedControl()).toBeChecked()
   })
@@ -248,15 +255,6 @@ describe('KeyDefinitionModal', () => {
     expect(definition.indexed).toBe(false)
     expect(definition.tooltip).toBe('The height in mm')
     expect(definition).toMatchObject(STORED_OPTIONS)
-  })
-
-  it('opens a key whose definition carries an explicit null flag with the control on', () => {
-    renderModal({
-      ...keyDetail,
-      definition: { ...keyDetail.definition, indexed: null }
-    } as unknown as ClassificationStoreConfigurationKeyDetail)
-
-    expect(indexedControl()).toBeChecked()
   })
 
   it('does not carry the flag of the key edited before into the next one', async () => {

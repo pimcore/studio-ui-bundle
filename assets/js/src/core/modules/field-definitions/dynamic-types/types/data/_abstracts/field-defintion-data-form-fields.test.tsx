@@ -64,6 +64,10 @@ const renderWithArea = (area: string[]): string[] => {
     .filter((name) => INSPECTED_ITEMS.includes(name))
 }
 
+/** The form item the Classification Store index control lives in. */
+const indexedItem = (): HTMLElement | undefined => screen.getAllByTestId('form-item')
+  .find((element) => element.getAttribute('data-name') === 'indexed')
+
 describe('FieldDefinitionDataFormFields shared toggles', () => {
   it('offers a Classification Store key only the options it reads', () => {
     // `indexed` is offered and `index` is not: one control, and not the object query index
@@ -82,16 +86,14 @@ describe('FieldDefinitionDataFormFields shared toggles', () => {
     renderWithArea(['classification-store'])
 
     // Visible text beside the control, and a label of its own rather than the hidden `index`
-    expect(screen.getByText('classification-store.key-indexed-hint')).toBeInTheDocument()
-    expect(screen.getByLabelText('classification-store.key-indexed')).toBeInTheDocument()
+    expect(indexedItem()).toContainElement(screen.getByText('classification-store.key-indexed-hint'))
+    expect(indexedItem()).toContainElement(screen.getByLabelText('classification-store.key-indexed'))
     expect(screen.queryByLabelText('index')).not.toBeInTheDocument()
   })
 
   it('binds the control to the stored flag rather than to the form value', () => {
     renderWithArea(['classification-store'])
 
-    const item = screen.getAllByTestId('form-item').find((element) => element.getAttribute('data-name') === 'indexed')
-
-    expect(item).toHaveAttribute('data-value-prop-name', 'checked')
+    expect(indexedItem()).toHaveAttribute('data-value-prop-name', 'checked')
   })
 })
