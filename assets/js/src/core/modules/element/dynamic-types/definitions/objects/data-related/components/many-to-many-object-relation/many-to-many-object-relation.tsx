@@ -220,12 +220,18 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     [mergedGridFullData]
   )
 
+  // Keyed by the grid item id: `id` need not be a visible field, and the items arrive per class, not in row order.
   const visibleFieldsValue = useMemo(() => {
     return mergedGridFullData.map(item => {
-      return item?.columns?.reduce<Record<string, any>>((acc, col) => {
+      if (isNil(item?.id)) {
+        return undefined
+      }
+
+      const values = (item?.columns ?? []).reduce<Record<string, any>>((acc, col) => {
         acc[col.key!] = col.value
         return acc
       }, {})
+      return { ...values, id: item.id }
     })
   }, [mergedGridFullData])
 
