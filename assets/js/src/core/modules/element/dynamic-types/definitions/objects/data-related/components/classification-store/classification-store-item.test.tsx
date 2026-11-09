@@ -54,9 +54,23 @@ let mockLocalizedEdit: string | null = null
 // A configured key title can be a translation key itself, so the label has to be looked up;
 // everything without a translation comes back unchanged, as the other cases assert.
 const mockTranslations: Record<string, string> = { 'classification-store.color.blue': 'Blue' }
+const mockGermanTranslations: Record<string, string> = { 'classification-store.color.blue': 'Blau' }
+
+/** The interface language. */
+let mockLanguage = 'en'
+
+/**
+ * One `t` per language, held rather than built per call: i18next hands out a new `t` when the
+ * interface language changes and the same one otherwise, and a fresh identity on every render
+ * would recompute every memo of the component — hiding exactly what the language case pins down.
+ */
+const mockTranslators: Record<string, (key: string) => string> = {
+  en: (key: string) => mockTranslations[key] ?? key,
+  de: (key: string) => mockGermanTranslations[key] ?? mockTranslations[key] ?? key
+}
 
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => mockTranslations[key] ?? key })
+  useTranslation: () => ({ t: mockTranslators[mockLanguage] })
 }))
 
 // icons resolve through the dependency injection container, which is not set up here
@@ -67,9 +81,14 @@ jest.mock('@Pimcore/components/icon/icon', () => ({
 jest.mock('@Pimcore/components/form/item/provider/item/use-item', () => ({
   useItem: () => ({ name: ['store', '1', 'default'] })
 }))
-jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value', () => ({
-  useKeyedListContext: () => ({ operations: { remove: jest.fn(), getValue: mockGetValue } })
-}))
+// The real context value is held by a provider and does not change identity per render, and the
+// component's memos depend on it. A fresh object here recomputed them on every render, which is
+// the one thing a test about a retained render tree must not do.
+jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value', () => {
+  const operations = { remove: jest.fn(), getValue: (...args: unknown[]) => mockGetValue(...args) }
+
+  return { useKeyedListContext: () => ({ operations }) }
+})
 jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
   useElementContext: () => ({ id: 42, elementType: 'data-object' })
 }))
@@ -78,9 +97,12 @@ jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
 jest.mock('@Pimcore/modules/data-object/hooks/use-data-object-draft', () => ({
   useDataObjectDraft: () => ({ dataObject: { id: 42, permissions: { localizedEdit: mockLocalizedEdit } } })
 }))
-jest.mock('./provider', () => ({
-  useClassificationStore: () => ({ isNewGroup: () => false })
-}))
+// Stable for the same reason as the keyed-list context above: `isNewGroup` is a memo dependency.
+jest.mock('./provider', () => {
+  const isNewGroup = (): boolean => false
+
+  return { useClassificationStore: () => ({ isNewGroup }) }
+})
 jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: mockConfirm })
 }))
@@ -182,6 +204,22 @@ const translatedTitleLayout = {
   ]
 } as any
 
+/** A stable callback, for the cases that render the same props twice. */
+const noop = (): void => {}
+
+/**
+ * Held at module level on purpose: the language case re-renders these props unchanged, so every
+ * dependency of the component's memoized tree keeps its identity and the language is the only
+ * input that moved.
+ */
+const LANGUAGE_CASE_PROPS = {
+  currentLayoutData: [translatedTitleLayout],
+  fieldLocalized: true,
+  groupLayout: translatedTitleLayout,
+  localizationGroup: LANGUAGE,
+  updateCurrentLayoutData: noop
+}
+
 const headings = (): Array<string | null> => [...document.querySelectorAll('h5')].map((heading) => heading.textContent)
 
 const renderedKeyIds = (): unknown[] => mockObjectComponent.mock.calls.map(([props]) => props.name)
@@ -218,6 +256,7 @@ describe('ClassificationStoreItem', () => {
     mockObjectComponent.mockClear()
     mockGetValue.mockReset()
     mockLocalizedEdit = null
+    mockLanguage = 'en'
   })
 
   it('asks for confirmation when the group is deleted', async () => {
@@ -454,6 +493,28 @@ describe('ClassificationStoreItem', () => {
 
     // the key that is not localized stays a plain string, which the field label translates itself
     expect(propsOfKey(52).title).toBe(TRANSLATED_TITLE)
+  })
+
+  it('relabels its keys when the interface language changes', () => {
+    // The group renders a retained tree, and the labels, the headings, the indicator tooltip and
+    // its accessible label are already-translated nodes inside it. A language change moves `t`
+    // and nothing else, so a tree that does not watch `t` keeps serving the previous language
+    // until one of the other inputs happens to move.
+    //
+    // A fresh element each time, from the same props: handing React the identical element back
+    // makes it skip the subtree altogether, so nothing would be re-rendered to assert on. The
+    // props are the same objects, which is what leaves the language as the only input that moved.
+    const group = (): React.JSX.Element => <ClassificationStoreItem { ...LANGUAGE_CASE_PROPS } />
+
+    const { rerender } = render(group())
+
+    expect(screen.getByText('Blue')).toBeInTheDocument()
+
+    mockLanguage = 'de'
+    rerender(group())
+
+    expect(screen.getByText('Blau')).toBeInTheDocument()
+    expect(screen.queryByText('Blue')).not.toBeInTheDocument()
   })
 
   it('marks only the key flagged localized itself on a field that is not localized', () => {

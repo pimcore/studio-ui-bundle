@@ -270,5 +270,9 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         </Panel>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized, isLocalizationGroupEditable])
+    // `t` is a dependency: the memo retains the key titles, the sub-group headings, the indicator
+    // tooltip and the accessible labels as already translated nodes, and i18next hands out a new
+    // `t` when the interface language changes. Without it the group kept serving the previous
+    // language until one of the others happened to move.
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized, isLocalizationGroupEditable, t])
 }

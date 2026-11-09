@@ -385,8 +385,14 @@ const api = baseApi.enhanceEndpoints({
           (draft) => {
             const idx = draft.items.findIndex((k) => k.id === args.id)
             if (idx !== -1) {
-              draft.items[idx] = {
-                ...draft.items[idx],
+              // Assigned onto the existing row rather than replacing it. Immer records one patch
+              // per path it sees written, so the inverse patches this produces name only the
+              // members this request wrote — and the rollback below can therefore undo no more
+              // than that. Replacing the row recorded a single replace of the whole row, and a
+              // request that failed after a later one had already succeeded then restored every
+              // member of it: the exact staleness the response mask further down prevents,
+              // arriving through the other door.
+              Object.assign(draft.items[idx], {
                 name: update.name,
                 // A null title means "leave the stored one alone" to the server, just like a
                 // null type does, so writing it into the cache would blank the Title cell
@@ -402,8 +408,8 @@ const api = baseApi.enhanceEndpoints({
                 // on the way to the wire and would patch a null the server never hears about.
                 ...(update.localized !== undefined ? { localized: update.localized } : {})
                 // `definition` intentionally excluded: a null definition means "leave the stored
-                // one alone" to the server, so spreading it would wipe the cached definition.
-              }
+                // one alone" to the server, so writing it would wipe the cached definition.
+              })
             }
           }
         )
@@ -526,8 +532,14 @@ const api = baseApi.enhanceEndpoints({
           (draft, cacheKey) => {
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
-              // Upsert — update in-place whatever the payload named
-              draft.items[idx] = { ...draft.items[idx], ...absentSafePatch }
+              // Upsert — update in-place whatever the payload named. Assigned onto the existing
+              // row rather than replacing it, for the same reason the key update above is: the
+              // inverse patches then name only the members this request wrote, so rolling back a
+              // request that failed after a later one succeeded cannot undo the later one. The
+              // two surfaces here write disjoint members, so a whole-row rollback took the field
+              // mask below apart — a failed sorter edit restored the sub group an assignment had
+              // already saved.
+              Object.assign(draft.items[idx], absentSafePatch)
             } else {
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new

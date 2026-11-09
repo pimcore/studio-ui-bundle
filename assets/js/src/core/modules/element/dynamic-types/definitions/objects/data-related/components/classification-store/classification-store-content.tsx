@@ -253,6 +253,10 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
     hideEmptyData,
     hideEmptyDataRevision,
     isAddRemoveDisallowed,
-    props.title
+    props.title,
+    // `t` is a dependency for the same reason it is one on the group below: the add action's
+    // label and the hide-empty-data labels are retained here as already translated nodes, and
+    // i18next hands out a new `t` when the interface language changes.
+    t
   ])
 }

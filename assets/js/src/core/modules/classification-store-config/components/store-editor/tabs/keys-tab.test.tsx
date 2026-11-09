@@ -221,4 +221,28 @@ describe('KeysTab', () => {
     expect('localized' in updateRequests()[0].body!).toBe(false)
     expect(updateRequests()[0].body).toEqual(expect.objectContaining({ [columnId]: value }))
   })
+
+  // The definition is written by the key definition dialog alone. A cell edit that sent the one
+  // its row happens to hold would be sending a non-null definition, which is a value and not an
+  // absence: it passes the preservation mask of the cache patch, and the edit's own response then
+  // writes the stale blob back over a definition the dialog saved while the edit was in flight.
+  // The fixture's key carries one on purpose, so an echoed definition is visible here.
+  it.each([
+    ['title', 'Shipping weight'],
+    ['name', 'shipping-weight'],
+    ['type', 'textarea'],
+    ['description', 'How heavy the parcel is']
+  ])('leaves the stored definition alone when the %s cell is edited', async (columnId, value) => {
+    expect(storedKey.definition).not.toBeNull()
+
+    renderTab()
+
+    const cell = await screen.findByLabelText(`${columnId}-0`, undefined, WAIT_BUDGET)
+
+    fireEvent.change(cell, { target: { value } })
+
+    await waitFor(() => { expect(updateRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(updateRequests()[0].body).toEqual(expect.objectContaining({ definition: null }))
+  })
 })

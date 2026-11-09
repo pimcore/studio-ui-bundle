@@ -59,13 +59,19 @@ const cachedKey = (store: ReturnType<typeof createStore>): Record<string, unknow
 
 const flush = async (): Promise<void> => { await new Promise((resolve) => setTimeout(resolve, 0)) }
 
+/**
+ * Answers one held-back request: with the row it carries, or — given a failure status — with the
+ * rejection that makes the slice roll its optimistic patch back.
+ */
+type Responder = (payload: Record<string, unknown>, status?: number) => void
+
 describe('classification store key update cache patch', () => {
   const originalFetch = globalThis.fetch
-  let respondToUpdate: (key: Record<string, unknown>) => void
+  let respondToUpdate: Responder
   /** The update requests the slice sent, so what reaches the wire can be asserted. */
   let updateRequests: Array<{ url: string, body: Record<string, unknown> }>
   /** One resolver per update request, in the order the requests were made. */
-  let pendingUpdates: Array<(key: Record<string, unknown>) => void>
+  let pendingUpdates: Responder[]
 
   beforeEach(() => {
     updateRequests = []
@@ -83,9 +89,9 @@ describe('classification store key update cache patch', () => {
 
       // The update answer is held back so the optimistic window can be asserted.
       return await new Promise<Response>((resolve) => {
-        respondToUpdate = (key) => {
+        respondToUpdate = (key, status = 200) => {
           resolve(new Response(JSON.stringify(key), {
-            status: 200,
+            status,
             headers: { 'Content-Type': 'application/json' }
           }))
         }
@@ -276,6 +282,62 @@ describe('classification store key update cache patch', () => {
       localized: false
     }))
   })
+
+  it('keeps a saved localization when an older cell edit fails after it', async () => {
+    // The rollback is the other door into the same staleness the response mask closes, and the
+    // mask cannot see it: a failed request may undo the members it wrote and no others, or it
+    // takes a save the server has already accepted down with it.
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // A title edit goes out first and carries no localized member at all.
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    // The dialog's save follows while the cell edit is still in flight, and succeeds.
+    const dialogSave = dispatchUpdate(store, keyUpdate({ localized: false }))
+    await flush()
+
+    expect(pendingUpdates).toHaveLength(2)
+
+    pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', localized: false })
+    await dialogSave
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ localized: false }))
+
+    // The cell edit answers last and is rejected, so its optimistic title rolls back.
+    pendingUpdates[0]({ message: 'Conflict' }, 409)
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      // its own member is back as it was ...
+      title: 'Weight',
+      // ... and the flag the dialog saved in the meantime is untouched
+      localized: false
+    }))
+  })
+
+  it('keeps a saved definition when an older cell edit fails after it', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    const dialogSave = dispatchUpdate(store, keyUpdate({ definition: DEFINITION }))
+    await flush()
+
+    pendingUpdates[1]({ ...storedKey, definition: DEFINITION })
+    await dialogSave
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: DEFINITION }))
+
+    pendingUpdates[0]({ message: 'Conflict' }, 409)
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      title: 'Weight',
+      definition: DEFINITION
+    }))
+  })
 })
 
 /**
@@ -314,7 +376,7 @@ describe('classification store key-group relation upsert cache patch', () => {
 
   const originalFetch = globalThis.fetch
   /** One resolver per upsert request, in the order the requests were made. */
-  let pendingUpserts: Array<(relation: Record<string, unknown>) => void>
+  let pendingUpserts: Responder[]
 
   beforeEach(() => {
     pendingUpserts = []
@@ -329,9 +391,9 @@ describe('classification store key-group relation upsert cache patch', () => {
 
       // Every upsert answer is held back, so the test decides the order they land in.
       return await new Promise<Response>((resolve) => {
-        pendingUpserts.push((relation) => {
+        pendingUpserts.push((relation, status = 200) => {
           resolve(new Response(JSON.stringify(relation), {
-            status: 200,
+            status,
             headers: { 'Content-Type': 'application/json' }
           }))
         })
@@ -402,6 +464,35 @@ describe('classification store key-group relation upsert cache patch', () => {
     await assignment
 
     expect(cachedRelation(store)).toEqual(expect.objectContaining({ mandatory: true, subGroup: 'electrical' }))
+  })
+
+  it('keeps an assigned sub group when an older cell edit fails after it', async () => {
+    // The same two surfaces, reached through the rollback instead of through the response: a
+    // failed upsert may undo the members it wrote and no others, or the field mask above is
+    // taken apart from behind and the assignment the server kept disappears from the cache.
+    const store = createStore()
+    await store.dispatch(
+      (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection.initiate(relationQueryArgs)
+    )
+    expect(cachedRelation(store)).toEqual(expect.objectContaining({ sorter: 3, subGroup: null }))
+
+    const cellEdit = upsert(store, { sorter: 9 })
+    await flush()
+    const assignment = upsert(store, { subGroup: 'electrical' })
+    await flush()
+
+    expect(pendingUpserts).toHaveLength(2)
+
+    pendingUpserts[1]({ ...storedRelation, sorter: 9, subGroup: 'electrical' })
+    await assignment
+    expect(cachedRelation(store)).toEqual(expect.objectContaining({ sorter: 9, subGroup: 'electrical' }))
+
+    // The cell edit answers last and is rejected.
+    pendingUpserts[0]({ message: 'Conflict' }, 409)
+    await cellEdit
+
+    // Its own sorter is back as it was, and the sub group it never named is still assigned.
+    expect(cachedRelation(store)).toEqual(expect.objectContaining({ sorter: 3, subGroup: 'electrical' }))
   })
 
   it('keeps the field mask on a page that already held the row while another page did not', async () => {

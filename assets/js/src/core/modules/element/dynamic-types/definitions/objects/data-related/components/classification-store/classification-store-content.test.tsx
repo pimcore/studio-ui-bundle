@@ -52,8 +52,21 @@ const mockItem = jest.fn()
 const mockUpdateCurrentLayoutData = jest.fn()
 const mockSetHasLocalizedFields = jest.fn()
 
+/** The interface language. */
+let mockLanguage = 'en'
+
+/**
+ * One `t` per language, held rather than built per call: i18next hands out a new `t` when the
+ * interface language changes and the same one otherwise, and a fresh identity on every render
+ * would recompute every memo of the component — hiding exactly what the language case pins down.
+ */
+const mockTranslators: Record<string, (key: string) => string> = {
+  en: (key: string) => key,
+  de: (key: string) => (key === 'add' ? 'hinzufügen' : key)
+}
+
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key })
+  useTranslation: () => ({ t: mockTranslators[mockLanguage] })
 }))
 
 // icons resolve through the dependency injection container, which is not set up here
@@ -61,9 +74,17 @@ jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: () => <span />
 }))
 
-jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value', () => ({
-  useKeyedListSelector: () => ({ groupKeys: mockGroupKeys, activeGroups: {}, groupCollectionMapping: {} })
-}))
+// The real selector caches its projection by content equality, so these keep their identity
+// between renders and the component's memo depends on them. Fresh objects here recomputed that
+// memo on every render, which is the one thing a test about a retained render tree must not do.
+jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value', () => {
+  const activeGroups = {}
+  const groupCollectionMapping = {}
+
+  return {
+    useKeyedListSelector: () => ({ groupKeys: mockGroupKeys, activeGroups, groupCollectionMapping })
+  }
+})
 
 // the form barrel imports antd-style; the hidden bookkeeping items are not asserted here
 jest.mock('@Pimcore/components/form/form', () => ({
@@ -107,6 +128,13 @@ const renderContent = (props: Partial<ClassificationStoreProps> = {}): void => {
     />
   )
 }
+
+/**
+ * Held at module level on purpose: the language case re-renders these props unchanged, so every
+ * dependency of the component's memoized tree keeps its identity and the language is the only
+ * input that moved.
+ */
+const LANGUAGE_CASE_PROPS = { title: 'Technical Attributes' }
 
 const CURRENT_LANGUAGE_OPTION = 'Current language (EN)'
 const DEFAULT_OPTION = 'Default'
@@ -154,6 +182,7 @@ describe('ClassificationStoreContent', () => {
     mockItem.mockClear()
     mockUpdateCurrentLayoutData.mockClear()
     mockSetHasLocalizedFields.mockClear()
+    mockLanguage = 'en'
     // Resolving a key's localization must cost no request: the layout already carries the flag.
     globalThis.fetch = jest.fn() as unknown as typeof fetch
   })
@@ -339,5 +368,30 @@ describe('ClassificationStoreContent', () => {
     await userEvent.click(screen.getByText(CURRENT_LANGUAGE_OPTION))
 
     expect(itemProps().at(-1)?.localizationGroup).toBe(LANGUAGE)
+  })
+
+  it('relabels its own actions when the interface language changes', () => {
+    // This view renders a retained tree too, and the add action's label is an already translated
+    // node inside it. A language change moves `t` and nothing else, so a tree that does not watch
+    // `t` keeps serving the previous language until one of the other inputs happens to move.
+    //
+    // A fresh element each time, from the same props: handing React the identical element back
+    // makes it skip the subtree altogether, and the props are the same objects, which is what
+    // leaves the language as the only input that moved.
+    installLayout([inheritingGroup])
+
+    const content = (): React.JSX.Element => (
+      <ClassificationStoreContent { ...(LANGUAGE_CASE_PROPS as ClassificationStoreProps) } />
+    )
+
+    const { rerender } = render(content())
+
+    expect(screen.getByRole('button', { name: 'add' })).toBeInTheDocument()
+
+    mockLanguage = 'de'
+    rerender(content())
+
+    expect(screen.getByRole('button', { name: 'hinzufügen' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'add' })).not.toBeInTheDocument()
   })
 })
