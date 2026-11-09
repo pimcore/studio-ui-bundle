@@ -15,7 +15,6 @@ import { type ElementIcon } from '@sdk/modules/widget-manager'
 import { injectable } from 'inversify'
 import { isNil, kebabCase, uniq } from 'lodash'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { filterTypesByArea } from '@Pimcore/modules/field-definitions/dynamic-types/utils/area-scope-helper'
 
 export interface GroupInfo {
   icon: ElementIcon
@@ -271,12 +270,12 @@ export class DynamicTypeFieldDefinitionRegistry extends DynamicTypeRegistryAbstr
     const allowedDropdownTags = isRoot ? ['group:root'] : dynType.getValidDropdownTags(context)
 
     const dropdownTagTypes = this.getTypesByTags(allowedDropdownTags, context)
-    const actions = this.buildGroupedActions(filterTypesByArea(dropdownTagTypes, context), 'add-')
+    const actions = this.buildGroupedActions(dropdownTagTypes, 'add-')
 
     if (!isRoot) {
       if (!isCustomLayout) {
         const convertibleTagTypes = this.getTypesByTags(dynType.getValidConvertibleTags(context), context)
-        const convertibleActions = this.buildGroupedActions(filterTypesByArea(convertibleTagTypes, context), 'convert-')
+        const convertibleActions = this.buildGroupedActions(convertibleTagTypes, 'convert-')
 
         if ((convertibleActions?.length ?? 0) > 0) {
           actions?.push({
