@@ -15,8 +15,12 @@ import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type CreateContextMenuItemsProps } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { t } from 'i18next'
+import { canExpandMainWidgetTabset } from '../utils/expand-main-widget-tabset'
 
-export const createContextMenuItems = ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps): DropdownProps['menu']['items'] => {
+export const createContextMenuItems = ({ contextMenuState, closeContextMenu, model, closeWidget, expandMainWidget }: CreateContextMenuItemsProps): DropdownProps['menu']['items'] => {
+  const nodeId = contextMenuState.tabNode.getId()
+  const cannotUseFullSpace = !canExpandMainWidgetTabset(model, nodeId)
+
   return [
     {
       key: 'close-tab',
@@ -73,6 +77,16 @@ export const createContextMenuItems = ({ contextMenuState, closeContextMenu, mod
           })
           closeContextMenu()
         }
+      }
+    },
+    ...(cannotUseFullSpace ? [] : [{ type: 'divider' as const, key: 'use-full-space-divider' }]),
+    {
+      key: 'use-full-space',
+      label: t('use-full-space'),
+      hidden: cannotUseFullSpace,
+      onClick: () => {
+        expandMainWidget(nodeId)
+        closeContextMenu()
       }
     }
   ]

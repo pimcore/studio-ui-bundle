@@ -22,11 +22,11 @@ const config: Meta = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'A predefined layout component specifically designed for configuration interfaces. This layout provides a standardized 25/75 split with a left panel for configuration navigation (tree, menu, or options) and a right panel for the main configuration content. Use this component exclusively for configuration screens to maintain consistency across all configuration interfaces in the application.'
+        component: '**Deprecated:** use `PageLayout` with `variant="config"` instead (Components/Layout/PageLayout). A predefined layout component specifically designed for configuration interfaces. This layout provides a standardized 20/80 split with a left panel for configuration navigation (tree, menu, or options; 170px minimum, no maximum) and a right panel for the main configuration content. Use this component exclusively for configuration screens to maintain consistency across all configuration interfaces in the application.'
       }
     }
   },
-  tags: ['autodocs']
+  tags: ['autodocs', 'deprecated']
 }
 
 export default config

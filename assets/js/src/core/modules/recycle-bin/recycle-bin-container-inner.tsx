@@ -120,7 +120,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
 
           <Flex align="center">
             <IconButton
-              aria-label={ t('refresh') }
+              aria-label={ t('toolbar.reload') }
               disabled={ isRTKLoading || isLoading }
               icon={ { value: 'refresh' } }
               onClick={ () => {
@@ -130,7 +130,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                   )
                 )
               } }
-              tooltip={ { title: t('refresh') } }
+              tooltip={ { title: t('toolbar.reload') } }
             />
 
             {total > 0 && (
