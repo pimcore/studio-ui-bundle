@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { type ReactNode, useId } from 'react'
 import type { SwitchProps as AntdSwitchProps } from 'antd/es/switch/index'
 import { Switch as AntdSwitch } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TooltipIcon, type TooltipIconProps } from '@Pimcore/components/tooltip-icon/tooltip-icon'
-import { isNil, isString } from 'lodash'
+import { isNil } from 'lodash'
 
 export interface SwitchProps extends AntdSwitchProps {
   labelLeft?: ReactNode
@@ -21,7 +21,15 @@ export interface SwitchProps extends AntdSwitchProps {
   tooltip?: ReactNode
   tooltipPlacement?: TooltipIconProps['placement']
   'aria-label'?: string
+  'aria-labelledby'?: string
 }
+
+/**
+ * Whether React renders text for this label. A nil, boolean or empty label renders nothing, and
+ * referencing it would name the switch with the empty string instead of leaving it unnamed.
+ */
+const isRendered = (label: ReactNode): boolean =>
+  !isNil(label) && typeof label !== 'boolean' && label !== ''
 
 export const Switch = ({
   labelLeft,
@@ -29,22 +37,40 @@ export const Switch = ({
   tooltip,
   tooltipPlacement = 'right',
   'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
   ...props
 }: SwitchProps): React.JSX.Element => {
-  // The labels are siblings of the switch, which renders as a button and cannot be labelled by one.
-  const accessibleName = ariaLabel ?? [labelLeft, labelRight].find(isString)
+  const idPrefix = useId()
+  const leftId = `${idPrefix}label-left`
+  const rightId = `${idPrefix}label-right`
+  const hasLabelLeft = isRendered(labelLeft)
+  const hasLabelRight = isRendered(labelRight)
+
+  // The labels are siblings of the switch, which renders as a button and so cannot be the target
+  // of a <label>. Each one is wrapped in an element carrying an id and referenced through
+  // `aria-labelledby` instead, which names the switch whatever the label renders as — a plain
+  // string, a <Text>, or a whole Flex. A name the caller passed itself always wins.
+  const labelIds = [
+    hasLabelLeft ? leftId : undefined,
+    hasLabelRight ? rightId : undefined
+  ].filter((id): id is string => id !== undefined)
+
+  const labelledBy = ariaLabelledBy ?? (
+    isNil(ariaLabel) && labelIds.length > 0 ? labelIds.join(' ') : undefined
+  )
 
   return (
     <Flex
       align={ 'center' }
       gap={ 'extra-small' }
     >
-      {labelLeft}
+      {hasLabelLeft && <span id={ leftId }>{labelLeft}</span>}
       <AntdSwitch
         { ...props }
-        aria-label={ accessibleName }
+        aria-label={ ariaLabel }
+        aria-labelledby={ labelledBy }
       />
-      {labelRight}
+      {hasLabelRight && <span id={ rightId }>{labelRight}</span>}
       {!isNil(tooltip) && (
         <TooltipIcon
           placement={ tooltipPlacement }

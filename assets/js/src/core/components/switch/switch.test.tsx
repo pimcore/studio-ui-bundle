@@ -51,8 +51,55 @@ describe('Switch accessible name', () => {
     expect(screen.getByRole('switch')).toHaveAccessibleName('Indexed')
   })
 
-  it('leaves the control unnamed when the label is not a string', () => {
+  it('names it with a rendered label that is not a plain string', () => {
     render(<Switch labelRight={ <span>{LABEL}</span> } />)
+
+    expect(screen.getByRole('switch')).toHaveAccessibleName(LABEL)
+    expect(screen.getByLabelText(LABEL)).toBe(screen.getByRole('switch'))
+  })
+
+  it('names it with everything a nested label renders', () => {
+    render(
+      <Switch
+        labelRight={ (
+          <span>
+            <span>{LABEL}</span>
+            <span>{' (queued)'}</span>
+          </span>
+        ) }
+      />
+    )
+
+    expect(screen.getByRole('switch')).toHaveAccessibleName(`${LABEL} (queued)`)
+  })
+
+  it('reads both labels when the switch is rendered between them', () => {
+    render(
+      <Switch
+        labelLeft={ 'Excluded' }
+        labelRight={ <span>Indexed</span> }
+      />
+    )
+
+    expect(screen.getByRole('switch')).toHaveAccessibleName('Excluded Indexed')
+  })
+
+  it('keeps a caller provided aria-labelledby instead of pointing at the label', () => {
+    render(
+      <>
+        <span id="external-name">Search index</span>
+        <Switch
+          aria-labelledby="external-name"
+          labelRight={ <span>{LABEL}</span> }
+        />
+      </>
+    )
+
+    expect(screen.getByRole('switch')).toHaveAccessibleName('Search index')
+  })
+
+  it('leaves the control unnamed when no label is rendered', () => {
+    render(<Switch labelRight={ false } />)
 
     expect(screen.getByRole('switch')).not.toHaveAccessibleName()
   })
