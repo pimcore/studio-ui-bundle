@@ -2208,7 +2208,7 @@ classification-store.engine.label: "Motore: {{engine}}"
 classification-store.engine.eav: "EAV"
 classification-store.engine.document: "Documento"
 classification-store.engine.eav-hint: "I valori qualificati e i tipi di chiave estesi richiedono il motore documenti."
-classification-store.key-type-needs-document-engine: "Il motore di questo store non può contenere questo tipo di chiave. Richiede il motore documenti, che lo store mostra accanto alle sue schede."
+classification-store.key-type-needs-document-engine: "Il motore di questo store non può contenere questo tipo di chiave. Richiede il motore documenti."
 classification-store.add-sub-group: Aggiungi sottogruppo
 classification-store.delete-sub-group: "Eliminare il sottogruppo \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: Un sottogruppo appartiene allo store, quindi uno nuovo diventa disponibile per ogni gruppo di questo store.

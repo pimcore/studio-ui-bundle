@@ -2208,7 +2208,7 @@ classification-store.engine.label: "Engine: {{engine}}"
 classification-store.engine.eav: "EAV"
 classification-store.engine.document: "Dokument"
 classification-store.engine.eav-hint: "Qualifizierte Werte und die erweiterten Schlüsseltypen benötigen die Dokument-Engine."
-classification-store.key-type-needs-document-engine: "Die Engine dieses Stores kann diesen Schlüsseltyp nicht speichern. Er benötigt die Dokument-Engine, die der Store neben seinen Tabs anzeigt."
+classification-store.key-type-needs-document-engine: "Die Engine dieses Stores kann diesen Schlüsseltyp nicht speichern. Er benötigt die Dokument-Engine."
 classification-store.add-sub-group: Untergruppe hinzufügen
 classification-store.delete-sub-group: "Untergruppe \"{{subGroupName}}\" löschen?"
 classification-store.add-sub-group-store-hint: Eine Untergruppe gehört zum Store, eine neue steht daher jeder Gruppe dieses Stores zur Verfügung.
