@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papie
 error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
 error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
 error.syntax_error: Syntaxfehler
+validation.mandatory: "{{field}} ist ein Pflichtfeld"
+validation.regex_mismatch: "{{field}} entspricht nicht dem erforderlichen Muster {{regex}}"
+validation.max_length: "{{field}} darf nicht länger als {{max}} Zeichen sein"
+validation.min_length: "{{field}} muss mindestens {{min}} Zeichen lang sein"
+validation.not_numeric: "{{field}} muss eine Zahl sein, erhalten: {{value}}"
+validation.not_integer: "{{field}} muss eine ganze Zahl sein, erhalten: {{value}}"
+validation.not_unsigned: "{{field}} darf nicht negativ sein, erhalten: {{value}}"
+validation.min_value: "{{field}} muss mindestens {{min}} sein, erhalten: {{value}}"
+validation.max_value: "{{field}} darf höchstens {{max}} sein, erhalten: {{value}}"
+validation.range_start_after_end: "{{field}}: Der Beginn darf nicht nach dem Ende liegen"
+validation.invalid_email: "{{field}} ist keine gültige E-Mail-Adresse: {{value}}"
+validation.invalid_option: "{{field}} hat eine ungültige Option: {{value}}"
+validation.invalid_time: "{{field}} ist keine gültige Uhrzeit: {{value}}"
+validation.invalid_relation: "{{field}} enthält eine ungültige Relation"
+validation.max_relations: "{{field}} erlaubt höchstens {{max}} Relationen"
+validation.max_items: "{{field}} erlaubt höchstens {{max}} Einträge"
+validation.slug_not_unique: "Der URL-Slug {{value}} in {{field}} wird bereits verwendet"
+validation.slug_invalid: "{{field}} ist kein gültiger URL-Slug"
+validation.slug_reserved_characters: "{{field}} enthält reservierte Zeichen: {{characters}}"
+validation.unique_constraint: "Eine Eindeutigkeitsbedingung wird verletzt"
+validation.missing_required_editables: "Werte für Pflicht-Editables fehlen"
+validation.image_too_large: "Das Bild {{filename}} ist zu groß (max. {{max_megapixels}} Megapixel). Verkleinern Sie es auf {{suggested_width}}×{{suggested_height}} Pixel oder weniger"
+validation.and_more: "und {{n}} weitere"
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter
@@ -1295,6 +1318,7 @@ close-tab: Tab schließen
 close-others: Andere schließen
 close-unmodified: Unveränderte schließen
 close-all: Alle schließen
+use-full-space: Ganzen Bereich nutzen
 asset.tree.context-menu.download: Herunterladen
 asset.tree.context-menu.download-as-zip: Als ZIP herunterladen
 element-selector.title.single: Element auswählen
@@ -1400,6 +1424,7 @@ system-information.type: Typ
 system-information.class-id: Klassen-ID
 system-information.class: Klasse
 system-information.file-size: Dateigröße
+system-information.checksum: Prüfsumme
 system-information.modification-date: Änderungsdatum
 system-information.creation-date: Erstellungsdatum
 system-information.user-modification: Benutzer Änderung
@@ -2182,6 +2207,10 @@ classification-store.rename-key: Schlüssel umbenennen
 classification-store.delete-key: "Schlüssel \"{{keyName}}\" löschen?"
 classification-store.delete-key-relation: "Schlüssel \"{{keyName}}\" aus dieser Gruppe entfernen?"
 classification-store.delete-group-relation: "Gruppe \"{{groupName}}\" aus dieser Collection entfernen?"
+classification-store.delete-group-consequence: "Beim Löschen dieser Gruppe werden auch die Werte gelöscht, die jedes Objekt unter ihr speichert. Dies kann nicht rückgängig gemacht werden."
+classification-store.delete-collection-consequence: "Die Collection und ihre Gruppenliste werden entfernt. Die Gruppen und ihre Schlüssel bleiben im Store erhalten, und es werden keine Objektwerte gelöscht."
+classification-store.delete-key-relation-consequence: "Der Schlüssel wird nur aus dieser Gruppe entfernt. Der Schlüssel selbst bleibt im Store erhalten, und nichts, was ein Objekt speichert, wird gelöscht."
+classification-store.delete-group-relation-consequence: "Die Gruppe wird nur aus dieser Collection entfernt. Die Gruppe, ihre Schlüssel und die Werte, die Objekte unter ihr speichern, bleiben unberührt."
 classification-store.edit-definition: Definition bearbeiten
 classification-store.edit-key-definition: "Schlüsseldefinition bearbeiten: {{keyName}}"
 classification-store.columns.id: ID
@@ -2212,6 +2241,8 @@ classification-store.key-type-needs-document-engine: "Die Engine dieses Stores k
 classification-store.add-sub-group: Untergruppe hinzufügen
 classification-store.delete-sub-group: "Untergruppe \"{{subGroupName}}\" löschen?"
 classification-store.add-sub-group-store-hint: Eine Untergruppe gehört zum Store, eine neue steht daher jeder Gruppe dieses Stores zur Verfügung.
+classification-store.key-indexed: In den Suchindex des Classification Store aufnehmen
+classification-store.key-indexed-hint: Solange dies ausgeschaltet ist, kann dieser Schlüssel nicht sortiert, gefiltert oder durchsucht werden, und sein Wert wird aus dem gespeicherten Suchdokument entfernt. Der Index wird über die Warteschlange angeglichen, Änderungen wirken daher nicht sofort.
 classification-store.delete-sub-group-in-use-hint: Heben Sie die Zuordnung der Schlüssel zu dieser Untergruppe zuerst in den oben genannten Gruppen auf und löschen Sie sie dann.
 classification-store.no-sub-groups: Dieser Store hat noch keine Untergruppen
 classification-store.select-sub-group: Untergruppe auswählen
@@ -2233,6 +2264,13 @@ classification-store.sub-group-unused: "Kein Schlüssel dieser Gruppe verwendet 
 classification-store.assign-sub-group-progress: "Die Untergruppe wird {{done}} von {{total}} Schlüsseln zugeordnet…"
 classification-store.assign-sub-group-failed: "Die Untergruppe konnte folgenden Schlüsseln nicht zugeordnet werden: {{keyNames}}"
 classification-store.assign-sub-group-running: Warten, bis die Zuordnung der Untergruppe abgeschlossen ist
+classification-store.key-localization: "Lokalisierung"
+classification-store.key-localization.inherit: "Erben"
+classification-store.key-localization.localized: "Lokalisiert"
+classification-store.key-localization.not-localized: "Nicht lokalisiert"
+classification-store.key-localization-confirm: "Werte, die dieser Schlüssel in anderen Sprachen hält, werden möglicherweise nicht mehr angezeigt oder gespeichert. Trotzdem speichern?"
+classification-store.key-localized: "Lokalisierter Schlüssel"
+classification-store.key-localized-tooltip: "Dieser Schlüssel hält einen eigenen Wert pro Sprache."
 classification-store.import: Store-Konfiguration importieren
 classification-store.import-success: Store-Konfiguration erfolgreich importiert
 home: Startseite

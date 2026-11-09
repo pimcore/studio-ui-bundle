@@ -131,12 +131,12 @@ export const McpServersRail = ({
     <ContentLayout
       renderToolbar={
         <Toolbar justify="space-between">
-          <Tooltip title={ t('refresh') }>
+          <Tooltip title={ t('toolbar.reload') }>
             <IconButton
+              aria-label={ t('toolbar.reload') }
               disabled={ isFetching }
               icon={ { value: 'refresh' } }
               onClick={ onRefresh }
-              title={ t('refresh') }
               type="link"
             />
           </Tooltip>

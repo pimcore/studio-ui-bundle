@@ -868,7 +868,7 @@ export type ClassificationStoreConfigurationKeyDetail = {
     enabled: boolean;
     /** Description of the key */
     description: string | null;
-    /** Definition of the key */
+    /** Definition of the key, reported as it is stored. The member "indexed" is reserved: it is this key's own search index flag, where false asks for the key to be left out of the search index wherever it is used and anything else leaves it indexed. Studio stores the flag and queues a remap when it changes; honouring it is the search index's own. The members "variants" and "multiValue" are reserved as well: "variants" is the ordered list of variant names the key permits a value to carry, where a value carrying no variant addresses the default variant, and "multiValue" is whether the key holds more than one value per variant. A key that permits more than the one slot it always had - a "variants" list naming at least one variant, or "multiValue" true - carries its values in the object data payload as a list of entries rather than as a single value. A key that names no usable variant and does not declare "multiValue" true - an absent, empty or non-list "variants" member, with "multiValue" absent or false - permits exactly that one slot, and its values are carried unchanged; a key naming a variant carries a list of entries even with "multiValue" false, and a key declaring "multiValue" true carries one even with no variant named. */
     definition: object | null;
     /** Creation date as Unix timestamp */
     creationDate: number | null;
@@ -878,6 +878,8 @@ export type ClassificationStoreConfigurationKeyDetail = {
     title?: string | null;
     /** Opaque identifier of the key, assigned by the system and never writable */
     identifier?: string | null;
+    /** Whether the key holds a value per language, reported as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of that field alone. */
+    localized?: boolean | null;
 };
 export type ClassificationStoreConfigurationKeyCreate = {
     /** Name of the key */
@@ -896,8 +898,10 @@ export type ClassificationStoreConfigurationKeyUpdate = {
     description?: string | null;
     /** Data type of the key (e.g. input, textarea, select) */
     type: string | null;
-    /** Values for object brick definition metadata */
+    /** Values for object brick definition metadata. The member "indexed" is reserved: it is this key's own search index flag, where false asks for the key to be left out of the search index wherever it is used and anything else leaves it indexed. Changing it queues a remap of every search index the key's store reaches, which converges in the background; honouring the flag is the search index's own. The members "variants" and "multiValue" are reserved as well: "variants" is the ordered list of variant names the key permits a value to carry, where a value carrying no variant addresses the default variant, and "multiValue" is whether the key holds more than one value per variant. A key that permits more than the one slot it always had - a "variants" list naming at least one variant, or "multiValue" true - carries its values in the object data payload as a list of entries rather than as a single value. A key that names no usable variant and does not declare "multiValue" true - an absent, empty or non-list "variants" member, with "multiValue" absent or false - permits exactly that one slot and its values are carried unchanged; a key naming a variant carries a list of entries even with "multiValue" false, and a key declaring "multiValue" true carries one even with no variant named. Declaring either is accepted whatever the engine of the key's store reports. The whole object replaces the stored one, so a client that rebuilds it from a form has to send the member back to keep it. It is unrelated to the "index" member below, which is about the object query tables. */
     definition: object | null;
+    /** Whether the key holds a value per language: true, false, or null to state nothing and let the `localized` flag of the class definition field the key is rendered in decide. Leaving the member out of the request keeps the stored value, sending it as null stores null. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
+    localized?: boolean | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
     /** AdditionalAttributes */
@@ -922,8 +926,10 @@ export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
     subGroup?: string | null;
     /** Partial field definition overriding the one of the key for this assignment */
     definitionOverride?: object | null;
-    /** Metadata carried by this assignment */
+    /** Free-form metadata carried by this assignment, reported as it is stored. No member is reserved. */
     metadata?: object | null;
+    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It belongs to the key, not to this assignment, and is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
+    localized?: boolean | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
     /** ID of the key */
@@ -934,11 +940,11 @@ export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
     sorter?: number | null;
     /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
     mandatory?: boolean | null;
-    /** Partial field definition overriding the one of the key for this assignment */
+    /** Partial field definition overriding the one of the key for this assignment. Omitting it leaves a stored one alone, a supplied object replaces it whole rather than merging into it, and an explicit null clears it. */
     definitionOverride?: object | null;
-    /** Sub group of the store this assignment belongs to */
+    /** Sub group of the store this assignment belongs to. Omitting it leaves a stored one alone, a supplied value replaces it, and an explicit null clears it. */
     subGroup?: string | null;
-    /** Metadata carried by this assignment */
+    /** Free-form metadata carried by this assignment. No member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. */
     metadata?: object | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationDelete = {
@@ -960,6 +966,10 @@ export type ClassificationStoreConfigurationStoreDetail = {
     description: string | null;
     /** Opaque identifier of the store, assigned by the system and never writable */
     identifier?: string | null;
+    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
+    engine?: string | null;
+    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
+    engineCapabilities?: string[] | null;
 };
 export type ClassificationStoreConfigurationStoreCreate = {
     /** Name of the store */
@@ -1004,6 +1014,10 @@ export type ClassificationStoreConfigurationStoreTreeNode = {
     description: string | null;
     /** Opaque identifier of the store, assigned by the system and never writable */
     identifier?: string | null;
+    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
+    engine?: string | null;
+    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
+    engineCapabilities?: string[] | null;
 };
 export type ClassificationStoreConfigurationStoreUpdate = {
     /** Name of the store */
@@ -1094,6 +1108,10 @@ export type ClassificationStoreKeyGroupRelation = {
     keyDescription: string | null;
     /** Key Description */
     groupDescription: string | null;
+    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
+    localized?: boolean | null;
+    /** Data type of the key, as the relation stores it; null where the relation states none */
+    keyType?: string | null;
 };
 export type ClassificationStoreCollection2 = {
     /** ID */
@@ -1108,6 +1126,12 @@ export type ClassificationStoreCollection2 = {
     title?: string | null;
     /** Identifier of the sub group this key is assigned to within the group */
     subGroup?: string | null;
+    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
+    localized?: boolean | null;
+    /** The variant names the key permits, in the order it declares them, as the key stores them; null where the key declares none. A value carrying no variant addresses the default variant, which is never one of these names. */
+    variants?: string[] | null;
+    /** Whether the key holds more than one value per variant, as the key stores it; null where the key declares nothing. */
+    multiValue?: boolean | null;
 };
 export type ClassificationStoreSubGroupLayout = {
     /** Identifier the key assignments name this sub group by */

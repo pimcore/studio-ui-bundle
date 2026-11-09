@@ -22,26 +22,30 @@ import {
 import { buildSubGroupSections } from '@Pimcore/modules/data-object/classification-store/utils/sub-group-sections'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Form } from '@Pimcore/components/form/form'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { Title } from '@Pimcore/components/title/title'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
+import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
+import {
+  RestoreInheritanceLocaleContext
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/hooks/restore-inheritance-locale-context'
 import { useClassificationStore } from './provider'
+import { useLanguageEditPermission } from './hooks/use-language-edit-permission'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { getKeyLabel } from './utils/key-label'
 import { useStyles } from './classification-store-item.styles'
+import { getKeyCombinedFieldNameParent } from './utils/combined-field-name'
 
-const renderKey = (item: ClassificationStoreCollection2): React.JSX.Element => (
-  <ObjectComponent
-    key={ item.id }
-    { ...item.definition }
-    name={ item.id }
-    technicalName={ item.name }
-    title={ getKeyLabel(item) }
-  />
-)
+/** The language independent slot every key that is not localized is bound to. */
+const LANGUAGE_INDEPENDENT = 'default'
 
 export interface ClassificationStoreItemProps {
+  /** Field name of the classification store the group belongs to. */
+  classificationStoreName: string
   groupLayout?: ClassificationStoreGroupLayout2
   currentLayoutData: ClassificationStoreGroupLayout2[]
   updateCurrentLayoutData: (value: ClassificationStoreGroupLayout2[]) => void
@@ -51,18 +55,22 @@ export interface ClassificationStoreItemProps {
   hideEmptyDataRevision?: number
   /** Localization the group is currently edited in ('default' or a language). */
   localizationGroup?: string
+  /** Localized flag of the class definition field, which every key without its own inherits. */
+  fieldLocalized?: boolean
   /** Hides the delete button, e.g. when the store is not editable. */
   disallowDelete?: boolean
 }
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
   const {
+    classificationStoreName,
     groupLayout,
     currentLayoutData,
     updateCurrentLayoutData,
     hideEmptyData = false,
     hideEmptyDataRevision = 0,
-    localizationGroup = 'default',
+    localizationGroup = LANGUAGE_INDEPENDENT,
+    fieldLocalized = false,
     disallowDelete = false
   } = props
 
@@ -70,12 +78,31 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { operations } = useKeyedListContext()
   const { id } = useElementContext()
   const { isNewGroup } = useClassificationStore()
+  const canEditLanguage = useLanguageEditPermission()
 
   const modal = useFormModal()
   const { styles } = useStyles()
   const { t } = useTranslation()
 
   const fieldName: string = isArray(name) ? name[name.length - 1] : name
+
+  // True and false are the key's own decision; a null or absent flag inherits the field's.
+  const isKeyLocalized = (key: ClassificationStoreCollection2): boolean => {
+    if (key.localized === true) return true
+    if (key.localized === false) return false
+
+    return fieldLocalized
+  }
+
+  const slotOf = (key: ClassificationStoreCollection2): string =>
+    isKeyLocalized(key) ? localizationGroup : LANGUAGE_INDEPENDENT
+
+  // A key bound to a language slot is edited in that language, so it follows the same
+  // localizedEdit permission the localized control follows - whether the key resolves to
+  // localized through its own flag or through the field's. The language independent slot carries
+  // no language for the permission to answer, and the keys bound to it are unaffected.
+  const isLocalizationGroupEditable = localizationGroup === LANGUAGE_INDEPENDENT ||
+    canEditLanguage(localizationGroup)
 
   const handleItemDelete = (): void => {
     const updatedLayout = currentLayoutData.filter(item => item.id !== groupLayout?.id)
@@ -96,13 +123,17 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
       return keys
     }
 
-    const hiddenKeyIds = getHiddenKeyIds({
-      keys,
-      groupValue: operations.getValue([String(groupId), localizationGroup])
-    })
+    // Keys of one group can sit in two slots at once, so each is checked against the values of
+    // the slot it is bound to: reading one slot for all of them hid the keys of the other.
+    const hiddenKeyIds = new Set(
+      [LANGUAGE_INDEPENDENT, localizationGroup].flatMap((slot) => [...getHiddenKeyIds({
+        keys: keys.filter((key) => slotOf(key) === slot),
+        groupValue: operations.getValue([String(groupId), slot])
+      })])
+    )
 
     return keys.filter((key) => !hiddenKeyIds.has(key.id))
-  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, operations, isNewGroup])
+  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, fieldLocalized, operations, isNewGroup])
 
   // The layout lists its sub groups in the order the backend put them in, which is the order
   // their first key appears in; it is never re-sorted here. A group layout that carries none
@@ -133,6 +164,72 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
 
     return subGroupNames.get(identifier) ?? identifier
   }
+
+  /**
+   * Read-only marker that this key holds a value per language; it cannot change the flag.
+   * The status is carried by an image role rather than by a bare labelled span, which a screen
+   * reader does not reliably announce.
+   */
+  const localizedIndicator = (
+    <Tooltip title={ t('classification-store.key-localized-tooltip') }>
+      <span
+        aria-label={ t('classification-store.key-localized') }
+        role='img'
+      >
+        <Icon value='translate' />
+      </span>
+    </Tooltip>
+  )
+
+  const labelOf = (item: ClassificationStoreCollection2): React.ReactNode => {
+    if (!isKeyLocalized(item)) {
+      return getKeyLabel(item)
+    }
+
+    // Translated here: the field label only translates a plain string, so a node would render raw.
+    return (
+      <Flex
+        align='center'
+        gap='extra-small'
+      >
+        { t(getKeyLabel(item)) }
+        { localizedIndicator }
+      </Flex>
+    )
+  }
+
+  // Each key carries its own slot, so a key that is not localized stays on the language
+  // independent one whichever localization the field level control shows.
+  const renderKey = (item: ClassificationStoreCollection2): React.JSX.Element => {
+    const slot = slotOf(item)
+    const definition = item.definition as { noteditable?: boolean | null } | undefined
+    // Whatever the definition itself forbids stays forbidden; the language permission only adds to it.
+    const isReadOnly = definition?.noteditable === true ||
+      (slot !== LANGUAGE_INDEPENDENT && !isLocalizationGroupEditable)
+
+    return (
+      <Form.Group
+        key={ item.id }
+        name={ [slot] }
+      >
+        {/* the restore permission check reads the locale of the key it is offered for */}
+        <RestoreInheritanceLocaleContext.Provider value={ slot === LANGUAGE_INDEPENDENT ? undefined : slot }>
+          <ObjectComponent
+            { ...item.definition }
+            name={ item.id }
+            noteditable={ isReadOnly }
+            technicalName={ item.name }
+            title={ labelOf(item) }
+          />
+        </RestoreInheritanceLocaleContext.Provider>
+      </Form.Group>
+    )
+  }
+
+  const combinedFieldNameParent = useMemo(
+    () => getKeyCombinedFieldNameParent(classificationStoreName, groupLayout?.id ?? ''),
+    [classificationStoreName, groupLayout?.id]
+  )
 
   const handleClose: (e: React.MouseEvent<HTMLButtonElement>) => void = (e) => {
     e.stopPropagation()
@@ -171,17 +268,23 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         theme='border-highlight'
         title={ groupLayout?.name }
       >
-        <Panel>
-          { subGroupSections === undefined
-            ? visibleKeys.map(renderKey)
-            : subGroupSections.map((section) => (
-              <React.Fragment key={ section.identifier ?? '' }>
-                <Title level={ 5 }>{ headingOf(section.identifier) }</Title>
-                { section.items.map(renderKey) }
-              </React.Fragment>
-              )) }
-        </Panel>
+        <CombinedFieldNameProvider combinedFieldNameParent={ combinedFieldNameParent }>
+          <Panel>
+            { subGroupSections === undefined
+              ? visibleKeys.map(renderKey)
+              : subGroupSections.map((section) => (
+                <React.Fragment key={ section.identifier ?? '' }>
+                  <Title level={ 5 }>{ headingOf(section.identifier) }</Title>
+                  { section.items.map(renderKey) }
+                </React.Fragment>
+                )) }
+          </Panel>
+        </CombinedFieldNameProvider>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete])
+    // `t` is a dependency: the memo retains the key titles, the sub-group headings, the indicator
+    // tooltip and the accessible labels as already translated nodes, and i18next hands out a new
+    // `t` when the interface language changes. Without it the group kept serving the previous
+    // language until one of the others happened to move.
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized, isLocalizationGroupEditable, t, combinedFieldNameParent])
 }

@@ -223,7 +223,12 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
   const handleDelete = (collection: ClassificationStoreConfigurationCollectionDetail): void => {
     void modal.confirm({
       title: t('delete'),
-      content: t('classification-store.delete-collection', { collectionName: collection.name }),
+      content: (
+        <>
+          <p>{ t('classification-store.delete-collection', { collectionName: collection.name }) }</p>
+          <p>{ t('classification-store.delete-collection-consequence') }</p>
+        </>
+      ),
       onOk: async () => {
         const response = await deleteCollection({ id: collection.id })
 
@@ -280,10 +285,11 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                   ? null
                   : (
                     <IconButton
+                      aria-label={ t('toolbar.reload') }
                       icon={ { value: 'refresh' } }
                       loading={ isFetching }
                       onClick={ () => { void refetch() } }
-                      tooltip={ { title: t('refresh') } }
+                      tooltip={ { title: t('toolbar.reload') } }
                     />
                     ) }
                 <Pagination

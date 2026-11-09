@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élé
 error.error_login_token_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent générer un lien de connexion pour un utilisateur administrateur
 error.error_login_token_no_user_password: "Impossible de générer un lien de connexion pour cet utilisateur car aucun mot de passe n'est défini"
 error.syntax_error: Erreur de syntaxe
+validation.mandatory: "{{field}} est obligatoire"
+validation.regex_mismatch: "{{field}} ne correspond pas au modèle requis {{regex}}"
+validation.max_length: "{{field}} ne doit pas dépasser {{max}} caractères"
+validation.min_length: "{{field}} doit contenir au moins {{min}} caractères"
+validation.not_numeric: "{{field}} doit être un nombre, reçu : {{value}}"
+validation.not_integer: "{{field}} doit être un nombre entier, reçu : {{value}}"
+validation.not_unsigned: "{{field}} ne doit pas être négatif, reçu : {{value}}"
+validation.min_value: "{{field}} doit être au moins {{min}}, reçu : {{value}}"
+validation.max_value: "{{field}} doit être au plus {{max}}, reçu : {{value}}"
+validation.range_start_after_end: "{{field}} : le début ne doit pas être postérieur à la fin"
+validation.invalid_email: "{{field}} n'est pas une adresse e-mail valide : {{value}}"
+validation.invalid_option: "{{field}} contient une option invalide : {{value}}"
+validation.invalid_time: "{{field}} n'est pas une heure valide : {{value}}"
+validation.invalid_relation: "{{field}} contient une relation invalide"
+validation.max_relations: "{{field}} autorise au plus {{max}} relations"
+validation.max_items: "{{field}} autorise au plus {{max}} éléments"
+validation.slug_not_unique: "Le slug d'URL {{value}} dans {{field}} est déjà utilisé"
+validation.slug_invalid: "{{field}} n'est pas un slug d'URL valide"
+validation.slug_reserved_characters: "{{field}} contient des caractères réservés : {{characters}}"
+validation.unique_constraint: "Une contrainte d'unicité est enfreinte"
+validation.missing_required_editables: "Des valeurs pour des éléments éditables obligatoires sont manquantes"
+validation.image_too_large: "L'image {{filename}} est trop grande (max. {{max_megapixels}} mégapixels). Redimensionnez-la à {{suggested_width}}×{{suggested_height}} pixels ou moins"
+validation.and_more: "et {{n}} de plus"
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
 sidebar.tag_filters: Filtres par tags
@@ -1295,6 +1318,7 @@ close-tab: Fermer l'onglet
 close-others: Fermer les autres
 close-unmodified: Fermer les non modifiés
 close-all: Tout fermer
+use-full-space: Utiliser tout l'espace
 asset.tree.context-menu.download: Télécharger
 asset.tree.context-menu.download-as-zip: Télécharger en ZIP
 element-selector.title.single: Sélectionner un élément
@@ -1400,6 +1424,7 @@ system-information.type: Type
 system-information.class-id: ID de classe
 system-information.class: Classe
 system-information.file-size: Taille du fichier
+system-information.checksum: Somme de contrôle
 system-information.modification-date: Date de modification
 system-information.creation-date: Date de création
 system-information.user-modification: Utilisateur de modification
@@ -2182,6 +2207,10 @@ classification-store.rename-key: Renommer la clé
 classification-store.delete-key: "Supprimer la clé \"{{keyName}}\" ?"
 classification-store.delete-key-relation: "Retirer la clé \"{{keyName}}\" de ce groupe ?"
 classification-store.delete-group-relation: "Retirer le groupe \"{{groupName}}\" de cette collection ?"
+classification-store.delete-group-consequence: "La suppression de ce groupe supprime aussi les valeurs que chaque objet conserve sous ce groupe. Cette action est irréversible."
+classification-store.delete-collection-consequence: "La collection et sa liste de groupes sont supprimées. Les groupes et leurs clés restent dans le store, et aucune valeur d'objet n'est supprimée."
+classification-store.delete-key-relation-consequence: "La clé est retirée de ce groupe uniquement. La clé elle-même reste dans le store, et rien de ce qu'un objet conserve n'est supprimé."
+classification-store.delete-group-relation-consequence: "Le groupe est retiré de cette collection uniquement. Le groupe, ses clés et les valeurs que les objets conservent sous lui ne sont pas modifiés."
 classification-store.edit-definition: Modifier la définition
 classification-store.edit-key-definition: "Modifier la définition de la clé : {{keyName}}"
 classification-store.columns.id: ID
@@ -2212,6 +2241,8 @@ classification-store.key-type-needs-document-engine: "Le moteur de ce store ne p
 classification-store.add-sub-group: Ajouter un sous-groupe
 classification-store.delete-sub-group: "Supprimer le sous-groupe \"{{subGroupName}}\" ?"
 classification-store.add-sub-group-store-hint: Un sous-groupe appartient au magasin ; un nouveau sous-groupe devient donc disponible pour tous les groupes de ce magasin.
+classification-store.key-indexed: "Inclure dans l'index de recherche du Classification Store"
+classification-store.key-indexed-hint: Tant que cette option est désactivée, cette clé ne peut être ni triée, ni filtrée, ni recherchée, et sa valeur est retirée du document de recherche stocké. L'index converge via la file d'attente, les modifications ne sont donc pas immédiates.
 classification-store.delete-sub-group-in-use-hint: Retirez d'abord l'affectation des clés à ce sous-groupe dans les groupes nommés ci-dessus, puis supprimez-le.
 classification-store.no-sub-groups: Ce magasin n'a encore aucun sous-groupe
 classification-store.select-sub-group: Sélectionner un sous-groupe
@@ -2233,6 +2264,13 @@ classification-store.sub-group-unused: "Aucune clé de ce groupe n'utilise plus 
 classification-store.assign-sub-group-progress: "Affectation du sous-groupe à {{done}} clé(s) sur {{total}}…"
 classification-store.assign-sub-group-failed: "Le sous-groupe n'a pas pu être affecté à : {{keyNames}}"
 classification-store.assign-sub-group-running: Attendez la fin de l'affectation du sous-groupe
+classification-store.key-localization: "Localisation"
+classification-store.key-localization.inherit: "Hériter"
+classification-store.key-localization.localized: "Localisé"
+classification-store.key-localization.not-localized: "Non localisé"
+classification-store.key-localization-confirm: "Les valeurs que cette clé contient dans d'autres langues risquent de ne plus être affichées ni enregistrées. Enregistrer quand même ?"
+classification-store.key-localized: "Clé localisée"
+classification-store.key-localized-tooltip: "Cette clé contient une valeur propre à chaque langue."
 classification-store.import: Importer la configuration du store
 classification-store.import-success: Configuration du store importée avec succès
 home: Accueil

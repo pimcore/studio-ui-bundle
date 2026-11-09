@@ -13,6 +13,7 @@ import { isUndefined } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import {
   closeWidget as closeWidgetAction,
+  expandMainWidget as expandMainWidgetAction,
   openBottomWidget as openBottomWidgetAction,
   openLeftWidget as openLeftWidgetAction,
   openMainWidget as openMainWidgetAction,
@@ -54,6 +55,10 @@ export class WidgetManagerActionService {
 
   openRightWidget = (tabConfig: WidgetManagerTabConfig): void => {
     store.dispatch(openRightWidgetAction(tabConfig))
+  }
+
+  expandMainWidget = (id: string): void => {
+    store.dispatch(expandMainWidgetAction(id))
   }
 
   switchToWidget = (id: string): void => {

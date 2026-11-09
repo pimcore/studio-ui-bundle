@@ -14,7 +14,7 @@ import { render, screen } from '@testing-library/react'
 import { type ISystemInfoModalData, SystemInfoModal } from './system-info-modal'
 
 // The form building blocks and data hooks pull in the store, antd-style and the API layer.
-// Only the rendered public URL matters here, so they are replaced by plain elements/stubs.
+// Only the rendered rows matter here, so they are replaced by plain elements/stubs.
 jest.mock('antd/es/typography/Link', () => ({
   __esModule: true,
   default: ({ children }: { children: React.ReactNode }) => <span>{children}</span>
@@ -77,6 +77,11 @@ jest.mock('@Pimcore/modules/app/settings/hooks/use-settings', () => ({
   useSettings: () => ({ asset_frontend_prefix: null })
 }))
 
+const useAssetCustomSettingsGetByIdQuery = jest.fn()
+jest.mock('@Pimcore/modules/asset/asset-api-slice-enhanced', () => ({
+  useAssetCustomSettingsGetByIdQuery: (...args: unknown[]) => useAssetCustomSettingsGetByIdQuery(...args)
+}))
+
 jest.mock('@Pimcore/app/config/app-config', () => ({
   currentDomain: 'https://studio.example.com'
 }))
@@ -102,9 +107,36 @@ const createDocument = (settingsData?: Record<string, unknown>): ISystemInfoModa
   ...(!isUndefined(settingsData) ? { settingsData } : {})
 } as unknown as ISystemInfoModalData)
 
+const createElement = (elementType: string, type: string): ISystemInfoModalData => ({
+  id: 7,
+  fullPath: '/images/hero.jpg',
+  deeplink: `https://studio.example.com/admin/studio/${elementType}_7`,
+  modificationDate: null,
+  creationDate: null,
+  userOwner: 0,
+  userModification: 0,
+  type,
+  elementType
+} as unknown as ISystemInfoModalData)
+
+const mockCustomSettings = (dynamicCustomSettings?: Record<string, unknown>): void => {
+  useAssetCustomSettingsGetByIdQuery.mockReturnValue({
+    data: isUndefined(dynamicCustomSettings) ? undefined : { items: { dynamicCustomSettings } }
+  })
+}
+
 const getPublicUrl = (): string => {
   return screen.getByLabelText<HTMLInputElement>('system-information.public-url').value
 }
+
+const queryChecksum = (): HTMLInputElement | null => {
+  return screen.queryByLabelText<HTMLInputElement>('system-information.checksum')
+}
+
+beforeEach(() => {
+  useAssetCustomSettingsGetByIdQuery.mockReset()
+  mockCustomSettings()
+})
 
 describe('SystemInfoModal public URL', () => {
   it('uses the site-aware settingsData.url for documents (service-operations#1343)', () => {
@@ -131,5 +163,57 @@ describe('SystemInfoModal public URL', () => {
     )
 
     expect(getPublicUrl()).toBe('https://studio.example.com/gothia/en/about')
+  })
+})
+
+describe('SystemInfoModal checksum (#1963)', () => {
+  it('shows the stored checksum of an asset from its custom settings', () => {
+    mockCustomSettings({ checksum: 'd41d8cd98f00b204e9800998ecf8427e', focalPointX: 50 })
+
+    render(
+      <SystemInfoModal
+        data={ createElement('asset', 'image') }
+        onClose={ jest.fn() }
+      />
+    )
+
+    expect(useAssetCustomSettingsGetByIdQuery).toHaveBeenCalledWith({ id: 7 }, { skip: false })
+    expect(queryChecksum()?.value).toBe('d41d8cd98f00b204e9800998ecf8427e')
+  })
+
+  it.each([
+    ['no custom settings are loaded yet', undefined],
+    ['the custom settings have no checksum', { focalPointX: 50 }],
+    ['the checksum is empty', { checksum: '' }],
+    ['the checksum is not a string', { checksum: 12345 }]
+  ])('hides the row when %s', (_, dynamicCustomSettings) => {
+    mockCustomSettings(dynamicCustomSettings)
+
+    render(
+      <SystemInfoModal
+        data={ createElement('asset', 'image') }
+        onClose={ jest.fn() }
+      />
+    )
+
+    expect(queryChecksum()).toBeNull()
+  })
+
+  it.each([
+    ['folder', 'asset', 'folder'],
+    ['document', 'document', 'page'],
+    ['data object', 'data-object', 'object']
+  ])('does not request or show a checksum for a %s', (_, elementType, type) => {
+    mockCustomSettings({ checksum: 'd41d8cd98f00b204e9800998ecf8427e' })
+
+    render(
+      <SystemInfoModal
+        data={ createElement(elementType, type) }
+        onClose={ jest.fn() }
+      />
+    )
+
+    expect(useAssetCustomSettingsGetByIdQuery).toHaveBeenCalledWith({ id: 7 }, { skip: true })
+    expect(queryChecksum()).toBeNull()
   })
 })

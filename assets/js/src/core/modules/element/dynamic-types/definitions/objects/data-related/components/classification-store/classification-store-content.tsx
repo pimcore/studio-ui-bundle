@@ -18,6 +18,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { ClassificationStoreItem } from './classification-store-item'
 import { ClassificationStoreContentEmpty } from './classification-store-content-empty'
+import { getClassificationStoreName } from './utils/combined-field-name'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { useLanguageIndependentValuePermission } from './hooks/use-language-independent-value-permission'
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
@@ -27,10 +28,7 @@ import { Switch, type SwitchProps } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
-import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
-import {
-  RestoreInheritanceLocaleContext
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/hooks/restore-inheritance-locale-context'
+import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
 // Project the keyed-list value to the bits this view actually depends on: the
 // group keys and the two bookkeeping maps. None of these change when a field
@@ -49,6 +47,9 @@ const selectStructure = (values: Record<string, any>): {
   }
 }
 
+const LANGUAGE_INDEPENDENT_MODE = 'default'
+const CURRENT_LANGUAGE_MODE = 'current-language'
+
 export const ClassificationStoreContent = (props: ClassificationStoreProps): React.JSX.Element => {
   const { t } = useTranslation()
 
@@ -60,23 +61,38 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const [hideEmptyDataRevision, setHideEmptyDataRevision] = useState<number>(0)
 
   const { openModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
+  const classificationStoreName = getClassificationStoreName(props.name)
   const { groupKeys, activeGroups, groupCollectionMapping } = useKeyedListSelector(selectStructure)
-  const { currentLanguage } = useLanguageSelection()
+  const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
   const isLanguageIndependentValuePermitted = useLanguageIndependentValuePermission()
 
-  const isLocalizable = props.localized ?? false
+  const isFieldLocalized = props.localized ?? false
+  // A key flagged localized is localized on a field that is not, which core answers the same way
+  // in LocalizationResolver::hasLocalizedKey(). Read off the layout the editor already has.
+  const hasLocalizedKey = useMemo(
+    () => currentLayoutData.some((group) => (group.keys ?? []).some((key) => key.localized === true)),
+    [currentLayoutData]
+  )
+  const isLocalizable = isFieldLocalized || hasLocalizedKey
   const isAddRemoveDisallowed = props.noteditable === true || props.disallowAddRemove === true
   const hasGroups = !isEmpty(groupKeys)
   // A non localized store only ever has the language independent column, so no language
   // permission applies to it.
   const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValuePermitted
 
-  const [localizationMode, setLocalizationMode] = useState<string>(
-    allowLanguageIndependentValue ? 'default' : 'current-language'
-  )
+  // The same condition raises the editor's language selector: offering a current-language mode
+  // the user has no language picker for is worse than not offering it at all. Not on mount: a key
+  // flagged localized only becomes known once the layout arrives.
+  useEffect(() => {
+    if (isLocalizable && !hasLocalizedFields) setHasLocalizedFields(true)
+  }, [isLocalizable, hasLocalizedFields])
 
-  let localizationGroup = 'default'
+  const [selectedLocalizationMode, setSelectedLocalizationMode] = useState<string>(LANGUAGE_INDEPENDENT_MODE)
+  // Derived rather than seeded: whether the language independent value may be shown also depends
+  // on the keys of the layout, which only arrive after the first render.
+  const localizationMode = allowLanguageIndependentValue ? selectedLocalizationMode : CURRENT_LANGUAGE_MODE
+  const localizationGroup = localizationMode === CURRENT_LANGUAGE_MODE ? currentLanguage : LANGUAGE_INDEPENDENT_MODE
 
   useEffect(() => {
     const initialLayout = props.activeGroupDefinitions ?? []
@@ -89,7 +105,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   }, [])
 
   const handleLocalizationChange = (value: string): void => {
-    setLocalizationMode(value)
+    setSelectedLocalizationMode(value)
   }
 
   const handleHideEmptyDataChange: SwitchProps['onChange'] = (checked, event): void => {
@@ -100,10 +116,6 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
     if (checked) {
       setHideEmptyDataRevision((revision) => revision + 1)
     }
-  }
-
-  if (localizationMode === 'current-language') {
-    localizationGroup = currentLanguage
   }
 
   // the group bookkeeping is part of the store value, so it is kept in the form in both states
@@ -189,6 +201,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
                   <LocalizationSwitch
                     allowLanguageIndependentValue={ allowLanguageIndependentValue }
                     initialValue={ localizationMode }
+                    key={ String(allowLanguageIndependentValue) }
                     onChange={ handleLocalizationChange }
                   />
                   )
@@ -200,33 +213,33 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         theme='default'
         title={ props.title }
       >
-        {/* the keys shown are those of one language, which the restore of a key checks the edit permission of */}
-        <RestoreInheritanceLocaleContext.Provider value={ localizationGroup === 'default' ? undefined : localizationGroup }>
-          <Space
-            className='w-full'
-            direction='vertical'
-            size='small'
-          >
-            {groupKeys.map((key) => {
-              return (
-                <Form.Group
-                  key={ `${key}` }
-                  name={ [key, localizationGroup] }
-                >
-                  <ClassificationStoreItem
-                    currentLayoutData={ currentLayoutData }
-                    disallowDelete={ isAddRemoveDisallowed }
-                    groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
-                    hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }
-                    hideEmptyDataRevision={ hideEmptyDataRevision }
-                    localizationGroup={ localizationGroup }
-                    updateCurrentLayoutData={ updateCurrentLayoutData }
-                  />
-                </Form.Group>
-              )
-            })}
-          </Space>
-        </RestoreInheritanceLocaleContext.Provider>
+        {/* the language node sits per key, not per group: a group can hold keys of both slots */}
+        <Space
+          className='w-full'
+          direction='vertical'
+          size='small'
+        >
+          {groupKeys.map((key) => {
+            return (
+              <Form.Group
+                key={ `${key}` }
+                name={ [key] }
+              >
+                <ClassificationStoreItem
+                  classificationStoreName={ classificationStoreName }
+                  currentLayoutData={ currentLayoutData }
+                  disallowDelete={ isAddRemoveDisallowed }
+                  fieldLocalized={ isFieldLocalized }
+                  groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
+                  hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }
+                  hideEmptyDataRevision={ hideEmptyDataRevision }
+                  localizationGroup={ localizationGroup }
+                  updateCurrentLayoutData={ updateCurrentLayoutData }
+                />
+              </Form.Group>
+            )
+          })}
+        </Space>
 
         {hiddenFormItems}
       </BaseView>
@@ -237,10 +250,16 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
     localizationGroup,
     localizationMode,
     allowLanguageIndependentValue,
+    isFieldLocalized,
+    isLocalizable,
     currentLayoutData,
     hideEmptyData,
     hideEmptyDataRevision,
     isAddRemoveDisallowed,
-    props.title
+    props.title,
+    // `t` is a dependency for the same reason it is one on the group below: the add action's
+    // label and the hide-empty-data labels are retained here as already translated nodes, and
+    // i18next hands out a new `t` when the interface language changes.
+    t
   ])
 }

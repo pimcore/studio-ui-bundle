@@ -235,6 +235,22 @@ const deleteButtons = (): HTMLElement[] => screen.getAllByRole('row')
   .flatMap((row) => within(row).queryAllByRole('button'))
   .filter((button) => !(button.getAttribute('aria-label') ?? '').startsWith('cell-'))
 
+/** Accessor columns the grid renders, read off the cells of the row of the given key. */
+const renderedColumnIds = (keyId: number): string[] => screen.getAllByRole('row')
+  .flatMap((row) => within(row).queryAllByRole('button'))
+  .map((button) => button.getAttribute('aria-label') ?? '')
+  .filter((label) => label.startsWith('cell-') && label.endsWith(`-${keyId}`))
+  .map((label) => label.replace(/^cell-/, '').replace(/-\d+$/, ''))
+
+/** Every property name a payload carries, nested ones included: a `metadata.indexed` counts too. */
+const propertyNames = (value: unknown): string[] =>
+  value === null || typeof value !== 'object'
+    ? []
+    : Object.entries(value).flatMap(([name, nested]) => [name, ...propertyNames(nested)])
+
+/** Payload property names that would carry an index decision into a relation. */
+const indexish = (name: string): boolean => /index/i.test(name)
+
 /** No inter-event delay: these tests click through several rows and a dialog. */
 const setupUser = (): UserEvent => userEvent.setup({ delay: null })
 
@@ -462,6 +478,25 @@ describe('KeyGroupRelationsGrid', () => {
     expect(unassignButton()).toBeEnabled()
   })
 
+  it('adds nothing index-shaped to the key list or to a relation payload', async () => {
+    // Whether a key reaches the Classification Store search index is decided on the key itself, so
+    // this grid gains no cell for it and an assignment needs no index value to send.
+    const user = setupUser()
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    expect(renderedColumnIds(11)).toEqual(['keyId', 'keyName', 'keyDescription', 'mandatory', 'sorter'])
+
+    await selectKeys(user, 'height')
+    await confirmAssign(user)
+
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(
+      upsertRequests().flatMap((request) => propertyNames(request.body)).filter(indexish)
+    ).toEqual([])
+  })
+
   it('assigns the sub group with one upsert per key, carrying nothing but the pair', async () => {
     const user = setupUser()
     refusedKeyIds = [12]
@@ -647,5 +682,87 @@ describe('KeyGroupRelationsGrid', () => {
     releaseUpsert()
 
     await waitFor(() => { expect(deleteButtons()[0]).toBeEnabled() }, WAIT_BUDGET)
+  })
+})
+
+describe('KeyGroupRelationsGrid remove dialog', () => {
+  const originalFetch = globalThis.fetch
+  const DELETE_URL = '/pimcore-studio/api/classification-store/configuration/key-group-relations'
+
+  /** One assigned key, the only one of its sub group, and a server that accepts the delete. */
+  const stubSingleRelation = (): void => {
+    const assigned = { ...relation(11, 'height', 1, false), subGroup: SUB_GROUP }
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      let body: Record<string, any> | undefined
+
+      try {
+        body = JSON.parse(await input.clone().text())
+      } catch {
+        body = undefined
+      }
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.method === 'DELETE') {
+        return jsonResponse(null, 200)
+      }
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        return jsonResponse({ items: [assigned], totalItems: 1 })
+      }
+
+      if (input.url.endsWith(SUB_GROUPS_URL)) {
+        return jsonResponse({ items: vocabulary, totalItems: vocabulary.length })
+      }
+
+      throw new Error(`unexpected request to ${input.url}`)
+    }) as unknown as typeof fetch
+  }
+
+  beforeEach(() => {
+    requests.length = 0
+    stubSingleRelation()
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('states that only the assignment goes, without sending a request', async () => {
+    const user = setupUser()
+
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    const callsBefore = (globalThis.fetch as jest.Mock).mock.calls.length
+
+    await user.click(deleteButtons()[0])
+
+    const dialog = await screen.findByRole('dialog', undefined, WAIT_BUDGET)
+
+    expect(within(dialog).getByText('classification-store.delete-key-relation-consequence')).toBeInTheDocument()
+    expect((globalThis.fetch as jest.Mock).mock.calls).toHaveLength(callsBefore)
+  })
+
+  it('still removes the pair of key and group and reports the sub group it emptied', async () => {
+    const user = setupUser()
+
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    await user.click(deleteButtons()[0])
+    await user.click((await screen.findByRole('dialog', undefined, WAIT_BUDGET)).querySelector('.ant-btn-primary')!)
+
+    await waitFor(() => {
+      expect(requests.filter((request) => request.method === 'DELETE')).toHaveLength(1)
+    }, WAIT_BUDGET)
+
+    const deleteRequest = requests.find((request) => request.method === 'DELETE')!
+
+    expect(deleteRequest.url.endsWith(DELETE_URL)).toBe(true)
+    expect(deleteRequest.body).toEqual({ keyId: 11, groupId: GROUP_ID })
+    expect(await screen.findByText(/classification-store.sub-group-unused/, undefined, WAIT_BUDGET))
+      .toBeInTheDocument()
   })
 })

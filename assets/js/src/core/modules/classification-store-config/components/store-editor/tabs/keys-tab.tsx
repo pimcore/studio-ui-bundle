@@ -33,6 +33,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { serviceIds, useInjection } from '@sdk/app'
 import {
+  asKeyDetail,
   type ClassificationStoreConfigurationKeyDetail,
   useClassificationStoreConfigurationKeyCollectionQuery,
   useClassificationStoreConfigurationKeyCreateMutation,
@@ -128,9 +129,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   // Derive the current key object from the live cache by ID so the definition
   // modal always receives the latest values (e.g. after an optimistic type change).
-  const definitionKey = definitionKeyId !== undefined
+  const cachedDefinitionKey = definitionKeyId !== undefined
     ? keys.find((k) => k.id === definitionKeyId)
     : undefined
+  const definitionKey = cachedDefinitionKey === undefined ? undefined : asKeyDetail(cachedDefinitionKey)
 
   const [createKey] = useClassificationStoreConfigurationKeyCreateMutation()
   const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()
@@ -192,10 +194,11 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             id: createdKey.id,
             classificationStoreConfigurationKeyUpdate: {
               name: createdKey.name,
-              title: createdKey.title ?? null,
               description,
-              type: createdKey.type,
-              definition: createdKey.definition
+              // This call writes the description of the key just created and nothing else, so
+              // the type and the definition are left to the stored ones (see handleTitleChange).
+              type: null,
+              definition: null
             }
           })
 
@@ -236,6 +239,17 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     })
   }
 
+  // Every writer below sends the one field its cell changed and nothing else. An absent title or
+  // description leaves the stored one alone, and a null type or definition does the same for the
+  // two the payload cannot omit; echoing a value back from the row the edit was read on reverts
+  // whatever another writer saved into that field meanwhile. `name` is the one field the payload
+  // requires, and the cache carries this request's own name from the moment it is sent.
+  //
+  // `definition` is the clearest case: a definition read out of the cache is sent back as the grid
+  // last saw it, and the response then carries it through the preservation mask of the cache patch,
+  // over a definition — the index flag, the localization — the key definition dialog saved while
+  // the cell edit was in flight. A cell edit never writes the definition, so it must not send the
+  // one it happens to hold.
   const handleTitleChange = useCallback(async (
     key: KeyRow,
     newTitle: string
@@ -245,9 +259,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       classificationStoreConfigurationKeyUpdate: {
         name: key.name,
         title: newTitle.trim() === '' ? null : newTitle,
-        description: key.description ?? null,
-        type: key.type,
-        definition: key.definition
+        type: null,
+        definition: null
       }
     })
 
@@ -264,8 +277,6 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       id: key.id,
       classificationStoreConfigurationKeyUpdate: {
         name: key.name,
-        title: key.title ?? null,
-        description: key.description ?? null,
         type: newType,
         definition: null
       }
@@ -351,10 +362,11 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
               ? null
               : (
                 <IconButton
+                  aria-label={ t('toolbar.reload') }
                   icon={ { value: 'refresh' } }
                   loading={ isFetching }
                   onClick={ () => { void refetch() } }
-                  tooltip={ { title: t('refresh') } }
+                  tooltip={ { title: t('toolbar.reload') } }
                 />
                 ) }
             <Pagination
@@ -411,6 +423,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             manualSorting
             onSortingChange={ onSortingChange }
             onUpdateCellData={ ({ columnId, value, rowData }) => {
+              // Each branch sends its own field only (see handleTitleChange).
               const typedRow = rowData as KeyRow
               if (columnId === 'name') {
                 const newName = (value as string).trim()
@@ -419,10 +432,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: newName,
-                    title: typedRow.title ?? null,
-                    description: typedRow.description ?? null,
-                    type: typedRow.type,
-                    definition: typedRow.definition
+                    type: null,
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               } else if (columnId === 'title') {
@@ -434,10 +445,9 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: typedRow.name,
-                    title: typedRow.title ?? null,
                     description: (value as string).trim() === '' ? null : (value as string),
-                    type: typedRow.type,
-                    definition: typedRow.definition
+                    type: null,
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               }

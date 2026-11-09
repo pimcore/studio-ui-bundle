@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet 
 error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
 error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 error.syntax_error: Syntaxfel
+validation.mandatory: "{{field}} är obligatoriskt"
+validation.regex_mismatch: "{{field}} matchar inte det obligatoriska mönstret {{regex}}"
+validation.max_length: "{{field}} får inte vara längre än {{max}} tecken"
+validation.min_length: "{{field}} måste vara minst {{min}} tecken långt"
+validation.not_numeric: "{{field}} måste vara ett tal, fick: {{value}}"
+validation.not_integer: "{{field}} måste vara ett heltal, fick: {{value}}"
+validation.not_unsigned: "{{field}} får inte vara negativt, fick: {{value}}"
+validation.min_value: "{{field}} måste vara minst {{min}}, fick: {{value}}"
+validation.max_value: "{{field}} får vara högst {{max}}, fick: {{value}}"
+validation.range_start_after_end: "{{field}}: början får inte ligga efter slutet"
+validation.invalid_email: "{{field}} är inte en giltig e-postadress: {{value}}"
+validation.invalid_option: "{{field}} har ett ogiltigt alternativ: {{value}}"
+validation.invalid_time: "{{field}} är inte en giltig tid: {{value}}"
+validation.invalid_relation: "{{field}} innehåller en ogiltig relation"
+validation.max_relations: "{{field}} tillåter högst {{max}} relationer"
+validation.max_items: "{{field}} tillåter högst {{max}} objekt"
+validation.slug_not_unique: "URL-slugen {{value}} i {{field}} används redan"
+validation.slug_invalid: "{{field}} är inte en giltig URL-slug"
+validation.slug_reserved_characters: "{{field}} innehåller reserverade tecken: {{characters}}"
+validation.unique_constraint: "En unikhetsbegränsning bryts"
+validation.missing_required_editables: "Värden för obligatoriska redigerbara element saknas"
+validation.image_too_large: "Bilden {{filename}} är för stor (max. {{max_megapixels}} megapixlar). Ändra storlek till {{suggested_width}}×{{suggested_height}} pixlar eller mindre"
+validation.and_more: "och {{n}} till"
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -1295,6 +1318,7 @@ close-tab: Stäng flik
 close-others: Stäng andra
 close-unmodified: Stäng oförändrade
 close-all: Stäng alla
+use-full-space: Använd hela ytan
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
 element-selector.title.single: Välj ett element
@@ -1400,6 +1424,7 @@ system-information.type: Typ
 system-information.class-id: Klass-ID
 system-information.class: Klass
 system-information.file-size: Filstorlek
+system-information.checksum: Kontrollsumma
 system-information.modification-date: Ändringsdatum
 system-information.creation-date: Skapandedatum
 system-information.user-modification: Ändrad av
@@ -2182,6 +2207,10 @@ classification-store.rename-key: Byt namn på nyckel
 classification-store.delete-key: "Ta bort nyckel \"{{keyName}}\"?"
 classification-store.delete-key-relation: "Ta bort nyckel \"{{keyName}}\" från den här gruppen?"
 classification-store.delete-group-relation: "Ta bort grupp \"{{groupName}}\" från den här samlingen?"
+classification-store.delete-group-consequence: "När du tar bort den här gruppen tas även de värden bort som varje objekt har under den. Det går inte att ångra."
+classification-store.delete-collection-consequence: "Samlingen och dess grupplista tas bort. Grupperna och deras nycklar finns kvar i store och inga objektvärden tas bort."
+classification-store.delete-key-relation-consequence: "Nyckeln tas bara bort från den här gruppen. Själva nyckeln finns kvar i store och inget som ett objekt har sparat tas bort."
+classification-store.delete-group-relation-consequence: "Gruppen tas bara bort från den här samlingen. Gruppen, dess nycklar och värdena som objekt har under den påverkas inte."
 classification-store.edit-definition: Redigera definition
 classification-store.edit-key-definition: "Redigera nyckeldefinition: {{keyName}}"
 classification-store.columns.id: ID
@@ -2212,6 +2241,8 @@ classification-store.key-type-needs-document-engine: "Den här storens motor kan
 classification-store.add-sub-group: Lägg till undergrupp
 classification-store.delete-sub-group: "Ta bort undergruppen \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: En undergrupp hör till lagret, så en ny blir tillgänglig för alla grupper i detta lager.
+classification-store.key-indexed: Inkludera i Classification Store-sökindexet
+classification-store.key-indexed-hint: Så länge det här är avstängt kan den här nyckeln inte sorteras, filtreras eller sökas på, och värdet tas bort från det lagrade sökdokumentet. Indexet uppdateras via kön, så ändringar sker inte omedelbart.
 classification-store.delete-sub-group-in-use-hint: Ta först bort kopplingen mellan nycklarna och denna undergrupp i grupperna som nämns ovan, och ta sedan bort den.
 classification-store.no-sub-groups: Detta lager har inga undergrupper än
 classification-store.select-sub-group: Välj undergrupp
@@ -2233,6 +2264,13 @@ classification-store.sub-group-unused: "Ingen nyckel i denna grupp använder und
 classification-store.assign-sub-group-progress: "Kopplar undergruppen till {{done}} av {{total}} nycklar…"
 classification-store.assign-sub-group-failed: "Undergruppen kunde inte kopplas till: {{keyNames}}"
 classification-store.assign-sub-group-running: Vänta tills undergruppstilldelningen är klar
+classification-store.key-localization: "Lokalisering"
+classification-store.key-localization.inherit: "Ärv"
+classification-store.key-localization.localized: "Lokaliserad"
+classification-store.key-localization.not-localized: "Inte lokaliserad"
+classification-store.key-localization-confirm: "Värden som denna nyckel har på andra språk kan sluta visas eller sparas. Spara ändå?"
+classification-store.key-localized: "Lokaliserad nyckel"
+classification-store.key-localized-tooltip: "Denna nyckel har ett eget värde per språk."
 classification-store.import: Importera store-konfiguration
 classification-store.import-success: Store-konfigurationen har importerats
 home: Hem

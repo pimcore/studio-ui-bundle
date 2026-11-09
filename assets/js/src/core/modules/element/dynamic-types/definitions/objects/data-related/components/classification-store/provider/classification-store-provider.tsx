@@ -9,7 +9,7 @@
  */
 
 import React, { createContext, useCallback, useState, useMemo, useRef } from 'react'
-import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
 export interface ClassificationStoreContextData {
   isOpen: boolean

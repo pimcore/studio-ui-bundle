@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet 
 error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
 error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
 error.syntax_error: Syntaksfeil
+validation.mandatory: "{{field}} er obligatorisk"
+validation.regex_mismatch: "{{field}} samsvarer ikke med det påkrevde mønsteret {{regex}}"
+validation.max_length: "{{field}} kan ikke være lengre enn {{max}} tegn"
+validation.min_length: "{{field}} må være minst {{min}} tegn langt"
+validation.not_numeric: "{{field}} må være et tall, fikk: {{value}}"
+validation.not_integer: "{{field}} må være et heltall, fikk: {{value}}"
+validation.not_unsigned: "{{field}} kan ikke være negativt, fikk: {{value}}"
+validation.min_value: "{{field}} må være minst {{min}}, fikk: {{value}}"
+validation.max_value: "{{field}} kan være høyst {{max}}, fikk: {{value}}"
+validation.range_start_after_end: "{{field}}: starten kan ikke være etter slutten"
+validation.invalid_email: "{{field}} er ikke en gyldig e-postadresse: {{value}}"
+validation.invalid_option: "{{field}} har et ugyldig alternativ: {{value}}"
+validation.invalid_time: "{{field}} er ikke et gyldig klokkeslett: {{value}}"
+validation.invalid_relation: "{{field}} inneholder en ugyldig relasjon"
+validation.max_relations: "{{field}} tillater høyst {{max}} relasjoner"
+validation.max_items: "{{field}} tillater høyst {{max}} elementer"
+validation.slug_not_unique: "URL-sluggen {{value}} i {{field}} er allerede i bruk"
+validation.slug_invalid: "{{field}} er ikke en gyldig URL-slug"
+validation.slug_reserved_characters: "{{field}} inneholder reserverte tegn: {{characters}}"
+validation.unique_constraint: "En unikhetsbegrensning brytes"
+validation.missing_required_editables: "Verdier for obligatoriske redigerbare elementer mangler"
+validation.image_too_large: "Bildet {{filename}} er for stort (maks. {{max_megapixels}} megapiksler). Endre størrelsen til {{suggested_width}}×{{suggested_height}} piksler eller mindre"
+validation.and_more: "og {{n}} til"
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
 sidebar.tag_filters: Taggfiltre
@@ -1295,6 +1318,7 @@ close-tab: Lukk fane
 close-others: Lukk andre
 close-unmodified: Lukk uendrede
 close-all: Lukk alle
+use-full-space: Bruk hele området
 asset.tree.context-menu.download: Last ned
 asset.tree.context-menu.download-as-zip: Last ned som ZIP
 element-selector.title.single: Velg element
@@ -1400,6 +1424,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Filstørrelse
+system-information.checksum: Kontrollsum
 system-information.modification-date: Endringsdato
 system-information.creation-date: Opprettelsesdato
 system-information.user-modification: Endret av bruker
@@ -2182,6 +2207,10 @@ classification-store.rename-key: Gi nytt navn til nøkkel
 classification-store.delete-key: "Slette nøkkel \"{{keyName}}\"?"
 classification-store.delete-key-relation: "Fjerne nøkkel \"{{keyName}}\" fra denne gruppen?"
 classification-store.delete-group-relation: "Fjerne gruppe \"{{groupName}}\" fra denne samlingen?"
+classification-store.delete-group-consequence: "Når du sletter denne gruppen, slettes også verdiene hvert objekt har under den. Dette kan ikke angres."
+classification-store.delete-collection-consequence: "Samlingen og gruppelisten den inneholder fjernes. Gruppene og nøklene deres blir værende i store, og ingen objektverdier slettes."
+classification-store.delete-key-relation-consequence: "Nøkkelen fjernes bare fra denne gruppen. Selve nøkkelen blir værende i store, og ingenting et objekt har lagret slettes."
+classification-store.delete-group-relation-consequence: "Gruppen fjernes bare fra denne samlingen. Gruppen, nøklene og verdiene objekter har under den berøres ikke."
 classification-store.edit-definition: Rediger definisjon
 classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"
 classification-store.columns.id: ID
@@ -2212,6 +2241,8 @@ classification-store.key-type-needs-document-engine: "Motoren til denne storen k
 classification-store.add-sub-group: Legg til undergruppe
 classification-store.delete-sub-group: "Slette undergruppen \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: En undergruppe hører til butikken, så en ny blir tilgjengelig for alle grupper i denne butikken.
+classification-store.key-indexed: Ta med i søkeindeksen til Classification Store
+classification-store.key-indexed-hint: Så lenge dette er slått av, kan denne nøkkelen ikke sorteres, filtreres eller søkes i, og verdien fjernes fra det lagrede søkedokumentet. Indeksen oppdateres via køen, så endringer skjer ikke umiddelbart.
 classification-store.delete-sub-group-in-use-hint: Fjern først tilknytningen av nøklene til denne undergruppen i gruppene nevnt over, og slett den deretter.
 classification-store.no-sub-groups: Denne butikken har ingen undergrupper ennå
 classification-store.select-sub-group: Velg undergruppe
@@ -2233,6 +2264,13 @@ classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker und
 classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
 classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
 classification-store.assign-sub-group-running: Vent til tilknytningen av undergruppen er ferdig
+classification-store.key-localization: "Lokalisering"
+classification-store.key-localization.inherit: "Arv"
+classification-store.key-localization.localized: "Lokalisert"
+classification-store.key-localization.not-localized: "Ikke lokalisert"
+classification-store.key-localization-confirm: "Verdier denne nøkkelen har på andre språk kan slutte å vises eller lagres. Lagre likevel?"
+classification-store.key-localized: "Lokalisert nøkkel"
+classification-store.key-localized-tooltip: "Denne nøkkelen har en egen verdi per språk."
 classification-store.import: Importer store-konfigurasjon
 classification-store.import-success: Store-konfigurasjonen ble importert
 home: Hjem

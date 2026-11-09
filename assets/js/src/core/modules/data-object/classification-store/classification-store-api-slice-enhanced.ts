@@ -16,13 +16,15 @@ import {
   api as baseApi,
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
-  type ClassificationStoreConfigurationKeyCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
+  type ClassificationStoreConfigurationKeyCollectionApiArg,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiArg,
   type ClassificationStoreCollection2 as GeneratedKeyLayout,
   type ClassificationStoreGroupLayout2 as GeneratedGroupLayout,
   type ClassificationStoreConfigurationKeyGroupRelationCreate as GeneratedKeyGroupRelationCreate,
+  type ClassificationStoreConfigurationKeyDetail as GeneratedKeyDetail,
+  type ClassificationStoreConfigurationKeyUpdate as GeneratedKeyUpdate,
   type ClassificationStoreConfigurationSubGroupDetail as GeneratedSubGroupDetail,
   type ClassificationStoreConfigurationStoreTreeNode as GeneratedStoreTreeNode,
   type ClassificationStoreConfigurationStoreDetail as GeneratedStoreDetail,
@@ -122,6 +124,63 @@ export interface ClassificationStoreConfigurationSubGroupDeleteApiArg {
   id: number
 }
 
+/**
+ * The part of a key's definition blob the Classification Store search index reads. An absent
+ * `indexed` means the key is indexed, so a key stored before the flag existed is not reported
+ * as excluded. It is not the field definition's `index`, which drives the object query index.
+ *
+ * Unlike the rest of this block, a regeneration does not supersede the two shadows below: the
+ * schema declares `definition` as free-form JSON, so no generated client ever names what is in it.
+ *
+ * The flag is named alongside a `string` index signature of `unknown` rather than on its own: a
+ * definition blob is a whole field definition and carries dozens of members this client never
+ * reads. Naming only `indexed` made excess-property checking reject every contextually typed
+ * literal — `{ name: 'height', fieldtype: 'input' }` is a valid definition the server accepts,
+ * and a type that cannot express it is narrower than the thing it describes.
+ */
+export type ClassificationStoreKeyDefinition = {
+  /** Whether this key reaches the Classification Store search index */
+  indexed?: boolean
+} & {
+  /** Every other member of the blob, which this client passes through without reading. */
+  [member: string]: unknown
+}
+
+/**
+ * A key, whose definition blob carries the Classification Store index flag. It also reports
+ * whether the key holds a value per language: `localized` is a tri-state, where `true` and
+ * `false` are the key's own decision and `null` inherits the flag of the class definition field
+ * the store is used in.
+ */
+export interface ClassificationStoreConfigurationKeyDetail extends Omit<GeneratedKeyDetail, 'definition'> {
+  /** Definition of the key */
+  definition: ClassificationStoreKeyDefinition | null
+  /** Whether the key is localized; null inherits the class field's flag */
+  localized?: boolean | null
+}
+
+/**
+ * The key update payload, whose definition blob carries the Classification Store index flag. It
+ * also carries the localization tri-state: absent leaves the stored value alone, `true` and
+ * `false` store that value, and an explicit null stores NULL, which means the key inherits the
+ * class field's flag again.
+ */
+export interface ClassificationStoreConfigurationKeyUpdate extends Omit<GeneratedKeyUpdate, 'definition'> {
+  /** Values for object brick definition metadata */
+  definition: ClassificationStoreKeyDefinition | null
+  /** Whether the key is localized; null inherits the class field's flag */
+  localized?: boolean | null
+}
+
+/**
+ * A key row as the generated client types it, read as the shape above. The index signature is the
+ * one thing a generated `object` does not promise, so the read has to be declared; it is a read
+ * and not a parse, the same bytes seen through a type that can name `indexed`. Every surface that
+ * takes a key from a collection response goes through here rather than casting at the call.
+ */
+export const asKeyDetail = (key: GeneratedKeyDetail): ClassificationStoreConfigurationKeyDetail =>
+  key as ClassificationStoreConfigurationKeyDetail
+
 /** A key-group relation, which now also stores the identifier of its sub group. */
 export interface ClassificationStoreConfigurationKeyGroupRelationDetail extends GeneratedKeyGroupRelationDetail {
   /** Identifier of the sub group this key is assigned to in this group */
@@ -164,12 +223,174 @@ export interface ClassificationStoreSubGroupLayout {
 export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
   /** Identifier of the sub group this key is assigned to in its group */
   subGroup?: string | null
+  /** Whether this key is localized; null inherits the class field's flag */
+  localized?: boolean | null
 }
 
 export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
   keys: ClassificationStoreCollection2[]
   /** Sub groups the keys of this group are assigned to, ordered by their first key */
   subGroups?: ClassificationStoreSubGroupLayout[]
+}
+
+// ─── The local write ledger for a key ───────────────────────────────────────────
+// A key-update response is a snapshot of the whole key taken at a moment this client cannot know:
+// two requests can reach the server in either order, so the one answered last is not necessarily
+// the one that landed last. That is why a confirmation may not simply replace the cached row.
+//
+// It is not a reason to keep the cached value for every field the payload did not name, either.
+// A field no local write touched is a field whose only writer is somebody else, and there the
+// response IS the canonical value — refusing it left another user's exclusion of a key discarded
+// by an unrelated description edit, and the key definition dialog then reopened showing the key
+// as indexed, where an untouched save undid the exclusion.
+//
+// So the question a confirmation asks per field is "did another local write of mine overlap this
+// request?", and the ledger below answers it: `pending` counts the writes in flight, `started`
+// counts every write ever begun, so a write that began and finished inside this request's
+// lifetime is seen as well as one still running.
+//
+// There is one question that mask cannot answer, and the per-key flight count below is what
+// answers it. Where two writes overlap and NEITHER of them names a field — two cell edits, one on
+// the title and one on the description, both leaving the definition alone — that field has no
+// local writer, so both answers are canonical for it and each one simply replaces what the other
+// wrote. The cache then holds whichever answer arrived last, which is not the snapshot the server
+// applied last: a title edit answered after a description edit can carry the definition as it
+// stood before another user's exclusion, and the dialog reopened on that row saves the stale flag
+// back and undoes the exclusion. Arrival order is not an ordering, and this client has no server
+// revision to order by — `modificationDate` is a Unix second, and the responses in question are
+// milliseconds apart. So once the last of a set of overlapping writes has settled the key is
+// re-read from the server, which is the only authority on what it now holds.
+
+/** The fields of a key whose cached value a confirmation has to decide about. */
+const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition', 'localized'] as const
+type KeyWriteField = typeof KEY_WRITE_FIELDS[number]
+
+interface KeyWriteCounters { pending: number, started: number }
+
+const localKeyWrites = new Map<string, KeyWriteCounters>()
+/** In-flight key updates across all keys, so the ledger can be emptied when none are left. */
+let localKeyWritesInFlight = 0
+
+/**
+ * Per key rather than per field: how many of this client's updates to it are in flight, and
+ * whether any of them was ever in flight alongside another. A write that names no field at all
+ * still counts here, which is why this is not derived from the per-field counters.
+ */
+interface KeyFlight { inFlight: number, overlapped: boolean }
+
+const keyFlights = new Map<string, KeyFlight>()
+
+const keyFlight = (id: unknown): KeyFlight => {
+  const slot = String(id)
+  let flight = keyFlights.get(slot)
+  if (flight === undefined) {
+    flight = { inFlight: 0, overlapped: false }
+    keyFlights.set(slot, flight)
+  }
+
+  return flight
+}
+
+const keyWriteCounters = (id: unknown, field: KeyWriteField): KeyWriteCounters => {
+  const slot = `${String(id)}:${field}`
+  let counters = localKeyWrites.get(slot)
+  if (counters === undefined) {
+    counters = { pending: 0, started: 0 }
+    localKeyWrites.set(slot, counters)
+  }
+  return counters
+}
+
+/** Which fields a key-update payload writes, by the three-state rules the server reads it with. */
+const keyFieldsWritten = (update: {
+  title?: string | null
+  description?: string | null
+  type?: string | null
+  definition?: unknown
+  localized?: boolean | null
+}): Record<KeyWriteField, boolean> => ({
+  // `title` and `description` are optional: absent leaves the stored value alone, null clears it.
+  title: update.title !== undefined,
+  description: update.description !== undefined,
+  // `type` and `definition` cannot be absent from the payload, so a null is their "leave alone".
+  type: update.type !== undefined && update.type !== null,
+  definition: update.definition !== undefined && update.definition !== null,
+  // `localized` is a tri-state: absent leaves the stored value alone, and a present null is a
+  // value rather than an absence — it stores NULL, so the key inherits the class field's flag.
+  localized: update.localized !== undefined
+})
+
+/**
+ * Registers a key update's own writes and returns the decision its confirmation needs: for a
+ * field the payload did not name, whether the response can be trusted for it. Call `settled()`
+ * once the request has been answered and its cache patch applied; it reports whether the cached
+ * key now has to be re-read from the server.
+ */
+const openKeyWrite = (
+  id: unknown,
+  written: Record<KeyWriteField, boolean>
+): { responseIsCanonicalFor: (field: KeyWriteField) => boolean, settled: () => boolean } => {
+  // Taken before this request registers itself, so a request never counts its own write.
+  const contended = new Map<KeyWriteField, boolean>()
+  const startedAtDispatch = new Map<KeyWriteField, number>()
+  for (const field of KEY_WRITE_FIELDS) {
+    const counters = keyWriteCounters(id, field)
+    contended.set(field, counters.pending > 0)
+    startedAtDispatch.set(field, counters.started)
+  }
+
+  // Read before this request counts itself, for the same reason as the field snapshot above.
+  const flight = keyFlight(id)
+  if (flight.inFlight > 0) flight.overlapped = true
+  flight.inFlight += 1
+
+  localKeyWritesInFlight += 1
+  for (const field of KEY_WRITE_FIELDS) {
+    if (!written[field]) continue
+    const counters = keyWriteCounters(id, field)
+    counters.pending += 1
+    counters.started += 1
+  }
+
+  return {
+    responseIsCanonicalFor: (field) =>
+      contended.get(field) !== true &&
+      keyWriteCounters(id, field).started === startedAtDispatch.get(field),
+    settled: () => {
+      for (const field of KEY_WRITE_FIELDS) {
+        if (written[field]) keyWriteCounters(id, field).pending -= 1
+      }
+      localKeyWritesInFlight -= 1
+      // With nothing in flight nobody is holding a dispatch-time snapshot any more, so the ledger
+      // can be dropped whole rather than growing one entry per key touched in the session.
+      if (localKeyWritesInFlight === 0) localKeyWrites.clear()
+
+      flight.inFlight -= 1
+      // True exactly once per set of overlapping writes, when the last of them has settled: the
+      // cache is now holding answers ordered by arrival for any field none of them named, and
+      // only the server can say which of them is current. A write that overlapped nothing returns
+      // false, so the ordinary single save stays one request.
+      const overlapSettled = flight.inFlight === 0 && flight.overlapped
+      if (flight.inFlight === 0) keyFlights.delete(String(id))
+
+      return overlapSettled
+    }
+  }
+}
+
+// The two shadows above — the key detail and the key update payload — are what the responses and
+// arguments below are typed against, so the collection response and the update argument have to
+// be declared here too rather than imported from the generated slice.
+
+export interface ClassificationStoreConfigurationKeyCollectionApiResponse {
+  totalItems: number
+  items: ClassificationStoreConfigurationKeyDetail[]
+}
+
+export interface ClassificationStoreConfigurationKeyUpdateApiArg {
+  /** Id of the key configuration */
+  id: number
+  classificationStoreConfigurationKeyUpdate: ClassificationStoreConfigurationKeyUpdate
 }
 
 // Helper: scan all active query cache entries for a given endpoint name and patch each one.
@@ -236,6 +457,208 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
   })
 
   return results
+}
+
+/**
+ * Re-reads one cache entry of the key collection from the server, ignoring what the cache holds.
+ *
+ * Used where a patch cannot decide which of two server-side orders won: a write confirmed inside a
+ * collection read, where the read's snapshot and the write's confirmation are two statements about
+ * the same row with no knowable order between them (see the read ledger below). The entry is named
+ * by the arguments of the read that could not decide, so one unanswerable read costs one request.
+ *
+ * `subscribe: false` keeps the refetch from holding the entry open: it writes into the entries the
+ * grid is already subscribed to, and an entry nobody is reading any more expires as before. An
+ * open key definition dialog is unaffected — the layout provider seeds once and ignores later
+ * refreshes of the same key (layout-provider-factory.tsx, "Already initialized").
+ */
+const refetchKeyCollection = (
+  dispatch: (thunk: any) => void,
+  args: ClassificationStoreConfigurationKeyCollectionApiArg
+): void => {
+  dispatch(baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate(
+    args,
+    { subscribe: false, forceRefetch: true }
+  ))
+}
+
+/**
+ * Re-reads the cached pages of one store's key collection, ignoring what the cache holds.
+ *
+ * Used for the other case a patch cannot decide: two of this client's writes to the same key
+ * overlapped, so for any field neither of them named the cache took whichever answer arrived last
+ * (see the ledger above). That one is not confined to a single entry — the confirmation patch
+ * fans out over every cached page, so every page that holds the key took the same last answer —
+ * and it fires once per set of overlapping writes rather than once per read.
+ *
+ * `storeId` is the store the confirmed key belongs to, and pages of any other store are left
+ * alone: a key belongs to exactly one store (`ClassificationStoreConfigurationKeyDetail.storeId`),
+ * so a page listing another store's keys cannot hold the row and re-reading it buys nothing. It is
+ * undefined only where no response arrived to name the store, and then every page is re-read
+ * because there is nothing to narrow by.
+ *
+ * Only the cached pages are re-read — a tag invalidation would also refetch the groups, the
+ * collections and every relation list, none of which a key update can have changed.
+ */
+const refetchKeyCollections = (dispatch: (thunk: any) => void, storeId?: number): void => {
+  // Accessing internal RTK Query store state to find the cached pages, as the patch helpers do.
+  dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+    const state = getState() as Record<string, unknown>
+    const queries = (state.api as Record<string, unknown>)?.queries as Record<string, unknown> ?? {}
+
+    for (const [queryKey, queryState] of Object.entries(queries)) {
+      if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
+      const qs = queryState as { originalArgs: ClassificationStoreConfigurationKeyCollectionApiArg }
+      if (storeId !== undefined && qs.originalArgs?.storeId !== storeId) continue
+      refetchKeyCollection(innerDispatch, qs.originalArgs)
+    }
+  })
+}
+
+// ─── The collection reads a confirmation has to survive ─────────────────────────
+// A read of the key collection is a snapshot of the server taken at a moment this client cannot
+// know either, and its answer replaces the whole cached page rather than a field of a row. So a
+// read dispatched before a key update confirms, and answered after it, writes the page back as it
+// stood before that save: the exclusion the key definition dialog had just confirmed is gone from
+// the cache, and reopening the dialog shows the key as indexed again — then saves that back.
+//
+// The write ledger above cannot see this. It weighs this client's writes against each other, and a
+// read registers nothing in it, so a save that overlaps only a read is a save that overlapped
+// "nothing" and schedules no corrective re-read. It is not confined to the key the read was taken
+// for, either: the answer carries every row of the page, so a save on any key in it is overwritten
+// the same way. The corrective re-read below is one such read, and the ordinary grid load, the
+// page change and the tag invalidation are the others, so this is registered on the collection
+// endpoint itself rather than around that one dispatch.
+//
+// Every read in flight is registered here, and a confirmation landing inside one leaves the fields
+// that confirmation owns behind. Once the read's answer has been written to the cache those fields
+// are written over it again, in the order they were confirmed. Only the fields the request named
+// are preserved: for those the server has just said what it stored, and only in the one cache
+// entry this read answered. Everything else in the row is the read's, which is what re-reading is
+// for.
+//
+// Two things the replay cannot establish, and the corrective re-read is how both are answered:
+//
+//   * which of the two is newer. A confirmation that landed after the read was dispatched is not
+//     thereby newer than the read's answer: the server evaluates the read at a moment this client
+//     cannot know, and that moment can be after it applied the update AND after another user
+//     changed the same field back. Replayed over such an answer the confirmation reinstates a
+//     value the server no longer holds, and a single save schedules no re-read of its own, so
+//     reopening the dialog would offer that stale value and save it back.
+//   * whether the other cached entries are owed anything. They are not: a read writes its own
+//     entry, so a replay reaching into the entry of a later, differently keyed read overwrites
+//     that read's fresher answer with this one's remembered confirmation.
+//
+// So the replay is kept — the cache must not flicker back to the pre-save value — but a read that
+// replayed anything re-reads the collection as it settles, and the cache ends on the server's
+// state rather than on an assumption about arrival order. The re-read is registered here like any
+// other read, so a confirmation landing inside it is replayed and re-read in turn; with no further
+// write to confirm, the next one records nothing and the sequence stops.
+//
+// Both halves of that are confined to the reads and the entry the save can actually have changed,
+// because a save is one row of one store and this ledger holds every read of every store:
+//
+//   * a confirmation is recorded only against reads of the store the confirmed key belongs to.
+//     Recorded against all of them, a save in one store left a remembered confirmation on the
+//     editor's read of another store, whose page cannot hold the row; the replay then found no
+//     row to write and the read still ordered a corrective re-read, so one save cost a re-read of
+//     every store open in the session.
+//   * a read re-reads its own entry and no other. Re-reading every cached page meant each read of
+//     a staggered set ordered the whole set again, so n reads in flight cost n×n requests and a
+//     corrective read that had already answered was launched a second time by a later settlement.
+//   * and only a read whose replay actually wrote a row re-reads at all. Whether the page carries
+//     the saved key is not knowable when the confirmation is recorded — the read has not answered
+//     yet — but it is knowable once it has, and a page that never held the row has no conflict of
+//     statements on it to resolve.
+
+/** The fields of one key a confirmed update is the authority on, and the values it confirmed. */
+type ConfirmedKeyFields = Partial<Record<KeyWriteField, unknown>>
+
+interface KeyCollectionRead {
+  /** The store whose keys this read lists; a confirmation from any other store is not its concern. */
+  storeId: number
+  preserve: Array<{ id: unknown, fields: ConfirmedKeyFields }>
+}
+
+/** The reads of the key collection now in flight. */
+const keyCollectionReads = new Set<KeyCollectionRead>()
+
+/**
+ * Registers a read of the key collection, under the query arguments it was dispatched with — the
+ * one cache entry its answer lands in, and so the only entry its replay may touch and the only one
+ * it may re-read. Call `settled()` once its answer has been written to the cache — or once it has
+ * failed, where there is simply nothing to write back over.
+ */
+const openKeyCollectionRead = (
+  args: ClassificationStoreConfigurationKeyCollectionApiArg
+): { settled: (dispatch: (thunk: any) => void) => void } => {
+  const read: KeyCollectionRead = { storeId: args.storeId, preserve: [] }
+  keyCollectionReads.add(read)
+
+  return {
+    settled: (dispatch) => {
+      keyCollectionReads.delete(read)
+      if (read.preserve.length === 0) return
+
+      // Set from inside the recipe, which `updateQueryData` runs synchronously while this
+      // dispatch is on the stack — so it is readable immediately below. It stays false where the
+      // answer carried none of the preserved keys, and where the entry had already been dropped
+      // and the recipe never ran at all.
+      let replayed = false
+
+      // This read's own entry, named by the arguments it was dispatched with, and not every cached
+      // page: an entry another read has since refreshed holds that read's answer, which is newer
+      // than the confirmation remembered here, and replaying into it would put the older value
+      // back.
+      dispatch(baseApi.util.updateQueryData(
+        'classificationStoreConfigurationKeyCollection',
+        args,
+        (draft) => {
+          const page = draft as unknown as ClassificationStoreConfigurationKeyCollectionApiResponse
+          for (const { id, fields } of read.preserve) {
+            const idx = page.items.findIndex((k) => k.id === id)
+            // A key the answer does not carry any more — deleted, moved to another page or
+            // filtered out — has no row to write to, and nothing to preserve.
+            if (idx !== -1) {
+              Object.assign(page.items[idx], fields)
+              replayed = true
+            }
+          }
+        }
+      ))
+
+      // Nothing of this read's answer was written over, so the two statements never met on this
+      // page and there is no order to resolve: a page that does not carry the saved key reads the
+      // same before and after the save.
+      if (!replayed) return
+
+      // The replay is a guess about which of two unordered statements is newer, so the server is
+      // asked — for this read's own entry, which is the only one the replay touched. See the
+      // section comment above: this is also what gives a save that overlapped only a read the
+      // corrective re-read the write ledger would have given it had it overlapped a write.
+      refetchKeyCollection(dispatch, args)
+    }
+  }
+}
+
+/**
+ * Records the fields a key update has just had confirmed against the collection reads in flight
+ * that list the confirmed key's own store, so each of those reads writes them back once its own
+ * answer has landed. A read of any other store is left alone: its page lists keys of a store this
+ * key does not belong to, so its answer cannot be carrying the row and cannot be overwriting the
+ * save.
+ */
+const preserveAcrossKeyCollectionReads = (
+  id: unknown,
+  storeId: number,
+  fields: ConfirmedKeyFields
+): void => {
+  if (keyCollectionReads.size === 0 || Object.keys(fields).length === 0) return
+
+  for (const read of keyCollectionReads) {
+    if (read.storeId !== storeId) continue
+    read.preserve.push({ id, fields })
+  }
 }
 
 const api = baseApi.enhanceEndpoints({
@@ -354,53 +777,143 @@ const api = baseApi.enhanceEndpoints({
     // ─── Keys ────────────────────────────────────────────────────────────────
 
     classificationStoreConfigurationKeyCollection: {
-      providesTags: ['Classification Store']
+      providesTags: ['Classification Store'],
+      // Every read of the page is registered for as long as it is in flight, so a key update
+      // confirmed while it ran can write its own fields back over the answer (see the read ledger
+      // above). Without it the answer — a snapshot taken before that update was applied — is the
+      // last word on every row of the page, including rows of keys the read was not taken for.
+      // Registered with its own arguments: the replay belongs to the entry this read answers, and
+      // a read with other arguments has its own, newer answer there.
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const read = openKeyCollectionRead(args)
+        try {
+          await queryFulfilled
+        } catch {
+          // A read that failed wrote nothing into the cache, so there is nothing over it to undo.
+        } finally {
+          read.settled(dispatch)
+        }
+      }
     },
 
     classificationStoreConfigurationKeyUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
-        // Optimistically apply the update payload to the cache immediately so the
-        // UI reflects the change without waiting for the server round-trip.
-        const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
-          dispatch,
-          'classificationStoreConfigurationKeyCollection',
-          (draft) => {
-            const idx = draft.items.findIndex((k) => k.id === args.id)
-            if (idx !== -1) {
-              const update = args.classificationStoreConfigurationKeyUpdate
-              draft.items[idx] = {
-                ...draft.items[idx],
-                name: update.name,
-                // A null title means "leave the stored one alone" to the server, just like a
-                // null type does, so writing it into the cache would blank the Title cell
-                // for the length of the request and let it come back with the response.
-                ...(update.title !== undefined && update.title !== null ? { title: update.title } : {}),
-                ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
-                // `description` is optional in the payload now, so an absent one must not be
-                // written: it would blank the cached cell for the length of the request.
-                ...(update.description !== undefined ? { description: update.description } : {})
-                // `definition` intentionally excluded: a null definition means "leave the stored
-                // one alone" to the server, so spreading it would wipe the cached definition.
-              }
-            }
-          }
-        )
-
+        // Read as the shadowed payload above, which is what the hook's callers hand the trigger:
+        // the generated argument types `definition` as a bare `object` and does not name
+        // `localized` at all, so neither the index flag nor the localization tri-state is
+        // readable through it.
+        const update = args.classificationStoreConfigurationKeyUpdate as ClassificationStoreConfigurationKeyUpdate
+        const written = keyFieldsWritten(update)
+        const write = openKeyWrite(args.id, written)
+        // The store the confirmed row belongs to, so the corrective re-read in the `finally` can
+        // leave the cached pages of every other store alone. Only a response can name it — the
+        // payload carries no store — so a request that failed leaves it undefined and the re-read
+        // falls back to every cached page.
+        let confirmedStoreId: number | undefined
+        // Everything from here on is inside the `finally` that closes the ledger entry: a write
+        // left open would mark its fields contended for the rest of the session, and the cache
+        // would go back to refusing every canonical value for them.
         try {
-          // Once confirmed, overwrite with the canonical server-returned value.
-          const { data: updated } = await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
+          // Only what the payload names is patched. `title` and `description` are optional, so they
+          // carry three states: absent leaves the stored value alone, a null clears it, a string
+          // sets it. `type` and `definition` cannot be absent from the payload, so a null is their
+          // "leave the stored one alone" and writing it would wipe the cached value instead.
+          // `definition` is left out either way: no cached cell shows it, and the key definition
+          // dialog reads it back from the response below.
+          const namedFields = {
+            name: update.name,
+            ...(update.title !== undefined ? { title: update.title } : {}),
+            ...(update.description !== undefined ? { description: update.description } : {}),
+            // Spelled out rather than read off `written.type`, which is a boolean and so does not
+            // narrow the null away for the patch.
+            ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
+            // `localized` is a tri-state, so a present null is a value and not an absence: it
+            // stores NULL, which means the key inherits the class field's flag again. Keyed off
+            // `undefined` and not off `in`, because an undefined member is dropped on the way to
+            // the wire and would patch a null the server never hears about.
+            ...(update.localized !== undefined ? { localized: update.localized } : {})
+          }
+          // Optimistically apply the update payload to the cache immediately so the
+          // UI reflects the change without waiting for the server round-trip.
+          const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
             dispatch,
             'classificationStoreConfigurationKeyCollection',
             (draft) => {
-              const idx = draft.items.findIndex((k) => k.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
+              const idx = draft.items.findIndex((k) => k.id === args.id)
+              if (idx !== -1) {
+                // Assigned onto the existing row rather than replacing it. Immer records one patch
+                // per path it sees written, so the inverse patches this produces name only the
+                // members this request wrote — and the rollback below can therefore undo no more
+                // than that. Replacing the row recorded a single replace of the whole row, and a
+                // request that failed after a later one had already succeeded then restored every
+                // member of it: the exact staleness the response mask further down prevents,
+                // arriving through the other door.
+                Object.assign(draft.items[idx], namedFields)
+              }
             }
           )
-        } catch {
-          // Server rejected — roll back all optimistic patches.
-          patchResults.forEach((r) => { r.undo() })
+
+          try {
+            const { data: updated } = await queryFulfilled
+            // The fields this request named, as the server has just confirmed them. A collection
+            // read already in flight answers with a snapshot taken before this request was
+            // applied, and replaces the whole page with it; these values are written back over
+            // that answer so the save survives it (see the read ledger above).
+            const confirmedRow = asKeyDetail(updated)
+            confirmedStoreId = confirmedRow.storeId
+            const ownedFields: ConfirmedKeyFields = {}
+            for (const field of KEY_WRITE_FIELDS) {
+              if (written[field]) ownedFields[field] = confirmedRow[field]
+            }
+            preserveAcrossKeyCollectionReads(updated.id, confirmedRow.storeId, ownedFields)
+
+            patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
+              dispatch,
+              'classificationStoreConfigurationKeyCollection',
+              (draft) => {
+                const idx = draft.items.findIndex((k) => k.id === updated.id)
+                if (idx === -1) return
+
+                // Once confirmed, the server's answer is taken for every field this request named,
+                // and for every field nobody else here was writing at the same time: that field has
+                // no local writer, so the response is the freshest value there is and another
+                // user's change to it belongs in the cache.
+                //
+                // The cached value is kept only where a local write of this client's overlapped the
+                // request, because there the response may be a snapshot from before that write
+                // landed. Replacing the whole row in that case reverted the definition the key
+                // definition dialog had just saved when a cell edit answered last, and reverted the
+                // cell edit when the dialog save answered last — and the same for the localization
+                // the dialog writes, which the grid and the dialog both read out of this cache.
+                const cached = draft.items[idx]
+                const keepCached = (field: KeyWriteField): boolean =>
+                  !written[field] && !write.responseIsCanonicalFor(field)
+                draft.items[idx] = {
+                  ...asKeyDetail(updated),
+                  ...(keepCached('title') ? { title: cached.title } : {}),
+                  ...(keepCached('description') ? { description: cached.description } : {}),
+                  ...(keepCached('type') ? { type: cached.type } : {}),
+                  ...(keepCached('definition') ? { definition: cached.definition } : {}),
+                  ...(keepCached('localized') ? { localized: cached.localized } : {})
+                }
+              }
+            )
+          } catch {
+            // Server rejected — roll back all optimistic patches.
+            patchResults.forEach((r) => { r.undo() })
+          }
+        } finally {
+          // After the cache patch, so a request still counts as in flight for as long as it can
+          // still write, and a rejected one leaves the ledger as it found it.
+          //
+          // `settled()` answers the one question the field mask above cannot: two of this client's
+          // writes overlapped, so a field neither of them named was confirmed twice and the cache
+          // kept whichever answer arrived last. Re-read once the last of them has settled — after
+          // every patch, so nothing in flight can be overwritten, and only on that path, so an
+          // ordinary save still costs one request. Narrowed to the store the confirmed row named:
+          // the pages of another store cannot hold this key, so re-reading them answers nothing.
+          if (write.settled()) refetchKeyCollections(dispatch, confirmedStoreId)
         }
       }
     },
@@ -488,8 +1001,14 @@ const api = baseApi.enhanceEndpoints({
           (draft, cacheKey) => {
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
-              // Upsert — update in-place whatever the payload named
-              draft.items[idx] = { ...draft.items[idx], ...absentSafePatch }
+              // Upsert — update in-place whatever the payload named. Assigned onto the existing
+              // row rather than replacing it, for the same reason the key update above is: the
+              // inverse patches then name only the members this request wrote, so rolling back a
+              // request that failed after a later one succeeded cannot undo the later one. The
+              // two surfaces here write disjoint members, so a whole-row rollback took the field
+              // mask below apart — a failed sorter edit restored the sub group an assignment had
+              // already saved.
+              Object.assign(draft.items[idx], absentSafePatch)
             } else {
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new
@@ -684,7 +1203,6 @@ export const {
   useClassificationStoreConfigurationCollectionDeleteMutation,
   // CRUD mutations — keys
   useClassificationStoreConfigurationKeyCreateMutation,
-  useClassificationStoreConfigurationKeyUpdateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
   // CRUD mutations — key-group relations
   useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
@@ -728,6 +1246,18 @@ export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation =
   api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation as unknown as TypedUseMutation<
     ClassificationStoreConfigurationKeyGroupRelationDetail,
     { classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate },
+    BaseQuery
+  >
+
+/**
+ * The key update hook, re-typed to take the `localized` tri-state the shipped payload declares.
+ * Re-typed rather than wrapped for the same reason as the hook above: a wrapper drops the hook's
+ * own options. Removed with the rest of the hand-written block on the next regeneration.
+ */
+export const useClassificationStoreConfigurationKeyUpdateMutation =
+  api.useClassificationStoreConfigurationKeyUpdateMutation as unknown as TypedUseMutation<
+    ClassificationStoreConfigurationKeyDetail,
+    ClassificationStoreConfigurationKeyUpdateApiArg,
     BaseQuery
   >
 

@@ -14,7 +14,15 @@ import { FieldDefinitionEncryptedFieldFormFields } from '@Pimcore/modules/field-
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
-export const BASE_FIELD_KEYS = new Set(['fieldtype', 'fieldType', 'datatype', 'name', 'title', 'tooltip'])
+/**
+ * The members that belong to the encrypted field itself rather than to the delegate it wraps.
+ * They are neither hoisted out of a stored delegate nor cleared when the delegate type changes.
+ *
+ * `indexed` is in here because it is the Classification Store key's own search index flag, held on
+ * the key and not on whatever type renders its value: left out, switching the delegate type would
+ * clear it, the save would omit it, and an excluded key would reopen as indexed.
+ */
+export const BASE_FIELD_KEYS = new Set(['fieldtype', 'fieldType', 'datatype', 'name', 'title', 'tooltip', 'indexed'])
 
 export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'encryptedField'

@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan element niet herstellen uit 
 error.error_login_token_as_admin_non_admin_user: Alleen administratieve gebruikers kunnen een inloglink voor een administratieve gebruiker genereren
 error.error_login_token_no_user_password: Er kan geen inloglink voor deze gebruiker worden gegenereerd omdat er geen wachtwoord is ingesteld
 error.syntax_error: Syntaxisfout
+validation.mandatory: "{{field}} is verplicht"
+validation.regex_mismatch: "{{field}} komt niet overeen met het vereiste patroon {{regex}}"
+validation.max_length: "{{field}} mag niet langer zijn dan {{max}} tekens"
+validation.min_length: "{{field}} moet minimaal {{min}} tekens lang zijn"
+validation.not_numeric: "{{field}} moet een getal zijn, ontvangen: {{value}}"
+validation.not_integer: "{{field}} moet een geheel getal zijn, ontvangen: {{value}}"
+validation.not_unsigned: "{{field}} mag niet negatief zijn, ontvangen: {{value}}"
+validation.min_value: "{{field}} moet minimaal {{min}} zijn, ontvangen: {{value}}"
+validation.max_value: "{{field}} mag maximaal {{max}} zijn, ontvangen: {{value}}"
+validation.range_start_after_end: "{{field}}: het begin mag niet na het einde liggen"
+validation.invalid_email: "{{field}} is geen geldig e-mailadres: {{value}}"
+validation.invalid_option: "{{field}} heeft een ongeldige optie: {{value}}"
+validation.invalid_time: "{{field}} is geen geldige tijd: {{value}}"
+validation.invalid_relation: "{{field}} bevat een ongeldige relatie"
+validation.max_relations: "{{field}} staat maximaal {{max}} relaties toe"
+validation.max_items: "{{field}} staat maximaal {{max}} items toe"
+validation.slug_not_unique: "De URL-slug {{value}} in {{field}} is al in gebruik"
+validation.slug_invalid: "{{field}} is geen geldige URL-slug"
+validation.slug_reserved_characters: "{{field}} bevat gereserveerde tekens: {{characters}}"
+validation.unique_constraint: "Een uniciteitsbeperking wordt geschonden"
+validation.missing_required_editables: "Waarden voor verplichte editables ontbreken"
+validation.image_too_large: "Afbeelding {{filename}} is te groot (max. {{max_megapixels}} megapixels). Verklein haar tot {{suggested_width}}×{{suggested_height}} pixels of minder"
+validation.and_more: "en nog {{n}}"
 sidebar.selected_elements: Geselecteerde elementen
 sidebar.grid_config: Rasterinstelling
 sidebar.tag_filters: Tagfilters
@@ -1295,6 +1318,7 @@ close-tab: Tabblad sluiten
 close-others: Overige sluiten
 close-unmodified: Ongewijzigde sluiten
 close-all: Alles sluiten
+use-full-space: Volledige ruimte gebruiken
 asset.tree.context-menu.download: Downloaden
 asset.tree.context-menu.download-as-zip: Downloaden als ZIP
 element-selector.title.single: Element selecteren
@@ -1400,6 +1424,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Bestandsgrootte
+system-information.checksum: Checksum
 system-information.modification-date: Wijzigingsdatum
 system-information.creation-date: Aanmaakdatum
 system-information.user-modification: Gebruiker wijziging
@@ -2182,6 +2207,10 @@ classification-store.rename-key: Sleutel hernoemen
 classification-store.delete-key: 'Sleutel "{{keyName}}" verwijderen?'
 classification-store.delete-key-relation: 'Sleutel "{{keyName}}" uit deze groep verwijderen?'
 classification-store.delete-group-relation: 'Groep "{{groupName}}" uit deze collectie verwijderen?'
+classification-store.delete-group-consequence: "Als je deze groep verwijdert, worden ook de waarden verwijderd die elk object eronder bewaart. Dit kan niet ongedaan worden gemaakt."
+classification-store.delete-collection-consequence: "De collectie en de bijbehorende lijst met groepen worden verwijderd. De groepen en hun sleutels blijven in de store en er worden geen objectwaarden verwijderd."
+classification-store.delete-key-relation-consequence: "De sleutel wordt alleen uit deze groep verwijderd. De sleutel zelf blijft in de store en niets wat een object bewaart, wordt verwijderd."
+classification-store.delete-group-relation-consequence: "De groep wordt alleen uit deze collectie verwijderd. De groep, haar sleutels en de waarden die objecten eronder bewaren blijven ongewijzigd."
 classification-store.edit-definition: Definitie bewerken
 classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"
 classification-store.columns.id: ID
@@ -2212,6 +2241,8 @@ classification-store.key-type-needs-document-engine: "De engine van deze store k
 classification-store.add-sub-group: Subgroep toevoegen
 classification-store.delete-sub-group: "Subgroep \"{{subGroupName}}\" verwijderen?"
 classification-store.add-sub-group-store-hint: Een subgroep hoort bij de store, dus een nieuwe komt beschikbaar voor elke groep van deze store.
+classification-store.key-indexed: Opnemen in de zoekindex van de Classification Store
+classification-store.key-indexed-hint: Zolang dit uitgeschakeld is, kan deze sleutel niet worden gesorteerd, gefilterd of doorzocht en wordt de waarde uit het opgeslagen zoekdocument verwijderd. De index wordt via de wachtrij bijgewerkt, dus wijzigingen zijn niet meteen zichtbaar.
 classification-store.delete-sub-group-in-use-hint: Maak eerst de toewijzing van de sleutels aan deze subgroep ongedaan in de hierboven genoemde groepen en verwijder hem daarna.
 classification-store.no-sub-groups: Deze store heeft nog geen subgroepen
 classification-store.select-sub-group: Subgroep selecteren
@@ -2233,6 +2264,13 @@ classification-store.sub-group-unused: "Geen enkele sleutel van deze groep gebru
 classification-store.assign-sub-group-progress: "Subgroep wordt aan {{done}} van {{total}} sleutels toegewezen…"
 classification-store.assign-sub-group-failed: "De subgroep kon niet worden toegewezen aan: {{keyNames}}"
 classification-store.assign-sub-group-running: Wacht tot de toewijzing van de subgroep klaar is
+classification-store.key-localization: "Localisatie"
+classification-store.key-localization.inherit: "Overerven"
+classification-store.key-localization.localized: "Gelokaliseerd"
+classification-store.key-localization.not-localized: "Niet gelokaliseerd"
+classification-store.key-localization-confirm: "Waarden die deze sleutel in andere talen bevat, worden mogelijk niet meer weergegeven of opgeslagen. Toch opslaan?"
+classification-store.key-localized: "Gelokaliseerde sleutel"
+classification-store.key-localized-tooltip: "Deze sleutel bevat een eigen waarde per taal."
 classification-store.import: Storeconfiguratie importeren
 classification-store.import-success: Storeconfiguratie succesvol geïmporteerd
 home: Startpagina
