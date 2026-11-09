@@ -20,3 +20,12 @@ export const withoutCustomTabs = (config: ElementSelectorConfig): ElementSelecto
   const { customTabs, ...rest } = config
   return rest
 }
+
+// Through the Window API an iframe's call runs in this window, where isInIframe() is false: its render comes from another realm.
+export const withoutForeignCustomTabs = (config: ElementSelectorConfig): ElementSelectorConfig => {
+  if (config.customTabs?.every(tab => tab.render instanceof Function) ?? true) {
+    return config
+  }
+
+  return withoutCustomTabs(config)
+}

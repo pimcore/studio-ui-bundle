@@ -73,6 +73,10 @@ import {
 import { useElementSelector } from './provider/element-selector/use-element-selector'
 // eslint-disable-next-line import/first
 import { elementApi } from '@Pimcore/app/public-api/element/element-api'
+// eslint-disable-next-line import/first
+import { ApiGatewayEvent } from '@Pimcore/app/public-api/api-gateway'
+// eslint-disable-next-line import/first
+import { runInNewContext } from 'vm'
 
 interface NewElement {
   type: string
@@ -251,6 +255,39 @@ describe('ElementSelector custom tabs', () => {
       elementApi.openElementSelector({ onFinish, customTabs: [deliveryTab(jest.fn())] })
 
       expect(mockFrame.parentOpen).toHaveBeenCalledWith({ onFinish })
+    })
+  })
+
+  describe('reached through the Window API from an iframe', () => {
+    // getPimcoreStudioApi() hands an iframe this window's elementApi, so the call runs here, where isInIframe() is false.
+    const openedConfig = (): ElementSelectorConfig => (ApiGatewayEvent as unknown as jest.Mock).mock.lastCall[1]
+
+    beforeEach(() => {
+      jest.spyOn(window, 'dispatchEvent').mockReturnValue(true)
+      jest.spyOn(console, 'warn').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('drops custom tabs whose render comes from another window', () => {
+      const onFinish = jest.fn()
+      const foreignRender = runInNewContext('(function render () { return null })')
+
+      elementApi.openElementSelector({ onFinish, customTabs: [{ ...deliveryTab(jest.fn()), render: foreignRender }] })
+
+      expect(openedConfig()).toEqual({ onFinish })
+      expect(console.warn).toHaveBeenCalledTimes(1)
+    })
+
+    it('keeps custom tabs from this window', () => {
+      const config: ElementSelectorConfig = { onFinish: jest.fn(), customTabs: [deliveryTab(jest.fn())] }
+
+      elementApi.openElementSelector(config)
+
+      expect(openedConfig()).toBe(config)
+      expect(console.warn).not.toHaveBeenCalled()
     })
   })
 })
