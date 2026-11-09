@@ -12,6 +12,7 @@ import { type ElementSelectorConfig } from '@sdk/modules/element'
 import { useElementSelectorHelper } from './use-element-selector-helper'
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isInIframe } from '@Pimcore/utils/iframe'
+import { withoutCustomTabs } from './without-custom-tabs'
 
 export interface UseElementSelectorReturn {
   open: () => void
@@ -26,7 +27,7 @@ export const useElementSelector = (props: UseElementSelectorProps): UseElementSe
     // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       const { element } = getPimcoreStudioApi()
-      element.openElementSelector(props)
+      element.openElementSelector(withoutCustomTabs(props))
       return
     }
 
