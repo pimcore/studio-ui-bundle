@@ -33,6 +33,7 @@ import {
   RestoreInheritanceLocaleContext
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/hooks/restore-inheritance-locale-context'
 import { useClassificationStore } from './provider'
+import { useLanguageEditPermission } from './hooks/use-language-edit-permission'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { getKeyLabel } from './utils/key-label'
 import { useStyles } from './classification-store-item.styles'
@@ -72,6 +73,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { operations } = useKeyedListContext()
   const { id } = useElementContext()
   const { isNewGroup } = useClassificationStore()
+  const canEditLanguage = useLanguageEditPermission()
 
   const modal = useFormModal()
   const { styles } = useStyles()
@@ -89,6 +91,13 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
 
   const slotOf = (key: ClassificationStoreCollection2): string =>
     isKeyLocalized(key) ? localizationGroup : LANGUAGE_INDEPENDENT
+
+  // A key bound to a language slot is edited in that language, so it follows the same
+  // localizedEdit permission the localized control follows - whether the key resolves to
+  // localized through its own flag or through the field's. The language independent slot carries
+  // no language for the permission to answer, and the keys bound to it are unaffected.
+  const isLocalizationGroupEditable = localizationGroup === LANGUAGE_INDEPENDENT ||
+    canEditLanguage(localizationGroup)
 
   const handleItemDelete = (): void => {
     const updatedLayout = currentLayoutData.filter(item => item.id !== groupLayout?.id)
@@ -151,10 +160,17 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     return subGroupNames.get(identifier) ?? identifier
   }
 
-  /** Read-only marker that this key holds a value per language; it cannot change the flag. */
+  /**
+   * Read-only marker that this key holds a value per language; it cannot change the flag.
+   * The status is carried by an image role rather than by a bare labelled span, which a screen
+   * reader does not reliably announce.
+   */
   const localizedIndicator = (
     <Tooltip title={ t('classification-store.key-localized-tooltip') }>
-      <span aria-label={ t('classification-store.key-localized') }>
+      <span
+        aria-label={ t('classification-store.key-localized') }
+        role='img'
+      >
         <Icon value='translate' />
       </span>
     </Tooltip>
@@ -181,6 +197,10 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   // independent one whichever localization the field level control shows.
   const renderKey = (item: ClassificationStoreCollection2): React.JSX.Element => {
     const slot = slotOf(item)
+    const definition = item.definition as { noteditable?: boolean | null } | undefined
+    // Whatever the definition itself forbids stays forbidden; the language permission only adds to it.
+    const isReadOnly = definition?.noteditable === true ||
+      (slot !== LANGUAGE_INDEPENDENT && !isLocalizationGroupEditable)
 
     return (
       <Form.Group
@@ -192,6 +212,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
           <ObjectComponent
             { ...item.definition }
             name={ item.id }
+            noteditable={ isReadOnly }
             technicalName={ item.name }
             title={ labelOf(item) }
           />
@@ -249,5 +270,5 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         </Panel>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized, isLocalizationGroupEditable])
 }

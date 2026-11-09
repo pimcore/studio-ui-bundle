@@ -45,6 +45,12 @@ const mockConfirm = jest.fn()
 const mockObjectComponent = jest.fn()
 const mockGetValue = jest.fn()
 
+/**
+ * The workspace language edit permission of the open data object, as a comma separated list.
+ * Null is no restriction at all, which is what every case that is not about the permission uses.
+ */
+let mockLocalizedEdit: string | null = null
+
 // A configured key title can be a translation key itself, so the label has to be looked up;
 // everything without a translation comes back unchanged, as the other cases assert.
 const mockTranslations: Record<string, string> = { 'classification-store.color.blue': 'Blue' }
@@ -66,6 +72,11 @@ jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-
 }))
 jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
   useElementContext: () => ({ id: 42, elementType: 'data-object' })
+}))
+// The permission is read off the loaded data object, the way useLanguageEditPermission does it;
+// the helper that answers it is the real one.
+jest.mock('@Pimcore/modules/data-object/hooks/use-data-object-draft', () => ({
+  useDataObjectDraft: () => ({ dataObject: { id: 42, permissions: { localizedEdit: mockLocalizedEdit } } })
 }))
 jest.mock('./provider', () => ({
   useClassificationStore: () => ({ isNewGroup: () => false })
@@ -128,6 +139,8 @@ const subGroupedLayout = {
 
 const GROUP_ID = 4
 const LANGUAGE = 'en'
+/** A second content language, for the cases where only one of the two may be edited. */
+const OTHER_LANGUAGE = 'de'
 const LANGUAGE_INDEPENDENT = 'default'
 const LOCALIZED_INDICATOR = 'classification-store.key-localized'
 
@@ -143,6 +156,17 @@ const mixedLayout = {
   id: GROUP_ID,
   name: 'Mixed',
   keys: MIXED_KEYS.map((key) => ({ ...key, definition: { datatype: 'data' } }))
+} as any
+
+// Two localized keys, one of them read-only by its own definition: what the definition forbids
+// must stay forbidden whatever the language permission allows.
+const lockedKeyLayout = {
+  id: 6,
+  name: 'Locked',
+  keys: [
+    { id: 61, name: 'ef000061', title: 'Locked', localized: true, definition: { datatype: 'data', noteditable: true } },
+    { id: 62, name: 'ef000062', title: 'Open', localized: true, definition: { datatype: 'data' } }
+  ]
 } as any
 
 const TRANSLATED_TITLE = 'classification-store.color.blue'
@@ -193,6 +217,7 @@ describe('ClassificationStoreItem', () => {
     mockConfirm.mockClear()
     mockObjectComponent.mockClear()
     mockGetValue.mockReset()
+    mockLocalizedEdit = null
   })
 
   it('asks for confirmation when the group is deleted', async () => {
@@ -340,16 +365,72 @@ describe('ClassificationStoreItem', () => {
     }
   })
 
+  // A key bound to a language slot is edited in that language, so it follows the same
+  // localizedEdit permission the localized control and the restore of a localized field follow.
+  it('makes the keys of the slot read-only in a language the permission leaves out', () => {
+    mockLocalizedEdit = LANGUAGE
+
+    renderMixedGroup(true, OTHER_LANGUAGE)
+
+    // the three that resolve to localized sit in the German slot, which may not be edited
+    expect(propsOfKey(41).noteditable).toBe(true)
+    expect(propsOfKey(42).noteditable).toBe(true)
+    expect(propsOfKey(43).noteditable).toBe(true)
+    // the explicit false one stays on the language independent slot, which carries no language
+    expect(propsOfKey(44).noteditable).not.toBe(true)
+  })
+
+  it('restricts only the key flagged localized itself on a field that is not localized', () => {
+    mockLocalizedEdit = LANGUAGE
+
+    renderMixedGroup(false, OTHER_LANGUAGE)
+
+    expect(propsOfKey(43).noteditable).toBe(true)
+
+    for (const key of [41, 42, 44]) {
+      expect(propsOfKey(key).noteditable).not.toBe(true)
+    }
+  })
+
+  it.each([
+    ['the permission names the language', LANGUAGE, LANGUAGE],
+    ['the permission names it among others', `${OTHER_LANGUAGE},${LANGUAGE}`, LANGUAGE],
+    ['the permission is empty', '', LANGUAGE],
+    ['the permission names languages but the keys are on the language independent slot', LANGUAGE, LANGUAGE_INDEPENDENT]
+  ])('keeps every key of a mixed group editable when %s', (_name, permission, mode) => {
+    mockLocalizedEdit = permission
+
+    renderMixedGroup(true, mode)
+
+    for (const key of MIXED_KEYS) {
+      expect(propsOfKey(key.id).noteditable).not.toBe(true)
+    }
+  })
+
+  it('leaves a key its definition declares read-only read-only, and the others editable', () => {
+    render(
+      <ClassificationStoreItem
+        currentLayoutData={ [lockedKeyLayout] }
+        fieldLocalized
+        groupLayout={ lockedKeyLayout }
+        localizationGroup={ LANGUAGE }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(propsOfKey(61).noteditable).toBe(true)
+    expect(propsOfKey(62).noteditable).not.toBe(true)
+  })
+
   it('marks the keys that resolve to localized with a read-only indicator and the others with none', () => {
     renderMixedGroup(true, LANGUAGE)
 
     // three keys resolve to localized on a localized field, the explicit false one does not
     expect(screen.getAllByLabelText(LOCALIZED_INDICATOR)).toHaveLength(3)
 
-    for (const indicator of screen.getAllByLabelText(LOCALIZED_INDICATOR)) {
-      expect(indicator).not.toHaveAttribute('role')
-      expect(indicator.tagName).toBe('SPAN')
-    }
+    // the status is exposed as an image with its label, not as a bare labelled span a screen
+    // reader may skip - and not as anything that could be taken for a control
+    expect(screen.getAllByRole('img', { name: LOCALIZED_INDICATOR })).toHaveLength(3)
 
     expect(screen.queryByRole('button', { name: LOCALIZED_INDICATOR })).not.toBeInTheDocument()
     expect(screen.queryByRole('switch')).not.toBeInTheDocument()

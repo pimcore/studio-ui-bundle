@@ -130,13 +130,22 @@ export const KeyDefinitionModal = ({
     serviceIds['DynamicTypes/FieldDefinitionRegistry']
   )
 
-  const storedLocalization = localizationOf(keyDetail?.localized)
-  const [localization, setLocalization] = useState<KeyLocalization>(storedLocalization)
+  // The stored state the control was last seeded from, held rather than read live: the key detail
+  // comes from the collection cache, which a refresh of the same key can move while the dialog is
+  // open. Comparing against the live flag then reported an untouched control as changed.
+  const [baselineLocalization, setBaselineLocalization] = useState<KeyLocalization>(
+    () => localizationOf(keyDetail?.localized)
+  )
+  const [localization, setLocalization] = useState<KeyLocalization>(baselineLocalization)
 
   // Seeded per key, not per mount: the dialog stays mounted between keys, so a key opened after
-  // another one would otherwise show the state of the previous one.
+  // another one would otherwise show the state of the previous one. The baseline is seeded with
+  // it, so both only move when the dialog is handed a different key.
   useEffect(() => {
-    setLocalization(localizationOf(keyDetail?.localized))
+    const seeded = localizationOf(keyDetail?.localized)
+
+    setBaselineLocalization(seeded)
+    setLocalization(seeded)
   }, [keyDetail?.id])
 
   // Ref to the getLayout function — updated by KeyDefinitionFormBridge
@@ -161,7 +170,7 @@ export const KeyDefinitionModal = ({
         type: keyDetail.type,
         definition: (layout as Record<string, unknown> | null | undefined) ?? null,
         // Sent only when the control moved: an absent member leaves the stored flag alone, a null clears it.
-        ...(localization !== storedLocalization ? { localized: localizedValueOf(localization) } : {})
+        ...(localization !== baselineLocalization ? { localized: localizedValueOf(localization) } : {})
       }
     })
 
@@ -178,7 +187,9 @@ export const KeyDefinitionModal = ({
     // One save at a time: a second one recomputes the stored state from the patch the first wrote.
     if (isSaving) return
 
-    if (!putsOtherLanguagesAtRisk(storedLocalization, localization)) {
+    // Warned about on the same baseline the payload is decided on: an untouched control is not a
+    // transition, whatever the cached flag has moved to meanwhile.
+    if (!putsOtherLanguagesAtRisk(baselineLocalization, localization)) {
       void saveKey()
       return
     }

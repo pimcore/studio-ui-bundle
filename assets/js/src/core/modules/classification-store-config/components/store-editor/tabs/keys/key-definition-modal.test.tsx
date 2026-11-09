@@ -343,6 +343,49 @@ describe('KeyDefinitionModal', () => {
     expect(confirmWarning).not.toHaveBeenCalled()
   })
 
+  // The key detail is read from the collection cache, which a refresh of the same key can move
+  // while the dialog is open. The control is only re-seeded when the key id changes, so the
+  // payload has to be decided against the state it was seeded with, not against the live flag.
+  it.each([
+    ['an absent flag', undefined, true],
+    ['a null flag', null, true],
+    ['a true flag', true, false],
+    ['a false flag', false, null]
+  ])('omits the localized member when a same-key refresh moves %s under an untouched control', async (
+    _name,
+    localized,
+    refreshed
+  ) => {
+    const patchCache = renderModal(localized)
+
+    patchCache(refreshed)
+
+    fireEvent.change(screen.getByLabelText('tooltip'), { target: { value: EDITED_TOOLTIP } })
+    save()
+
+    const payload = await savedPayload()
+
+    expect(sendsLocalized(payload)).toBe(false)
+    expect(payload.definition).toMatchObject({ tooltip: EDITED_TOOLTIP })
+    // an untouched control is not a transition, so the refreshed flag raises no warning either
+    expect(confirmWarning).not.toHaveBeenCalled()
+  })
+
+  it('still sends the state the control was moved to when a same-key refresh arrives after it', async () => {
+    const patchCache = renderModal(null)
+
+    fireEvent.click(option(LOCALIZED))
+    patchCache(false)
+
+    await saveConfirmingWarning()
+
+    const payload = await savedPayload()
+
+    expect(sendsLocalized(payload)).toBe(true)
+    expect(payload.localized).toBe(true)
+    expect(option(LOCALIZED)).toBeChecked()
+  })
+
   // The three transitions that can leave values in other languages unreachable warn; the other
   // three do not, and neither does leaving the state as it is.
   it.each([
