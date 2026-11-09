@@ -58,9 +58,12 @@ export const ElementSelectorContent = (): React.JSX.Element => {
     })
   }
 
+  const startTabs: NonNullable<ITabsProps['items']> = []
+
   for (const customTab of helper.config.customTabs ?? []) {
     const item: NonNullable<ITabsProps['items']>[number] = {
-      key: customTab.key,
+      // Prefixed so a caller's key cannot collide with a built-in area.
+      key: `custom:${customTab.key}`,
       label: customTab.label,
       forceRender: true,
       children: <div style={ { height: '65vh' } }>
@@ -76,11 +79,13 @@ export const ElementSelectorContent = (): React.JSX.Element => {
     }
 
     if (customTab.position === 'start') {
-      tabItems.unshift(item)
+      startTabs.push(item)
     } else {
       tabItems.push(item)
     }
   }
+
+  tabItems.unshift(...startTabs)
 
   useEffect(() => {
     if (tabItems.length > 0 && activeArea === undefined) {

@@ -135,17 +135,24 @@ describe('ElementSelector custom tabs', () => {
     expect(screen.getByRole('tab', { name: 'Assets' })).toHaveAttribute('aria-selected', 'true')
   })
 
-  it('lists a caller tab at the start first and selects it', () => {
-    renderSelector([{
-      name: 'open',
-      config: { selectionType: SelectionType.Single, customTabs: [deliveryTab(jest.fn(), 'start')] }
-    }])
+  it('lists caller tabs at the start first, in their order, and selects the first', () => {
+    const second = { ...deliveryTab(jest.fn(), 'start'), key: 'second', label: 'Second', render: () => null }
+    const customTabs = [deliveryTab(jest.fn(), 'start'), second]
+    renderSelector([{ name: 'open', config: { selectionType: SelectionType.Single, customTabs } }])
 
     fireEvent.click(screen.getByText('open'))
 
-    expect(tabLabels()).toEqual(['In this delivery', 'Assets', 'Objects', 'Documents'])
+    expect(tabLabels()).toEqual(['In this delivery', 'Second', 'Assets', 'Objects', 'Documents'])
     expect(screen.getByRole('tab', { name: 'In this delivery' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByText('pick new element (single)')).toBeInTheDocument()
+  })
+
+  it('keeps a caller tab whose key equals a built-in area apart from that area', () => {
+    renderSelector([{ name: 'open', config: { customTabs: [{ ...deliveryTab(jest.fn()), key: 'asset' }] } }])
+
+    fireEvent.click(screen.getByText('open'))
+    fireEvent.click(screen.getByRole('tab', { name: 'In this delivery' }))
+    expect(screen.getAllByRole('tab', { selected: true }).map(tab => tab.textContent)).toEqual(['In this delivery'])
   })
 
   it('hands the tab result to the tab own callback only and closes the selector', () => {
