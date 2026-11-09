@@ -93,6 +93,28 @@ const queryArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 
  */
 const otherQueryArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 20 } } }
 
+/** A second page of the same store, which does not carry the key the saves below are made on. */
+const secondPageArgs = { storeId: STORE_ID, body: { filters: { page: 2, pageSize: 10 } } }
+
+/**
+ * A second store, open in another editor of the same session. Its key collection is a different
+ * endpoint argument, a different cache entry and a different URL, and no key of this store can
+ * appear on its pages — `storeId` is a member of the key itself.
+ */
+const OTHER_STORE_ID = 2
+const OTHER_STORE_KEYS_URL =
+  `/pimcore-studio/api/classification-store/configuration/stores/${OTHER_STORE_ID}/keys`
+const otherStoreQueryArgs = { storeId: OTHER_STORE_ID, body: { filters: { page: 1, pageSize: 10 } } }
+
+const otherStoreKey = {
+  ...storedKey,
+  id: 11,
+  name: 'voltage',
+  storeId: OTHER_STORE_ID,
+  title: 'Voltage',
+  definition: { ...typedDefinition, name: 'voltage', title: 'Voltage' }
+}
+
 const createStore = (): ReturnType<typeof configureStore> => configureStore({
   reducer: { [api.reducerPath]: api.reducer },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware)
@@ -140,6 +162,16 @@ describe('classification store key update cache patch', () => {
   /** How often the collection was read, so a re-read can be told from the first load. */
   let keyCollectionReads: number
   /**
+   * The filters every collection read asked for, in order. Two cache entries of one store share a
+   * URL and differ only in the body, so this is what says WHICH entry a corrective re-read was
+   * ordered for — the one thing a bare count cannot tell.
+   */
+  let keyCollectionFilters: Array<Record<string, unknown>>
+  /** The same, for the second store: its own counter, its own held answers. */
+  let otherStoreReads: number
+  let otherStoreServerKeys: Array<Record<string, unknown>>
+  let pendingOtherStoreReads: Array<(rows: Array<Record<string, unknown>>) => void>
+  /**
    * Set by a test that needs the collection's answer held back: a read is a snapshot in flight
    * too, and only a held one can be made to land after an update it predates has confirmed. Each
    * responder answers with the rows it is given — the page as the server held it when the read
@@ -153,17 +185,33 @@ describe('classification store key update cache patch', () => {
     pendingUpdates = []
     serverKeys = [storedKey]
     keyCollectionReads = 0
+    keyCollectionFilters = []
     holdKeyCollectionReads = false
     pendingKeyCollectionReads = []
+    otherStoreReads = 0
+    otherStoreServerKeys = [otherStoreKey]
+    pendingOtherStoreReads = []
+
+    const page = (rows: Array<Record<string, unknown>>): Response =>
+      new Response(JSON.stringify({ items: rows, totalItems: rows.length }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
 
     globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.url.endsWith(OTHER_STORE_KEYS_URL)) {
+        otherStoreReads += 1
+        if (!holdKeyCollectionReads) return page(otherStoreServerKeys)
+
+        return await new Promise<Response>((resolve) => {
+          pendingOtherStoreReads.push((rows) => { resolve(page(rows)) })
+        })
+      }
+
       if (input.url.endsWith(KEYS_URL)) {
         keyCollectionReads += 1
-        const page = (rows: Array<Record<string, unknown>>): Response =>
-          new Response(JSON.stringify({ items: rows, totalItems: rows.length }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-          })
+        const body = JSON.parse(await input.clone().text()) as { filters?: Record<string, unknown> }
+        keyCollectionFilters.push(body.filters ?? {})
 
         if (!holdKeyCollectionReads) return page(serverKeys)
 
@@ -595,6 +643,143 @@ describe('classification store key update cache patch', () => {
     // nothing: the sequence is bounded by the writes that feed it.
     await flush()
     expect(keyCollectionReads).toBe(3)
+  })
+
+  /**
+   * What a read is owed is bounded by what it can have overwritten, and the three tests below are
+   * the three bounds. A save is one row of one store; the read ledger holds every read of every
+   * store in the session, and a read that could not have been carrying the row has no conflict of
+   * statements on it to resolve and nothing to ask the server about.
+   */
+  const holdCollectionReadOf = async (
+    store: ReturnType<typeof createStore>,
+    args: unknown
+  ): Promise<void> => {
+    holdKeyCollectionReads = true
+    void store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(
+      args,
+      { subscribe: false, forceRefetch: true }
+    ))
+    await flush()
+  }
+
+  it('leaves a collection read of another store out of a save it cannot be overwriting', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+    // A second editor, open on another store, with its own cache entry and its own URL.
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(
+      otherStoreQueryArgs
+    ))
+    expect(otherStoreReads).toBe(1)
+
+    // Its read is in flight when the dialog's save on a key of the FIRST store confirms.
+    await holdCollectionReadOf(store, otherStoreQueryArgs)
+    expect(otherStoreReads).toBe(2)
+
+    const excluded = { ...typedDefinition, indexed: false }
+    const dialogSave = updateKey(store, { definition: excluded })
+    await flush()
+    pendingUpdates[0]({ ...storedKey, definition: excluded })
+    await dialogSave
+
+    // It answers with the other store's page, which cannot carry the saved key: `storeId` is a
+    // member of the key, so the row is in exactly one store's collection.
+    pendingOtherStoreReads[0]([otherStoreKey])
+    await waitFor(() => {
+      expect(cachedKeysOf(store, otherStoreQueryArgs)[0]).toEqual(
+        expect.objectContaining({ id: otherStoreKey.id })
+      )
+    })
+    await flush()
+
+    // So nothing of the save was recorded against it, and it orders no corrective re-read —
+    // neither of its own store nor of the one that was saved. A save in one store costs nothing
+    // in any other store open in the session.
+    expect(otherStoreReads).toBe(2)
+    expect(keyCollectionReads).toBe(1)
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: excluded }))
+  })
+
+  it('re-reads the entry of the read that could not decide and no other cached page', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(
+      otherQueryArgs
+    ))
+    expect(keyCollectionReads).toBe(2)
+
+    // Two entries of the same store read at once, to be answered out of order — the staggered
+    // responses that made this multiply.
+    await holdCollectionReadOf(store, queryArgs)
+    await holdCollectionReadOf(store, otherQueryArgs)
+    expect(pendingKeyCollectionReads).toHaveLength(2)
+
+    const excluded = { ...typedDefinition, indexed: false }
+    const dialogSave = updateKey(store, { definition: excluded })
+    await flush()
+    pendingUpdates[0]({ ...storedKey, definition: excluded })
+    await dialogSave
+
+    // The first read answers with the page as it stood before the save. It replays the save back
+    // over its own answer and orders one corrective re-read, under its own arguments.
+    pendingKeyCollectionReads[0]([{ ...storedKey, definition: typedDefinition }])
+    await waitFor(() => { expect(pendingKeyCollectionReads).toHaveLength(3) })
+    expect(keyCollectionFilters[4]).toEqual(queryArgs.body.filters)
+
+    // That corrective read answers. No write of this client's was confirmed inside it, so it
+    // records nothing and the sequence stops there.
+    pendingKeyCollectionReads[2]([{ ...storedKey, definition: excluded }])
+    await flush()
+    expect(pendingKeyCollectionReads).toHaveLength(3)
+
+    // Now the second read answers, and re-reads its own entry.
+    pendingKeyCollectionReads[1]([{ ...storedKey, definition: typedDefinition }])
+    await waitFor(() => { expect(pendingKeyCollectionReads).toHaveLength(4) })
+    await flush()
+
+    // Six reads for two entries: each was loaded, read again, and corrected once. The first
+    // entry's corrective read is NOT launched a second time by the second read settling — which
+    // is what re-reading every cached page per settlement did, at n² requests for n reads in
+    // flight, re-running reads that had already answered.
+    expect(keyCollectionFilters).toEqual([
+      queryArgs.body.filters,
+      otherQueryArgs.body.filters,
+      queryArgs.body.filters,
+      otherQueryArgs.body.filters,
+      queryArgs.body.filters,
+      otherQueryArgs.body.filters
+    ])
+  })
+
+  it('orders no re-read for a read whose page does not carry the saved key', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // The second page of the same store is read, and the save lands on a key of the first page
+    // while that read is in flight.
+    await holdCollectionReadOf(store, secondPageArgs)
+    expect(keyCollectionReads).toBe(2)
+
+    const excluded = { ...typedDefinition, indexed: false }
+    const dialogSave = updateKey(store, { definition: excluded })
+    await flush()
+    pendingUpdates[0]({ ...storedKey, definition: excluded })
+    await dialogSave
+
+    // Whether the page carries the key is unknowable while the read is in flight, so the
+    // confirmation is recorded against it — and knowable once it answers.
+    pendingKeyCollectionReads[0]([otherKey])
+    await waitFor(() => {
+      expect(cachedKeysOf(store, secondPageArgs)[0]).toEqual(
+        expect.objectContaining({ id: OTHER_KEY_ID })
+      )
+    })
+    await flush()
+
+    // It answered without the saved row, so the replay wrote nothing, nothing of the save was
+    // overwritten, and no page is re-read.
+    expect(keyCollectionReads).toBe(2)
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: excluded }))
   })
 
   it('sends the localized member of the payload to the key endpoint', async () => {

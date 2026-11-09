@@ -436,22 +436,47 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
 }
 
 /**
- * Re-reads every cached page of the key collection from the server, ignoring what the cache holds.
+ * Re-reads one cache entry of the key collection from the server, ignoring what the cache holds.
  *
- * Used where a patch cannot decide which of two server-side orders won. Two of this client's
- * writes overlapped, so for any field neither of them named the cache took whichever answer
- * arrived last (see the ledger above); or a write confirmed inside a collection read, where the
- * read's snapshot and the write's confirmation are two statements about the same row with no
- * knowable order between them (see the read ledger below). Only the cached pages are re-read — a
- * tag invalidation would also refetch the groups, the collections and every relation list, none of
- * which a key update can have changed.
+ * Used where a patch cannot decide which of two server-side orders won: a write confirmed inside a
+ * collection read, where the read's snapshot and the write's confirmation are two statements about
+ * the same row with no knowable order between them (see the read ledger below). The entry is named
+ * by the arguments of the read that could not decide, so one unanswerable read costs one request.
  *
  * `subscribe: false` keeps the refetch from holding the entry open: it writes into the entries the
  * grid is already subscribed to, and an entry nobody is reading any more expires as before. An
  * open key definition dialog is unaffected — the layout provider seeds once and ignores later
  * refreshes of the same key (layout-provider-factory.tsx, "Already initialized").
  */
-const refetchKeyCollections = (dispatch: (thunk: any) => void): void => {
+const refetchKeyCollection = (
+  dispatch: (thunk: any) => void,
+  args: ClassificationStoreConfigurationKeyCollectionApiArg
+): void => {
+  dispatch(baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate(
+    args,
+    { subscribe: false, forceRefetch: true }
+  ))
+}
+
+/**
+ * Re-reads the cached pages of one store's key collection, ignoring what the cache holds.
+ *
+ * Used for the other case a patch cannot decide: two of this client's writes to the same key
+ * overlapped, so for any field neither of them named the cache took whichever answer arrived last
+ * (see the ledger above). That one is not confined to a single entry — the confirmation patch
+ * fans out over every cached page, so every page that holds the key took the same last answer —
+ * and it fires once per set of overlapping writes rather than once per read.
+ *
+ * `storeId` is the store the confirmed key belongs to, and pages of any other store are left
+ * alone: a key belongs to exactly one store (`ClassificationStoreConfigurationKeyDetail.storeId`),
+ * so a page listing another store's keys cannot hold the row and re-reading it buys nothing. It is
+ * undefined only where no response arrived to name the store, and then every page is re-read
+ * because there is nothing to narrow by.
+ *
+ * Only the cached pages are re-read — a tag invalidation would also refetch the groups, the
+ * collections and every relation list, none of which a key update can have changed.
+ */
+const refetchKeyCollections = (dispatch: (thunk: any) => void, storeId?: number): void => {
   // Accessing internal RTK Query store state to find the cached pages, as the patch helpers do.
   dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
     const state = getState() as Record<string, unknown>
@@ -459,11 +484,9 @@ const refetchKeyCollections = (dispatch: (thunk: any) => void): void => {
 
     for (const [queryKey, queryState] of Object.entries(queries)) {
       if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
-      const qs = queryState as { originalArgs: unknown }
-      innerDispatch(baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate(
-        qs.originalArgs as Parameters<typeof baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate>[0],
-        { subscribe: false, forceRefetch: true }
-      ))
+      const qs = queryState as { originalArgs: ClassificationStoreConfigurationKeyCollectionApiArg }
+      if (storeId !== undefined && qs.originalArgs?.storeId !== storeId) continue
+      refetchKeyCollection(innerDispatch, qs.originalArgs)
     }
   })
 }
@@ -507,31 +530,57 @@ const refetchKeyCollections = (dispatch: (thunk: any) => void): void => {
 // state rather than on an assumption about arrival order. The re-read is registered here like any
 // other read, so a confirmation landing inside it is replayed and re-read in turn; with no further
 // write to confirm, the next one records nothing and the sequence stops.
+//
+// Both halves of that are confined to the reads and the entry the save can actually have changed,
+// because a save is one row of one store and this ledger holds every read of every store:
+//
+//   * a confirmation is recorded only against reads of the store the confirmed key belongs to.
+//     Recorded against all of them, a save in one store left a remembered confirmation on the
+//     editor's read of another store, whose page cannot hold the row; the replay then found no
+//     row to write and the read still ordered a corrective re-read, so one save cost a re-read of
+//     every store open in the session.
+//   * a read re-reads its own entry and no other. Re-reading every cached page meant each read of
+//     a staggered set ordered the whole set again, so n reads in flight cost n×n requests and a
+//     corrective read that had already answered was launched a second time by a later settlement.
+//   * and only a read whose replay actually wrote a row re-reads at all. Whether the page carries
+//     the saved key is not knowable when the confirmation is recorded — the read has not answered
+//     yet — but it is knowable once it has, and a page that never held the row has no conflict of
+//     statements on it to resolve.
 
 /** The fields of one key a confirmed update is the authority on, and the values it confirmed. */
 type ConfirmedKeyFields = Partial<Record<KeyWriteField, unknown>>
 
-interface KeyCollectionRead { preserve: Array<{ id: unknown, fields: ConfirmedKeyFields }> }
+interface KeyCollectionRead {
+  /** The store whose keys this read lists; a confirmation from any other store is not its concern. */
+  storeId: number
+  preserve: Array<{ id: unknown, fields: ConfirmedKeyFields }>
+}
 
 /** The reads of the key collection now in flight. */
 const keyCollectionReads = new Set<KeyCollectionRead>()
 
 /**
  * Registers a read of the key collection, under the query arguments it was dispatched with — the
- * one cache entry its answer lands in, and so the only entry its replay may touch. Call
- * `settled()` once its answer has been written to the cache — or once it has failed, where there
- * is simply nothing to write back over.
+ * one cache entry its answer lands in, and so the only entry its replay may touch and the only one
+ * it may re-read. Call `settled()` once its answer has been written to the cache — or once it has
+ * failed, where there is simply nothing to write back over.
  */
 const openKeyCollectionRead = (
   args: ClassificationStoreConfigurationKeyCollectionApiArg
 ): { settled: (dispatch: (thunk: any) => void) => void } => {
-  const read: KeyCollectionRead = { preserve: [] }
+  const read: KeyCollectionRead = { storeId: args.storeId, preserve: [] }
   keyCollectionReads.add(read)
 
   return {
     settled: (dispatch) => {
       keyCollectionReads.delete(read)
       if (read.preserve.length === 0) return
+
+      // Set from inside the recipe, which `updateQueryData` runs synchronously while this
+      // dispatch is on the stack — so it is readable immediately below. It stays false where the
+      // answer carried none of the preserved keys, and where the entry had already been dropped
+      // and the recipe never ran at all.
+      let replayed = false
 
       // This read's own entry, named by the arguments it was dispatched with, and not every cached
       // page: an entry another read has since refreshed holds that read's answer, which is newer
@@ -546,28 +595,46 @@ const openKeyCollectionRead = (
             const idx = page.items.findIndex((k) => k.id === id)
             // A key the answer does not carry any more — deleted, moved to another page or
             // filtered out — has no row to write to, and nothing to preserve.
-            if (idx !== -1) Object.assign(page.items[idx], fields)
+            if (idx !== -1) {
+              Object.assign(page.items[idx], fields)
+              replayed = true
+            }
           }
         }
       ))
 
+      // Nothing of this read's answer was written over, so the two statements never met on this
+      // page and there is no order to resolve: a page that does not carry the saved key reads the
+      // same before and after the save.
+      if (!replayed) return
+
       // The replay is a guess about which of two unordered statements is newer, so the server is
-      // asked. See the section comment above: this is also what gives a save that overlapped only
-      // a read the corrective re-read the write ledger would have given it had it overlapped a
-      // write.
-      refetchKeyCollections(dispatch)
+      // asked — for this read's own entry, which is the only one the replay touched. See the
+      // section comment above: this is also what gives a save that overlapped only a read the
+      // corrective re-read the write ledger would have given it had it overlapped a write.
+      refetchKeyCollection(dispatch, args)
     }
   }
 }
 
 /**
- * Records the fields a key update has just had confirmed against every collection read in flight,
- * so each of those reads writes them back once its own answer has landed.
+ * Records the fields a key update has just had confirmed against the collection reads in flight
+ * that list the confirmed key's own store, so each of those reads writes them back once its own
+ * answer has landed. A read of any other store is left alone: its page lists keys of a store this
+ * key does not belong to, so its answer cannot be carrying the row and cannot be overwriting the
+ * save.
  */
-const preserveAcrossKeyCollectionReads = (id: unknown, fields: ConfirmedKeyFields): void => {
+const preserveAcrossKeyCollectionReads = (
+  id: unknown,
+  storeId: number,
+  fields: ConfirmedKeyFields
+): void => {
   if (keyCollectionReads.size === 0 || Object.keys(fields).length === 0) return
 
-  for (const read of keyCollectionReads) read.preserve.push({ id, fields })
+  for (const read of keyCollectionReads) {
+    if (read.storeId !== storeId) continue
+    read.preserve.push({ id, fields })
+  }
 }
 
 const api = baseApi.enhanceEndpoints({
@@ -715,6 +782,11 @@ const api = baseApi.enhanceEndpoints({
         const update = args.classificationStoreConfigurationKeyUpdate as ClassificationStoreConfigurationKeyUpdate
         const written = keyFieldsWritten(update)
         const write = openKeyWrite(args.id, written)
+        // The store the confirmed row belongs to, so the corrective re-read in the `finally` can
+        // leave the cached pages of every other store alone. Only a response can name it — the
+        // payload carries no store — so a request that failed leaves it undefined and the re-read
+        // falls back to every cached page.
+        let confirmedStoreId: number | undefined
         // Everything from here on is inside the `finally` that closes the ledger entry: a write
         // left open would mark its fields contended for the rest of the session, and the cache
         // would go back to refusing every canonical value for them.
@@ -765,11 +837,12 @@ const api = baseApi.enhanceEndpoints({
             // applied, and replaces the whole page with it; these values are written back over
             // that answer so the save survives it (see the read ledger above).
             const confirmedRow = asKeyDetail(updated)
+            confirmedStoreId = confirmedRow.storeId
             const ownedFields: ConfirmedKeyFields = {}
             for (const field of KEY_WRITE_FIELDS) {
               if (written[field]) ownedFields[field] = confirmedRow[field]
             }
-            preserveAcrossKeyCollectionReads(updated.id, ownedFields)
+            preserveAcrossKeyCollectionReads(updated.id, confirmedRow.storeId, ownedFields)
 
             patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
               dispatch,
@@ -814,8 +887,9 @@ const api = baseApi.enhanceEndpoints({
           // writes overlapped, so a field neither of them named was confirmed twice and the cache
           // kept whichever answer arrived last. Re-read once the last of them has settled — after
           // every patch, so nothing in flight can be overwritten, and only on that path, so an
-          // ordinary save still costs one request.
-          if (write.settled()) refetchKeyCollections(dispatch)
+          // ordinary save still costs one request. Narrowed to the store the confirmed row named:
+          // the pages of another store cannot hold this key, so re-reading them answers nothing.
+          if (write.settled()) refetchKeyCollections(dispatch, confirmedStoreId)
         }
       }
     },
