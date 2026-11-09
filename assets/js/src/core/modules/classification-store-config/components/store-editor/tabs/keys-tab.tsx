@@ -32,6 +32,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { serviceIds, useInjection } from '@sdk/app'
 import {
+  asKeyDetail,
   type ClassificationStoreConfigurationKeyDetail,
   useClassificationStoreConfigurationKeyCollectionQuery,
   useClassificationStoreConfigurationKeyCreateMutation,
@@ -110,9 +111,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   // Derive the current key object from the live cache by ID so the definition
   // modal always receives the latest values (e.g. after an optimistic type change).
-  const definitionKey = definitionKeyId !== undefined
+  const cachedDefinitionKey = definitionKeyId !== undefined
     ? keys.find((k) => k.id === definitionKeyId)
     : undefined
+  const definitionKey = cachedDefinitionKey === undefined ? undefined : asKeyDetail(cachedDefinitionKey)
 
   const [createKey] = useClassificationStoreConfigurationKeyCreateMutation()
   const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()

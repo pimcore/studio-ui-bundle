@@ -13,15 +13,35 @@
 /**
  * The key update patches the cached key while the request is pending, but only with the fields
  * it actually names: a title the payload does not carry must not blank the cached title for the
- * length of the request, while one carried as null is a clear and shows at once. The response is
- * confirmed through the same mask, because the fields a request did not name come back as the
- * server held them while it ran — the grid's cells and the key definition dialog write disjoint
- * fields of the same row, so a whole-row replacement reverts whichever of them answered first.
+ * length of the request, while one carried as null is a clear and shows at once.
+ *
+ * The confirmation is where the two writers of a key row meet. The grid's cells and the key
+ * definition dialog write disjoint fields of the same row, and two requests can reach the server
+ * in either order, so a whole-row replacement reverts whichever of them answered first. But the
+ * cached value may only be kept where one of this client's own writes overlapped the request: a
+ * field nobody here was writing has no local writer at all, and there the response is canonical
+ * — another user's exclusion of the key arrives in it and has to be taken, not discarded.
  */
 
 import { configureStore } from '@reduxjs/toolkit'
 import { waitFor } from '@testing-library/react'
-import { api } from './classification-store-api-slice-enhanced'
+import {
+  api,
+  type ClassificationStoreKeyDefinition
+} from './classification-store-api-slice-enhanced'
+
+/**
+ * A definition blob is a whole field definition, and the exported type has to be able to express
+ * one. This literal is the shape every caller writes; typed, it is rejected at build time by a
+ * `ClassificationStoreKeyDefinition` that names only `indexed`, which is what `tsc --noEmit`
+ * catches here — @swc/jest strips types, so this assertion is the type check's, not jest's.
+ */
+const typedDefinition: ClassificationStoreKeyDefinition = {
+  name: 'weight',
+  fieldtype: 'input',
+  title: 'Weight',
+  indexed: true
+}
 
 const STORE_ID = 1
 const KEY_ID = 5
@@ -36,7 +56,7 @@ const storedKey = {
   enabled: true,
   title: 'Weight',
   description: null,
-  definition: { name: 'weight', fieldtype: 'input', indexed: true },
+  definition: typedDefinition,
   creationDate: null,
   modificationDate: null
 }
@@ -149,6 +169,45 @@ describe('classification store key update cache patch', () => {
 
     pendingUpdates[0]({ ...storedKey, title: 'Shipping weight' })
     await pending
+  })
+
+  it('takes the server definition when no local write overlapped the request', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // Another user excluded the key from the index while this page sat on a cached row that
+    // still says indexed. A description-only edit is the only request this client has in flight,
+    // so its answer is the canonical state of every field it did not name.
+    const excluded = { ...storedKey.definition, indexed: false }
+    const cellEdit = updateKey(store, { description: 'Shipping' })
+    await flush()
+
+    pendingUpdates[0]({ ...storedKey, description: 'Shipping', definition: excluded })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({
+      description: 'Shipping',
+      definition: excluded
+    }))
+  })
+
+  it('takes a server title nobody here was editing', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // The same rule for the fields the grid writes: a definition save names no title, so a title
+    // changed elsewhere since the page loaded comes back in its answer and stands.
+    const dialogSave = updateKey(store, { definition: { ...storedKey.definition, indexed: false } })
+    await flush()
+
+    pendingUpdates[0]({
+      ...storedKey,
+      title: 'Gross weight',
+      definition: { ...storedKey.definition, indexed: false }
+    })
+    await dialogSave
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ title: 'Gross weight' }))
   })
 
   it('keeps a saved definition when an older cell edit answers last', async () => {
