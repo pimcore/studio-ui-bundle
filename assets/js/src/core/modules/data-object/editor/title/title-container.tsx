@@ -24,7 +24,7 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
   const nodeName = node.getName()
   node.getName = () => {
     if (dataObject?.parentId === 0) {
-      node.getName = () => t('home')
+      return t('home')
     }
 
     const key = !isUndefined(dataObject) ? getElementKey(dataObject as Element, elementTypes.dataObject) : ''
@@ -32,10 +32,12 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
     return key !== '' ? key : nodeName
   }
 
+  // TabTitleContainer is memoised: pass the resolved name as a prop, node.getName() is mutated in place
   return (
     <TabTitleContainer
       modified={ dataObject?.modified ?? false }
       node={ node }
+      title={ node.getName() }
     />
   )
 }

@@ -171,4 +171,28 @@ describe('useRename', () => {
 
     expect(elementPatch).toHaveBeenCalledWith({ body: { data: [{ id: 5, key: 'car' }] } })
   })
+
+  it.each([
+    ['data-object', 'updateDataObjectKey', { id: 5, key: 'truck' }],
+    ['document', 'updateDocumentKey', { id: 5, key: 'truck' }],
+    ['asset', 'updateAssetFilename', { id: 5, filename: 'truck' }]
+  ] as const)('updates the %s draft key after a successful rename', async (elementType, actionType, payload) => {
+    const { result } = renderHook(() => useRename(elementType))
+
+    await act(async () => { await result.current.renameMutation(5, 'truck') })
+
+    expect(dispatch).toHaveBeenCalledWith({ type: actionType, payload })
+  })
+
+  it('keeps the draft key and the tree name when the rename is rejected', async () => {
+    elementPatch.mockResolvedValue(false)
+    const { result } = renderHook(() => useRename('data-object'))
+
+    await act(async () => { await result.current.renameMutation(5, 'taken') })
+
+    const types = dispatch.mock.calls.map(([action]) => action.type)
+    expect(types).not.toContain('updateDataObjectKey')
+    expect(types).not.toContain('renameNode')
+    expect(types).toContain('setNodeLoadingInAllTree')
+  })
 })
