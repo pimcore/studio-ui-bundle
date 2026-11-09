@@ -2238,6 +2238,7 @@ classification-store.engine.eav: "EAV"
 classification-store.engine.document: "Dokument"
 classification-store.engine.eav-hint: "Wartości kwalifikowane i rozszerzone typy kluczy wymagają silnika dokumentowego."
 classification-store.key-type-needs-document-engine: "Silnik tego store'a nie może przechowywać tego typu klucza. Wymaga silnika dokumentowego."
+classification-store.keys-without-field-filter: "Dla tych kluczy nie jest dostępny żaden filtr pola, więc nie zostały dodane: {{keyNames}}"
 classification-store.add-sub-group: Dodaj podgrupę
 classification-store.delete-sub-group: "Usunąć podgrupę \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: Podgrupa należy do magazynu, więc nowa staje się dostępna dla każdej grupy tego magazynu.

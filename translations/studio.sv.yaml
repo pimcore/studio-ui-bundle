@@ -2238,6 +2238,7 @@ classification-store.engine.eav: "EAV"
 classification-store.engine.document: "Dokument"
 classification-store.engine.eav-hint: "Kvalificerade värden och de utökade nyckeltyperna kräver dokumentmotorn."
 classification-store.key-type-needs-document-engine: "Den här storens motor kan inte lagra den här nyckeltypen. Den kräver dokumentmotorn."
+classification-store.keys-without-field-filter: "Inget fältfilter är tillgängligt för dessa nycklar, så de lades inte till: {{keyNames}}"
 classification-store.add-sub-group: Lägg till undergrupp
 classification-store.delete-sub-group: "Ta bort undergruppen \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: En undergrupp hör till lagret, så en ny blir tillgänglig för alla grupper i detta lager.

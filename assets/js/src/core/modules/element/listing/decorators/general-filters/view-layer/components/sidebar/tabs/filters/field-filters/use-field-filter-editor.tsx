@@ -10,6 +10,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isEmpty, isNil } from 'lodash'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { type AvailableColumn, buildColumnPickerGroups, resolveColumnTranslationKey } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
@@ -23,6 +25,9 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { useFilterableColumns } from '../../../../../../search-modes/use-filterable-columns'
+
+// The field filter a classification store key's own type is resolved through, as for any data object field.
+const CLASSIFICATION_STORE_KEY_FILTER_TYPE = 'dataobject.adapter'
 
 export interface UseFieldFilterEditorProps {
   /**
@@ -48,6 +53,7 @@ export interface UseFieldFilterEditorReturn {
  */
 export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): UseFieldFilterEditorReturn => {
   const { t } = useTranslation()
+  const messageApi = useMessage()
   // includes the draft search mode's columns, so a mode picked in the panel can be filtered on
   const availableColumns = useFilterableColumns('draft')
   const { getType } = useDynamicTypeResolver()
@@ -86,7 +92,7 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
   const reportsFilter = (dynamicTypeIds: string[], frontendType: string | null): boolean => {
     let dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds })
 
-    if (dynamicType === null) {
+    if (isNil(dynamicType)) {
       return false
     }
 
@@ -100,6 +106,16 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
 
     return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(frontendType)
   }
+
+  /**
+   * A classification store key is a data object field definition, so its filter is resolved the way a
+   * column's is: through the object adapter, whose `isFilterAvailable` answers from the object data
+   * registry that the classification store filter itself reads when it transforms the filter.
+   */
+  const keyReportsFilter = (fieldtype: string): boolean => reportsFilter([CLASSIFICATION_STORE_KEY_FILTER_TYPE, fieldtype], fieldtype)
+
+  const keyLabel = (item: Record<string, any>): string =>
+    (item.title ?? item.name ?? item.definition?.title ?? String(item.id)) as string
 
   const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
     key: filter.id,
@@ -136,7 +152,21 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
     }
 
     // A key whose type reports no grid filter is not offered one; filters already saved are untouched.
-    const filterableItems = data.data.filter((item) => reportsFilter([item.definition.fieldtype as string], item.definition.fieldtype as string))
+    const filterableItems: Array<Record<string, any>> = []
+    const skippedKeyNames: string[] = []
+
+    for (const item of data.data as Array<Record<string, any>>) {
+      if (keyReportsFilter(item.definition.fieldtype as string)) {
+        filterableItems.push(item)
+      } else {
+        skippedKeyNames.push(keyLabel(item))
+      }
+    }
+
+    // A shorter list than the selection must not be a silent one: name the keys that got no filter.
+    if (!isEmpty(skippedKeyNames)) {
+      void messageApi.info(t('classification-store.keys-without-field-filter', { keyNames: skippedKeyNames.join(', ') }))
+    }
 
     const newFilters = filterableItems.map((item) => {
       const fieldDefinition = item.definition

@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { useStoreEngine } from '@Pimcore/modules/classification-store-config/hooks/use-store-engine'
@@ -24,7 +25,7 @@ export const StoreEngineIndicator = ({ storeId }: IStoreEngineIndicatorProps): R
   const { t } = useTranslation()
   const { engine } = useStoreEngine(storeId)
 
-  if (engine === null || engine === undefined) {
+  if (isNil(engine)) {
     return <></>
   }
 

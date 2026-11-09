@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
+
 export const CLASSIFICATION_STORE_KEY_TYPE_TAG = 'classificationStore'
 
 // The data types a key is never defined with; every other data type declares the tag above.
@@ -58,7 +60,7 @@ export const KEY_TYPE_REQUIRED_CAPABILITIES: Readonly<Record<string, readonly st
  * while an empty set is an engine that reports none.
  */
 export const isKeyTypeHeldByEngine = (type: string, capabilities: readonly string[] | null | undefined): boolean => {
-  if (capabilities === null || capabilities === undefined) {
+  if (isNil(capabilities)) {
     return true
   }
 
