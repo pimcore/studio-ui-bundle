@@ -97,14 +97,25 @@ describe('classification store key update cache patch', () => {
   let updateRequests: Array<{ url: string, body: Record<string, unknown> }>
   /** One resolver per update request, in the order the requests were made. */
   let pendingUpdates: Responder[]
+  /**
+   * The key as the server holds it, which a test can move: it is what another user's change looks
+   * like from here, and what a re-read of the collection answers with.
+   */
+  let serverKey: Record<string, unknown>
+  /** How often the collection was read, so a re-read can be told from the first load. */
+  let keyCollectionReads: number
 
   beforeEach(() => {
     updateRequests = []
     pendingUpdates = []
+    serverKey = storedKey
+    keyCollectionReads = 0
 
     globalThis.fetch = jest.fn(async (input: Request) => {
       if (input.url.endsWith(KEYS_URL)) {
-        return new Response(JSON.stringify({ items: [storedKey], totalItems: 1 }), {
+        keyCollectionReads += 1
+
+        return new Response(JSON.stringify({ items: [serverKey], totalItems: 1 }), {
           status: 200,
           headers: { 'Content-Type': 'application/json' }
         })
@@ -301,6 +312,62 @@ describe('classification store key update cache patch', () => {
       description: 'the shipping weight',
       definition: { ...storedKey.definition, indexed: false }
     }))
+  })
+
+  it('re-reads the key when two overlapping edits both leave the definition untouched', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+    expect(keyCollectionReads).toBe(1)
+
+    const excluded = { ...storedKey.definition, indexed: false }
+
+    // Two cell edits overlap and neither of them names the definition, so the definition has no
+    // local writer at all and both answers are canonical for it.
+    const titleEdit = updateKey(store, { title: 'Shipping weight' })
+    await flush()
+    const descriptionEdit = updateKey(store, { description: 'Shipping' })
+    await flush()
+
+    expect(pendingUpdates).toHaveLength(2)
+
+    // The server applied the title first, another user then excluded the key, and the description
+    // edit was applied after that. So the answer to the description edit carries the exclusion,
+    // and the answer to the older title edit carries the definition as it stood before it.
+    serverKey = { ...storedKey, title: 'Shipping weight', description: 'Shipping', definition: excluded }
+
+    pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', description: 'Shipping', definition: excluded })
+    await descriptionEdit
+
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', definition: storedKey.definition })
+    await titleEdit
+
+    // Arrival order would leave the stale flag in the cache, where reopening the dialog shows the
+    // key as indexed and an untouched save writes the exclusion away. The key is re-read instead,
+    // so the cache ends on what the server holds.
+    await waitFor(() => { expect(keyCollectionReads).toBe(2) })
+    await waitFor(() => {
+      expect(cachedKey(store)).toEqual(expect.objectContaining({
+        title: 'Shipping weight',
+        description: 'Shipping',
+        definition: excluded
+      }))
+    })
+  })
+
+  it('does not re-read the key after a save that overlapped nothing', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+    expect(keyCollectionReads).toBe(1)
+
+    const dialogSave = updateKey(store, { definition: { ...storedKey.definition, indexed: false } })
+    await flush()
+
+    pendingUpdates[0]({ ...storedKey, definition: { ...storedKey.definition, indexed: false } })
+    await dialogSave
+    await flush()
+
+    // The ordinary save is one request: the re-read is the price of an overlap, not of every save.
+    expect(keyCollectionReads).toBe(1)
   })
 
   it('sends the localized member of the payload to the key endpoint', async () => {

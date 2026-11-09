@@ -223,6 +223,18 @@ export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
 // request?", and the ledger below answers it: `pending` counts the writes in flight, `started`
 // counts every write ever begun, so a write that began and finished inside this request's
 // lifetime is seen as well as one still running.
+//
+// There is one question that mask cannot answer, and the per-key flight count below is what
+// answers it. Where two writes overlap and NEITHER of them names a field — two cell edits, one on
+// the title and one on the description, both leaving the definition alone — that field has no
+// local writer, so both answers are canonical for it and each one simply replaces what the other
+// wrote. The cache then holds whichever answer arrived last, which is not the snapshot the server
+// applied last: a title edit answered after a description edit can carry the definition as it
+// stood before another user's exclusion, and the dialog reopened on that row saves the stale flag
+// back and undoes the exclusion. Arrival order is not an ordering, and this client has no server
+// revision to order by — `modificationDate` is a Unix second, and the responses in question are
+// milliseconds apart. So once the last of a set of overlapping writes has settled the key is
+// re-read from the server, which is the only authority on what it now holds.
 
 /** The fields of a key whose cached value a confirmation has to decide about. */
 const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition', 'localized'] as const
@@ -233,6 +245,26 @@ interface KeyWriteCounters { pending: number, started: number }
 const localKeyWrites = new Map<string, KeyWriteCounters>()
 /** In-flight key updates across all keys, so the ledger can be emptied when none are left. */
 let localKeyWritesInFlight = 0
+
+/**
+ * Per key rather than per field: how many of this client's updates to it are in flight, and
+ * whether any of them was ever in flight alongside another. A write that names no field at all
+ * still counts here, which is why this is not derived from the per-field counters.
+ */
+interface KeyFlight { inFlight: number, overlapped: boolean }
+
+const keyFlights = new Map<string, KeyFlight>()
+
+const keyFlight = (id: unknown): KeyFlight => {
+  const slot = String(id)
+  let flight = keyFlights.get(slot)
+  if (flight === undefined) {
+    flight = { inFlight: 0, overlapped: false }
+    keyFlights.set(slot, flight)
+  }
+
+  return flight
+}
 
 const keyWriteCounters = (id: unknown, field: KeyWriteField): KeyWriteCounters => {
   const slot = `${String(id)}:${field}`
@@ -266,12 +298,13 @@ const keyFieldsWritten = (update: {
 /**
  * Registers a key update's own writes and returns the decision its confirmation needs: for a
  * field the payload did not name, whether the response can be trusted for it. Call `settled()`
- * once the request has been answered and its cache patch applied.
+ * once the request has been answered and its cache patch applied; it reports whether the cached
+ * key now has to be re-read from the server.
  */
 const openKeyWrite = (
   id: unknown,
   written: Record<KeyWriteField, boolean>
-): { responseIsCanonicalFor: (field: KeyWriteField) => boolean, settled: () => void } => {
+): { responseIsCanonicalFor: (field: KeyWriteField) => boolean, settled: () => boolean } => {
   // Taken before this request registers itself, so a request never counts its own write.
   const contended = new Map<KeyWriteField, boolean>()
   const startedAtDispatch = new Map<KeyWriteField, number>()
@@ -280,6 +313,11 @@ const openKeyWrite = (
     contended.set(field, counters.pending > 0)
     startedAtDispatch.set(field, counters.started)
   }
+
+  // Read before this request counts itself, for the same reason as the field snapshot above.
+  const flight = keyFlight(id)
+  if (flight.inFlight > 0) flight.overlapped = true
+  flight.inFlight += 1
 
   localKeyWritesInFlight += 1
   for (const field of KEY_WRITE_FIELDS) {
@@ -301,6 +339,16 @@ const openKeyWrite = (
       // With nothing in flight nobody is holding a dispatch-time snapshot any more, so the ledger
       // can be dropped whole rather than growing one entry per key touched in the session.
       if (localKeyWritesInFlight === 0) localKeyWrites.clear()
+
+      flight.inFlight -= 1
+      // True exactly once per set of overlapping writes, when the last of them has settled: the
+      // cache is now holding answers ordered by arrival for any field none of them named, and
+      // only the server can say which of them is current. A write that overlapped nothing returns
+      // false, so the ordinary single save stays one request.
+      const overlapSettled = flight.inFlight === 0 && flight.overlapped
+      if (flight.inFlight === 0) keyFlights.delete(String(id))
+
+      return overlapSettled
     }
   }
 }
@@ -384,6 +432,36 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
   })
 
   return results
+}
+
+/**
+ * Re-reads every cached page of the key collection from the server, ignoring what the cache holds.
+ *
+ * Used where a patch cannot decide: two of this client's writes overlapped, so for any field
+ * neither of them named the cache took whichever answer arrived last (see the ledger above). Only
+ * the cached pages are re-read — a tag invalidation would also refetch the groups, the collections
+ * and every relation list, none of which a key update can have changed.
+ *
+ * `subscribe: false` keeps the refetch from holding the entry open: it writes into the entries the
+ * grid is already subscribed to, and an entry nobody is reading any more expires as before. An
+ * open key definition dialog is unaffected — the layout provider seeds once and ignores later
+ * refreshes of the same key (layout-provider-factory.tsx, "Already initialized").
+ */
+const refetchKeyCollections = (dispatch: (thunk: any) => void): void => {
+  // Accessing internal RTK Query store state to find the cached pages, as the patch helpers do.
+  dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+    const state = getState() as Record<string, unknown>
+    const queries = (state.api as Record<string, unknown>)?.queries as Record<string, unknown> ?? {}
+
+    for (const [queryKey, queryState] of Object.entries(queries)) {
+      if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
+      const qs = queryState as { originalArgs: unknown }
+      innerDispatch(baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate(
+        qs.originalArgs as Parameters<typeof baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate>[0],
+        { subscribe: false, forceRefetch: true }
+      ))
+    }
+  })
 }
 
 const api = baseApi.enhanceEndpoints({
@@ -598,7 +676,13 @@ const api = baseApi.enhanceEndpoints({
         } finally {
           // After the cache patch, so a request still counts as in flight for as long as it can
           // still write, and a rejected one leaves the ledger as it found it.
-          write.settled()
+          //
+          // `settled()` answers the one question the field mask above cannot: two of this client's
+          // writes overlapped, so a field neither of them named was confirmed twice and the cache
+          // kept whichever answer arrived last. Re-read once the last of them has settled — after
+          // every patch, so nothing in flight can be overwritten, and only on that path, so an
+          // ordinary save still costs one request.
+          if (write.settled()) refetchKeyCollections(dispatch)
         }
       }
     },
