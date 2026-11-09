@@ -38,6 +38,24 @@ jest.mock('@Pimcore/modules/document/element-selector/document-selector-listing'
   DocumentSelectorListing: () => <div>document listing</div>
 }))
 
+jest.mock('@Pimcore/modules/asset/services/asset-opening-service', () => ({ assetOpeningService: {} }))
+jest.mock('@Pimcore/modules/document/services/document-opening-service', () => ({ documentOpeningService: {} }))
+jest.mock('@Pimcore/modules/data-object/services/data-object-opening-service', () => ({ dataObjectOpeningService: {} }))
+
+jest.mock('@Pimcore/app/public-api/api-gateway', () => ({ ApiGatewayEvent: jest.fn(), ApiGatewayEventType: {} }))
+
+const mockFrame = { inIframe: false, parentOpen: jest.fn() }
+
+jest.mock('@Pimcore/utils/iframe', () => ({
+  ...jest.requireActual('@Pimcore/utils/iframe'),
+  isInIframe: () => mockFrame.inIframe
+}))
+
+jest.mock('@Pimcore/app/public-api/helpers/api-helper', () => ({
+  isPimcoreStudioApiAvailable: () => mockFrame.inIframe,
+  getPimcoreStudioApi: () => ({ element: { openElementSelector: mockFrame.parentOpen } })
+}))
+
 // eslint-disable-next-line import/first
 import '@testing-library/jest-dom'
 // eslint-disable-next-line import/first
@@ -53,6 +71,8 @@ import {
 } from './provider/element-selector/element-selector-provider'
 // eslint-disable-next-line import/first
 import { useElementSelector } from './provider/element-selector/use-element-selector'
+// eslint-disable-next-line import/first
+import { elementApi } from '@Pimcore/app/public-api/element/element-api'
 
 interface NewElement {
   type: string
@@ -189,5 +209,48 @@ describe('ElementSelector custom tabs', () => {
 
     fireEvent.click(screen.getByText('open plain'))
     expect(tabLabels()).toEqual(['Assets', 'Objects', 'Documents'])
+  })
+
+  describe('opened from an iframe', () => {
+    beforeEach(() => {
+      mockFrame.inIframe = true
+      mockFrame.parentOpen = jest.fn()
+      jest.spyOn(console, 'warn').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      mockFrame.inIframe = false
+      jest.restoreAllMocks()
+    })
+
+    it('drops custom tabs before handing the config to the parent window', () => {
+      const onFinish = jest.fn()
+      renderSelector([{ name: 'open', config: { onFinish, customTabs: [deliveryTab(jest.fn())] } }])
+
+      fireEvent.click(screen.getByText('open'))
+
+      expect(mockFrame.parentOpen).toHaveBeenCalledTimes(1)
+      expect(mockFrame.parentOpen).toHaveBeenCalledWith({ onFinish })
+      expect(console.warn).toHaveBeenCalledTimes(1)
+      expect(screen.queryByTestId('element-selector')).not.toBeInTheDocument()
+    })
+
+    it('hands a config without custom tabs to the parent window as it is', () => {
+      const config: ElementSelectorConfig = { selectionType: SelectionType.Single, onFinish: jest.fn() }
+      renderSelector([{ name: 'open', config }])
+
+      fireEvent.click(screen.getByText('open'))
+
+      expect(mockFrame.parentOpen).toHaveBeenCalledWith(config)
+      expect(console.warn).not.toHaveBeenCalled()
+    })
+
+    it('drops custom tabs on the Window API path as well', () => {
+      const onFinish = jest.fn()
+
+      elementApi.openElementSelector({ onFinish, customTabs: [deliveryTab(jest.fn())] })
+
+      expect(mockFrame.parentOpen).toHaveBeenCalledWith({ onFinish })
+    })
   })
 })

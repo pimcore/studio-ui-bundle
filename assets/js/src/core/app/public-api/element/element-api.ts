@@ -15,6 +15,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isInIframe } from '@Pimcore/utils/iframe'
+import { withoutCustomTabs } from '@Pimcore/modules/element/element-selector/provider/element-selector/without-custom-tabs'
 import { ApiGatewayEventType, ApiGatewayEvent } from '@Pimcore/app/public-api/api-gateway'
 import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
 import { type LinkModalOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
@@ -122,7 +123,7 @@ class ElementApiImpl implements ElementApi {
       const { element: elementApi } = getPimcoreStudioApi()
 
       if (isInIframe()) {
-        elementApi.openElementSelector(config)
+        elementApi.openElementSelector(withoutCustomTabs(config))
       } else {
         this.openElementSelectorDirectly(config)
       }
