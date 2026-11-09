@@ -2182,6 +2182,10 @@ classification-store.rename-key: Byt namn på nyckel
 classification-store.delete-key: "Ta bort nyckel \"{{keyName}}\"?"
 classification-store.delete-key-relation: "Ta bort nyckel \"{{keyName}}\" från den här gruppen?"
 classification-store.delete-group-relation: "Ta bort grupp \"{{groupName}}\" från den här samlingen?"
+classification-store.delete-group-consequence: "När du tar bort den här gruppen tas även de värden bort som varje objekt har under den. Det går inte att ångra."
+classification-store.delete-collection-consequence: "Samlingen och dess grupplista tas bort. Grupperna och deras nycklar finns kvar i store och inga objektvärden tas bort."
+classification-store.delete-key-relation-consequence: "Nyckeln tas bara bort från den här gruppen. Själva nyckeln finns kvar i store och inget som ett objekt har sparat tas bort."
+classification-store.delete-group-relation-consequence: "Gruppen tas bara bort från den här samlingen. Gruppen, dess nycklar och värdena som objekt har under den påverkas inte."
 classification-store.edit-definition: Redigera definition
 classification-store.edit-key-definition: "Redigera nyckeldefinition: {{keyName}}"
 classification-store.columns.id: ID

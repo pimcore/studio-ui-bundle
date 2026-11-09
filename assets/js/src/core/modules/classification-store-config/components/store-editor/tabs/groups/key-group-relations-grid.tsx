@@ -308,7 +308,12 @@ export const KeyGroupRelationsGrid = ({
   const handleRemove = useCallback((relation: ClassificationStoreConfigurationKeyGroupRelationDetail): void => {
     void modal.confirm({
       title: t('delete'),
-      content: t('classification-store.delete-key-relation', { keyName: relation.keyName ?? String(relation.keyId) }),
+      content: (
+        <>
+          <p>{ t('classification-store.delete-key-relation', { keyName: relation.keyName ?? String(relation.keyId) }) }</p>
+          <p>{ t('classification-store.delete-key-relation-consequence') }</p>
+        </>
+      ),
       onOk: async () => {
         const response = await deleteRelation({
           classificationStoreConfigurationKeyGroupRelationDelete: {

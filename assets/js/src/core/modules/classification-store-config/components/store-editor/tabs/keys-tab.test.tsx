@@ -111,7 +111,7 @@ import { Provider } from 'react-redux'
 // eslint-disable-next-line import/first
 import { configureStore } from '@reduxjs/toolkit'
 // eslint-disable-next-line import/first
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import userEvent from '@testing-library/user-event'
 // eslint-disable-next-line import/first
@@ -481,5 +481,61 @@ describe('KeysTab key creation', () => {
       type: created.type,
       definition: created.definition
     })
+  })
+})
+
+describe('KeysTab delete dialog', () => {
+  const originalFetch = globalThis.fetch
+  const deleteRequests = (): RecordedRequest[] => requests.filter((request) => request.method === 'DELETE')
+
+  beforeEach(() => {
+    requests.length = 0
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      requests.push({ url: input.url, method: input.method, body: undefined })
+
+      if (input.method === 'DELETE') {
+        return jsonResponse(null, 200)
+      }
+
+      return jsonResponse({ items: [height], totalItems: 1 })
+    }) as unknown as typeof fetch
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('shows the generic confirmation alone and sends no request on open', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    const callsBefore = (globalThis.fetch as jest.Mock).mock.calls.length
+    const buttons = within(screen.getAllByRole('row')[1]).getAllByRole('button')
+
+    await user.click(buttons[buttons.length - 1])
+
+    const dialog = await screen.findByRole('dialog', undefined, WAIT_BUDGET)
+
+    expect(within(dialog).getByText('classification-store.delete-key')).toBeInTheDocument()
+    expect(dialog.textContent).not.toContain('consequence')
+    expect((globalThis.fetch as jest.Mock).mock.calls).toHaveLength(callsBefore)
+  })
+
+  it('still deletes the key by its id when confirmed', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    const buttons = within(screen.getAllByRole('row')[1]).getAllByRole('button')
+
+    await user.click(buttons[buttons.length - 1])
+    await user.click((await screen.findByRole('dialog', undefined, WAIT_BUDGET)).querySelector('.ant-btn-primary')!)
+
+    await waitFor(() => { expect(deleteRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(deleteRequests()[0].url.endsWith(`/configuration/keys/${height.id}`)).toBe(true)
   })
 })

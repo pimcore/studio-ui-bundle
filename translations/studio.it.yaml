@@ -2182,6 +2182,10 @@ classification-store.rename-key: Rinomina chiave
 classification-store.delete-key: "Eliminare la chiave \"{{keyName}}\"?"
 classification-store.delete-key-relation: "Rimuovere la chiave \"{{keyName}}\" da questo gruppo?"
 classification-store.delete-group-relation: "Rimuovere il gruppo \"{{groupName}}\" da questa collection?"
+classification-store.delete-group-consequence: "L'eliminazione di questo gruppo elimina anche i valori che ogni oggetto conserva al suo interno. Questa azione non può essere annullata."
+classification-store.delete-collection-consequence: "La collection e il relativo elenco di gruppi vengono rimossi. I gruppi e le loro chiavi restano nello store e nessun valore degli oggetti viene eliminato."
+classification-store.delete-key-relation-consequence: "La chiave viene rimossa solo da questo gruppo. La chiave stessa resta nello store e nulla di ciò che un oggetto conserva viene eliminato."
+classification-store.delete-group-relation-consequence: "Il gruppo viene rimosso solo da questa collection. Il gruppo, le sue chiavi e i valori che gli oggetti conservano al suo interno restano invariati."
 classification-store.edit-definition: Modifica definizione
 classification-store.edit-key-definition: "Modifica definizione chiave: {{keyName}}"
 classification-store.columns.id: ID
