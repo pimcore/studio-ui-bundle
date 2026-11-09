@@ -88,6 +88,21 @@ describe('AbstractMercureProcess authorization and reconnect', () => {
     jest.useRealTimers()
   })
 
+  it('subscribes with the Mercure 1.0 query parameters', async () => {
+    process.start()
+    await settle()
+
+    const url = new URL(lastSource().url)
+    expect(url.searchParams.getAll('match')).toEqual(['studio-backend-default'])
+    expect(url.searchParams.has('topic')).toBe(false)
+
+    lastSource().onmessage?.(new MessageEvent('message', { data: '{}', lastEventId: 'urn:uuid:1' }))
+    lastSource().fail(FakeEventSource.CONNECTING)
+    await jest.advanceTimersByTimeAsync(FIRST_RECONNECT_DELAY)
+
+    expect(new URL(lastSource().url).searchParams.get('last_event_id')).toBe('urn:uuid:1')
+  })
+
   it('renews the authorization before opening the stream', async () => {
     process.start()
     await settle()

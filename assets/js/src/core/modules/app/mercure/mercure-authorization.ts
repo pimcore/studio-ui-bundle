@@ -12,7 +12,7 @@ import { store } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/app/mercure-api-slice.gen'
 
 /**
- * Keeps the `mercureAuthorization` cookie alive for as long as the tab is open.
+ * Keeps the Mercure authorization cookie alive for as long as the tab is open.
  *
  * The hub authorises a subscription exactly once, when the EventSource connects, from the
  * cookie sent with that request. The cookie lives for `cookie_lifetime` seconds (one hour by
