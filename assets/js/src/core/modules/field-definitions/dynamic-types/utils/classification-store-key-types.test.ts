@@ -40,6 +40,12 @@ const context: FieldDefinitionContext = { area: ['classification-store'], path: 
 
 const DATA_TYPES_DIR = path.resolve(__dirname, '../types/data')
 const CALCULATED_VALUE = 'calculatedValue'
+const NEWLY_OFFERED_TYPES = [
+  'advancedManyToManyObjectRelation', 'advancedManyToManyRelation', 'consent', 'dateRange', 'email', 'externalImage',
+  'firstname', 'gender', 'geobounds', 'geopoint', 'geopolygon', 'geopolyline', 'hotspotimage', 'imageGallery',
+  'lastname', 'link', 'manyToManyObjectRelation', 'manyToManyRelation', 'manyToOneRelation', 'numericRange',
+  'structuredTable', 'video'
+]
 
 // The form fields reach antd and the whole application; only the tags are read here.
 const mockFormFields = (dir: string): void => {
@@ -95,6 +101,10 @@ describe('classification store key types', () => {
     // 2026-11-05 option-A decision: the calculated type stays offered, the exclusion only scopes the unlocked set.
     expect(offered).toContain(CALCULATED_VALUE)
     expect(offered).toHaveLength(48)
+  })
+
+  it('offers the 22 structured types next to the ones offered before', () => {
+    expect(offered).toEqual(expect.arrayContaining(NEWLY_OFFERED_TYPES))
   })
 
   it('declares a capability requirement only for offered types', () => {
