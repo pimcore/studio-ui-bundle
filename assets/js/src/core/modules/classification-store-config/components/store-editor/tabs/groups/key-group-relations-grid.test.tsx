@@ -235,6 +235,22 @@ const deleteButtons = (): HTMLElement[] => screen.getAllByRole('row')
   .flatMap((row) => within(row).queryAllByRole('button'))
   .filter((button) => !(button.getAttribute('aria-label') ?? '').startsWith('cell-'))
 
+/** Accessor columns the grid renders, read off the cells of the row of the given key. */
+const renderedColumnIds = (keyId: number): string[] => screen.getAllByRole('row')
+  .flatMap((row) => within(row).queryAllByRole('button'))
+  .map((button) => button.getAttribute('aria-label') ?? '')
+  .filter((label) => label.startsWith('cell-') && label.endsWith(`-${keyId}`))
+  .map((label) => label.replace(/^cell-/, '').replace(/-\d+$/, ''))
+
+/** Every property name a payload carries, nested ones included: a `metadata.indexed` counts too. */
+const propertyNames = (value: unknown): string[] =>
+  value === null || typeof value !== 'object'
+    ? []
+    : Object.entries(value).flatMap(([name, nested]) => [name, ...propertyNames(nested)])
+
+/** Payload property names that would carry an index decision into a relation. */
+const indexish = (name: string): boolean => /index/i.test(name)
+
 /** No inter-event delay: these tests click through several rows and a dialog. */
 const setupUser = (): UserEvent => userEvent.setup({ delay: null })
 
@@ -460,6 +476,25 @@ describe('KeyGroupRelationsGrid', () => {
 
     expect(assignButton()).toBeEnabled()
     expect(unassignButton()).toBeEnabled()
+  })
+
+  it('adds nothing index-shaped to the key list or to a relation payload', async () => {
+    // Whether a key reaches the Classification Store search index is decided on the key itself, so
+    // this grid gains no cell for it and an assignment needs no index value to send.
+    const user = setupUser()
+    renderGrid()
+    await screen.findByText('height', undefined, WAIT_BUDGET)
+
+    expect(renderedColumnIds(11)).toEqual(['keyId', 'keyName', 'keyDescription', 'mandatory', 'sorter'])
+
+    await selectKeys(user, 'height')
+    await confirmAssign(user)
+
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(
+      upsertRequests().flatMap((request) => propertyNames(request.body)).filter(indexish)
+    ).toEqual([])
   })
 
   it('assigns the sub group with one upsert per key, carrying nothing but the pair', async () => {

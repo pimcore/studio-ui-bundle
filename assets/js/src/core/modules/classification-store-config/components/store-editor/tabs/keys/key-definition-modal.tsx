@@ -26,9 +26,12 @@ import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-
 import { serviceIds, useInjection } from '@sdk/app'
 import {
   type ClassificationStoreConfigurationKeyDetail,
+  type ClassificationStoreConfigurationKeyUpdate,
+  type ClassificationStoreKeyDefinition,
   useClassificationStoreConfigurationKeyUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { Form, type formInstanceType } from '@sdk/components'
 
 interface IKeyDefinitionModalProps {
   open: boolean
@@ -70,21 +73,33 @@ const putsOtherLanguagesAtRisk = (from: KeyLocalization, to: KeyLocalization): b
 
 /**
  * Inner component that sets currentFieldDefinitionId once structure is ready
- * and exposes getLayout to the parent via a callback ref.
+ * and exposes getLayout and the form to the parent via callback refs.
+ *
+ * The form instance is created here rather than in the dialog, so that it lives exactly as long
+ * as the dialog body: a form kept across openings would carry the values of the key edited
+ * before into the next one, because a remounted form merges its own store over the new
+ * initial values.
  */
 const KeyDefinitionFormBridge = ({
   noPadding,
+  onGetForm,
   onGetLayout
 }: {
   noPadding?: boolean
+  onGetForm: (form: formInstanceType) => void
   onGetLayout: (fn: () => Layout | undefined) => void
 }): React.JSX.Element => {
   const { structure, setCurrentFieldDefinitionId, setCurrentFieldDefinitionIdPath, currentFieldDefinitionId, getLayout } = useLayout()
+  const [form] = Form.useForm()
 
-  // Expose getLayout upward
+  // Expose getLayout and the form upward. Both callbacks are listed: the dialog memoises them
+  // with an empty dependency list, so re-running on them costs nothing today, and a caller that
+  // later passes an unstable callback re-publishes the refs instead of leaving the dialog holding
+  // the previous render's pair.
   useEffect(() => {
     onGetLayout(getLayout)
-  }, [getLayout])
+    onGetForm(form)
+  }, [getLayout, form, onGetLayout, onGetForm])
 
   // Auto-select the single root field once structure is ready.
   // Also set currentFieldDefinitionIdPath so layout-form.tsx never receives null.
@@ -95,7 +110,12 @@ const KeyDefinitionFormBridge = ({
     }
   }, [structure, currentFieldDefinitionId, setCurrentFieldDefinitionId, setCurrentFieldDefinitionIdPath])
 
-  return <LayoutForm noPadding={ noPadding } />
+  return (
+    <LayoutForm
+      form={ form }
+      noPadding={ noPadding }
+    />
+  )
 }
 
 /**
@@ -148,30 +168,45 @@ export const KeyDefinitionModal = ({
     setLocalization(seeded)
   }, [keyDetail?.id])
 
-  // Ref to the getLayout function — updated by KeyDefinitionFormBridge
+  // Refs to the getLayout function and the form — updated by KeyDefinitionFormBridge
   const getLayoutRef = useRef<(() => Layout | undefined) | null>(null)
+  const formRef = useRef<formInstanceType | null>(null)
 
   const handleGetLayout = useCallback((fn: () => Layout | undefined): void => {
     getLayoutRef.current = fn
   }, [])
 
+  const handleGetForm = useCallback((form: formInstanceType): void => {
+    formRef.current = form
+  }, [])
+
   const saveKey = async (): Promise<void> => {
-    if (keyDetail === undefined || getLayoutRef.current === null) return
+    if (keyDetail === undefined || getLayoutRef.current === null || formRef.current === null) return
     const layout = getLayoutRef.current()
+
+    // The form reaches the layout provider through a 300 ms debounce, so a save pressed inside
+    // that window would send the values that predate the last change. The live form is read here.
+    const definition: ClassificationStoreKeyDefinition | null = layout === undefined
+      ? null
+      : { ...layout, ...formRef.current.getFieldsValue(true) }
+
+    // This dialog owns the definition and the key's localization, and nothing else on the key, so
+    // the payload names nothing else. The configured title, the description and the type are left
+    // out rather than echoed back from the key the dialog was opened with: an absent title or
+    // description keeps the stored one and a null type does the same, where echoing them reverts a
+    // grid cell edit made while the dialog was open. The title inside the definition blob is a
+    // different value.
+    const update: ClassificationStoreConfigurationKeyUpdate = {
+      name: keyDetail.name,
+      type: null,
+      definition,
+      // Sent only when the control moved: an absent member leaves the stored flag alone, a null clears it.
+      ...(localization !== baselineLocalization ? { localized: localizedValueOf(localization) } : {})
+    }
 
     const response = await updateKey({
       id: keyDetail.id,
-      classificationStoreConfigurationKeyUpdate: {
-        name: keyDetail.name,
-        // Saving a definition must not touch the configured title, which is a column of its
-        // own: the title carried inside the definition blob is a different value.
-        title: keyDetail.title ?? null,
-        description: keyDetail.description,
-        type: keyDetail.type,
-        definition: (layout as Record<string, unknown> | null | undefined) ?? null,
-        // Sent only when the control moved: an absent member leaves the stored flag alone, a null clears it.
-        ...(localization !== baselineLocalization ? { localized: localizedValueOf(localization) } : {})
-      }
+      classificationStoreConfigurationKeyUpdate: update
     })
 
     if ('error' in response) {
@@ -257,6 +292,9 @@ export const KeyDefinitionModal = ({
       ...base,
       ...defaultData,
       ...(keyDetail.definition ?? {}),
+      // Only an explicit false excludes a key, so a definition stored without the flag — or with
+      // an explicit null — opens with the control on rather than reporting the key as excluded.
+      indexed: keyDetail.definition?.indexed !== false,
       fieldType: keyDetail.type,
       fieldtype: keyDetail.type
     } as unknown as Layout
@@ -304,6 +342,7 @@ export const KeyDefinitionModal = ({
               >
                 <KeyDefinitionFormBridge
                   noPadding
+                  onGetForm={ handleGetForm }
                   onGetLayout={ handleGetLayout }
                 />
               </LayoutProvider>

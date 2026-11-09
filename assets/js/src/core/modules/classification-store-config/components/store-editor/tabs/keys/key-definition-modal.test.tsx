@@ -12,7 +12,7 @@
 
 import React from 'react'
 import { StyleProvider } from '@ant-design/cssinjs'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import {
   type ClassificationStoreConfigurationKeyDetail
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
@@ -47,16 +47,28 @@ jest.mock('@sdk/components', () => {
     Form: AntForm,
     FormKit,
     Input: AntInput,
-    Switch: () => null,
+    // The index control is read and toggled here, so the switch stands in as a labelled checkbox.
+    Switch: ({ checked, disabled, labelRight, onChange }: any) => (
+      <input
+        aria-label={ String(labelRight ?? '') }
+        checked={ checked === true }
+        disabled={ disabled === true }
+        onChange={ (event) => { onChange?.(event.target.checked) } }
+        type="checkbox"
+      />
+    ),
     TextArea: AntInput.TextArea
   }
 })
 
 jest.mock('@sdk/utils', () => {
+  const { useRef } = jest.requireActual('react')
   let nextId = 0
 
   return {
-    useDebounce: (value: unknown) => value,
+    // The dialog is driven inside the debounce window: the form holds the edit and the layout
+    // provider has not been written yet, which is the state a save pressed right away reads.
+    useDebounce: (value: unknown) => useRef(value).current,
     uuid: () => `node-${++nextId}`
   }
 })
@@ -174,26 +186,67 @@ const STORED_LOCALIZED: Record<string, boolean | null> = {
   [NOT_LOCALIZED]: false
 }
 
-/** Hands the dialog a new stored flag, the way the optimistic cache patch does mid-save. */
-type PatchCache = (localized: boolean | null) => void
+/** The same key, with its stored definition replaced wholesale. */
+const keyWithDefinition = (definition: unknown): ClassificationStoreConfigurationKeyDetail =>
+  ({ ...keyDetail, definition }) as unknown as ClassificationStoreConfigurationKeyDetail
 
-const renderModal = (localized: boolean | null = null): PatchCache => {
-  const tree = (stored: boolean | null): React.JSX.Element => (
-    <StyleProvider container={ document.createElement('div') }>
-      <KeyDefinitionModal
-        keyDetail={ { ...keyDetail, localized: stored } }
-        onClose={ jest.fn() }
-        onSaved={ jest.fn() }
-        open
-      />
-    </StyleProvider>
-  )
+/** The same key, with the index flag set as given or carrying none at all. */
+const keyIndexed = (indexed?: boolean): ClassificationStoreConfigurationKeyDetail => {
+  const definition: Record<string, unknown> = { ...keyDetail.definition }
 
-  // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
-  const { rerender } = render(tree(localized))
+  if (indexed === undefined) {
+    delete definition.indexed
+  } else {
+    definition.indexed = indexed
+  }
 
-  return (stored) => { rerender(tree(stored)) }
+  return keyWithDefinition(definition)
 }
+
+/** The same key, with the localization tri-state stored as given. */
+const keyLocalized = (localized: boolean | null | undefined): ClassificationStoreConfigurationKeyDetail =>
+  ({ ...keyDetail, localized }) as unknown as ClassificationStoreConfigurationKeyDetail
+
+/** Every stored shape that means indexed: the flag set, absent, explicitly null, no definition at all. */
+const INDEXED_KEYS: Array<[string, ClassificationStoreConfigurationKeyDetail]> = [
+  ['an explicit true', keyIndexed(true)],
+  ['no flag', keyIndexed()],
+  ['an explicit null flag', keyWithDefinition({ ...keyDetail.definition, indexed: null })],
+  // The state a freshly created key is in, so the dialog must not report it as excluded either
+  ['no definition at all', keyWithDefinition(null)]
+]
+
+const modal = (detail: ClassificationStoreConfigurationKeyDetail | undefined, open = true): React.JSX.Element => (
+  // AntD's stylesheet carries selectors jsdom cannot parse, so it is collected outside the document.
+  <StyleProvider container={ document.createElement('div') }>
+    <KeyDefinitionModal
+      keyDetail={ detail }
+      onClose={ jest.fn() }
+      onSaved={ jest.fn() }
+      open={ open }
+    />
+  </StyleProvider>
+)
+
+/** Hands the dialog a new key detail, the way the optimistic cache patch does mid-save. */
+type PatchCache = (detail: ClassificationStoreConfigurationKeyDetail) => void
+
+const renderModal = (detail: ClassificationStoreConfigurationKeyDetail = keyDetail): PatchCache => {
+  const { rerender } = render(modal(detail))
+
+  return (next) => { rerender(modal(next)) }
+}
+
+/** The dialog on a key whose stored localization is the given one, re-patchable by that flag. */
+const renderLocalized = (
+  localized: boolean | null | undefined = null
+): ((refreshed: boolean | null | undefined) => void) => {
+  const patchCache = renderModal(keyLocalized(localized))
+
+  return (refreshed) => { patchCache(keyLocalized(refreshed)) }
+}
+
+const indexedControl = (): HTMLElement => screen.getByLabelText('classification-store.key-indexed')
 
 const option = (name: string): HTMLElement => screen.getByRole('radio', { name })
 
@@ -280,7 +333,7 @@ describe('KeyDefinitionModal', () => {
     ['a true flag', true, LOCALIZED],
     ['a false flag', false, NOT_LOCALIZED]
   ])('seeds the localization control from %s', (_name, localized, expected) => {
-    renderModal(localized)
+    renderLocalized(localized)
 
     expect(option(expected)).toBeChecked()
     expect(option(INHERIT)).toBeInTheDocument()
@@ -294,7 +347,7 @@ describe('KeyDefinitionModal', () => {
     [LOCALIZED, NOT_LOCALIZED, false]
   ])('sends the state of the localization control from %s to %s', async (from, selected, expected) => {
     // Each row moves the control, because an unchanged control sends no member at all.
-    renderModal(STORED_LOCALIZED[from])
+    renderLocalized(STORED_LOCALIZED[from])
 
     fireEvent.click(option(selected))
     await saveConfirmingWarning()
@@ -303,12 +356,11 @@ describe('KeyDefinitionModal', () => {
 
     expect(sendsLocalized(payload)).toBe(true)
     expect(payload.localized).toBe(expected)
-    // the definition and the key's own columns ride along unchanged
-    expect(payload).toEqual(expect.objectContaining({
-      name: KEY_NAME,
-      title: 'Height',
-      type: KEY_TYPE
-    }))
+    // the definition rides along unchanged, while the cells the keys grid also writes are left
+    // out of the payload rather than echoed back (see the key names test further down)
+    expect(payload).toEqual(expect.objectContaining({ name: KEY_NAME, type: null }))
+    expect(payload).not.toHaveProperty('title')
+    expect(payload).not.toHaveProperty('description')
     expect(payload.definition).toMatchObject(STORED_OPTIONS)
   })
 
@@ -320,7 +372,7 @@ describe('KeyDefinitionModal', () => {
     ['a true flag', true],
     ['a false flag', false]
   ])('omits the localized member when the control is untouched, with %s stored', async (_name, localized) => {
-    renderModal(localized)
+    renderLocalized(localized)
 
     fireEvent.change(screen.getByLabelText('tooltip'), { target: { value: EDITED_TOOLTIP } })
     save()
@@ -333,7 +385,7 @@ describe('KeyDefinitionModal', () => {
   })
 
   it('omits the localized member again when the control is moved back to the stored state', async () => {
-    renderModal(true)
+    renderLocalized(true)
 
     fireEvent.click(option(NOT_LOCALIZED))
     fireEvent.click(option(LOCALIZED))
@@ -356,7 +408,7 @@ describe('KeyDefinitionModal', () => {
     localized,
     refreshed
   ) => {
-    const patchCache = renderModal(localized)
+    const patchCache = renderLocalized(localized)
 
     patchCache(refreshed)
 
@@ -372,7 +424,7 @@ describe('KeyDefinitionModal', () => {
   })
 
   it('still sends the state the control was moved to when a same-key refresh arrives after it', async () => {
-    const patchCache = renderModal(null)
+    const patchCache = renderLocalized(null)
 
     fireEvent.click(option(LOCALIZED))
     patchCache(false)
@@ -399,7 +451,7 @@ describe('KeyDefinitionModal', () => {
     [INHERIT, INHERIT, false],
     [NOT_LOCALIZED, NOT_LOCALIZED, false]
   ])('warns on %s to %s: %s', async (from, to, warns) => {
-    renderModal(STORED_LOCALIZED[from])
+    renderLocalized(STORED_LOCALIZED[from])
 
     fireEvent.click(option(to))
     save()
@@ -428,7 +480,7 @@ describe('KeyDefinitionModal', () => {
     let answer: (value: unknown) => void = () => {}
     updateKey.mockReturnValue(new Promise((resolve) => { answer = resolve }))
 
-    renderModal(true)
+    renderLocalized(true)
 
     fireEvent.click(option(NOT_LOCALIZED))
     save()
@@ -463,7 +515,7 @@ describe('KeyDefinitionModal', () => {
   // update already wrote into the cached key, and so omit the very member it had just sent.
   it('ignores a second save while the first is in flight, patched cache and all', async () => {
     const answer = saveInFlight()
-    const patchCache = renderModal(null)
+    const patchCache = renderLocalized(null)
 
     fireEvent.click(option(LOCALIZED))
     save()
@@ -499,7 +551,7 @@ describe('KeyDefinitionModal', () => {
   it('ignores a second save while a confirmed save is in flight', async () => {
     const answer = saveInFlight()
 
-    renderModal(true)
+    renderLocalized(true)
 
     fireEvent.click(option(NOT_LOCALIZED))
     save()
@@ -516,5 +568,94 @@ describe('KeyDefinitionModal', () => {
 
     answer({ data: {} })
     await expectBusy(false)
+  })
+
+  it('opens a key excluded from the search index with the control off', () => {
+    renderModal(keyIndexed(false))
+
+    expect(indexedControl()).not.toBeChecked()
+  })
+
+  it.each(INDEXED_KEYS)('opens a key that carries %s with the control on', (_label, detail) => {
+    renderModal(detail)
+
+    expect(indexedControl()).toBeChecked()
+  })
+
+  it('sends the flag as indexed inside the definition, losing nothing else it held', async () => {
+    renderModal()
+
+    fireEvent.click(indexedControl())
+
+    const definition = await savedDefinition()
+
+    expect(definition.indexed).toBe(false)
+    expect(definition).toMatchObject(STORED_OPTIONS)
+    expect(definition.tooltip).toBe('The height in cm')
+  })
+
+  it('names the definition and nothing else the grid also writes', async () => {
+    // The title, description and type cells of the keys grid write the same row. Echoing them
+    // back from the key this dialog was opened with reverts a cell edit made while it was open,
+    // so the payload leaves the optional two out and sends the type it cannot omit as null.
+    renderModal()
+
+    await savedDefinition()
+
+    const update: Record<string, unknown> =
+      updateKey.mock.calls[0][0].classificationStoreConfigurationKeyUpdate
+
+    expect(Object.keys(update).sort()).toEqual(['definition', 'name', 'type'])
+    expect(update).toMatchObject({ name: KEY_NAME, type: null })
+  })
+
+  it('sends an edit saved inside the debounce window, which the layout provider has not seen', async () => {
+    renderModal(keyIndexed(true))
+
+    fireEvent.change(screen.getByLabelText('tooltip'), { target: { value: 'The height in mm' } })
+    fireEvent.click(indexedControl())
+
+    const definition = await savedDefinition()
+
+    expect(definition.indexed).toBe(false)
+    expect(definition.tooltip).toBe('The height in mm')
+    expect(definition).toMatchObject(STORED_OPTIONS)
+  })
+
+  it('does not carry the flag of the key edited before into the next one', async () => {
+    // The dialog stays mounted between openings while its body does not, so each opening reads
+    // the key it is handed rather than the form the previous key was left on.
+    const { rerender } = render(modal(keyIndexed(true)))
+
+    fireEvent.click(indexedControl())
+    expect(indexedControl()).not.toBeChecked()
+
+    rerender(modal(undefined, false))
+    rerender(modal(keyIndexed(true)))
+
+    expect(indexedControl()).toBeChecked()
+    expect(await savedDefinition()).toMatchObject({ indexed: true })
+  })
+
+  it('shows the flag the update answered with, not the one the form was left on', async () => {
+    // The update writes the server's answer into the cache for the fields it named — `definition`
+    // among them — and keys-tab re-derives the dialog's keyDetail from that cache, so the reopened
+    // dialog reads the returned flag and not the local edit.
+    updateKey.mockResolvedValue({ data: keyIndexed(true) })
+
+    renderModal(keyIndexed(true))
+
+    fireEvent.click(indexedControl())
+
+    expect(await savedDefinition()).toMatchObject({ indexed: false })
+
+    const response: { data: ClassificationStoreConfigurationKeyDetail } =
+      await updateKey.mock.results[0].value
+
+    // `destroyOnClose` drops the form, so reopening builds the layout from the key it is handed.
+    cleanup()
+    renderModal(response.data)
+
+    expect(indexedControl()).toBeChecked()
   })
 })

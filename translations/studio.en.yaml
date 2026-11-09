@@ -2211,6 +2211,8 @@ classification-store.tabs.sub-groups: Sub groups
 classification-store.add-sub-group: Add sub group
 classification-store.delete-sub-group: "Delete sub group \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: A sub group belongs to the store, so a new one becomes available to every group of this store.
+classification-store.key-indexed: Include in the Classification Store search index
+classification-store.key-indexed-hint: While off, this key cannot be sorted, filtered or searched on, and its value is removed from the stored search document. The index converges through the queue, so changes are not immediate.
 classification-store.delete-sub-group-in-use-hint: Unassign the keys from this sub group in the groups named above first, then delete it.
 classification-store.no-sub-groups: This store has no sub groups yet
 classification-store.select-sub-group: Select sub group

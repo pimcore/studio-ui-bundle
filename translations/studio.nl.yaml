@@ -2207,6 +2207,8 @@ classification-store.tabs.sub-groups: Subgroepen
 classification-store.add-sub-group: Subgroep toevoegen
 classification-store.delete-sub-group: "Subgroep \"{{subGroupName}}\" verwijderen?"
 classification-store.add-sub-group-store-hint: Een subgroep hoort bij de store, dus een nieuwe komt beschikbaar voor elke groep van deze store.
+classification-store.key-indexed: Opnemen in de zoekindex van de Classification Store
+classification-store.key-indexed-hint: Zolang dit uitgeschakeld is, kan deze sleutel niet worden gesorteerd, gefilterd of doorzocht en wordt de waarde uit het opgeslagen zoekdocument verwijderd. De index wordt via de wachtrij bijgewerkt, dus wijzigingen zijn niet meteen zichtbaar.
 classification-store.delete-sub-group-in-use-hint: Maak eerst de toewijzing van de sleutels aan deze subgroep ongedaan in de hierboven genoemde groepen en verwijder hem daarna.
 classification-store.no-sub-groups: Deze store heeft nog geen subgroepen
 classification-store.select-sub-group: Subgroep selecteren
