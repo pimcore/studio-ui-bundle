@@ -37,7 +37,7 @@ export const useServerSideEvent = ({ topics, messageHandler, openHandler }: UseS
   function open (): void {
     const url = new URL(ServerSideEventDomain)
     topics.forEach(topic => {
-      url.searchParams.append('topic', topic)
+      url.searchParams.append('match', topic)
     })
 
     event = new EventSource(url.toString(), { withCredentials: true })
