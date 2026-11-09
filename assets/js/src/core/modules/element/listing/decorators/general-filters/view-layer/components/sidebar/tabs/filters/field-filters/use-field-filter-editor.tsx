@@ -83,6 +83,24 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
 
   const [filters, setFilters] = useState<FieldFiltersProps['data']>(initialFilters)
 
+  const reportsFilter = (dynamicTypeIds: string[], frontendType: string | null): boolean => {
+    let dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds })
+
+    if (dynamicType === null) {
+      return false
+    }
+
+    if (!(dynamicType instanceof DynamicTypeFieldFilterAbstract)) {
+      if ('dynamicTypeFieldFilterType' in dynamicType) {
+        dynamicType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+      } else {
+        return false
+      }
+    }
+
+    return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(frontendType)
+  }
+
   const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
     key: filter.id,
     filterValue: filter.data,
@@ -117,7 +135,10 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
       throw new Error(`Could not find column configuration for field filter with key ${data.modalContext.fieldName}`)
     }
 
-    const newFilters = data.data.map((item) => {
+    // A key whose type reports no grid filter is not offered one; filters already saved are untouched.
+    const filterableItems = data.data.filter((item) => reportsFilter([item.definition.fieldtype as string], item.definition.fieldtype as string))
+
+    const newFilters = filterableItems.map((item) => {
       const fieldDefinition = item.definition
 
       return {
@@ -184,8 +205,6 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
   }
 
   const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
-    let dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] })
-
     if (column.type === 'dataobject.classificationstore' && classDefinitionContext !== undefined) {
       return true
     }
@@ -194,19 +213,7 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
       return false
     }
 
-    if (dynamicType === null) {
-      return false
-    }
-
-    if (!(dynamicType instanceof DynamicTypeFieldFilterAbstract)) {
-      if ('dynamicTypeFieldFilterType' in dynamicType) {
-        dynamicType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-      } else {
-        return false
-      }
-    }
-
-    return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(column.frontendType ?? null)
+    return reportsFilter([column.type, column.frontendType!], column.frontendType ?? null)
   }), [availableColumns, filters])
 
   const columnGroups = useMemo(

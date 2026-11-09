@@ -11,11 +11,13 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { GroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/groups-tab'
 import { KeysTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/keys-tab'
 import { CollectionsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/collections-tab'
 import { SubGroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/sub-groups-tab'
+import { StoreEngineIndicator } from '@Pimcore/modules/classification-store-config/components/store-editor/store-engine-indicator'
 import { StoreImportProvider } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
 import { useStyles } from '@Pimcore/modules/classification-store-config/classification-store-config.styles'
 
@@ -82,7 +84,15 @@ export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps)
         items={ tabItems }
         noTabBarMargin
         onChange={ setActiveKey }
-        tabBarExtraContent={ importExportActions }
+        tabBarExtraContent={ (
+          <Flex
+            align="center"
+            gap="small"
+          >
+            <StoreEngineIndicator storeId={ storeId } />
+            {importExportActions}
+          </Flex>
+        ) }
       />
     </StoreImportProvider>
   )

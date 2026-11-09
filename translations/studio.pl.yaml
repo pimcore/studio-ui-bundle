@@ -2204,6 +2204,11 @@ classification-store.search-groups: Szukaj grup…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 classification-store.tabs.sub-groups: Podgrupy
+classification-store.engine.label: "Silnik: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Dokument"
+classification-store.engine.eav-hint: "Wartości kwalifikowane i rozszerzone typy kluczy wymagają silnika dokumentowego."
+classification-store.key-type-needs-document-engine: "Silnik tego store'a nie może przechowywać tego typu klucza. Wymaga silnika dokumentowego, który store pokazuje obok swoich kart."
 classification-store.add-sub-group: Dodaj podgrupę
 classification-store.delete-sub-group: "Usunąć podgrupę \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: Podgrupa należy do magazynu, więc nowa staje się dostępna dla każdej grupy tego magazynu.

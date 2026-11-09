@@ -16,6 +16,7 @@ import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { kebabCase } from 'lodash'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -38,6 +39,8 @@ import {
   useClassificationStoreConfigurationKeyDeleteMutation,
   useClassificationStoreConfigurationKeyUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+import { isKeyTypeHeldByEngine } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
+import { useStoreEngine } from '@Pimcore/modules/classification-store-config/hooks/use-store-engine'
 import { KeyDefinitionModal } from './keys/key-definition-modal'
 
 interface IKeysTabProps {
@@ -54,15 +57,30 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
+  const { engineCapabilities } = useStoreEngine(storeId)
+
   const typeSelectOptions = useMemo(() => (
     fieldDefinitionRegistry
       .getTypesByTags(['classificationStore'], { area: ['classification-store'], path: [], fieldDefinitions: {} })
-      .map((type) => ({
-        label: t('field-definition.' + kebabCase(type.id)),
-        value: type.id
-      }))
+      .map((type) => ({ id: type.id, label: t('field-definition.' + kebabCase(type.id)) }))
       .sort((a, b) => a.label.localeCompare(b.label))
-  ), [fieldDefinitionRegistry, t])
+      .map(({ id, label }) => {
+        if (isKeyTypeHeldByEngine(id, engineCapabilities)) {
+          return { label, value: id }
+        }
+
+        return {
+          label: (
+            <Tooltip title={ t('classification-store.key-type-needs-document-engine') }>
+              <span>{label}</span>
+            </Tooltip>
+          ),
+          displayValue: label,
+          disabled: true,
+          value: id
+        }
+      })
+  ), [fieldDefinitionRegistry, t, engineCapabilities])
 
   const [definitionKeyId, setDefinitionKeyId] = useState<number | undefined>(undefined)
   const [definitionModalOpen, setDefinitionModalOpen] = useState(false)

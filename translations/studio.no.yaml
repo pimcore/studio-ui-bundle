@@ -2204,6 +2204,11 @@ classification-store.search-groups: Søk i grupper…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 classification-store.tabs.sub-groups: Undergrupper
+classification-store.engine.label: "Motor: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Dokument"
+classification-store.engine.eav-hint: "Kvalifiserte verdier og de utvidede nøkkeltypene krever dokumentmotoren."
+classification-store.key-type-needs-document-engine: "Motoren til denne storen kan ikke lagre denne nøkkeltypen. Den krever dokumentmotoren, som storen viser ved siden av fanene sine."
 classification-store.add-sub-group: Legg til undergruppe
 classification-store.delete-sub-group: "Slette undergruppen \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: En undergruppe hører til butikken, så en ny blir tilgjengelig for alle grupper i denne butikken.

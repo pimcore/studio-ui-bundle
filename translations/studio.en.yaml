@@ -2208,6 +2208,11 @@ classification-store.search-groups: Search groups…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 classification-store.tabs.sub-groups: Sub groups
+classification-store.engine.label: "Engine: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Document"
+classification-store.engine.eav-hint: "Qualified values and the widened key types need the document engine."
+classification-store.key-type-needs-document-engine: "The engine of this store cannot hold this key type. It needs the document engine, which the store shows next to its tabs."
 classification-store.add-sub-group: Add sub group
 classification-store.delete-sub-group: "Delete sub group \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: A sub group belongs to the store, so a new one becomes available to every group of this store.

@@ -2204,6 +2204,11 @@ classification-store.search-groups: Buscar grupos…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 classification-store.tabs.sub-groups: Subgrupos
+classification-store.engine.label: "Motor: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Documento"
+classification-store.engine.eav-hint: "Los valores cualificados y los tipos de clave ampliados requieren el motor de documentos."
+classification-store.key-type-needs-document-engine: "El motor de este store no puede almacenar este tipo de clave. Requiere el motor de documentos, que el store muestra junto a sus pestañas."
 classification-store.add-sub-group: Añadir subgrupo
 classification-store.delete-sub-group: "¿Eliminar el subgrupo \"{{subGroupName}}\"?"
 classification-store.add-sub-group-store-hint: Un subgrupo pertenece al almacén, por lo que uno nuevo estará disponible para todos los grupos de este almacén.

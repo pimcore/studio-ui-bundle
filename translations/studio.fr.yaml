@@ -2204,6 +2204,11 @@ classification-store.search-groups: Rechercher des groupes…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 classification-store.tabs.sub-groups: Sous-groupes
+classification-store.engine.label: "Moteur : {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Document"
+classification-store.engine.eav-hint: "Les valeurs qualifiées et les types de clé étendus nécessitent le moteur de documents."
+classification-store.key-type-needs-document-engine: "Le moteur de ce store ne peut pas contenir ce type de clé. Il nécessite le moteur de documents, que le store affiche à côté de ses onglets."
 classification-store.add-sub-group: Ajouter un sous-groupe
 classification-store.delete-sub-group: "Supprimer le sous-groupe \"{{subGroupName}}\" ?"
 classification-store.add-sub-group-store-hint: Un sous-groupe appartient au magasin ; un nouveau sous-groupe devient donc disponible pour tous les groupes de ce magasin.
