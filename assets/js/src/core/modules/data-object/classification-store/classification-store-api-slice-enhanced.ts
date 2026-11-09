@@ -434,6 +434,75 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
   return results
 }
 
+// ─── The collection reads a confirmation has to survive ─────────────────────────
+// A read of the key collection is a snapshot of the server taken at a moment this client cannot
+// know either, and its answer replaces the whole cached page rather than a field of a row. So a
+// read dispatched before a key update confirms, and answered after it, writes the page back as it
+// stood before that save: the exclusion the key definition dialog had just confirmed is gone from
+// the cache, and reopening the dialog shows the key as indexed again — then saves that back.
+//
+// The write ledger above cannot see this. It weighs this client's writes against each other, and a
+// read registers nothing in it, so a save that overlaps only a read is a save that overlapped
+// "nothing" and schedules no corrective re-read. It is not confined to the key the read was taken
+// for, either: the answer carries every row of the page, so a save on any key in it is overwritten
+// the same way. The corrective re-read below is one such read, and the ordinary grid load, the
+// page change and the tag invalidation are the others, so this is registered on the collection
+// endpoint itself rather than around that one dispatch.
+//
+// Every read in flight is registered here, and a confirmation landing inside one leaves the fields
+// that confirmation owns behind. Once the read's answer has been written to the cache those fields
+// are written over it again, in the order they were confirmed. Only the fields the request named
+// are preserved: for those the server has just said what it stored, which is newer than a snapshot
+// taken before the request was answered. Everything else in the row is the read's, which is what
+// re-reading is for.
+
+/** The fields of one key a confirmed update is the authority on, and the values it confirmed. */
+type ConfirmedKeyFields = Partial<Record<KeyWriteField, unknown>>
+
+interface KeyCollectionRead { preserve: Array<{ id: unknown, fields: ConfirmedKeyFields }> }
+
+/** The reads of the key collection now in flight. */
+const keyCollectionReads = new Set<KeyCollectionRead>()
+
+/**
+ * Registers a read of the key collection. Call `settled()` once its answer has been written to the
+ * cache — or once it has failed, where there is simply nothing to write back over.
+ */
+const openKeyCollectionRead = (): { settled: (dispatch: (thunk: any) => void) => void } => {
+  const read: KeyCollectionRead = { preserve: [] }
+  keyCollectionReads.add(read)
+
+  return {
+    settled: (dispatch) => {
+      keyCollectionReads.delete(read)
+      if (read.preserve.length === 0) return
+
+      patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
+        dispatch,
+        'classificationStoreConfigurationKeyCollection',
+        (draft) => {
+          for (const { id, fields } of read.preserve) {
+            const idx = draft.items.findIndex((k) => k.id === id)
+            // A key the answer does not carry any more — deleted, moved to another page or
+            // filtered out — has no row to write to, and nothing to preserve.
+            if (idx !== -1) Object.assign(draft.items[idx], fields)
+          }
+        }
+      )
+    }
+  }
+}
+
+/**
+ * Records the fields a key update has just had confirmed against every collection read in flight,
+ * so each of those reads writes them back once its own answer has landed.
+ */
+const preserveAcrossKeyCollectionReads = (id: unknown, fields: ConfirmedKeyFields): void => {
+  if (keyCollectionReads.size === 0 || Object.keys(fields).length === 0) return
+
+  for (const read of keyCollectionReads) read.preserve.push({ id, fields })
+}
+
 /**
  * Re-reads every cached page of the key collection from the server, ignoring what the cache holds.
  *
@@ -580,7 +649,21 @@ const api = baseApi.enhanceEndpoints({
     // ─── Keys ────────────────────────────────────────────────────────────────
 
     classificationStoreConfigurationKeyCollection: {
-      providesTags: ['Classification Store']
+      providesTags: ['Classification Store'],
+      // Every read of the page is registered for as long as it is in flight, so a key update
+      // confirmed while it ran can write its own fields back over the answer (see the read ledger
+      // above). Without it the answer — a snapshot taken before that update was applied — is the
+      // last word on every row of the page, including rows of keys the read was not taken for.
+      async onQueryStarted (_args, { dispatch, queryFulfilled }) {
+        const read = openKeyCollectionRead()
+        try {
+          await queryFulfilled
+        } catch {
+          // A read that failed wrote nothing into the cache, so there is nothing over it to undo.
+        } finally {
+          read.settled(dispatch)
+        }
+      }
     },
 
     classificationStoreConfigurationKeyUpdate: {
@@ -638,6 +721,17 @@ const api = baseApi.enhanceEndpoints({
 
           try {
             const { data: updated } = await queryFulfilled
+            // The fields this request named, as the server has just confirmed them. A collection
+            // read already in flight answers with a snapshot taken before this request was
+            // applied, and replaces the whole page with it; these values are written back over
+            // that answer so the save survives it (see the read ledger above).
+            const confirmedRow = asKeyDetail(updated)
+            const ownedFields: ConfirmedKeyFields = {}
+            for (const field of KEY_WRITE_FIELDS) {
+              if (written[field]) ownedFields[field] = confirmedRow[field]
+            }
+            preserveAcrossKeyCollectionReads(updated.id, ownedFields)
+
             patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
               dispatch,
               'classificationStoreConfigurationKeyCollection',

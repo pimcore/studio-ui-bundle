@@ -70,6 +70,20 @@ const storedKey = {
 /** A definition blob only the key definition dialog writes; every cell edit leaves it alone. */
 const DEFINITION = { fieldtype: 'input', title: 'Weight' }
 
+const OTHER_KEY_ID = 9
+
+/**
+ * A second key of the same page. A collection answer carries every row it holds, so a read in
+ * flight is the last word on keys it was never taken for as much as on the one it was.
+ */
+const otherKey = {
+  ...storedKey,
+  id: OTHER_KEY_ID,
+  name: 'diameter',
+  title: 'Diameter',
+  definition: { ...typedDefinition, name: 'diameter', title: 'Diameter' }
+}
+
 const queryArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 } } }
 
 const createStore = (): ReturnType<typeof configureStore> => configureStore({
@@ -77,10 +91,18 @@ const createStore = (): ReturnType<typeof configureStore> => configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware)
 })
 
-const cachedKey = (store: ReturnType<typeof createStore>): Record<string, unknown> | undefined => {
+const cachedKeys = (store: ReturnType<typeof createStore>): Array<Record<string, unknown>> => {
   const select = (api.endpoints as any).classificationStoreConfigurationKeyCollection.select(queryArgs)
-  return select(store.getState()).data?.items?.[0]
+  return select(store.getState()).data?.items ?? []
 }
+
+const cachedKey = (store: ReturnType<typeof createStore>): Record<string, unknown> | undefined =>
+  cachedKeys(store)[0]
+
+const cachedKeyById = (
+  store: ReturnType<typeof createStore>,
+  id: number
+): Record<string, unknown> | undefined => cachedKeys(store).find((key) => key.id === id)
 
 const flush = async (): Promise<void> => { await new Promise((resolve) => setTimeout(resolve, 0)) }
 
@@ -98,26 +120,42 @@ describe('classification store key update cache patch', () => {
   /** One resolver per update request, in the order the requests were made. */
   let pendingUpdates: Responder[]
   /**
-   * The key as the server holds it, which a test can move: it is what another user's change looks
+   * The page as the server holds it, which a test can move: it is what another user's change looks
    * like from here, and what a re-read of the collection answers with.
    */
-  let serverKey: Record<string, unknown>
+  let serverKeys: Array<Record<string, unknown>>
   /** How often the collection was read, so a re-read can be told from the first load. */
   let keyCollectionReads: number
+  /**
+   * Set by a test that needs the collection's answer held back: a read is a snapshot in flight
+   * too, and only a held one can be made to land after an update it predates has confirmed. Each
+   * responder answers with the rows it is given — the page as the server held it when the read
+   * was taken.
+   */
+  let holdKeyCollectionReads: boolean
+  let pendingKeyCollectionReads: Array<(rows: Array<Record<string, unknown>>) => void>
 
   beforeEach(() => {
     updateRequests = []
     pendingUpdates = []
-    serverKey = storedKey
+    serverKeys = [storedKey]
     keyCollectionReads = 0
+    holdKeyCollectionReads = false
+    pendingKeyCollectionReads = []
 
     globalThis.fetch = jest.fn(async (input: Request) => {
       if (input.url.endsWith(KEYS_URL)) {
         keyCollectionReads += 1
+        const page = (rows: Array<Record<string, unknown>>): Response =>
+          new Response(JSON.stringify({ items: rows, totalItems: rows.length }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          })
 
-        return new Response(JSON.stringify({ items: [serverKey], totalItems: 1 }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+        if (!holdKeyCollectionReads) return page(serverKeys)
+
+        return await new Promise<Response>((resolve) => {
+          pendingKeyCollectionReads.push((rows) => { resolve(page(rows)) })
         })
       }
 
@@ -333,7 +371,7 @@ describe('classification store key update cache patch', () => {
     // The server applied the title first, another user then excluded the key, and the description
     // edit was applied after that. So the answer to the description edit carries the exclusion,
     // and the answer to the older title edit carries the definition as it stood before it.
-    serverKey = { ...storedKey, title: 'Shipping weight', description: 'Shipping', definition: excluded }
+    serverKeys = [{ ...storedKey, title: 'Shipping weight', description: 'Shipping', definition: excluded }]
 
     pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', description: 'Shipping', definition: excluded })
     await descriptionEdit
@@ -368,6 +406,87 @@ describe('classification store key update cache patch', () => {
 
     // The ordinary save is one request: the re-read is the price of an overlap, not of every save.
     expect(keyCollectionReads).toBe(1)
+  })
+
+  /**
+   * A read of the collection is a snapshot in flight too, and its answer replaces the whole cached
+   * page. So a read dispatched before a save and answered after it writes the page back as it
+   * stood before the save, and the write ledger cannot see it: a save overlapping only a read
+   * overlapped no write, so it schedules no corrective re-read and the dialog reopens on the stale
+   * flag. The fields the save named are written back over the answer instead.
+   */
+  const holdOneCollectionRead = async (store: ReturnType<typeof createStore>): Promise<void> => {
+    holdKeyCollectionReads = true
+    void store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(
+      queryArgs,
+      { subscribe: false, forceRefetch: true }
+    ))
+    await flush()
+    expect(pendingKeyCollectionReads).toHaveLength(1)
+  }
+
+  it('keeps a definition saved while a collection read it predates was in flight', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    // A re-read of the page goes out: the corrective one the ledger schedules, a page change or a
+    // tag invalidation — the same read either way — and is held before it answers.
+    await holdOneCollectionRead(store)
+
+    // The dialog excludes the key from the index while that read is in flight, and is confirmed.
+    const excluded = { ...typedDefinition, indexed: false }
+    const dialogSave = updateKey(store, { definition: excluded })
+    await flush()
+    pendingUpdates[0]({ ...storedKey, definition: excluded })
+    await dialogSave
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: excluded }))
+
+    // The read answers last, with the page as the server held it when the read was taken: the key
+    // still indexed, and a title another user had changed in the meantime.
+    pendingKeyCollectionReads[0]([{ ...storedKey, title: 'Gross weight', definition: typedDefinition }])
+
+    await waitFor(() => {
+      expect(cachedKey(store)).toEqual(expect.objectContaining({
+        // the read landed — it is the authority on every field nobody here was writing ...
+        title: 'Gross weight',
+        // ... and not on the exclusion this client saved after it was taken
+        definition: excluded
+      }))
+    })
+  })
+
+  it('keeps a definition saved on another key of the page while a collection read was in flight', async () => {
+    const store = createStore()
+    serverKeys = [storedKey, otherKey]
+    await subscribeToKeys(store)
+
+    await holdOneCollectionRead(store)
+
+    // The exclusion is saved on the other key of the page — the read was not taken for it, and
+    // replaces its row all the same.
+    const excluded = { ...otherKey.definition, indexed: false }
+    const dialogSave = store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyUpdate.initiate({
+      id: OTHER_KEY_ID,
+      classificationStoreConfigurationKeyUpdate: keyUpdate({ name: otherKey.name, definition: excluded })
+    }))
+    await flush()
+    pendingUpdates[0]({ ...otherKey, definition: excluded })
+    await dialogSave
+
+    expect(cachedKeyById(store, OTHER_KEY_ID)).toEqual(expect.objectContaining({ definition: excluded }))
+
+    pendingKeyCollectionReads[0]([
+      storedKey,
+      { ...otherKey, title: 'Outer diameter', definition: otherKey.definition }
+    ])
+
+    await waitFor(() => {
+      expect(cachedKeyById(store, OTHER_KEY_ID)).toEqual(expect.objectContaining({
+        title: 'Outer diameter',
+        definition: excluded
+      }))
+    })
   })
 
   it('sends the localized member of the payload to the key endpoint', async () => {
