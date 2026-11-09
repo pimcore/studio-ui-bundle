@@ -1,0 +1,193 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key })
+}))
+
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => jest.requireActual('@test-utils/mocks/create-styles-mock'))
+
+jest.mock('@Pimcore/components/tabs/tab-context-menu', () => ({
+  TabContextMenu: () => null
+}))
+
+jest.mock('@sdk/modules/element', () => jest.requireActual('./provider/element-selector/element-selector-provider'))
+
+jest.mock('@Pimcore/components/modal/modal', () => ({
+  Modal: (props: Record<string, any>) => (props.open === true
+    ? <div data-testid="element-selector">{ props.children }</div>
+    : null)
+}))
+
+jest.mock('@Pimcore/modules/asset/element-selector/asset-selector-listing', () => ({
+  AssetSelectorListing: () => <div>asset listing</div>
+}))
+
+jest.mock('@Pimcore/modules/data-object/element-selector/data-object-selector-listing', () => ({
+  DataObjectSelectorListing: () => <div>object listing</div>
+}))
+
+jest.mock('@Pimcore/modules/document/element-selector/document-selector-listing', () => ({
+  DocumentSelectorListing: () => <div>document listing</div>
+}))
+
+// eslint-disable-next-line import/first
+import '@testing-library/jest-dom'
+// eslint-disable-next-line import/first
+import React from 'react'
+// eslint-disable-next-line import/first
+import { fireEvent, render, screen } from '@testing-library/react'
+// eslint-disable-next-line import/first
+import {
+  type ElementSelectorConfig,
+  type ElementSelectorCustomTab,
+  ElementSelectorProvider,
+  SelectionType
+} from './provider/element-selector/element-selector-provider'
+// eslint-disable-next-line import/first
+import { useElementSelector } from './provider/element-selector/use-element-selector'
+
+interface NewElement {
+  type: string
+  id: string
+}
+
+const Opener = ({ name, config }: { name: string, config: ElementSelectorConfig }): React.JSX.Element => {
+  const { open } = useElementSelector(config)
+
+  return <button onClick={ open }>{ name }</button>
+}
+
+const deliveryTab = (onFinish: jest.Mock, position?: 'start' | 'end'): ElementSelectorCustomTab<NewElement> => ({
+  key: 'in-this-delivery',
+  label: 'In this delivery',
+  position,
+  render: ({ finish, selectionType }) => (
+    <button onClick={ () => { finish({ type: 'object', id: 'new:abc' }) } }>
+      { `pick new element (${selectionType})` }
+    </button>
+  ),
+  onFinish
+})
+
+const tabLabels = (): string[] => screen.getAllByRole('tab').map(tab => tab.textContent ?? '')
+
+const renderSelector = (openers: Array<{ name: string, config: ElementSelectorConfig }>): void => {
+  render(
+    <ElementSelectorProvider>
+      { openers.map(opener => (
+        <Opener
+          config={ opener.config }
+          key={ opener.name }
+          name={ opener.name }
+        />
+      )) }
+    </ElementSelectorProvider>
+  )
+}
+
+describe('ElementSelector custom tabs', () => {
+  it('shows only the built-in tabs for a caller without custom tabs', () => {
+    renderSelector([{ name: 'open', config: {} }])
+
+    fireEvent.click(screen.getByText('open'))
+
+    expect(tabLabels()).toEqual(['Assets', 'Objects', 'Documents'])
+  })
+
+  it('adds a caller tab after the built-in ones by default', () => {
+    renderSelector([{ name: 'open', config: { customTabs: [deliveryTab(jest.fn())] } }])
+
+    fireEvent.click(screen.getByText('open'))
+
+    expect(tabLabels()).toEqual(['Assets', 'Objects', 'Documents', 'In this delivery'])
+    expect(screen.getByRole('tab', { name: 'Assets' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('lists a caller tab at the start first and selects it', () => {
+    renderSelector([{
+      name: 'open',
+      config: { selectionType: SelectionType.Single, customTabs: [deliveryTab(jest.fn(), 'start')] }
+    }])
+
+    fireEvent.click(screen.getByText('open'))
+
+    expect(tabLabels()).toEqual(['In this delivery', 'Assets', 'Objects', 'Documents'])
+    expect(screen.getByRole('tab', { name: 'In this delivery' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByText('pick new element (single)')).toBeInTheDocument()
+  })
+
+  it('hands the tab result to the tab own callback only and closes the selector', () => {
+    const onTabFinish = jest.fn()
+    const onFinish = jest.fn()
+
+    renderSelector([{ name: 'open', config: { onFinish, customTabs: [deliveryTab(onTabFinish, 'start')] } }])
+
+    fireEvent.click(screen.getByText('open'))
+    fireEvent.click(screen.getByText('pick new element (multiple)'))
+
+    expect(onTabFinish).toHaveBeenCalledTimes(1)
+    expect(onTabFinish).toHaveBeenCalledWith({ type: 'object', id: 'new:abc' })
+    expect(onFinish).not.toHaveBeenCalled()
+    expect(screen.queryByTestId('element-selector')).not.toBeInTheDocument()
+  })
+
+  it('lets the tab close the selector without a result', () => {
+    const onTabFinish = jest.fn()
+
+    renderSelector([{
+      name: 'open',
+      config: {
+        customTabs: [{
+          key: 'cancel-only',
+          label: 'Cancel only',
+          position: 'start',
+          render: ({ close }) => <button onClick={ close }>cancel</button>,
+          onFinish: onTabFinish
+        }]
+      }
+    }])
+
+    fireEvent.click(screen.getByText('open'))
+    fireEvent.click(screen.getByText('cancel'))
+
+    expect(onTabFinish).not.toHaveBeenCalled()
+    expect(screen.queryByTestId('element-selector')).not.toBeInTheDocument()
+  })
+
+  it('shows a caller tab alone when every built-in area is off', () => {
+    renderSelector([{
+      name: 'open',
+      config: {
+        areas: { asset: false, document: false, object: false },
+        customTabs: [deliveryTab(jest.fn())]
+      }
+    }])
+
+    fireEvent.click(screen.getByText('open'))
+
+    expect(screen.queryAllByRole('tab')).toHaveLength(0)
+    expect(screen.getByText('pick new element (multiple)')).toBeInTheDocument()
+    expect(screen.queryByText('No areas configured')).not.toBeInTheDocument()
+  })
+
+  it('does not carry custom tabs over to the next caller', () => {
+    renderSelector([
+      { name: 'open with tab', config: { customTabs: [deliveryTab(jest.fn())] } },
+      { name: 'open plain', config: {} }
+    ])
+
+    fireEvent.click(screen.getByText('open with tab'))
+    expect(tabLabels()).toContain('In this delivery')
+
+    fireEvent.click(screen.getByText('open plain'))
+    expect(tabLabels()).toEqual(['Assets', 'Objects', 'Documents'])
+  })
+})

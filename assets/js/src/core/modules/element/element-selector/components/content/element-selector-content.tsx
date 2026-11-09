@@ -14,8 +14,9 @@ import { AssetSelectorListing } from '@Pimcore/modules/asset/element-selector/as
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { DataObjectSelectorListing } from '@Pimcore/modules/data-object/element-selector/data-object-selector-listing'
 import { useAreaControl } from '../../provider/area-control/use-area-control'
-import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { DocumentSelectorListing } from '@Pimcore/modules/document/element-selector/document-selector-listing'
+import { SelectionType } from '../../provider/element-selector/element-selector-provider'
 
 export const ElementSelectorContent = (): React.JSX.Element => {
   const helper = useElementSelectorHelper()
@@ -57,9 +58,33 @@ export const ElementSelectorContent = (): React.JSX.Element => {
     })
   }
 
+  for (const customTab of helper.config.customTabs ?? []) {
+    const item: NonNullable<ITabsProps['items']>[number] = {
+      key: customTab.key,
+      label: customTab.label,
+      forceRender: true,
+      children: <div style={ { height: '65vh' } }>
+        { customTab.render({
+          selectionType: helper.config.selectionType ?? SelectionType.Multiple,
+          finish: (result) => {
+            customTab.onFinish(result)
+            helper.close()
+          },
+          close: helper.close
+        }) }
+      </div>
+    }
+
+    if (customTab.position === 'start') {
+      tabItems.unshift(item)
+    } else {
+      tabItems.push(item)
+    }
+  }
+
   useEffect(() => {
     if (tabItems.length > 0 && activeArea === undefined) {
-      setActiveArea(tabItems[0].key as unknown as ElementType)
+      setActiveArea(tabItems[0].key)
     }
   }, [])
 

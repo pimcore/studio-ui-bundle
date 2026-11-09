@@ -103,6 +103,7 @@ studioApi.element.openElementSelector(selectorConfig)
 | `areas` | `{ asset: boolean, document: boolean, object: boolean }` | Enable/disable element type tabs (default: all `true`) |
 | `onFinish` | `(event: ElementSelectorFinishEvent) => void` | Callback receiving selected items |
 | `config` | `object` | Optional type-specific filters for allowed types/classes |
+| `customTabs` | `ElementSelectorCustomTab[]` | Optional extra tabs beside the built-in ones: `key`, `label`, `position` (`start` or `end`, default `end`), `render({ selectionType, finish, close })` for the tab's content, and `onFinish(result)`, called with what the content passes to `finish`, after which the dialog closes. Their result does not go through the dialog's `onFinish`. |
 
 #### `openUploadModal(props: ModalUploadProps): void`
 Opens the file upload modal:
