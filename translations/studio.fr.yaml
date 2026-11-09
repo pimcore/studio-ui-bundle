@@ -2228,6 +2228,13 @@ classification-store.sub-group-unused: "Aucune clé de ce groupe n'utilise plus 
 classification-store.assign-sub-group-progress: "Affectation du sous-groupe à {{done}} clé(s) sur {{total}}…"
 classification-store.assign-sub-group-failed: "Le sous-groupe n'a pas pu être affecté à : {{keyNames}}"
 classification-store.assign-sub-group-running: Attendez la fin de l'affectation du sous-groupe
+classification-store.key-localization: "Localisation"
+classification-store.key-localization.inherit: "Hériter"
+classification-store.key-localization.localized: "Localisé"
+classification-store.key-localization.not-localized: "Non localisé"
+classification-store.key-localization-confirm: "Les valeurs que cette clé contient dans d'autres langues risquent de ne plus être affichées ni enregistrées. Enregistrer quand même ?"
+classification-store.key-localized: "Clé localisée"
+classification-store.key-localized-tooltip: "Cette clé contient une valeur propre à chaque langue."
 classification-store.import: Importer la configuration du store
 classification-store.import-success: Configuration du store importée avec succès
 home: Accueil

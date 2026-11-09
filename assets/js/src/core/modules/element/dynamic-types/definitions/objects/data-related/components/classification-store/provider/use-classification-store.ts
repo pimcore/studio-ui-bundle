@@ -10,7 +10,7 @@
 
 import { useContext } from 'react'
 import { ClassificationStoreContext } from './classification-store-provider'
-import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
 export interface UseClassificationStoreReturn {
   isOpenModal: boolean

@@ -14,7 +14,15 @@
  * renders the groups in the order the layout configures, and installs the layout the
  * object delivers for its already active groups with the key titles it carries — which
  * for a reopened object is a map keyed by group id, and so carries no order.
+ *
+ * It offers exactly one field level language control, and it offers it whenever any key of the
+ * field can hold a value in a language other than the language independent one: the field's own
+ * localized flag, which every key without one inherits, or a key of its store flagged localized.
+ * The answer is read off the layout the editor already has, so no request is made for it, and the
+ * editor's own language selector is raised by that same answer.
  */
+
+/* eslint-disable max-lines */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not
 // transform. Only the markup asserted below matters here.
@@ -37,12 +45,28 @@ import { ClassificationStoreContent } from './classification-store-content'
 import { type ClassificationStoreProps } from './classification-store'
 
 let mockGroupKeys: string[] = []
+let mockCurrentLayoutData: any[] = []
+let mockLanguageIndependentValuePermitted = true
 const mockOpenModal = jest.fn()
 const mockItem = jest.fn()
 const mockUpdateCurrentLayoutData = jest.fn()
+const mockSetHasLocalizedFields = jest.fn()
+
+/** The interface language. */
+let mockLanguage = 'en'
+
+/**
+ * One `t` per language, held rather than built per call: i18next hands out a new `t` when the
+ * interface language changes and the same one otherwise, and a fresh identity on every render
+ * would recompute every memo of the component — hiding exactly what the language case pins down.
+ */
+const mockTranslators: Record<string, (key: string) => string> = {
+  en: (key: string) => key,
+  de: (key: string) => (key === 'add' ? 'hinzufügen' : key)
+}
 
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key })
+  useTranslation: () => ({ t: mockTranslators[mockLanguage] })
 }))
 
 // icons resolve through the dependency injection container, which is not set up here
@@ -50,9 +74,17 @@ jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: () => <span />
 }))
 
-jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value', () => ({
-  useKeyedListSelector: () => ({ groupKeys: mockGroupKeys, activeGroups: {}, groupCollectionMapping: {} })
-}))
+// The real selector caches its projection by content equality, so these keep their identity
+// between renders and the component's memo depends on them. Fresh objects here recomputed that
+// memo on every render, which is the one thing a test about a retained render tree must not do.
+jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value', () => {
+  const activeGroups = {}
+  const groupCollectionMapping = {}
+
+  return {
+    useKeyedListSelector: () => ({ groupKeys: mockGroupKeys, activeGroups, groupCollectionMapping })
+  }
+})
 
 // the form barrel imports antd-style; the hidden bookkeeping items are not asserted here
 jest.mock('@Pimcore/components/form/form', () => ({
@@ -66,15 +98,19 @@ jest.mock('@Pimcore/components/input/input', () => ({ Input: () => null }))
 jest.mock('./provider', () => ({
   useClassificationStore: () => ({
     openModal: mockOpenModal,
-    currentLayoutData: [],
+    currentLayoutData: mockCurrentLayoutData,
     updateCurrentLayoutData: mockUpdateCurrentLayoutData
   })
 }))
 jest.mock('@Pimcore/components/language-selection/provider/use-language-selection', () => ({
-  useLanguageSelection: () => ({ currentLanguage: 'en' })
+  useLanguageSelection: () => ({
+    currentLanguage: 'en',
+    hasLocalizedFields: false,
+    setHasLocalizedFields: mockSetHasLocalizedFields
+  })
 }))
 jest.mock('./hooks/use-language-independent-value-permission', () => ({
-  useLanguageIndependentValuePermission: () => true
+  useLanguageIndependentValuePermission: () => mockLanguageIndependentValuePermitted
 }))
 
 jest.mock('./classification-store-item', () => ({
@@ -93,12 +129,66 @@ const renderContent = (props: Partial<ClassificationStoreProps> = {}): void => {
   )
 }
 
+/**
+ * Held at module level on purpose: the language case re-renders these props unchanged, so every
+ * dependency of the component's memoized tree keeps its identity and the language is the only
+ * input that moved.
+ */
+const LANGUAGE_CASE_PROPS = { title: 'Technical Attributes' }
+
+const CURRENT_LANGUAGE_OPTION = 'Current language (EN)'
+const DEFAULT_OPTION = 'Default'
+const DEFAULT_SLOT = 'default'
+const LANGUAGE = 'en'
+
+/** One group of several keys, none of which carries a flag of its own. */
+const inheritingGroup = {
+  id: 7,
+  name: 'Dimensions',
+  keys: [
+    { id: 11, name: 'ef000011', title: 'Height', definition: { datatype: 'data' } },
+    { id: 12, name: 'ef000012', title: 'Width', localized: null, definition: { datatype: 'data' } }
+  ]
+}
+
+/** A second group, one key of which is flagged localized itself. */
+const groupWithLocalizedKey = {
+  id: 8,
+  name: 'Weights',
+  keys: [
+    { id: 21, name: 'ef000021', title: 'Net weight', localized: true, definition: { datatype: 'data' } },
+    { id: 22, name: 'ef000022', title: 'Gross weight', localized: false, definition: { datatype: 'data' } }
+  ]
+}
+
+const localizationSwitches = (): HTMLElement[] => screen.queryAllByText(CURRENT_LANGUAGE_OPTION)
+
+const itemProps = (): Array<Record<string, any>> => mockItem.mock.calls.map(([props]) => props)
+
+/** The layout the editor already holds, as the groups added in-session deliver it. */
+const installLayout = (layout: Array<{ id: number }>): void => {
+  mockGroupKeys = layout.map((group) => String(group.id))
+  mockCurrentLayoutData = layout
+}
+
 describe('ClassificationStoreContent', () => {
+  const originalFetch = globalThis.fetch
+
   beforeEach(() => {
     mockGroupKeys = []
+    mockCurrentLayoutData = []
+    mockLanguageIndependentValuePermitted = true
     mockOpenModal.mockClear()
     mockItem.mockClear()
     mockUpdateCurrentLayoutData.mockClear()
+    mockSetHasLocalizedFields.mockClear()
+    mockLanguage = 'en'
+    // Resolving a key's localization must cost no request: the layout already carries the flag.
+    globalThis.fetch = jest.fn() as unknown as typeof fetch
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
   })
 
   it('shows the empty state with an add button while no group is assigned', async () => {
@@ -173,5 +263,135 @@ describe('ClassificationStoreContent', () => {
         ]
       })
     ])
+  })
+
+  it.each([
+    { field: 'a localized field whose keys all inherit', localized: true, layout: [inheritingGroup], offered: true },
+    {
+      field: 'a localized field holding a key flagged localized',
+      localized: true,
+      layout: [inheritingGroup, groupWithLocalizedKey],
+      offered: true
+    },
+    {
+      field: 'a field that is not localized holding a key flagged localized',
+      localized: false,
+      layout: [groupWithLocalizedKey],
+      offered: true
+    },
+    {
+      field: 'a field that is not localized whose keys all inherit',
+      localized: false,
+      layout: [inheritingGroup],
+      offered: false
+    }
+  ])('decides whether the language control is offered for $field', ({ localized, layout, offered }) => {
+    installLayout(layout)
+
+    renderContent({ localized })
+
+    // exactly one per field, never one per group and never one per key
+    expect(localizationSwitches()).toHaveLength(offered ? 1 : 0)
+    // and the editor's own language selector is raised by the very same condition: a
+    // current-language mode the user has no language picker for is not a mode they can act on
+    expect(mockSetHasLocalizedFields).toHaveBeenCalledTimes(offered ? 1 : 0)
+    expect(globalThis.fetch).not.toHaveBeenCalled()
+  })
+
+  // The already active groups arrive as a map keyed by group id, the groups added in-session as a
+  // list; both end up in the same layout, so the same fixture must resolve the same way.
+  it.each([
+    { delivery: 'already active groups', viaActiveGroupDefinitions: true },
+    { delivery: 'groups added in-session', viaActiveGroupDefinitions: false }
+  ])('resolves the localization of $delivery from the same layout', ({ viaActiveGroupDefinitions }) => {
+    const layout = [inheritingGroup, groupWithLocalizedKey]
+
+    mockGroupKeys = layout.map((group) => String(group.id))
+
+    if (viaActiveGroupDefinitions) {
+      renderContent({
+        localized: false,
+        activeGroupDefinitions: { 7: inheritingGroup, 8: groupWithLocalizedKey }
+      } as unknown as Partial<ClassificationStoreProps>)
+
+      // the installed layout carries the flag per key, which is what the resolution reads
+      expect(mockUpdateCurrentLayoutData).toHaveBeenCalledWith([
+        expect.objectContaining({ id: 7, keys: layout[0].keys }),
+        expect.objectContaining({ id: 8, keys: layout[1].keys })
+      ])
+
+      mockItem.mockClear()
+    }
+
+    mockCurrentLayoutData = layout
+    renderContent({ localized: false })
+
+    expect(localizationSwitches()).toHaveLength(1)
+    expect(itemProps().map((props) => props.fieldLocalized)).toEqual([false, false])
+    expect(itemProps().map((props) => props.localizationGroup)).toEqual([DEFAULT_SLOT, DEFAULT_SLOT])
+    expect(globalThis.fetch).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    { field: 'a localized field', localized: true, layout: [inheritingGroup] },
+    {
+      field: 'a field that is not localized holding a key flagged localized',
+      localized: false,
+      layout: [groupWithLocalizedKey]
+    }
+  ])('hides the default option of $field when the permission excludes it', ({ localized, layout }) => {
+    mockLanguageIndependentValuePermitted = false
+    installLayout(layout)
+
+    renderContent({ localized })
+
+    expect(localizationSwitches()).toHaveLength(1)
+    expect(screen.queryByText(DEFAULT_OPTION)).not.toBeInTheDocument()
+    // and the groups are edited in the current language, not in the slot the user may not see
+    expect(itemProps().map((props) => props.localizationGroup)).toEqual(layout.map(() => LANGUAGE))
+  })
+
+  it('keeps offering the default option when the permission allows it', () => {
+    installLayout([inheritingGroup])
+
+    renderContent({ localized: true })
+
+    expect(screen.getByText(DEFAULT_OPTION)).toBeInTheDocument()
+    expect(itemProps().map((props) => props.localizationGroup)).toEqual([DEFAULT_SLOT])
+  })
+
+  it('moves the localized keys to the current language when the control is switched', async () => {
+    installLayout([inheritingGroup])
+
+    renderContent({ localized: true })
+
+    await userEvent.click(screen.getByText(CURRENT_LANGUAGE_OPTION))
+
+    expect(itemProps().at(-1)?.localizationGroup).toBe(LANGUAGE)
+  })
+
+  it('relabels its own actions when the interface language changes', () => {
+    // This view renders a retained tree too, and the add action's label is an already translated
+    // node inside it. A language change moves `t` and nothing else, so a tree that does not watch
+    // `t` keeps serving the previous language until one of the other inputs happens to move.
+    //
+    // A fresh element each time, from the same props: handing React the identical element back
+    // makes it skip the subtree altogether, and the props are the same objects, which is what
+    // leaves the language as the only input that moved.
+    installLayout([inheritingGroup])
+
+    const content = (): React.JSX.Element => (
+      <ClassificationStoreContent { ...(LANGUAGE_CASE_PROPS as ClassificationStoreProps) } />
+    )
+
+    const { rerender } = render(content())
+
+    expect(screen.getByRole('button', { name: 'add' })).toBeInTheDocument()
+
+    mockLanguage = 'de'
+    rerender(content())
+
+    expect(screen.getByRole('button', { name: 'hinzufügen' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'add' })).not.toBeInTheDocument()
   })
 })

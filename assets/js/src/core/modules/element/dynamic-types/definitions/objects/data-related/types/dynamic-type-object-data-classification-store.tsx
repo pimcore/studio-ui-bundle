@@ -54,9 +54,9 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
     const { item, fieldBreadcrumbTitle, formPath } = props
 
-    if (item?.localized === false) {
-      return []
-    }
+    // The key's own flag decides, a null or absent one inherits the field's, so a mixed store
+    // lists exactly the keys that hold a value per language.
+    const isFieldLocalized = item?.localized === true
 
     const activeGroupDefinitions = normalizeGroups(item.activeGroupDefinitions)
 
@@ -89,6 +89,10 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
         }
 
         if (isEmpty(dataItem.definition) || isUndefined(groupId)) {
+          return []
+        }
+
+        if ((dataItem.localized ?? isFieldLocalized) !== true) {
           return []
         }
 

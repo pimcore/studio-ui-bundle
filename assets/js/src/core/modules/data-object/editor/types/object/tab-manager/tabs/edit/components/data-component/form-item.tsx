@@ -42,7 +42,9 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const inheritanceStateContext = useInheritanceState()
   const inheritedState = inheritanceStateContext?.getInheritanceState(formFieldName)?.inherited
   const hasInheritanceIcon = inheritedState === true || inheritedState === 'broken'
-  const labelIsEmpty = !isNonEmptyString(_props.title) && !isNonEmptyString(_props.tooltip) && !hasInheritanceIcon
+  // A title can also be a node, e.g. a classification store key label carrying its localization indicator
+  const hasTitle = isNonEmptyString(_props.title) || React.isValidElement(_props.title)
+  const labelIsEmpty = !hasTitle && !isNonEmptyString(_props.tooltip) && !hasInheritanceIcon
   const shouldSuppressLabel = suppressEmptyLabel && labelIsEmpty
 
   const effectiveFormItemProps = shouldSuppressLabel

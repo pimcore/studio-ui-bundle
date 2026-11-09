@@ -177,7 +177,9 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
               title: createdKey.title ?? null,
               description,
               type: createdKey.type,
-              definition: createdKey.definition
+              // Null for the same reason as the cell edits below: this call writes the
+              // description of the key just created and nothing else.
+              definition: null
             }
           })
 
@@ -229,7 +231,11 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         title: newTitle.trim() === '' ? null : newTitle,
         description: key.description ?? null,
         type: key.type,
-        definition: key.definition
+        // Null, not the definition this row happens to hold: null means "leave the stored one
+        // alone" to the server, while a definition read out of the cache is sent back as the
+        // grid last saw it — and the response then carries it through the preservation mask of
+        // the cache patch, over a definition the dialog saved while this edit was in flight.
+        definition: null
       }
     })
 
@@ -404,7 +410,9 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                     title: typedRow.title ?? null,
                     description: typedRow.description ?? null,
                     type: typedRow.type,
-                    definition: typedRow.definition
+                    // Null for the same reason as the title edit above: a cell edit never writes
+                    // the definition, so it must not send the one it happens to hold.
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               } else if (columnId === 'title') {
@@ -419,7 +427,9 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                     title: typedRow.title ?? null,
                     description: (value as string).trim() === '' ? null : (value as string),
                     type: typedRow.type,
-                    definition: typedRow.definition
+                    // Null for the same reason as the title edit above: a cell edit never writes
+                    // the definition, so it must not send the one it happens to hold.
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               }
