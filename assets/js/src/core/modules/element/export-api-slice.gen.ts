@@ -336,6 +336,10 @@ export type RelationFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
@@ -344,6 +348,10 @@ export type SimpleFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
