@@ -2230,6 +2230,13 @@ classification-store.sub-group-unused: "Ingen nyckel i denna grupp använder und
 classification-store.assign-sub-group-progress: "Kopplar undergruppen till {{done}} av {{total}} nycklar…"
 classification-store.assign-sub-group-failed: "Undergruppen kunde inte kopplas till: {{keyNames}}"
 classification-store.assign-sub-group-running: Vänta tills undergruppstilldelningen är klar
+classification-store.key-localization: "Lokalisering"
+classification-store.key-localization.inherit: "Ärv"
+classification-store.key-localization.localized: "Lokaliserad"
+classification-store.key-localization.not-localized: "Inte lokaliserad"
+classification-store.key-localization-confirm: "Värden som denna nyckel har på andra språk kan sluta visas eller sparas. Spara ändå?"
+classification-store.key-localized: "Lokaliserad nyckel"
+classification-store.key-localized-tooltip: "Denna nyckel har ett eget värde per språk."
 classification-store.import: Importera store-konfiguration
 classification-store.import-success: Store-konfigurationen har importerats
 home: Hem

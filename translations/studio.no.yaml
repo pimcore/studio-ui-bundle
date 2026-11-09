@@ -2230,6 +2230,13 @@ classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker und
 classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
 classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
 classification-store.assign-sub-group-running: Vent til tilknytningen av undergruppen er ferdig
+classification-store.key-localization: "Lokalisering"
+classification-store.key-localization.inherit: "Arv"
+classification-store.key-localization.localized: "Lokalisert"
+classification-store.key-localization.not-localized: "Ikke lokalisert"
+classification-store.key-localization-confirm: "Verdier denne nøkkelen har på andre språk kan slutte å vises eller lagres. Lagre likevel?"
+classification-store.key-localized: "Lokalisert nøkkel"
+classification-store.key-localized-tooltip: "Denne nøkkelen har en egen verdi per språk."
 classification-store.import: Importer store-konfigurasjon
 classification-store.import-success: Store-konfigurasjonen ble importert
 home: Hjem

@@ -2230,6 +2230,13 @@ classification-store.sub-group-unused: "Żaden klucz tej grupy nie używa już p
 classification-store.assign-sub-group-progress: "Przypisywanie podgrupy do {{done}} z {{total}} kluczy…"
 classification-store.assign-sub-group-failed: "Nie udało się przypisać podgrupy do: {{keyNames}}"
 classification-store.assign-sub-group-running: Poczekaj na zakończenie przypisywania podgrupy
+classification-store.key-localization: "Lokalizacja"
+classification-store.key-localization.inherit: "Dziedzicz"
+classification-store.key-localization.localized: "Zlokalizowane"
+classification-store.key-localization.not-localized: "Niezlokalizowane"
+classification-store.key-localization-confirm: "Wartości, które ten klucz przechowuje w innych językach, mogą przestać być wyświetlane lub zapisywane. Zapisać mimo to?"
+classification-store.key-localized: "Zlokalizowany klucz"
+classification-store.key-localized-tooltip: "Ten klucz przechowuje własną wartość dla każdego języka."
 classification-store.import: Importuj konfigurację store
 classification-store.import-success: Konfiguracja store została zaimportowana
 home: Strona główna

@@ -2230,6 +2230,13 @@ classification-store.sub-group-unused: "Geen enkele sleutel van deze groep gebru
 classification-store.assign-sub-group-progress: "Subgroep wordt aan {{done}} van {{total}} sleutels toegewezen…"
 classification-store.assign-sub-group-failed: "De subgroep kon niet worden toegewezen aan: {{keyNames}}"
 classification-store.assign-sub-group-running: Wacht tot de toewijzing van de subgroep klaar is
+classification-store.key-localization: "Localisatie"
+classification-store.key-localization.inherit: "Overerven"
+classification-store.key-localization.localized: "Gelokaliseerd"
+classification-store.key-localization.not-localized: "Niet gelokaliseerd"
+classification-store.key-localization-confirm: "Waarden die deze sleutel in andere talen bevat, worden mogelijk niet meer weergegeven of opgeslagen. Toch opslaan?"
+classification-store.key-localized: "Gelokaliseerde sleutel"
+classification-store.key-localized-tooltip: "Deze sleutel bevat een eigen waarde per taal."
 classification-store.import: Storeconfiguratie importeren
 classification-store.import-success: Storeconfiguratie succesvol geïmporteerd
 home: Startpagina

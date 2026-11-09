@@ -42,7 +42,20 @@ const activeGroupDefinitions = [{
   ]
 }]
 
-const item = { name: 'store', title: 'Features', activeGroupDefinitions }
+const item = { name: 'store', title: 'Features', localized: true, activeGroupDefinitions }
+
+// A mixed store: the key's own flag decides which keys hold a value per language, and a null or
+// absent one inherits the field's.
+const mixedActiveGroupDefinitions = [{
+  id: 7,
+  name: 'dimensions',
+  title: 'Dimensions',
+  keys: [
+    { id: 11, name: 'ef000001', title: 'Inherits', definition: { datatype: 'data' } },
+    { id: 12, name: 'ef000002', title: 'Localized', localized: true, definition: { datatype: 'data' } },
+    { id: 13, name: 'ef000003', title: 'Independent', localized: false, definition: { datatype: 'data' } }
+  ]
+}]
 
 describe('DynamicTypeObjectDataClassificationStore', () => {
   let type: DynamicTypeObjectDataClassificationStoreLike
@@ -55,6 +68,19 @@ describe('DynamicTypeObjectDataClassificationStore', () => {
     const descriptors = await type.extractLocalizedFields({ item, fieldBreadcrumbTitle: '', formPath: [] })
 
     expect(descriptors.map((descriptor) => descriptor.fieldData.title)).toEqual([TITLED_KEY_LABEL, UNTITLED_KEY_NAME])
+  })
+
+  it.each([
+    ['a localized field', true, ['Inherits', 'Localized']],
+    ['a field that is not localized', false, ['Localized']]
+  ])('lists the keys of %s that hold a value per language', async (_name, localized, expected) => {
+    const descriptors = await type.extractLocalizedFields({
+      item: { ...item, localized, activeGroupDefinitions: mixedActiveGroupDefinitions },
+      fieldBreadcrumbTitle: '',
+      formPath: []
+    })
+
+    expect(descriptors.map((descriptor) => descriptor.fieldData.title)).toEqual(expected)
   })
 
   it('labels the keys of a version without values by their title', async () => {

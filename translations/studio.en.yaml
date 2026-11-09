@@ -2234,6 +2234,13 @@ classification-store.sub-group-unused: "No key of this group uses sub group \"{{
 classification-store.assign-sub-group-progress: "Assigning the sub group to {{done}} of {{total}} keys…"
 classification-store.assign-sub-group-failed: "The sub group could not be assigned to: {{keyNames}}"
 classification-store.assign-sub-group-running: Wait for the sub group assignment to finish
+classification-store.key-localization: "Localization"
+classification-store.key-localization.inherit: "Inherit"
+classification-store.key-localization.localized: "Localized"
+classification-store.key-localization.not-localized: "Not localized"
+classification-store.key-localization-confirm: "Values this key holds in other languages may no longer be shown or saved. Save anyway?"
+classification-store.key-localized: "Localized key"
+classification-store.key-localized-tooltip: "This key holds its own value per language."
 classification-store.import: Import store configuration
 classification-store.import-success: Store configuration imported successfully
 home: Home

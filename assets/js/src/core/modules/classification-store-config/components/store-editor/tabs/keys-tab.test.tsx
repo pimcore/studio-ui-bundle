@@ -16,6 +16,9 @@
  * leaves the stored one alone, and a null type or definition does the same for the two the
  * payload cannot omit. Echoing a value back from the row the edit was read on reverts whatever
  * another writer — another cell, or the key definition dialog — saved into that field meanwhile.
+ *
+ * The localization of a key is written by the key definition dialog alone, so an edit of the name,
+ * the title, the type or the description must omit the `localized` member entirely as well.
  */
 
 // trackError runs for real and ends at this service, which needs the application shell's modal
@@ -136,6 +139,9 @@ const height = {
   creationDate: null,
   modificationDate: null
 }
+
+/** The same key, with a stored localization a cell edit must not carry back. */
+const localizedHeight = { ...height, localized: true }
 
 const width = {
   id: KEY_ID,
@@ -335,6 +341,31 @@ describe('KeysTab cell edits', () => {
     expect(Object.keys(updateRequests()[0].body!).sort()).toEqual(expectedKeys)
     expect(updateRequests()[0].body).toMatchObject({ definition: null })
     expect(storedKey(7).definition).toEqual(height.definition)
+  })
+
+  // The localization of a key is written by the key definition dialog alone. A cell edit that
+  // carried the `localized` it happened to hold would write that value back over whatever the
+  // dialog stored, so the member has to be absent from the payload altogether. The fixture's key
+  // carries one on purpose, so an echoed flag is visible here.
+  it.each([
+    ['name', 'depth'],
+    ['title', 'Depth'],
+    ['description', 'the depth'],
+    ['type', 'textarea']
+  ])('leaves the stored localization alone when the %s cell is edited', async (columnId, value) => {
+    stubFetch([localizedHeight])
+    renderTab()
+
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    editCell(columnId, 0, value)
+
+    await waitFor(() => {
+      expect(updateRequests()).toHaveLength(1)
+    }, WAIT_BUDGET)
+
+    expect('localized' in updateRequests()[0].body!).toBe(false)
+    expect(updateRequests()[0].body).toEqual(expect.objectContaining({ [columnId]: value }))
+    expect(storedKey(7).localized).toBe(true)
   })
 
   it('keeps a title cleared by one cell when an older cell edit answers last', async () => {

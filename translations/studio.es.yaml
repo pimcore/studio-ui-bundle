@@ -2230,6 +2230,13 @@ classification-store.sub-group-unused: "Ninguna clave de este grupo usa ya el su
 classification-store.assign-sub-group-progress: "Asignando el subgrupo a {{done}} de {{total}} claves…"
 classification-store.assign-sub-group-failed: "No se pudo asignar el subgrupo a: {{keyNames}}"
 classification-store.assign-sub-group-running: Espere a que termine la asignación del subgrupo
+classification-store.key-localization: "Localización"
+classification-store.key-localization.inherit: "Heredar"
+classification-store.key-localization.localized: "Localizado"
+classification-store.key-localization.not-localized: "No localizado"
+classification-store.key-localization-confirm: "Los valores que esta clave tiene en otros idiomas podrían dejar de mostrarse o guardarse. ¿Guardar de todos modos?"
+classification-store.key-localized: "Clave localizada"
+classification-store.key-localized-tooltip: "Esta clave tiene su propio valor por idioma."
 classification-store.import: Importar configuración del store
 classification-store.import-success: Configuración del store importada correctamente
 home: Inicio

@@ -177,6 +177,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             classificationStoreConfigurationKeyUpdate: {
               name: createdKey.name,
               description,
+              // This call writes the description of the key just created and nothing else, so
+              // the type and the definition are left to the stored ones (see handleTitleChange).
               type: null,
               definition: null
             }
@@ -224,6 +226,12 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   // two the payload cannot omit; echoing a value back from the row the edit was read on reverts
   // whatever another writer saved into that field meanwhile. `name` is the one field the payload
   // requires, and the cache carries this request's own name from the moment it is sent.
+  //
+  // `definition` is the clearest case: a definition read out of the cache is sent back as the grid
+  // last saw it, and the response then carries it through the preservation mask of the cache patch,
+  // over a definition — the index flag, the localization — the key definition dialog saved while
+  // the cell edit was in flight. A cell edit never writes the definition, so it must not send the
+  // one it happens to hold.
   const handleTitleChange = useCallback(async (
     key: KeyRow,
     newTitle: string

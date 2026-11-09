@@ -45,8 +45,10 @@ jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-label-ext
 jest.mock('@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style', () => ({
   useInheritanceOverlayStyle: () => undefined
 }))
+let mockSuppressEmptyLabel = false
+
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider', () => ({
-  useSuppressEmptyFieldLabel: () => false
+  useSuppressEmptyFieldLabel: () => mockSuppressEmptyLabel
 }))
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state', () => ({
   useInheritanceState: () => undefined
@@ -88,10 +90,10 @@ const objectDataType = (labelAfterControl: boolean): DynamicTypeObjectDataAbstra
   getEmptyValue: () => null
 }) as unknown as DynamicTypeObjectDataAbstract
 
-const renderItem = (labelAfterControl: boolean): HTMLElement => {
+const renderItem = (labelAfterControl: boolean, title: React.ReactNode = 'Active'): HTMLElement => {
   render(
     <DataComponentFormItem
-      _props={ { name: 'active', title: 'Active' } as unknown as AbstractObjectDataDefinition }
+      _props={ { name: 'active', title } as unknown as AbstractObjectDataDefinition }
       formFieldName={ ['active'] }
       objectDataType={ objectDataType(labelAfterControl) }
       technicalName="active"
@@ -102,6 +104,10 @@ const renderItem = (labelAfterControl: boolean): HTMLElement => {
 }
 
 describe('DataComponentFormItem', () => {
+  beforeEach(() => {
+    mockSuppressEmptyLabel = false
+  })
+
   it('lays the label out after the control for a type that asks for it', () => {
     const item = renderItem(true)
 
@@ -117,5 +123,24 @@ describe('DataComponentFormItem', () => {
     renderItem(false)
 
     expect(screen.getByText('Active').closest('[data-tooltip]')).toHaveAttribute('data-tooltip', 'active')
+  })
+
+  // A classification store key label is a node, not a string: it carries the key's title next to
+  // the localization indicator. Suppressing it would drop both.
+  it('keeps a label whose title is a node while empty labels are suppressed', () => {
+    mockSuppressEmptyLabel = true
+
+    renderItem(false, <span>Net weight</span>)
+
+    expect(screen.getByText('Net weight')).toBeInTheDocument()
+  })
+
+  it('still suppresses a label with no title at all', () => {
+    mockSuppressEmptyLabel = true
+
+    renderItem(false, '')
+
+    expect(screen.queryByText('Active')).not.toBeInTheDocument()
+    expect(screen.getByTestId('form-item').querySelector('span')).toBeNull()
   })
 })

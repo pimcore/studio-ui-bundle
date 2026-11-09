@@ -26,6 +26,8 @@ The following steps are necessary when updating to newer versions.
 
 - [Classification Store] Added: an `Include in the Classification Store search index` toggle on the `Edit key definition` dialog in `Settings > Classification Store > <store> > Keys`, stored as `indexed` inside the key definition. A key whose definition carries no such flag opens with the toggle on, so no existing key is reported as excluded.
 
+- [Classification Store] Added: a key can decide its own localization. The `Edit key definition` dialog in `Settings > Classification Store > <store> > Keys` carries an `Inherit` / `Localized` / `Not localized` control, and the object editor binds a key that resolves to not localized to the language-independent value even inside a localized field. A class field that is not localized but holds a key flagged localized now offers the language controls it previously withheld.
+
 - [Listings] Search modes can contribute columns while they are applied (`SearchModeAbstract.getAdditionalColumns()`, default: none). They are shown via the new `visibleColumns` of `useSelectedColumns()`, can be filtered and reordered for the session, and are never stored in grid configurations or saved searches. A bundle with its own listing data query must request `visibleColumns` instead of `selectedColumns`, otherwise mode columns stay empty.
 
 ## Upgrade to 2026.3.3

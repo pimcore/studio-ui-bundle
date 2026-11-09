@@ -16,7 +16,6 @@ import {
   api as baseApi,
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
-  type ClassificationStoreConfigurationKeyCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiArg,
@@ -122,16 +121,30 @@ export type ClassificationStoreKeyDefinition = {
   [member: string]: unknown
 }
 
-/** A key, whose definition blob carries the Classification Store index flag. */
+/**
+ * A key, whose definition blob carries the Classification Store index flag. It also reports
+ * whether the key holds a value per language: `localized` is a tri-state, where `true` and
+ * `false` are the key's own decision and `null` inherits the flag of the class definition field
+ * the store is used in.
+ */
 export interface ClassificationStoreConfigurationKeyDetail extends Omit<GeneratedKeyDetail, 'definition'> {
   /** Definition of the key */
   definition: ClassificationStoreKeyDefinition | null
+  /** Whether the key is localized; null inherits the class field's flag */
+  localized?: boolean | null
 }
 
-/** The key update payload, whose definition blob carries the Classification Store index flag. */
+/**
+ * The key update payload, whose definition blob carries the Classification Store index flag. It
+ * also carries the localization tri-state: absent leaves the stored value alone, `true` and
+ * `false` store that value, and an explicit null stores NULL, which means the key inherits the
+ * class field's flag again.
+ */
 export interface ClassificationStoreConfigurationKeyUpdate extends Omit<GeneratedKeyUpdate, 'definition'> {
   /** Values for object brick definition metadata */
   definition: ClassificationStoreKeyDefinition | null
+  /** Whether the key is localized; null inherits the class field's flag */
+  localized?: boolean | null
 }
 
 /**
@@ -185,6 +198,8 @@ export interface ClassificationStoreSubGroupLayout {
 export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
   /** Identifier of the sub group this key is assigned to in its group */
   subGroup?: string | null
+  /** Whether this key is localized; null inherits the class field's flag */
+  localized?: boolean | null
 }
 
 export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
@@ -210,7 +225,7 @@ export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
 // lifetime is seen as well as one still running.
 
 /** The fields of a key whose cached value a confirmation has to decide about. */
-const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition'] as const
+const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition', 'localized'] as const
 type KeyWriteField = typeof KEY_WRITE_FIELDS[number]
 
 interface KeyWriteCounters { pending: number, started: number }
@@ -235,13 +250,17 @@ const keyFieldsWritten = (update: {
   description?: string | null
   type?: string | null
   definition?: unknown
+  localized?: boolean | null
 }): Record<KeyWriteField, boolean> => ({
   // `title` and `description` are optional: absent leaves the stored value alone, null clears it.
   title: update.title !== undefined,
   description: update.description !== undefined,
   // `type` and `definition` cannot be absent from the payload, so a null is their "leave alone".
   type: update.type !== undefined && update.type !== null,
-  definition: update.definition !== undefined && update.definition !== null
+  definition: update.definition !== undefined && update.definition !== null,
+  // `localized` is a tri-state: absent leaves the stored value alone, and a present null is a
+  // value rather than an absence — it stores NULL, so the key inherits the class field's flag.
+  localized: update.localized !== undefined
 })
 
 /**
@@ -284,6 +303,21 @@ const openKeyWrite = (
       if (localKeyWritesInFlight === 0) localKeyWrites.clear()
     }
   }
+}
+
+// The two shadows above — the key detail and the key update payload — are what the responses and
+// arguments below are typed against, so the collection response and the update argument have to
+// be declared here too rather than imported from the generated slice.
+
+export interface ClassificationStoreConfigurationKeyCollectionApiResponse {
+  totalItems: number
+  items: ClassificationStoreConfigurationKeyDetail[]
+}
+
+export interface ClassificationStoreConfigurationKeyUpdateApiArg {
+  /** Id of the key configuration */
+  id: number
+  classificationStoreConfigurationKeyUpdate: ClassificationStoreConfigurationKeyUpdate
 }
 
 // Helper: scan all active query cache entries for a given endpoint name and patch each one.
@@ -474,7 +508,11 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationKeyUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
-        const update = args.classificationStoreConfigurationKeyUpdate
+        // Read as the shadowed payload above, which is what the hook's callers hand the trigger:
+        // the generated argument types `definition` as a bare `object` and does not name
+        // `localized` at all, so neither the index flag nor the localization tri-state is
+        // readable through it.
+        const update = args.classificationStoreConfigurationKeyUpdate as ClassificationStoreConfigurationKeyUpdate
         const written = keyFieldsWritten(update)
         const write = openKeyWrite(args.id, written)
         // Everything from here on is inside the `finally` that closes the ledger entry: a write
@@ -493,7 +531,12 @@ const api = baseApi.enhanceEndpoints({
             ...(update.description !== undefined ? { description: update.description } : {}),
             // Spelled out rather than read off `written.type`, which is a boolean and so does not
             // narrow the null away for the patch.
-            ...(update.type !== undefined && update.type !== null ? { type: update.type } : {})
+            ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
+            // `localized` is a tri-state, so a present null is a value and not an absence: it
+            // stores NULL, which means the key inherits the class field's flag again. Keyed off
+            // `undefined` and not off `in`, because an undefined member is dropped on the way to
+            // the wire and would patch a null the server never hears about.
+            ...(update.localized !== undefined ? { localized: update.localized } : {})
           }
           // Optimistically apply the update payload to the cache immediately so the
           // UI reflects the change without waiting for the server round-trip.
@@ -503,7 +546,14 @@ const api = baseApi.enhanceEndpoints({
             (draft) => {
               const idx = draft.items.findIndex((k) => k.id === args.id)
               if (idx !== -1) {
-                draft.items[idx] = { ...draft.items[idx], ...namedFields }
+                // Assigned onto the existing row rather than replacing it. Immer records one patch
+                // per path it sees written, so the inverse patches this produces name only the
+                // members this request wrote — and the rollback below can therefore undo no more
+                // than that. Replacing the row recorded a single replace of the whole row, and a
+                // request that failed after a later one had already succeeded then restored every
+                // member of it: the exact staleness the response mask further down prevents,
+                // arriving through the other door.
+                Object.assign(draft.items[idx], namedFields)
               }
             }
           )
@@ -526,16 +576,18 @@ const api = baseApi.enhanceEndpoints({
                 // request, because there the response may be a snapshot from before that write
                 // landed. Replacing the whole row in that case reverted the definition the key
                 // definition dialog had just saved when a cell edit answered last, and reverted the
-                // cell edit when the dialog save answered last.
+                // cell edit when the dialog save answered last — and the same for the localization
+                // the dialog writes, which the grid and the dialog both read out of this cache.
                 const cached = draft.items[idx]
                 const keepCached = (field: KeyWriteField): boolean =>
                   !written[field] && !write.responseIsCanonicalFor(field)
                 draft.items[idx] = {
-                  ...updated,
+                  ...asKeyDetail(updated),
                   ...(keepCached('title') ? { title: cached.title } : {}),
                   ...(keepCached('description') ? { description: cached.description } : {}),
                   ...(keepCached('type') ? { type: cached.type } : {}),
-                  ...(keepCached('definition') ? { definition: cached.definition } : {})
+                  ...(keepCached('definition') ? { definition: cached.definition } : {}),
+                  ...(keepCached('localized') ? { localized: cached.localized } : {})
                 }
               }
             )
@@ -634,8 +686,14 @@ const api = baseApi.enhanceEndpoints({
           (draft, cacheKey) => {
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
-              // Upsert — update in-place whatever the payload named
-              draft.items[idx] = { ...draft.items[idx], ...absentSafePatch }
+              // Upsert — update in-place whatever the payload named. Assigned onto the existing
+              // row rather than replacing it, for the same reason the key update above is: the
+              // inverse patches then name only the members this request wrote, so rolling back a
+              // request that failed after a later one succeeded cannot undo the later one. The
+              // two surfaces here write disjoint members, so a whole-row rollback took the field
+              // mask below apart — a failed sorter edit restored the sub group an assignment had
+              // already saved.
+              Object.assign(draft.items[idx], absentSafePatch)
             } else {
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new
@@ -830,7 +888,6 @@ export const {
   useClassificationStoreConfigurationCollectionDeleteMutation,
   // CRUD mutations — keys
   useClassificationStoreConfigurationKeyCreateMutation,
-  useClassificationStoreConfigurationKeyUpdateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
   // CRUD mutations — key-group relations
   useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
@@ -874,6 +931,18 @@ export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation =
   api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation as unknown as TypedUseMutation<
     ClassificationStoreConfigurationKeyGroupRelationDetail,
     { classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate },
+    BaseQuery
+  >
+
+/**
+ * The key update hook, re-typed to take the `localized` tri-state the shipped payload declares.
+ * Re-typed rather than wrapped for the same reason as the hook above: a wrapper drops the hook's
+ * own options. Removed with the rest of the hand-written block on the next regeneration.
+ */
+export const useClassificationStoreConfigurationKeyUpdateMutation =
+  api.useClassificationStoreConfigurationKeyUpdateMutation as unknown as TypedUseMutation<
+    ClassificationStoreConfigurationKeyDetail,
+    ClassificationStoreConfigurationKeyUpdateApiArg,
     BaseQuery
   >
 
