@@ -19,6 +19,9 @@ jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => jest.re
 jest.mock('@Pimcore/components/content/content', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('@Pimcore/components/content-layout/content-layout', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('@Pimcore/components/toolbar/toolbar', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/icon/icon', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/dropdown/dropdown', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/dropdown-button/dropdown-button', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('@Pimcore/components/flex/flex', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('@Pimcore/components/text/text', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('@Pimcore/components/tag/tag', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
@@ -131,13 +134,39 @@ describe('ServiceUserList', () => {
     expect(handlers.onSelect).toHaveBeenCalledWith(2)
   })
 
-  it('offers create and create from user', () => {
+  it('keeps both create actions in one new menu, so the narrow list pane shows them', () => {
     renderList()
 
-    fireEvent.click(screen.getByText('service-users.create'))
-    fireEvent.click(screen.getByText('service-users.create-from-user'))
+    expect(screen.queryByText('service-users.create')).toBeNull()
+    expect(screen.queryByText('service-users.create-from-user')).toBeNull()
+    expect(screen.getByText('toolbar.new')).toBeInTheDocument()
+  })
+
+  it('offers create in the new menu', async () => {
+    renderList()
+
+    fireEvent.click(screen.getByText('toolbar.new'))
+    fireEvent.click(await screen.findByText('service-users.create'))
 
     expect(handlers.onCreate).toHaveBeenCalledTimes(1)
+    expect(handlers.onCreateFromUser).not.toHaveBeenCalled()
+  })
+
+  it('offers create from user in the new menu', async () => {
+    renderList()
+
+    fireEvent.click(screen.getByText('toolbar.new'))
+    fireEvent.click(await screen.findByText('service-users.create-from-user'))
+
     expect(handlers.onCreateFromUser).toHaveBeenCalledTimes(1)
+    expect(handlers.onCreate).not.toHaveBeenCalled()
+  })
+
+  it('reloads the list', () => {
+    renderList()
+
+    fireEvent.click(screen.getByText('toolbar.reload'))
+
+    expect(handlers.onRefresh).toHaveBeenCalledTimes(1)
   })
 })

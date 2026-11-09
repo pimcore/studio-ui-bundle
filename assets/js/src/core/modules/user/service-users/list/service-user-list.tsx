@@ -14,9 +14,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { ToolbarTree } from '@Pimcore/modules/user/management/toolbar/toolbar-tree'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { type ServiceUser } from '../service-users-api-slice-enhanced'
@@ -59,30 +58,23 @@ export const ServiceUserList = ({
   return (
     <ContentLayout
       renderToolbar={
-        <Toolbar justify="space-between">
-          <IconButton
-            icon={ { value: 'refresh' } }
-            onClick={ onRefresh }
-            title={ t('refresh') }
-            type="link"
-          />
-          <Flex gap="mini">
-            <IconTextButton
-              icon={ { value: 'copy' } }
-              onClick={ onCreateFromUser }
-              type="link"
-            >
-              {t('service-users.create-from-user')}
-            </IconTextButton>
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ onCreate }
-              type="link"
-            >
-              {t('service-users.create')}
-            </IconTextButton>
-          </Flex>
-        </Toolbar>
+        <ToolbarTree
+          actions={ [
+            {
+              key: 'create',
+              label: t('service-users.create'),
+              icon: <Icon value="new" />,
+              onClick: onCreate
+            },
+            {
+              key: 'create-from-user',
+              label: t('service-users.create-from-user'),
+              icon: <Icon value="copy" />,
+              onClick: onCreateFromUser
+            }
+          ] }
+          onReload={ onRefresh }
+        />
       }
     >
       <Content

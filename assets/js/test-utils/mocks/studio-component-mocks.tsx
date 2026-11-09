@@ -47,6 +47,39 @@ export const ContentLayout = ({ children, renderToolbar }: ChildrenProps & { ren
 )
 
 export const Toolbar = ({ children }: ChildrenProps): React.JSX.Element => <div role="toolbar">{children}</div>
+export const Icon = ({ value }: { value: string }): React.JSX.Element => <span data-icon={ value } />
+export const DropdownButton = Button
+
+interface DropdownMenuItem {
+  key: string
+  label: React.ReactNode
+  onClick?: () => void
+}
+
+/** Opens its menu on a click on the trigger, like a Dropdown with trigger ['click']. */
+export const Dropdown = ({ children, menu }: ChildrenProps & { menu: { items: DropdownMenuItem[] } }): React.JSX.Element => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div>
+      <div onClickCapture={ () => { setOpen(true) } }>{children}</div>
+      {open && (
+        <ul role="menu">
+          {menu.items.map((item) => (
+            <li key={ item.key }>
+              <button
+                onClick={ () => { setOpen(false); item.onClick?.() } }
+                role="menuitem"
+                type="button"
+              >{item.label}</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 export const Flex = ({ children }: ChildrenProps): React.JSX.Element => <div>{children}</div>
 export const Text = ({ children }: ChildrenProps): React.JSX.Element => <span>{children}</span>
 export const Tag = ({ children }: ChildrenProps): React.JSX.Element => <span data-testid="tag">{children}</span>
