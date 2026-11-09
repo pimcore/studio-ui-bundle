@@ -15,6 +15,7 @@ import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -231,7 +232,18 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
   const handleDelete = (group: ClassificationStoreConfigurationGroupDetail): void => {
     void modal.confirm({
       title: t('delete'),
-      content: t('classification-store.delete-group', { groupName: group.name }),
+      content: (
+        <>
+          <p>{ t('classification-store.delete-group', { groupName: group.name }) }</p>
+          <Alert
+            message={ t('classification-store.delete-group-consequence') }
+            showIcon
+            type="warning"
+          />
+        </>
+      ),
+      okText: t('element.delete.confirmation.ok'),
+      okButtonProps: { danger: true },
       onOk: async () => {
         const response = await deleteGroup({ id: group.id })
 

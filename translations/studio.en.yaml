@@ -2186,6 +2186,10 @@ classification-store.rename-key: Rename key
 classification-store.delete-key: "Delete key \"{{keyName}}\"?"
 classification-store.delete-key-relation: "Remove key \"{{keyName}}\" from this group?"
 classification-store.delete-group-relation: "Remove group \"{{groupName}}\" from this collection?"
+classification-store.delete-group-consequence: "Deleting this group also deletes the values every object holds under it. This cannot be undone."
+classification-store.delete-collection-consequence: "The collection and its list of groups are removed. The groups and their keys stay in the store, and no object values are deleted."
+classification-store.delete-key-relation-consequence: "The key is removed from this group only. The key itself stays in the store, and nothing an object holds is deleted."
+classification-store.delete-group-relation-consequence: "The group is removed from this collection only. The group, its keys and the values objects hold under it are untouched."
 classification-store.edit-definition: Edit definition
 classification-store.edit-key-definition: "Edit key definition: {{keyName}}"
 classification-store.columns.id: ID

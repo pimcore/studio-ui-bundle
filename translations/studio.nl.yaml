@@ -2182,6 +2182,10 @@ classification-store.rename-key: Sleutel hernoemen
 classification-store.delete-key: 'Sleutel "{{keyName}}" verwijderen?'
 classification-store.delete-key-relation: 'Sleutel "{{keyName}}" uit deze groep verwijderen?'
 classification-store.delete-group-relation: 'Groep "{{groupName}}" uit deze collectie verwijderen?'
+classification-store.delete-group-consequence: "Als je deze groep verwijdert, worden ook de waarden verwijderd die elk object eronder bewaart. Dit kan niet ongedaan worden gemaakt."
+classification-store.delete-collection-consequence: "De collectie en de bijbehorende lijst met groepen worden verwijderd. De groepen en hun sleutels blijven in de store en er worden geen objectwaarden verwijderd."
+classification-store.delete-key-relation-consequence: "De sleutel wordt alleen uit deze groep verwijderd. De sleutel zelf blijft in de store en niets wat een object bewaart, wordt verwijderd."
+classification-store.delete-group-relation-consequence: "De groep wordt alleen uit deze collectie verwijderd. De groep, haar sleutels en de waarden die objecten eronder bewaren blijven ongewijzigd."
 classification-store.edit-definition: Definitie bewerken
 classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"
 classification-store.columns.id: ID
