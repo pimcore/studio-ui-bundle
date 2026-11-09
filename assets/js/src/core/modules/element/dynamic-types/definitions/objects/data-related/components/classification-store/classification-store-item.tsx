@@ -29,6 +29,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
+import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 import {
   RestoreInheritanceLocaleContext
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/hooks/restore-inheritance-locale-context'
@@ -37,11 +38,14 @@ import { useLanguageEditPermission } from './hooks/use-language-edit-permission'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { getKeyLabel } from './utils/key-label'
 import { useStyles } from './classification-store-item.styles'
+import { getKeyCombinedFieldNameParent } from './utils/combined-field-name'
 
 /** The language independent slot every key that is not localized is bound to. */
 const LANGUAGE_INDEPENDENT = 'default'
 
 export interface ClassificationStoreItemProps {
+  /** Field name of the classification store the group belongs to. */
+  classificationStoreName: string
   groupLayout?: ClassificationStoreGroupLayout2
   currentLayoutData: ClassificationStoreGroupLayout2[]
   updateCurrentLayoutData: (value: ClassificationStoreGroupLayout2[]) => void
@@ -59,6 +63,7 @@ export interface ClassificationStoreItemProps {
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
   const {
+    classificationStoreName,
     groupLayout,
     currentLayoutData,
     updateCurrentLayoutData,
@@ -221,6 +226,11 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     )
   }
 
+  const combinedFieldNameParent = useMemo(
+    () => getKeyCombinedFieldNameParent(classificationStoreName, groupLayout?.id ?? ''),
+    [classificationStoreName, groupLayout?.id]
+  )
+
   const handleClose: (e: React.MouseEvent<HTMLButtonElement>) => void = (e) => {
     e.stopPropagation()
 
@@ -258,21 +268,23 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         theme='border-highlight'
         title={ groupLayout?.name }
       >
-        <Panel>
-          { subGroupSections === undefined
-            ? visibleKeys.map(renderKey)
-            : subGroupSections.map((section) => (
-              <React.Fragment key={ section.identifier ?? '' }>
-                <Title level={ 5 }>{ headingOf(section.identifier) }</Title>
-                { section.items.map(renderKey) }
-              </React.Fragment>
-              )) }
-        </Panel>
+        <CombinedFieldNameProvider combinedFieldNameParent={ combinedFieldNameParent }>
+          <Panel>
+            { subGroupSections === undefined
+              ? visibleKeys.map(renderKey)
+              : subGroupSections.map((section) => (
+                <React.Fragment key={ section.identifier ?? '' }>
+                  <Title level={ 5 }>{ headingOf(section.identifier) }</Title>
+                  { section.items.map(renderKey) }
+                </React.Fragment>
+                )) }
+          </Panel>
+        </CombinedFieldNameProvider>
       </BaseView>
     )
     // `t` is a dependency: the memo retains the key titles, the sub-group headings, the indicator
     // tooltip and the accessible labels as already translated nodes, and i18next hands out a new
     // `t` when the interface language changes. Without it the group kept serving the previous
     // language until one of the others happened to move.
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized, isLocalizationGroupEditable, t])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, subGroupSections, disallowDelete, localizationGroup, fieldLocalized, isLocalizationGroupEditable, t, combinedFieldNameParent])
 }

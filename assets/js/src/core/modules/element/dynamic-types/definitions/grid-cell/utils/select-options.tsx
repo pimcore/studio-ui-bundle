@@ -94,6 +94,21 @@ export const convertSelectOptions = (
 export const normalizeSelectValue = (value: unknown): string | string[] | undefined =>
   Array.isArray(value) ? value.map(String) : stringifyOptionValue(value)
 
+// Converts only the options matching the current value(s). Used to seed the label of a dynamic select
+// from the layout options without translating and rendering a provider list of thousands of entries.
+export const convertSelectedOptions = (
+  options: SelectOptionData[] | null | undefined,
+  value: unknown
+): ConvertedSelectOption[] | undefined => {
+  if (isNil(options)) {
+    return undefined
+  }
+
+  const selectedValues = new Set([normalizeSelectValue(value)].flat().filter(selected => !isUndefined(selected)))
+
+  return convertSelectOptions(options.filter(option => selectedValues.has(String(option.value))))
+}
+
 export const resolveOptions = (
   config: SelectOptionsConfig,
   fieldName: string,

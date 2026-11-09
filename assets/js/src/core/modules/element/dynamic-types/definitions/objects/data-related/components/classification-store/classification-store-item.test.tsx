@@ -213,6 +213,7 @@ const noop = (): void => {}
  * input that moved.
  */
 const LANGUAGE_CASE_PROPS = {
+  classificationStoreName: 'store',
   currentLayoutData: [translatedTitleLayout],
   fieldLocalized: true,
   groupLayout: translatedTitleLayout,
@@ -239,6 +240,7 @@ const renderMixedGroup = (fieldLocalized: boolean, localizationGroup: string, hi
   render(
     <Form.Group name={ [String(GROUP_ID)] }>
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [mixedLayout] }
         fieldLocalized={ fieldLocalized }
         groupLayout={ mixedLayout }
@@ -262,6 +264,7 @@ describe('ClassificationStoreItem', () => {
   it('asks for confirmation when the group is deleted', async () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='technicalAttributes'
         currentLayoutData={ [groupLayout] }
         groupLayout={ groupLayout }
         updateCurrentLayoutData={ jest.fn() }
@@ -276,6 +279,7 @@ describe('ClassificationStoreItem', () => {
   it('hides the delete action when deleting is disallowed', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='technicalAttributes'
         currentLayoutData={ [groupLayout] }
         disallowDelete
         groupLayout={ groupLayout }
@@ -290,6 +294,7 @@ describe('ClassificationStoreItem', () => {
   it('labels a key with its title, overriding the title of its definition', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [keyedGroupLayout] }
         groupLayout={ keyedGroupLayout }
         updateCurrentLayoutData={ jest.fn() }
@@ -304,6 +309,7 @@ describe('ClassificationStoreItem', () => {
   it('labels a key without a title by its name', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [keyedGroupLayout] }
         groupLayout={ keyedGroupLayout }
         updateCurrentLayoutData={ jest.fn() }
@@ -318,6 +324,7 @@ describe('ClassificationStoreItem', () => {
   it('renders the keys under their sub-group heading in the order of the layout', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [subGroupedLayout] }
         groupLayout={ subGroupedLayout }
         updateCurrentLayoutData={ jest.fn() }
@@ -333,6 +340,7 @@ describe('ClassificationStoreItem', () => {
 
     render(
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [subGroupedLayout] }
         groupLayout={ subGroupedLayout }
         hideEmptyData
@@ -347,6 +355,7 @@ describe('ClassificationStoreItem', () => {
   it('renders a group layout without sub groups as one flat list', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [keyedGroupLayout] }
         groupLayout={ keyedGroupLayout }
         updateCurrentLayoutData={ jest.fn() }
@@ -449,6 +458,7 @@ describe('ClassificationStoreItem', () => {
   it('leaves a key its definition declares read-only read-only, and the others editable', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [lockedKeyLayout] }
         fieldLocalized
         groupLayout={ lockedKeyLayout }
@@ -479,6 +489,7 @@ describe('ClassificationStoreItem', () => {
   it('translates the label it renders beside the indicator, as the field label does the plain one', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='store'
         currentLayoutData={ [translatedTitleLayout] }
         fieldLocalized
         groupLayout={ translatedTitleLayout }

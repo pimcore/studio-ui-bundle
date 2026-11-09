@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { act, render, screen } from '@testing-library/react'
 import { KeyedList, type KeyedListProps } from './keyed-list'
 import { type KeyedListData } from './provider/keyed-list/keyed-list-provider'
@@ -46,6 +46,35 @@ const RegisteringField = ({ name, initialValue }: { name: string[], initialValue
   }, [value])
 
   return null
+}
+
+// mimics dynamic-type-object-data-quantity-value's handleDefaultValue: a quantity
+// value field registers its default unit whenever the stored value is *empty*, which
+// includes a persisted NULL — not only an absent key, as RegisteringField assumes
+const DefaultUnitField = ({ name, unitId }: { name: string[], unitId: string }): null => {
+  const { operations } = useKeyedList()
+  const value = operations.getValue(name)
+
+  useEffect(() => {
+    if (value === undefined || value === null) {
+      operations.update(name, { value: null, unitId }, true)
+    }
+  }, [value])
+
+  return null
+}
+
+// mounts its children a tick later, the way the editor mounts a brick's fields once
+// their dynamic type has resolved rather than together with the list
+const DeferredMount = ({ delay, children }: { delay: number, children: React.ReactNode }): React.JSX.Element | null => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    const handler = setTimeout(() => { setMounted(true) }, delay)
+    return () => { clearTimeout(handler) }
+  }, [delay])
+
+  return mounted ? <>{children}</> : null
 }
 
 // renders the group name path the iterated children are scoped to
@@ -130,6 +159,151 @@ describe('KeyedList', () => {
 
       expect(onChange).not.toHaveBeenCalled()
       expect(operations.getValue(['attributes', 'myBrick', 'cargoCapacity'])).toEqual({ value: null, unitId: 'l' })
+    })
+
+    it('does not report a registration landing in the commit the compare debounce flushes in (PEES-1928)', () => {
+      // `length` was saved NULL/NULL and the default unit was introduced on the brick
+      // afterwards, so the unit the field registers necessarily differs from what is
+      // stored — that is what makes the baseline move at all. The brick is attached, so
+      // `initialValue` is non-empty and the empty-list guard does not apply.
+      const onChange = jest.fn()
+      const props = { value: { myBrick: { length: null, note: 'repro note' } }, onChange }
+
+      // `topSpeed` registers on mount. Before the fix that advanced baselineValue.current
+      // synchronously while the compare effect still read the `value` of that render,
+      // whose setValue had not committed yet: the baseline sat a registration ahead of
+      // the value and the list reported — harmlessly on its own, the content still equals
+      // what came in, but lastReportedRef is armed by it. The quantity value field is
+      // still resolving and mounts a tick later; its default unit only ever belongs to
+      // the baseline, yet against an armed lastReportedRef it came back out as a report
+      // carrying content nobody entered.
+      renderKeyedList(props, (
+        <>
+          <RegisteringField name={ ['attributes', 'myBrick', 'topSpeed'] } />
+          <DeferredMount delay={ 10 }>
+            <DefaultUnitField
+              name={ ['attributes', 'myBrick', 'length'] }
+              unitId="cm"
+            />
+          </DeferredMount>
+        </>
+      ))
+
+      act(() => { jest.advanceTimersByTime(10) })
+      flushDebounce()
+
+      // same contract as the mount-time case above: a residual content-equal report is
+      // tolerated, a report carrying the registered default unit is the object being
+      // marked modified without anyone touching it
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ myBrick: { length: null, note: 'repro note' } })
+      })
+    })
+
+    it('lets the later of two registrations for one path win (review of #4317)', () => {
+      // The same path registered twice before either setValue commits. The first
+      // differs from the committed NULL so it is queued; the second equals it so it
+      // is taken into the baseline straight away. Those are two different schedules,
+      // and the queued one lands afterwards — so without ordering the superseded
+      // registration is written over the newer one and the baseline ends up holding
+      // a unit the field has already moved off. That arms lastReportedRef, and the
+      // field's next registration then comes back out as a change nobody made.
+      //
+      // Driven through `operations` rather than through mounted fields: what matters
+      // is two registrations for one path in a single batch, and the operations say
+      // exactly that without a component arrangement standing in for it.
+      const onChange = jest.fn()
+      renderKeyedList({ value: { myBrick: { length: null } }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', 'myBrick', 'length'], null, true)
+      })
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+      })
+      flushDebounce()
+
+      // same contract as the cases above: a content-equal report is tolerated, one
+      // carrying the registered default unit is the object being marked modified
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ myBrick: { length: null } })
+      })
+    })
+
+    it('lets a parent registration stand against an older queued child (review of #4317)', () => {
+      // The overlapping-path form of the case above, and the reason ordering is
+      // decided by whether the paths overlap rather than by whether they are equal.
+      // The child registration differs from the committed NULL so it queues; the
+      // parent matches the committed subtree so it would otherwise be applied
+      // straight away — and the queued child then lands on top of it, putting back
+      // the unit the parent had just cleared.
+      const onChange = jest.fn()
+      renderKeyedList({ value: { myBrick: { length: null } }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', 'myBrick'], { length: null }, true)
+      })
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+      })
+      flushDebounce()
+
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ myBrick: { length: null } })
+      })
+    })
+
+    it('treats a numeric and a string path segment as the same path (review of #4317)', () => {
+      // `update` takes a NamePath, which permits numeric segments, and lodash
+      // addresses `1` and `'1'` as one property — so two registrations spelled
+      // differently reach the same place. Comparing the segments as written makes
+      // the overlap invisible and the older queued registration lands on top of the
+      // newer one again, which is the ordering bug through a third door.
+      const onChange = jest.fn()
+      renderKeyedList({ value: { 1: { length: null } }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 1, 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', '1', 'length'], null, true)
+      })
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', 1, 'length'], { value: null, unitId: 'cm' }, true)
+      })
+      flushDebounce()
+
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ 1: { length: null } })
+      })
+    })
+
+    it('does not mutate a registered value while replaying the queue (review of #4317)', () => {
+      // A registration goes into the baseline by reference, so writing a child path
+      // afterwards reaches into the object the caller still holds. A field that
+      // registers the same object twice — which is what re-running one effect does —
+      // then finds its own last registration altered by the child that came between.
+      const onChange = jest.fn()
+      const parent = { length: null }
+      renderKeyedList({ value: { other: 'untouched' }, onChange })
+
+      act(() => {
+        operations.update(['attributes', 'myBrick'], parent, true)
+        operations.update(['attributes', 'myBrick', 'length'], { value: null, unitId: 'cm' }, true)
+        operations.update(['attributes', 'myBrick'], parent, true)
+      })
+      flushDebounce()
+
+      // the caller's object is the reviewer's point: nothing the list does while
+      // catching its baseline up may reach back into what was handed to it
+      expect(parent).toEqual({ length: null })
+      expect(operations.getValue(['attributes', 'myBrick'])).toEqual({ length: null })
     })
 
     it('normalizes an empty array value to an object and stays silent on mount', () => {

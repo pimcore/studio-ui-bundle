@@ -62,6 +62,8 @@ const setupLabel = 'user-profile.two-factor-authentication.setup'
 const renewLabel = 'user-profile.two-factor-authentication.renew'
 const disableLabel = 'user-profile.two-factor-authentication.disable'
 const requiredHint = 'user-profile.two-factor-authentication.required-hint'
+const statusActive = 'user-profile.two-factor-authentication.status.active'
+const statusInactive = 'user-profile.two-factor-authentication.status.inactive'
 
 const setTwoFactor = (active: boolean, required: boolean): void => {
   mockUser.twoFactorAuthentication = { required, enabled: active, type: active ? 'google' : '', active }
@@ -80,6 +82,7 @@ describe('TwoFactorAccordion', () => {
   it('offers setup but no disable when 2FA is not set up', () => {
     render(<TwoFactorAccordion />)
 
+    expect(screen.getByText(statusInactive)).toBeTruthy()
     expect(screen.getByText(setupLabel)).toBeTruthy()
     expect(screen.queryByText(disableLabel)).toBeNull()
   })
@@ -90,12 +93,15 @@ describe('TwoFactorAccordion', () => {
 
     expect(screen.getByText(renewLabel)).toBeTruthy()
     expect(screen.getByText(disableLabel)).toBeTruthy()
+    expect(screen.queryByText(statusActive)).toBeNull()
+    expect(screen.queryByText(statusInactive)).toBeNull()
   })
 
   it('hides disable and explains why when 2FA is required', () => {
     setTwoFactor(true, true)
     render(<TwoFactorAccordion />)
 
+    expect(screen.getByText(statusActive)).toBeTruthy()
     expect(screen.getByText(renewLabel)).toBeTruthy()
     expect(screen.getByText(requiredHint)).toBeTruthy()
     expect(screen.queryByText(disableLabel)).toBeNull()
