@@ -86,15 +86,28 @@ const otherKey = {
 
 const queryArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 } } }
 
+/**
+ * A second read of the same rows under different arguments — another consumer of the collection
+ * asking for a larger page. It has its own cache entry, holding its own answer, and a read of the
+ * entry above has nothing to say about what is in it.
+ */
+const otherQueryArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 20 } } }
+
 const createStore = (): ReturnType<typeof configureStore> => configureStore({
   reducer: { [api.reducerPath]: api.reducer },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware)
 })
 
-const cachedKeys = (store: ReturnType<typeof createStore>): Array<Record<string, unknown>> => {
-  const select = (api.endpoints as any).classificationStoreConfigurationKeyCollection.select(queryArgs)
+const cachedKeysOf = (
+  store: ReturnType<typeof createStore>,
+  args: unknown
+): Array<Record<string, unknown>> => {
+  const select = (api.endpoints as any).classificationStoreConfigurationKeyCollection.select(args)
   return select(store.getState()).data?.items ?? []
 }
+
+const cachedKeys = (store: ReturnType<typeof createStore>): Array<Record<string, unknown>> =>
+  cachedKeysOf(store, queryArgs)
 
 const cachedKey = (store: ReturnType<typeof createStore>): Record<string, unknown> | undefined =>
   cachedKeys(store)[0]
@@ -487,6 +500,101 @@ describe('classification store key update cache patch', () => {
         definition: excluded
       }))
     })
+  })
+
+  /**
+   * The replay belongs to the one cache entry the read answered. Replayed into every cached entry
+   * it reaches entries that hold a different, later read's answer, and overwrites that answer with
+   * a confirmation taken from before it.
+   */
+  it('replays a confirmation into the entry its read answered and not into a differently keyed one', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+    // A second consumer of the same rows, with its own cache entry.
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(otherQueryArgs))
+    expect(cachedKeysOf(store, otherQueryArgs)[0]).toEqual(
+      expect.objectContaining({ definition: typedDefinition })
+    )
+
+    // Every collection read from here on is held, so the test decides the order they land in.
+    await holdOneCollectionRead(store)
+
+    // The dialog excludes the key while that read is in flight, and is confirmed.
+    const excluded = { ...typedDefinition, indexed: false }
+    const dialogSave = updateKey(store, { definition: excluded })
+    await flush()
+    pendingUpdates[0]({ ...storedKey, definition: excluded })
+    await dialogSave
+
+    // Another user re-enables the key. The second entry is re-read after that confirmation, under
+    // its own arguments, and answers with the newer state.
+    void store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(
+      otherQueryArgs,
+      { subscribe: false, forceRefetch: true }
+    ))
+    await flush()
+    expect(pendingKeyCollectionReads).toHaveLength(2)
+    pendingKeyCollectionReads[1]([{ ...storedKey, title: 'Gross weight', definition: typedDefinition }])
+    await waitFor(() => {
+      expect(cachedKeysOf(store, otherQueryArgs)[0]).toEqual(
+        expect.objectContaining({ title: 'Gross weight' })
+      )
+    })
+
+    // The first read answers last, with the page as it stood before the save.
+    pendingKeyCollectionReads[0]([{ ...storedKey, definition: typedDefinition }])
+
+    // Its own entry takes the replay — the save it predates has to survive it ...
+    await waitFor(() => { expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: excluded })) })
+    // ... and the entry it never answered keeps the newer answer that was fetched into it.
+    expect(cachedKeysOf(store, otherQueryArgs)[0]).toEqual(
+      expect.objectContaining({ title: 'Gross weight', definition: typedDefinition })
+    )
+  })
+
+  /**
+   * Which of the two is newer is not knowable from here: the server evaluates the read at a moment
+   * this client cannot see, and that moment can be after it applied the update and after another
+   * user changed the same field back. So the replay is not the last word — the collection is
+   * re-read, and the cache ends on what the server holds.
+   */
+  it('re-reads the collection after a save confirmed inside a collection read', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+    expect(keyCollectionReads).toBe(1)
+
+    await holdOneCollectionRead(store)
+    expect(keyCollectionReads).toBe(2)
+
+    const excluded = { ...typedDefinition, indexed: false }
+    const dialogSave = updateKey(store, { definition: excluded })
+    await flush()
+    pendingUpdates[0]({ ...storedKey, definition: excluded })
+    await dialogSave
+
+    // The server applied the exclusion, another user then re-enabled the key, and the held read
+    // was evaluated after both — so its snapshot is the newer of the two statements, and neither
+    // response says so.
+    const serverRow = { ...storedKey, definition: typedDefinition }
+    serverKeys = [serverRow]
+    pendingKeyCollectionReads[0]([serverRow])
+
+    // The replay goes in first, so the dialog and the grid never flicker back to the pre-save
+    // value ...
+    await waitFor(() => { expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: excluded })) })
+
+    // ... and the corrective read follows and puts the question to the server.
+    await waitFor(() => { expect(keyCollectionReads).toBe(3) })
+    pendingKeyCollectionReads[1]([serverRow])
+
+    await waitFor(() => {
+      expect(cachedKey(store)).toEqual(expect.objectContaining({ definition: typedDefinition }))
+    })
+
+    // The corrective read confirmed nothing of this client's, so it replays nothing and re-reads
+    // nothing: the sequence is bounded by the writes that feed it.
+    await flush()
+    expect(keyCollectionReads).toBe(3)
   })
 
   it('sends the localized member of the payload to the key endpoint', async () => {
