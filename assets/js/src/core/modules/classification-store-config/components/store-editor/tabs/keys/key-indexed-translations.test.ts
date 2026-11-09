@@ -15,12 +15,23 @@ import yaml from 'js-yaml'
 /** The locale files the bundle ships, at the repository root above `assets/js/src`. */
 const TRANSLATIONS_DIR = path.resolve(__dirname, '../../../../../../../../../../translations')
 
-const LOCALES = ['de', 'en', 'es', 'fr', 'it', 'nl', 'no', 'pl', 'sv']
+/**
+ * The locales the bundle ships today. They are the floor, not the ceiling: the per-locale checks
+ * below run over whatever `studio.*.yaml` the directory actually holds, so adding a tenth locale
+ * puts it under the same requirement instead of failing a count.
+ */
+const SHIPPED_LOCALES = ['de', 'en', 'es', 'fr', 'it', 'nl', 'no', 'pl', 'sv']
+
+/** Every locale file present, read from disk so a new one is covered the day it is added. */
+const LOCALES = fs.readdirSync(TRANSLATIONS_DIR)
+  .map((name) => /^studio\.([A-Za-z_-]+)\.yaml$/.exec(name)?.[1])
+  .filter((locale): locale is string => locale !== undefined)
+  .sort()
 
 /** Translation keys the Classification Store index control introduces. */
 const NEW_KEYS = ['classification-store.key-indexed', 'classification-store.key-indexed-hint']
 
-/** A key that carries real text in all nine files today, so a wrong path fails loudly. */
+/** A key that carries real text in every locale file today, so a wrong path fails loudly. */
 const ANCHOR_KEY = 'classification-store.add-sub-group-store-hint'
 
 /** The decided English hint: it describes the state the control is in, it does not instruct. */
@@ -32,10 +43,10 @@ const messages = (locale: string): Record<string, string> => yaml.load(
 ) as Record<string, string>
 
 describe('Classification Store index control translations', () => {
-  it('reads the nine locale files the bundle ships', () => {
-    expect(
-      fs.readdirSync(TRANSLATIONS_DIR).filter((name) => name.startsWith('studio.')).sort()
-    ).toEqual(LOCALES.map((locale) => `studio.${locale}.yaml`).sort())
+  it('reads the locale files the bundle ships', () => {
+    // A subset check, not an equality: every locale that shipped must still be there, and a
+    // locale added later is an addition to cover rather than a failure.
+    expect(LOCALES).toEqual(expect.arrayContaining(SHIPPED_LOCALES))
 
     expect(messages('en')[ANCHOR_KEY]).toEqual(expect.any(String))
   })

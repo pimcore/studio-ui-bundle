@@ -60,11 +60,14 @@ const KeyDefinitionFormBridge = ({
   const { structure, setCurrentFieldDefinitionId, setCurrentFieldDefinitionIdPath, currentFieldDefinitionId, getLayout } = useLayout()
   const [form] = Form.useForm()
 
-  // Expose getLayout and the form upward
+  // Expose getLayout and the form upward. Both callbacks are listed: the dialog memoises them
+  // with an empty dependency list, so re-running on them costs nothing today, and a caller that
+  // later passes an unstable callback re-publishes the refs instead of leaving the dialog holding
+  // the previous render's pair.
   useEffect(() => {
     onGetLayout(getLayout)
     onGetForm(form)
-  }, [getLayout, form])
+  }, [getLayout, form, onGetLayout, onGetForm])
 
   // Auto-select the single root field once structure is ready.
   // Also set currentFieldDefinitionIdPath so layout-form.tsx never receives null.
