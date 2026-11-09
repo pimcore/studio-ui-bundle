@@ -23,36 +23,47 @@ export const CLASSIFICATION_STORE_EXCLUDED_TYPES: readonly string[] = [
   'reverseObjectRelation'
 ]
 
-// The names are the core EngineFeature cases, as the store response reports them.
+// The name is the core EngineFeature case, as the store response reports it.
 export const ENGINE_CAPABILITY_STRUCTURED_VALUES = 'StructuredValues'
-export const ENGINE_CAPABILITY_RELATIONS = 'Relations'
 
-const RELATION_CAPABILITIES = [ENGINE_CAPABILITY_STRUCTURED_VALUES, ENGINE_CAPABILITY_RELATIONS]
+const STRUCTURED_VALUES = [ENGINE_CAPABILITY_STRUCTURED_VALUES]
 
-// A type absent here is held by every engine.
+/**
+ * The types core refuses at definition time on an engine that holds only the two EAV value columns.
+ *
+ * This mirrors `KeyConfig::assertTypeFitsTheStoreEngine()`, whose refusal is exactly
+ * `!KeyTypeSupport::isHeldInValueColumns($type) && !$engine->supports(EngineFeature::StructuredValues)`.
+ * So `StructuredValues` is the only capability the definition gate reads: `Relations` is a WRITE-time
+ * check in `RelationResolver::assertStorable()` and must not be required here, or the picker would
+ * disable a relation type on an engine whose `save()` accepts it.
+ *
+ * A type is "held in the value columns" when it has a `classificationstore_<fieldtype>` marshaller
+ * (image, table, multiselect, rgbaColor, quantityValue*, booleanSelect, …) or when its `normalize()`
+ * declares a scalar-compatible return type. Everything reached through `SimpleNormalizerTrait`
+ * returns `mixed` and is therefore held — which is why the `Input`- and `Select`-derived types
+ * (email, firstname, lastname, gender, time, country, language, user) are absent here.
+ *
+ * A type absent from this map is held by every engine.
+ */
 export const KEY_TYPE_REQUIRED_CAPABILITIES: Readonly<Record<string, readonly string[]>> = {
-  advancedManyToManyObjectRelation: RELATION_CAPABILITIES,
-  advancedManyToManyRelation: RELATION_CAPABILITIES,
-  manyToManyObjectRelation: RELATION_CAPABILITIES,
-  manyToManyRelation: RELATION_CAPABILITIES,
-  manyToOneRelation: RELATION_CAPABILITIES,
-  consent: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  dateRange: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  email: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  externalImage: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  firstname: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  gender: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  geobounds: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  geopoint: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  geopolygon: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  geopolyline: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  hotspotimage: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  imageGallery: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  lastname: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  link: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  numericRange: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  structuredTable: [ENGINE_CAPABILITY_STRUCTURED_VALUES],
-  video: [ENGINE_CAPABILITY_STRUCTURED_VALUES]
+  advancedManyToManyObjectRelation: STRUCTURED_VALUES,
+  advancedManyToManyRelation: STRUCTURED_VALUES,
+  manyToManyObjectRelation: STRUCTURED_VALUES,
+  manyToManyRelation: STRUCTURED_VALUES,
+  manyToOneRelation: STRUCTURED_VALUES,
+  consent: STRUCTURED_VALUES,
+  dateRange: STRUCTURED_VALUES,
+  externalImage: STRUCTURED_VALUES,
+  geobounds: STRUCTURED_VALUES,
+  geopoint: STRUCTURED_VALUES,
+  geopolygon: STRUCTURED_VALUES,
+  geopolyline: STRUCTURED_VALUES,
+  hotspotimage: STRUCTURED_VALUES,
+  imageGallery: STRUCTURED_VALUES,
+  link: STRUCTURED_VALUES,
+  numericRange: STRUCTURED_VALUES,
+  structuredTable: STRUCTURED_VALUES,
+  video: STRUCTURED_VALUES
 }
 
 /**

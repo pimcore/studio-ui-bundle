@@ -25,6 +25,8 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { useFilterableColumns } from '../../../../../../search-modes/use-filterable-columns'
+import { getKeyLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/key-label'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 // The field filter a classification store key's own type is resolved through, as for any data object field.
 const CLASSIFICATION_STORE_KEY_FILTER_TYPE = 'dataobject.adapter'
@@ -114,8 +116,20 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
    */
   const keyReportsFilter = (fieldtype: string): boolean => reportsFilter([CLASSIFICATION_STORE_KEY_FILTER_TYPE, fieldtype], fieldtype)
 
-  const keyLabel = (item: Record<string, any>): string =>
-    (item.title ?? item.name ?? item.definition?.title ?? String(item.id)) as string
+  /**
+   * A configured empty title is a valid key state, so every level is tested for a non-empty string
+   * rather than for null - the same rule as the shared `getKeyLabel`, which this delegates to for
+   * the title/name pair. The id is the last resort, so the message always names the skipped key.
+   */
+  const keyLabel = (item: Record<string, any>): string => {
+    const label = getKeyLabel({ name: item.name as string, title: item.title as string | null })
+
+    if (isNonEmptyString(label)) {
+      return label
+    }
+
+    return isNonEmptyString(item.definition?.title) ? item.definition.title : String(item.id)
+  }
 
   const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
     key: filter.id,

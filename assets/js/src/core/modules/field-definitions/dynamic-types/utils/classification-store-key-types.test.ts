@@ -14,7 +14,6 @@ import { type DynamicTypeFieldDefinitionAbstract, type FieldDefinitionContext } 
 import {
   CLASSIFICATION_STORE_EXCLUDED_TYPES,
   CLASSIFICATION_STORE_KEY_TYPE_TAG,
-  ENGINE_CAPABILITY_RELATIONS,
   ENGINE_CAPABILITY_STRUCTURED_VALUES,
   isKeyTypeHeldByEngine,
   KEY_TYPE_REQUIRED_CAPABILITIES
@@ -123,8 +122,28 @@ describe('isKeyTypeHeldByEngine', () => {
     expect(isKeyTypeHeldByEngine('input', [])).toBe(true)
   })
 
-  it('needs the relations capability for a relation as well', () => {
-    expect(isKeyTypeHeldByEngine('manyToOneRelation', [ENGINE_CAPABILITY_STRUCTURED_VALUES])).toBe(false)
-    expect(isKeyTypeHeldByEngine('manyToOneRelation', [ENGINE_CAPABILITY_STRUCTURED_VALUES, ENGINE_CAPABILITY_RELATIONS])).toBe(true)
+  // KeyConfig::assertTypeFitsTheStoreEngine() reads StructuredValues alone; Relations is checked at
+  // write time by RelationResolver::assertStorable(). Requiring it here disabled a relation type on
+  // an engine whose save() accepts it.
+  it('holds a relation on StructuredValues alone, without the relations capability', () => {
+    expect(isKeyTypeHeldByEngine('manyToOneRelation', [ENGINE_CAPABILITY_STRUCTURED_VALUES])).toBe(true)
+    expect(isKeyTypeHeldByEngine('manyToOneRelation', [])).toBe(false)
   })
+
+  // Everything reached through SimpleNormalizerTrait normalizes to `mixed`, so KeyTypeSupport
+  // ::isHeldInValueColumns() answers true and core never refuses it - the EAV engine holds it.
+  it.each(['email', 'firstname', 'lastname', 'gender', 'time', 'country', 'language', 'user'])(
+    'holds the scalar-valued type %s on an engine that reports no capability',
+    (type) => {
+      expect(isKeyTypeHeldByEngine(type, [])).toBe(true)
+    }
+  )
+
+  // A marshaller packs these into the two value columns, so they are held without StructuredValues.
+  it.each(['image', 'table', 'multiselect', 'rgbaColor', 'quantityValue', 'booleanSelect'])(
+    'holds the marshalled type %s on an engine that reports no capability',
+    (type) => {
+      expect(isKeyTypeHeldByEngine(type, [])).toBe(true)
+    }
+  )
 })

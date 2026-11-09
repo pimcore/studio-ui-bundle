@@ -30,7 +30,8 @@ let capturedColumns: any[] = []
 let storeEngine: { engine: string | null | undefined, engineCapabilities: string[] | null | undefined }
 
 const STORE_ID = 7
-const TYPE_IDS = ['input', 'geopoint', 'manyToOneRelation']
+// email is an Input-derived type: it normalizes to `mixed`, so the EAV value columns hold it.
+const TYPE_IDS = ['input', 'email', 'geopoint', 'manyToOneRelation']
 const DOCUMENT_CAPABILITIES = ['StructuredValues', 'Relations']
 
 // a declaration, so it is initialised when the hoisted mock factories run
@@ -110,6 +111,15 @@ describe('KeysTab type select', () => {
 
     expect(typeOptions().map((option) => option.value).sort()).toEqual([...TYPE_IDS].sort())
     expect(disabledTypes().sort()).toEqual(['geopoint', 'manyToOneRelation'])
+  })
+
+  // The definition gate core applies is StructuredValues alone, so an engine reporting only that
+  // disables nothing - including the relation types, whose Relations check is a write-time one.
+  it('disables nothing on an engine that reports StructuredValues without Relations', () => {
+    storeEngine = { engine: 'document', engineCapabilities: ['StructuredValues'] }
+    render(<KeysTab storeId={ STORE_ID } />)
+
+    expect(disabledTypes()).toEqual([])
   })
 
   it('disables nothing when the response carries no capability set', () => {

@@ -26,9 +26,6 @@ import {
   type ClassificationStoreConfigurationKeyDetail as GeneratedKeyDetail,
   type ClassificationStoreConfigurationKeyUpdate as GeneratedKeyUpdate,
   type ClassificationStoreConfigurationSubGroupDetail as GeneratedSubGroupDetail,
-  type ClassificationStoreConfigurationStoreTreeNode as GeneratedStoreTreeNode,
-  type ClassificationStoreConfigurationStoreDetail as GeneratedStoreDetail,
-  type ClassificationStoreKeyGroupRelation as GeneratedKeyGroupRelation,
   type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
@@ -54,27 +51,6 @@ export const hasIdentifier = (
 ): subGroup is ClassificationStoreConfigurationSubGroupDetail =>
   typeof subGroup.identifier === 'string' && subGroup.identifier !== ''
 
-
-// ─── Hand-written engine and key-type members ───────────────────────────────────
-// The backend publishes these after the checked-in slice was generated; they go when it is refreshed.
-// `engineCapabilities` is a tri-state: [] is an engine reporting none, null is a question that could not be put.
-
-/** A store node carrying the engine and capability set the backend publishes. */
-export interface ClassificationStoreConfigurationStoreTreeNode extends GeneratedStoreTreeNode {
-  engine?: string | null
-  engineCapabilities?: string[] | null
-}
-
-/** The store detail carrying the engine and capability set the backend publishes. */
-export interface ClassificationStoreConfigurationStoreDetail extends GeneratedStoreDetail {
-  engine?: string | null
-  engineCapabilities?: string[] | null
-}
-
-/** A key-group relation carrying the type of its key. */
-export interface ClassificationStoreKeyGroupRelation extends GeneratedKeyGroupRelation {
-  keyType?: string | null
-}
 
 export interface ClassificationStoreConfigurationSubGroupCreate {
   /** Name of the sub group */

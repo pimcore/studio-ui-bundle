@@ -194,6 +194,38 @@ describe('useFieldFilterEditor', () => {
       expect(messageInfo).toHaveBeenCalledWith('classification-store.keys-without-field-filter:key 1, key 2')
     })
 
+    // A configured empty title is a valid key state, and `??` would have let it name the key as ''.
+    it('names a skipped key by its name when its configured title is empty', () => {
+      draftFieldFilters = []
+      filterableColumns = [storeColumn]
+      renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      applyKeys([{ ...appliedItem('image', 1), title: '' }])
+
+      expect(messageInfo).toHaveBeenCalledWith('classification-store.keys-without-field-filter:key 1')
+    })
+
+    // Neither title nor name is set, so the id is what is left to name it by.
+    it('falls back to the key id when title and name are both empty', () => {
+      draftFieldFilters = []
+      filterableColumns = [storeColumn]
+      renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      applyKeys([{ id: 7, name: '', title: '', groupId: 1, definition: { fieldtype: 'image', title: '' } }])
+
+      expect(messageInfo).toHaveBeenCalledWith('classification-store.keys-without-field-filter:7')
+    })
+
+    it('prefers a configured non-empty title over the name', () => {
+      draftFieldFilters = []
+      filterableColumns = [storeColumn]
+      renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      applyKeys([{ ...appliedItem('image', 1), title: 'Colour' }])
+
+      expect(messageInfo).toHaveBeenCalledWith('classification-store.keys-without-field-filter:Colour')
+    })
+
     it('reports nothing when every selected key has a filter', () => {
       draftFieldFilters = []
       filterableColumns = [storeColumn]
