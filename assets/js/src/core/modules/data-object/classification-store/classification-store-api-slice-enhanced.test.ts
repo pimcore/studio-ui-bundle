@@ -904,6 +904,58 @@ describe('classification store key update cache patch', () => {
     }))
   })
 
+  it('keeps saved custom metadata when an older cell edit answers last', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    const metadataSave = dispatchUpdate(store, keyUpdate({ customMetadata: { externalCode: 'EF1' } }))
+    await flush()
+
+    expect(pendingUpdates).toHaveLength(2)
+
+    pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', customMetadata: { externalCode: 'EF1' } })
+    await metadataSave
+
+    // The cell edit answers last, carrying the pairs as they were before the metadata save.
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', customMetadata: null })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ customMetadata: { externalCode: 'EF1' } }))
+  })
+
+  it('takes the answer for custom metadata when the payload names it as null', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    const clear = dispatchUpdate(store, keyUpdate({ customMetadata: null }))
+    await flush()
+
+    pendingUpdates[1]({ ...storedKey, customMetadata: null })
+    await clear
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', customMetadata: { stale: 'x' } })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ customMetadata: null }))
+  })
+
+  it('takes the answer for custom metadata nobody here was writing', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+
+    // A payload that omits the member does not claim it, so another user's pairs arrive.
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', customMetadata: { fromServer: '1' } })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ customMetadata: { fromServer: '1' } }))
+  })
+
   it('keeps a saved localization when an older cell edit fails after it', async () => {
     // The rollback is the other door into the same staleness the response mask closes, and the
     // mask cannot see it: a failed request may undo the members it wrote and no others, or it

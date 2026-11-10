@@ -78,6 +78,9 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   ApiError: class ApiError extends Error {}
 }))
 jest.mock('./keys/key-definition-modal', () => ({ KeyDefinitionModal: stub }))
+jest.mock('./shared/metadata-modal', () => ({ MetadataModal: stub }))
+jest.mock('./shared/titles-modal', () => ({ TitlesModal: stub }))
+jest.mock('./shared/pair-actions', () => ({ PairActions: stub }))
 jest.mock('@Pimcore/modules/classification-store-config/hooks/use-store-engine', () => ({
   useStoreEngine: () => storeEngine
 }))

@@ -43,11 +43,21 @@ import {
 import { KeyGroupRelationsGrid } from './groups/key-group-relations-grid'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { useStoreImport } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
+import { MetadataModal } from './shared/metadata-modal'
+import { TitlesModal } from './shared/titles-modal'
+import { PairActions } from './shared/pair-actions'
+import { type PairMap } from './shared/pairs'
 
 interface IGroupsTabProps {
   storeId: number
   /** Opens the Sub groups tab of the store, where the vocabulary is managed. */
   onShowSubGroups?: () => void
+}
+
+/** The pair editor being open, and the row it was opened on. */
+interface PairEditorState {
+  kind: 'metadata' | 'titles'
+  row: ClassificationStoreConfigurationGroupDetail
 }
 
 interface IGroupDetailFormValues {
@@ -67,6 +77,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
+  const [pairEditor, setPairEditor] = useState<PairEditorState | undefined>(undefined)
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)
@@ -257,16 +268,42 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     })
   }
 
+  // Read at send time, so a name edited inline after the editor opened is the one sent.
+  const groupsRef = useRef(groups)
+  groupsRef.current = groups
+
+  const handleSavePairs = async (next: PairMap | null): Promise<void> => {
+    if (pairEditor === undefined) return
+
+    const group = groupsRef.current.find((g) => g.id === pairEditor.row.id) ?? pairEditor.row
+    const response = await updateGroup({
+      id: group.id,
+      classificationStoreConfigurationGroupUpdate: {
+        name: group.name,
+        description: group.description ?? null,
+        customMetadata: next
+      }
+    })
+
+    if ('error' in response) {
+      throw new ApiError(response.error!)
+    }
+  }
+
+  const handleClosePairEditor = (): void => { setPairEditor(undefined) }
+
   const columnHelper = useMemo(() => createColumnHelper<ClassificationStoreConfigurationGroupDetail>(), [])
 
   // Ref-forwarding: keep stable ref so columns useMemo never needs handler deps
   const handleDeleteRef = useRef(handleDelete)
   handleDeleteRef.current = handleDelete
+  const setPairEditorRef = useRef(setPairEditor)
+  setPairEditorRef.current = setPairEditor
 
   const columns = useMemo(() => [
     columnHelper.accessor('id', {
       header: t('classification-store.columns.id'),
-      size: 80
+      size: 60
     }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
@@ -277,197 +314,226 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     columnHelper.display({
       id: 'actions',
       header: t('classification-store.columns.actions'),
-      size: 60,
+      size: 124,
       cell: (info) => (
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ () => { handleDeleteRef.current(info.row.original) } }
-          tooltip={ { title: t('delete') } }
-        />
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <PairActions
+            customMetadata={ info.row.original.customMetadata }
+            name={ info.row.original.name }
+            onEditMetadata={ () => { setPairEditorRef.current({ kind: 'metadata', row: info.row.original }) } }
+            onEditTitles={ () => { setPairEditorRef.current({ kind: 'titles', row: info.row.original }) } }
+          />
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ () => { handleDeleteRef.current(info.row.original) } }
+            tooltip={ { title: t('delete') } }
+          />
+        </Flex>
       )
     })
   ], [t, columnHelper])
 
   return (
-    <SplitLayout
-      leftItem={ {
-        size: 35,
-        minSize: 250,
-        children: (
-          <ContentLayout
-            renderToolbar={
-              <Toolbar theme="secondary">
-                { isLoading
-                  ? null
-                  : (
-                    <IconButton
-                      aria-label={ t('toolbar.reload') }
-                      icon={ { value: 'refresh' } }
-                      loading={ isFetching }
-                      onClick={ () => { void refetch() } }
-                      tooltip={ { title: t('toolbar.reload') } }
-                    />
-                    ) }
-                <Pagination
-                  current={ page }
-                  defaultPageSize={ pageSize }
-                  onChange={ (newPage, newPageSize) => {
-                    setPage(newPage)
-                    setPageSize(newPageSize)
-                  } }
-                  showSizeChanger
-                  showTotal={ (total) => t('pagination.show-total', { total }) }
-                  total={ total }
-                />
-              </Toolbar>
-            }
-            renderTopBar={
-              <Flex
-                align="center"
-                justify="space-between"
-                style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
-              >
-                <Flex
-                  align="center"
-                  gap="small"
-                >
-                  <Header title={ t('classification-store.tabs.groups') } />
-                  <IconTextButton
-                    icon={ { value: 'new' } }
-                    onClick={ handleAdd }
-                  >
-                    {t('classification-store.add-group')}
-                  </IconTextButton>
-                </Flex>
-                <SearchInput
-                  loading={ isFetching }
-                  onSearch={ (value) => {
-                    setSearchTerm(value)
-                    setPage(1)
-                  } }
-                  placeholder={ t('search') }
-                />
-              </Flex>
-            }
-          >
-            <Flex
-              style={ { height: '100%', padding: '0 16px' } }
-              vertical
-            >
-              <Grid
-                autoWidth
-                columns={ columns }
-                data={ groups }
-                enableRowSelection
-                enableSorting
-                isLoading={ isLoading || isFetching }
-                manualSorting
-                onSelectedRowsChange={ (rows) => { setSelectedRows(rows) } }
-                onSortingChange={ onSortingChange }
-                onUpdateCellData={ ({ columnId, value, rowData }) => {
-                  if (columnId === 'name') {
-                    const newName = (value as string).trim()
-                    if (newName === '') return
-                    void updateGroup({
-                      id: rowData.id,
-                      classificationStoreConfigurationGroupUpdate: {
-                        name: newName,
-                        description: rowData.description ?? null
-                      }
-                    }).then((response) => {
-                      if ('error' in response) {
-                        trackError(new ApiError(response.error!))
-                      }
-                    })
-                  }
-                } }
-                selectedRows={ selectedRows }
-                setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
-                sorting={ sorting }
-              />
-            </Flex>
-          </ContentLayout>
-        )
-      } }
-      resizeAble
-      rightItem={ {
-        // Widest share that still leaves the groups list its own width; the key grid carries one column more.
-        // The detail carries the strip, the headings and the widest grid, so it takes the larger share.
-        size: 65,
-        minSize: 300,
-        children: activeGroup === undefined
-          ? (
-            <Flex
-              align="center"
-              justify="center"
-              style={ { height: '100%' } }
-            >
-              <NoContent text={ t('classification-store.select-group-hint') } />
-            </Flex>
-            )
-          : (
+    <>
+      <SplitLayout
+        leftItem={ {
+          size: 35,
+          minSize: 300,
+          children: (
             <ContentLayout
+              renderToolbar={
+                <Toolbar theme="secondary">
+                  { isLoading
+                    ? null
+                    : (
+                      <IconButton
+                        aria-label={ t('toolbar.reload') }
+                        icon={ { value: 'refresh' } }
+                        loading={ isFetching }
+                        onClick={ () => { void refetch() } }
+                        tooltip={ { title: t('toolbar.reload') } }
+                      />
+                      ) }
+                  <Pagination
+                    current={ page }
+                    defaultPageSize={ pageSize }
+                    onChange={ (newPage, newPageSize) => {
+                      setPage(newPage)
+                      setPageSize(newPageSize)
+                    } }
+                    showSizeChanger
+                    showTotal={ (total) => t('pagination.show-total', { total }) }
+                    total={ total }
+                  />
+                </Toolbar>
+              }
               renderTopBar={
                 <Flex
                   align="center"
+                  justify="space-between"
                   style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
                 >
-                  <Header title={ activeGroup.name } />
+                  <Flex
+                    align="center"
+                    gap="small"
+                  >
+                    <Header title={ t('classification-store.tabs.groups') } />
+                    <IconTextButton
+                      icon={ { value: 'new' } }
+                      onClick={ handleAdd }
+                    >
+                      {t('classification-store.add-group')}
+                    </IconTextButton>
+                  </Flex>
+                  <SearchInput
+                    loading={ isFetching }
+                    onSearch={ (value) => {
+                      setSearchTerm(value)
+                      setPage(1)
+                    } }
+                    placeholder={ t('search') }
+                  />
                 </Flex>
               }
             >
               <Flex
-                style={ { height: '100%' } }
+                style={ { height: '100%', padding: '0 16px' } }
                 vertical
               >
-                <FormKit
-                  formProps={ {
-                    form: detailForm,
-                    onValuesChange: handleDetailFormChange
+                <Grid
+                  autoWidth
+                  columns={ columns }
+                  data={ groups }
+                  enableRowSelection
+                  enableSorting
+                  isLoading={ isLoading || isFetching }
+                  manualSorting
+                  onSelectedRowsChange={ (rows) => { setSelectedRows(rows) } }
+                  onSortingChange={ onSortingChange }
+                  onUpdateCellData={ ({ columnId, value, rowData }) => {
+                    if (columnId === 'name') {
+                      const newName = (value as string).trim()
+                      if (newName === '') return
+                      void updateGroup({
+                        id: rowData.id,
+                        classificationStoreConfigurationGroupUpdate: {
+                          name: newName,
+                          description: rowData.description ?? null
+                        }
+                      }).then((response) => {
+                        if ('error' in response) {
+                          trackError(new ApiError(response.error!))
+                        }
+                      })
+                    }
                   } }
-                  wrapInPanel={ false }
-                >
-                  <Flex
-                    gap="small"
-                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
-                    vertical
-                  >
-                    <Form.Item
-                      label={ t('classification-store.columns.name') }
-                      name="name"
-                      rules={ [{ required: true }] }
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      label={ t('classification-store.columns.description') }
-                      name="description"
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Flex>
-                </FormKit>
-                <Flex style={ { flex: 1, overflow: 'hidden' } }>
-                  {/*
-                    Keyed by store and group so switching either remounts the grid. Its row
-                    selection is keyed by sub-group section and key id, and both repeat across
-                    groups, so a carried-over selection would let Assign and Unassign act on
-                    keys of the group the user just left.
-                  */}
-                  <KeyGroupRelationsGrid
-                    groupId={ activeGroup.id }
-                    groupName={ activeGroup.name }
-                    key={ `${storeId}-${activeGroup.id}` }
-                    onShowSubGroups={ onShowSubGroups }
-                    storeId={ storeId }
-                  />
-                </Flex>
+                  selectedRows={ selectedRows }
+                  setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
+                  sorting={ sorting }
+                />
               </Flex>
             </ContentLayout>
-            )
-      } }
-      withDivider
-      withToolbar
-    />
+          )
+        } }
+        resizeAble
+        rightItem={ {
+          // Widest share that still leaves the groups list its own width; the key grid carries one column more.
+          // The detail carries the strip, the headings and the widest grid, so it takes the larger share.
+          size: 65,
+          minSize: 300,
+          children: activeGroup === undefined
+            ? (
+              <Flex
+                align="center"
+                justify="center"
+                style={ { height: '100%' } }
+              >
+                <NoContent text={ t('classification-store.select-group-hint') } />
+              </Flex>
+              )
+            : (
+              <ContentLayout
+                renderTopBar={
+                  <Flex
+                    align="center"
+                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                  >
+                    <Header title={ activeGroup.name } />
+                  </Flex>
+                }
+              >
+                <Flex
+                  style={ { height: '100%' } }
+                  vertical
+                >
+                  <FormKit
+                    formProps={ {
+                      form: detailForm,
+                      onValuesChange: handleDetailFormChange
+                    } }
+                    wrapInPanel={ false }
+                  >
+                    <Flex
+                      gap="small"
+                      style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                      vertical
+                    >
+                      <Form.Item
+                        label={ t('classification-store.columns.name') }
+                        name="name"
+                        rules={ [{ required: true }] }
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        label={ t('classification-store.columns.description') }
+                        name="description"
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Flex>
+                  </FormKit>
+                  <Flex style={ { flex: 1, overflow: 'hidden' } }>
+                    {/*
+                      Keyed by store and group so switching either remounts the grid. Its row
+                      selection is keyed by sub-group section and key id, and both repeat across
+                      groups, so a carried-over selection would let Assign and Unassign act on
+                      keys of the group the user just left.
+                    */}
+                    <KeyGroupRelationsGrid
+                      groupId={ activeGroup.id }
+                      groupName={ activeGroup.name }
+                      key={ `${storeId}-${activeGroup.id}` }
+                      onShowSubGroups={ onShowSubGroups }
+                      storeId={ storeId }
+                    />
+                  </Flex>
+                </Flex>
+              </ContentLayout>
+              )
+        } }
+        withDivider
+        withToolbar
+      />
+      <MetadataModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'metadata' }
+        value={ pairEditor?.row.customMetadata }
+      />
+      <TitlesModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'titles' }
+        value={ pairEditor?.row.customMetadata }
+      />
+    </>
   )
 }

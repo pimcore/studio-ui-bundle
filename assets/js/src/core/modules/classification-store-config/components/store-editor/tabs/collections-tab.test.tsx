@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 // trackError runs for real and ends at this service, which needs the application shell's modal
 // instance. Only the sink is replaced, so what is asserted is a reported error.
 jest.mock('@Pimcore/modules/app/error-handler/services/error-modal-service', () => ({
@@ -32,7 +34,9 @@ jest.mock('@Pimcore/components/grid/grid.styles', () => ({
 }))
 
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
+  useTranslation: () => ({
+    t: (key: string, options?: { name?: string }) => options?.name !== undefined ? `${key}:${options.name}` : key
+  }),
   initReactI18next: { type: '3rdParty', init: () => {} }
 }))
 
@@ -65,9 +69,23 @@ jest.mock('@sdk/app', () => ({
   })
 }))
 
-// The dialog is not opened here; the tab renders it closed, which shows nothing.
+// The key definition dialog stays closed here. The pair editors open, and their footer buttons are
+// the stand-in's own.
 jest.mock('@Pimcore/components/modal/modal', () => ({
-  Modal: ({ children, open }: any) => (open === true ? <div>{children}</div> : null)
+  Modal: ({ children, open, onOk }: any) => (open === true
+    ? (
+      <div>
+        {children}
+        <button
+          data-testid="modal-ok"
+          onClick={ onOk }
+          type="button"
+        >
+          ok
+        </button>
+      </div>
+      )
+    : null)
 }))
 
 // The real cell resolves its renderer through the dynamic type registry. This stand-in shows
@@ -98,7 +116,7 @@ import { Provider } from 'react-redux'
 // eslint-disable-next-line import/first
 import { configureStore } from '@reduxjs/toolkit'
 // eslint-disable-next-line import/first
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import userEvent from '@testing-library/user-event'
 // eslint-disable-next-line import/first
@@ -242,5 +260,160 @@ describe('CollectionsTab delete dialog', () => {
     expect(deleteRequests()[0].url.endsWith(DELETE_URL)).toBe(true)
     // The detail pane falls back to its hint once nothing is selected
     expect(await screen.findByText('classification-store.select-collection-hint', undefined, WAIT_BUDGET)).toBeInTheDocument()
+  })
+})
+
+describe('CollectionsTab pair actions', () => {
+  const PAIR_VALUE = 'classification-store.pair-value'
+  const EDIT_METADATA = 'classification-store.aria.edit-metadata:measurements'
+  const EDIT_TITLES = 'classification-store.aria.edit-titles:measurements'
+  const ROW_NAME = 'measurements'
+
+  const originalFetch = globalThis.fetch
+  let rows: Array<Record<string, unknown>>
+  let updates: Array<Record<string, unknown>>
+
+  const pairRow = (id: number, name: string, customMetadata: unknown): Record<string, unknown> => ({
+    ...item,
+    id,
+    name,
+    customMetadata
+  })
+
+  const stubPairFetch = (): void => {
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.method === 'PUT') {
+        const body = JSON.parse(await input.clone().text()) as Record<string, unknown>
+        const id = Number(input.url.split('/').pop())
+        const index = rows.findIndex((row) => row.id === id)
+
+        updates.push(body)
+        rows[index] = { ...rows[index], ...body }
+
+        return jsonResponse(rows[index])
+      }
+
+      if (input.url.endsWith(LIST_URL)) {
+        return jsonResponse({ items: rows, totalItems: rows.length })
+      }
+
+      return jsonResponse({ items: [], totalItems: 0 })
+    }) as unknown as typeof fetch
+  }
+
+  const rowButtons = (index: number): HTMLElement[] => within(screen.getAllByRole('row')[index]).getAllByRole('button')
+
+  beforeEach(() => {
+    updates = []
+    rows = [
+      pairRow(ID, ROW_NAME, { a: '1', 'title.de': 'x' }),
+      pairRow(ID + 1, 'weights', null),
+      pairRow(ID + 2, 'volumes', {})
+    ]
+    stubPairFetch()
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('puts the metadata and titles actions before delete, named after the row', async () => {
+    renderTab()
+    expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    const labels = rowButtons(1).map((button) => button.getAttribute('aria-label'))
+
+    expect(labels.slice(0, 2)).toEqual([
+      EDIT_METADATA,
+      EDIT_TITLES
+    ])
+    expect(labels).toHaveLength(3)
+    expect(screen.getByLabelText('classification-store.aria.edit-titles:weights')).toBeInTheDocument()
+  })
+
+  it('counts every stored pair on the metadata button only and shows no number for none', async () => {
+    renderTab()
+    expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    expect(within(screen.getAllByRole('row')[1]).getByText('2')).toBeInTheDocument()
+    expect(rowButtons(1)[0].closest('.ant-badge')).not.toBeNull()
+    expect(rowButtons(1)[1].closest('.ant-badge')).toBeNull()
+    expect(screen.getAllByRole('row')[2].querySelector('.ant-scroll-number')).toBeNull()
+    expect(screen.getAllByRole('row')[3].querySelector('.ant-scroll-number')).toBeNull()
+  })
+
+  it('declares the widths that leave the name column room in the pane', async () => {
+    renderTab()
+    expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    const widthOf = (header: string): string => screen.getByText(header).closest('th')!.style.width
+
+    expect(widthOf('classification-store.columns.actions')).toBe('124px')
+    expect(widthOf('classification-store.columns.id')).toBe('60px')
+  })
+
+  it('sends the name, the description and the pairs, and nothing else', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByLabelText(EDIT_METADATA))
+    await user.type(screen.getAllByLabelText(PAIR_VALUE)[0], '2')
+    await user.click(screen.getByTestId('modal-ok'))
+
+    await waitFor(() => { expect(updates).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(updates[0]).toEqual({
+      name: ROW_NAME,
+      description: null,
+      customMetadata: { a: '12', 'title.de': 'x' }
+    })
+  })
+
+  it('sends the title editor payload with the generic pairs kept', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByLabelText(EDIT_TITLES))
+    await user.type(screen.getAllByLabelText('classification-store.pair-title')[0], 'y')
+    await user.click(screen.getByTestId('modal-ok'))
+
+    await waitFor(() => { expect(updates).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(updates[0].customMetadata).toEqual({ a: '1', 'title.de': 'xy' })
+  })
+
+  it('opens an empty editor for an entity without pairs', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('weights', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByLabelText('classification-store.aria.edit-metadata:weights'))
+
+    expect(screen.getByText('classification-store.pair-no-content')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /classification-store.add-pair/ })).toBeInTheDocument()
+  })
+
+  it('sends the name edited inline after the editor opened', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByLabelText(EDIT_METADATA))
+    fireEvent.change(screen.getByLabelText('name-0'), { target: { value: 'Renamed' } })
+    await waitFor(() => { expect(updates).toHaveLength(1) }, WAIT_BUDGET)
+    expect(await screen.findByDisplayValue('Renamed', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.type(screen.getAllByLabelText(PAIR_VALUE)[0], '2')
+    await user.click(screen.getByTestId('modal-ok'))
+
+    await waitFor(() => { expect(updates).toHaveLength(2) }, WAIT_BUDGET)
+
+    expect(updates[1]).toEqual(expect.objectContaining({ name: 'Renamed' }))
   })
 })

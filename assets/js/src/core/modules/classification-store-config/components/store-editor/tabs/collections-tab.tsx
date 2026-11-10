@@ -43,9 +43,19 @@ import {
 import { CollectionGroupRelationsGrid } from './collections/collection-group-relations-grid'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { useStoreImport } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
+import { MetadataModal } from './shared/metadata-modal'
+import { TitlesModal } from './shared/titles-modal'
+import { PairActions } from './shared/pair-actions'
+import { type PairMap } from './shared/pairs'
 
 interface ICollectionsTabProps {
   storeId: number
+}
+
+/** The pair editor being open, and the row it was opened on. */
+interface PairEditorState {
+  kind: 'metadata' | 'titles'
+  row: ClassificationStoreConfigurationCollectionDetail
 }
 
 interface ICollectionDetailFormValues {
@@ -65,6 +75,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
+  const [pairEditor, setPairEditor] = useState<PairEditorState | undefined>(undefined)
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)
@@ -242,197 +253,253 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     })
   }
 
+  // Read at send time, so a name edited inline after the editor opened is the one sent.
+  const collectionsRef = useRef(collections)
+  collectionsRef.current = collections
+
+  const handleSavePairs = async (next: PairMap | null): Promise<void> => {
+    if (pairEditor === undefined) return
+
+    const collection = collectionsRef.current.find((c) => c.id === pairEditor.row.id) ?? pairEditor.row
+    const response = await updateCollection({
+      id: collection.id,
+      classificationStoreConfigurationCollectionUpdate: {
+        name: collection.name,
+        description: collection.description ?? null,
+        customMetadata: next
+      }
+    })
+
+    if ('error' in response) {
+      throw new ApiError(response.error!)
+    }
+  }
+
+  const handleClosePairEditor = (): void => { setPairEditor(undefined) }
+
   const columnHelper = useMemo(() => createColumnHelper<ClassificationStoreConfigurationCollectionDetail>(), [])
 
   // Ref-forwarding: keep stable ref so columns useMemo never needs handler deps
   const handleDeleteRef = useRef(handleDelete)
   handleDeleteRef.current = handleDelete
+  const setPairEditorRef = useRef(setPairEditor)
+  setPairEditorRef.current = setPairEditor
 
   const columns = useMemo(() => [
     columnHelper.accessor('id', {
       header: t('classification-store.columns.id'),
-      size: 80
+      size: 60
     }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
       size: 220,
-      meta: { type: 'input', editable: true }
+      // The name absorbs what the fixed columns leave, so the table never outgrows the pane.
+      meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
       id: 'actions',
       header: t('classification-store.columns.actions'),
-      size: 60,
+      size: 124,
       cell: (info) => (
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ () => { handleDeleteRef.current(info.row.original) } }
-          tooltip={ { title: t('delete') } }
-        />
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <PairActions
+            customMetadata={ info.row.original.customMetadata }
+            name={ info.row.original.name }
+            onEditMetadata={ () => { setPairEditorRef.current({ kind: 'metadata', row: info.row.original }) } }
+            onEditTitles={ () => { setPairEditorRef.current({ kind: 'titles', row: info.row.original }) } }
+          />
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ () => { handleDeleteRef.current(info.row.original) } }
+            tooltip={ { title: t('delete') } }
+          />
+        </Flex>
       )
     })
   ], [t, columnHelper])
 
   return (
-    <SplitLayout
-      leftItem={ {
-        size: 45,
-        minSize: 250,
-        children: (
-          <ContentLayout
-            renderToolbar={
-              <Toolbar theme="secondary">
-                { isLoading
-                  ? null
-                  : (
-                    <IconButton
-                      aria-label={ t('toolbar.reload') }
-                      icon={ { value: 'refresh' } }
-                      loading={ isFetching }
-                      onClick={ () => { void refetch() } }
-                      tooltip={ { title: t('toolbar.reload') } }
-                    />
-                    ) }
-                <Pagination
-                  current={ page }
-                  defaultPageSize={ pageSize }
-                  onChange={ (newPage, newPageSize) => {
-                    setPage(newPage)
-                    setPageSize(newPageSize)
-                  } }
-                  showSizeChanger
-                  showTotal={ (total) => t('pagination.show-total', { total }) }
-                  total={ total }
-                />
-              </Toolbar>
-            }
-            renderTopBar={
-              <Header >
-                <Flex gap='extra-small'>
-                  <Title>{t('classification-store.tabs.collections')}</Title>
-                  <IconTextButton
-                    icon={ { value: 'new' } }
-                    onClick={ handleAdd }
-                  >
-                    {t('classification-store.add-collection')}
-                  </IconTextButton>
-                </Flex>
-                <SearchInput
-                  loading={ isFetching }
-                  onSearch={ (value) => {
-                    setSearchTerm(value)
-                    setPage(1)
-                  } }
-                  placeholder={ t('search') }
-                  withPrefix={ false }
-                  withoutAddon={ false }
-                />
-              </Header>
-            }
-          >
-            <Flex
-              style={ { height: '100%', padding: '0 16px' } }
-              vertical
-            >
-              <Grid
-                columns={ columns }
-                data={ collections }
-                enableRowSelection
-                enableSorting
-                isLoading={ isLoading || isFetching }
-                manualSorting
-                onSelectedRowsChange={ (rows) => { setSelectedRows(rows) } }
-                onSortingChange={ onSortingChange }
-                onUpdateCellData={ ({ columnId, value, rowData }) => {
-                  if (columnId === 'name') {
-                    const newName = (value as string).trim()
-                    if (newName === '') return
-                    void updateCollection({
-                      id: rowData.id,
-                      classificationStoreConfigurationCollectionUpdate: {
-                        name: newName,
-                        description: rowData.description ?? null
-                      }
-                    }).then((response) => {
-                      if ('error' in response) {
-                        trackError(new ApiError(response.error!))
-                      }
-                    })
-                  }
-                } }
-                selectedRows={ selectedRows }
-                setRowId={ (row: ClassificationStoreConfigurationCollectionDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
-                sorting={ sorting }
-              />
-            </Flex>
-          </ContentLayout>
-        )
-      } }
-      resizeAble
-      rightItem={ {
-        size: 55,
-        minSize: 300,
-        children: activeCollection === undefined
-          ? (
-            <Flex
-              align="center"
-              justify="center"
-              style={ { height: '100%' } }
-            >
-              <NoContent text={ t('classification-store.select-collection-hint') } />
-            </Flex>
-            )
-          : (
+    <>
+      <SplitLayout
+        leftItem={ {
+          size: 45,
+          minSize: 300,
+          children: (
             <ContentLayout
+              renderToolbar={
+                <Toolbar theme="secondary">
+                  { isLoading
+                    ? null
+                    : (
+                      <IconButton
+                        aria-label={ t('toolbar.reload') }
+                        icon={ { value: 'refresh' } }
+                        loading={ isFetching }
+                        onClick={ () => { void refetch() } }
+                        tooltip={ { title: t('toolbar.reload') } }
+                      />
+                      ) }
+                  <Pagination
+                    current={ page }
+                    defaultPageSize={ pageSize }
+                    onChange={ (newPage, newPageSize) => {
+                      setPage(newPage)
+                      setPageSize(newPageSize)
+                    } }
+                    showSizeChanger
+                    showTotal={ (total) => t('pagination.show-total', { total }) }
+                    total={ total }
+                  />
+                </Toolbar>
+              }
               renderTopBar={
                 <Header >
-                  <Title>{activeCollection.name}</Title>
+                  <Flex gap='extra-small'>
+                    <Title>{t('classification-store.tabs.collections')}</Title>
+                    <IconTextButton
+                      icon={ { value: 'new' } }
+                      onClick={ handleAdd }
+                    >
+                      {t('classification-store.add-collection')}
+                    </IconTextButton>
+                  </Flex>
+                  <SearchInput
+                    loading={ isFetching }
+                    onSearch={ (value) => {
+                      setSearchTerm(value)
+                      setPage(1)
+                    } }
+                    placeholder={ t('search') }
+                    withPrefix={ false }
+                    withoutAddon={ false }
+                  />
                 </Header>
               }
             >
               <Flex
-                style={ { height: '100%' } }
+                style={ { height: '100%', padding: '0 16px' } }
                 vertical
               >
-                <FormKit
-                  formProps={ {
-                    form: detailForm,
-                    onValuesChange: handleDetailFormChange
+                <Grid
+                  columns={ columns }
+                  data={ collections }
+                  enableRowSelection
+                  enableSorting
+                  isLoading={ isLoading || isFetching }
+                  manualSorting
+                  onSelectedRowsChange={ (rows) => { setSelectedRows(rows) } }
+                  onSortingChange={ onSortingChange }
+                  onUpdateCellData={ ({ columnId, value, rowData }) => {
+                    if (columnId === 'name') {
+                      const newName = (value as string).trim()
+                      if (newName === '') return
+                      void updateCollection({
+                        id: rowData.id,
+                        classificationStoreConfigurationCollectionUpdate: {
+                          name: newName,
+                          description: rowData.description ?? null
+                        }
+                      }).then((response) => {
+                        if ('error' in response) {
+                          trackError(new ApiError(response.error!))
+                        }
+                      })
+                    }
                   } }
-                  wrapInPanel={ false }
-                >
-                  <Flex
-                    gap="small"
-                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
-                    vertical
-                  >
-                    <Form.Item
-                      label={ t('classification-store.columns.name') }
-                      name="name"
-                      rules={ [{ required: true }] }
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      label={ t('classification-store.columns.description') }
-                      name="description"
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Flex>
-                </FormKit>
-                <Flex style={ { flex: 1, overflow: 'hidden' } }>
-                  <CollectionGroupRelationsGrid
-                    colId={ activeCollection.id }
-                    collectionName={ activeCollection.name }
-                    storeId={ storeId }
-                  />
-                </Flex>
+                  selectedRows={ selectedRows }
+                  setRowId={ (row: ClassificationStoreConfigurationCollectionDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
+                  sorting={ sorting }
+                />
               </Flex>
             </ContentLayout>
-            )
-      } }
-      withDivider
-      withToolbar
-    />
+          )
+        } }
+        resizeAble
+        rightItem={ {
+          size: 55,
+          minSize: 300,
+          children: activeCollection === undefined
+            ? (
+              <Flex
+                align="center"
+                justify="center"
+                style={ { height: '100%' } }
+              >
+                <NoContent text={ t('classification-store.select-collection-hint') } />
+              </Flex>
+              )
+            : (
+              <ContentLayout
+                renderTopBar={
+                  <Header >
+                    <Title>{activeCollection.name}</Title>
+                  </Header>
+                }
+              >
+                <Flex
+                  style={ { height: '100%' } }
+                  vertical
+                >
+                  <FormKit
+                    formProps={ {
+                      form: detailForm,
+                      onValuesChange: handleDetailFormChange
+                    } }
+                    wrapInPanel={ false }
+                  >
+                    <Flex
+                      gap="small"
+                      style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                      vertical
+                    >
+                      <Form.Item
+                        label={ t('classification-store.columns.name') }
+                        name="name"
+                        rules={ [{ required: true }] }
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        label={ t('classification-store.columns.description') }
+                        name="description"
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Flex>
+                  </FormKit>
+                  <Flex style={ { flex: 1, overflow: 'hidden' } }>
+                    <CollectionGroupRelationsGrid
+                      colId={ activeCollection.id }
+                      collectionName={ activeCollection.name }
+                      storeId={ storeId }
+                    />
+                  </Flex>
+                </Flex>
+              </ContentLayout>
+              )
+        } }
+        withDivider
+        withToolbar
+      />
+      <MetadataModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'metadata' }
+        value={ pairEditor?.row.customMetadata }
+      />
+      <TitlesModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'titles' }
+        value={ pairEditor?.row.customMetadata }
+      />
+    </>
   )
 }

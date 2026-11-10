@@ -64,6 +64,8 @@ export interface ClassificationStoreConfigurationSubGroupUpdate {
   name: string
   /** Description of the sub group */
   description: string | null
+  /** Free-form pairs of the sub group; absent keeps the stored ones, null clears them */
+  customMetadata?: object | null
 }
 
 export interface ClassificationStoreConfigurationSubGroupCollectionApiResponse {
@@ -238,7 +240,7 @@ export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
 // re-read from the server, which is the only authority on what it now holds.
 
 /** The fields of a key whose cached value a confirmation has to decide about. */
-const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition', 'localized'] as const
+const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition', 'localized', 'customMetadata'] as const
 type KeyWriteField = typeof KEY_WRITE_FIELDS[number]
 
 interface KeyWriteCounters { pending: number, started: number }
@@ -284,6 +286,7 @@ const keyFieldsWritten = (update: {
   type?: string | null
   definition?: unknown
   localized?: boolean | null
+  customMetadata?: object | null
 }): Record<KeyWriteField, boolean> => ({
   // `title` and `description` are optional: absent leaves the stored value alone, null clears it.
   title: update.title !== undefined,
@@ -293,7 +296,9 @@ const keyFieldsWritten = (update: {
   definition: update.definition !== undefined && update.definition !== null,
   // `localized` is a tri-state: absent leaves the stored value alone, and a present null is a
   // value rather than an absence — it stores NULL, so the key inherits the class field's flag.
-  localized: update.localized !== undefined
+  localized: update.localized !== undefined,
+  // `customMetadata` is a tri-state too: absent leaves the stored pairs alone, null clears them.
+  customMetadata: update.customMetadata !== undefined
 })
 
 /**
@@ -871,7 +876,8 @@ const api = baseApi.enhanceEndpoints({
                   ...(keepCached('description') ? { description: cached.description } : {}),
                   ...(keepCached('type') ? { type: cached.type } : {}),
                   ...(keepCached('definition') ? { definition: cached.definition } : {}),
-                  ...(keepCached('localized') ? { localized: cached.localized } : {})
+                  ...(keepCached('localized') ? { localized: cached.localized } : {}),
+                  ...(keepCached('customMetadata') ? { customMetadata: cached.customMetadata } : {})
                 }
               }
             )
