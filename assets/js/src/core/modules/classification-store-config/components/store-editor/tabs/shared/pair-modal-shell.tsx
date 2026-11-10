@@ -58,6 +58,16 @@ export const PairModalShell = ({
   const [saving, setSaving] = useState(false)
   const session = useRef(0)
 
+  // The list seeds itself once, so its identity has to change whenever the editor is opened or
+  // pointed at another entity. `destroyOnClose` only unmounts after the leave animation, and a
+  // reopen inside that window would otherwise keep the previous list alive.
+  const [openCount, setOpenCount] = useState(0)
+  const [wasOpen, setWasOpen] = useState(open)
+  if (open !== wasOpen) {
+    setWasOpen(open)
+    if (open) setOpenCount((count) => count + 1)
+  }
+
   useEffect(() => {
     if (!open) {
       setDirty(false)
@@ -123,6 +133,7 @@ export const PairModalShell = ({
     >
       <PairList
         hint={ hint }
+        key={ `${openCount}:${entityName}` }
         onDirtyChange={ handleDirtyChange }
         ref={ listRef }
         value={ value }

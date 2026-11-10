@@ -352,8 +352,10 @@ describe('GroupsTab pair actions', () => {
 
     expect(widthOf('classification-store.columns.actions')).toBe('124px')
     expect(widthOf('classification-store.columns.id')).toBe('60px')
-    // 50 selection + 60 id + 34 name floor + 124 actions fits the 300px minimum pane
-    expect(screen.getByRole('table').style.minWidth).toBe('268px')
+    // 50 selection + 60 id + 120 name floor + 124 actions: a narrower pane scrolls, it never cuts names
+    expect(screen.getByRole('table').style.minWidth).toBe('354px')
+    // The table fills a wide pane, which is what hands the spare width to the name column
+    expect(screen.getByRole('table').style.width).toBe('100%')
   })
 
   it('sends the name, the description and the pairs, and nothing else', async () => {

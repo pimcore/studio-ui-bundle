@@ -58,6 +58,14 @@ interface PairEditorState {
   row: ClassificationStoreConfigurationCollectionDetail
 }
 
+/** The editable fields of a collection; name and description are always replaced together. */
+interface CollectionDraft {
+  name: string
+  description: string | null
+  /** Carried only once a change names it: absent keeps the stored pairs. */
+  customMetadata?: object | null
+}
+
 interface ICollectionDetailFormValues {
   name: string
   description: string
@@ -103,10 +111,18 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     }
   }), [storeId, page, pageSize, searchTerm, sorting])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationCollectionCollectionQuery(queryArgs)
+  const { data, error, isError, isLoading, isFetching, refetch } = useClassificationStoreConfigurationCollectionCollectionQuery(queryArgs)
 
   const collections = data?.items ?? []
   const total = data?.totalItems ?? 0
+
+  // A refused list request must not read as an empty store: a 403 or a 500 leaves `data`
+  // undefined, so the failure is reported rather than left to look like "nothing here".
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -147,6 +163,59 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     setSelectedRows({})
   }, [importCount])
 
+  /** Cumulative pending change of a row, and the chain its saves run on, both keyed by row id. */
+  const draftsRef = useRef(new Map<number, CollectionDraft>())
+  const chainsRef = useRef(new Map<number, Promise<void>>())
+
+  /**
+   * Saves one changed field of a row, carrying whatever earlier change of that row has not come
+   * back yet. `CollectionUpdate` replaces name and description whole, so two unordered writes of the
+   * same row (a metadata save and an inline rename) could land in either order and the later
+   * answer would restore the older name. The draft carries the pending value forward and the
+   * chain keeps the requests in the order they were made; a queued save is rebased onto the
+   * draft when it is sent, not when it is queued.
+   */
+  const handleUpdate = useCallback(async (
+    row: ClassificationStoreConfigurationCollectionDetail,
+    change: Partial<CollectionDraft>,
+    rethrow = false
+  ): Promise<void> => {
+    const { id } = row
+    const stored: CollectionDraft = { name: row.name, description: row.description ?? null }
+    const outcome: { failure?: ApiError } = {}
+
+    const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
+      const next: CollectionDraft = { ...(draftsRef.current.get(id) ?? stored), ...change }
+
+      draftsRef.current.set(id, next)
+
+      const response = await updateCollection({
+        id,
+        classificationStoreConfigurationCollectionUpdate: next
+      })
+
+      if ('error' in response) {
+        // The server kept its own value: the next edit starts from the refetched row.
+        draftsRef.current.delete(id)
+        outcome.failure = new ApiError(response.error!)
+        if (!rethrow) trackError(outcome.failure)
+      }
+    })
+
+    chainsRef.current.set(id, chain)
+
+    void chain.then(() => {
+      if (chainsRef.current.get(id) === chain) {
+        chainsRef.current.delete(id)
+        draftsRef.current.delete(id)
+      }
+    })
+
+    await chain
+
+    if (outcome.failure !== undefined && rethrow) throw outcome.failure
+  }, [updateCollection])
+
   const handleDetailChange = useCallback((changedValues: Partial<ICollectionDetailFormValues>) => {
     const collection = activeCollectionRef.current
     if (collection === undefined) return
@@ -157,18 +226,11 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
 
     if ('name' in changedValues && newName === '') return
 
-    void updateCollection({
-      id: collection.id,
-      classificationStoreConfigurationCollectionUpdate: {
-        name: newName !== '' ? newName : collection.name,
-        description: newDesc !== '' ? newDesc : null
-      }
-    }).then((response) => {
-      if ('error' in response) {
-        trackError(new ApiError(response.error!))
-      }
+    void handleUpdate(collection, {
+      name: newName !== '' ? newName : collection.name,
+      description: newDesc !== '' ? newDesc : null
     })
-  }, [detailForm, updateCollection])
+  }, [detailForm, handleUpdate])
 
   const { handleFormChange: handleDetailFormChange } = useDebouncedFormChange(handleDetailChange, { delay: 300 })
 
@@ -261,18 +323,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     if (pairEditor === undefined) return
 
     const collection = collectionsRef.current.find((c) => c.id === pairEditor.row.id) ?? pairEditor.row
-    const response = await updateCollection({
-      id: collection.id,
-      classificationStoreConfigurationCollectionUpdate: {
-        name: collection.name,
-        description: collection.description ?? null,
-        customMetadata: next
-      }
-    })
-
-    if ('error' in response) {
-      throw new ApiError(response.error!)
-    }
+    await handleUpdate(collection, { customMetadata: next }, true)
   }
 
   const handleClosePairEditor = (): void => { setPairEditor(undefined) }
@@ -292,8 +343,8 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
-      size: 34,
-      // Its size is the table minWidth floor; the auto width gives it whatever the pane leaves.
+      size: 120,
+      // Its size is the table minWidth floor: a narrower pane scrolls the grid instead of cutting names.
       meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
@@ -380,10 +431,11 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
               }
             >
               <Flex
-                style={ { height: '100%', padding: '0 16px' } }
+                style={ { height: '100%', padding: '0 16px', overflowX: 'auto' } }
                 vertical
               >
                 <Grid
+                  autoWidth
                   columns={ columns }
                   data={ collections }
                   enableRowSelection
@@ -396,17 +448,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                     if (columnId === 'name') {
                       const newName = (value as string).trim()
                       if (newName === '') return
-                      void updateCollection({
-                        id: rowData.id,
-                        classificationStoreConfigurationCollectionUpdate: {
-                          name: newName,
-                          description: rowData.description ?? null
-                        }
-                      }).then((response) => {
-                        if ('error' in response) {
-                          trackError(new ApiError(response.error!))
-                        }
-                      })
+                      void handleUpdate(rowData as ClassificationStoreConfigurationCollectionDetail, { name: newName })
                     }
                   } }
                   selectedRows={ selectedRows }

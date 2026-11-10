@@ -28,6 +28,8 @@ export const PairActions = ({ name, customMetadata, onEditMetadata, onEditTitles
     <>
       <Badge
         count={ Object.keys(customMetadata ?? {}).length }
+        // Pulled inside the button so the count never paints into the row above.
+        offset={ [-2, 8] }
         size="small"
       >
         <IconButton

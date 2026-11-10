@@ -328,6 +328,17 @@ describe('the pair modals', () => {
     expect(Object.keys(sent)).toEqual(['plain', 'obj', 'num', 'flag', 'arr'])
   })
 
+  it('lay the heading, an editable row and a read-only row out on the same columns', () => {
+    renderMetadata({ a: '1', obj: { x: 1 } })
+
+    const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-pair-row]'))
+    const heading = screen.getByText(KEY_LABEL).closest<HTMLElement>('div')!
+
+    expect(rows).toHaveLength(2)
+    expect(heading.style.gridTemplateColumns).not.toBe('')
+    rows.forEach((row) => { expect(row.style.gridTemplateColumns).toBe(heading.style.gridTemplateColumns) })
+  })
+
   it('send null and not an empty map when every row is removed', async () => {
     const user = userEvent.setup({ delay: null })
 

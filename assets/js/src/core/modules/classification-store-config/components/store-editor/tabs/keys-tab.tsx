@@ -127,10 +127,18 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     }
   }), [storeId, page, pageSize, searchTerm, sorting])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyCollectionQuery(queryArgs)
+  const { data, error, isError, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyCollectionQuery(queryArgs)
 
   const keys = data?.items ?? []
   const total = data?.totalItems ?? 0
+
+  // A refused list request must not read as an empty store: a 403 or a 500 leaves `data`
+  // undefined, so the failure is reported rather than left to look like "nothing here".
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {

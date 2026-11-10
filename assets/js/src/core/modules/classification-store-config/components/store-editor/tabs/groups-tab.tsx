@@ -29,6 +29,7 @@ import { type RowSelectionState, type SortingState } from '@tanstack/react-table
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -58,6 +59,14 @@ interface IGroupsTabProps {
 interface PairEditorState {
   kind: 'metadata' | 'titles'
   row: ClassificationStoreConfigurationGroupDetail
+}
+
+/** The editable fields of a group; name and description are always replaced together. */
+interface GroupDraft {
+  name: string
+  description: string | null
+  /** Carried only once a change names it: absent keeps the stored pairs. */
+  customMetadata?: object | null
 }
 
 interface IGroupDetailFormValues {
@@ -105,10 +114,18 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     }
   }), [storeId, page, pageSize, searchTerm, sorting])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationGroupCollectionQuery(queryArgs)
+  const { data, error, isError, isLoading, isFetching, refetch } = useClassificationStoreConfigurationGroupCollectionQuery(queryArgs)
 
   const groups = data?.items ?? []
   const total = data?.totalItems ?? 0
+
+  // A refused list request must not read as an empty store: a 403 or a 500 leaves `data`
+  // undefined, so the failure is reported rather than left to look like "nothing here".
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -156,6 +173,59 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     setSelectedRows({})
   }, [importCount])
 
+  /** Cumulative pending change of a row, and the chain its saves run on, both keyed by row id. */
+  const draftsRef = useRef(new Map<number, GroupDraft>())
+  const chainsRef = useRef(new Map<number, Promise<void>>())
+
+  /**
+   * Saves one changed field of a row, carrying whatever earlier change of that row has not come
+   * back yet. `GroupUpdate` replaces name and description whole, so two unordered writes of the
+   * same row (a metadata save and an inline rename) could land in either order and the later
+   * answer would restore the older name. The draft carries the pending value forward and the
+   * chain keeps the requests in the order they were made; a queued save is rebased onto the
+   * draft when it is sent, not when it is queued.
+   */
+  const handleUpdate = useCallback(async (
+    row: ClassificationStoreConfigurationGroupDetail,
+    change: Partial<GroupDraft>,
+    rethrow = false
+  ): Promise<void> => {
+    const { id } = row
+    const stored: GroupDraft = { name: row.name, description: row.description ?? null }
+    const outcome: { failure?: ApiError } = {}
+
+    const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
+      const next: GroupDraft = { ...(draftsRef.current.get(id) ?? stored), ...change }
+
+      draftsRef.current.set(id, next)
+
+      const response = await updateGroup({
+        id,
+        classificationStoreConfigurationGroupUpdate: next
+      })
+
+      if ('error' in response) {
+        // The server kept its own value: the next edit starts from the refetched row.
+        draftsRef.current.delete(id)
+        outcome.failure = new ApiError(response.error!)
+        if (!rethrow) trackError(outcome.failure)
+      }
+    })
+
+    chainsRef.current.set(id, chain)
+
+    void chain.then(() => {
+      if (chainsRef.current.get(id) === chain) {
+        chainsRef.current.delete(id)
+        draftsRef.current.delete(id)
+      }
+    })
+
+    await chain
+
+    if (outcome.failure !== undefined && rethrow) throw outcome.failure
+  }, [updateGroup])
+
   const handleDetailChange = useCallback((changedValues: Partial<IGroupDetailFormValues>) => {
     const group = activeGroupRef.current
     if (group === undefined) return
@@ -166,18 +236,11 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
 
     if ('name' in changedValues && newName === '') return
 
-    void updateGroup({
-      id: group.id,
-      classificationStoreConfigurationGroupUpdate: {
-        name: newName !== '' ? newName : group.name,
-        description: newDesc !== '' ? newDesc : null
-      }
-    }).then((response) => {
-      if ('error' in response) {
-        trackError(new ApiError(response.error!))
-      }
+    void handleUpdate(group, {
+      name: newName !== '' ? newName : group.name,
+      description: newDesc !== '' ? newDesc : null
     })
-  }, [detailForm, updateGroup])
+  }, [detailForm, handleUpdate])
 
   const { handleFormChange: handleDetailFormChange } = useDebouncedFormChange(handleDetailChange, { delay: 300 })
 
@@ -276,18 +339,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     if (pairEditor === undefined) return
 
     const group = groupsRef.current.find((g) => g.id === pairEditor.row.id) ?? pairEditor.row
-    const response = await updateGroup({
-      id: group.id,
-      classificationStoreConfigurationGroupUpdate: {
-        name: group.name,
-        description: group.description ?? null,
-        customMetadata: next
-      }
-    })
-
-    if ('error' in response) {
-      throw new ApiError(response.error!)
-    }
+    await handleUpdate(group, { customMetadata: next }, true)
   }
 
   const handleClosePairEditor = (): void => { setPairEditor(undefined) }
@@ -307,8 +359,8 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
-      size: 34,
-      // Its size is the table minWidth floor; the auto width gives it whatever the pane leaves.
+      size: 120,
+      // Its size is the table minWidth floor: a narrower pane scrolls the grid instead of cutting names.
       meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
@@ -371,16 +423,9 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                 </Toolbar>
               }
               renderTopBar={
-                <Flex
-                  align="center"
-                  justify="space-between"
-                  style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
-                >
-                  <Flex
-                    align="center"
-                    gap="small"
-                  >
-                    <Header title={ t('classification-store.tabs.groups') } />
+                <Header >
+                  <Flex gap='extra-small'>
+                    <Title>{t('classification-store.tabs.groups')}</Title>
                     <IconTextButton
                       icon={ { value: 'new' } }
                       onClick={ handleAdd }
@@ -395,12 +440,14 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                       setPage(1)
                     } }
                     placeholder={ t('search') }
+                    withPrefix={ false }
+                    withoutAddon={ false }
                   />
-                </Flex>
+                </Header>
               }
             >
               <Flex
-                style={ { height: '100%', padding: '0 16px' } }
+                style={ { height: '100%', padding: '0 16px', overflowX: 'auto' } }
                 vertical
               >
                 <Grid
@@ -417,17 +464,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                     if (columnId === 'name') {
                       const newName = (value as string).trim()
                       if (newName === '') return
-                      void updateGroup({
-                        id: rowData.id,
-                        classificationStoreConfigurationGroupUpdate: {
-                          name: newName,
-                          description: rowData.description ?? null
-                        }
-                      }).then((response) => {
-                        if ('error' in response) {
-                          trackError(new ApiError(response.error!))
-                        }
-                      })
+                      void handleUpdate(rowData as ClassificationStoreConfigurationGroupDetail, { name: newName })
                     }
                   } }
                   selectedRows={ selectedRows }

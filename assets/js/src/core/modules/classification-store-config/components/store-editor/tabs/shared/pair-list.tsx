@@ -34,6 +34,7 @@ import {
 } from './pairs'
 
 const PREVIEW_LENGTH = 40
+const TYPE_COLUMN_WIDTH = 72
 
 export interface PairListHandle {
   /** The next map, or undefined when a row is invalid and nothing may be sent. */
@@ -58,6 +59,13 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
   const { token } = theme.useToken()
   const [form] = Form.useForm<{ pairs: PairRow[] }>()
   const scrollRef = useRef<HTMLDivElement>(null)
+  // Header and every row share these columns: key, value, remove.
+  const rowGridStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: `minmax(0, 1fr) minmax(0, 1fr) ${token.controlHeight}px`,
+    columnGap: token.marginXS,
+    alignItems: 'start'
+  }
 
   // The untouched original stays beside the form state: read-only rows are carried from it.
   const [original] = useState<PairMap | null>(() => (value ?? null) as PairMap | null)
@@ -118,17 +126,36 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
 
     return (
       <>
-        <Text style={ { flex: 1 } }>{row.key}</Text>
-        <Tag>{t(`classification-store.pair-type.${jsonTypeOf(stored)}`)}</Tag>
-        <Tooltip title={ <pre style={ { margin: 0 } }>{JSON.stringify(stored, null, 2)}</pre> }>
-          <Text
-            ellipsis
-            style={ { flex: 1 } }
-            type="secondary"
+        <Text
+          ellipsis
+          style={ { paddingInline: token.controlPaddingHorizontal, lineHeight: `${token.controlHeight}px` } }
+        >
+          {row.key}
+        </Text>
+        <Flex
+          align="center"
+          gap="small"
+          style={ { minHeight: token.controlHeight, minWidth: 0 } }
+        >
+          <Flex
+            justify="start"
+            style={ { flex: 'none', width: TYPE_COLUMN_WIDTH } }
           >
-            {preview(stored)}
-          </Text>
-        </Tooltip>
+            <Tag style={ { margin: 0 } }>{t(`classification-store.pair-type.${jsonTypeOf(stored)}`)}</Tag>
+          </Flex>
+          <Tooltip
+            placement="bottomLeft"
+            title={ <pre style={ { margin: 0 } }>{JSON.stringify(stored, null, 2)}</pre> }
+          >
+            <Text
+              ellipsis
+              style={ { flex: 1, minWidth: 0 } }
+              type="secondary"
+            >
+              {preview(stored)}
+            </Text>
+          </Tooltip>
+        </Flex>
       </>
     )
   }
@@ -159,23 +186,11 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
         initialValues={ { pairs: initialRows } }
         layout="vertical"
       >
-        <Flex
-          gap="small"
-          style={ { paddingBottom: token.paddingXXS } }
-        >
-          <Text
-            strong
-            style={ { flex: 1 } }
-          >
-            {t(view.keyLabel)}
-          </Text>
-          <Text
-            strong
-            style={ { flex: 1 } }
-          >
-            {t(view.valueLabel)}
-          </Text>
-        </Flex>
+        <div style={ { ...rowGridStyle, paddingBottom: token.paddingXXS } }>
+          <Text strong>{t(view.keyLabel)}</Text>
+          <Text strong>{t(view.valueLabel)}</Text>
+          <span />
+        </div>
 
         <div
           data-testid="pair-scroll"
@@ -193,12 +208,10 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                   const valueMessage = messageOf(rowError.value)
 
                   return (
-                    <Flex
-                      align="start"
+                    <div
                       data-pair-row
-                      gap="small"
                       key={ field.key }
-                      style={ { marginBottom: token.marginXS } }
+                      style={ { ...rowGridStyle, marginBottom: token.marginXS } }
                     >
                       { row?.readOnly
                         ? renderReadOnly(row)
@@ -207,7 +220,7 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                             <Form.Item
                               help={ keyMessage }
                               name={ [field.name, 'key'] }
-                              style={ { flex: 1, marginBottom: 0 } }
+                              style={ { marginBottom: 0 } }
                               validateStatus={ keyMessage !== undefined ? 'error' : undefined }
                             >
                               <Input aria-label={ t(view.keyLabel) } />
@@ -215,7 +228,7 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                             <Form.Item
                               help={ valueMessage }
                               name={ [field.name, 'value'] }
-                              style={ { flex: 1, marginBottom: 0 } }
+                              style={ { marginBottom: 0 } }
                               validateStatus={ valueMessage !== undefined ? 'error' : undefined }
                             >
                               <Input aria-label={ t(view.valueLabel) } />
@@ -228,7 +241,7 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                         onClick={ () => { remove(field.name) } }
                         tooltip={ { title: t('remove') } }
                       />
-                    </Flex>
+                    </div>
                   )
                 }) }
               </>
