@@ -245,4 +245,22 @@ describe('GroupsTab delete dialog', () => {
     // The detail pane falls back to its hint once nothing is selected
     expect(await screen.findByText('classification-store.select-group-hint', undefined, WAIT_BUDGET)).toBeInTheDocument()
   })
+
+  it('lets the key grid container scroll sideways instead of clipping it', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('dimensions', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getAllByRole('checkbox')[0])
+    await waitFor(() => {
+      expect(screen.queryByText('classification-store.select-group-hint')).not.toBeInTheDocument()
+    }, WAIT_BUDGET)
+
+    const container = document.querySelector<HTMLElement>('[style*="overflow-x"]')
+
+    expect(container).not.toBeNull()
+    expect(container!.style.overflowX).toBe('auto')
+    expect(container!.style.overflow).not.toBe('hidden')
+  })
 })
