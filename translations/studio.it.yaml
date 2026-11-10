@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "L'assegnazione restringe la chiave
 classification-store.override.options-stale-only: "Il sottoinsieme salvato nomina solo valori che la chiave non offre più."
 classification-store.override.stored-unreadable: "Il valore salvato non può essere letto come elenco."
 classification-store.override.options-unavailable: "Impossibile caricare le opzioni di questa chiave"
+classification-store.override.tag-options-unavailable: "opzioni non elencate"
+classification-store.override.options-stored-unlisted: "Questa chiave non pubblica opzioni con cui confrontare il sottoinsieme memorizzato. Viene conservato così com'è; usa tutte le opzioni per rimuoverlo."
 classification-store.override.units-no-vocabulary: "Questa chiave non definisce un vocabolario di unità, quindi qui non si può restringere nulla."
 classification-store.override.no-units-title: "Nessuna unità è disponibile per questa chiave in questo gruppo"
 classification-store.override.units-empty: "L'assegnazione restringe le unità valide a un elenco vuoto."

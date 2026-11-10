@@ -119,10 +119,12 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
           onChange={ (value: string) => { onChange(setDefaultUnit(draft, value === USE_DEFAULT ? undefined : value)) } }
           options={ [
             { value: USE_DEFAULT, label: t('classification-store.override.use-key-default') },
+            // The stored default stays visible as itself, so it never reads like the reset choice.
+            ...(defaultOutside ? [{ value: String(storedDefault), label: `${String(storedDefault)} (${t('classification-store.override.no-longer-offered')})`, disabled: true }] : []),
             ...choices.map((id) => ({ value: id, label: unitSymbol(relation, id) }))
           ] }
           placeholder={ t('classification-store.override.use-key-default') }
-          value={ storedDefault === undefined ? USE_DEFAULT : defaultOutside ? undefined : storedDefault }
+          value={ storedDefault === undefined ? USE_DEFAULT : defaultOutside ? String(storedDefault) : storedDefault }
         />
         { defaultOutside && (
           <StatedState

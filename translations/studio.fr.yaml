@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "L'affectation restreint la clé à
 classification-store.override.options-stale-only: "Le sous-ensemble enregistré ne nomme que des valeurs que la clé ne propose plus."
 classification-store.override.stored-unreadable: "La valeur enregistrée ne peut pas être lue comme une liste."
 classification-store.override.options-unavailable: "Les options de cette clé n'ont pas pu être chargées"
+classification-store.override.tag-options-unavailable: "options inconnues"
+classification-store.override.options-stored-unlisted: "Cette clé ne publie aucune option avec laquelle comparer le sous-ensemble enregistré. Il est conservé tel quel ; utilisez toutes les options pour le retirer."
 classification-store.override.units-no-vocabulary: "Cette clé ne définit aucun vocabulaire d'unités : rien ne peut être restreint ici."
 classification-store.override.no-units-title: "Aucune unité n'est disponible pour cette clé dans ce groupe"
 classification-store.override.units-empty: "L'affectation restreint les unités valides à une liste vide."

@@ -33,4 +33,10 @@ describe('key override draft', () => {
     expect(tags).toHaveLength(1)
     expect(tags[0].danger).toBe(false)
   })
+
+  it('uses a short tag for stored options the row cannot judge', () => {
+    const [tag] = overrideTags(rel({ type: 'input', definitionOverride: { options: ['red'] } }))
+
+    expect(tag.translationKey).toBe('classification-store.override.tag-options-unavailable')
+  })
 })

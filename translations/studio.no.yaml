@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "Tilknytningen begrenser nøkkelen 
 classification-store.override.options-stale-only: "Den lagrede delmengden nevner bare verdier nøkkelen ikke lenger tilbyr."
 classification-store.override.stored-unreadable: "Den lagrede verdien kan ikke leses som en liste."
 classification-store.override.options-unavailable: "Alternativene for denne nøkkelen kunne ikke lastes"
+classification-store.override.tag-options-unavailable: "alternativer ukjent"
+classification-store.override.options-stored-unlisted: "Denne nøkkelen publiserer ingen alternativer å sammenligne den lagrede delmengden med. Den beholdes som den er; bruk alle alternativer for å fjerne den."
 classification-store.override.units-no-vocabulary: "Denne nøkkelen oppgir ikke noe enhetsvokabular, så ingenting kan begrenses her."
 classification-store.override.no-units-title: "Ingen enheter er tilgjengelige for denne nøkkelen i denne gruppen"
 classification-store.override.units-empty: "Tilknytningen begrenser de gyldige enhetene til en tom liste."

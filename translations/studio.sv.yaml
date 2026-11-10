@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "Kopplingen begränsar nyckeln till
 classification-store.override.options-stale-only: "Den sparade delmängden nämner bara värden som nyckeln inte längre erbjuder."
 classification-store.override.stored-unreadable: "Det sparade värdet kan inte läsas som en lista."
 classification-store.override.options-unavailable: "Nyckelns alternativ kunde inte läsas in"
+classification-store.override.tag-options-unavailable: "alternativ okända"
+classification-store.override.options-stored-unlisted: "Nyckeln publicerar inga alternativ att jämföra den sparade delmängden med. Den behålls som den är; använd alla alternativ för att ta bort den."
 classification-store.override.units-no-vocabulary: "Den här nyckeln anger inget enhetsvokabulär, så inget kan begränsas här."
 classification-store.override.no-units-title: "Inga enheter är tillgängliga för den här nyckeln i den här gruppen"
 classification-store.override.units-empty: "Kopplingen begränsar de giltiga enheterna till en tom lista."

@@ -297,7 +297,9 @@ describe('KeyOverrideDialog', () => {
     ['a default outside the valid set', unitRow({ definitionOverride: { validUnits: ['g'], defaultUnit: 'kg' } }), `${OVERRIDE}.default-outside:kg`, USE_KEY_DEFAULT, 3],
     ['no options published', selectRow({ options: [] }), `${OVERRIDE}.key-offers-no-options`, undefined, 0],
     ['no valid units published', unitRow({ validUnits: null }), `${OVERRIDE}.units-no-vocabulary`, undefined, 0],
-    ['neither options nor units', selectRow({ type: 'input', options: null }), `${OVERRIDE}.nothing-to-narrow`, undefined, 0]
+    ['neither options nor units', selectRow({ type: 'input', options: null }), `${OVERRIDE}.nothing-to-narrow`, undefined, 0],
+    ['a stored subset on a key publishing no options', selectRow({ type: 'input', options: null, definitionOverride: { options: ['red'] } }), `${OVERRIDE}.options-stored-unlisted`, USE_ALL_OPTIONS, 0],
+    ['a stored subset beside units on a key publishing no options', unitRow({ options: null, definitionOverride: { options: ['red'] } }), `${OVERRIDE}.options-stored-unlisted`, USE_ALL_OPTIONS, 3]
   ])('names %s, issues no request on open and offers its action', async (_name, row, sentence, action, checkboxes) => {
     renderDialog(row)
 

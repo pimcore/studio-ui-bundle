@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "De toewijzing beperkt de sleutel t
 classification-store.override.options-stale-only: "De opgeslagen subset noemt alleen waarden die de sleutel niet meer aanbiedt."
 classification-store.override.stored-unreadable: "De opgeslagen waarde kan niet als lijst worden gelezen."
 classification-store.override.options-unavailable: "De opties van deze sleutel konden niet worden geladen"
+classification-store.override.tag-options-unavailable: "opties onbekend"
+classification-store.override.options-stored-unlisted: "Deze sleutel publiceert geen opties om de opgeslagen deelverzameling mee te vergelijken. Ze blijft ongewijzigd; gebruik alle opties om haar te wissen."
 classification-store.override.units-no-vocabulary: "Deze sleutel noemt geen eenhedenvocabulaire, dus hier kan niets worden beperkt."
 classification-store.override.no-units-title: "Voor deze sleutel zijn in deze groep geen eenheden beschikbaar"
 classification-store.override.units-empty: "De toewijzing beperkt de geldige eenheden tot een lege lijst."

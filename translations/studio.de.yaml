@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "Die Zuordnung schränkt den Schlü
 classification-store.override.options-stale-only: "Die gespeicherte Teilmenge nennt nur Werte, die der Schlüssel nicht mehr anbietet."
 classification-store.override.stored-unreadable: "Der gespeicherte Wert kann nicht als Liste gelesen werden."
 classification-store.override.options-unavailable: "Die Optionen dieses Schlüssels konnten nicht geladen werden"
+classification-store.override.tag-options-unavailable: "Optionen unbekannt"
+classification-store.override.options-stored-unlisted: "Dieser Schlüssel veröffentlicht keine Optionen, mit denen sich die gespeicherte Teilmenge vergleichen ließe. Sie bleibt unverändert; mit „Alle Optionen verwenden“ wird sie entfernt."
 classification-store.override.units-no-vocabulary: "Dieser Schlüssel nennt kein Einheitenvokabular, daher kann hier nichts eingeschränkt werden."
 classification-store.override.no-units-title: "Für diesen Schlüssel sind in dieser Gruppe keine Einheiten verfügbar"
 classification-store.override.units-empty: "Die Zuordnung schränkt die gültigen Einheiten auf eine leere Liste ein."

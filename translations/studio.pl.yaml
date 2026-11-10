@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "Przypisanie zawęża klucz do pust
 classification-store.override.options-stale-only: "Zapisany podzbiór wymienia tylko wartości, których klucz już nie oferuje."
 classification-store.override.stored-unreadable: "Zapisanej wartości nie można odczytać jako listy."
 classification-store.override.options-unavailable: "Nie udało się wczytać opcji tego klucza"
+classification-store.override.tag-options-unavailable: "opcje nieznane"
+classification-store.override.options-stored-unlisted: "Ten klucz nie publikuje opcji, z którymi można porównać zapisany podzbiór. Pozostaje bez zmian; użyj wszystkich opcji, aby go usunąć."
 classification-store.override.units-no-vocabulary: "Ten klucz nie określa słownika jednostek, więc nic nie można tu zawęzić."
 classification-store.override.no-units-title: "Dla tego klucza w tej grupie nie ma dostępnych jednostek"
 classification-store.override.units-empty: "Przypisanie zawęża dozwolone jednostki do pustej listy."

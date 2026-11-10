@@ -2276,6 +2276,8 @@ classification-store.override.options-empty: "La asignación restringe la clave 
 classification-store.override.options-stale-only: "El subconjunto guardado solo nombra valores que la clave ya no ofrece."
 classification-store.override.stored-unreadable: "El valor guardado no se puede leer como una lista."
 classification-store.override.options-unavailable: "No se pudieron cargar las opciones de esta clave"
+classification-store.override.tag-options-unavailable: "opciones sin listar"
+classification-store.override.options-stored-unlisted: "Esta clave no publica opciones con las que comparar el subconjunto almacenado. Se conserva tal cual; usa todas las opciones para quitarlo."
 classification-store.override.units-no-vocabulary: "Esta clave no define un vocabulario de unidades, así que aquí no se puede restringir nada."
 classification-store.override.no-units-title: "No hay unidades disponibles para esta clave en este grupo"
 classification-store.override.units-empty: "La asignación restringe las unidades válidas a una lista vacía."

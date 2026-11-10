@@ -212,7 +212,7 @@ export const overrideTags = (relation: Relation): IOverrideTag[] => {
 
   if (draft.options !== undefined && !optionsPublished) {
     // The key's options are unknown, not absent: nothing about the stored subset can be judged.
-    tags.push({ id: 'options', translationKey: 'classification-store.override.options-unavailable', params: {}, text: '', danger: false })
+    tags.push({ id: 'options', translationKey: 'classification-store.override.tag-options-unavailable', params: {}, text: '', danger: false })
   } else if (draft.options !== undefined) {
     const resolved = resolveSubset(draft.options, options)
 

@@ -431,9 +431,10 @@ export const KeyGroupRelationsGrid = ({
         <Flex
           align="center"
           gap="mini"
-          style={ { width: '100%' } }
+          style={ { width: '100%', flexWrap: 'wrap' } }
         >
-          <div style={ { flex: '1 1 auto', minWidth: 0, overflow: 'hidden' } }>
+          {/* The tags wrap beneath the name rather than taking its width, so the name keeps its column. */}
+          <div style={ { flex: '1 1 100%', minWidth: 0, overflow: 'hidden' } }>
             <DefaultCell { ...info } />
           </div>
           { overrideTags(info.row.original).map((tag) => (

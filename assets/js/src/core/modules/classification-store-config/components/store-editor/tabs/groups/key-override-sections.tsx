@@ -19,6 +19,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import {
   clearOptions,
+  draftOf,
   carriesUnits,
   storesUnitMember,
   optionValuesOf,
@@ -155,8 +156,24 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
   }
 
   if (options === undefined || options === null) {
-    // A type that carries units but no options has no options half at all.
-    return <></>
+    // A type that carries units but no options has no options half, unless a subset is stored:
+    // that narrowing is then stated and can be cleared, never hidden.
+    if (draft.options === undefined) return <></>
+
+    return (
+      <Flex
+        gap="small"
+        vertical
+      >
+        { heading }
+        <StatedState
+          actionLabel={ clearLabel }
+          description={ t('classification-store.override.options-stored-unlisted') }
+          onAction={ clear }
+          title={ t('classification-store.override.no-options-title') }
+        />
+      </Flex>
+    )
   }
 
   const offered = optionValuesOf(relation)
@@ -216,5 +233,5 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
 export const offersNothing = (relation: Relation): boolean => {
   const { options, optionsUnavailableReason: reason } = vocabularyOf(relation)
 
-  return !carriesUnits(relation) && !storesUnitMember(relation) && (options === undefined || options === null) && (reason === undefined || reason === null)
+  return !carriesUnits(relation) && !storesUnitMember(relation) && draftOf(relation).options === undefined && (options === undefined || options === null) && (reason === undefined || reason === null)
 }
