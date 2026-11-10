@@ -764,6 +764,8 @@ export type ClassificationStoreConfigurationCollectionDetail = {
     modificationDate: number | null;
     /** Opaque identifier of the collection, assigned by the system and never writable */
     identifier?: string | null;
+    /** Free-form pairs the collection carries, reported as stored. Pimcore reads no member of it, and null where the collection holds none. */
+    customMetadata?: object | null;
 };
 export type Error = {
     /** Message */
@@ -786,6 +788,8 @@ export type ClassificationStoreConfigurationCollectionUpdate = {
     name: string;
     /** Description of the collection */
     description: string | null;
+    /** Free-form pairs of the collection. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationCollectionRelationDetail = {
     /** AdditionalAttributes */
@@ -838,6 +842,8 @@ export type ClassificationStoreConfigurationGroupDetail = {
     modificationDate: number | null;
     /** Opaque identifier of the group, assigned by the system and never writable */
     identifier?: string | null;
+    /** Free-form pairs the group carries, reported as stored. Pimcore reads no member of it, and null where the group holds none. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationGroupCreate = {
     /** Name of the group */
@@ -850,6 +856,8 @@ export type ClassificationStoreConfigurationGroupUpdate = {
     name: string;
     /** Description of the group */
     description: string | null;
+    /** Free-form pairs of the group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationKeyDetail = {
     /** AdditionalAttributes */
@@ -880,6 +888,8 @@ export type ClassificationStoreConfigurationKeyDetail = {
     identifier?: string | null;
     /** Whether the key holds a value per language, reported as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of that field alone. */
     localized?: boolean | null;
+    /** Free-form pairs the key carries, reported as stored. Pimcore reads no member of it, and null where the key holds none. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationKeyCreate = {
     /** Name of the key */
@@ -902,6 +912,8 @@ export type ClassificationStoreConfigurationKeyUpdate = {
     definition: object | null;
     /** Whether the key holds a value per language: true, false, or null to state nothing and let the `localized` flag of the class definition field the key is rendered in decide. Leaving the member out of the request keeps the stored value, sending it as null stores null. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
     localized?: boolean | null;
+    /** Free-form pairs of the key. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
     /** AdditionalAttributes */
@@ -940,11 +952,11 @@ export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
     sorter?: number | null;
     /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
     mandatory?: boolean | null;
-    /** Partial field definition overriding the one of the key for this assignment. Omitting it leaves a stored one alone, a supplied object replaces it whole rather than merging into it, and an explicit null clears it. */
+    /** Partial field definition overriding the one of the key for this assignment. Omitting it leaves a stored one alone, a supplied object replaces it whole rather than merging into it, and an explicit null clears it. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
     definitionOverride?: object | null;
     /** Sub group of the store this assignment belongs to. Omitting it leaves a stored one alone, a supplied value replaces it, and an explicit null clears it. */
     subGroup?: string | null;
-    /** Free-form metadata carried by this assignment. No member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. */
+    /** Free-form metadata carried by this assignment. No member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
     metadata?: object | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationDelete = {
@@ -1044,6 +1056,8 @@ export type ClassificationStoreConfigurationSubGroupDetail = {
     modificationDate: number | null;
     /** Generated identifier a key assignment names this sub group by, read-only */
     identifier?: string | null;
+    /** Free-form pairs the sub group carries, reported as stored. Pimcore reads no member of it, and null where the sub group holds none. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationSubGroupCreate = {
     /** Name of the sub group */
@@ -1056,6 +1070,8 @@ export type ClassificationStoreConfigurationSubGroupUpdate = {
     name: string;
     /** Description of the sub group */
     description: string | null;
+    /** Free-form pairs of the sub group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationGetPageResponse = {
     /** AdditionalAttributes */
