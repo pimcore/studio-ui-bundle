@@ -46,11 +46,18 @@ const api = baseApi.enhanceEndpoints({
     serviceUserRotateSecret: {
       invalidatesTags: () => []
     },
+    // Both change the token summary (active count, latest expiry) that list and detail show.
     serviceUserMcpTokenIssue: {
-      invalidatesTags: () => []
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.SERVICE_USERS(),
+        ...invalidatingTags.SERVICE_USER_DETAIL(args.id)
+      ]
     },
     serviceUserMcpTokenRevoke: {
-      invalidatesTags: () => []
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.SERVICE_USERS(),
+        ...invalidatingTags.SERVICE_USER_DETAIL(args.id)
+      ]
     }
   }
 })
@@ -65,7 +72,9 @@ export const {
   useServiceUserUpdateByIdMutation,
   useServiceUserDeactivateByIdMutation,
   useServiceUserDeleteByIdMutation,
-  useServiceUserRotateSecretMutation
+  useServiceUserRotateSecretMutation,
+  useServiceUserMcpTokenIssueMutation,
+  useServiceUserMcpTokenRevokeMutation
 } = api
 
 export { api }

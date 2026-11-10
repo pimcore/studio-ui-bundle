@@ -12,7 +12,7 @@ import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { ServiceUsersContainer } from './service-users-container'
 
-const credentials = { serviceUserId: 9, clientId: 'svc_9', clientSecret: 'secret-9' }
+const token = { token: 'pmcp_shown-once', expiresAt: 1_800_000_000 }
 
 jest.mock('./service-users-api-slice-enhanced', () => ({
   useServiceUserGetCollectionQuery: () => ({
@@ -67,24 +67,34 @@ jest.mock('./detail/service-user-detail', () => ({
   )
 }))
 jest.mock('./create/create-service-user-modal', () => ({
-  CreateServiceUserModal: ({ open, mode, onCreated }: { open: boolean, mode: string, onCreated: (value: unknown) => void }) => open
+  CreateServiceUserModal: ({ open, mode, onCreated }: {
+    open: boolean
+    mode: string
+    onCreated: (serviceUserId: number, issued?: unknown) => void
+  }) => open
     ? (
-      <button
-        onClick={ () => { onCreated(credentials) } }
-        type="button"
-      >{`submit:${mode}`}</button>
+      <>
+        <button
+          onClick={ () => { onCreated(9, token) } }
+          type="button"
+        >{`submit:${mode}`}</button>
+        <button
+          onClick={ () => { onCreated(9) } }
+          type="button"
+        >{`skip:${mode}`}</button>
+      </>
       )
     : null
 }))
 jest.mock('./credentials/one-time-secret-modal', () => ({
-  OneTimeSecretModal: ({ credentials, onClose }: { credentials?: { clientSecret: string }, onClose: () => void }) =>
-    credentials === undefined
+  OneTimeSecretModal: ({ credential, onClose }: { credential?: { token: string }, onClose: () => void }) =>
+    credential === undefined
       ? null
       : (
         <button
           onClick={ onClose }
           type="button"
-        >{`secret:${credentials.clientSecret}`}</button>
+        >{`secret:${credential.token}`}</button>
         )
 }))
 
@@ -99,7 +109,7 @@ describe('ServiceUsersContainer', () => {
     expect(screen.getByText('detail:4')).toBeInTheDocument()
   })
 
-  it('shows the one-time secret after creating and opens the new service user', () => {
+  it('shows the issued token once after creating and opens the new service user', () => {
     render(<ServiceUsersContainer />)
 
     fireEvent.click(screen.getByText('create'))
@@ -108,9 +118,19 @@ describe('ServiceUsersContainer', () => {
     expect(screen.queryByText('submit:create')).toBeNull()
     expect(screen.getByText('detail:9')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByText('secret:secret-9'))
+    fireEvent.click(screen.getByText('secret:pmcp_shown-once'))
 
-    expect(screen.queryByText('secret:secret-9')).toBeNull()
+    expect(screen.queryByText('secret:pmcp_shown-once')).toBeNull()
+  })
+
+  it('opens the new service user without a one-time modal when the token step was skipped', () => {
+    render(<ServiceUsersContainer />)
+
+    fireEvent.click(screen.getByText('create'))
+    fireEvent.click(screen.getByText('skip:create'))
+
+    expect(screen.getByText('detail:9')).toBeInTheDocument()
+    expect(screen.queryByText(/^secret:/)).toBeNull()
   })
 
   it('creates from a user in the from-user mode', () => {

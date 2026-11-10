@@ -13,18 +13,18 @@ import { isUndefined } from 'lodash'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { Content } from '@Pimcore/components/content/content'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { type ServiceUserCredentials, useServiceUserGetCollectionQuery } from './service-users-api-slice-enhanced'
+import { useServiceUserGetCollectionQuery } from './service-users-api-slice-enhanced'
 import { ServiceUserList } from './list/service-user-list'
 import { ServiceUserDetail } from './detail/service-user-detail'
 import { CreateServiceUserModal, type CreateServiceUserMode } from './create/create-service-user-modal'
-import { OneTimeSecretModal } from './credentials/one-time-secret-modal'
+import { type AccessTokenCredential, OneTimeSecretModal } from './credentials/one-time-secret-modal'
 import { nowInSeconds } from './utils/dormancy'
 
 export const ServiceUsersContainer = (): React.JSX.Element => {
   const { data, isLoading, error, refetch } = useServiceUserGetCollectionQuery()
   const [selectedId, setSelectedId] = useState<number | undefined>(undefined)
   const [createMode, setCreateMode] = useState<CreateServiceUserMode | undefined>(undefined)
-  const [credentials, setCredentials] = useState<ServiceUserCredentials | undefined>(undefined)
+  const [token, setToken] = useState<AccessTokenCredential | undefined>(undefined)
   // Recomputed on every list load, so the dormancy filter compares against a fresh "now".
   const now = useMemo(() => nowInSeconds(), [data])
 
@@ -34,10 +34,10 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
     }
   }, [error])
 
-  const handleCreated = (created: ServiceUserCredentials): void => {
+  const handleCreated = (serviceUserId: number, issuedToken?: AccessTokenCredential): void => {
     setCreateMode(undefined)
-    setCredentials(created)
-    setSelectedId(created.serviceUserId)
+    setToken(issuedToken)
+    setSelectedId(serviceUserId)
   }
 
   return (
@@ -84,8 +84,8 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
       />
 
       <OneTimeSecretModal
-        credentials={ credentials }
-        onClose={ () => { setCredentials(undefined) } }
+        credential={ token }
+        onClose={ () => { setToken(undefined) } }
       />
     </>
   )

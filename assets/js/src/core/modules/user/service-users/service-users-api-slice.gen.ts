@@ -234,6 +234,12 @@ export type CreateServiceUserFromUser = {
     /** OAuth scopes the bound client may request; all known scopes when omitted */
     scopes?: string[] | null;
 };
+export type ServiceUserMcpAccessTokenSummary = {
+    /** Number of tokens that have not expired */
+    active: number;
+    /** Latest expiry among the active tokens as a Unix timestamp, null without one */
+    latestExpiresAt: number | null;
+};
 export type ServiceUser = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -265,6 +271,10 @@ export type ServiceUser = {
     clientId: string | null;
     /** Timestamp of the last login */
     lastLogin: number | null;
+    /** Whether the OAuth client_credentials grant is enabled on this instance. While false, the client secret authenticates nothing; use an MCP access token. */
+    clientCredentialsEnabled: boolean;
+    /** Summary of the MCP access tokens of the service user (never the tokens themselves) */
+    mcpTokens: ServiceUserMcpAccessTokenSummary;
 };
 export type UpdateServiceUser = {
     /** Contact email of the team responsible */

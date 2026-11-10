@@ -14,11 +14,22 @@ import { CreateServiceUserModal } from './create-service-user-modal'
 
 const mockCreate = jest.fn()
 const mockCreateFromUser = jest.fn()
+const mockIssue = jest.fn()
+const mockServiceUserQuery = jest.fn()
+const mockCopy = jest.fn()
 const mockTrackError = jest.fn()
 
 jest.mock('../service-users-api-slice-enhanced', () => ({
   useServiceUserCreateMutation: () => [mockCreate, { isLoading: false }],
-  useServiceUserCreateFromUserMutation: () => [mockCreateFromUser, { isLoading: false }]
+  useServiceUserCreateFromUserMutation: () => [mockCreateFromUser, { isLoading: false }],
+  useServiceUserMcpTokenIssueMutation: () => [mockIssue, { isLoading: false }],
+  useServiceUserGetByIdQuery: (args: unknown, options: unknown) => mockServiceUserQuery(args, options)
+}))
+jest.mock('@Pimcore/utils/clipboard', () => ({
+  copyToClipboardWithFeedback: async (text: string, onSuccess: () => void) => { mockCopy(text); onSuccess() }
+}))
+jest.mock('@Pimcore/components/message/useMessage', () => ({
+  useMessage: () => ({ success: jest.fn(), error: jest.fn() })
 }))
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
@@ -37,9 +48,22 @@ jest.mock('@Pimcore/components/modal/modal', () => jest.requireActual('@test-uti
 jest.mock('@Pimcore/components/input/input', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('@Pimcore/components/flex/flex', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('@Pimcore/components/text/text', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/input-number/input-number', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/alert/alert', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/button/button', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/formatted-date-time/formatted-date-time', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
 const credentials = { serviceUserId: 9, clientId: 'svc_9', clientSecret: 'secret-9' }
+const accessToken = { token: 'pmcp_shown-once', expiresAt: 1_800_000_000 }
+
+const instanceWith = (clientCredentialsEnabled: boolean): void => {
+  mockServiceUserQuery.mockImplementation((args: unknown, options: { skip?: boolean }) =>
+    options.skip === true
+      ? { data: undefined, isFetching: false }
+      : { data: { id: 9, clientCredentialsEnabled }, isFetching: false }
+  )
+}
 
 const onCreated = jest.fn()
 const onCancel = jest.fn()
@@ -64,16 +88,20 @@ describe('CreateServiceUserModal', () => {
     jest.clearAllMocks()
     mockCreate.mockResolvedValue({ data: credentials })
     mockCreateFromUser.mockResolvedValue({ data: credentials })
+    mockIssue.mockResolvedValue({ data: accessToken })
+    instanceWith(false)
   })
 
-  it('creates a service user with name and contact email and hands over the credentials', async () => {
+  it('creates a service user with name and contact email and continues with the credentials step', async () => {
     renderModal('create')
 
     type('service-users.field.name', 'svc-erp-sync')
     type('service-users.field.email', 'erp-team@example.com')
     fireEvent.click(screen.getByText('service-users.create.ok'))
 
-    await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(credentials) })
+    await screen.findByText('service-users.create.credentials.title')
+    expect(onCreated).not.toHaveBeenCalled()
+    expect(mockServiceUserQuery).toHaveBeenLastCalledWith({ id: 9 }, { skip: false })
     expect(mockCreate).toHaveBeenCalledWith({
       serviceUserCreate: { name: 'svc-erp-sync', email: 'erp-team@example.com' }
     })
@@ -106,7 +134,7 @@ describe('CreateServiceUserModal', () => {
     type('service-users.field.source-user', '3')
     fireEvent.click(screen.getByText('service-users.create.ok'))
 
-    await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(credentials) })
+    await screen.findByText('service-users.create.credentials.title')
     expect(mockCreateFromUser).toHaveBeenCalledWith({
       id: 3,
       serviceUserCreateFromUser: { name: 'svc-editor-copy', email: null }
@@ -123,5 +151,79 @@ describe('CreateServiceUserModal', () => {
 
     await waitFor(() => { expect(mockTrackError).toHaveBeenCalledTimes(1) })
     expect(onCreated).not.toHaveBeenCalled()
+  })
+
+  describe('credentials step', () => {
+    const createAndContinue = async (): Promise<void> => {
+      renderModal('create')
+      type('service-users.field.name', 'svc-test-token')
+      fireEvent.click(screen.getByText('service-users.create.ok'))
+      await screen.findByText('service-users.create.credentials.title')
+    }
+
+    it('offers only an access token when client credentials are disabled and issues it with the chosen lifetime', async () => {
+      await createAndContinue()
+
+      expect(screen.getByText('service-users.credentials.issue.title')).toBeInTheDocument()
+      expect(screen.getByText('service-users.create.credentials.token-description')).toBeInTheDocument()
+      expect(screen.queryByDisplayValue('secret-9')).toBeNull()
+      expect(screen.queryByText('service-users.secret.client-secret')).toBeNull()
+      expect(screen.queryByText('service-users.create.credentials.which')).toBeNull()
+      expect(screen.getByLabelText('service-users.credentials.issue.ttl')).toHaveValue(30)
+
+      type('service-users.credentials.issue.ttl', '1')
+      fireEvent.click(screen.getByText('service-users.credentials.issue'))
+
+      await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(9, accessToken) })
+      expect(mockIssue).toHaveBeenCalledWith({ id: 9, serviceUserMcpTokenRequest: { ttlDays: 1 } })
+    })
+
+    it('shows client id and secret and the optional token step when client credentials are enabled', async () => {
+      instanceWith(true)
+      await createAndContinue()
+
+      expect(screen.getByText('service-users.create.credentials.which')).toBeInTheDocument()
+      expect(screen.getByLabelText('service-users.credentials.client-id')).toHaveValue('svc_9')
+      expect(screen.getByLabelText('service-users.secret.client-secret')).toHaveValue('secret-9')
+      expect(screen.getByRole('alert')).toHaveTextContent('service-users.secret.warning')
+      expect(screen.getByText('service-users.credentials.issue.title')).toBeInTheDocument()
+
+      fireEvent.click(screen.getByText('service-users.secret.copy'))
+      expect(mockCopy).toHaveBeenCalledWith('secret-9')
+
+      fireEvent.click(screen.getByText('service-users.credentials.issue'))
+
+      await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(9, accessToken) })
+      expect(mockIssue).toHaveBeenCalledWith({ id: 9, serviceUserMcpTokenRequest: { ttlDays: 30 } })
+    })
+
+    it('can be skipped without issuing a token', async () => {
+      await createAndContinue()
+
+      fireEvent.click(screen.getByText('service-users.create.credentials.skip'))
+
+      expect(onCreated).toHaveBeenCalledWith(9, undefined)
+      expect(mockIssue).not.toHaveBeenCalled()
+    })
+
+    it('refuses a lifetime outside 1 to 90 days', async () => {
+      await createAndContinue()
+
+      type('service-users.credentials.issue.ttl', '0')
+
+      expect(screen.getByText('service-users.credentials.issue')).toBeDisabled()
+      expect(screen.getByText('service-users.credentials.issue.ttl.invalid')).toBeInTheDocument()
+    })
+
+    it('reports a failed issue and stays on the step', async () => {
+      mockIssue.mockResolvedValue({ error: { status: 422 } })
+      await createAndContinue()
+
+      fireEvent.click(screen.getByText('service-users.credentials.issue'))
+
+      await waitFor(() => { expect(mockTrackError).toHaveBeenCalledTimes(1) })
+      expect(onCreated).not.toHaveBeenCalled()
+      expect(screen.getByText('service-users.create.credentials.title')).toBeInTheDocument()
+    })
   })
 })

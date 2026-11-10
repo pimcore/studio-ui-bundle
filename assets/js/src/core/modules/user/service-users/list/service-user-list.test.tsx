@@ -48,7 +48,9 @@ const serviceUser = (id: number, name: string, lastLogin: number | null, active 
   dataObjectWorkspaces: [],
   documentWorkspaces: [],
   clientId: `client-${id}`,
-  lastLogin
+  lastLogin,
+  clientCredentialsEnabled: false,
+  mcpTokens: { active: 0, latestExpiresAt: null }
 })
 
 const items = [

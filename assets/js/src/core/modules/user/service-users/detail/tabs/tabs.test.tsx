@@ -44,7 +44,9 @@ const serviceUser: ServiceUser = {
   dataObjectWorkspaces: [],
   documentWorkspaces: [],
   clientId: 'svc_7',
-  lastLogin: null
+  lastLogin: null,
+  clientCredentialsEnabled: false,
+  mcpTokens: { active: 0, latestExpiresAt: null }
 }
 
 describe('RolesTab', () => {

@@ -86,7 +86,9 @@ const serviceUser = (active = true): ServiceUser => ({
   dataObjectWorkspaces: [],
   documentWorkspaces: [],
   clientId: 'svc_7',
-  lastLogin: null
+  lastLogin: null,
+  clientCredentialsEnabled: false,
+  mcpTokens: { active: 0, latestExpiresAt: null }
 })
 
 const onDeleted = jest.fn()
@@ -155,6 +157,50 @@ describe('ServiceUserDetail', () => {
         documentWorkspaces: []
       }
     })
+  })
+
+  it('keeps unsaved edits when a refetch changes only the token summary', () => {
+    const { rerender } = render(
+      <ServiceUserDetail
+        id={ 7 }
+        onDeleted={ onDeleted }
+      />
+    )
+
+    fireEvent.click(screen.getByText('email:erp@example.com'))
+    expect(screen.getByText('email:new@example.com')).toBeInTheDocument()
+
+    mockQueryState.data = { ...serviceUser(), mcpTokens: { active: 1, latestExpiresAt: 1_800_000_000 } }
+    rerender(
+      <ServiceUserDetail
+        id={ 7 }
+        onDeleted={ onDeleted }
+      />
+    )
+
+    expect(screen.getByText('email:new@example.com')).toBeInTheDocument()
+    expect(within(toolbar()).getByText('save')).not.toBeDisabled()
+  })
+
+  it('takes over the loaded values when the editable part changed on the server', () => {
+    const { rerender } = render(
+      <ServiceUserDetail
+        id={ 7 }
+        onDeleted={ onDeleted }
+      />
+    )
+
+    fireEvent.click(screen.getByText('email:erp@example.com'))
+
+    mockQueryState.data = { ...serviceUser(), email: 'other@example.com' }
+    rerender(
+      <ServiceUserDetail
+        id={ 7 }
+        onDeleted={ onDeleted }
+      />
+    )
+
+    expect(screen.getByText('email:other@example.com')).toBeInTheDocument()
   })
 
   it('deactivates after confirmation', async () => {

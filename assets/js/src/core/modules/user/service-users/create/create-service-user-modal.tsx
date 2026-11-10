@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -20,8 +20,16 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   type ServiceUserCredentials,
   useServiceUserCreateFromUserMutation,
-  useServiceUserCreateMutation
+  useServiceUserCreateMutation,
+  useServiceUserGetByIdQuery,
+  useServiceUserMcpTokenIssueMutation
 } from '../service-users-api-slice-enhanced'
+import { type AccessTokenCredential, OneTimeCredentialFields } from '../credentials/one-time-secret-modal'
+import {
+  isValidTokenLifetime,
+  TOKEN_LIFETIME_DEFAULT_DAYS,
+  TokenLifetimeField
+} from '../credentials/token-lifetime-field'
 
 export type CreateServiceUserMode = 'create' | 'from-user'
 
@@ -29,7 +37,8 @@ interface CreateServiceUserModalProps {
   mode: CreateServiceUserMode
   open: boolean
   onCancel: () => void
-  onCreated: (credentials: ServiceUserCredentials) => void
+  /** Called when the dialog is done: with the issued token, or without one when the token step was skipped. */
+  onCreated: (serviceUserId: number, token?: AccessTokenCredential) => void
 }
 
 const NAME_MAX_LENGTH = 64
@@ -39,25 +48,53 @@ const NAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]*$/
 export const isValidServiceUserName = (name: string): boolean =>
   name.length <= NAME_MAX_LENGTH && NAME_PATTERN.test(name)
 
+const reportError = (error: unknown): void => {
+  trackError(new ApiError(error as ConstructorParameters<typeof ApiError>[0]))
+}
+
 export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: CreateServiceUserModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [sourceUserId, setSourceUserId] = useState<number | undefined>(undefined)
+  // Set once the service user exists; the dialog then shows the credentials step.
+  const [created, setCreated] = useState<ServiceUserCredentials | undefined>(undefined)
+  const [ttlDays, setTtlDays] = useState<number | null>(TOKEN_LIFETIME_DEFAULT_DAYS)
   const [create, { isLoading: creating }] = useServiceUserCreateMutation()
   const [createFromUser, { isLoading: creatingFromUser }] = useServiceUserCreateFromUserMutation()
+  const [issue, { isLoading: issuing }] = useServiceUserMcpTokenIssueMutation()
+  // The created service user tells whether the OAuth client secret authenticates anything on this instance.
+  const { data: serviceUser, isFetching: loadingServiceUser, error: serviceUserError } = useServiceUserGetByIdQuery(
+    { id: created?.serviceUserId ?? 0 },
+    { skip: isUndefined(created) }
+  )
+
+  useEffect(() => {
+    if (!isUndefined(serviceUserError)) {
+      reportError(serviceUserError)
+    }
+  }, [serviceUserError])
 
   const isFromUser = mode === 'from-user'
   const nameIsInvalid = name !== '' && !isValidServiceUserName(name)
   const canSubmit = isValidServiceUserName(name) && (!isFromUser || !isUndefined(sourceUserId))
+  // Without the service user loaded the secret stays hidden; it can be rotated later when the grant is on.
+  const clientCredentialsEnabled = serviceUser?.clientCredentialsEnabled === true
 
   const reset = (): void => {
     setName('')
     setEmail('')
     setSourceUserId(undefined)
+    setCreated(undefined)
+    setTtlDays(TOKEN_LIFETIME_DEFAULT_DAYS)
   }
 
-  const handleOk = async (): Promise<void> => {
+  const finish = (serviceUserId: number, token?: AccessTokenCredential): void => {
+    reset()
+    onCreated(serviceUserId, token)
+  }
+
+  const handleCreate = async (): Promise<void> => {
     if (!canSubmit) {
       return
     }
@@ -68,24 +105,77 @@ export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: Crea
       : await create({ serviceUserCreate: payload })
 
     if ('error' in result) {
-      trackError(new ApiError(result.error as ConstructorParameters<typeof ApiError>[0]))
+      reportError(result.error)
       return
     }
 
-    reset()
-    onCreated(result.data)
+    setCreated(result.data)
+  }
+
+  const handleIssue = async (serviceUserId: number): Promise<void> => {
+    if (!isValidTokenLifetime(ttlDays)) {
+      return
+    }
+
+    const result = await issue({ id: serviceUserId, serviceUserMcpTokenRequest: { ttlDays } })
+
+    if ('error' in result) {
+      reportError(result.error)
+      return
+    }
+
+    finish(serviceUserId, result.data)
+  }
+
+  if (!isUndefined(created)) {
+    const serviceUserId = created.serviceUserId
+
+    return (
+      <Modal
+        cancelText={ t('service-users.create.credentials.skip') }
+        // The step can show the client secret; a closed antd modal would keep it in the DOM.
+        destroyOnClose
+        maskClosable={ false }
+        okButtonProps={ { disabled: loadingServiceUser || !isValidTokenLifetime(ttlDays), loading: issuing } }
+        okText={ t('service-users.credentials.issue') }
+        onCancel={ () => { finish(serviceUserId) } }
+        onOk={ () => { void handleIssue(serviceUserId) } }
+        open={ open }
+        title={ t('service-users.create.credentials.title') }
+      >
+        <Flex
+          gap="small"
+          vertical
+        >
+          {clientCredentialsEnabled && (
+            <>
+              <Text>{t('service-users.create.credentials.which')}</Text>
+              <Text strong>{t('service-users.credentials.oauth')}</Text>
+              <OneTimeCredentialFields credential={ created } />
+            </>
+          )}
+          <Text strong>{t('service-users.credentials.issue.title')}</Text>
+          {!clientCredentialsEnabled && <Text>{t('service-users.create.credentials.token-description')}</Text>}
+          <TokenLifetimeField
+            onChange={ setTtlDays }
+            value={ ttlDays }
+          />
+        </Flex>
+      </Modal>
+    )
   }
 
   return (
     <Modal
       cancelText={ t('button.cancel') }
+      destroyOnClose
       okButtonProps={ { disabled: !canSubmit, loading: creating || creatingFromUser } }
       okText={ t('service-users.create.ok') }
       onCancel={ () => {
         reset()
         onCancel()
       } }
-      onOk={ () => { void handleOk() } }
+      onOk={ () => { void handleCreate() } }
       open={ open }
       title={ t(isFromUser ? 'service-users.create-from-user.title' : 'service-users.create.title') }
     >

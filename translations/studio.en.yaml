@@ -3152,6 +3152,27 @@ service-users.credentials.never-used: Never
 service-users.credentials.no-client: No OAuth client
 service-users.credentials.rotate: Rotate secret
 service-users.credentials.rotate.confirm: 'Create a new client secret for "{{name}}"? The current secret stops working at once.'
+service-users.credentials.mcp-tokens: MCP access tokens
+service-users.credentials.mcp-tokens.active: Active tokens
+service-users.credentials.mcp-tokens.latest-expiry: Latest expiry
+service-users.credentials.mcp-tokens.none: No active tokens
+service-users.credentials.issue: Issue token
+service-users.credentials.issue.title: Issue an MCP access token
+service-users.credentials.issue.ttl: Lifetime in days (1 to 90)
+service-users.credentials.issue.ttl.invalid: Enter a whole number of days from 1 to 90.
+service-users.credentials.issue.hint: 'The token is shown only once. Clients send it as "Authorization: Bearer <token>".'
+service-users.credentials.revoke: Revoke all tokens
+service-users.credentials.revoke.confirm: Revoke every MCP access token of this service user? Connected clients stop working immediately.
+service-users.credentials.revoke.success: All MCP access tokens of the service user are revoked.
+service-users.credentials.oauth: OAuth client
+service-users.credentials.oauth.disabled: OAuth client credentials are disabled on this instance; use an MCP access token.
+service-users.credentials.oauth.rotate-hint: Access tokens already issued with the old secret stay valid until they expire.
+service-users.credentials.token: Access token
+service-users.credentials.token.expires: Expires
+service-users.create.credentials.title: Credentials
+service-users.create.credentials.skip: Skip, issue later
+service-users.create.credentials.which: 'Use the OAuth client for pipelines that can run the client_credentials grant; use an MCP access token for everything else.'
+service-users.create.credentials.token-description: 'Clients connect with an MCP access token. Issue one now, or later from the credentials of the service user.'
 service-users.secret.title: Client secret
 service-users.secret.client-secret: Client secret
 service-users.secret.warning: 'Copy the secret now. It is shown only once and cannot be displayed again.'

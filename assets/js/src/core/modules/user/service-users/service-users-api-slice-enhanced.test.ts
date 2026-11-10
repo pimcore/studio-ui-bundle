@@ -29,9 +29,12 @@ const serviceUser = {
   dataObjectWorkspaces: [],
   documentWorkspaces: [],
   clientId: 'svc_abc',
-  lastLogin: null
+  lastLogin: null,
+  clientCredentialsEnabled: false,
+  mcpTokens: { active: 0, latestExpiresAt: null }
 }
 const credentials = { serviceUserId: 7, clientId: 'svc_abc', clientSecret: 'one-time-secret' }
+const accessToken = { token: 'pmcp_one-time-token', expiresAt: 1_800_000_000 }
 
 const createStore = (): ReturnType<typeof configureStore> => configureStore({
   reducer: { [api.reducerPath]: api.reducer },
@@ -59,6 +62,9 @@ describe('service users api slice', () => {
 
       if (path === COLLECTION_URL) {
         return json({ totalItems: 1, items: [serviceUser] })
+      }
+      if (path.endsWith('/mcp-token') && request.method === 'POST') {
+        return json(accessToken)
       }
       if (request.method === 'DELETE') {
         return new Response(null, { status: 200 })
@@ -138,6 +144,38 @@ describe('service users api slice', () => {
     expect(requests('POST', `${DETAIL_URL}/rotate-secret`)).toHaveLength(1)
     expect(requests('GET', COLLECTION_URL)).toHaveLength(1)
     expect(requests('GET', DETAIL_URL)).toHaveLength(1)
+  })
+
+  it('issues an MCP access token and refreshes the token summary in the list and the detail', async () => {
+    const store = createStore()
+    await subscribeToList(store)
+    await subscribeToDetail(store)
+
+    const result = await store.dispatch(api.endpoints.serviceUserMcpTokenIssue.initiate({
+      id: 7,
+      serviceUserMcpTokenRequest: { ttlDays: 1 }
+    }) as any)
+
+    expect(result.data).toEqual(accessToken)
+    expect(bodies.get(requests('POST', `${DETAIL_URL}/mcp-token`)[0])).toEqual({ ttlDays: 1 })
+    await waitFor(() => {
+      expect(requests('GET', COLLECTION_URL)).toHaveLength(2)
+      expect(requests('GET', DETAIL_URL)).toHaveLength(2)
+    })
+  })
+
+  it('revokes all MCP access tokens and refreshes the token summary in the list and the detail', async () => {
+    const store = createStore()
+    await subscribeToList(store)
+    await subscribeToDetail(store)
+
+    await store.dispatch(api.endpoints.serviceUserMcpTokenRevoke.initiate({ id: 7 }) as any)
+
+    expect(requests('DELETE', `${DETAIL_URL}/mcp-token`)).toHaveLength(1)
+    await waitFor(() => {
+      expect(requests('GET', COLLECTION_URL)).toHaveLength(2)
+      expect(requests('GET', DETAIL_URL)).toHaveLength(2)
+    })
   })
 
   it('deactivates a service user and refreshes the list and the detail', async () => {

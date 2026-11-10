@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEqual, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
@@ -54,9 +54,19 @@ export const ServiceUserDetail = ({ id, onDeleted }: ServiceUserDetailProps): Re
   const [deactivate, { isLoading: deactivating }] = useServiceUserDeactivateByIdMutation()
   const [remove] = useServiceUserDeleteByIdMutation()
   const [draft, setDraft] = useState<ServiceUserDraft | undefined>(undefined)
+  // The editable part of the last loaded service user. A refetch that changes only other fields (the MCP token
+  // summary after issuing or revoking a token) must not throw away unsaved edits.
+  const loadedDraft = useRef<ServiceUserDraft | undefined>(undefined)
 
   useEffect(() => {
-    setDraft(isUndefined(serviceUser) ? undefined : toDraft(serviceUser))
+    const next = isUndefined(serviceUser) ? undefined : toDraft(serviceUser)
+
+    if (!isUndefined(next) && !isUndefined(loadedDraft.current) && isEqual(next, loadedDraft.current)) {
+      return
+    }
+
+    loadedDraft.current = next
+    setDraft(next)
   }, [serviceUser])
 
   useEffect(() => {
