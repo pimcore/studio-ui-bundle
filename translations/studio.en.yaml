@@ -2208,12 +2208,19 @@ classification-store.rename-collection: Rename collection
 classification-store.delete-collection: "Delete collection \"{{collectionName}}\"?"
 classification-store.add-key: Add key
 classification-store.rename-key: Rename key
-classification-store.delete-key: "Delete key \"{{keyName}}\"?"
+classification-store.delete-key: "Remove key \"{{keyName}}\" from every group?"
 classification-store.delete-key-relation: "Remove key \"{{keyName}}\" from this group?"
 classification-store.delete-group-relation: "Remove group \"{{groupName}}\" from this collection?"
 classification-store.delete-group-consequence: "Deleting this group also deletes the values every object holds under it. This cannot be undone."
 classification-store.delete-collection-consequence: "The collection and its list of groups are removed. The groups and their keys stay in the store, and no object values are deleted."
 classification-store.delete-key-relation-consequence: "The key is removed from this group only. The key itself stays in the store, and nothing an object holds is deleted."
+classification-store.delete-key-consequence: "The key is removed from every group it belongs to and is no longer offered anywhere. Nothing an object holds is deleted, but those values stay out of reach until the key is restored and assigned to a group again. Its group assignments, their order, their mandatory flags and their per-group overrides do not come back with it."
+classification-store.keys-view.active: Active
+classification-store.keys-view.deleted: Deleted
+classification-store.restore-key: Restore
+classification-store.restore-key-question: "Restore key \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "The key comes back belonging to no group. Its group assignments, their order, their mandatory flags and their per-group overrides are gone and cannot be recovered, so assign the key to a group again before its values are reachable."
+classification-store.keys-deleted-empty: No deleted keys.
 classification-store.delete-group-relation-consequence: "The group is removed from this collection only. The group, its keys and the values objects hold under it are untouched."
 classification-store.edit-definition: Edit definition
 classification-store.edit-key-definition: "Edit key definition: {{keyName}}"

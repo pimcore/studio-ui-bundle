@@ -899,18 +899,29 @@ const api = baseApi.enhanceEndpoints({
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
+          patchAllCacheEntries<
+            ClassificationStoreConfigurationKeyCollectionApiResponse,
+            ClassificationStoreConfigurationKeyCollectionApiArg
+          >(
             dispatch,
             'classificationStoreConfigurationKeyCollection',
             (draft) => {
               draft.items = draft.items.filter((k) => k.id !== args.id)
               draft.totalItems = Math.max(0, draft.totalItems - 1)
-            }
+            },
+            // The Deleted view lists disabled keys, which this delete adds to rather than removes from.
+            (cacheArgs) => cacheArgs.body.disabledOnly !== true
           )
         } catch {
           // Mutation failed — cache stays stale until next refetch
         }
       }
+    },
+
+    // Invalidation rather than a hand patch, as for the sub groups below: which view and page a
+    // restored key lands on, and what each total becomes, are the server's decisions.
+    classificationStoreConfigurationKeyRestore: {
+      invalidatesTags: ['Classification Store']
     },
 
     // ─── Key-Group Relations ──────────────────────────────────────────────────
@@ -1180,6 +1191,7 @@ export const {
   // CRUD mutations — keys
   useClassificationStoreConfigurationKeyCreateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
+  useClassificationStoreConfigurationKeyRestoreMutation,
   // CRUD mutations — key-group relations
   useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
   // CRUD mutations — collection-group relations

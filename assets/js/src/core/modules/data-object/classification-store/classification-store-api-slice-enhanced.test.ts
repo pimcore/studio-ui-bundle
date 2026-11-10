@@ -1261,3 +1261,44 @@ describe('invalidating the classification store tag', () => {
     before.forEach((url) => { expect(after.filter((requested) => requested === url)).toHaveLength(2) })
   })
 })
+
+/**
+ * A key delete disables the key, so it leaves the Active view and arrives in the Deleted view.
+ * The cached entries of the two views sit on the same endpoint and differ only in the body.
+ */
+describe('classification store key delete cache patch', () => {
+  const originalFetch = globalThis.fetch
+
+  const deletedViewArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 }, disabledOnly: true } }
+
+  beforeEach(() => {
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.method === 'DELETE') {
+        return new Response('null', { status: 200, headers: { 'Content-Type': 'application/json' } })
+      }
+
+      return new Response(JSON.stringify({ items: [storedKey], totalItems: 1 }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }) as unknown as typeof fetch
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('drops the row and the total from the Active entry only', async () => {
+    const store = createStore()
+    const select = (args: unknown): { items: unknown[], totalItems: number } =>
+      (api.endpoints as any).classificationStoreConfigurationKeyCollection.select(args)(store.getState()).data
+
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(queryArgs))
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(deletedViewArgs))
+
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyDelete.initiate({ id: KEY_ID }))
+
+    await waitFor(() => { expect(select(queryArgs)).toEqual({ items: [], totalItems: 0 }) })
+    expect(select(deletedViewArgs)).toEqual({ items: [storedKey], totalItems: 1 })
+  })
+})

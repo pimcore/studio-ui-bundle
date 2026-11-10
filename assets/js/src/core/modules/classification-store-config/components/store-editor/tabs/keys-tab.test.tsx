@@ -84,22 +84,25 @@ jest.mock('@Pimcore/components/modal/modal', () => ({
 }))
 
 // The real cell resolves its renderer through the dynamic type registry. This stand-in shows
-// the value and reports an edit the way the registered input cell does.
+// the value and reports an edit the way the registered input cell does; a column that is not
+// editable renders as plain text, as the real cell does.
 jest.mock('@Pimcore/components/grid/columns/default-cell', () => ({
-  DefaultCell: (props: any) => (
-    <input
-      aria-label={ `${String(props.column.id)}-${String(props.row.index)}` }
-      onChange={ (event: { target: { value: string } }) => {
-        props.table.options.meta.onUpdateCellData({
-          rowIndex: props.row.index,
-          columnId: props.column.id,
-          value: event.target.value,
-          rowData: props.row.original
-        })
-      } }
-      value={ String(props.getValue() ?? '') }
-    />
-  )
+  DefaultCell: (props: any) => props.column.columnDef.meta?.editable !== true
+    ? <span>{ String(props.getValue() ?? '') }</span>
+    : (
+      <input
+        aria-label={ `${String(props.column.id)}-${String(props.row.index)}` }
+        onChange={ (event: { target: { value: string } }) => {
+          props.table.options.meta.onUpdateCellData({
+            rowIndex: props.row.index,
+            columnId: props.column.id,
+            value: event.target.value,
+            rowData: props.row.original
+          })
+        } }
+        value={ String(props.getValue() ?? '') }
+      />
+      )
 }))
 
 // eslint-disable-next-line import/first
@@ -116,6 +119,8 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event'
 // eslint-disable-next-line import/first
 import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+// eslint-disable-next-line import/first
+import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
 // eslint-disable-next-line import/first
 import { KeysTab } from './keys-tab'
 
@@ -521,7 +526,7 @@ describe('KeysTab delete dialog', () => {
     globalThis.fetch = originalFetch
   })
 
-  it('shows the generic confirmation alone and sends no request on open', async () => {
+  it('shows the question and the consequence and sends no request on open', async () => {
     const user = userEvent.setup({ delay: null })
 
     renderTab()
@@ -535,7 +540,8 @@ describe('KeysTab delete dialog', () => {
     const dialog = await screen.findByRole('dialog', undefined, WAIT_BUDGET)
 
     expect(within(dialog).getByText('classification-store.delete-key')).toBeInTheDocument()
-    expect(dialog.textContent).not.toContain('consequence')
+    expect(within(dialog).getByText('classification-store.delete-key-consequence')).toBeInTheDocument()
+    expect(dialog.querySelector('.ant-alert')).toBeNull()
     expect((globalThis.fetch as jest.Mock).mock.calls).toHaveLength(callsBefore)
   })
 
@@ -553,5 +559,167 @@ describe('KeysTab delete dialog', () => {
     await waitFor(() => { expect(deleteRequests()).toHaveLength(1) }, WAIT_BUDGET)
 
     expect(deleteRequests()[0].url.endsWith(`/configuration/keys/${height.id}`)).toBe(true)
+  })
+})
+
+describe('KeysTab deleted view', () => {
+  const originalFetch = globalThis.fetch
+  const RESTORE_URL_SUFFIX = '/restore'
+  const showErrorMock = ErrorModalService.showError as unknown as jest.Mock
+
+  const deletedKey = { ...height, id: 12, name: 'weight', title: 'Weight', enabled: false }
+
+  /** Whether the server holds the deleted key as disabled, and how it answers the restore. */
+  let isRestored: boolean
+  let hasDeletedKeys: boolean
+  let restoreStatus: number
+
+  const bodyOf = (request: RecordedRequest): Record<string, unknown> | undefined => request.body
+  const collectionRequests = (): RecordedRequest[] => requests.filter((request) => request.url.endsWith(COLLECTION_URL))
+  const restoreRequests = (): RecordedRequest[] =>
+    requests.filter((request) => request.url.endsWith(RESTORE_URL_SUFFIX))
+  const deletedViewRequests = (): RecordedRequest[] =>
+    collectionRequests().filter((request) => bodyOf(request)?.disabledOnly === true)
+
+  beforeEach(() => {
+    requests.length = 0
+    isRestored = false
+    hasDeletedKeys = true
+    restoreStatus = 200
+    showErrorMock.mockClear()
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      let body: Record<string, unknown> | undefined
+
+      try {
+        body = JSON.parse(await input.clone().text())
+      } catch {
+        body = undefined
+      }
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(TREE_URL)) {
+        return jsonResponse([])
+      }
+
+      if (input.url.endsWith(COLLECTION_URL)) {
+        const items = body?.disabledOnly === true
+          ? (hasDeletedKeys && !isRestored ? [deletedKey] : [])
+          : (isRestored ? [height, { ...deletedKey, enabled: true }] : [height])
+
+        return jsonResponse({ items, totalItems: items.length })
+      }
+
+      if (input.url.endsWith(`/keys/${deletedKey.id}${RESTORE_URL_SUFFIX}`)) {
+        if (restoreStatus !== 200) {
+          return jsonResponse({ message: 'restore failed' }, restoreStatus)
+        }
+
+        isRestored = true
+
+        return jsonResponse({ ...deletedKey, enabled: true })
+      }
+
+      return jsonResponse({ items: [], totalItems: 0 })
+    }) as unknown as typeof fetch
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  const openDeletedView = async (user: ReturnType<typeof userEvent.setup>): Promise<void> => {
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByText('classification-store.keys-view.deleted'))
+  }
+
+  it('offers both views and asks for the enabled keys with the unchanged arguments', async () => {
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    expect(screen.getByText('classification-store.keys-view.active')).toBeInTheDocument()
+    expect(screen.getByText('classification-store.keys-view.deleted')).toBeInTheDocument()
+    expect(bodyOf(collectionRequests()[0])).toEqual({ filters: { page: 1, pageSize: expect.any(Number), columnFilters: [] } })
+  })
+
+  it('lists only the disabled keys, read-only, with Restore as the one action', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    await openDeletedView(user)
+
+    expect(await screen.findByText('weight', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    expect(screen.queryByText('height')).toBeNull()
+    expect(screen.queryByDisplayValue('weight')).toBeNull()
+    expect(bodyOf(deletedViewRequests()[0])?.disabledOnly).toBe(true)
+
+    const buttons = within(screen.getAllByRole('row')[1]).getAllByRole('button')
+
+    expect(buttons).toHaveLength(1)
+    expect(buttons[0]).toHaveAccessibleName('classification-store.restore-key')
+  })
+
+  it('asks before restoring and sends no request on open', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    await openDeletedView(user)
+    await screen.findByText('weight', undefined, WAIT_BUDGET)
+
+    const callsBefore = (globalThis.fetch as jest.Mock).mock.calls.length
+
+    await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
+
+    const dialog = await screen.findByRole('dialog', undefined, WAIT_BUDGET)
+
+    expect(within(dialog).getByText('classification-store.restore-key-consequence')).toBeInTheDocument()
+    expect((globalThis.fetch as jest.Mock).mock.calls).toHaveLength(callsBefore)
+    expect(restoreRequests()).toHaveLength(0)
+  })
+
+  it('restores the key by its id, then shows it in the Active view and no longer in the Deleted one', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    await openDeletedView(user)
+    await screen.findByText('weight', undefined, WAIT_BUDGET)
+    await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
+    await user.click((await screen.findByRole('dialog', undefined, WAIT_BUDGET)).querySelector('.ant-btn-primary')!)
+
+    await waitFor(() => { expect(restoreRequests()).toHaveLength(1) }, WAIT_BUDGET)
+    expect(restoreRequests()[0].method).toBe('POST')
+    expect(restoreRequests()[0].body).toBeUndefined()
+    await waitFor(() => { expect(screen.queryByText('weight')).toBeNull() }, WAIT_BUDGET)
+
+    await user.click(screen.getByText('classification-store.keys-view.active'))
+
+    expect(await screen.findByDisplayValue('weight', undefined, WAIT_BUDGET)).toBeInTheDocument()
+  })
+
+  it('keeps the row and reports the error when the restore fails', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    restoreStatus = 500
+    await openDeletedView(user)
+    await screen.findByText('weight', undefined, WAIT_BUDGET)
+    await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
+    await user.click((await screen.findByRole('dialog', undefined, WAIT_BUDGET)).querySelector('.ant-btn-primary')!)
+
+    await waitFor(() => { expect(showErrorMock).toHaveBeenCalledTimes(1) }, WAIT_BUDGET)
+    expect(screen.getByText('weight')).toBeInTheDocument()
+  })
+
+  it('shows an empty state and keeps the switch usable when nothing is deleted', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    hasDeletedKeys = false
+    await openDeletedView(user)
+
+    expect(await screen.findByText('classification-store.keys-deleted-empty', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    expect(screen.queryByDisplayValue('height')).toBeNull()
+
+    await user.click(screen.getByText('classification-store.keys-view.active'))
+
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
   })
 })
