@@ -411,8 +411,10 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
         renderTopBar={
           <Flex
             align="center"
+            gap="extra-small"
             justify="space-between"
             style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+            wrap="wrap"
           >
             <Flex
               align="center"

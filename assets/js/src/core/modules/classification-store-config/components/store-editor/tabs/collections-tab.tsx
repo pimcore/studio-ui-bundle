@@ -16,6 +16,7 @@ import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Header } from '@Pimcore/components/header/header'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -29,7 +30,6 @@ import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Header } from '@Pimcore/components/header/header'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
@@ -46,6 +46,7 @@ import { useStoreImport } from '@Pimcore/modules/classification-store-config/com
 import { MetadataModal } from './shared/metadata-modal'
 import { TitlesModal } from './shared/titles-modal'
 import { PairActions } from './shared/pair-actions'
+import { getScrollAffordanceStyle } from './shared/scroll-affordance'
 import { type PairMap } from './shared/pairs'
 
 interface ICollectionsTabProps {
@@ -407,8 +408,18 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                 </Toolbar>
               }
               renderTopBar={
-                <Header >
-                  <Flex gap='extra-small'>
+                <Flex
+                  align="center"
+                  gap="extra-small"
+                  justify="space-between"
+                  style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                  wrap="wrap"
+                >
+                  <Flex
+                    align="center"
+                    gap='extra-small'
+                    wrap="wrap"
+                  >
                     <Title>{t('classification-store.tabs.collections')}</Title>
                     <IconTextButton
                       icon={ { value: 'new' } }
@@ -427,11 +438,11 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                     withPrefix={ false }
                     withoutAddon={ false }
                   />
-                </Header>
+                </Flex>
               }
             >
               <Flex
-                style={ { height: '100%', padding: '0 16px', overflowX: 'auto' } }
+                style={ { height: '100%', padding: '0 16px', ...getScrollAffordanceStyle(token.colorBgContainer, token.colorBorder) } }
                 vertical
               >
                 <Grid

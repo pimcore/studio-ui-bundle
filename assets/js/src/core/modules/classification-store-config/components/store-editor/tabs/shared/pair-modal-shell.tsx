@@ -60,7 +60,9 @@ export const PairModalShell = ({
 
   // The list seeds itself once, so its identity has to change whenever the editor is opened or
   // pointed at another entity. `destroyOnClose` only unmounts after the leave animation, and a
-  // reopen inside that window would otherwise keep the previous list alive.
+  // reopen inside that window would otherwise keep the previous list alive. The key must not
+  // involve entityName or value: both go empty in the render that closes the editor, and a new key
+  // then would remount the list as "No pairs yet" for the length of the fade.
   const [openCount, setOpenCount] = useState(0)
   const [wasOpen, setWasOpen] = useState(open)
   if (open !== wasOpen) {
@@ -103,6 +105,9 @@ export const PairModalShell = ({
   }
 
   const handleCancel = (): void => {
+    // A save already dispatched cannot be taken back, so the editor stays until it has answered.
+    if (saving) return
+
     if (!dirty) {
       onCancel()
       return
@@ -121,9 +126,12 @@ export const PairModalShell = ({
 
   return (
     <Modal
+      cancelButtonProps={ { disabled: saving } }
       confirmLoading={ confirmLoading || saving }
       destroyOnClose
+      keyboard={ !saving }
       limitContentHeight
+      maskClosable={ !saving }
       okText={ t('save') }
       onCancel={ handleCancel }
       onOk={ () => { void handleOk() } }
@@ -133,7 +141,7 @@ export const PairModalShell = ({
     >
       <PairList
         hint={ hint }
-        key={ `${openCount}:${entityName}` }
+        key={ openCount }
         onDirtyChange={ handleDirtyChange }
         ref={ listRef }
         value={ value }

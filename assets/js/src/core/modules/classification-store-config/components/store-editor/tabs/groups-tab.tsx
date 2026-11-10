@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Header } from '@Pimcore/components/header/header'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -28,7 +29,6 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { Header } from '@Pimcore/components/header/header'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
@@ -47,6 +47,7 @@ import { useStoreImport } from '@Pimcore/modules/classification-store-config/com
 import { MetadataModal } from './shared/metadata-modal'
 import { TitlesModal } from './shared/titles-modal'
 import { PairActions } from './shared/pair-actions'
+import { getScrollAffordanceStyle } from './shared/scroll-affordance'
 import { type PairMap } from './shared/pairs'
 
 interface IGroupsTabProps {
@@ -423,8 +424,18 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                 </Toolbar>
               }
               renderTopBar={
-                <Header >
-                  <Flex gap='extra-small'>
+                <Flex
+                  align="center"
+                  gap="extra-small"
+                  justify="space-between"
+                  style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                  wrap="wrap"
+                >
+                  <Flex
+                    align="center"
+                    gap='extra-small'
+                    wrap="wrap"
+                  >
                     <Title>{t('classification-store.tabs.groups')}</Title>
                     <IconTextButton
                       icon={ { value: 'new' } }
@@ -443,11 +454,11 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                     withPrefix={ false }
                     withoutAddon={ false }
                   />
-                </Header>
+                </Flex>
               }
             >
               <Flex
-                style={ { height: '100%', padding: '0 16px', overflowX: 'auto' } }
+                style={ { height: '100%', padding: '0 16px', ...getScrollAffordanceStyle(token.colorBgContainer, token.colorBorder) } }
                 vertical
               >
                 <Grid
