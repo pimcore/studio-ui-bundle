@@ -116,6 +116,13 @@ export const StatedState = ({ title, description, actionLabel, onAction }: IStat
   </Flex>
 )
 
+const noOptionsDescriptionKey = (offeredCount: number, status: IResolvedSubset['status']): string => {
+  if (offeredCount === 0) return 'classification-store.override.key-offers-no-options'
+  if (status === 'invalid') return 'classification-store.override.stored-unreadable'
+  if (status === 'empty') return 'classification-store.override.options-empty'
+  return 'classification-store.override.options-stale-only'
+}
+
 export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { options, optionsUnavailableReason: reason } = vocabularyOf(relation)
@@ -178,13 +185,7 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
   const resolved = resolveSubset(draft.options, offered)
 
   if (offered.length === 0 || resolved.status === 'invalid' || resolved.status === 'empty' || resolved.status === 'stale-only') {
-    const description = offered.length === 0
-      ? t('classification-store.override.key-offers-no-options')
-      : resolved.status === 'invalid'
-        ? t('classification-store.override.stored-unreadable')
-        : resolved.status === 'empty'
-          ? t('classification-store.override.options-empty')
-          : t('classification-store.override.options-stale-only')
+    const description = t(noOptionsDescriptionKey(offered.length, resolved.status))
 
     return (
       <Flex

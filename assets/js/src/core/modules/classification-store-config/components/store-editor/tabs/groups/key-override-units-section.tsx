@@ -37,7 +37,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
   const defaultOutside = storedDefault !== undefined && !(typeof storedDefault === 'string' && choices.includes(storedDefault))
   // The key's own symbol for the stored default; the reason is only given where the key itself dropped the unit,
   // since otherwise it is this group's subset that excludes it, which the sentence below the control states.
-  const storedId = String(storedDefault)
+  const storedId = storedDefault === undefined ? '' : typeof storedDefault === 'string' ? storedDefault : JSON.stringify(storedDefault)
   const keyStillOffers = keyUnits.some((unit) => unit.id === storedId)
   const defaultLabel = keyStillOffers
     ? unitSymbol(relation, storedId)
@@ -127,11 +127,11 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
           options={ [
             { value: USE_DEFAULT, label: t('classification-store.override.use-key-default') },
             // The stored default stays visible as itself, so it never reads like the reset choice.
-            ...(defaultOutside ? [{ value: String(storedDefault), label: defaultLabel, disabled: true }] : []),
+            ...(defaultOutside ? [{ value: storedId, label: defaultLabel, disabled: true }] : []),
             ...choices.map((id) => ({ value: id, label: unitSymbol(relation, id) }))
           ] }
           placeholder={ t('classification-store.override.use-key-default') }
-          value={ storedDefault === undefined ? USE_DEFAULT : defaultOutside ? String(storedDefault) : storedDefault }
+          value={ storedDefault === undefined ? USE_DEFAULT : defaultOutside ? storedId : storedDefault }
         />
         { defaultOutside && (
           <StatedState

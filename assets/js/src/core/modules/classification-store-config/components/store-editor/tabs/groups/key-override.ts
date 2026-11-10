@@ -31,11 +31,11 @@ export interface IPublishedUnit {
 }
 
 /** Key types that carry units. */
-const UNIT_TYPES: readonly string[] = ['quantityValue', 'inputQuantityValue', 'quantityValueRange']
+const UNIT_TYPES: ReadonlySet<string> = new Set(['quantityValue', 'inputQuantityValue', 'quantityValueRange'])
 
 export const vocabularyOf = (relation: Relation): IPublishedKeyVocabulary => relation as IPublishedKeyVocabulary
 
-export const carriesUnits = (relation: Relation): boolean => UNIT_TYPES.includes(vocabularyOf(relation).keyType ?? '')
+export const carriesUnits = (relation: Relation): boolean => UNIT_TYPES.has(vocabularyOf(relation).keyType ?? '')
 
 export const keyUnitsOf = (relation: Relation): IPublishedUnit[] => vocabularyOf(relation).units?.validUnits ?? []
 
