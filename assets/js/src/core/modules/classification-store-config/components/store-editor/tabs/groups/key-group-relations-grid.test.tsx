@@ -485,7 +485,7 @@ describe('KeyGroupRelationsGrid', () => {
     renderGrid()
     await screen.findByText('height', undefined, WAIT_BUDGET)
 
-    expect(renderedColumnIds(11)).toEqual(['keyId', 'keyDescription', 'mandatory', 'sorter'])
+    expect(renderedColumnIds(11)).toEqual(['keyId', 'keyName', 'keyDescription', 'mandatory', 'sorter'])
 
     await selectKeys(user, 'height')
     await confirmAssign(user)

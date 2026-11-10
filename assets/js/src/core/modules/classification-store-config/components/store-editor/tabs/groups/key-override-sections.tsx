@@ -20,6 +20,7 @@ import { type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pi
 import {
   clearOptions,
   carriesUnits,
+  storesUnitMember,
   optionValuesOf,
   resolveSubset,
   toggleOption,
@@ -215,5 +216,5 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
 export const offersNothing = (relation: Relation): boolean => {
   const { options, optionsUnavailableReason: reason } = vocabularyOf(relation)
 
-  return !carriesUnits(relation) && (options === undefined || options === null) && (reason === undefined || reason === null)
+  return !carriesUnits(relation) && !storesUnitMember(relation) && (options === undefined || options === null) && (reason === undefined || reason === null)
 }

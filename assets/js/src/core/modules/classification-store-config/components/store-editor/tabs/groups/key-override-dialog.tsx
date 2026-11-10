@@ -18,8 +18,8 @@ import {
   type ClassificationStoreConfigurationKeyGroupRelationDetail,
   useClassificationStoreConfigurationKeyGroupRelationCreateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import { buildOverride, carriesUnits, draftOf, type IOverrideDraft } from './key-override'
-import { offersNothing, OptionsSection } from './key-override-sections'
+import { buildOverride, carriesUnits, clearUnreadable, draftOf, storesUnitMember, type IOverrideDraft } from './key-override'
+import { offersNothing, OptionsSection, StatedState } from './key-override-sections'
 import { UnitsSection } from './key-override-units-section'
 
 interface IKeyOverrideDialogProps {
@@ -72,11 +72,14 @@ export const KeyOverrideDialog = ({ relation, groupName, onClose }: IKeyOverride
 
   return (
     <Modal
+      cancelButtonProps={ { disabled: saving } }
+      closable={ !saving }
       confirmLoading={ saving }
       destroyOnClose
       limitContentHeight
+      maskClosable={ !saving }
       okText={ t('save') }
-      onCancel={ close }
+      onCancel={ () => { if (!saving) close() } }
       onOk={ () => { void handleSave() } }
       open={ relation !== undefined }
       size="L"
@@ -87,30 +90,38 @@ export const KeyOverrideDialog = ({ relation, groupName, onClose }: IKeyOverride
           gap="large"
           vertical
         >
-          { offersNothing(relation)
+          { draft.unreadable
             ? (
-              <Alert
-                message={ t('classification-store.override.nothing-to-narrow') }
-                showIcon
-                type="info"
+              <StatedState
+                actionLabel={ t('classification-store.override.use-all-options') }
+                description={ t('classification-store.override.stored-unreadable') }
+                onAction={ () => { setEdit({ relation, draft: clearUnreadable(draft) }) } }
               />
               )
-            : (
-              <>
-                <OptionsSection
-                  draft={ draft }
-                  onChange={ (next) => { setEdit({ relation, draft: next }) } }
-                  relation={ relation }
+            : offersNothing(relation)
+              ? (
+                <Alert
+                  message={ t('classification-store.override.nothing-to-narrow') }
+                  showIcon
+                  type="info"
                 />
-                { carriesUnits(relation) && (
+                )
+              : (
+                <>
+                  <OptionsSection
+                    draft={ draft }
+                    onChange={ (next) => { setEdit({ relation, draft: next }) } }
+                    relation={ relation }
+                  />
+                  { (carriesUnits(relation) || storesUnitMember(relation)) && (
                   <UnitsSection
                     draft={ draft }
                     onChange={ (next) => { setEdit({ relation, draft: next }) } }
                     relation={ relation }
                   />
+                  ) }
+                </>
                 ) }
-              </>
-              ) }
         </Flex>
       ) }
     </Modal>

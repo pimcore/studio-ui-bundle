@@ -46,22 +46,49 @@ export const keyUnitsOf = (relation: Relation): IPublishedUnit[] => vocabularyOf
 export const unitSymbol = (relation: Relation, id: string): string =>
   keyUnitsOf(relation).find((unit) => unit.id === id)?.symbol ?? id
 
-/** The three members of the override this screen edits, held as stored so an unread one survives a save. */
+/**
+ * The three members of the override this screen edits, held as stored. `rest` carries every other
+ * member of the stored object so a save overlays the three and leaves the rest as it was.
+ * `unreadable` marks a stored value that is not an object at all.
+ */
 export interface IOverrideDraft {
   options: unknown
   defaultUnit: unknown
   validUnits: unknown
+  rest: Record<string, unknown>
+  unreadable: boolean
 }
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
 
 export const draftOf = (relation: Relation): IOverrideDraft => {
-  const stored = (relation.definitionOverride ?? {}) as Record<string, unknown>
+  const raw: unknown = relation.definitionOverride
+
+  if (raw !== undefined && raw !== null && !isPlainObject(raw)) {
+    return { options: undefined, defaultUnit: undefined, validUnits: undefined, rest: {}, unreadable: true }
+  }
+
+  const { options, defaultUnit, validUnits, ...rest } = raw ?? {}
 
   return {
-    options: stored.options ?? undefined,
-    defaultUnit: stored.defaultUnit ?? undefined,
-    validUnits: stored.validUnits ?? undefined
+    options: options ?? undefined,
+    defaultUnit: defaultUnit ?? undefined,
+    validUnits: validUnits ?? undefined,
+    rest,
+    unreadable: false
   }
 }
+
+/** True where the stored override names a unit member, whatever the key's type carries. */
+export const storesUnitMember = (relation: Relation): boolean => {
+  const { defaultUnit, validUnits } = draftOf(relation)
+
+  return defaultUnit !== undefined || validUnits !== undefined
+}
+
+/** Clears an unreadable stored value, the one action that resolves it. */
+export const clearUnreadable = (draft: IOverrideDraft): IOverrideDraft => ({ ...draft, unreadable: false })
 
 export type SubsetStatus = 'all' | 'narrowed' | 'empty' | 'stale-only' | 'invalid'
 
@@ -158,6 +185,7 @@ export const setDefaultUnit = (draft: IOverrideDraft, defaultUnit: string | unde
 /** The override as it is sent: every member left set, and an explicit null where none remains. */
 export const buildOverride = (draft: IOverrideDraft): Record<string, unknown> | null => {
   const override: Record<string, unknown> = {
+    ...draft.rest,
     ...(draft.options !== undefined ? { options: draft.options } : {}),
     ...(draft.defaultUnit !== undefined ? { defaultUnit: draft.defaultUnit } : {}),
     ...(draft.validUnits !== undefined ? { validUnits: draft.validUnits } : {})
@@ -182,12 +210,15 @@ export const overrideTags = (relation: Relation): IOverrideTag[] => {
   const options = optionValuesOf(relation)
   const optionsPublished = vocabularyOf(relation).options !== undefined && vocabularyOf(relation).options !== null
 
-  if (draft.options !== undefined) {
+  if (draft.options !== undefined && !optionsPublished) {
+    // The key's options are unknown, not absent: nothing about the stored subset can be judged.
+    tags.push({ id: 'options', translationKey: 'classification-store.override.options-unavailable', params: {}, text: '', danger: false })
+  } else if (draft.options !== undefined) {
     const resolved = resolveSubset(draft.options, options)
 
-    if (resolved.status === 'empty' || resolved.status === 'stale-only' || (optionsPublished && resolved.status === 'invalid')) {
+    if (resolved.status === 'empty' || resolved.status === 'stale-only' || resolved.status === 'invalid') {
       tags.push({ id: 'options', translationKey: 'classification-store.override.tag-no-options', params: {}, text: '', danger: true })
-    } else if (optionsPublished) {
+    } else {
       tags.push({
         id: 'options',
         translationKey: 'classification-store.override.tag-options',

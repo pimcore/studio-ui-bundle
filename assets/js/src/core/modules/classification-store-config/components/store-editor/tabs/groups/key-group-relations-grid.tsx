@@ -21,6 +21,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Tag } from '@Pimcore/components/tag/tag'
+import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 import { createColumnHelper, functionalUpdate, type RowSelectionState, type Updater } from '@tanstack/react-table'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Header } from '@Pimcore/components/header/header'
@@ -425,17 +426,21 @@ export const KeyGroupRelationsGrid = ({
     columnHelper.accessor('keyName', {
       header: t('classification-store.columns.name'),
       size: 200,
+      // The name stays a DefaultCell (keyboard navigation, clipping, padding); the tags sit beside it.
       cell: (info) => (
         <Flex
           align="center"
           gap="mini"
-          wrap="wrap"
+          style={ { width: '100%' } }
         >
-          <span>{ info.getValue() }</span>
+          <div style={ { flex: '1 1 auto', minWidth: 0, overflow: 'hidden' } }>
+            <DefaultCell { ...info } />
+          </div>
           { overrideTags(info.row.original).map((tag) => (
             <Tag
               color={ tag.danger ? 'error' : undefined }
               key={ tag.id }
+              style={ { flex: 'none' } }
             >
               { tag.translationKey === null ? tag.text : t(tag.translationKey, tag.params) }
             </Tag>
