@@ -70,16 +70,20 @@ jest.mock('./create/create-service-user-modal', () => ({
   CreateServiceUserModal: ({ open, mode, onCreated }: {
     open: boolean
     mode: string
-    onCreated: (serviceUserId: number, issued?: unknown) => void
+    onCreated: (serviceUserId: number, issued: unknown[]) => void
   }) => open
     ? (
       <>
         <button
-          onClick={ () => { onCreated(9, token) } }
+          onClick={ () => { onCreated(9, [token]) } }
           type="button"
         >{`submit:${mode}`}</button>
         <button
-          onClick={ () => { onCreated(9) } }
+          onClick={ () => { onCreated(9, [{ clientId: 'svc_9', clientSecret: 'secret-9' }, token]) } }
+          type="button"
+        >{`submit-both:${mode}`}</button>
+        <button
+          onClick={ () => { onCreated(9, []) } }
           type="button"
         >{`skip:${mode}`}</button>
       </>
@@ -87,14 +91,17 @@ jest.mock('./create/create-service-user-modal', () => ({
     : null
 }))
 jest.mock('./credentials/one-time-secret-modal', () => ({
-  OneTimeSecretModal: ({ credential, onClose }: { credential?: { token: string }, onClose: () => void }) =>
-    credential === undefined
+  OneTimeSecretModal: ({ credentials, onClose }: {
+    credentials?: Array<{ token?: string, clientSecret?: string | null }>
+    onClose: () => void
+  }) =>
+    credentials === undefined || credentials.length === 0
       ? null
       : (
         <button
           onClick={ onClose }
           type="button"
-        >{`secret:${credential.token}`}</button>
+        >{`secret:${credentials.map((credential) => credential.token ?? credential.clientSecret).join('+')}`}</button>
         )
 }))
 
@@ -121,6 +128,17 @@ describe('ServiceUsersContainer', () => {
     fireEvent.click(screen.getByText('secret:pmcp_shown-once'))
 
     expect(screen.queryByText('secret:pmcp_shown-once')).toBeNull()
+  })
+
+  it('passes every one-time credential of the creation to one modal', () => {
+    render(<ServiceUsersContainer />)
+
+    fireEvent.click(screen.getByText('create'))
+    fireEvent.click(screen.getByText('submit-both:create'))
+
+    fireEvent.click(screen.getByText('secret:secret-9+pmcp_shown-once'))
+
+    expect(screen.queryByText(/^secret:/)).toBeNull()
   })
 
   it('opens the new service user without a one-time modal when the token step was skipped', () => {

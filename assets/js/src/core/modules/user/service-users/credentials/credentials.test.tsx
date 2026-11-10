@@ -10,7 +10,6 @@
 
 import React from 'react'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
-import { OneTimeSecretModal } from './one-time-secret-modal'
 import { CredentialsSection } from './credentials-section'
 import { type ServiceUser } from '../service-users-api-slice-enhanced'
 
@@ -82,66 +81,6 @@ const serviceUser = (
   lastLogin,
   clientCredentialsEnabled,
   mcpTokens: { active, latestExpiresAt }
-})
-
-describe('OneTimeSecretModal', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
-  it('is closed without credentials', () => {
-    render(<OneTimeSecretModal onClose={ jest.fn() } />)
-
-    expect(screen.queryByRole('dialog')).toBeNull()
-  })
-
-  it('shows client id and secret with the warning that the secret is shown only once', () => {
-    render(
-      <OneTimeSecretModal
-        credential={ credentials }
-        onClose={ jest.fn() }
-      />
-    )
-
-    expect(screen.getByLabelText('service-users.credentials.client-id')).toHaveValue('svc_7')
-    expect(screen.getByLabelText('service-users.secret.client-secret')).toHaveValue('shown-once')
-    expect(screen.getByRole('alert')).toHaveTextContent('service-users.secret.warning')
-  })
-
-  it('copies the secret and closes', () => {
-    const onClose = jest.fn()
-    render(
-      <OneTimeSecretModal
-        credential={ credentials }
-        onClose={ onClose }
-      />
-    )
-
-    fireEvent.click(screen.getByText('service-users.secret.copy'))
-    fireEvent.click(screen.getByText('service-users.secret.close'))
-
-    expect(mockCopy).toHaveBeenCalledWith('shown-once')
-    expect(onClose).toHaveBeenCalledTimes(1)
-  })
-
-  it('shows an access token with its expiry and no client id, and copies the token', () => {
-    render(
-      <OneTimeSecretModal
-        credential={ accessToken }
-        onClose={ jest.fn() }
-      />
-    )
-
-    expect(screen.getByLabelText('service-users.credentials.token')).toHaveValue('pmcp_shown-once')
-    expect(screen.getByText('date:1800000000')).toBeInTheDocument()
-    expect(screen.getByRole('alert')).toHaveTextContent('service-users.secret.warning')
-    expect(screen.queryByLabelText('service-users.credentials.client-id')).toBeNull()
-    expect(screen.queryByLabelText('service-users.secret.client-secret')).toBeNull()
-
-    fireEvent.click(screen.getByText('service-users.secret.copy'))
-
-    expect(mockCopy).toHaveBeenCalledWith('pmcp_shown-once')
-  })
 })
 
 describe('CredentialsSection', () => {

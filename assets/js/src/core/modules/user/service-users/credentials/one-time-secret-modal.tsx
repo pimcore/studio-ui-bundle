@@ -10,7 +10,6 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isUndefined } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { Input } from '@Pimcore/components/input/input'
@@ -26,6 +25,7 @@ import {
 } from '../service-users-api-slice-enhanced'
 
 export type ClientSecretCredential = Pick<ServiceUserCredentials, 'clientId' | 'clientSecret'>
+// clientSecret is null while the client_credentials grant is disabled on the instance.
 export type AccessTokenCredential = Pick<ServiceUserMcpAccessToken, 'token' | 'expiresAt'>
 
 /** A credential the API returns once: the OAuth client secret or an MCP access token. */
@@ -38,7 +38,7 @@ interface OneTimeCredentialFieldsProps {
   credential: OneTimeCredential
 }
 
-/** The value of a one-time credential with the "shown only once" warning and a copy button for the secret part. */
+/** The value of a one-time credential with a copy button for the secret part. */
 export const OneTimeCredentialFields = ({ credential }: OneTimeCredentialFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { success, error } = useMessage()
@@ -47,6 +47,10 @@ export const OneTimeCredentialFields = ({ credential }: OneTimeCredentialFieldsP
   const secretLabel = t(isToken ? 'service-users.credentials.token' : 'service-users.secret.client-secret')
 
   const copySecret = (): void => {
+    if (secretValue === null) {
+      return
+    }
+
     void copyToClipboardWithFeedback(
       secretValue,
       () => { void success(t('clipboard.copy.success')) },
@@ -59,11 +63,6 @@ export const OneTimeCredentialFields = ({ credential }: OneTimeCredentialFieldsP
       gap="small"
       vertical
     >
-      <Alert
-        message={ t('service-users.secret.warning') }
-        showIcon
-        type="warning"
-      />
       {!isToken && (
         <>
           <Text strong>{t('service-users.credentials.client-id')}</Text>
@@ -74,34 +73,44 @@ export const OneTimeCredentialFields = ({ credential }: OneTimeCredentialFieldsP
           />
         </>
       )}
-      <Text strong>{secretLabel}</Text>
-      <Input
-        placeholder={ secretLabel }
-        readOnly
-        value={ secretValue }
-      />
+      {secretValue !== null
+        ? (
+          <>
+            <Text strong>{secretLabel}</Text>
+            <Input
+              placeholder={ secretLabel }
+              readOnly
+              value={ secretValue }
+            />
+          </>
+          )
+        : <Text type="secondary">{t('service-users.credentials.oauth.disabled')}</Text>}
       {isToken && (
         <Flex gap="small">
           <Text type="secondary">{t('service-users.credentials.token.expires')}</Text>
           <FormattedDateTime timestamp={ credential.expiresAt } />
         </Flex>
       )}
-      <div>
-        <Button onClick={ copySecret }>{t('service-users.secret.copy')}</Button>
-      </div>
+      {secretValue !== null && (
+        <div>
+          <Button onClick={ copySecret }>{t('service-users.secret.copy')}</Button>
+        </div>
+      )}
     </Flex>
   )
 }
 
 interface OneTimeSecretModalProps {
-  /** The modal is open while a credential is set; the parent drops it on close so the secret is gone. */
-  credential?: OneTimeCredential
+  /** The modal is open while credentials are set; the parent drops them on close so the secrets are gone. */
+  credentials?: OneTimeCredential[]
   onClose: () => void
 }
 
-export const OneTimeSecretModal = ({ credential, onClose }: OneTimeSecretModalProps): React.JSX.Element => {
+/** Shows all one-time credentials of an action together, once, under a single warning. */
+export const OneTimeSecretModal = ({ credentials, onClose }: OneTimeSecretModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const isToken = !isUndefined(credential) && isAccessTokenCredential(credential)
+  const items = credentials ?? []
+  const isOnlyToken = items.length === 1 && isAccessTokenCredential(items[0])
 
   return (
     <Modal
@@ -119,10 +128,25 @@ export const OneTimeSecretModal = ({ credential, onClose }: OneTimeSecretModalPr
         </Flex>
       }
       maskClosable={ false }
-      open={ !isUndefined(credential) }
-      title={ t(isToken ? 'service-users.credentials.token' : 'service-users.secret.title') }
+      open={ items.length > 0 }
+      title={ t(isOnlyToken ? 'service-users.credentials.token' : 'service-users.secret.title') }
     >
-      {!isUndefined(credential) && <OneTimeCredentialFields credential={ credential } />}
+      <Flex
+        gap="small"
+        vertical
+      >
+        <Alert
+          message={ t('service-users.secret.warning') }
+          showIcon
+          type="warning"
+        />
+        {items.map((credential, index) => (
+          <OneTimeCredentialFields
+            credential={ credential }
+            key={ isAccessTokenCredential(credential) ? 'token' : `secret-${index}` }
+          />
+        ))}
+      </Flex>
     </Modal>
   )
 }

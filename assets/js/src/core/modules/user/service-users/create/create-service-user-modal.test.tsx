@@ -161,6 +161,8 @@ describe('CreateServiceUserModal', () => {
       await screen.findByText('service-users.create.credentials.title')
     }
 
+    const clientSecretCredential = { clientId: 'svc_9', clientSecret: 'secret-9' }
+
     it('offers only an access token when client credentials are disabled and issues it with the chosen lifetime', async () => {
       await createAndContinue()
 
@@ -174,35 +176,48 @@ describe('CreateServiceUserModal', () => {
       type('service-users.credentials.issue.ttl', '1')
       fireEvent.click(screen.getByText('service-users.credentials.issue'))
 
-      await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(9, accessToken) })
+      await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(9, [accessToken]) })
       expect(mockIssue).toHaveBeenCalledWith({ id: 9, serviceUserMcpTokenRequest: { ttlDays: 1 } })
     })
 
-    it('shows client id and secret and the optional token step when client credentials are enabled', async () => {
+    it('explains the choice but does not show the client secret inline when client credentials are enabled', async () => {
       instanceWith(true)
       await createAndContinue()
 
       expect(screen.getByText('service-users.create.credentials.which')).toBeInTheDocument()
-      expect(screen.getByLabelText('service-users.credentials.client-id')).toHaveValue('svc_9')
-      expect(screen.getByLabelText('service-users.secret.client-secret')).toHaveValue('secret-9')
-      expect(screen.getByRole('alert')).toHaveTextContent('service-users.secret.warning')
-      expect(screen.getByText('service-users.credentials.issue.title')).toBeInTheDocument()
+      expect(screen.queryByText('service-users.create.credentials.token-description')).toBeNull()
+      expect(screen.queryByDisplayValue('secret-9')).toBeNull()
+      expect(screen.queryByLabelText('service-users.secret.client-secret')).toBeNull()
+      expect(screen.queryByText('service-users.secret.copy')).toBeNull()
+      expect(screen.getByLabelText('service-users.credentials.issue.ttl')).toHaveValue(30)
+    })
 
-      fireEvent.click(screen.getByText('service-users.secret.copy'))
-      expect(mockCopy).toHaveBeenCalledWith('secret-9')
+    it('hands over the client secret and the token together when the grant is on and a token is issued', async () => {
+      instanceWith(true)
+      await createAndContinue()
 
       fireEvent.click(screen.getByText('service-users.credentials.issue'))
 
-      await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(9, accessToken) })
+      await waitFor(() => { expect(onCreated).toHaveBeenCalledWith(9, [clientSecretCredential, accessToken]) })
       expect(mockIssue).toHaveBeenCalledWith({ id: 9, serviceUserMcpTokenRequest: { ttlDays: 30 } })
     })
 
-    it('can be skipped without issuing a token', async () => {
+    it('hands over the client secret alone when the grant is on and the token step is skipped', async () => {
+      instanceWith(true)
       await createAndContinue()
 
       fireEvent.click(screen.getByText('service-users.create.credentials.skip'))
 
-      expect(onCreated).toHaveBeenCalledWith(9, undefined)
+      expect(onCreated).toHaveBeenCalledWith(9, [clientSecretCredential])
+      expect(mockIssue).not.toHaveBeenCalled()
+    })
+
+    it('hands over nothing when the grant is off and the token step is skipped', async () => {
+      await createAndContinue()
+
+      fireEvent.click(screen.getByText('service-users.create.credentials.skip'))
+
+      expect(onCreated).toHaveBeenCalledWith(9, [])
       expect(mockIssue).not.toHaveBeenCalled()
     })
 

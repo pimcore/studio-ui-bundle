@@ -17,14 +17,14 @@ import { useServiceUserGetCollectionQuery } from './service-users-api-slice-enha
 import { ServiceUserList } from './list/service-user-list'
 import { ServiceUserDetail } from './detail/service-user-detail'
 import { CreateServiceUserModal, type CreateServiceUserMode } from './create/create-service-user-modal'
-import { type AccessTokenCredential, OneTimeSecretModal } from './credentials/one-time-secret-modal'
+import { type OneTimeCredential, OneTimeSecretModal } from './credentials/one-time-secret-modal'
 import { nowInSeconds } from './utils/dormancy'
 
 export const ServiceUsersContainer = (): React.JSX.Element => {
   const { data, isLoading, error, refetch } = useServiceUserGetCollectionQuery()
   const [selectedId, setSelectedId] = useState<number | undefined>(undefined)
   const [createMode, setCreateMode] = useState<CreateServiceUserMode | undefined>(undefined)
-  const [token, setToken] = useState<AccessTokenCredential | undefined>(undefined)
+  const [credentials, setCredentials] = useState<OneTimeCredential[] | undefined>(undefined)
   // Recomputed on every list load, so the dormancy filter compares against a fresh "now".
   const now = useMemo(() => nowInSeconds(), [data])
 
@@ -34,9 +34,9 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
     }
   }, [error])
 
-  const handleCreated = (serviceUserId: number, issuedToken?: AccessTokenCredential): void => {
+  const handleCreated = (serviceUserId: number, issued: OneTimeCredential[]): void => {
     setCreateMode(undefined)
-    setToken(issuedToken)
+    setCredentials(issued)
     setSelectedId(serviceUserId)
   }
 
@@ -84,8 +84,8 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
       />
 
       <OneTimeSecretModal
-        credential={ token }
-        onClose={ () => { setToken(undefined) } }
+        credentials={ credentials }
+        onClose={ () => { setCredentials(undefined) } }
       />
     </>
   )

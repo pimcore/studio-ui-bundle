@@ -24,7 +24,7 @@ import {
   useServiceUserGetByIdQuery,
   useServiceUserMcpTokenIssueMutation
 } from '../service-users-api-slice-enhanced'
-import { type AccessTokenCredential, OneTimeCredentialFields } from '../credentials/one-time-secret-modal'
+import { type AccessTokenCredential, type OneTimeCredential } from '../credentials/one-time-secret-modal'
 import {
   isValidTokenLifetime,
   TOKEN_LIFETIME_DEFAULT_DAYS,
@@ -37,8 +37,8 @@ interface CreateServiceUserModalProps {
   mode: CreateServiceUserMode
   open: boolean
   onCancel: () => void
-  /** Called when the dialog is done: with the issued token, or without one when the token step was skipped. */
-  onCreated: (serviceUserId: number, token?: AccessTokenCredential) => void
+  /** Called when the dialog is done, with every one-time credential of the creation (empty when nothing was issued). */
+  onCreated: (serviceUserId: number, credentials: OneTimeCredential[]) => void
 }
 
 const NAME_MAX_LENGTH = 64
@@ -90,8 +90,17 @@ export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: Crea
   }
 
   const finish = (serviceUserId: number, token?: AccessTokenCredential): void => {
+    // The client secret only counts when it authenticates anything on this instance.
+    const credentials: OneTimeCredential[] = []
+    if (clientCredentialsEnabled && !isUndefined(created)) {
+      credentials.push({ clientId: created.clientId, clientSecret: created.clientSecret })
+    }
+    if (!isUndefined(token)) {
+      credentials.push(token)
+    }
+
     reset()
-    onCreated(serviceUserId, token)
+    onCreated(serviceUserId, credentials)
   }
 
   const handleCreate = async (): Promise<void> => {
@@ -147,15 +156,12 @@ export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: Crea
           gap="small"
           vertical
         >
-          {clientCredentialsEnabled && (
-            <>
-              <Text>{t('service-users.create.credentials.which')}</Text>
-              <Text strong>{t('service-users.credentials.oauth')}</Text>
-              <OneTimeCredentialFields credential={ created } />
-            </>
-          )}
+          <Text>
+            {t(clientCredentialsEnabled
+              ? 'service-users.create.credentials.which'
+              : 'service-users.create.credentials.token-description')}
+          </Text>
           <Text strong>{t('service-users.credentials.issue.title')}</Text>
-          {!clientCredentialsEnabled && <Text>{t('service-users.create.credentials.token-description')}</Text>}
           <TokenLifetimeField
             onChange={ setTtlDays }
             value={ ttlDays }

@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNull } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -188,7 +188,7 @@ export const CredentialsSection = ({ serviceUser }: CredentialsSectionProps): Re
       </Modal>
 
       <OneTimeSecretModal
-        credential={ credential }
+        credentials={ isUndefined(credential) ? undefined : [credential] }
         onClose={ () => { setCredential(undefined) } }
       />
     </Flex>
