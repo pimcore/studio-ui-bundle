@@ -77,17 +77,25 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
   }, [isError, isSchedulesError, error, schedulesError])
 
-  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
-    if (dataObject?.changes === undefined) return
-    Promise.all([
+  // Saves the data and the schedules; resolves with the outcome of the schedules save (the data
+  // save reports its success through onFinish).
+  const saveDataAndSchedules = async (task: SaveTaskType, onFinish?: () => void): Promise<boolean> => {
+    if (dataObject?.changes === undefined) return false
+
+    return await Promise.all([
       saveDataObject(getModifiedDataObjectAttributes(), task, () => {
         resetModifiedDataObjectAttributes()
         onFinish?.()
       }),
       saveSchedules()
-    ]).catch((error) => {
+    ]).then(([, schedulesSaved]) => schedulesSaved).catch((error) => {
       console.error(error)
+      return false
     })
+  }
+
+  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
+    void saveDataAndSchedules(task, onFinish)
   }
 
   // A transition with unsavedChangesBehaviour "save" saves through this same flow, using the
@@ -108,10 +116,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
       return checkElementPermission(dataObject.permissions, 'publish') ? SaveTaskType.Publish : undefined
     },
-    startSave: (task, onSaved) => { void handleSaveClick(task, onSaved) },
-    isError,
-    isSchedulesError,
-    isSchedulesSuccess
+    startSave: saveDataAndSchedules
   })
 
   const getSecondaryButtons = (): ReactElement[] => {

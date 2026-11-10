@@ -10,8 +10,16 @@
 
 import { isEmpty } from 'lodash'
 import { t } from 'i18next'
+import { useStore } from 'react-redux'
 import { useAlertModal } from '@sdk/components'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { type RootState } from '@Pimcore/app/store'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DebouncedFormRegistry } from '@Pimcore/components/form/services/debounced-form-registry'
+import { selectAssetById } from '@Pimcore/modules/asset/asset-draft-slice'
+import { selectDataObjectById } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { selectDocumentById } from '@Pimcore/modules/document/document-draft-slice'
+import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 import {
   useEditFormContextOptional
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
@@ -47,14 +55,33 @@ export const useUnsavedChangesGuard = (
   elementType: ElementType,
   getSaver: () => UnsavedChangesSaver | undefined
 ): UseUnsavedChangesGuardReturn => {
-  const { element } = useElementDraft(id, elementType)
+  const store = useStore<RootState>()
   const editForm = useEditFormContextOptional()
   const alertModal = useAlertModal()
+
+  // Read when the action is triggered, not from the render that created this guard: a caller may
+  // hold on to an older guard (e.g. a menu built once), and the draft may have changed since.
+  const isDraftModified = (): boolean => {
+    const state = store.getState()
+
+    switch (elementType) {
+      case 'data-object':
+        return selectDataObjectById(state, id)?.modified ?? false
+      case 'asset':
+        return selectAssetById(state, id)?.modified ?? false
+      case 'document':
+        // Document sidebar forms reach the draft only after a debounce; flush it first, as saving does.
+        container.get<DebouncedFormRegistry>(serviceIds.debouncedFormRegistry).flushByTag(createDocumentDebounceTag(id))
+        return selectDocumentById(store.getState(), id)?.modified ?? false
+      default:
+        return false
+    }
+  }
 
   // The edit form collects changes right away; the draft is only marked as
   // modified once the debounced autosave has run.
   const hasUnsavedChanges = (): boolean =>
-    element?.modified === true || !isEmpty(editForm?.getModifiedDataObjectAttributes())
+    isDraftModified() || !isEmpty(editForm?.getModifiedDataObjectAttributes())
 
   const confirmDiscard = async (): Promise<boolean> => await new Promise<boolean>((resolve) => {
     alertModal.warn({

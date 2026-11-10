@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, useState, useEffect } from 'react'
+import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Button } from '@Pimcore/components/button/button'
@@ -17,31 +17,18 @@ import { getWorkflowActions } from '../../../types/workflow-types'
 import { useWorkflowAction } from '../../../hooks/use-workflow-action'
 
 export const DropdownButton = ({ workflow }: IWorkflowCardProps): ReactNode => {
-  const [items, setItems] = useState<DropdownMenuProps['items']>([])
   const { t } = useTranslation()
-  const workflowActions = getWorkflowActions(workflow)
-
   const { triggerAction, submissionLoading } = useWorkflowAction()
 
-  const setWorkflowData = (): void => {
-    const items: DropdownMenuProps['items'] = []
-
-    workflowActions.forEach((action) => {
-      items.push({
-        key: action.actionType + '-' + action.transitionId,
-        label: t(action.label),
-        onClick: () => {
-          triggerAction(action)
-        }
-      })
-    })
-
-    setItems(items)
-  }
-
-  useEffect(() => {
-    setWorkflowData()
-  }, [])
+  // Built on every render, so a click always runs the current triggerAction: it closes over the
+  // element's current state (e.g. the unsaved-changes guard), which a menu built once on mount would not.
+  const items: DropdownMenuProps['items'] = getWorkflowActions(workflow).map((action) => ({
+    key: action.actionType + '-' + action.transitionId,
+    label: t(action.label),
+    onClick: () => {
+      triggerAction(action)
+    }
+  }))
 
   return (
     <Dropdown

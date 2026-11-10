@@ -12,15 +12,24 @@ import { renderHook } from '@testing-library/react'
 import { useUnsavedChangesGuard } from './use-unsaved-changes-guard'
 import { type UnsavedChangesBehaviour, type WorkflowAction } from '../types/workflow-types'
 import { type UnsavedChangesSaver } from '../provider/unsaved-changes-saver-context'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useAlertModal } from '@sdk/components'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import {
   useEditFormContextOptional
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 
 // Factories, so the real modules — and the SDK barrel they pull in — are never loaded.
 jest.mock('@sdk/components', () => ({ useAlertModal: jest.fn() }))
-jest.mock('@Pimcore/modules/element/hooks/use-element-draft', () => ({ useElementDraft: jest.fn() }))
+// The draft is read from the store when the action is triggered; each slice selector returns its
+// element of the fake state below.
+const draftState: { modified: boolean } = { modified: false }
+jest.mock('react-redux', () => ({ useStore: () => ({ getState: () => draftState }) }))
+jest.mock('@Pimcore/modules/asset/asset-draft-slice', () => ({ selectAssetById: (state: { modified: boolean }) => state }))
+jest.mock('@Pimcore/modules/data-object/data-object-draft-slice', () => ({ selectDataObjectById: (state: { modified: boolean }) => state }))
+jest.mock('@Pimcore/modules/document/document-draft-slice', () => ({ selectDocumentById: (state: { modified: boolean }) => state }))
+const flushByTag = jest.fn()
+jest.mock('@Pimcore/app/depency-injection', () => ({ container: { get: () => ({ flushByTag }) } }))
+jest.mock('@Pimcore/app/config/services/service-ids', () => ({ serviceIds: { debouncedFormRegistry: 'DebouncedFormRegistry' } }))
 jest.mock(
   '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider',
   () => ({ useEditFormContextOptional: jest.fn() })
@@ -40,12 +49,15 @@ const action = (unsavedChangesBehaviour?: UnsavedChangesBehaviour, actionType: '
 })
 
 const setUp = ({ modified = false, formChanges = {} }: { modified?: boolean, formChanges?: Record<string, unknown> } = {}): void => {
-  (useElementDraft as jest.Mock).mockReturnValue({ element: { modified } });
+  draftState.modified = modified;
   (useEditFormContextOptional as jest.Mock).mockReturnValue({ getModifiedDataObjectAttributes: () => formChanges })
 }
 
-const guard = (getSaver: () => UnsavedChangesSaver | undefined = () => saver): ReturnType<typeof useUnsavedChangesGuard>['guard'] =>
-  renderHook(() => useUnsavedChangesGuard(7, 'data-object', getSaver)).result.current.guard
+const guard = (
+  getSaver: () => UnsavedChangesSaver | undefined = () => saver,
+  elementType: ElementType = 'data-object'
+): ReturnType<typeof useUnsavedChangesGuard>['guard'] =>
+  renderHook(() => useUnsavedChangesGuard(7, elementType, getSaver)).result.current.guard
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -107,5 +119,35 @@ describe('useUnsavedChangesGuard', () => {
 
     await expect(guard(() => undefined)(action('save'))).resolves.toBe(false)
     expect(warn).toHaveBeenCalled()
+  })
+
+  it('reads the draft when the action is triggered, not when the guard was created', async () => {
+    setUp()
+    // e.g. a menu that kept the guard of an earlier render
+    const heldGuard = guard()
+
+    draftState.modified = true
+    warn.mockImplementationOnce(({ onCancel }: { onCancel: () => void }) => { onCancel() })
+
+    await expect(heldGuard(action('warn'))).resolves.toBe(false)
+    expect(warn).toHaveBeenCalledTimes(1)
+  })
+
+  it('flushes the debounced document forms before deciding whether a document has changes', async () => {
+    setUp()
+    // the pending navigation edit reaches the draft only when flushed
+    flushByTag.mockImplementationOnce(() => { draftState.modified = true })
+    warn.mockImplementationOnce(({ onCancel }: { onCancel: () => void }) => { onCancel() })
+
+    await expect(guard(() => undefined, 'document')(action('warn'))).resolves.toBe(false)
+    expect(flushByTag).toHaveBeenCalledWith('document-7')
+    expect(warn).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not flush the document forms for other element types', async () => {
+    setUp()
+
+    await expect(guard()(action('warn'))).resolves.toBe(true)
+    expect(flushByTag).not.toHaveBeenCalled()
   })
 })

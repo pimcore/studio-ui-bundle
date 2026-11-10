@@ -464,6 +464,10 @@ action-could-not-be-applied: Åtgärden kunde inte tillämpas
 failed-to-assign-tag-to-element: Kunde inte tilldela tagg till element
 failed-to-un-assign-tag-to-element: Kunde inte ta bort tagg från element
 workflow-modal.perform-action: Utför åtgärd
+workflow.unsaved-changes.title: Osparade ändringar
+workflow.unsaved-changes.warn: Det finns osparade ändringar. De går förlorade när åtgärden tillämpas. Vill du tillämpa den ändå?
+workflow.unsaved-changes.apply-anyway: Tillämpa ändå
+workflow.unsaved-changes.save-failed: De osparade ändringarna kunde inte sparas, så åtgärden tillämpades inte.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Anteckningar
 workflow-modal.notes-required: Ange dina anteckningar

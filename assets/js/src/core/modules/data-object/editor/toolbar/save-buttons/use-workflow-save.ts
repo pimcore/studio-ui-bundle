@@ -24,16 +24,18 @@ export interface UseWorkflowSaveProps {
    * the object right now (no permission, another save of theirs still running).
    */
   getTask: () => SaveTaskType.Publish | SaveTaskType.Save | undefined
-  /** Starts the save buttons' own save (data + properties + schedules); `onSaved` follows the data save. */
-  startSave: (task: SaveTaskType, onSaved: () => void) => void
-  isError: boolean
-  isSchedulesError: boolean
-  isSchedulesSuccess: boolean
+  /**
+   * Starts the save buttons' own save (data + properties + schedules). `onDataSaved` follows the data
+   * save; the returned promise resolves with the outcome of the schedules save.
+   */
+  startSave: (task: SaveTaskType, onDataSaved: () => void) => Promise<boolean>
 }
 
 interface PendingSave {
   resolve: (saved: boolean) => void
   dataSaved: boolean
+  /** undefined while the schedules are still being saved. */
+  schedulesSaved?: boolean
   /** The save was seen running or queued; once the editor is idle again without dataSaved, it failed. */
   started: boolean
 }
@@ -44,11 +46,15 @@ interface PendingSave {
  * behind a running autosave, with properties, save processors and schedules. The returned promise
  * settles only once that save has completed — true when both the data and the schedules were saved,
  * false as soon as either failed.
+ *
+ * Only the outcome of this save counts, never the save buttons' mutation flags: those can still
+ * hold the result of an earlier save, and a save queued behind an autosave is sent by another
+ * useSave instance whose flags never reach the buttons.
  */
-export const useWorkflowSave = ({ getTask, startSave, isError, isSchedulesError, isSchedulesSuccess }: UseWorkflowSaveProps): void => {
+export const useWorkflowSave = ({ getTask, startSave }: UseWorkflowSaveProps): void => {
   const { runningTask, queuedTask } = useSaveContext()
   const pendingRef = useRef<PendingSave | null>(null)
-  const [dataSavedTick, setDataSavedTick] = useState(0)
+  const [outcomeTick, setOutcomeTick] = useState(0)
 
   const settle = (saved: boolean): void => {
     const pending = pendingRef.current
@@ -61,20 +67,21 @@ export const useWorkflowSave = ({ getTask, startSave, isError, isSchedulesError,
   }
 
   useEffect(() => {
-    if (pendingRef.current === null) {
+    const pending = pendingRef.current
+    if (pending === null) {
       return
     }
 
-    if (isError || isSchedulesError) {
+    if (pending.schedulesSaved === false) {
       settle(false)
-    } else if (pendingRef.current.dataSaved && isSchedulesSuccess) {
+    } else if (pending.dataSaved && pending.schedulesSaved === true) {
       settle(true)
     }
-  }, [isError, isSchedulesError, isSchedulesSuccess, dataSavedTick])
+  }, [outcomeTick])
 
-  // A save queued behind an auto save may be sent by another useSave instance, whose error never
-  // reaches `isError` here. The shared save state does: once the pending save has been seen
-  // running (or waiting) and the editor is idle again without the data reported as saved, it failed.
+  // The data save reports only success (onDataSaved). Its failure shows in the shared save state:
+  // once the pending save has been seen running (or waiting) and the editor is idle again without
+  // the data reported as saved, it failed — whichever useSave instance sent it.
   useEffect(() => {
     const pending = pendingRef.current
     if (pending === null) {
@@ -89,20 +96,26 @@ export const useWorkflowSave = ({ getTask, startSave, isError, isSchedulesError,
     }
   }, [runningTask, queuedTask])
 
-  // Called by the save buttons once the data save finished; the effect above then settles the
-  // pending save as soon as the schedules are saved too.
-  const markDataSaved = (): void => {
-    if (pendingRef.current === null) {
-      return
+  const startPendingSave = (task: SaveTaskType, resolve: (saved: boolean) => void): void => {
+    const pending: PendingSave = { resolve, dataSaved: false, started: false }
+    pendingRef.current = pending
+
+    const report = (update: Partial<PendingSave>): void => {
+      // a late report of a save that has already settled must not touch a newer one
+      if (pendingRef.current !== pending) {
+        return
+      }
+
+      Object.assign(pending, update)
+      setOutcomeTick((tick) => tick + 1)
     }
 
-    pendingRef.current.dataSaved = true
-    setDataSavedTick((tick) => tick + 1)
-  }
-
-  const startPendingSave = (task: SaveTaskType, resolve: (saved: boolean) => void): void => {
-    pendingRef.current = { resolve, dataSaved: false, started: false }
-    startSave(task, markDataSaved)
+    startSave(task, () => { report({ dataSaved: true }) })
+      .then((schedulesSaved) => { report({ schedulesSaved }) })
+      .catch((error) => {
+        console.error(error)
+        report({ schedulesSaved: false })
+      })
   }
 
   useRegisterUnsavedChangesSaver(async () => {

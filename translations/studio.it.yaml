@@ -464,6 +464,10 @@ action-could-not-be-applied: Impossibile applicare l'azione
 failed-to-assign-tag-to-element: Impossibile assegnare il tag all'elemento
 failed-to-un-assign-tag-to-element: Impossibile rimuovere il tag dall'elemento
 workflow-modal.perform-action: Esegui azione
+workflow.unsaved-changes.title: Modifiche non salvate
+workflow.unsaved-changes.warn: Ci sono modifiche non salvate. Andranno perse se questa azione viene applicata. Applicarla comunque?
+workflow.unsaved-changes.apply-anyway: Applica comunque
+workflow.unsaved-changes.save-failed: Non è stato possibile salvare le modifiche non salvate, quindi l'azione non è stata applicata.
 workflow-modal.cancel: Annulla
 workflow-modal.notes: Note
 workflow-modal.notes-required: Inserire le note
