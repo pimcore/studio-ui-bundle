@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
@@ -34,6 +35,7 @@ import { useAppDispatch } from '@sdk/app'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { shouldIncludeColumnItem } from './utils/dropdown-filter'
+import { buildPatchData } from './utils/build-patch-data'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
@@ -54,7 +56,7 @@ export interface BatchEditModalProps {
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
-  const { selectedRows } = useRowSelection()
+  const { selectedRows, deselectRows } = useRowSelection()
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
@@ -92,10 +94,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   useEffect(() => {
     if (isFolderPatchSuccess || isIdPatchSuccess) {
       resetModal()
-    }
-
-    if (isIdPatchSuccess && selectedRowsCount === 1) {
-      dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_ID(id)))
     }
   }, [isFolderPatchSuccess, isIdPatchSuccess])
 
@@ -163,7 +161,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     form.submit()
   }
 
-  const onFormFinish = async (values: any): Promise<void> => {
+  const onFormFinish = async (values: Record<string, unknown>): Promise<void> => {
     if (selectedRowsCount === 0) {
       const filters = getArgs()?.body?.filters ?? {}
       delete filters.page
@@ -180,23 +178,29 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       })
       await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
-      await patchObjectsByIds({
+      const response = await patchObjectsByIds({
         body: {
           data: [
             {
               id: parseInt(selectedRowsIds[0]),
-              editableData: values
+              ...buildPatchData(values)
             }
           ]
         }
       })
+
+      if (response.error === undefined) {
+        dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_ID(id)))
+        deselectRows(selectedRowsIds)
+      }
     } else {
       const job = new DataObjectBatchEditJob({
         patchObjectsByIds,
         selectedRowsIds: selectedRowsIds.map(Number),
         values,
         assetContextId: id,
-        refreshGrid
+        refreshGrid,
+        onFinish: () => { deselectRows(selectedRowsIds) }
       })
       await executionEngine.runJob(job)
     }

@@ -10,7 +10,7 @@
 
 import React, { type SyntheticEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useVideoContext } from './video-provider'
+import { useOptionalVideoContext } from './video-provider'
 
 interface VideoSourceType {
   src: string
@@ -42,7 +42,7 @@ export const PimcoreVideo = ({
   poster
 }: PimcoreVideoProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { setPlayerPosition } = useVideoContext()
+  const videoContext = useOptionalVideoContext()
 
   return (
     // eslint-disable-next-line jsx-a11y/media-has-caption
@@ -79,6 +79,6 @@ export const PimcoreVideo = ({
 
   function onPlayerTimeUpdate (e: SyntheticEvent): void {
     const video = e.target as HTMLVideoElement
-    setPlayerPosition(video.currentTime)
+    videoContext?.setPlayerPosition(video.currentTime)
   }
 }

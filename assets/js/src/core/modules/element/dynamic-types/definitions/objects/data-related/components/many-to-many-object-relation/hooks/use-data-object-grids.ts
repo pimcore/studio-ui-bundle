@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo } from 'react'
-import { map, filter, isEmpty } from 'lodash'
+import { useEffect, useMemo, useRef } from 'react'
+import { map, filter, isEmpty, isNil, isUndefined } from 'lodash'
 import {
   type DataObjectGetGridApiResponse,
   type GridColumnRequest,
@@ -18,6 +18,7 @@ import {
 import { type ManyToManyRelationValue } from '@Pimcore/components/many-to-many-relation'
 import { type UseClassDefinitionsReturn } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface IUseDataObjectGridsProps {
   classIds?: string[]
@@ -29,6 +30,7 @@ interface IUseDataObjectGridsProps {
 
 export interface IUseDataObjectGridsReturn {
   isLoading: boolean
+  isError: boolean
   data: DataObjectGetGridApiResponse['items']
   refetchAll: () => void
 }
@@ -48,8 +50,10 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
           applyFallbackLanguages,
           columns,
           filters: {
+            // One page holding all related objects of the class; a fixed page size left the rows
+            // beyond it without visible field values.
             page: 1,
-            pageSize: 999,
+            pageSize: filterValue.length,
             includeDescendants: true,
             columnFilters: [
               {
@@ -64,9 +68,23 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
     )
   })
 
-  const isLoading = queries.some(q => q.isLoading || q.isFetching)
+  // A refetch of data already shown (e.g. after any data object save invalidated the grids) runs in the background.
+  const isLoading = queries.some(q => q.isLoading || (q.isFetching && isUndefined(q.data)))
+  const isError = queries.some(q => q.isError)
+
+  // Every class has its own request; each failure is tracked once, also when another class failed before.
+  const trackedErrors = useRef(new WeakSet<object>())
+  useEffect(() => {
+    queries.forEach(q => {
+      if (q.isError && !isNil(q.error) && !trackedErrors.current.has(q.error)) {
+        trackedErrors.current.add(q.error)
+        trackError(new ApiError(q.error))
+      }
+    })
+  })
+
   const data = useMemo(() => queries.flatMap(q => q.data?.items ?? []), queries.map(q => q.data))
   const refetchAll = (): void => { queries.forEach(q => { void q.refetch() }) }
 
-  return { isLoading, data, refetchAll }
+  return { isLoading, isError, data, refetchAll }
 }

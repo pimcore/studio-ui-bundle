@@ -10,9 +10,18 @@
 
 const addDataObject = jest.fn()
 const trackError = jest.fn()
+const dispatch = jest.fn()
 
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice.gen', () => ({
   useDataObjectAddMutation: () => [addDataObject, { isLoading: false }]
+}))
+
+jest.mock('@sdk/app', () => ({
+  useAppDispatch: () => dispatch
+}))
+
+jest.mock('@Pimcore/components/element-tree/element-tree-slice', () => ({
+  refreshNodeChildren: (payload: unknown) => ({ type: 'refreshNodeChildren', payload })
 }))
 
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
@@ -55,6 +64,53 @@ describe('useCreateObject', () => {
   beforeEach(() => {
     addDataObject.mockReset()
     trackError.mockReset()
+    dispatch.mockReset()
+  })
+
+  it('refreshes the already-loaded tree children of the parent after creating', async () => {
+    addDataObject.mockResolvedValue({ data: { id: 99 } })
+    const { result } = setup()
+
+    await result.current.createObject(values)
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'refreshNodeChildren',
+      payload: { nodeId: '7', elementType: 'data-object' }
+    })
+  })
+
+  it('does not refresh the tree when creation fails', async () => {
+    addDataObject.mockResolvedValue({ error: { status: 500 } })
+    const { result } = setup()
+
+    await result.current.createObject(values)
+
+    expect(dispatch).not.toHaveBeenCalled()
+  })
+
+  it('ignores a second submit while the first request is still pending', async () => {
+    let resolveRequest: (value: unknown) => void = () => {}
+    addDataObject.mockReturnValue(new Promise((resolve) => { resolveRequest = resolve }))
+    const { result, onCreated } = setup()
+
+    const first = result.current.createObject(values)
+    const second = result.current.createObject(values)
+    resolveRequest({ data: { id: 99 } })
+    await Promise.all([first, second])
+
+    expect(addDataObject).toHaveBeenCalledTimes(1)
+    expect(onCreated).toHaveBeenCalledTimes(1)
+  })
+
+  it('accepts a new submit once the previous request has failed', async () => {
+    addDataObject.mockResolvedValueOnce({ error: { status: 500 } }).mockResolvedValueOnce({ data: { id: 99 } })
+    const { result, onCreated } = setup()
+
+    await result.current.createObject(values)
+    await result.current.createObject(values)
+
+    expect(addDataObject).toHaveBeenCalledTimes(2)
+    expect(onCreated).toHaveBeenCalledTimes(1)
   })
 
   it('sends the parent and the selected class to the add endpoint', async () => {

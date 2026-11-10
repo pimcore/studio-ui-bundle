@@ -16,12 +16,13 @@ import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import { type SelectProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
-import { convertSelectOptions, normalizeSelectValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
+import { convertSelectedOptions, normalizeSelectValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
 import { useDynamicSelectOptions } from '../../hooks/use-dynamic-select-options'
 
 /**
- * Renderer for select/multiselect fields with a dynamic options provider. Seeds the label from the
- * enriched layout options and refreshes from the backend on dropdown open (sending unsaved changes).
+ * Renderer for select/multiselect fields with a dynamic options provider. Seeds the label of the current
+ * value from the enriched layout options (not the whole list, providers can return thousands of options)
+ * and loads the full list from the backend on dropdown open (sending unsaved changes).
  * Contexts are read optionally so it also works read-only / outside the edit form.
  */
 export const DynamicSelectField = (props: SelectProps): React.JSX.Element => {
@@ -31,7 +32,7 @@ export const DynamicSelectField = (props: SelectProps): React.JSX.Element => {
 
   const { options: fetchedOptions, isLoading, fetchOptions } = useDynamicSelectOptions(objectId, fieldName)
 
-  const seededOptions = useMemo(() => convertSelectOptions(props.options), [props.options])
+  const seededOptions = useMemo(() => convertSelectedOptions(props.options, props.value), [props.options, props.value])
   const options = fetchedOptions ?? seededOptions
   const hasHtmlLabels = options?.some(option => option.title !== undefined) ?? false
 

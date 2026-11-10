@@ -85,6 +85,13 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.files-exist.title: 'Filerna finns redan'
+asset.upload.files-exist.message: '{{total}} av de valda filerna finns redan i den här mappen. Vad vill du göra med dem?'
+asset.upload.files-exist.more: 'och {{hidden}} till'
+asset.upload.review-each: 'Granska en i taget'
+asset.upload.skip-all: 'Hoppa över alla'
+asset.upload.keep-both-all: 'Behåll båda för alla'
+asset.upload.overwrite-all: 'Skriv över alla'
 asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
@@ -334,6 +341,7 @@ notification.action-list.completed-actions: Slutförda åtgärder
 aria.notification.action-list.toggle-collapse: Växla lista med åtgärder
 aria.notification.action-list.cancel-all: Avbryt alla pågående åtgärder
 aria.notification.action-list.cancel: Avbryt åtgärd
+aria.stack-list.drag-handle: Dra för att sortera om
 asset.image.editor.zoom.reset: Återställ
 aria.asset.image.editor.zoom.reset: Återställ zoom
 aria.asset.image.editor.zoom.zoom-in: Zooma in
@@ -577,6 +585,9 @@ listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
 listing.actions.delete: Ta bort
+listing.actions.delete-all: Ta bort alla
+listing.actions.delete-all.not-allowed: "Vissa objekt i mappen är låsta eller så har du inte behörighet att ta bort dem."
+listing.actions.delete-all.empty: "Mappen innehåller inga objekt att ta bort."
 listing.actions.export: Exportera
 reports.csv-export-modal.title: CSV-exportalternativ
 reports.csv-export-modal.include-headers: Inkludera kolumnrubriker
@@ -1163,7 +1174,9 @@ jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu

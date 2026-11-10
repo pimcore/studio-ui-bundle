@@ -71,9 +71,38 @@ export const parseFilterDate = (dateStr: string | null): number | null => {
   return dayjs(dateStr.slice(0, 10), 'YYYY-MM-DD').unix()
 }
 
+// Internal fields set by the utc/timezone plugins. dayjs has no public getter for the timezone
+// name; the timezone plugin itself reads `$x.$timezone` the same way.
+type DayjsInternals = Dayjs & {
+  $x?: { $timezone?: string }
+  $offset?: number
+}
+
+/**
+ * Re-creates a dayjs object of another dayjs copy with the local instance, keeping its UTC mode,
+ * fixed offset or named timezone so the displayed wall-clock does not change.
+ */
+const toLocalDayJs = (value: DayjsInternals): Dayjs => {
+  const instant = value.valueOf()
+  const timezone = value.$x?.$timezone
+  if (isNonEmptyString(timezone)) {
+    return dayjs(instant).tz(timezone)
+  }
+  // isUTC() only exists when the foreign copy has the utc plugin
+  if (typeof value.isUTC === 'function' && value.isUTC()) {
+    return dayjs.utc(instant)
+  }
+  if (typeof value.$offset === 'number') {
+    return dayjs(instant).utcOffset(value.$offset)
+  }
+  return dayjs(instant)
+}
+
 export const toDayJs = (value?: unknown, format?: string, options?: ToDayJsOptions): Dayjs | null => {
   if (dayjs.isDayjs(value)) {
-    return value
+    // A dayjs object created by another bundle's dayjs copy (module federation) lacks the plugins
+    // antd's pickers rely on (e.g. weekday) - re-create it with the local, fully extended instance.
+    return value instanceof dayjs ? value : toLocalDayJs(value)
   }
   if (typeof value === 'number') {
     if (options?.respectTimezone === false && isNonEmptyString(options.timezone)) {

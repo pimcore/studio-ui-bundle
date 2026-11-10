@@ -22,9 +22,10 @@ interface ImagePanelProps {
   width?: string | number | null
   height?: string | number | null
   dataTestId?: string
+  disabled?: boolean
 }
 
-export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, height = 150, dataTestId }: ImagePanelProps): React.JSX.Element => {
+export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, height = 150, dataTestId, disabled }: ImagePanelProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -64,6 +65,7 @@ export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, h
           <ImagePicker
             allowedTypes={ ['image'] }
             description={ descriptionKey }
+            disabled={ disabled }
             height={ height }
             type='add'
             width={ width }

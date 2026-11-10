@@ -17,6 +17,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { ClassificationStoreItem } from './classification-store-item'
+import { getClassificationStoreName } from './utils/combined-field-name'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { useLanguageIndependentValuePermission } from './hooks/use-language-independent-value-permission'
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
@@ -57,6 +58,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const [hideEmptyDataRevision, setHideEmptyDataRevision] = useState<number>(0)
 
   const { openModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
+  const classificationStoreName = getClassificationStoreName(props.name)
   const { groupKeys, activeGroups, groupCollectionMapping } = useKeyedListSelector(selectStructure)
   const { currentLanguage } = useLanguageSelection()
 
@@ -168,6 +170,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
               name={ [key, localizationGroup] }
             >
               <ClassificationStoreItem
+                classificationStoreName={ classificationStoreName }
                 currentLayoutData={ currentLayoutData }
                 groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
                 hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }

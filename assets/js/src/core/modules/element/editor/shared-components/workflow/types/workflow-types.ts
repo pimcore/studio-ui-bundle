@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isNumber, isString } from 'lodash'
 import { type WorkflowDetails } from '../../../shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
 export type ActionType = 'transition' | 'global'
@@ -42,6 +42,8 @@ export interface WorkflowAction {
   label: string
   notes?: WorkflowNotes
   unsavedChangesBehaviour?: UnsavedChangesBehaviour
+  /** Custom layout id the data-object editor switches to after the action was applied. */
+  objectLayout?: string
 }
 
 export interface WorkflowActionData {
@@ -77,6 +79,8 @@ interface ActionItem {
   label: string
   notes?: WorkflowNotes
   unsavedChangesBehaviour?: string
+  // the backend sends the configured layout id, or false when none is set
+  objectLayout?: boolean | number | string
 }
 
 const isUnsavedChangesBehaviour = (value: string | undefined): value is UnsavedChangesBehaviour =>
@@ -92,7 +96,10 @@ const createWorkflowAction = (
   transitionId: item.name,
   label: item.label,
   notes: isEmpty(item.notes) ? undefined : item.notes,
-  unsavedChangesBehaviour: isUnsavedChangesBehaviour(item.unsavedChangesBehaviour) ? item.unsavedChangesBehaviour : undefined
+  unsavedChangesBehaviour: isUnsavedChangesBehaviour(item.unsavedChangesBehaviour) ? item.unsavedChangesBehaviour : undefined,
+  objectLayout: (isString(item.objectLayout) || isNumber(item.objectLayout)) && String(item.objectLayout) !== ''
+    ? String(item.objectLayout)
+    : undefined
 })
 
 export const getWorkflowActions = (workflow: WorkflowDetails): WorkflowActionsList => {

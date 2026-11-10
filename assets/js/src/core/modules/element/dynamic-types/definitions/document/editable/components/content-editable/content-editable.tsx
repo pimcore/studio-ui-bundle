@@ -28,6 +28,15 @@ export interface ContentEditableProps {
   inherited?: boolean
 }
 
+const hasNoContentAfter = (node: Node, root: HTMLElement): boolean => {
+  const rest = document.createRange()
+  rest.setStartAfter(node)
+  rest.setEnd(root, root.childNodes.length)
+  const content = rest.cloneContents()
+
+  return content.textContent === '' && isNull(content.querySelector('br'))
+}
+
 const ContentEditable = ({
   value,
   onChange,
@@ -75,7 +84,10 @@ const ContentEditable = ({
   useEffect(() => {
     if (!isNull(contentRef.current)) {
       const htmlContent = valueToHtml(value)
-      if (contentRef.current.innerHTML !== htmlContent) {
+      const currentHtml = contentRef.current.innerHTML
+      // A kept trailing <br> is trimmed from the value and must not trigger a reset
+      const currentHtmlWithoutTrailingBreaks = currentHtml.replace(/(<br\s*\/?>)+$/i, '')
+      if (currentHtml !== htmlContent && currentHtmlWithoutTrailingBreaks !== htmlContent) {
         contentRef.current.innerHTML = htmlContent
       }
       currentValueRef.current = value
@@ -122,33 +134,41 @@ const ContentEditable = ({
     setTimeout(handleContentChange, 0)
   }
 
+  const insertLineBreak = (): void => {
+    const selection = window.getSelection?.()
+    if (isNil(selection) || selection.rangeCount === 0) {
+      return
+    }
+
+    const range = selection.getRangeAt(0)
+    const br = document.createElement('br')
+
+    range.deleteContents()
+    range.insertNode(br)
+
+    // A trailing <br> is collapsed by the browser, a second one makes the new line visible
+    if (!isNull(contentRef.current) && hasNoContentAfter(br, contentRef.current)) {
+      br.after(document.createElement('br'))
+    }
+
+    // Collapsed caret behind the <br>: Firefox drops the <br> when typing replaces a selected node
+    range.setStartAfter(br)
+    range.collapse(true)
+
+    selection.removeAllRanges()
+    selection.addRange(range)
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter') {
-      if (!allowMultiLine) {
-        e.preventDefault()
-      } else {
-        e.preventDefault()
+    if (e.key !== 'Enter') {
+      return
+    }
 
-        if (!isNil(window.getSelection)) {
-          const selection = window.getSelection()
-          if (!isNull(selection) && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0)
-            const br = document.createElement('br')
-            const textNode = document.createTextNode('\u00a0')
+    e.preventDefault()
 
-            range.deleteContents()
-            range.insertNode(br)
-            range.collapse(false)
-            range.insertNode(textNode)
-            range.selectNodeContents(textNode)
-
-            selection.removeAllRanges()
-            selection.addRange(range)
-          }
-        }
-
-        setTimeout(handleContentChange, 0)
-      }
+    if (allowMultiLine) {
+      insertLineBreak()
+      setTimeout(handleContentChange, 0)
     }
   }
 

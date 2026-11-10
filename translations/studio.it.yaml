@@ -85,6 +85,13 @@ asset.upload.overwrite: Sovrascrivi
 asset.upload.keep-both: Mantieni entrambi
 asset.upload.skip: Salta
 asset.upload.apply-to-all: Applica a tutti
+asset.upload.files-exist.title: 'I file esistono già'
+asset.upload.files-exist.message: '{{total}} dei file selezionati esistono già in questa cartella. Cosa desidera fare?'
+asset.upload.files-exist.more: 'e altri {{hidden}}'
+asset.upload.review-each: 'Esamina uno per uno'
+asset.upload.skip-all: 'Salta tutti'
+asset.upload.keep-both-all: 'Mantieni entrambi per tutti'
+asset.upload.overwrite-all: 'Sovrascrivi tutti'
 asset.upload.checking-duplicate-file-names: "Controllo dei nomi file duplicati ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creazione cartelle
 asset.upload.folder-drop.creating-folders-hint: Attendere mentre la struttura delle cartelle viene creata…
@@ -334,6 +341,7 @@ notification.action-list.completed-actions: Azioni completate
 aria.notification.action-list.toggle-collapse: Mostra/nascondi elenco azioni
 aria.notification.action-list.cancel-all: Annulla tutte le azioni in corso
 aria.notification.action-list.cancel: Annulla azione
+aria.stack-list.drag-handle: Trascinare per riordinare
 asset.image.editor.zoom.reset: Ripristina
 aria.asset.image.editor.zoom.reset: Ripristina zoom
 aria.asset.image.editor.zoom.zoom-in: Ingrandisci
@@ -577,6 +585,9 @@ listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
 listing.actions.zip-download: Download ZIP
 listing.actions.delete: Elimina
+listing.actions.delete-all: Elimina tutto
+listing.actions.delete-all.not-allowed: "Alcuni elementi di questa cartella sono bloccati oppure non hai il permesso di eliminarli."
+listing.actions.delete-all.empty: "Questa cartella non contiene elementi da eliminare."
 listing.actions.export: Esporta
 reports.csv-export-modal.title: Opzioni esportazione CSV
 reports.csv-export-modal.include-headers: Includi intestazioni colonne
@@ -1163,7 +1174,9 @@ jobs.zip-upload-job.title: Carica ZIP
 jobs.zip-upload-job.step1.title: Estrazione ZIP
 jobs.zip-upload-job.step2.title: Creazione asset
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Modifica in blocco
 batch-edit.no-content: Non sono ancora state aggiunte colonne

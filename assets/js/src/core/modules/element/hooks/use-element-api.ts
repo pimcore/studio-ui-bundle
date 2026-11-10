@@ -73,49 +73,61 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
   const { updateFieldValue: updateDocumentFieldValue } = useCacheUpdate('document', ['DOCUMENT_TREE'])
 
+  const patchAsset = async (args: ElementPatchArgs): Promise<boolean> => {
+    const response = await assetPatch(args)
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return false
+    }
+
+    updateAssetFieldValue(args.body.data[0].id, 'filename', args.body.data[0].key)
+    return true
+  }
+
+  const patchDataObject = async (args: ElementPatchArgs): Promise<boolean> => {
+    const response = await dataObjectPatch(args)
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return false
+    }
+
+    updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+    return true
+  }
+
+  const patchDocument = async (args: ElementPatchArgs): Promise<boolean> => {
+    if (args.body.data.length !== 1) {
+      trackError(new GeneralError('Document patching only supports a single element'))
+    }
+
+    const response = await documentUpdate({
+      id: args.body.data[0].id,
+      body: {
+        data: {
+          parentId: args.body.data[0].parentId,
+          key: args.body.data[0].key,
+          locked: args.body.data[0].locked,
+          index: args.body.data[0].index
+        }
+      }
+    })
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return false
+    }
+
+    updateDocumentFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+    return true
+  }
+
   const elementPatch = async (args: ElementPatchArgs): Promise<boolean> => {
     try {
       if (elementType === 'asset') {
-        const response = await assetPatch(args)
-        if (!isUndefined(response.error)) {
-          trackError(new ApiError(response.error))
-        }
-
-        updateAssetFieldValue(args.body.data[0].id, 'filename', args.body.data[0].key)
-
-        return isUndefined(response.error)
+        return await patchAsset(args)
       } else if (elementType === 'data-object') {
-        const response = await dataObjectPatch(args)
-        if (!isUndefined(response.error)) {
-          trackError(new ApiError(response.error))
-        }
-
-        updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
-
-        return isUndefined(response.error)
+        return await patchDataObject(args)
       } else if (elementType === 'document') {
-        if (args.body.data.length !== 1) {
-          trackError(new GeneralError('Document patching only supports a single element'))
-        }
-
-        const response = await documentUpdate({
-          id: args.body.data[0].id,
-          body: {
-            data: {
-              parentId: args.body.data[0].parentId,
-              key: args.body.data[0].key,
-              locked: args.body.data[0].locked,
-              index: args.body.data[0].index
-            }
-          }
-        })
-        if (!isUndefined(response.error)) {
-          trackError(new ApiError(response.error))
-        }
-
-        updateDocumentFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
-
-        return isUndefined(response.error)
+        return await patchDocument(args)
       }
     } catch {
       trackError(new GeneralError('Error while patching element'))

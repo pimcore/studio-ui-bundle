@@ -77,10 +77,11 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   // Gated on the class-definition flag, and on the relation explicitly accepting objects —
   // the flag only exists on the object relation types, but the toolbar is shared by all of
-  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too.
+  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too. A
+  // folder-only relation also has `dataObjectsAllowed`, so the `object` subtype is required.
   const relationCanCreateObjects = props.allowToCreateNewObject === true &&
     props.disabled !== true &&
-    props.dataObjectsAllowed === true
+    isAllowedSubType('data-object', 'object', props)
 
   // Skipped entirely for relations that cannot create objects, so asset/document relations
   // do not fetch the class collection.

@@ -20,6 +20,8 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ExportCsvApiResponse, type ExportCsvFolderApiResponse, useExportCsvFolderMutation, useExportCsvMutation } from '@Pimcore/modules/element/export-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { getExportContextName } from '../get-export-context-name'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
@@ -36,6 +38,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const [form] = Form.useForm()
   const executionEngine = useExecutionEngine()
   const { id, elementType } = useElementContext()
+  const { element } = useElementDraft(id, elementType)
   const [fetchCreateCsv, { isError: isCreateCsvError, error: createCsvError }] = useExportCsvMutation()
   const [fetchCreateFolderCsv, { isError: isCreateFolderCsvError, error: createFolderCsvError }] = useExportCsvFolderMutation()
   const { selectedRows } = useRowSelection()
@@ -93,7 +96,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
 
   function onFinish (values: CSVFormValues): void {
     const isFolderExport = numberedSelectedRows.length === 0
-    const job = new CsvDownloadJob({ action: async () => await getDownloadAction(values.delimiter, values.header), isFolderExport })
+    const job = new CsvDownloadJob({ action: async () => await getDownloadAction(values.delimiter, values.header), isFolderExport, context: getExportContextName(element?.fullPath) })
     void executionEngine.runJob(job)
 
     props.setOpen(false)

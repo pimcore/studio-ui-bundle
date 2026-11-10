@@ -29,7 +29,60 @@ export interface UploadConflictModalResult {
   checkFileExists: (fileName: string, folderId: number) => Promise<UploadConflictCheckResult>
   checkFilesExist: (fileNames: string[], folderId: number) => Promise<UploadConflictCheckResult[]>
   askUserOverwrite: (fileName: string) => Promise<UploadConflictAction>
+  /** Resolves to `null` when the user wants to decide file by file instead. */
+  askUserOverwriteAll: (fileNames: string[]) => Promise<UploadConflictAction | null>
   resetApplyToAll: () => void
+}
+
+/** File names listed in the summary prompt before the rest is collapsed into a count. */
+const LISTED_FILE_NAMES = 5
+
+const UploadConflictSummary = ({ fileNames }: { fileNames: string[] }): React.JSX.Element => {
+  const { t } = useTranslation()
+  const hiddenFileNames = fileNames.length - LISTED_FILE_NAMES
+
+  return (
+    <>
+      <Box margin={ { bottom: 'small' } }>
+        {t('asset.upload.files-exist.message', { total: fileNames.length })}
+      </Box>
+      <Box margin={ { bottom: 'small' } }>
+        {fileNames.slice(0, LISTED_FILE_NAMES).map((fileName, index) => (
+          <div key={ `${fileName}-${index}` }>{fileName}</div>
+        ))}
+        {hiddenFileNames > 0 && (
+          <div>{t('asset.upload.files-exist.more', { hidden: hiddenFileNames })}</div>
+        )}
+      </Box>
+    </>
+  )
+}
+
+const UploadConflictSummaryActions = (
+  { onAction }: { onAction: (action: UploadConflictAction | null) => void }
+): React.JSX.Element => {
+  const { t } = useTranslation()
+
+  return (
+    <Flex
+      gap={ { x: 0, y: 'small' } }
+      justify="flex-end"
+      wrap="wrap"
+    >
+      <Button onClick={ () => { onAction(null) } }>
+        {t('asset.upload.review-each')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.SKIP) } }>
+        {t('asset.upload.skip-all')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.KEEP) } }>
+        {t('asset.upload.keep-both-all')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.OVERWRITE) } }>
+        {t('asset.upload.overwrite-all')}
+      </Button>
+    </Flex>
+  )
 }
 
 export const useUploadConflictModal = (): UploadConflictModalResult => {
@@ -170,9 +223,37 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
     })
   }
 
+  const askUserOverwriteAll = async (fileNames: string[]): Promise<UploadConflictAction | null> => {
+    if (!isNil(applyToAllRef.current.action)) {
+      return applyToAllRef.current.action
+    }
+
+    return await new Promise((resolve) => {
+      const handleAction = (action: UploadConflictAction | null): void => {
+        modalInstance.destroy()
+        resolve(action)
+      }
+
+      const modalInstance = modal.confirm({
+        title: t('asset.upload.files-exist.title'),
+        icon: (
+          <Icon
+            options={ { width: 24, height: 24 } }
+            value="warning-circle"
+          />
+        ),
+        content: <UploadConflictSummary fileNames={ fileNames } />,
+        footer: () => <UploadConflictSummaryActions onAction={ handleAction } />,
+        closable: false,
+        maskClosable: false,
+        keyboard: false
+      })
+    })
+  }
+
   const resetApplyToAll = (): void => {
     applyToAllRef.current.action = null
   }
 
-  return { checkFileExists, checkFilesExist, askUserOverwrite, resetApplyToAll }
+  return { checkFileExists, checkFilesExist, askUserOverwrite, askUserOverwriteAll, resetApplyToAll }
 }

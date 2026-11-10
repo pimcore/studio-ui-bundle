@@ -98,11 +98,12 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
       }
     }
 
-    const isEditable = props.objectProps.noteditable !== true
+    // The options are needed for display as well: without them a read-only column shows the stored
+    // value instead of its label. Editability is carried separately by the column meta's `editable`.
     const hasOptions = props.objectProps.options !== undefined && Array.isArray(props.objectProps.options) && props.objectProps.options.length > 0
 
     return {
-      options: isEditable && hasOptions ? this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null) ?? [] : []
+      options: hasOptions ? this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null) ?? [] : []
     }
   }
 

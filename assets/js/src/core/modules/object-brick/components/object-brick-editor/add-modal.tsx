@@ -15,6 +15,7 @@ import { Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { type InputRef } from 'antd'
 import React, { useRef } from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 export const ObjectBrickAddModal = (): React.JSX.Element => {
@@ -26,13 +27,18 @@ export const ObjectBrickAddModal = (): React.JSX.Element => {
   const { openConfiguration } = useItems()
 
   const onFormFinish = (values: any): void => {
-    form.resetFields()
-
     createObjectBrick({
       createObjectBrick: {
         key: values.key
       }
     }).then((data) => {
+      // RTK Query resolves (not rejects) on API errors — surface the backend message and keep the modal open.
+      if (!isUndefined(data.error)) {
+        trackError(new ApiError(data.error))
+        return
+      }
+
+      form.resetFields()
       closeModal()
 
       const objectBrick: ConfigurationPartial = {

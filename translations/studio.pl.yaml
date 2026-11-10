@@ -85,6 +85,13 @@ asset.upload.overwrite: Nadpisz
 asset.upload.keep-both: Zachowaj oba
 asset.upload.skip: Pomiń
 asset.upload.apply-to-all: Zastosuj do wszystkich
+asset.upload.files-exist.title: 'Pliki już istnieją'
+asset.upload.files-exist.message: '{{total}} z wybranych plików już istnieje w tym folderze. Co chcesz z nimi zrobić?'
+asset.upload.files-exist.more: 'i {{hidden}} więcej'
+asset.upload.review-each: 'Przejrzyj każdy osobno'
+asset.upload.skip-all: 'Pomiń wszystkie'
+asset.upload.keep-both-all: 'Zachowaj oba dla wszystkich'
+asset.upload.overwrite-all: 'Nadpisz wszystkie'
 asset.upload.checking-duplicate-file-names: "Sprawdzanie zduplikowanych nazw plików ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Tworzenie folderów
 asset.upload.folder-drop.creating-folders-hint: Poczekaj, aż struktura folderów zostanie utworzona…
@@ -334,6 +341,7 @@ notification.action-list.completed-actions: Zakończone akcje
 aria.notification.action-list.toggle-collapse: Rozwiń/zwiń listę akcji
 aria.notification.action-list.cancel-all: Anuluj wszystkie trwające akcje
 aria.notification.action-list.cancel: Anuluj akcję
+aria.stack-list.drag-handle: Przeciągnij, aby zmienić kolejność
 asset.image.editor.zoom.reset: Resetuj
 aria.asset.image.editor.zoom.reset: Resetuj powiększenie
 aria.asset.image.editor.zoom.zoom-in: Powiększ
@@ -577,6 +585,9 @@ listing.actions: Zastosuj do wyboru
 listing.non-selected.actions: Zastosuj do wszystkich
 listing.actions.zip-download: Pobierz ZIP
 listing.actions.delete: Usuń
+listing.actions.delete-all: Usuń wszystko
+listing.actions.delete-all.not-allowed: "Niektóre elementy w tym folderze są zablokowane lub nie masz uprawnień do ich usunięcia."
+listing.actions.delete-all.empty: "Ten folder nie zawiera elementów do usunięcia."
 listing.actions.export: Eksportuj
 reports.csv-export-modal.title: Opcje eksportu CSV
 reports.csv-export-modal.include-headers: Uwzględnij nagłówki kolumn
@@ -1163,7 +1174,9 @@ jobs.zip-upload-job.title: Przesyłanie ZIP
 jobs.zip-upload-job.step1.title: Rozpakowywanie ZIP
 jobs.zip-upload-job.step2.title: Tworzenie assetów
 jobs.download-csv-job.title: Eksport CSV
+jobs.download-csv-job.title-with-context: "Eksport CSV ({{name}})"
 jobs.download-xlsx-job.title: Eksport XLSX
+jobs.download-xlsx-job.title-with-context: "Eksport XLSX ({{name}})"
 jobs.download-zip-job.title: Pobieranie ZIP
 batch-edit.modal-title: Edycja zbiorcza
 batch-edit.no-content: Nie dodano jeszcze żadnych kolumn
