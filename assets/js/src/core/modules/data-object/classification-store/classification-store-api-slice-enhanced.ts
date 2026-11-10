@@ -954,9 +954,9 @@ const api = baseApi.enhanceEndpoints({
         const absentSafePatch = {
           ...(sorter !== undefined && sorter !== null ? { sorter } : {}),
           ...(mandatory !== undefined && mandatory !== null ? { mandatory } : {}),
-          ...('subGroup' in create ? { subGroup: create.subGroup ?? null } : {}),
+          ...(create.subGroup !== undefined ? { subGroup: create.subGroup ?? null } : {}),
           // An explicit null clears the stored override, so it is a value to patch, as subGroup is.
-          ...('definitionOverride' in create ? { definitionOverride: create.definitionOverride ?? null } : {})
+          ...(create.definitionOverride !== undefined ? { definitionOverride: create.definitionOverride ?? null } : {})
         }
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
@@ -970,7 +970,7 @@ const api = baseApi.enhanceEndpoints({
         // confirmation then replaced the whole page-1 row — writing back the `subGroup` an older
         // cell edit's response had never named, which is the exact staleness the field mask below
         // exists to prevent.
-        const overrideOnly = 'definitionOverride' in create && !('subGroup' in create) &&
+        const overrideOnly = create.definitionOverride !== undefined && create.subGroup === undefined &&
           (sorter === undefined || sorter === null) && (mandatory === undefined || mandatory === null)
         const createdIn = new Set<string>()
         const patchResults = optimisticPatchAllCacheEntries<
@@ -1028,8 +1028,8 @@ const api = baseApi.enhanceEndpoints({
           const confirmed = {
             ...(sorter !== undefined ? { sorter: updated.sorter } : {}),
             ...(mandatory !== undefined ? { mandatory: updated.mandatory } : {}),
-            ...('subGroup' in create ? { subGroup: updated.subGroup ?? null } : {}),
-            ...('definitionOverride' in create ? { definitionOverride: updated.definitionOverride ?? null } : {})
+            ...(create.subGroup !== undefined ? { subGroup: updated.subGroup ?? null } : {}),
+            ...(create.definitionOverride !== undefined ? { definitionOverride: updated.definitionOverride ?? null } : {})
           }
           patchAllCacheEntries<
             ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
