@@ -152,8 +152,8 @@ const renderMetadata = (value: object | null, overrides: Partial<IPairModalProps
 const renderTitles = (value: object | null, overrides: Partial<IPairModalProps> = {}): ReturnType<typeof render> =>
   render(<TitlesModal { ...props(value, overrides) } />)
 
-const keyInputs = (): HTMLInputElement[] => screen.queryAllByLabelText(KEY_LABEL)
-const valueInputs = (): HTMLInputElement[] => screen.queryAllByLabelText(VALUE_LABEL)
+const keyInputs = (): HTMLInputElement[] => screen.queryAllByLabelText(rowLabel(KEY_LABEL))
+const valueInputs = (): HTMLInputElement[] => screen.queryAllByLabelText(rowLabel(VALUE_LABEL))
 const clickOk = async (user: ReturnType<typeof userEvent.setup>): Promise<void> => {
   await user.click(screen.getByRole('button', { name: 'ok' }))
 }
@@ -186,8 +186,8 @@ describe('the pair modals', () => {
 
     renderTitles(null)
     await user.click(screen.getByRole('button', { name: ADD_PAIR }))
-    expect(screen.queryAllByLabelText(LOCALE_LABEL)).toHaveLength(1)
-    expect(screen.queryAllByLabelText(TITLE_LABEL)).toHaveLength(1)
+    expect(screen.queryAllByLabelText(rowLabel(LOCALE_LABEL))).toHaveLength(1)
+    expect(screen.queryAllByLabelText(rowLabel(TITLE_LABEL))).toHaveLength(1)
   })
 
   it('fetch nothing on opening and hand the next map to onSave', async () => {
@@ -355,7 +355,7 @@ describe('the pair modals', () => {
     const stored = { externalCode: 'EF1', 'title.de': 'Höhe' }
     const { unmount } = renderTitles(stored)
 
-    expect(screen.queryAllByLabelText(LOCALE_LABEL).map((input) => (input as HTMLInputElement).value)).toEqual(['de'])
+    expect(screen.queryAllByLabelText(rowLabel(LOCALE_LABEL)).map((input) => (input as HTMLInputElement).value)).toEqual(['de'])
 
     await user.clear(valueInputsOf(TITLE_LABEL)[0])
     await user.type(valueInputsOf(TITLE_LABEL)[0], 'Hoehe')
@@ -376,15 +376,15 @@ describe('the pair modals', () => {
 
     const add = screen.getByRole('button', { name: ADD_PAIR })
     await user.click(add)
-    await user.type(screen.getAllByLabelText(LOCALE_LABEL)[1], 'nl-BE')
-    await user.type(screen.getAllByLabelText(TITLE_LABEL)[1], 'Hoogte')
+    await user.type(screen.getAllByLabelText(rowLabel(LOCALE_LABEL))[1], 'nl-BE')
+    await user.type(screen.getAllByLabelText(rowLabel(TITLE_LABEL))[1], 'Hoogte')
     await clickOk(user)
 
     await waitFor(() => { expect(onSave).toHaveBeenCalledWith({ 'title.de': 'Höhe', 'title.nl-BE': 'Hoogte' }) })
 
     onSave.mockClear()
-    await user.clear(screen.getAllByLabelText(LOCALE_LABEL)[1])
-    await user.type(screen.getAllByLabelText(LOCALE_LABEL)[1], 'de')
+    await user.clear(screen.getAllByLabelText(rowLabel(LOCALE_LABEL))[1])
+    await user.type(screen.getAllByLabelText(rowLabel(LOCALE_LABEL))[1], 'de')
 
     expect(await screen.findAllByText('classification-store.pair-locale-duplicate')).toHaveLength(2)
     await clickOk(user)
@@ -451,5 +451,8 @@ describe('the pair modals', () => {
 })
 
 function valueInputsOf (label: string): HTMLInputElement[] {
-  return within(screen.getByRole('dialog')).getAllByLabelText(label)
+  return within(screen.getByRole('dialog')).getAllByLabelText(rowLabel(label))
 }
+
+// Each pair input carries its column heading and its row number.
+const rowLabel = (heading: string): RegExp => new RegExp(`^${heading.replace(/\./g, '\\.')} \\d+$`)

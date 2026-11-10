@@ -92,7 +92,9 @@ export const rowErrors = (
     if (key === undefined) return { key: 'key-required' }
     if ((counts.get(key) ?? 0) > 1) return { key: 'duplicate' }
     if (wholeIsList) return { key: 'list' }
-    if (row.value === undefined || row.value === '') return { value: 'value-required' }
+    // A pair stored with an empty value stays valid until the user touches it.
+    const keptEmpty = row.value === '' && original?.[key] === ''
+    if (!keptEmpty && (row.value === undefined || row.value === '')) return { value: 'value-required' }
 
     return {}
   })
@@ -100,12 +102,31 @@ export const rowErrors = (
 
 /** The next map in row order; read-only rows carry their original value by reference. */
 export const buildMap = (rows: PairRow[], original: PairMap | null, view: PairView): PairMap | null => {
-  const entries: Array<[string, unknown]> = Object.entries(original ?? {})
-    .filter(([storedKey]) => !view.includes(storedKey))
+  const rowByKey = new Map<string, PairRow>()
+  rows.forEach((row) => { rowByKey.set(storedKeyOf(row, view), row) })
 
+  const valueOf = (key: string, row: PairRow): unknown => row.readOnly ? (original!)[key] : row.value
+  const entries: Array<[string, unknown]> = []
+  const used = new Set<string>()
+
+  // Stored order first: hidden members as they are, in-view members from their row.
+  Object.entries(original ?? {}).forEach(([storedKey, stored]) => {
+    if (!view.includes(storedKey)) {
+      entries.push([storedKey, stored])
+      return
+    }
+
+    const row = rowByKey.get(storedKey)
+    if (row === undefined) return
+
+    entries.push([storedKey, valueOf(storedKey, row)])
+    used.add(storedKey)
+  })
+
+  // Rows with no stored counterpart append in row order.
   rows.forEach((row) => {
     const key = storedKeyOf(row, view)
-    entries.push([key, row.readOnly ? (original!)[key] : row.value])
+    if (!used.has(key)) entries.push([key, valueOf(key, row)])
   })
 
   return entries.length === 0 ? null : Object.fromEntries(entries)

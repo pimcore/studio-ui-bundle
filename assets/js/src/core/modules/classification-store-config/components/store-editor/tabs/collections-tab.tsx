@@ -523,7 +523,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                       </Form.Item>
                     </Flex>
                   </FormKit>
-                  <Flex style={ { flex: 1, overflow: 'hidden' } }>
+                  <Flex style={ { flex: 1, minWidth: 0, ...getScrollAffordanceStyle(token.colorBgContainer, token.colorBorder) } }>
                     <CollectionGroupRelationsGrid
                       colId={ activeCollection.id }
                       collectionName={ activeCollection.name }

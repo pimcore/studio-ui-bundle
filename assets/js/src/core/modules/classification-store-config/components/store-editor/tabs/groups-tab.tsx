@@ -544,7 +544,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                       </Form.Item>
                     </Flex>
                   </FormKit>
-                  <Flex style={ { flex: 1, overflow: 'hidden' } }>
+                  <Flex style={ { flex: 1, minWidth: 0, ...getScrollAffordanceStyle(token.colorBgContainer, token.colorBorder) } }>
                     {/*
                       Keyed by store and group so switching either remounts the grid. Its row
                       selection is keyed by sub-group section and key id, and both repeat across

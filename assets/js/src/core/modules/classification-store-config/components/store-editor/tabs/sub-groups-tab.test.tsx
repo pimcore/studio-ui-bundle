@@ -585,7 +585,7 @@ describe('SubGroupsTab pair actions', () => {
 
   const saveMetadata = async (user: UserEvent, name: string, typed: string): Promise<void> => {
     await user.click(screen.getByLabelText(`classification-store.aria.edit-metadata:${name}`))
-    await user.type(screen.getAllByLabelText('classification-store.pair-value')[0], typed)
+    await user.type(screen.getAllByLabelText(rowLabel('classification-store.pair-value'))[0], typed)
     await user.click(screen.getByTestId('modal-ok'))
   }
 
@@ -718,3 +718,6 @@ describe('SubGroupsTab pair actions', () => {
     expect(screen.getByTestId('modal-ok')).toBeInTheDocument()
   })
 })
+
+// Each pair input carries its column heading and its row number.
+const rowLabel = (heading: string): RegExp => new RegExp(`^${heading.replace(/\./g, '\\.')} \\d+$`)

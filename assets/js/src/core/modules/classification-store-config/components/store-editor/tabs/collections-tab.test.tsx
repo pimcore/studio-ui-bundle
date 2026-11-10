@@ -363,7 +363,7 @@ describe('CollectionsTab pair actions', () => {
     expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
 
     await user.click(screen.getByLabelText(EDIT_METADATA))
-    await user.type(screen.getAllByLabelText(PAIR_VALUE)[0], '2')
+    await user.type(screen.getAllByLabelText(rowLabel(PAIR_VALUE))[0], '2')
     await user.click(screen.getByTestId('modal-ok'))
 
     await waitFor(() => { expect(updates).toHaveLength(1) }, WAIT_BUDGET)
@@ -382,7 +382,7 @@ describe('CollectionsTab pair actions', () => {
     expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
 
     await user.click(screen.getByLabelText(EDIT_TITLES))
-    await user.type(screen.getAllByLabelText('classification-store.pair-title')[0], 'y')
+    await user.type(screen.getAllByLabelText(rowLabel('classification-store.pair-title'))[0], 'y')
     await user.click(screen.getByTestId('modal-ok'))
 
     await waitFor(() => { expect(updates).toHaveLength(1) }, WAIT_BUDGET)
@@ -413,7 +413,7 @@ describe('CollectionsTab pair actions', () => {
     await waitFor(() => { expect(updates).toHaveLength(1) }, WAIT_BUDGET)
     expect(await screen.findByDisplayValue('Renamed', undefined, WAIT_BUDGET)).toBeInTheDocument()
 
-    await user.type(screen.getAllByLabelText(PAIR_VALUE)[0], '2')
+    await user.type(screen.getAllByLabelText(rowLabel(PAIR_VALUE))[0], '2')
     await user.click(screen.getByTestId('modal-ok'))
 
     await waitFor(() => { expect(updates).toHaveLength(2) }, WAIT_BUDGET)
@@ -421,3 +421,6 @@ describe('CollectionsTab pair actions', () => {
     expect(updates[1]).toEqual(expect.objectContaining({ name: 'Renamed' }))
   })
 })
+
+// Each pair input carries its column heading and its row number.
+const rowLabel = (heading: string): RegExp => new RegExp(`^${heading.replace(/\./g, '\\.')} \\d+$`)

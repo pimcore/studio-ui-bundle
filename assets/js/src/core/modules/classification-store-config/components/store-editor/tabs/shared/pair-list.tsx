@@ -223,7 +223,7 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                               style={ { marginBottom: 0 } }
                               validateStatus={ keyMessage !== undefined ? 'error' : undefined }
                             >
-                              <Input aria-label={ t(view.keyLabel) } />
+                              <Input aria-label={ `${t(view.keyLabel)} ${index + 1}` } />
                             </Form.Item>
                             <Form.Item
                               help={ valueMessage }
@@ -231,12 +231,16 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                               style={ { marginBottom: 0 } }
                               validateStatus={ valueMessage !== undefined ? 'error' : undefined }
                             >
-                              <Input aria-label={ t(view.valueLabel) } />
+                              <Input aria-label={ `${t(view.valueLabel)} ${index + 1}` } />
                             </Form.Item>
                           </>
                           ) }
                       <IconButton
-                        aria-label={ t('classification-store.aria.remove-pair', { name: row?.key ?? '' }) }
+                        aria-label={
+                          (row?.key ?? '').trim() !== ''
+                            ? t('classification-store.aria.remove-pair', { name: row.key })
+                            : t('classification-store.aria.remove-pair-at', { position: index + 1 })
+                        }
                         icon={ { value: 'close' } }
                         onClick={ () => { remove(field.name) } }
                         tooltip={ { title: t('remove') } }

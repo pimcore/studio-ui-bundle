@@ -2260,6 +2260,7 @@ classification-store.aria.delete-sub-group: "Supprimer le sous-groupe \"{{name}}
 classification-store.aria.edit-metadata: "Modifier les métadonnées de \"{{name}}\""
 classification-store.aria.edit-titles: "Modifier les titres de \"{{name}}\""
 classification-store.aria.remove-pair: "Retirer la paire \"{{name}}\""
+classification-store.aria.remove-pair-at: "Retirer la paire {{position}}"
 classification-store.edit-metadata: "Modifier les métadonnées : {{name}}"
 classification-store.edit-titles: "Modifier les titres : {{name}}"
 classification-store.action-edit-metadata: "Modifier les métadonnées"

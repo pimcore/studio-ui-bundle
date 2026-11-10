@@ -625,7 +625,7 @@ describe('KeysTab pair actions', () => {
     expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
 
     await user.click(screen.getByLabelText('classification-store.aria.edit-metadata:height'))
-    await user.type(screen.getAllByLabelText('classification-store.pair-value')[0], '2')
+    await user.type(screen.getAllByLabelText(rowLabel('classification-store.pair-value'))[0], '2')
     await user.click(screen.getByTestId('modal-ok'))
 
     await waitFor(() => { expect(updateRequests()).toHaveLength(1) }, WAIT_BUDGET)
@@ -649,3 +649,6 @@ describe('KeysTab pair actions', () => {
     expect(screen.getByText('classification-store.pair-no-content')).toBeInTheDocument()
   })
 })
+
+// Each pair input carries its column heading and its row number.
+const rowLabel = (heading: string): RegExp => new RegExp(`^${heading.replace(/\./g, '\\.')} \\d+$`)
