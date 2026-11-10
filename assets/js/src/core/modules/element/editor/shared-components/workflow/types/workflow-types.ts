@@ -69,8 +69,9 @@ interface ActionItem {
   objectLayout?: boolean | number | string
 }
 
-// string/number values that mean "no custom layout" (the config node is a scalar, so e.g. `objectLayout: 'false'` is passed through unchanged)
-const NO_LAYOUT_VALUES = new Set(['', 'false', '0'])
+// string values that mean "no custom layout" (the config node is a scalar, so e.g. `objectLayout: 'false'` is passed through unchanged)
+// '0' is deliberately not listed: it is a valid layout id (the main layout), see use-custom-layouts.ts
+const NO_LAYOUT_VALUES = new Set(['', 'false'])
 
 const normalizeObjectLayout = (objectLayout: ActionItem['objectLayout']): string | undefined => {
   if (!isString(objectLayout) && !isNumber(objectLayout)) {
