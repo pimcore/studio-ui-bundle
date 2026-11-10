@@ -350,6 +350,8 @@ describe('CollectionsTab pair actions', () => {
 
     expect(widthOf('classification-store.columns.actions')).toBe('124px')
     expect(widthOf('classification-store.columns.id')).toBe('60px')
+    // 50 selection + 60 id + 34 name floor + 124 actions fits the 300px minimum pane
+    expect(screen.getByRole('table').style.minWidth).toBe('268px')
   })
 
   it('sends the name, the description and the pairs, and nothing else', async () => {

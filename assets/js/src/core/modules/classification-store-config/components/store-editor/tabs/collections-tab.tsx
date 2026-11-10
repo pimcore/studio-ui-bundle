@@ -292,8 +292,8 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
-      size: 220,
-      // The name absorbs what the fixed columns leave, so the table never outgrows the pane.
+      size: 34,
+      // Its size is the table minWidth floor; the auto width gives it whatever the pane leaves.
       meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
