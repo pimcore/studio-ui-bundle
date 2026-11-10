@@ -689,6 +689,7 @@ mcp-servers.read-only-notice: Server definitions are file-managed on this enviro
 mcp-servers.save-success: MCP server saved
 mcp-servers.access.users-count: "Users: {{number}}"
 mcp-servers.access.roles-count: "Roles: {{number}}"
+mcp-servers.access.service-users-count: "Service users: {{number}}"
 mcp-servers.access.global-extra: any authenticated user
 mcp-servers.access.nobody: Nobody yet
 mcp-servers.badge.read: Read
@@ -714,11 +715,15 @@ mcp-servers.editor.copy-url: Copy server URL
 mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
 mcp-servers.sharing.title: Sharing
 mcp-servers.sharing.share-globally: Share globally
-mcp-servers.sharing.share-globally-tooltip: Any authenticated user gets Config Read and MCP Server Access (not Config Edit)
+mcp-servers.sharing.share-globally-tooltip: Any authenticated user, including service users, gets Config Read and MCP Server Access (not Config Edit)
 mcp-servers.sharing.users: Users
 mcp-servers.sharing.roles: Roles
 mcp-servers.sharing.add-user: Add a user…
 mcp-servers.sharing.add-role: Add a role…
+mcp-servers.sharing.service-users: Service users
+mcp-servers.sharing.add-service-user: Add a service user…
+mcp-servers.sharing.service-users-hint: Service users can only connect; they cannot read or edit the configuration.
+mcp-servers.sharing.inactive: inactive
 mcp-servers.sharing.name: Name
 mcp-servers.sharing.config-read: Config Read
 mcp-servers.sharing.config-edit: Config Edit
