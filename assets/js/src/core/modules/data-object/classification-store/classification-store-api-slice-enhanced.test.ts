@@ -1116,6 +1116,58 @@ describe('classification store key-group relation upsert cache patch', () => {
     expect(cachedRelation(store)).toEqual(expect.objectContaining({ sorter: 3, subGroup: 'electrical' }))
   })
 
+  it('patches a definition override while pending and takes the server value', async () => {
+    const store = createStore()
+    await store.dispatch(
+      (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection.initiate(relationQueryArgs)
+    )
+
+    const save = upsert(store, { definitionOverride: { options: ['a'] } })
+    await flush()
+    expect(cachedRelation(store)).toEqual(expect.objectContaining({ definitionOverride: { options: ['a'] }, sorter: 3 }))
+
+    pendingUpserts[0]({ ...storedRelation, definitionOverride: { options: ['a', 'b'] } })
+    await save
+
+    expect(cachedRelation(store)).toEqual(expect.objectContaining({ definitionOverride: { options: ['a', 'b'] } }))
+  })
+
+  it('patches a clearing null as null and rolls a failed override save back', async () => {
+    const store = createStore()
+    await store.dispatch(
+      (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection.initiate(relationQueryArgs)
+    )
+
+    const clear = upsert(store, { definitionOverride: null })
+    await flush()
+    expect(cachedRelation(store)).toEqual(expect.objectContaining({ definitionOverride: null }))
+    pendingUpserts[0]({ message: 'Conflict' }, 409)
+    await clear
+
+    expect(cachedRelation(store)?.definitionOverride).toBeUndefined()
+  })
+
+  it('keeps both an override save and an older cell edit', async () => {
+    const store = createStore()
+    await store.dispatch(
+      (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection.initiate(relationQueryArgs)
+    )
+
+    const cellEdit = upsert(store, { sorter: 9 })
+    await flush()
+    const override = upsert(store, { definitionOverride: { defaultUnit: 'kg' } })
+    await flush()
+
+    pendingUpserts[1]({ ...storedRelation, sorter: 9, definitionOverride: { defaultUnit: 'kg' } })
+    await override
+    pendingUpserts[0]({ ...storedRelation, sorter: 9, definitionOverride: null })
+    await cellEdit
+
+    expect(cachedRelation(store)).toEqual(
+      expect.objectContaining({ sorter: 9, definitionOverride: { defaultUnit: 'kg' } })
+    )
+  })
+
   it('keeps the field mask on a page that already held the row while another page did not', async () => {
     // The group is paged, so two of its pages can be cached at once and the relation sits on
     // only one of them. Insertion is therefore per cache entry: counting the second page's miss
