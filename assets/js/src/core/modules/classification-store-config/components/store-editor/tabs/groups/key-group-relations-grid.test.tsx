@@ -485,7 +485,7 @@ describe('KeyGroupRelationsGrid', () => {
     renderGrid()
     await screen.findByText('height', undefined, WAIT_BUDGET)
 
-    expect(renderedColumnIds(11)).toEqual(['keyId', 'keyName', 'keyDescription', 'mandatory', 'sorter'])
+    expect(renderedColumnIds(11)).toEqual(['keyId', 'keyDescription', 'mandatory', 'sorter'])
 
     await selectKeys(user, 'height')
     await confirmAssign(user)
@@ -764,5 +764,114 @@ describe('KeyGroupRelationsGrid remove dialog', () => {
     expect(deleteRequest.body).toEqual({ keyId: 11, groupId: GROUP_ID })
     expect(await screen.findByText(/classification-store.sub-group-unused/, undefined, WAIT_BUDGET))
       .toBeInTheDocument()
+  })
+})
+
+describe('KeyGroupRelationsGrid override action and tags', () => {
+  const originalFetch = globalThis.fetch
+  const UNITS = [{ id: 'kg', symbol: 'kg' }, { id: 'g', symbol: 'g' }, { id: 'lb', symbol: 'lb' }]
+  const COLORS = [{ label: 'Red', value: 'red' }, { label: 'Green', value: 'green' }, { label: 'Blue', value: 'blue' }]
+  const TAG_PREFIX = 'classification-store.override'
+  let rows: Array<Record<string, unknown>> = []
+
+  const serveRows = (): void => {
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      let body: Record<string, any> | undefined
+
+      try {
+        body = JSON.parse(await input.clone().text())
+      } catch {
+        body = undefined
+      }
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(RELATIONS_URL)) return jsonResponse({ items: rows, totalItems: rows.length })
+      if (input.url.endsWith(SUB_GROUPS_URL)) return jsonResponse({ items: vocabulary, totalItems: vocabulary.length })
+
+      return jsonResponse({ ...rows.find((row) => row.keyId === body?.keyId), ...body })
+    }) as unknown as typeof fetch
+  }
+
+  beforeEach(() => {
+    requests.length = 0
+    rows = [
+      { ...relation(11, 'plain', 1, false), type: 'select', options: COLORS },
+      { ...relation(12, 'color', 2, false), type: 'select', options: COLORS, definitionOverride: { options: ['red', 'green'] } },
+      { ...relation(13, 'weight', 3, false), type: 'quantityValue', validUnits: UNITS, definitionOverride: { defaultUnit: 'kg', validUnits: ['kg', 'g'] } },
+      { ...relation(14, 'empty', 4, false), type: 'select', options: COLORS, definitionOverride: { options: [], validUnits: [] } },
+      { ...relation(15, 'bare', 5, false), type: 'input', options: null }
+    ]
+    serveRows()
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+    releaseSubGroupAssignLock(STORE_ID, GROUP_ID)
+  })
+
+  it('offers one override action per row whatever the key type, naming the key', async () => {
+    renderGrid()
+    await screen.findByText('plain', undefined, WAIT_BUDGET)
+
+    for (const name of ['plain', 'color', 'weight', 'empty', 'bare']) {
+      expect(screen.getAllByRole('button', { name: `classification-store.aria.edit-key-override:${name}` })).toHaveLength(1)
+    }
+  })
+
+  it('tags each overridden member after the key name, and a row with no override carries none', async () => {
+    renderGrid()
+    await screen.findByText('plain', undefined, WAIT_BUDGET)
+
+    const rowOf = (name: string): HTMLElement => screen.getByText(name).closest('tr') as HTMLElement
+    const tagsOf = (name: string): string[] => Array.from(rowOf(name).querySelectorAll('.ant-tag')).map((tag) => tag.textContent ?? '')
+
+    expect(tagsOf('plain')).toEqual([])
+    expect(tagsOf('bare')).toEqual([])
+    expect(tagsOf('color')).toEqual([`${TAG_PREFIX}.tag-options:2,3`])
+    // default unit as its symbol, and the valid-units narrowing, which is the worst case of two here
+    expect(tagsOf('weight')).toEqual(['kg', `${TAG_PREFIX}.tag-units:2,3`])
+    expect(tagsOf('empty')).toEqual([`${TAG_PREFIX}.tag-no-options:`, `${TAG_PREFIX}.tag-no-units:`])
+  })
+
+  it('tags an empty valid-units subset as no units, and all three members together', async () => {
+    rows = [
+      { ...relation(21, 'nounits', 1, false), type: 'quantityValue', validUnits: UNITS, definitionOverride: { validUnits: [] } },
+      { ...relation(22, 'all', 2, false), type: 'quantityValue', options: COLORS, validUnits: UNITS, definitionOverride: { options: ['red'], defaultUnit: 'g', validUnits: ['g', 'gone'] } }
+    ]
+    renderGrid()
+    await screen.findByText('nounits', undefined, WAIT_BUDGET)
+
+    const tagsOf = (name: string): string[] => Array.from((screen.getByText(name).closest('tr') as HTMLElement).querySelectorAll('.ant-tag')).map((tag) => tag.textContent ?? '')
+
+    expect(tagsOf('nounits')).toEqual([`${TAG_PREFIX}.tag-no-units:`])
+    expect(tagsOf('all')).toEqual([`${TAG_PREFIX}.tag-options:1,3`, 'g', `${TAG_PREFIX}.tag-units:2,3`])
+  })
+
+  it('holds the override action while an assign batch is settling', async () => {
+    const user = setupUser()
+    let release: () => void = () => {}
+    const gate = new Promise<void>((resolve) => { release = resolve })
+    const serve = globalThis.fetch
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.url.endsWith(UPSERT_URL)) {
+        requests.push({ url: input.url, method: input.method, body: undefined })
+        await gate
+      }
+
+      return await (serve as any)(input)
+    }) as unknown as typeof fetch
+
+    renderGrid()
+    await screen.findByText('plain', undefined, WAIT_BUDGET)
+    await user.click(screen.getAllByRole('checkbox')[1])
+    await user.click(unassignButton())
+
+    await waitFor(() => { expect(upsertRequests()).toHaveLength(1) }, WAIT_BUDGET)
+    expect(screen.getByRole('button', { name: 'classification-store.aria.edit-key-override:plain' })).toBeDisabled()
+
+    release()
+    await waitFor(() => { expect(screen.getByRole('button', { name: 'classification-store.aria.edit-key-override:plain' })).toBeEnabled() }, WAIT_BUDGET)
   })
 })

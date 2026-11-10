@@ -10,6 +10,8 @@ The following steps are necessary when updating to newer versions.
 
 - [Classification Store] Added: sub groups, the per-store vocabulary a key's assignment to a group can be tagged with.
 
+- [Classification Store] Added: a key assignment in a group can narrow the key's options and units for that group, from a new action on each row of the group's key grid.
+
 - [Classification Store] Added: Export and Import actions on a store in the Classification Store configuration screen, which write and read the store's whole configuration as one JSON artifact.
 
 - [Data Objects] Added: the Group tab in the data object grid's add-column picker, which adds a column for every key of the picked group, in the order the group lists them, leaving out the keys the configuration already shows.
