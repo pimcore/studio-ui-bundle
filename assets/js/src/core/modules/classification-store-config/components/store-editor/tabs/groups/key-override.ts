@@ -108,7 +108,7 @@ export const resolveSubset = (raw: unknown, offered: string[]): IResolvedSubset 
     return { status: 'invalid', stored: [], live: [], stale: [] }
   }
 
-  const stored = raw
+  const stored = [...new Set(raw)]
   const live = stored.filter((value) => offered.includes(value))
   const stale = stored.filter((value) => !offered.includes(value))
 
@@ -232,7 +232,11 @@ export const overrideTags = (relation: Relation): IOverrideTag[] => {
   }
 
   if (typeof draft.defaultUnit === 'string') {
-    tags.push({ id: 'default-unit', translationKey: null, params: {}, text: unitSymbol(relation, draft.defaultUnit), danger: false })
+    const published = keyUnitsOf(relation)
+    // A default the key no longer permits is a disagreement the row must not present as a valid value.
+    const outside = published.length > 0 && !published.some((unit) => unit.id === draft.defaultUnit)
+
+    tags.push({ id: 'default-unit', translationKey: null, params: {}, text: unitSymbol(relation, draft.defaultUnit), danger: outside })
   } else if (draft.defaultUnit !== undefined) {
     tags.push({ id: 'default-unit', translationKey: 'classification-store.override.tag-unreadable', params: {}, text: '', danger: true })
   }

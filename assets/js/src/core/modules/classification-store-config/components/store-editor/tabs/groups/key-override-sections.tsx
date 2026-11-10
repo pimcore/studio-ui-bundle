@@ -89,11 +89,10 @@ interface IStatedStateProps {
   title?: string
   description: string
   actionLabel?: string
-  actionDisabled?: boolean
   onAction?: () => void
 }
 
-export const StatedState = ({ title, description, actionLabel, actionDisabled, onAction }: IStatedStateProps): React.JSX.Element => (
+export const StatedState = ({ title, description, actionLabel, onAction }: IStatedStateProps): React.JSX.Element => (
   <Flex
     gap="mini"
     vertical
@@ -107,7 +106,6 @@ export const StatedState = ({ title, description, actionLabel, actionDisabled, o
     { actionLabel !== undefined && (
       <div>
         <IconTextButton
-          disabled={ actionDisabled }
           icon={ { value: 'clear-filter' } }
           onClick={ onAction }
         >
@@ -195,8 +193,7 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
       >
         { heading }
         <StatedState
-          actionDisabled={ draft.options === undefined }
-          actionLabel={ clearLabel }
+          actionLabel={ draft.options === undefined ? undefined : clearLabel }
           description={ description }
           onAction={ clear }
           title={ t('classification-store.override.no-options-title') }

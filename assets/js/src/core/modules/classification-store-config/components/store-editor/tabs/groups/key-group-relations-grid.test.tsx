@@ -834,16 +834,17 @@ describe('KeyGroupRelationsGrid override action and tags', () => {
     expect(tagsOf('empty')).toEqual([`${TAG_PREFIX}.tag-no-options:`, `${TAG_PREFIX}.tag-no-units:`])
   })
 
-  it('gives the key name a whole line of its cell, with the tags wrapping beside or below it', async () => {
+  it('keeps the tags on the name line, so a row with an override is as tall as one without', async () => {
     renderGrid()
     await screen.findByText('plain', undefined, WAIT_BUDGET)
 
     const nameBox = screen.getByText('weight').closest<HTMLElement>('div[style*="flex"]')!
     const line = nameBox.parentElement!
 
-    // a non-shrinking tag next to a shrinkable name box is what collapsed the name to zero width
-    expect(nameBox.style.flex).toBe('1 1 100%')
-    expect(line.style.flexWrap).toBe('wrap')
+    // the row has a fixed height, so a wrapped second line would grow it or be clipped
+    expect(nameBox.style.flex).toBe('1 1 auto')
+    expect(nameBox.style.minWidth).toBe('0')
+    expect(line.style.flexWrap).toBe('nowrap')
     expect(Array.from(line.children).indexOf(nameBox)).toBe(0)
     expect(line.querySelectorAll('.ant-tag').length).toBeGreaterThan(0)
   })

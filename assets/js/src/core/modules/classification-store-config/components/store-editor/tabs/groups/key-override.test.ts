@@ -9,7 +9,7 @@
  */
 
 import { type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import { buildOverride, draftOf, overrideTags } from './key-override'
+import { buildOverride, draftOf, overrideTags, resolveSubset } from './key-override'
 
 const rel = (extra: Record<string, unknown>): ClassificationStoreConfigurationKeyGroupRelationDetail => (
   { keyId: 1, groupId: 2, ...extra } as unknown as ClassificationStoreConfigurationKeyGroupRelationDetail
@@ -47,5 +47,16 @@ describe('key override draft', () => {
     expect(overrideTags(rel({ keyType: 'quantityValue', definitionOverride: { defaultUnit: 5 } }))).toEqual([
       expect.objectContaining({ id: 'default-unit', translationKey: 'classification-store.override.tag-unreadable', danger: true })
     ])
+  })
+
+  it('counts a duplicated stored value once, so the last-option floor holds', () => {
+    expect(resolveSubset(['red', 'red'], ['red', 'green'])).toEqual(expect.objectContaining({ stored: ['red'], live: ['red'] }))
+  })
+
+  it('marks a default unit the key does not permit as a disagreement', () => {
+    const units = { validUnits: [{ id: 'kg', symbol: 'kg' }] }
+
+    expect(overrideTags(rel({ keyType: 'quantityValue', units, definitionOverride: { defaultUnit: 'stone' } }))[0].danger).toBe(true)
+    expect(overrideTags(rel({ keyType: 'quantityValue', units, definitionOverride: { defaultUnit: 'kg' } }))[0].danger).toBe(false)
   })
 })
