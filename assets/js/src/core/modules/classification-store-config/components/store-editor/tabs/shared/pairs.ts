@@ -18,6 +18,8 @@ export interface PairRow {
   readOnly: boolean
   /** Key as stored, kept only on read-only rows, which cannot be renamed. */
   storedKey?: string
+  /** Set once the user edits the row's key or value; an untouched row may keep a stored empty value. */
+  touched?: boolean
 }
 
 /** What tells the generic view from the titles view over the same stored map. */
@@ -93,7 +95,7 @@ export const rowErrors = (
     if ((counts.get(key) ?? 0) > 1) return { key: 'duplicate' }
     if (wholeIsList) return { key: 'list' }
     // A pair stored with an empty value stays valid until the user touches it.
-    const keptEmpty = row.value === '' && original?.[key] === ''
+    const keptEmpty = row.touched !== true && row.value === '' && original?.[key] === ''
     if (!keptEmpty && (row.value === undefined || row.value === '')) return { value: 'value-required' }
 
     return {}

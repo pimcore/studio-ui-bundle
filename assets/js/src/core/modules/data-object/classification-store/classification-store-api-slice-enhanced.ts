@@ -14,6 +14,8 @@ import { type TypedUseMutation } from '@reduxjs/toolkit/query/react'
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import {
   api as baseApi,
+  type ClassificationStoreConfigurationGroupCollectionApiArg,
+  type ClassificationStoreConfigurationCollectionCollectionApiArg,
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
@@ -650,6 +652,10 @@ type RowWriteField = 'name' | 'description' | 'customMetadata'
 const ROW_WRITE_FIELDS: readonly RowWriteField[] = ['name', 'description', 'customMetadata']
 
 const createRowWriteLedger = () => {
+  // Set when a request failed while another write of the same row overlapped it: its rollback was
+  // skipped (it could not tell its own members from the newer write's), so the cache is re-read
+  // once the last write has settled.
+  let needsReread = false
   const counters = new Map<string, { pending: number, started: number }>()
   let inFlight = 0
   const slot = (id: unknown, field: RowWriteField): { pending: number, started: number } => {
@@ -691,15 +697,44 @@ const createRowWriteLedger = () => {
       takesResponseFor: (field: RowWriteField): boolean =>
         contended.get(field) !== true &&
         slot(id, field).started === (startedAtDispatch.get(field) ?? 0) + (written[field] ? 1 : 0),
-      settled: (): void => {
+      /** Whether no other write of a member this request wrote overlapped it, so undoing it is exact. */
+      ownsItsPatch: (): boolean => ROW_WRITE_FIELDS.every((field) => !written[field] || (
+        contended.get(field) !== true &&
+        slot(id, field).started === (startedAtDispatch.get(field) ?? 0) + 1
+      )),
+      /** A rollback was skipped because a newer write overlapped: ask for a re-read at the end. */
+      skippedRollback: (): void => { needsReread = true },
+      /** Closes the request; true when it was the last in flight and a skipped rollback wants a re-read. */
+      settled: (): boolean => {
         for (const field of ROW_WRITE_FIELDS) {
           if (written[field]) slot(id, field).pending -= 1
         }
         inFlight -= 1
-        if (inFlight === 0) counters.clear()
+        if (inFlight !== 0) return false
+        counters.clear()
+        const reread = needsReread
+        needsReread = false
+        return reread
       }
     }
   }
+}
+
+/** Re-reads every cached page of a collection endpoint, ignoring what the cache holds. */
+const refetchCachedPages = (
+  dispatch: (thunk: any) => void,
+  endpointName: 'classificationStoreConfigurationGroupCollection' | 'classificationStoreConfigurationCollectionCollection'
+): void => {
+  dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+    const state = getState() as Record<string, unknown>
+    const queries = (state.api as Record<string, unknown>)?.queries as Record<string, unknown> ?? {}
+
+    for (const [queryKey, queryState] of Object.entries(queries)) {
+      if (!queryKey.startsWith(`${endpointName}(`)) continue
+      const qs = queryState as { originalArgs: ClassificationStoreConfigurationGroupCollectionApiArg & ClassificationStoreConfigurationCollectionCollectionApiArg }
+      innerDispatch(baseApi.endpoints[endpointName].initiate(qs.originalArgs, { subscribe: false, forceRefetch: true }))
+    }
+  })
 }
 
 const openGroupWrite = createRowWriteLedger()
@@ -753,9 +788,13 @@ const api = baseApi.enhanceEndpoints({
             }
           )
         } catch {
-          patchResults.forEach((r) => { r.undo() })
+          // Undoing restores the pre-request value of each member this request wrote, which would
+          // also discard a newer overlapping write's value for it. Roll back only when nothing
+          // overlapped; otherwise leave the cache and re-read once the overlap has settled.
+          if (write.ownsItsPatch()) patchResults.forEach((r) => { r.undo() })
+          else write.skippedRollback()
         } finally {
-          write.settled()
+          if (write.settled()) refetchCachedPages(dispatch, 'classificationStoreConfigurationGroupCollection')
         }
       }
     },
@@ -811,9 +850,10 @@ const api = baseApi.enhanceEndpoints({
             }
           )
         } catch {
-          patchResults.forEach((r) => { r.undo() })
+          if (write.ownsItsPatch()) patchResults.forEach((r) => { r.undo() })
+          else write.skippedRollback()
         } finally {
-          write.settled()
+          if (write.settled()) refetchCachedPages(dispatch, 'classificationStoreConfigurationCollectionCollection')
         }
       }
     },

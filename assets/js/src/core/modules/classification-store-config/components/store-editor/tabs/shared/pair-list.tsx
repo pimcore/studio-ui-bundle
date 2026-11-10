@@ -49,7 +49,7 @@ interface IPairListProps {
 }
 
 const preview = (value: unknown): string => {
-  const json = JSON.stringify(value)
+  const json = JSON.stringify(value) ?? ''
 
   return json.length > PREVIEW_LENGTH ? `${json.slice(0, PREVIEW_LENGTH)}…` : json
 }
@@ -79,7 +79,8 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
   const listShaped = wouldBeList(rows, original, view)
 
   useEffect(() => {
-    onDirtyChange(JSON.stringify(rows) !== initialJson)
+    // `touched` is bookkeeping for validation, not a change: editing a value back is not dirty.
+    onDirtyChange(JSON.stringify(rows.map(({ touched, ...rest }) => rest)) !== initialJson)
   }, [rows, initialJson, onDirtyChange])
 
   useImperativeHandle(ref, () => ({
@@ -102,10 +103,15 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
     }
   }), [form, original, view])
 
+  // Any edit to a row's key or value marks it touched, whatever the text is edited back to.
+  const markTouched = (index: number): void => {
+    form.setFieldValue(['pairs', index, 'touched'], true)
+  }
+
   const handleAdd = (): void => {
     const current = (form.getFieldValue('pairs') ?? []) as PairRow[]
 
-    form.setFieldValue('pairs', [...current, { key: '', value: '', readOnly: false }])
+    form.setFieldValue('pairs', [...current, { key: '', value: '', readOnly: false, touched: true }])
   }
 
   // A missing key or value is reported once a save was tried; a clash is reported as it is typed.
@@ -223,7 +229,10 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                               style={ { marginBottom: 0 } }
                               validateStatus={ keyMessage !== undefined ? 'error' : undefined }
                             >
-                              <Input aria-label={ `${t(view.keyLabel)} ${index + 1}` } />
+                              <Input
+                                aria-label={ `${t(view.keyLabel)} ${index + 1}` }
+                                onChange={ () => { markTouched(index) } }
+                              />
                             </Form.Item>
                             <Form.Item
                               help={ valueMessage }
@@ -231,7 +240,10 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
                               style={ { marginBottom: 0 } }
                               validateStatus={ valueMessage !== undefined ? 'error' : undefined }
                             >
-                              <Input aria-label={ `${t(view.valueLabel)} ${index + 1}` } />
+                              <Input
+                                aria-label={ `${t(view.valueLabel)} ${index + 1}` }
+                                onChange={ () => { markTouched(index) } }
+                              />
                             </Form.Item>
                           </>
                           ) }

@@ -45,4 +45,12 @@ describe('pairs', () => {
 
     expect(rowErrors(rows, original, generic)).toEqual([{}, {}, { value: 'value-required' }])
   })
+
+  it('requires a value once the user has touched a pair stored empty, even if they clear it back', () => {
+    const original = { a: '' }
+    const rows = toRows(original, generic)
+    rows[0].touched = true
+
+    expect(rowErrors(rows, original, generic)).toEqual([{ value: 'value-required' }])
+  })
 })
