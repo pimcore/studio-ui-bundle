@@ -177,6 +177,8 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
   /** Cumulative pending change of a row, and the chain its saves run on, both keyed by row id. */
   const draftsRef = useRef(new Map<number, GroupDraft>())
   const chainsRef = useRef(new Map<number, Promise<void>>())
+  /** Last name and description the server confirmed for a row whose chain is running. */
+  const baseRef = useRef(new Map<number, { name: string, description: string | null }>())
 
   /**
    * Saves one changed field of a row, carrying whatever earlier change of that row has not come
@@ -192,11 +194,19 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     rethrow = false
   ): Promise<void> => {
     const { id } = row
-    const stored: GroupDraft = { name: row.name, description: row.description ?? null }
+    // The row the grid shows may already carry the optimistic value of a save still in front of
+    // this one, so while a chain is running the base is the last value the server confirmed (or,
+    // before any has been, the row as it was when the chain began) — never the row read now.
+    const stored: GroupDraft = chainsRef.current.has(id)
+      ? (baseRef.current.get(id) ?? { name: row.name, description: row.description ?? null })
+      : { name: row.name, description: row.description ?? null }
+    if (!chainsRef.current.has(id)) baseRef.current.set(id, stored)
     const outcome: { failure?: ApiError } = {}
 
     const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
-      const next: GroupDraft = { ...(draftsRef.current.get(id) ?? stored), ...change }
+      // Rebased here, not at queue time: a save in front of this one that failed drops the draft,
+      // and this change then goes out over the confirmed base, not the refused optimistic name.
+      const next: GroupDraft = { ...(draftsRef.current.get(id) ?? baseRef.current.get(id) ?? stored), ...change }
 
       draftsRef.current.set(id, next)
 
@@ -204,6 +214,10 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
         id,
         classificationStoreConfigurationGroupUpdate: next
       })
+
+      if (!('error' in response)) {
+        baseRef.current.set(id, { name: next.name, description: next.description })
+      }
 
       if ('error' in response) {
         // The server kept its own value: the next edit starts from the refetched row.
@@ -219,6 +233,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
       if (chainsRef.current.get(id) === chain) {
         chainsRef.current.delete(id)
         draftsRef.current.delete(id)
+        baseRef.current.delete(id)
       }
     })
 

@@ -684,9 +684,13 @@ const createRowWriteLedger = () => {
 
     return {
       /** Whether the cached value of `field` is to be replaced by the response. */
+      // Written members are held to the same test as unwritten ones: a response may only decide a
+      // member when no other write of it was in flight at dispatch and none has started since
+      // (this request's own start is the one counted in `started` when it wrote the member).
+      // Otherwise the arrival order of overlapping answers would decide which stale value wins.
       takesResponseFor: (field: RowWriteField): boolean =>
-        written[field] ||
-        (contended.get(field) !== true && slot(id, field).started === startedAtDispatch.get(field)),
+        contended.get(field) !== true &&
+        slot(id, field).started === (startedAtDispatch.get(field) ?? 0) + (written[field] ? 1 : 0),
       settled: (): void => {
         for (const field of ROW_WRITE_FIELDS) {
           if (written[field]) slot(id, field).pending -= 1

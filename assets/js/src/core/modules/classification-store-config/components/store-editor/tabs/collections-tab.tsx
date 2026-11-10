@@ -167,6 +167,8 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
   /** Cumulative pending change of a row, and the chain its saves run on, both keyed by row id. */
   const draftsRef = useRef(new Map<number, CollectionDraft>())
   const chainsRef = useRef(new Map<number, Promise<void>>())
+  /** Last name and description the server confirmed for a row whose chain is running. */
+  const baseRef = useRef(new Map<number, { name: string, description: string | null }>())
 
   /**
    * Saves one changed field of a row, carrying whatever earlier change of that row has not come
@@ -182,11 +184,19 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     rethrow = false
   ): Promise<void> => {
     const { id } = row
-    const stored: CollectionDraft = { name: row.name, description: row.description ?? null }
+    // The row the grid shows may already carry the optimistic value of a save still in front of
+    // this one, so while a chain is running the base is the last value the server confirmed (or,
+    // before any has been, the row as it was when the chain began) — never the row read now.
+    const stored: CollectionDraft = chainsRef.current.has(id)
+      ? (baseRef.current.get(id) ?? { name: row.name, description: row.description ?? null })
+      : { name: row.name, description: row.description ?? null }
+    if (!chainsRef.current.has(id)) baseRef.current.set(id, stored)
     const outcome: { failure?: ApiError } = {}
 
     const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
-      const next: CollectionDraft = { ...(draftsRef.current.get(id) ?? stored), ...change }
+      // Rebased here, not at queue time: a save in front of this one that failed drops the draft,
+      // and this change then goes out over the confirmed base, not the refused optimistic name.
+      const next: CollectionDraft = { ...(draftsRef.current.get(id) ?? baseRef.current.get(id) ?? stored), ...change }
 
       draftsRef.current.set(id, next)
 
@@ -194,6 +204,10 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
         id,
         classificationStoreConfigurationCollectionUpdate: next
       })
+
+      if (!('error' in response)) {
+        baseRef.current.set(id, { name: next.name, description: next.description })
+      }
 
       if ('error' in response) {
         // The server kept its own value: the next edit starts from the refetched row.
@@ -209,6 +223,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
       if (chainsRef.current.get(id) === chain) {
         chainsRef.current.delete(id)
         draftsRef.current.delete(id)
+        baseRef.current.delete(id)
       }
     })
 
