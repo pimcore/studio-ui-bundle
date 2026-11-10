@@ -69,6 +69,19 @@ interface ActionItem {
   objectLayout?: boolean | number | string
 }
 
+// string/number values that mean "no custom layout" (the config node is a scalar, so e.g. `objectLayout: 'false'` is passed through unchanged)
+const NO_LAYOUT_VALUES = new Set(['', 'false', '0'])
+
+const normalizeObjectLayout = (objectLayout: ActionItem['objectLayout']): string | undefined => {
+  if (!isString(objectLayout) && !isNumber(objectLayout)) {
+    return undefined
+  }
+
+  const layoutId = String(objectLayout).trim()
+
+  return NO_LAYOUT_VALUES.has(layoutId.toLowerCase()) ? undefined : layoutId
+}
+
 const createWorkflowAction = (
   actionType: ActionType,
   workflowName: string,
@@ -79,9 +92,7 @@ const createWorkflowAction = (
   transitionId: item.name,
   label: item.label,
   notes: isEmpty(item.notes) ? undefined : item.notes,
-  objectLayout: (isString(item.objectLayout) || isNumber(item.objectLayout)) && String(item.objectLayout) !== ''
-    ? String(item.objectLayout)
-    : undefined
+  objectLayout: normalizeObjectLayout(item.objectLayout)
 })
 
 export const getWorkflowActions = (workflow: WorkflowDetails): WorkflowActionsList => {

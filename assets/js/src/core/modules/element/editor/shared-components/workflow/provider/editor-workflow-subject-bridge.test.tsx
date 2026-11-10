@@ -82,4 +82,12 @@ describe('EditorWorkflowSubjectBridge', () => {
     expect(setCurrentLayout).toHaveBeenCalledWith(null)
     expect(mockRefreshElement).toHaveBeenCalledWith(42)
   })
+
+  it('resets the layout when the transition object layout is the string "false"', () => {
+    // e.g. `objectLayout: 'false'` in the workflow config, passed through unchanged by the backend
+    const setCurrentLayout = applyTransition('false')
+
+    expect(setCurrentLayout).toHaveBeenCalledWith(null)
+    expect(setCurrentLayout).not.toHaveBeenCalledWith('false')
+  })
 })
