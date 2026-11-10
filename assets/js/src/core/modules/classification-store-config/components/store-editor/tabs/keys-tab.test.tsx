@@ -124,6 +124,14 @@ const COLLECTION_URL = `/pimcore-studio/api/classification-store/configuration/s
 const CREATE_URL = '/pimcore-studio/api/classification-store/configuration/keys/add'
 const KEY_ID = 8
 
+/**
+ * The tab reads the engine of its store off the store tree, to tell which key types the engine
+ * can hold. Nothing here asserts on that, so the tree is answered empty: an unknown store
+ * reports no engine and no capability set, which disables nothing. What the select offers and
+ * what it disables is asserted in `keys-tab.type-options.test.tsx`.
+ */
+const TREE_URL = '/pimcore-studio/api/classification-store/configuration/stores/tree'
+
 /** The definition blob of the key both writers of the last test touch. */
 const WIDTH_DEFINITION = { name: 'width', fieldtype: 'input', tooltip: 'The width in cm', indexed: true }
 
@@ -239,6 +247,10 @@ const stubFetch = (items: Array<Record<string, unknown>>, holdFirstUpdate = fals
     }
 
     requests.push({ url: input.url, method: input.method, body })
+
+    if (input.url.endsWith(TREE_URL)) {
+      return jsonResponse([])
+    }
 
     if (input.url.endsWith(COLLECTION_URL)) {
       return jsonResponse({ items: stored, totalItems: stored.length })
@@ -495,6 +507,10 @@ describe('KeysTab delete dialog', () => {
 
       if (input.method === 'DELETE') {
         return jsonResponse(null, 200)
+      }
+
+      if (input.url.endsWith(TREE_URL)) {
+        return jsonResponse([])
       }
 
       return jsonResponse({ items: [height], totalItems: 1 })

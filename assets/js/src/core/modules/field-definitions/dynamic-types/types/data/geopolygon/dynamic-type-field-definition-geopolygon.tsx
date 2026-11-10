@@ -26,7 +26,7 @@ export class DynamicTypeFieldDefinitionGeopolygon extends DynamicTypeFieldDefini
   }
 
   getTags (props: FieldDefinitionContext): string[] {
-    return [...super.getTags(props), 'encryptedFieldSupport']
+    return [...super.getTags(props), 'encryptedFieldSupport', 'classificationStore']
   }
 
   getDefaultData (): FieldDefinitionData {

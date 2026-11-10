@@ -62,9 +62,9 @@ describe('DynamicTypeFieldDefinitionImage', () => {
     expect(tags).toContain('group:data')
   })
 
-  it('does not offer the other image types as classification store key types', () => {
-    expect(new DynamicTypeFieldDefinitionHotspotImage().getTags(context)).not.toContain(CLASSIFICATION_STORE_TAG)
-    expect(new DynamicTypeFieldDefinitionImageGallery().getTags(context)).not.toContain(CLASSIFICATION_STORE_TAG)
-    expect(new DynamicTypeFieldDefinitionExternalImage().getTags(context)).not.toContain(CLASSIFICATION_STORE_TAG)
+  it('offers the other image types as classification store key types too', () => {
+    expect(new DynamicTypeFieldDefinitionHotspotImage().getTags(context)).toContain(CLASSIFICATION_STORE_TAG)
+    expect(new DynamicTypeFieldDefinitionImageGallery().getTags(context)).toContain(CLASSIFICATION_STORE_TAG)
+    expect(new DynamicTypeFieldDefinitionExternalImage().getTags(context)).toContain(CLASSIFICATION_STORE_TAG)
   })
 })

@@ -25,6 +25,10 @@ export class DynamicTypeFieldDefinitionAdvancedManyToMany extends DynamicTypeFie
     return [...super.getGroup(), 'relation']
   }
 
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'classificationStore']
+  }
+
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]

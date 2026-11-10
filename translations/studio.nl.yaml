@@ -2233,6 +2233,12 @@ classification-store.search-groups: Groepen zoeken…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 classification-store.tabs.sub-groups: Subgroepen
+classification-store.engine.label: "Engine: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Document"
+classification-store.engine.eav-hint: "Gekwalificeerde waarden en de uitgebreide sleuteltypen vereisen de documentengine."
+classification-store.key-type-needs-document-engine: "De engine van deze store kan dit sleuteltype niet bevatten. Het vereist de documentengine."
+classification-store.keys-without-field-filter: "Voor deze sleutels is geen veldfilter beschikbaar, daarom zijn ze niet toegevoegd: {{keyNames}}"
 classification-store.add-sub-group: Subgroep toevoegen
 classification-store.delete-sub-group: "Subgroep \"{{subGroupName}}\" verwijderen?"
 classification-store.add-sub-group-store-hint: Een subgroep hoort bij de store, dus een nieuwe komt beschikbaar voor elke groep van deze store.
