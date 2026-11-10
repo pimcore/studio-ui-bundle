@@ -1301,4 +1301,24 @@ describe('classification store key delete cache patch', () => {
     await waitFor(() => { expect(select(queryArgs)).toEqual({ items: [], totalItems: 0 }) })
     expect(select(deletedViewArgs)).toEqual({ items: [storedKey], totalItems: 1 })
   })
+
+  it('drops the key from every cached group relation page', async () => {
+    const GROUP = 7
+    const relation = { keyId: KEY_ID, groupId: GROUP }
+    const otherRelation = { keyId: KEY_ID + 1, groupId: GROUP }
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = input.method === 'DELETE' ? null : { items: [relation, otherRelation], totalItems: 2 }
+      return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } })
+    }) as unknown as typeof fetch
+    const store = createStore()
+    const relationArgs = { groupId: GROUP, body: { filters: { page: 1, pageSize: 10 } } }
+    const relations = (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection
+
+    await store.dispatch(relations.initiate(relationArgs))
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyDelete.initiate({ id: KEY_ID }))
+
+    await waitFor(() => {
+      expect(relations.select(relationArgs)(store.getState()).data).toEqual({ items: [otherRelation], totalItems: 1 })
+    })
+  })
 })

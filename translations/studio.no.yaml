@@ -2217,6 +2217,7 @@ classification-store.restore-key: Gjenopprett
 classification-store.restore-key-question: "Gjenopprette nøkkel \"{{keyName}}\"?"
 classification-store.restore-key-consequence: "Nøkkelen kommer tilbake uten å tilhøre noen gruppe. Gruppetilordningene, rekkefølgen deres, de obligatoriske flaggene og overstyringene per gruppe er borte og kan ikke gjenopprettes. Tildel nøkkelen en gruppe på nytt for at verdiene skal bli tilgjengelige igjen."
 classification-store.keys-deleted-empty: Ingen slettede nøkler.
+classification-store.keys-deleted-no-results: "Ingen slettede nøkler samsvarer med søket."
 classification-store.delete-group-relation-consequence: "Gruppen fjernes bare fra denne samlingen. Gruppen, nøklene og verdiene objekter har under den berøres ikke."
 classification-store.edit-definition: Rediger definisjon
 classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"

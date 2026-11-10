@@ -2221,6 +2221,7 @@ classification-store.restore-key: Restore
 classification-store.restore-key-question: "Restore key \"{{keyName}}\"?"
 classification-store.restore-key-consequence: "The key comes back belonging to no group. Its group assignments, their order, their mandatory flags and their per-group overrides are gone and cannot be recovered, so assign the key to a group again before its values are reachable."
 classification-store.keys-deleted-empty: No deleted keys.
+classification-store.keys-deleted-no-results: "No deleted keys match the search."
 classification-store.delete-group-relation-consequence: "The group is removed from this collection only. The group, its keys and the values objects hold under it are untouched."
 classification-store.edit-definition: Edit definition
 classification-store.edit-key-definition: "Edit key definition: {{keyName}}"

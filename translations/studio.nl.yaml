@@ -2217,6 +2217,7 @@ classification-store.restore-key: Herstellen
 classification-store.restore-key-question: 'Sleutel "{{keyName}}" herstellen?'
 classification-store.restore-key-consequence: 'De sleutel komt terug zonder tot een groep te behoren. Zijn groepstoewijzingen, hun volgorde, hun verplichtvlaggen en hun overschrijvingen per groep zijn verloren en kunnen niet worden hersteld. Wijs de sleutel opnieuw aan een groep toe om zijn waarden weer bereikbaar te maken.'
 classification-store.keys-deleted-empty: Geen verwijderde sleutels.
+classification-store.keys-deleted-no-results: "Geen verwijderde sleutels komen overeen met de zoekopdracht."
 classification-store.delete-group-relation-consequence: "De groep wordt alleen uit deze collectie verwijderd. De groep, haar sleutels en de waarden die objecten eronder bewaren blijven ongewijzigd."
 classification-store.edit-definition: Definitie bewerken
 classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"

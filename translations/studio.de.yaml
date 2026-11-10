@@ -2217,6 +2217,7 @@ classification-store.restore-key: Wiederherstellen
 classification-store.restore-key-question: "Schlüssel \"{{keyName}}\" wiederherstellen?"
 classification-store.restore-key-consequence: "Der Schlüssel kommt ohne Gruppenzugehörigkeit zurück. Seine Gruppenzuweisungen, deren Reihenfolge, ihre Pflichtfeld-Markierungen und ihre gruppenspezifischen Überschreibungen sind verloren und können nicht wiederhergestellt werden. Weisen Sie den Schlüssel erneut einer Gruppe zu, damit seine Werte wieder erreichbar sind."
 classification-store.keys-deleted-empty: Keine gelöschten Schlüssel.
+classification-store.keys-deleted-no-results: "Keine gelöschten Schlüssel entsprechen der Suche."
 classification-store.delete-group-relation-consequence: "Die Gruppe wird nur aus dieser Collection entfernt. Die Gruppe, ihre Schlüssel und die Werte, die Objekte unter ihr speichern, bleiben unberührt."
 classification-store.edit-definition: Definition bearbeiten
 classification-store.edit-key-definition: "Schlüsseldefinition bearbeiten: {{keyName}}"

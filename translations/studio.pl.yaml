@@ -2217,6 +2217,7 @@ classification-store.restore-key: Przywróć
 classification-store.restore-key-question: 'Przywrócić klucz "{{keyName}}"?'
 classification-store.restore-key-consequence: 'Klucz wraca bez przynależności do żadnej grupy. Jego przypisania do grup, ich kolejność, flagi obowiązkowości i nadpisania dla poszczególnych grup przepadły i nie można ich odzyskać. Przypisz klucz ponownie do grupy, aby jego wartości znów były dostępne.'
 classification-store.keys-deleted-empty: Brak usuniętych kluczy.
+classification-store.keys-deleted-no-results: "Żaden usunięty klucz nie pasuje do wyszukiwania."
 classification-store.delete-group-relation-consequence: "Grupa zostaje usunięta tylko z tej kolekcji. Grupa, jej klucze i wartości przechowywane przez obiekty w tej grupie pozostają nienaruszone."
 classification-store.edit-definition: Edytuj definicję
 classification-store.edit-key-definition: "Edytuj definicję klucza: {{keyName}}"

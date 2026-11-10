@@ -573,6 +573,7 @@ describe('KeysTab deleted view', () => {
   let isRestored: boolean
   let hasDeletedKeys: boolean
   let restoreStatus: number
+  let deletedListingStatus: number
 
   const bodyOf = (request: RecordedRequest): Record<string, unknown> | undefined => request.body
   const collectionRequests = (): RecordedRequest[] => requests.filter((request) => request.url.endsWith(COLLECTION_URL))
@@ -586,6 +587,7 @@ describe('KeysTab deleted view', () => {
     isRestored = false
     hasDeletedKeys = true
     restoreStatus = 200
+    deletedListingStatus = 200
     showErrorMock.mockClear()
 
     globalThis.fetch = jest.fn(async (input: Request) => {
@@ -604,8 +606,12 @@ describe('KeysTab deleted view', () => {
       }
 
       if (input.url.endsWith(COLLECTION_URL)) {
+        if (body?.disabledOnly === true && deletedListingStatus !== 200) {
+          return jsonResponse({ message: 'listing failed' }, deletedListingStatus)
+        }
+
         const items = body?.disabledOnly === true
-          ? (hasDeletedKeys && !isRestored ? [deletedKey] : [])
+          ? (hasDeletedKeys && !isRestored && !JSON.stringify(body).includes('zzz') ? [deletedKey] : [])
           : (isRestored ? [height, { ...deletedKey, enabled: true }] : [height])
 
         return jsonResponse({ items, totalItems: items.length })
@@ -721,5 +727,27 @@ describe('KeysTab deleted view', () => {
     await user.click(screen.getByText('classification-store.keys-view.active'))
 
     expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+  })
+
+  it('reports a failed Deleted listing instead of claiming the bin is empty', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    deletedListingStatus = 403
+    await openDeletedView(user)
+
+    await waitFor(() => { expect(showErrorMock).toHaveBeenCalledTimes(1) }, WAIT_BUDGET)
+    expect(screen.queryByText('classification-store.keys-deleted-empty')).toBeNull()
+  })
+
+  it('words a search that matches nothing as no results, not as an empty bin', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    await openDeletedView(user)
+    expect(await screen.findByText('weight', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.type(screen.getByPlaceholderText('search'), 'zzz{enter}')
+
+    expect(await screen.findByText('classification-store.keys-deleted-no-results', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    expect(screen.queryByText('classification-store.keys-deleted-empty')).toBeNull()
   })
 })

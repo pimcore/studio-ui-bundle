@@ -2217,6 +2217,7 @@ classification-store.restore-key: Restaurer
 classification-store.restore-key-question: "Restaurer la clé \"{{keyName}}\" ?"
 classification-store.restore-key-consequence: "La clé revient sans appartenir à aucun groupe. Ses affectations de groupe, leur ordre, leurs indicateurs obligatoires et leurs surcharges par groupe sont perdus et ne peuvent pas être récupérés. Affectez de nouveau la clé à un groupe pour que ses valeurs redeviennent accessibles."
 classification-store.keys-deleted-empty: Aucune clé supprimée.
+classification-store.keys-deleted-no-results: "Aucune clé supprimée ne correspond à la recherche."
 classification-store.delete-group-relation-consequence: "Le groupe est retiré de cette collection uniquement. Le groupe, ses clés et les valeurs que les objets conservent sous lui ne sont pas modifiés."
 classification-store.edit-definition: Modifier la définition
 classification-store.edit-key-definition: "Modifier la définition de la clé : {{keyName}}"

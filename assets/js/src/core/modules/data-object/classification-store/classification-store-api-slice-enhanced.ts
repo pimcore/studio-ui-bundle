@@ -390,8 +390,8 @@ function patchAllCacheEntries<T, A = unknown> (
     for (const [queryKey, queryState] of Object.entries(queries)) {
       if (!queryKey.startsWith(`${endpointName}(`)) continue
       const qs = queryState as { originalArgs: unknown }
-      if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
+        if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
         // @ts-expect-error — dynamic endpoint name not in the union
         innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
           patch(draft, queryKey)
@@ -910,7 +910,18 @@ const api = baseApi.enhanceEndpoints({
               draft.totalItems = Math.max(0, draft.totalItems - 1)
             },
             // The Deleted view lists disabled keys, which this delete adds to rather than removes from.
-            (cacheArgs) => cacheArgs.body.disabledOnly !== true
+            (cacheArgs) => cacheArgs?.body?.disabledOnly !== true
+          )
+          // The server unassigns the key from every group when it is disabled, so the cached
+          // relation pages of every group drop its rows too.
+          patchAllCacheEntries<ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse>(
+            dispatch,
+            'classificationStoreConfigurationKeyGroupRelationCollection',
+            (draft) => {
+              const before = draft.items.length
+              draft.items = draft.items.filter((r) => r.keyId !== args.id)
+              draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
+            }
           )
         } catch {
           // Mutation failed — cache stays stale until next refetch

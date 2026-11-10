@@ -137,13 +137,29 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   // currentData, so a view switch never shows the other view's rows under its own actions; the
   // Deleted view is re-read when opened, as a key deleted meanwhile is not in a cached page.
-  const { currentData: data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyCollectionQuery(
+  const {
+    currentData: data,
+    data: lastData,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch
+  } = useClassificationStoreConfigurationKeyCollectionQuery(
     queryArgs,
     { refetchOnMountOrArgChange: isDeletedView }
   )
 
+  // A failed listing is reported, never read as an empty one: an unreadable Deleted view must not
+  // say the bin is empty.
+  useEffect(() => {
+    if (isError && error !== undefined) trackError(new ApiError(error as ConstructorParameters<typeof ApiError>[0]))
+  }, [isError, error])
+
   const keys = data?.items ?? []
-  const total = data?.totalItems ?? 0
+  // Rows come from currentData; the total holds its last known value while a request is in flight
+  // so the pagination does not collapse to one page on every page change, search or view switch.
+  const total = (data ?? lastData)?.totalItems ?? 0
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -553,8 +569,12 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             } }
             sorting={ sorting }
           />
-          {isDeletedView && !isFetching && keys.length === 0 && (
-            <Text type="secondary">{ t('classification-store.keys-deleted-empty') }</Text>
+          {isDeletedView && !isFetching && !isError && data !== undefined && keys.length === 0 && (
+            <Text type="secondary">
+              { searchTerm.length > 0
+                ? t('classification-store.keys-deleted-no-results')
+                : t('classification-store.keys-deleted-empty') }
+            </Text>
           )}
         </Flex>
       </ContentLayout>

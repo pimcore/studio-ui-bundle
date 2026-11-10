@@ -2217,6 +2217,7 @@ classification-store.restore-key: Återställ
 classification-store.restore-key-question: "Återställa nyckel \"{{keyName}}\"?"
 classification-store.restore-key-consequence: "Nyckeln kommer tillbaka utan att tillhöra någon grupp. Dess gruppkopplingar, deras ordning, deras obligatoriska flaggor och deras åsidosättanden per grupp är borta och kan inte återställas. Tilldela nyckeln till en grupp igen för att göra dess värden åtkomliga igen."
 classification-store.keys-deleted-empty: Inga borttagna nycklar.
+classification-store.keys-deleted-no-results: "Inga borttagna nycklar matchar sökningen."
 classification-store.delete-group-relation-consequence: "Gruppen tas bara bort från den här samlingen. Gruppen, dess nycklar och värdena som objekt har under den påverkas inte."
 classification-store.edit-definition: Redigera definition
 classification-store.edit-key-definition: "Redigera nyckeldefinition: {{keyName}}"
