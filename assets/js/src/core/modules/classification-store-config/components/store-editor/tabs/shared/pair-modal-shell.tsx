@@ -56,9 +56,15 @@ export const PairModalShell = ({
   const listRef = useRef<PairListHandle>(null)
   const [dirty, setDirty] = useState(false)
   const [saving, setSaving] = useState(false)
+  const session = useRef(0)
 
   useEffect(() => {
-    if (!open) setDirty(false)
+    if (!open) {
+      setDirty(false)
+      setSaving(false)
+      // Whatever save is still in flight belongs to the editor that has just gone.
+      session.current += 1
+    }
   }, [open])
 
   const handleOk = async (): Promise<void> => {
@@ -67,15 +73,19 @@ export const PairModalShell = ({
     const collected = listRef.current?.collect()
     if (collected === undefined) return
 
+    const startedIn = session.current
     setSaving(true)
 
     try {
       await onSave(collected.next)
     } catch (error) {
       trackError(error as ApiError)
-      setSaving(false)
+      if (session.current === startedIn) setSaving(false)
       return
     }
+
+    // The editor this save was made in was closed meanwhile; what is open now is not its own.
+    if (session.current !== startedIn) return
 
     setSaving(false)
     messageApi.success(t(successKey))

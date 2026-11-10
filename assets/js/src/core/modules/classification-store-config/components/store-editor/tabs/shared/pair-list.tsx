@@ -29,7 +29,8 @@ import {
   type PairRow,
   type PairView,
   rowErrors,
-  toRows
+  toRows,
+  wouldBeList
 } from './pairs'
 
 const PREVIEW_LENGTH = 40
@@ -67,6 +68,7 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
   const watched = Form.useWatch('pairs', { form, preserve: true }) as PairRow[] | undefined
   const rows = watched ?? initialRows
   const errors = rowErrors(rows, original, view)
+  const listShaped = wouldBeList(rows, original, view)
 
   useEffect(() => {
     onDirtyChange(JSON.stringify(rows) !== initialJson)
@@ -79,6 +81,9 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
       const first = currentErrors.findIndex((entry) => entry.key !== undefined || entry.value !== undefined)
 
       setAttempted(true)
+
+      // A list-shaped key set is refused even when no editable row carries the message.
+      if (first === -1 && wouldBeList(current, original, view)) return undefined
 
       if (first !== -1) {
         scrollRef.current?.querySelectorAll('[data-pair-row]')[first]?.scrollIntoView?.({ block: 'nearest' })
@@ -141,6 +146,14 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
         />
       ) }
 
+      { listShaped && !errors.some((rowError) => rowError.key === 'list') && (
+        <Alert
+          message={ t('classification-store.pair-key-list') }
+          showIcon
+          type="error"
+        />
+      ) }
+
       <Form
         form={ form }
         initialValues={ { pairs: initialRows } }
@@ -167,7 +180,7 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
         <div
           data-testid="pair-scroll"
           ref={ scrollRef }
-          style={ { maxHeight: '40vh', overflowY: 'auto' } }
+          style={ { maxHeight: 'max(120px, calc(60vh - 200px))', overflowY: 'auto' } }
         >
           { rows.length === 0 && <NoContent text={ t('classification-store.pair-no-content') } /> }
           <Form.List name="pairs">

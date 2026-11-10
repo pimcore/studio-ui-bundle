@@ -58,6 +58,20 @@ const isListShaped = (keys: Set<string>): boolean => {
   return true
 }
 
+/** The keys of the whole map the save would send: these rows plus every member the view hides. */
+const wholeKeysOf = (rows: PairRow[], original: PairMap | null, view: PairView): Set<string> => {
+  const keys = new Set<string>(Object.keys(original ?? {}).filter((key) => !view.includes(key)))
+  rows.forEach((row) => {
+    if (row.readOnly || row.key.trim() !== '') keys.add(storedKeyOf(row, view))
+  })
+
+  return keys
+}
+
+/** Whether the map the save would send reads back as a list, whichever rows contribute its keys. */
+export const wouldBeList = (rows: PairRow[], original: PairMap | null, view: PairView): boolean =>
+  isListShaped(wholeKeysOf(rows, original, view))
+
 export const rowErrors = (
   rows: PairRow[],
   original: PairMap | null,
@@ -69,10 +83,7 @@ export const rowErrors = (
   const counts = new Map<string, number>()
   stored.forEach((key) => { if (key !== undefined) counts.set(key, (counts.get(key) ?? 0) + 1) })
 
-  // The whole map the save would send: these rows plus every member the view does not show.
-  const wholeKeys = new Set<string>(Object.keys(original ?? {}).filter((key) => !view.includes(key)))
-  counts.forEach((_, key) => wholeKeys.add(key))
-  const wholeIsList = isListShaped(wholeKeys)
+  const wholeIsList = wouldBeList(rows, original, view)
 
   return rows.map((row, index): PairRowErrors => {
     if (row.readOnly) return {}

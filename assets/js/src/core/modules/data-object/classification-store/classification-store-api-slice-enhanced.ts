@@ -642,6 +642,78 @@ const preserveAcrossKeyCollectionReads = (
   }
 }
 
+// Collections and groups: the same question the key ledger answers, without the corrective
+// re-read. A metadata save and a name edit are separate requests on one row, each answered with
+// the row as the server held it when it read it, so a confirmation may only take the response for
+// a member that no other local write of this client touched while it was in flight.
+type RowWriteField = 'name' | 'description' | 'customMetadata'
+const ROW_WRITE_FIELDS: readonly RowWriteField[] = ['name', 'description', 'customMetadata']
+
+const createRowWriteLedger = () => {
+  const counters = new Map<string, { pending: number, started: number }>()
+  let inFlight = 0
+  const slot = (id: unknown, field: RowWriteField): { pending: number, started: number } => {
+    const key = `${String(id)}:${field}`
+    let entry = counters.get(key)
+    if (entry === undefined) {
+      entry = { pending: 0, started: 0 }
+      counters.set(key, entry)
+    }
+    return entry
+  }
+
+  return (id: unknown, update: { customMetadata?: object | null }) => {
+    // `name` and `description` are required in the payload, so they are always written.
+    const written: Record<RowWriteField, boolean> = {
+      name: true,
+      description: true,
+      customMetadata: update.customMetadata !== undefined
+    }
+    const contended = new Map<RowWriteField, boolean>()
+    const startedAtDispatch = new Map<RowWriteField, number>()
+    for (const field of ROW_WRITE_FIELDS) {
+      contended.set(field, slot(id, field).pending > 0)
+      startedAtDispatch.set(field, slot(id, field).started)
+    }
+    inFlight += 1
+    for (const field of ROW_WRITE_FIELDS) {
+      if (!written[field]) continue
+      slot(id, field).pending += 1
+      slot(id, field).started += 1
+    }
+
+    return {
+      /** Whether the cached value of `field` is to be replaced by the response. */
+      takesResponseFor: (field: RowWriteField): boolean =>
+        written[field] ||
+        (contended.get(field) !== true && slot(id, field).started === startedAtDispatch.get(field)),
+      settled: (): void => {
+        for (const field of ROW_WRITE_FIELDS) {
+          if (written[field]) slot(id, field).pending -= 1
+        }
+        inFlight -= 1
+        if (inFlight === 0) counters.clear()
+      }
+    }
+  }
+}
+
+const openGroupWrite = createRowWriteLedger()
+const openCollectionWrite = createRowWriteLedger()
+
+/** The response row, with the cached value kept for every member this request may not decide. */
+const confirmedRow = <T extends { name: string, description?: string | null, customMetadata?: object | null }>(
+  updated: T,
+  cached: T,
+  takes: (field: RowWriteField) => boolean
+): T => {
+  const merged = { ...updated }
+  for (const field of ROW_WRITE_FIELDS) {
+    if (!takes(field)) (merged as Record<RowWriteField, unknown>)[field] = cached[field]
+  }
+  return merged
+}
+
 const api = baseApi.enhanceEndpoints({
   endpoints: {
 
@@ -654,6 +726,7 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationGroupUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const write = openGroupWrite(args.id, args.classificationStoreConfigurationGroupUpdate)
         const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationGroupCollectionApiResponse>(
           dispatch,
           'classificationStoreConfigurationGroupCollection',
@@ -661,7 +734,7 @@ const api = baseApi.enhanceEndpoints({
             const idx = draft.items.findIndex((g) => g.id === args.id)
             if (idx !== -1) {
               const update = args.classificationStoreConfigurationGroupUpdate
-              draft.items[idx] = { ...draft.items[idx], ...update }
+              Object.assign(draft.items[idx], update)
             }
           }
         )
@@ -672,11 +745,13 @@ const api = baseApi.enhanceEndpoints({
             'classificationStoreConfigurationGroupCollection',
             (draft) => {
               const idx = draft.items.findIndex((g) => g.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx !== -1) draft.items[idx] = confirmedRow(updated, draft.items[idx], write.takesResponseFor)
             }
           )
         } catch {
           patchResults.forEach((r) => { r.undo() })
+        } finally {
+          write.settled()
         }
       }
     },
@@ -709,6 +784,7 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationCollectionUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const write = openCollectionWrite(args.id, args.classificationStoreConfigurationCollectionUpdate)
         const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationCollectionCollectionApiResponse>(
           dispatch,
           'classificationStoreConfigurationCollectionCollection',
@@ -716,7 +792,7 @@ const api = baseApi.enhanceEndpoints({
             const idx = draft.items.findIndex((c) => c.id === args.id)
             if (idx !== -1) {
               const update = args.classificationStoreConfigurationCollectionUpdate
-              draft.items[idx] = { ...draft.items[idx], ...update }
+              Object.assign(draft.items[idx], update)
             }
           }
         )
@@ -727,11 +803,13 @@ const api = baseApi.enhanceEndpoints({
             'classificationStoreConfigurationCollectionCollection',
             (draft) => {
               const idx = draft.items.findIndex((c) => c.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx !== -1) draft.items[idx] = confirmedRow(updated, draft.items[idx], write.takesResponseFor)
             }
           )
         } catch {
           patchResults.forEach((r) => { r.undo() })
+        } finally {
+          write.settled()
         }
       }
     },
