@@ -502,7 +502,7 @@ export type UserObjectDependencies = {
     dependencies: DependencyToAnObject[];
     /** If it has hidden dependencies */
     hasHidden: boolean;
-    /** Total number of objects referencing this user, including ones the caller is not permitted to view - not the count of objects actually returned via dependencies or the paginated endpoint. */
+    /** Total number of objects referencing this user, including ones the caller may not view */
     totalItems?: number;
 };
 export type User = {

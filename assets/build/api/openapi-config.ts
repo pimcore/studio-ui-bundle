@@ -69,6 +69,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'emailLogSearch',
+      type: 'query'
+    },
+    {
       pattern: 'documentGetSearch',
       type: 'query',
     },
