@@ -116,6 +116,23 @@ describe('ServiceUserDetail', () => {
     mockDelete.mockResolvedValue({ data: null })
   })
 
+  it('reports its dirty state upward when a field is edited', () => {
+    const onDirtyChange = jest.fn()
+    render(
+      <ServiceUserDetail
+        id={ 7 }
+        onDeleted={ onDeleted }
+        onDirtyChange={ onDirtyChange }
+      />
+    )
+
+    expect(onDirtyChange).toHaveBeenLastCalledWith(7, false)
+
+    fireEvent.click(screen.getByText('email:erp@example.com'))
+
+    expect(onDirtyChange).toHaveBeenLastCalledWith(7, true)
+  })
+
   it('shows a loading state', () => {
     mockQueryState.data = undefined
     mockQueryState.isLoading = true

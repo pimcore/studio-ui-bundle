@@ -16,7 +16,7 @@ const token = { token: 'pmcp_shown-once', expiresAt: 1_800_000_000 }
 
 jest.mock('./service-users-api-slice-enhanced', () => ({
   useServiceUserGetCollectionQuery: () => ({
-    data: { totalItems: 1, items: [{ id: 4, name: 'svc-existing' }] },
+    data: { totalItems: 3, items: [{ id: 4, name: 'svc-existing' }, { id: 5, name: 'svc-second' }, { id: 9, name: 'svc-new' }] },
     isLoading: false,
     refetch: jest.fn()
   })
@@ -32,6 +32,34 @@ jest.mock('@Pimcore/components/predefined-layouts/config/config-layout', () => (
   )
 }))
 jest.mock('@Pimcore/components/content/content', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/tabs/tabs', () => ({
+  Tabs: ({ items = [], activeKey, onChange, onClose }: {
+    items?: Array<{ key: string, label: React.ReactNode }>
+    activeKey?: string
+    onChange?: (key: string) => void
+    onClose?: (key: string) => void
+  }) => (
+    <div>
+      {items.map((item) => (
+        <div
+          aria-selected={ item.key === activeKey }
+          key={ item.key }
+          role="tab"
+        >
+          <span
+            onClick={ () => { onChange?.(item.key) } }
+            role="presentation"
+          >{item.label}</span>
+          <button
+            aria-label={ `close:${item.key}` }
+            onClick={ () => { onClose?.(item.key) } }
+            type="button"
+          />
+        </div>
+      ))}
+    </div>
+  )
+}))
 jest.mock('./list/service-user-list', () => ({
   ServiceUserList: ({ serviceUsers, onSelect, onCreate, onCreateFromUser }: {
     serviceUsers: Array<{ id: number, name: string }>
@@ -59,12 +87,27 @@ jest.mock('./list/service-user-list', () => ({
   )
 }))
 jest.mock('./detail/service-user-detail', () => ({
-  ServiceUserDetail: ({ id, onDeleted }: { id: number, onDeleted: (id: number) => void }) => (
-    <button
-      onClick={ () => { onDeleted(id) } }
-      type="button"
-    >{`detail:${id}`}</button>
-  )
+  ServiceUserDetail: ({ id, onDeleted, onDirtyChange }: {
+    id: number
+    onDeleted: (id: number) => void
+    onDirtyChange: (id: number, isDirty: boolean) => void
+  }) => {
+    const [value, setValue] = React.useState('')
+
+    return (
+      <div>
+        <button
+          onClick={ () => { onDeleted(id) } }
+          type="button"
+        >{`detail:${id}`}</button>
+        <input
+          aria-label={ `field:${id}` }
+          onChange={ (event) => { setValue(event.target.value); onDirtyChange(id, event.target.value !== '') } }
+          value={ value }
+        />
+      </div>
+    )
+  }
 }))
 jest.mock('./create/create-service-user-modal', () => ({
   CreateServiceUserModal: ({ open, mode, onCreated }: {

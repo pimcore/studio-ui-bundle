@@ -39,13 +39,14 @@ import { WorkspacesTab } from './tabs/workspaces-tab'
 interface ServiceUserDetailProps {
   id: number
   onDeleted: (id: number) => void
+  onDirtyChange?: (id: number, isDirty: boolean) => void
 }
 
 const reportError = (error: unknown): void => {
   trackError(new ApiError(error as ConstructorParameters<typeof ApiError>[0]))
 }
 
-export const ServiceUserDetail = ({ id, onDeleted }: ServiceUserDetailProps): React.JSX.Element => {
+export const ServiceUserDetail = ({ id, onDeleted, onDirtyChange }: ServiceUserDetailProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { modal } = useStudioModal()
   const { success } = useMessage()
@@ -75,11 +76,15 @@ export const ServiceUserDetail = ({ id, onDeleted }: ServiceUserDetailProps): Re
     }
   }, [error])
 
+  const isModified = !isUndefined(serviceUser) && !isUndefined(draft) && !isEqual(draft, toDraft(serviceUser))
+
+  useEffect(() => {
+    onDirtyChange?.(id, isModified)
+  }, [id, isModified])
+
   if (isLoading || isUndefined(serviceUser) || isUndefined(draft)) {
     return <Content loading={ isLoading } />
   }
-
-  const isModified = !isEqual(draft, toDraft(serviceUser))
 
   const change = (patch: Partial<ServiceUserDraft>): void => {
     setDraft((current) => isUndefined(current) ? current : { ...current, ...patch })
