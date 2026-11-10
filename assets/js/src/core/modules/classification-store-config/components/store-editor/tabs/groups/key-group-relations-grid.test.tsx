@@ -796,11 +796,11 @@ describe('KeyGroupRelationsGrid override action and tags', () => {
   beforeEach(() => {
     requests.length = 0
     rows = [
-      { ...relation(11, 'plain', 1, false), type: 'select', options: COLORS },
-      { ...relation(12, 'color', 2, false), type: 'select', options: COLORS, definitionOverride: { options: ['red', 'green'] } },
-      { ...relation(13, 'weight', 3, false), type: 'quantityValue', validUnits: UNITS, definitionOverride: { defaultUnit: 'kg', validUnits: ['kg', 'g'] } },
-      { ...relation(14, 'empty', 4, false), type: 'select', options: COLORS, definitionOverride: { options: [], validUnits: [] } },
-      { ...relation(15, 'bare', 5, false), type: 'input', options: null }
+      { ...relation(11, 'plain', 1, false), keyType: 'select', options: COLORS },
+      { ...relation(12, 'color', 2, false), keyType: 'select', options: COLORS, definitionOverride: { options: ['red', 'green'] } },
+      { ...relation(13, 'weight', 3, false), keyType: 'quantityValue', units: { validUnits: UNITS }, definitionOverride: { defaultUnit: 'kg', validUnits: ['kg', 'g'] } },
+      { ...relation(14, 'empty', 4, false), keyType: 'select', options: COLORS, definitionOverride: { options: [], validUnits: [] } },
+      { ...relation(15, 'bare', 5, false), keyType: 'input', options: null }
     ]
     serveRows()
   })
@@ -850,8 +850,8 @@ describe('KeyGroupRelationsGrid override action and tags', () => {
 
   it('tags an empty valid-units subset as no units, and all three members together', async () => {
     rows = [
-      { ...relation(21, 'nounits', 1, false), type: 'quantityValue', validUnits: UNITS, definitionOverride: { validUnits: [] } },
-      { ...relation(22, 'all', 2, false), type: 'quantityValue', options: COLORS, validUnits: UNITS, definitionOverride: { options: ['red'], defaultUnit: 'g', validUnits: ['g', 'gone'] } }
+      { ...relation(21, 'nounits', 1, false), keyType: 'quantityValue', units: { validUnits: UNITS }, definitionOverride: { validUnits: [] } },
+      { ...relation(22, 'all', 2, false), keyType: 'quantityValue', options: COLORS, units: { validUnits: UNITS }, definitionOverride: { options: ['red'], defaultUnit: 'g', validUnits: ['g', 'gone'] } }
     ]
     renderGrid()
     await screen.findByText('nounits', undefined, WAIT_BUDGET)

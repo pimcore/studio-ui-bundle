@@ -10,6 +10,16 @@
 
 import { type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
+type Relation = ClassificationStoreConfigurationKeyGroupRelationDetail
+
+/** What the assignment row publishes about its key; declared here until the regenerated client carries it. */
+export interface IPublishedKeyVocabulary {
+  keyType?: string | null
+  options?: IPublishedOption[] | null
+  optionsUnavailableReason?: string | null
+  units?: { validUnits?: IPublishedUnit[] | null } | null
+}
+
 export interface IPublishedOption {
   label: string
   value: string
@@ -20,28 +30,14 @@ export interface IPublishedUnit {
   symbol: string
 }
 
-/**
- * What the assignment row publishes about its key. The generated client is refreshed from the
- * published contract by the standing snapshot routine; until it declares these members they are
- * read through this one type, so the names are corrected in one place.
- */
-export interface IPublishedKeyVocabulary {
-  type?: string
-  options?: IPublishedOption[] | null
-  optionsUnavailableReason?: string | null
-  validUnits?: IPublishedUnit[] | null
-}
-
-type Relation = ClassificationStoreConfigurationKeyGroupRelationDetail
-
 /** Key types that carry units. */
 const UNIT_TYPES: readonly string[] = ['quantityValue', 'inputQuantityValue', 'quantityValueRange']
 
 export const vocabularyOf = (relation: Relation): IPublishedKeyVocabulary => relation as IPublishedKeyVocabulary
 
-export const carriesUnits = (relation: Relation): boolean => UNIT_TYPES.includes(vocabularyOf(relation).type ?? '')
+export const carriesUnits = (relation: Relation): boolean => UNIT_TYPES.includes(vocabularyOf(relation).keyType ?? '')
 
-export const keyUnitsOf = (relation: Relation): IPublishedUnit[] => vocabularyOf(relation).validUnits ?? []
+export const keyUnitsOf = (relation: Relation): IPublishedUnit[] => vocabularyOf(relation).units?.validUnits ?? []
 
 export const unitSymbol = (relation: Relation, id: string): string =>
   keyUnitsOf(relation).find((unit) => unit.id === id)?.symbol ?? id
@@ -207,6 +203,12 @@ export interface IOverrideTag {
 export const overrideTags = (relation: Relation): IOverrideTag[] => {
   const draft = draftOf(relation)
   const tags: IOverrideTag[] = []
+
+  if (draft.unreadable) {
+    // A stored value that is no object is the state the dialog names; the row must not read as "no override".
+    return [{ id: 'options', translationKey: 'classification-store.override.tag-unreadable', params: {}, text: '', danger: true }]
+  }
+
   const options = optionValuesOf(relation)
   const optionsPublished = vocabularyOf(relation).options !== undefined && vocabularyOf(relation).options !== null
 
@@ -231,6 +233,8 @@ export const overrideTags = (relation: Relation): IOverrideTag[] => {
 
   if (typeof draft.defaultUnit === 'string') {
     tags.push({ id: 'default-unit', translationKey: null, params: {}, text: unitSymbol(relation, draft.defaultUnit), danger: false })
+  } else if (draft.defaultUnit !== undefined) {
+    tags.push({ id: 'default-unit', translationKey: 'classification-store.override.tag-unreadable', params: {}, text: '', danger: true })
   }
 
   if (draft.validUnits !== undefined) {

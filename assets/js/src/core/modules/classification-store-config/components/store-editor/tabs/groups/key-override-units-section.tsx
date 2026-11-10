@@ -35,6 +35,13 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
   const choices = defaultUnitChoices(relation, draft)
   const storedDefault = draft.defaultUnit
   const defaultOutside = storedDefault !== undefined && !(typeof storedDefault === 'string' && choices.includes(storedDefault))
+  // The key's own symbol for the stored default; the reason is only given where the key itself dropped the unit,
+  // since otherwise it is this group's subset that excludes it, which the sentence below the control states.
+  const storedId = String(storedDefault)
+  const keyStillOffers = keyUnits.some((unit) => unit.id === storedId)
+  const defaultLabel = keyStillOffers
+    ? unitSymbol(relation, storedId)
+    : `${storedId} (${t('classification-store.override.no-longer-offered')})`
   const clearUnitsAction = (
     <div>
       <IconTextButton
@@ -120,7 +127,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
           options={ [
             { value: USE_DEFAULT, label: t('classification-store.override.use-key-default') },
             // The stored default stays visible as itself, so it never reads like the reset choice.
-            ...(defaultOutside ? [{ value: String(storedDefault), label: `${String(storedDefault)} (${t('classification-store.override.no-longer-offered')})`, disabled: true }] : []),
+            ...(defaultOutside ? [{ value: String(storedDefault), label: defaultLabel, disabled: true }] : []),
             ...choices.map((id) => ({ value: id, label: unitSymbol(relation, id) }))
           ] }
           placeholder={ t('classification-store.override.use-key-default') }
@@ -129,7 +136,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
         { defaultOutside && (
           <StatedState
             actionLabel={ t('classification-store.override.use-key-default') }
-            description={ t('classification-store.override.default-outside', { unit: String(storedDefault) }) }
+            description={ t('classification-store.override.default-outside', { unit: unitSymbol(relation, storedId) }) }
             onAction={ () => { onChange(setDefaultUnit(draft, undefined)) } }
           />
         ) }

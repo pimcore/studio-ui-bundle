@@ -35,8 +35,17 @@ describe('key override draft', () => {
   })
 
   it('uses a short tag for stored options the row cannot judge', () => {
-    const [tag] = overrideTags(rel({ type: 'input', definitionOverride: { options: ['red'] } }))
+    const [tag] = overrideTags(rel({ keyType: 'input', definitionOverride: { options: ['red'] } }))
 
     expect(tag.translationKey).toBe('classification-store.override.tag-options-unavailable')
+  })
+
+  it('tags a stored override that cannot be read, so the row does not read as having none', () => {
+    expect(overrideTags(rel({ definitionOverride: 'kg' }))).toEqual([
+      expect.objectContaining({ translationKey: 'classification-store.override.tag-unreadable', danger: true })
+    ])
+    expect(overrideTags(rel({ keyType: 'quantityValue', definitionOverride: { defaultUnit: 5 } }))).toEqual([
+      expect.objectContaining({ id: 'default-unit', translationKey: 'classification-store.override.tag-unreadable', danger: true })
+    ])
   })
 })

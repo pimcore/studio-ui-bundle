@@ -1132,6 +1132,50 @@ describe('classification store key-group relation upsert cache patch', () => {
     expect(cachedRelation(store)).toEqual(expect.objectContaining({ definitionOverride: { options: ['a', 'b'] } }))
   })
 
+  it('does not insert a row for an override save into a cached page that did not hold it', async () => {
+    const store = createStore()
+    const page2Args = { groupId: GROUP_ID, body: { filters: { page: 2, pageSize: 10 } } }
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      const body = JSON.parse(await input.clone().text())
+
+      if (input.url.endsWith(RELATIONS_URL)) {
+        const page = body?.filters?.page ?? 1
+
+        return new Response(JSON.stringify(
+          page === 1
+            ? { items: [storedRelation], totalItems: 2 }
+            : { items: [{ ...storedRelation, keyId: 77, keyName: 'colour' }], totalItems: 2 }
+        ), { status: 200, headers: { 'Content-Type': 'application/json' } })
+      }
+
+      return await new Promise<Response>((resolve) => {
+        pendingUpserts.push((relation) => {
+          resolve(new Response(JSON.stringify(relation), { status: 200, headers: { 'Content-Type': 'application/json' } }))
+        })
+      })
+    }) as unknown as typeof fetch
+
+    const collection = (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection
+    await store.dispatch(collection.initiate(relationQueryArgs))
+    await store.dispatch(collection.initiate(page2Args))
+
+    const save = upsert(store, { definitionOverride: { options: ['a'] } })
+    await flush()
+
+    const page2 = (): any => collection.select(page2Args)(store.getState()).data
+
+    expect(page2().items).toHaveLength(1)
+    expect(page2().totalItems).toBe(2)
+
+    pendingUpserts[0]({ ...storedRelation, definitionOverride: { options: ['a'] } })
+    await save
+
+    expect(page2().items).toEqual([expect.objectContaining({ keyId: 77 })])
+    expect(page2().totalItems).toBe(2)
+    expect(cachedRelation(store)).toEqual(expect.objectContaining({ definitionOverride: { options: ['a'] } }))
+  })
+
   it('patches a clearing null as null and rolls a failed override save back', async () => {
     const store = createStore()
     await store.dispatch(

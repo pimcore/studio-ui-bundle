@@ -970,6 +970,8 @@ const api = baseApi.enhanceEndpoints({
         // confirmation then replaced the whole page-1 row — writing back the `subGroup` an older
         // cell edit's response had never named, which is the exact staleness the field mask below
         // exists to prevent.
+        const overrideOnly = 'definitionOverride' in create && !('subGroup' in create) &&
+          (sorter === undefined || sorter === null) && (mandatory === undefined || mandatory === null)
         const createdIn = new Set<string>()
         const patchResults = optimisticPatchAllCacheEntries<
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
@@ -988,7 +990,10 @@ const api = baseApi.enhanceEndpoints({
               // mask below apart — a failed sorter edit restored the sub group an assignment had
               // already saved.
               Object.assign(draft.items[idx], absentSafePatch)
-            } else {
+            } else if (!overrideOnly) {
+              // An override is only ever written from an existing row, so an entry that does not
+              // hold the pair (another page of the group) has nothing to patch and must not gain one;
+              // only the other writes create the relation.
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new
               // relation rather than leaving the cached row without one.

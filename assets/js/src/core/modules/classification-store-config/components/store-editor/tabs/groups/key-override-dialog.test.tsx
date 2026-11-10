@@ -111,7 +111,7 @@ const selectRow = (extra: Record<string, unknown> = {}): any => ({
   keyDescription: null,
   groupName: 'Lights',
   subGroup: null,
-  type: 'select',
+  keyType: 'select',
   options: COLORS,
   ...extra
 })
@@ -120,9 +120,9 @@ const unitRow = (extra: Record<string, unknown> = {}): any => ({
   ...selectRow(),
   keyId: 12,
   keyName: 'weight',
-  type: 'quantityValue',
+  keyType: 'quantityValue',
   options: null,
-  validUnits: UNITS,
+  units: { validUnits: UNITS },
   ...extra
 })
 
@@ -296,9 +296,9 @@ describe('KeyOverrideDialog', () => {
     ['only stale valid units', unitRow({ definitionOverride: { validUnits: ['stone'] } }), `${OVERRIDE}.units-stale-only`, USE_KEY_UNITS, 0],
     ['a default outside the valid set', unitRow({ definitionOverride: { validUnits: ['g'], defaultUnit: 'kg' } }), `${OVERRIDE}.default-outside:kg`, USE_KEY_DEFAULT, 3],
     ['no options published', selectRow({ options: [] }), `${OVERRIDE}.key-offers-no-options`, undefined, 0],
-    ['no valid units published', unitRow({ validUnits: null }), `${OVERRIDE}.units-no-vocabulary`, undefined, 0],
-    ['neither options nor units', selectRow({ type: 'input', options: null }), `${OVERRIDE}.nothing-to-narrow`, undefined, 0],
-    ['a stored subset on a key publishing no options', selectRow({ type: 'input', options: null, definitionOverride: { options: ['red'] } }), `${OVERRIDE}.options-stored-unlisted`, USE_ALL_OPTIONS, 0],
+    ['no valid units published', unitRow({ units: { validUnits: null } }), `${OVERRIDE}.units-no-vocabulary`, undefined, 0],
+    ['neither options nor units', selectRow({ keyType: 'input', options: null }), `${OVERRIDE}.nothing-to-narrow`, undefined, 0],
+    ['a stored subset on a key publishing no options', selectRow({ keyType: 'input', options: null, definitionOverride: { options: ['red'] } }), `${OVERRIDE}.options-stored-unlisted`, USE_ALL_OPTIONS, 0],
     ['a stored subset beside units on a key publishing no options', unitRow({ options: null, definitionOverride: { options: ['red'] } }), `${OVERRIDE}.options-stored-unlisted`, USE_ALL_OPTIONS, 3]
   ])('names %s, issues no request on open and offers its action', async (_name, row, sentence, action, checkboxes) => {
     renderDialog(row)
