@@ -82,9 +82,12 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const saveDataAndSchedules = async (task: SaveTaskType, onFinish?: () => void): Promise<boolean> => {
     if (dataObject?.changes === undefined) return false
 
+    const sentAttributes = getModifiedDataObjectAttributes()
+
     return await Promise.all([
-      saveDataObject(getModifiedDataObjectAttributes(), task, () => {
-        resetModifiedDataObjectAttributes()
+      saveDataObject(sentAttributes, task, () => {
+        // edits made while the request was running are not part of it and must stay collected
+        resetModifiedDataObjectAttributes(sentAttributes)
         onFinish?.()
       }),
       saveSchedules()

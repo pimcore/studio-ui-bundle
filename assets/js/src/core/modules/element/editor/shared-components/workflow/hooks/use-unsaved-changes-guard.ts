@@ -44,7 +44,8 @@ interface UseUnsavedChangesGuardReturn {
  *
  * - `save`: saves the element first through the saver its editor registered
  *   (the data-object save buttons; see WorkflowEditorCoordinator) and only
- *   continues once that save succeeded. Without a saver it falls back to `warn`;
+ *   continues once that save succeeded — asking first if the element was edited
+ *   while it was saving. Without a saver it falls back to `warn`;
  * - `warn`: asks whether to apply the action and lose the changes;
  * - `ignore`: submits right away.
  *
@@ -112,9 +113,17 @@ export const useUnsavedChangesGuard = (
         title: t('action-could-not-be-applied'),
         content: t('workflow.unsaved-changes.save-failed')
       })
+
+      return false
     }
 
-    return saved
+    // Edits made while the save was running were not part of it, and applying the action reloads
+    // the element: ask before they are lost.
+    if (!isEmpty(editForm?.getModifiedDataObjectAttributes())) {
+      return await confirmDiscard()
+    }
+
+    return true
   }
 
   return { guard }

@@ -27,7 +27,11 @@ interface EditFormContextProps {
   form: formInstanceType
   setFieldTypeMap: (fieldTypeMap: Map<string, string>) => void
   updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
-  resetModifiedDataObjectAttributes: () => void
+  /**
+   * Clears the collected changes. Given the attributes a save sent, it clears them only when nothing
+   * was changed since, so edits made while that save was running stay collected.
+   */
+  resetModifiedDataObjectAttributes: (sentAttributes?: Record<string, any>) => void
   updateDraft: () => Promise<void>
   getModifiedDataObjectAttributes: () => Record<string, any>
   getChangedFieldName: (changedValues: Record<string, unknown>, parentKey?: string) => string | null
@@ -83,7 +87,12 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     modifiedDataObjectAttributesRef.current = mergeFormChanges(modifiedDataObjectAttributesRef.current, changedValues, objectDataRegistry, fieldTypeMapRef.current)
   }
 
-  const resetModifiedDataObjectAttributes = (): void => {
+  const resetModifiedDataObjectAttributes = (sentAttributes?: Record<string, any>): void => {
+    // every change replaces the object (mergeFormChanges), so the same object means no change since
+    if (sentAttributes !== undefined && modifiedDataObjectAttributesRef.current !== sentAttributes) {
+      return
+    }
+
     modifiedDataObjectAttributesRef.current = {}
   }
 

@@ -86,11 +86,18 @@ describe('useUnsavedChangesGuard', () => {
   })
 
   it('saves through the registered saver for "save" — also for edits the autosave has not sent yet', async () => {
-    setUp({ formChanges: { name: 'new' } })
+    const formChanges: Record<string, unknown> = { name: 'new' }
+    setUp({ formChanges })
+    // a successful save clears the changes it sent
+    saver.mockImplementationOnce(async () => {
+      delete formChanges.name
+      return true
+    })
 
     await expect(guard()(action('save'))).resolves.toBe(true)
     expect(saver).toHaveBeenCalledTimes(1)
     expect(error).not.toHaveBeenCalled()
+    expect(warn).not.toHaveBeenCalled()
   })
 
   it('does not apply the action and says why when saving fails', async () => {
@@ -149,5 +156,33 @@ describe('useUnsavedChangesGuard', () => {
 
     await expect(guard()(action('warn'))).resolves.toBe(true)
     expect(flushByTag).not.toHaveBeenCalled()
+  })
+
+  it('asks before applying when the element was edited while it was being saved', async () => {
+    const formChanges: Record<string, unknown> = { name: 'new' }
+    ;(useEditFormContextOptional as jest.Mock).mockReturnValue({ getModifiedDataObjectAttributes: () => formChanges })
+    // the save sent "name"; "description" was edited while the request was running
+    saver.mockImplementationOnce(async () => {
+      delete formChanges.name
+      formChanges.description = 'edited while saving'
+      return true
+    })
+    warn.mockImplementationOnce(({ onCancel }: { onCancel: () => void }) => { onCancel() })
+
+    await expect(guard()(action('save'))).resolves.toBe(false)
+    expect(saver).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(expect.objectContaining({ content: 'workflow.unsaved-changes.warn' }))
+  })
+
+  it('applies right after the save when nothing was edited meanwhile', async () => {
+    const formChanges: Record<string, unknown> = { name: 'new' }
+    ;(useEditFormContextOptional as jest.Mock).mockReturnValue({ getModifiedDataObjectAttributes: () => formChanges })
+    saver.mockImplementationOnce(async () => {
+      delete formChanges.name
+      return true
+    })
+
+    await expect(guard()(action('save'))).resolves.toBe(true)
+    expect(warn).not.toHaveBeenCalled()
   })
 })
