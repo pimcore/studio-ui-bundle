@@ -12,6 +12,7 @@ import { renderHook } from '@testing-library/react'
 import type { RcFile } from 'antd/es/upload/interface'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { transformApiDataToNode } from '@Pimcore/modules/asset/tree/utils/transform-api-data-to-node'
 import { useUploadNewVersion } from './upload-new-version'
 
 const triggerUpload = jest.fn()
@@ -159,6 +160,30 @@ describe('useUploadNewVersion', () => {
     await lastUploadProps().onSuccess([{ response: { data: 'example_copy.jpg' } }])
 
     expect(warning).toHaveBeenCalledWith('asset.upload-new-version.renamed newFilename=example_copy.jpg oldFilename=example.png')
+  })
+
+  it('stores the renamed filename on the tree node, so the next tree upload compares against it', async () => {
+    dispatch.mockReturnValue(Object.assign(
+      Promise.resolve({ data: { items: [{ id: 7, filename: 'example.jpg' }] } }),
+      { unsubscribe: jest.fn() }
+    ))
+    ;(transformApiDataToNode as jest.Mock).mockReturnValue({
+      label: 'example.jpg',
+      realKey: 'example.jpg',
+      icon: { type: 'name', value: 'image' }
+    })
+    const { result } = renderHook(() => useUploadNewVersion())
+    clickItem(result.current.uploadNewVersionTreeContextMenuItem(treeNode))
+
+    await lastUploadProps().onSuccess([{ response: { data: 'example.jpg' } }])
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'updateNodeData',
+      payload: expect.objectContaining({
+        nodeId: '7',
+        data: expect.objectContaining({ label: 'example.jpg', realKey: 'example.jpg' })
+      })
+    })
   })
 
   it('does not warn when the filename stayed the same', async () => {

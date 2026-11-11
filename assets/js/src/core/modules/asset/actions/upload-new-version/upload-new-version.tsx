@@ -78,6 +78,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
           data: {
             icon: cacheBustedIcon,
             label: freshNode.label,
+            realKey: freshNode.realKey,
             metaData: { asset: cacheBustedItem }
           }
         }))
@@ -169,7 +170,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
         !checkElementPermission(node.permissions, 'versions'),
       onClick: () => {
         uploadNewVersion(
-          parseInt(node.id),
+          Number.parseInt(node.id),
           undefined,
           node.realKey ?? node.label
         )
