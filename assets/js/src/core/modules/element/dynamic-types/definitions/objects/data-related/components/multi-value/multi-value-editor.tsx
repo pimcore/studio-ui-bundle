@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Alert } from 'antd'
-import { isEqual, isNil } from 'lodash'
+import { isEqual, isNil, omit } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
@@ -30,6 +30,7 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { SuppressEmptyFieldLabelProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
+import { MULTI_VALUE_OWN_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-own-keys'
 import { CLASSIFICATION_STORE_WRAPPER_TYPES } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
 import {
   buildSlots,
@@ -39,6 +40,7 @@ import {
   orderEntries,
   seedEmptySlots,
   slotKeyOf,
+  withPositions,
   type MultiValueSlot
 } from './multi-value-slots'
 
@@ -55,15 +57,20 @@ interface SlotsProps extends MultiValueEditorProps {
   delegateDatatype: string
 }
 
-/** One entry's input: the delegate type's own widget, bound to the `value` member of the entry at `index`. */
+/** The members of the definition that are the delegate's own settings: the dialog writes them at the top level, beside the key's own. */
+const delegateSettingsOf = (props: Record<string, unknown>): Record<string, unknown> =>
+  omit(props, [...MULTI_VALUE_OWN_KEYS, 'value', 'onChange', 'noteditable', 'slot', 'index'])
+
+/** One entry's input: the delegate type's own widget, bound to the `v` member of the entry at `index`. */
 const EntryInput = ({ index, ...props }: SlotsProps & { index: number }): React.JSX.Element => (
   <Form.Group name={ index }>
     <SuppressEmptyFieldLabelProvider>
       <DataComponent
+        { ...delegateSettingsOf(props) }
         { ...props.delegate }
         datatype='data'
         fieldType={ props.delegateDatatype }
-        name='value'
+        name='v'
         noteditable={ props.noteditable === true }
         title=''
         tooltip=''
@@ -153,7 +160,7 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
           <IconTextButton
             disabled={ !addAllowed }
             icon={ { value: 'new' } }
-            onClick={ () => { operations.add(slot.variant === null ? {} : { variant: slot.variant }) } }
+            onClick={ () => { operations.add(slot.variant === null ? {} : { var: slot.variant }) } }
           >
             {t('add')}
           </IconTextButton>
@@ -187,16 +194,22 @@ const Slots = (props: SlotsProps): React.JSX.Element => {
   )
 }
 
+const withoutEmpty = (list: ClassificationStoreMultiValueEntry[]): ClassificationStoreMultiValueEntry[] =>
+  list.filter((entry) => !isNil(entry) && !isNil(entry.v))
+
 /** The value of a key of type `multiValue`: entries held as a list, shown in one slot per variant. */
 export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Element => {
   const { t } = useTranslation()
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const entries = useMemo(() => orderEntries(props.value), [props.value])
   // A slot that holds one value and has none stored is seeded as an empty entry, so the list's initial value already is what the inputs register.
-  const seeded = useMemo(
+  const base = useMemo(
     () => props.multiValue === true ? entries : seedEmptySlots(props.variants, entries),
     [entries, props.variants, props.multiValue]
   )
+  // What the control holds, empty rows included: only the payload leaves them out, so a row still being worked on survives the value coming back.
+  const [draft, setDraft] = useState<ClassificationStoreMultiValueEntry[] | null>(null)
+  const seeded = draft !== null && isEqual(withoutEmpty(draft), withoutEmpty(entries)) ? draft : base
   const delegateDatatype = props.delegateDatatype
 
   if (isNil(delegateDatatype) || delegateDatatype === '') {
@@ -217,16 +230,15 @@ export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Elemen
     )
   }
 
-  const withoutEmpty = (list: ClassificationStoreMultiValueEntry[]): ClassificationStoreMultiValueEntry[] =>
-    list.filter((entry) => !isNil(entry) && !isNil(entry.value))
-
   // An entry holding nothing is left out of what is written, which is how a cleared slot is cleared.
   // What equals the value already held is not a change: the list registers the fields it mounts, and that is not an edit.
   const emit = (list: ClassificationStoreMultiValueEntry[]): void => {
-    const written = withoutEmpty(list)
+    setDraft(list)
 
-    if (!isEqual(written, withoutEmpty(entries))) {
-      props.onChange?.(written)
+    const kept = withoutEmpty(list)
+
+    if (!isEqual(kept, withoutEmpty(entries))) {
+      props.onChange?.(withPositions(kept))
     }
   }
 

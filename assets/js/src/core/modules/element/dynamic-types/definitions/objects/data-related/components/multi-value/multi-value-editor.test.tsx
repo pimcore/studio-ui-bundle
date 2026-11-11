@@ -138,7 +138,7 @@ describe('MultiValueEditor', () => {
   beforeEach(() => { onChange = jest.fn() })
 
   it('renders exactly one input, the delegate widget, for a key declaring no variants and not repeating', () => {
-    renderEditor({ multiValue: false, value: [{ value: 'a' }] })
+    renderEditor({ multiValue: false, value: [{ v: 'a' }] })
 
     expect(inputs()).toHaveLength(1)
     expect(inputs()[0]).toHaveAttribute('data-fieldtype', 'quantityValue')
@@ -150,7 +150,7 @@ describe('MultiValueEditor', () => {
     renderEditor({
       variants: [{ name: 'metric' }, { name: 'imperial', label: 'Imperial' }],
       multiValue: false,
-      value: [{ variant: 'imperial', value: '1 ft' }, { variant: 'metric', value: '30 cm' }]
+      value: [{ var: 'imperial', v: '1 ft' }, { var: 'metric', v: '30 cm' }]
     })
 
     expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric', 'Imperial'])
@@ -158,19 +158,19 @@ describe('MultiValueEditor', () => {
   })
 
   it('does not report opening a key whose variant slots hold nothing yet as a change, and tags the first value written', async () => {
-    renderEditor({ variants: [{ name: 'metric' }, { name: 'imperial' }], multiValue: false, value: [{ variant: 'metric', value: '30 cm' }] })
+    renderEditor({ variants: [{ name: 'metric' }, { name: 'imperial' }], multiValue: false, value: [{ var: 'metric', v: '30 cm' }] })
 
     await new Promise((resolve) => setTimeout(resolve, 50))
     expect(onChange).not.toHaveBeenCalled()
 
     fireEvent.change(inputs()[1], { target: { value: '1 ft' } })
 
-    expect(await lastEmitted()).toEqual([{ variant: 'metric', value: '30 cm' }, { variant: 'imperial', value: '1 ft' }])
+    expect(await lastEmitted()).toEqual([{ var: 'metric', v: '30 cm', p: 0 }, { var: 'imperial', v: '1 ft', p: 0 }])
   })
 
   it('treats null and an empty list of variants alike', () => {
     const rendered = [null, []].map((variants) => {
-      const { container, unmount } = renderEditor({ variants, multiValue: false, value: [{ value: 'a' }] })
+      const { container, unmount } = renderEditor({ variants, multiValue: false, value: [{ v: 'a' }] })
       const html = container.innerHTML
 
       unmount()
@@ -186,48 +186,48 @@ describe('MultiValueEditor', () => {
     renderEditor({
       variants: [{ name: 'metric' }, { name: 'imperial' }],
       multiValue: false,
-      value: [{ variant: 'metric', value: '30 cm' }, { variant: 'imperial', value: '1 ft' }]
+      value: [{ var: 'metric', v: '30 cm' }, { var: 'imperial', v: '1 ft' }]
     })
 
     fireEvent.change(inputs()[0], { target: { value: '31 cm' } })
 
-    expect(await lastEmitted()).toEqual([{ variant: 'metric', value: '31 cm' }, { variant: 'imperial', value: '1 ft' }])
+    expect(await lastEmitted()).toEqual([{ var: 'metric', v: '31 cm', p: 0 }, { var: 'imperial', v: '1 ft', p: 0 }])
     expect(screen.queryByText(/convert|sync|calculate|derive|suggest/i)).toBeNull()
     expect(screen.queryByLabelText(/convert|sync|calculate|derive|suggest/i)).toBeNull()
   })
 
   it('writes a repeating list in the order the user left it, and reads it back in that order', async () => {
-    const { unmount } = renderEditor({ multiValue: true, value: [{ value: 'one' }, { value: 'two' }, { value: 'three' }] })
+    const { unmount } = renderEditor({ multiValue: true, value: [{ v: 'one' }, { v: 'two' }, { v: 'three' }] })
 
     fireEvent.click(screen.getAllByLabelText(MOVE_UP)[2])
 
-    expect((await lastEmitted()).map((entry) => entry.value)).toEqual(['one', 'three', 'two'])
-    expect((await lastEmitted()).every((entry) => !('position' in entry) && !('language' in entry))).toBe(true)
+    expect((await lastEmitted()).map((entry) => entry.v)).toEqual(['one', 'three', 'two'])
+    expect((await lastEmitted()).map((entry) => entry.p)).toEqual([0, 1, 2])
 
     unmount()
-    renderEditor({ multiValue: true, value: [{ value: 'one' }, { value: 'three' }, { value: 'two' }] })
+    renderEditor({ multiValue: true, value: [{ v: 'one' }, { v: 'three' }, { v: 'two' }] })
 
     expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['one', 'three', 'two'])
   })
 
-  it('places an entry read with a position at that position, and writes neither position nor language', async () => {
+  it('places an entry read with a position at that position, and writes each position as its index in the slot', async () => {
     renderEditor({
       multiValue: true,
-      value: [{ value: 'late', position: 2, language: 'de' }, { value: 'early', position: 0, language: 'de' }, { value: 'middle', position: 1 }]
+      value: [{ v: 'late', p: 2 }, { v: 'early', p: 0 }, { v: 'middle', p: 1 }]
     })
 
     expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['early', 'middle', 'late'])
 
     fireEvent.click(screen.getAllByLabelText(REMOVE)[1])
 
-    expect(await lastEmitted()).toEqual([{ value: 'early' }, { value: 'late' }])
+    expect(await lastEmitted()).toEqual([{ v: 'early', p: 0 }, { v: 'late', p: 1 }])
   })
 
   it('renders one list per variant when repeating, and adding to one leaves the other alone', async () => {
     renderEditor({
       variants: [{ name: 'metric' }, { name: 'imperial' }],
       multiValue: true,
-      value: [{ variant: 'metric', value: 'a' }, { variant: 'imperial', value: 'b' }]
+      value: [{ var: 'metric', v: 'a' }, { var: 'imperial', v: 'b' }]
     })
 
     expect(screen.getAllByText(ADD)).toHaveLength(2)
@@ -238,21 +238,49 @@ describe('MultiValueEditor', () => {
     fireEvent.change(inputs()[1], { target: { value: 'c' } })
 
     expect(await lastEmitted()).toEqual([
-      { variant: 'metric', value: 'a' },
-      { variant: 'imperial', value: 'b' },
-      { variant: 'metric', value: 'c' }
+      { var: 'metric', v: 'a', p: 0 },
+      { var: 'imperial', v: 'b', p: 0 },
+      { var: 'metric', v: 'c', p: 1 }
     ])
   })
 
+  it('keeps a pending empty row when the value comes back without it', async () => {
+    const tree = (value: unknown): React.JSX.Element => (
+      <ItemProvider item={ { name: 'height' } }>
+        <MultiValueEditor
+          delegateDatatype='quantityValue'
+          multiValue
+          onChange={ onChange }
+          value={ value }
+          variants={ null }
+        />
+      </ItemProvider>
+    )
+    const { rerender } = render(tree([{ v: 'a' }]))
+
+    fireEvent.click(screen.getByText(ADD))
+    fireEvent.click(screen.getByText(ADD))
+    await waitFor(() => { expect(inputs()).toHaveLength(3) })
+    fireEvent.change(inputs()[1], { target: { value: 'b' } })
+
+    const written = await lastEmitted()
+
+    expect(written).toEqual([{ v: 'a', p: 0 }, { v: 'b', p: 1 }])
+
+    rerender(tree(written))
+
+    expect(inputs()).toHaveLength(3)
+  })
+
   it('disables add with a visible reason at the maximum, and shows every stored value past it', () => {
-    renderEditor({ multiValue: true, maximum: 2, value: [{ value: 'a' }, { value: 'b' }] })
+    renderEditor({ multiValue: true, maximum: 2, value: [{ v: 'a' }, { v: 'b' }] })
 
     expect(screen.getByText(ADD)).toBeDisabled()
     expect(screen.getByText(/maximum-reached/)).toBeVisible()
   })
 
   it('keeps and shows every stored value under a maximum of 0 or below the stored count, refusing only adds', () => {
-    renderEditor({ multiValue: true, maximum: 0, value: [{ value: 'a' }, { value: 'b' }, { value: 'c' }] })
+    renderEditor({ multiValue: true, maximum: 0, value: [{ v: 'a' }, { v: 'b' }, { v: 'c' }] })
 
     expect(inputs()).toHaveLength(3)
     expect(screen.getByText(ADD)).toBeDisabled()
@@ -277,7 +305,7 @@ describe('MultiValueEditor', () => {
     renderEditor({
       variants: [{ name: 'metric' }],
       multiValue: false,
-      value: [{ variant: 'metric', value: 'm' }, { variant: 'legacy', value: 'l' }, { value: 'd' }]
+      value: [{ var: 'metric', v: 'm' }, { var: 'legacy', v: 'l' }, { v: 'd' }]
     })
 
     const headings = screen.getAllByRole('heading').map((heading) => heading.textContent)
@@ -289,20 +317,20 @@ describe('MultiValueEditor', () => {
 
     fireEvent.change(inputs()[0], { target: { value: 'm2' } })
 
-    expect(await lastEmitted()).toEqual([{ variant: 'metric', value: 'm2' }, { variant: 'legacy', value: 'l' }, { value: 'd' }])
+    expect(await lastEmitted()).toEqual([{ var: 'metric', v: 'm2', p: 0 }, { var: 'legacy', v: 'l', p: 0 }, { v: 'd', p: 0 }])
   })
 
   // A declared row with no name addresses nothing, so it is no slot of its own; what it must never
   // become is a second unheaded slot beside the default one, or one headed by nothing.
   it('declares no slot for a variant row carrying no name', () => {
-    renderEditor({ variants: [{ name: 'metric' }, {} as any], multiValue: false, value: [{ variant: 'metric', value: 'm' }] })
+    renderEditor({ variants: [{ name: 'metric' }, {} as any], multiValue: false, value: [{ var: 'metric', v: 'm' }] })
 
     expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric'])
     expect(inputs()).toHaveLength(1)
   })
 
   it('renders the one unheaded slot of a key whose every variant row carries no name', () => {
-    renderEditor({ variants: [{} as any], multiValue: false, value: [{ value: 'd' }] })
+    renderEditor({ variants: [{} as any], multiValue: false, value: [{ v: 'd' }] })
 
     expect(screen.queryAllByRole('heading')).toHaveLength(0)
     expect(inputs()).toHaveLength(1)
@@ -316,7 +344,7 @@ describe('MultiValueEditor', () => {
     renderEditor({
       variants: [{ name: 'metric' }],
       multiValue: false,
-      value: [{ variant: 'metric', value: 'a' }, { variant: 'metric', value: 'b' }]
+      value: [{ var: 'metric', v: 'a' }, { var: 'metric', v: 'b' }]
     })
 
     expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['a', 'b'])
@@ -325,7 +353,7 @@ describe('MultiValueEditor', () => {
   })
 
   it('reads no position off a list element holding nothing, and keeps the entries around it', () => {
-    renderEditor({ multiValue: true, value: [{ value: 'a' }, null as any, { value: 'b' }] })
+    renderEditor({ multiValue: true, value: [{ v: 'a' }, null as any, { v: 'b' }] })
 
     expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['a', 'b'])
   })

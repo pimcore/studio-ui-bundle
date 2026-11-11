@@ -24,7 +24,7 @@ export interface MultiValueSlot {
   declared: boolean
 }
 
-/** The entries as the editor holds and writes them: in display order, with neither language nor position. */
+/** The entries as the editor holds and writes them: in display order, without position (the writer numbers them). */
 export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry[] => {
   if (!Array.isArray(value)) {
     return []
@@ -33,12 +33,12 @@ export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry
   return (value as ClassificationStoreMultiValueEntry[])
     // A list element holding nothing is no entry, and is dropped here rather than read for a position.
     .filter((entry) => !isNil(entry))
-    .map((entry, index) => ({ entry, position: entry.position ?? index, index }))
+    .map((entry, index) => ({ entry, position: entry.p ?? index, index }))
     .sort((a, b) => a.position - b.position || a.index - b.index)
-    .map(({ entry: { language, position, ...rest } }) => rest)
+    .map(({ entry: { p, ...rest } }) => rest)
 }
 
-export const variantOf = (entry: ClassificationStoreMultiValueEntry): string | null => entry.variant ?? null
+export const variantOf = (entry: ClassificationStoreMultiValueEntry): string | null => entry.var ?? null
 
 /** The variants the key declares that a value can address: a row carrying no name addresses nothing. */
 export const declaredVariantsOf = (
@@ -96,5 +96,19 @@ export const seedEmptySlots = (
   ...entries,
   ...buildSlots(variants, entries)
     .filter((slot) => indexesOf(entries, slot).length === 0)
-    .map((slot): ClassificationStoreMultiValueEntry => slot.variant === null ? { value: null } : { variant: slot.variant, value: null })
+    .map((slot): ClassificationStoreMultiValueEntry => slot.variant === null ? { v: null } : { var: slot.variant, v: null })
 ]
+
+/** The entries as they are written: each carries `p`, its index within its variant's slot, because an absent `p` reads as 0 and two entries at one position are refused. */
+export const withPositions = (entries: readonly ClassificationStoreMultiValueEntry[]): ClassificationStoreMultiValueEntry[] => {
+  const counts = new Map<string | null, number>()
+
+  return entries.map((entry) => {
+    const variant = variantOf(entry)
+    const position = counts.get(variant) ?? 0
+
+    counts.set(variant, position + 1)
+
+    return { ...entry, p: position }
+  })
+}

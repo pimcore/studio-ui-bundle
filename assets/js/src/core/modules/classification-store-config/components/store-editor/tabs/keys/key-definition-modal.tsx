@@ -17,6 +17,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { Text } from '@Pimcore/components/text/text'
+import { MULTI_VALUE_OWN_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-own-keys'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { AreaProvider } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { SettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
@@ -56,6 +57,22 @@ const AREA = ['classification-store']
 
 const INHERIT = 'inherit'
 const MULTI_VALUE = 'multiValue'
+
+/**
+ * The dialog writes the delegate's own settings at the top level of the blob, and core builds the
+ * delegate from the blob's `delegate` member alone: the settings are packed into it here.
+ */
+const withDelegateMember = (definition: ClassificationStoreKeyDefinition): ClassificationStoreKeyDefinition => {
+  const record = definition as Record<string, unknown>
+  const settings = Object.fromEntries(
+    Object.entries(record).filter(([key, value]) => !MULTI_VALUE_OWN_KEYS.has(key) && value !== undefined)
+  )
+  const existing = record.delegate !== null && typeof record.delegate === 'object' ? record.delegate as Record<string, unknown> : {}
+
+  const packed: ClassificationStoreKeyDefinition = { ...definition, delegate: { ...existing, ...settings } }
+
+  return packed
+}
 const LOCALIZED = 'localized'
 const NOT_LOCALIZED = 'not-localized'
 
@@ -205,9 +222,13 @@ export const KeyDefinitionModal = ({
   const readDefinition = (): ClassificationStoreKeyDefinition | null => {
     const layout = getLayoutRef.current?.()
 
-    return layout === undefined || formRef.current === null
-      ? null
-      : { ...layout, ...formRef.current.getFieldsValue(true) }
+    if (layout === undefined || formRef.current === null) {
+      return null
+    }
+
+    const definition: ClassificationStoreKeyDefinition = { ...layout, ...formRef.current.getFieldsValue(true) }
+
+    return keyDetail?.type === MULTI_VALUE ? withDelegateMember(definition) : definition
   }
 
   const saveKey = async (): Promise<void> => {

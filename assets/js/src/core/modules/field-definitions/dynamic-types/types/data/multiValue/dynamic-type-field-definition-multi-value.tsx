@@ -10,14 +10,11 @@
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
-import { BASE_FIELD_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/encryptedField/dynamic-type-field-definition-encrypted-field'
+import { MULTI_VALUE_OWN_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-own-keys'
 import { FieldDefinitionMultiValueFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/field-definition-multi-value-form-fields'
 import { CLASSIFICATION_STORE_KEY_TYPE_TAG } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
-
-/** The members that belong to the multiValue key itself rather than to the delegate it wraps. */
-export const MULTI_VALUE_OWN_KEYS = new Set([...BASE_FIELD_KEYS, 'delegateDatatype', 'delegate', 'variants', 'multiValue', 'maximum'])
 
 export class DynamicTypeFieldDefinitionMultiValue extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'multiValue'

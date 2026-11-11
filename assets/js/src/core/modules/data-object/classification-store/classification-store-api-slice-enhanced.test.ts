@@ -54,7 +54,7 @@ const typedDefinition: ClassificationStoreKeyDefinition = {
  * types it as `object`, so a drift of the shadow from the payload is caught by `tsc --noEmit` here.
  */
 const typedMultiValuePayload: Record<string, Record<string, Record<number, ClassificationStoreMultiValueEntry[]>>> = {
-  4: { de: { 11: [{ value: { value: 30, unit: 'cm' }, variant: 'metric' }, { value: { value: 1, unit: 'ft' }, position: 1 }] } }
+  4: { de: { 11: [{ v: { value: 30, unit: 'cm' }, var: 'metric' }, { v: { value: 1, unit: 'ft' }, p: 1 }] } }
 }
 
 const STORE_ID = 1
@@ -160,8 +160,8 @@ describe('multiValue entry shadow', () => {
   it('names the members of one entry of the value of a multiValue key, in the slot it is stored under', () => {
     const [capped, positioned] = typedMultiValuePayload[4].de[11]
 
-    expect(capped).toEqual({ value: { value: 30, unit: 'cm' }, variant: 'metric' })
-    expect(positioned.position).toBe(1)
+    expect(capped).toEqual({ v: { value: 30, unit: 'cm' }, var: 'metric' })
+    expect(positioned.p).toBe(1)
     expect('language' in capped).toBe(false)
   })
 })

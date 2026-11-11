@@ -209,15 +209,17 @@ export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
 
 /**
  * One entry of the value of a key of type `multiValue`. It shadows a payload the generated client
- * types as `object`, and is used unchanged for reading and writing. The enclosing slot decides the
- * language and the order of the list decides the position, so the editor writes neither member.
+ * types as `object`, and is used unchanged for reading and writing. Its members are the ones of
+ * QualifiedValueSerializerInterface: `v`, `var` and `p`. The payload is keyed by language before it
+ * reaches an entry, so the slot is the authority on language and an entry carries no such member.
  */
 export interface ClassificationStoreMultiValueEntry {
   /** The delegate type's own value */
-  value: unknown
-  language?: string | null
-  variant?: string | null
-  position?: number | null
+  v: unknown
+  /** The variant; absent is the default variant */
+  var?: string | null
+  /** The position within the (language, variant) slot; absent reads as 0 */
+  p?: number | null
 }
 
 /** The members of a `multiValue` key definition the schema does not name. */

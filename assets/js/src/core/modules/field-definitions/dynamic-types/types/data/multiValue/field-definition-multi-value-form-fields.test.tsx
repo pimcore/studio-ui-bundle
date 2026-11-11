@@ -26,11 +26,6 @@ jest.mock('./field-definition-multi-value-variants', () => ({
   FieldDefinitionMultiValueVariants: () => null
 }))
 
-// Reached only for the own-key set; the type under test is not exercised here.
-jest.mock('./dynamic-type-field-definition-multi-value', () => ({
-  MULTI_VALUE_OWN_KEYS: new Set(['name', 'delegateDatatype', 'variants', 'multiValue', 'maximum'])
-}))
-
 // Which types the registry offers is the registry's answer: the picker never lists them itself.
 const mockRegistry = {
   getTypesByTags: () => ['input', 'geopoint', 'multiValue', 'encryptedField'].map((id) => ({ id })),

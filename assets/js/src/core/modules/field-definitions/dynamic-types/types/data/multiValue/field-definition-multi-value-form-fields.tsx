@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { MULTI_VALUE_OWN_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/dynamic-type-field-definition-multi-value'
+import { MULTI_VALUE_OWN_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-own-keys'
 import { FieldDefinitionMultiValueVariants } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/field-definition-multi-value-variants'
 import { MultiValueEngineContext } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-engine-context'
 import {
