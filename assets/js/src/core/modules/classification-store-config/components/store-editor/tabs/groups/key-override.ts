@@ -196,67 +196,81 @@ export interface IOverrideTag {
   danger: boolean
 }
 
-/** One tag per member the assignment overrides, none where it overrides nothing. */
-export const overrideTags = (
-  relation: Relation,
-  { installationUnits, status, unitLabel }: IKeyUnits = { installationUnits: [], status: 'ready', unitLabel: (id) => id }
-): IOverrideTag[] => {
-  const draft = draftOf(relation)
-  const tags: IOverrideTag[] = []
+const NO_PARAMS: Record<string, unknown> = {}
 
-  if (draft.unreadable) {
-    // A stored value that is no object is the state the dialog names; the row must not read as "no override".
-    return [{ id: 'options', translationKey: 'classification-store.override.tag-unreadable', params: {}, text: '', danger: true }]
+const DEFAULT_KEY_UNITS: IKeyUnits = { installationUnits: [], status: 'ready', unitLabel: (id) => id }
+
+const messageTag = (id: IOverrideTag['id'], translationKey: string, danger: boolean): IOverrideTag => ({
+  id,
+  translationKey,
+  params: NO_PARAMS,
+  text: '',
+  danger
+})
+
+const isBroken = (status: SubsetStatus): boolean => status === 'empty' || status === 'stale-only' || status === 'invalid'
+
+const optionsTag = (relation: Relation, draft: IOverrideDraft): IOverrideTag | null => {
+  if (draft.options === undefined) return null
+
+  if (relation.options === undefined || relation.options === null) {
+    // The key's options are unknown, not absent: nothing about the stored subset can be judged.
+    return messageTag('options', 'classification-store.override.tag-options-unavailable', false)
   }
 
   const options = optionValuesOf(relation)
-  const optionsPublished = relation.options !== undefined && relation.options !== null
+  const resolved = resolveSubset(draft.options, options)
 
-  if (draft.options !== undefined && !optionsPublished) {
-    // The key's options are unknown, not absent: nothing about the stored subset can be judged.
-    tags.push({ id: 'options', translationKey: 'classification-store.override.tag-options-unavailable', params: {}, text: '', danger: false })
-  } else if (draft.options !== undefined) {
-    const resolved = resolveSubset(draft.options, options)
+  if (isBroken(resolved.status)) return messageTag('options', 'classification-store.override.tag-no-options', true)
 
-    if (resolved.status === 'empty' || resolved.status === 'stale-only' || resolved.status === 'invalid') {
-      tags.push({ id: 'options', translationKey: 'classification-store.override.tag-no-options', params: {}, text: '', danger: true })
-    } else {
-      tags.push({
-        id: 'options',
-        translationKey: 'classification-store.override.tag-options',
-        params: { count: resolved.stored.length, total: options.length },
-        text: '',
-        danger: false
-      })
-    }
+  return {
+    ...messageTag('options', 'classification-store.override.tag-options', false),
+    params: { count: resolved.stored.length, total: options.length }
+  }
+}
+
+const defaultUnitTag = (relation: Relation, draft: IOverrideDraft, units: IKeyUnits): IOverrideTag | null => {
+  const { defaultUnit } = draft
+
+  if (defaultUnit === undefined) return null
+
+  if (typeof defaultUnit !== 'string') {
+    return messageTag('default-unit', 'classification-store.override.tag-unreadable', true)
   }
 
-  if (typeof draft.defaultUnit === 'string') {
-    const published = unitsVocabularyKnown(relation, status === 'ready') ? unitIdsOf(relation, installationUnits) : []
-    // A default the key no longer permits is a disagreement the row must not present as a valid value.
-    const outside = published.length > 0 && !published.includes(draft.defaultUnit)
+  const published = unitsVocabularyKnown(relation, units.status === 'ready')
+    ? unitIdsOf(relation, units.installationUnits)
+    : []
+  // A default the key no longer permits is a disagreement the row must not present as a valid value.
+  const outside = published.length > 0 && !published.includes(defaultUnit)
 
-    tags.push({ id: 'default-unit', translationKey: null, params: {}, text: unitLabel(draft.defaultUnit), danger: outside })
-  } else if (draft.defaultUnit !== undefined) {
-    tags.push({ id: 'default-unit', translationKey: 'classification-store.override.tag-unreadable', params: {}, text: '', danger: true })
+  return { id: 'default-unit', translationKey: null, params: NO_PARAMS, text: units.unitLabel(defaultUnit), danger: outside }
+}
+
+const validUnitsTag = (relation: Relation, draft: IOverrideDraft, units: IKeyUnits): IOverrideTag | null => {
+  if (draft.validUnits === undefined || !unitsVocabularyKnown(relation, units.status === 'ready')) return null
+
+  const offered = unitIdsOf(relation, units.installationUnits)
+  const resolved = resolveSubset(draft.validUnits, offered)
+
+  if (isBroken(resolved.status)) return messageTag('valid-units', 'classification-store.override.tag-no-units', true)
+  if (offered.length === 0) return null
+
+  return {
+    ...messageTag('valid-units', 'classification-store.override.tag-units', false),
+    params: { count: resolved.stored.length, total: offered.length }
   }
+}
 
-  if (draft.validUnits !== undefined && unitsVocabularyKnown(relation, status === 'ready')) {
-    const units = unitIdsOf(relation, installationUnits)
-    const resolved = resolveSubset(draft.validUnits, units)
+/** One tag per member the assignment overrides, none where it overrides nothing. */
+export const overrideTags = (relation: Relation, keyUnits?: IKeyUnits): IOverrideTag[] => {
+  const units = keyUnits ?? DEFAULT_KEY_UNITS
+  const draft = draftOf(relation)
 
-    if (resolved.status === 'empty' || resolved.status === 'stale-only' || resolved.status === 'invalid') {
-      tags.push({ id: 'valid-units', translationKey: 'classification-store.override.tag-no-units', params: {}, text: '', danger: true })
-    } else if (units.length > 0) {
-      tags.push({
-        id: 'valid-units',
-        translationKey: 'classification-store.override.tag-units',
-        params: { count: resolved.stored.length, total: units.length },
-        text: '',
-        danger: false
-      })
-    }
-  }
+  // A stored value that is no object is the state the dialog names; the row must not read as "no override".
+  if (draft.unreadable) return [messageTag('options', 'classification-store.override.tag-unreadable', true)]
 
-  return tags
+  return [optionsTag(relation, draft), defaultUnitTag(relation, draft, units), validUnitsTag(relation, draft, units)].filter(
+    (tag): tag is IOverrideTag => tag !== null
+  )
 }

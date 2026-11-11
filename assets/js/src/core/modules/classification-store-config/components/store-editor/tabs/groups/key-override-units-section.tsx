@@ -25,10 +25,22 @@ import {
   unitIdsOf,
   unitsVocabularyKnown
 } from './key-override'
+import { type ClassificationStoreConfigurationKeyGroupRelationDetail as Relation } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { StatedState, SubsetPicker, type ISectionProps, type ISubsetRow } from './key-override-sections'
 import { useKeyUnits } from './use-key-units'
 
 const USE_DEFAULT = ''
+
+/** The notice for a key with nothing to narrow, null where it has units to pick from. */
+const noVocabularyNotice = (relation: Relation, keyUnits: string[]): string | null => {
+  if (!publishesUnits(relation)) return 'classification-store.override.units-no-vocabulary'
+  if (keyUnits.length > 0) return null
+
+  // An absent member is read as a null one: every installation unit, of which there are none.
+  return relation.units?.validUnits == null
+    ? 'classification-store.override.units-installation-empty'
+    : 'classification-store.override.units-key-permits-none'
+}
 
 export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -69,15 +81,9 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
       )
     }
 
-    // An absent member is read as a null one: the relation names no vocabulary.
-    const emptyKey = publishesUnits(relation) && keyUnits.length === 0
-    if (!publishesUnits(relation) || emptyKey) {
-      const notice = !publishesUnits(relation)
-        ? 'classification-store.override.units-no-vocabulary'
-        : relation.units?.validUnits === null || relation.units?.validUnits === undefined
-          ? 'classification-store.override.units-installation-empty'
-          : 'classification-store.override.units-key-permits-none'
+    const notice = noVocabularyNotice(relation, keyUnits)
 
+    if (notice !== null) {
       return (
         <Flex
           gap="mini"
