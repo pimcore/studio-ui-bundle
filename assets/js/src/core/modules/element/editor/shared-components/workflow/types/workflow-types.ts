@@ -13,6 +13,13 @@ import { type WorkflowDetails } from '../../../shared-tab-manager/tabs/workflow/
 
 export type ActionType = 'transition' | 'global'
 
+/**
+ * What to do with unsaved changes when a transition is applied, as configured
+ * per transition (`options.unsavedChangesBehaviour`): save them first, warn
+ * that they will be lost, or ignore them.
+ */
+export type UnsavedChangesBehaviour = 'save' | 'warn' | 'ignore'
+
 interface WorkflowAdditionalField {
   name: string
   fieldType: string
@@ -34,6 +41,7 @@ export interface WorkflowAction {
   transitionId: string
   label: string
   notes?: WorkflowNotes
+  unsavedChangesBehaviour?: UnsavedChangesBehaviour
   /** Custom layout id the data-object editor switches to after the action was applied. */
   objectLayout?: string
 }
@@ -52,6 +60,11 @@ export interface WorkflowActionSubject {
   elementId: number
   elementType: string
   onApplied?: (action: WorkflowAction) => void
+  /**
+   * Runs before an action is submitted; resolving to false cancels it. The editor uses it to apply
+   * the transition's unsavedChangesBehaviour.
+   */
+  beforeSubmit?: (action: WorkflowAction) => Promise<boolean>
 }
 
 export interface WorkflowOptions {
@@ -65,9 +78,13 @@ interface ActionItem {
   name: string
   label: string
   notes?: WorkflowNotes
+  unsavedChangesBehaviour?: string
   // the backend sends the configured layout id, or false when none is set
   objectLayout?: boolean | number | string
 }
+
+const isUnsavedChangesBehaviour = (value: string | undefined): value is UnsavedChangesBehaviour =>
+  value === 'save' || value === 'warn' || value === 'ignore'
 
 // TEMPORARY client-side guard, see https://github.com/pimcore/platform-version/issues/801
 // The workflow designer can write `objectLayout: 'false'` (string) and studio-backend passes it through untyped.
@@ -97,6 +114,7 @@ const createWorkflowAction = (
   transitionId: item.name,
   label: item.label,
   notes: isEmpty(item.notes) ? undefined : item.notes,
+  unsavedChangesBehaviour: isUnsavedChangesBehaviour(item.unsavedChangesBehaviour) ? item.unsavedChangesBehaviour : undefined,
   objectLayout: normalizeObjectLayout(item.objectLayout)
 })
 

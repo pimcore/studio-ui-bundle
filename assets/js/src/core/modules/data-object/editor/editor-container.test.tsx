@@ -37,6 +37,11 @@ jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
   useOptionalElementContext: () => ({ id: 42, elementType: 'data-object' })
 }))
 
+// the guard pulls in the @sdk/components barrel (untranspiled antd ESM in jest); it is covered by its own test
+jest.mock('@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-unsaved-changes-guard', () => ({
+  useUnsavedChangesGuard: () => ({ guard: async () => await Promise.resolve(true) })
+}))
+
 jest.mock('@sdk/modules/element', () => ({
   useElementRefresh: () => ({ refreshElement: mockRefreshElement })
 }))
