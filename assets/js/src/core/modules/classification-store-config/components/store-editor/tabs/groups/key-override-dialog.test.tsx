@@ -424,7 +424,7 @@ describe('KeyOverrideDialog', () => {
     expect(selectedDefault()).toBe('kg')
   })
 
-  it('shows no picker and offers no clearing while the installation list is refused, and every unit once it is there', async () => {
+  it('shows no picker and a disabled clearing action while the installation list is refused, and every unit once it is there', async () => {
     const user = userEvent.setup({ delay: null })
     const everyUnit = unitRow({
       units: { defaultUnit: null, validUnits: null },
@@ -437,7 +437,7 @@ describe('KeyOverrideDialog', () => {
     expect(await screen.findByText(`${OVERRIDE}.units-unavailable`, undefined, WAIT_BUDGET)).toBeTruthy()
     expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
     expect(screen.queryByText(`${OVERRIDE}.units-stale-only`)).toBeNull()
-    expect(screen.queryByRole('button', { name: new RegExp(USE_KEY_UNITS) })).toBeNull()
+    expect((screen.getByRole('button', { name: new RegExp(USE_KEY_UNITS) }) as HTMLButtonElement).disabled).toBe(true)
     await save(user)
     await waitFor(() => { expect(upserts()).toHaveLength(1) }, WAIT_BUDGET)
     expect(upserts()[0].body?.definitionOverride).toEqual({ validUnits: ['kg'], defaultUnit: 'kg' })

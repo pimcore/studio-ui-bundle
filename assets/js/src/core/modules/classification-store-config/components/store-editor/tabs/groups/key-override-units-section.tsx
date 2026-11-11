@@ -73,11 +73,17 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
   const renderValidUnits = (): React.JSX.Element | null => {
     if (!known) {
       return (
-        <Alert
-          message={ t(status === 'failed' ? 'classification-store.override.units-unavailable' : 'classification-store.override.units-loading') }
-          showIcon
-          type={ status === 'failed' ? 'warning' : 'info' }
-        />
+        <Flex
+          gap="mini"
+          vertical
+        >
+          <Alert
+            message={ t(status === 'failed' ? 'classification-store.override.units-unavailable' : 'classification-store.override.units-loading') }
+            showIcon
+            type={ status === 'failed' ? 'warning' : 'info' }
+          />
+          { draft.validUnits !== undefined && clearUnitsAction }
+        </Flex>
       )
     }
 
