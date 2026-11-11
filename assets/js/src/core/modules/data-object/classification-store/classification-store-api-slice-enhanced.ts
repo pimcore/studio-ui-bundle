@@ -1214,16 +1214,19 @@ const api = baseApi.enhanceEndpoints({
         const create: ClassificationStoreConfigurationKeyGroupRelationCreate =
           args.classificationStoreConfigurationKeyGroupRelationCreate
         const { keyId, groupId, sorter, mandatory } = create
-        // Only what the payload carries is patched. An absent property means "leave the stored
-        // value alone" to the server, so patching it would blank the cell it belongs to for the
-        // length of the request — a sub-group assignment carries neither sorter nor mandatory.
+        // Only what the payload carries is patched (sorter, mandatory, subGroup, definitionOverride).
+        // An absent property means "leave the stored value alone" to the server, so patching it
+        // would blank the cell it belongs to for the length of the request — a sub-group
+        // assignment carries neither sorter nor mandatory.
         // null as well as undefined: the refreshed contract types both as
         // `AbsentValue::ABSENT`, and the server reads either as "leave the stored
         // value alone". Patching a null would blank the cached cell instead.
         const absentSafePatch = {
           ...(sorter !== undefined && sorter !== null ? { sorter } : {}),
           ...(mandatory !== undefined && mandatory !== null ? { mandatory } : {}),
-          ...('subGroup' in create ? { subGroup: create.subGroup ?? null } : {})
+          ...(create.subGroup !== undefined ? { subGroup: create.subGroup ?? null } : {}),
+          // An explicit null clears the stored override, so it is a value to patch, as subGroup is.
+          ...(create.definitionOverride !== undefined ? { definitionOverride: create.definitionOverride ?? null } : {})
         }
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
@@ -1237,6 +1240,8 @@ const api = baseApi.enhanceEndpoints({
         // confirmation then replaced the whole page-1 row — writing back the `subGroup` an older
         // cell edit's response had never named, which is the exact staleness the field mask below
         // exists to prevent.
+        const overrideOnly = create.definitionOverride !== undefined && create.subGroup === undefined &&
+          (sorter === undefined || sorter === null) && (mandatory === undefined || mandatory === null)
         const createdIn = new Set<string>()
         const patchResults = optimisticPatchAllCacheEntries<
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
@@ -1255,7 +1260,10 @@ const api = baseApi.enhanceEndpoints({
               // mask below apart — a failed sorter edit restored the sub group an assignment had
               // already saved.
               Object.assign(draft.items[idx], absentSafePatch)
-            } else {
+            } else if (!overrideOnly) {
+              // An override is only ever written from an existing row, so an entry that does not
+              // hold the pair (another page of the group) has nothing to patch and must not gain one;
+              // only the other writes create the relation.
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new
               // relation rather than leaving the cached row without one.
@@ -1290,7 +1298,8 @@ const api = baseApi.enhanceEndpoints({
           const confirmed = {
             ...(sorter !== undefined ? { sorter: updated.sorter } : {}),
             ...(mandatory !== undefined ? { mandatory: updated.mandatory } : {}),
-            ...('subGroup' in create ? { subGroup: updated.subGroup ?? null } : {})
+            ...(create.subGroup !== undefined ? { subGroup: updated.subGroup ?? null } : {}),
+            ...(create.definitionOverride !== undefined ? { definitionOverride: updated.definitionOverride ?? null } : {})
           }
           patchAllCacheEntries<
             ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
