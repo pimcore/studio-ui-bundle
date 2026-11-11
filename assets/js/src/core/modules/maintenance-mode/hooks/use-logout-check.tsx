@@ -15,8 +15,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
-import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useMaintenanceModeDeactivateMutation, useMaintenanceModeGetQuery } from '../maintenance-mode-api-slice-enhanced'
 
 /**
@@ -26,7 +25,8 @@ import { useMaintenanceModeDeactivateMutation, useMaintenanceModeGetQuery } from
 export const useLogoutCheck = (): ((logout: () => void) => void) => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const { data } = useMaintenanceModeGetQuery(undefined, { skip: !isAllowed(UserPermission.MaintenanceMode) })
+  const { isAdmin } = useUser()
+  const { data } = useMaintenanceModeGetQuery(undefined, { skip: !isAdmin })
   const [deactivate] = useMaintenanceModeDeactivateMutation()
 
   return (logout: () => void): void => {

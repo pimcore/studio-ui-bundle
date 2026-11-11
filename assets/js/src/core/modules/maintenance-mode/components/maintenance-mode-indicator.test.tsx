@@ -15,7 +15,7 @@ import { MaintenanceModeIndicator } from './maintenance-mode-indicator'
 const mockConfirm = jest.fn()
 const mockDeactivate = jest.fn()
 const mockUseGetQuery = jest.fn()
-const mockIsAllowed = jest.fn()
+const mockUser = { isAdmin: true }
 
 jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: mockConfirm })
@@ -24,9 +24,7 @@ jest.mock('../maintenance-mode-api-slice-enhanced', () => ({
   useMaintenanceModeGetQuery: (arg: undefined, options: { skip: boolean }) => mockUseGetQuery(arg, options),
   useMaintenanceModeDeactivateMutation: () => [mockDeactivate]
 }))
-jest.mock('@Pimcore/modules/auth/permission-helper', () => ({
-  isAllowed: (permission: string) => mockIsAllowed(permission)
-}))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => mockUser }))
 jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
   IconButton: ({ onClick, ...props }: { onClick: () => void, 'data-testid': string }) => (
     <button
@@ -49,7 +47,7 @@ describe('MaintenanceModeIndicator', () => {
     mockConfirm.mockReset()
     mockDeactivate.mockReset()
     mockDeactivate.mockResolvedValue({ data: { active: false } })
-    mockIsAllowed.mockReturnValue(true)
+    mockUser.isAdmin = true
     mockUseGetQuery.mockReturnValue({ data: { active: true } })
   })
 
@@ -67,13 +65,12 @@ describe('MaintenanceModeIndicator', () => {
     expect(screen.getByTestId(INDICATOR)).toBeInTheDocument()
   })
 
-  it('does not ask for the state without the maintenance_mode permission', () => {
-    mockIsAllowed.mockReturnValue(false)
+  it('does not ask for the state for non-admins', () => {
+    mockUser.isAdmin = false
     mockUseGetQuery.mockReturnValue({ data: undefined })
 
     render(<MaintenanceModeIndicator />)
 
-    expect(mockIsAllowed).toHaveBeenCalledWith('maintenance_mode')
     expect(mockUseGetQuery).toHaveBeenCalledWith(undefined, { skip: true })
     expect(screen.queryByTestId(INDICATOR)).toBeNull()
   })

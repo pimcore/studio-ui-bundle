@@ -11,9 +11,10 @@
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { store } from '@Pimcore/app/store'
 import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { type MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
-import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
 import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator'
 import { useMaintenanceModeContext } from './context/maintenance-mode-context'
@@ -28,7 +29,7 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       // Below System Settings (1100), above About (9999)
       order: 1200,
-      permission: UserPermission.MaintenanceMode,
+      hidden: () => !selectCurrentUser(store.getState()).isAdmin,
       perspectivePermission: NavPermission.MaintenanceMode,
       useCustomMainNavItem: () => {
         const { activateWithConfirmation } = useMaintenanceModeContext()

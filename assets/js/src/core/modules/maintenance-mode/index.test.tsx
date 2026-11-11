@@ -19,7 +19,7 @@ import './index'
 
 const mockRegisterToSlot = jest.fn()
 const mockActivateWithConfirmation = jest.fn()
-const mockAllowed = { user: true, perspective: true }
+const mockAllowed = { admin: true, perspective: true }
 
 jest.mock('@Pimcore/app/depency-injection', () => {
   const { MainNavRegistry } = jest.requireActual('@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry')
@@ -44,8 +44,10 @@ jest.mock('@Pimcore/modules/app/component-registry/component-registry', () => ({
   componentConfig: { leftSidebar: { slot: { name: 'leftSidebar.slot' } } }
 }))
 
-jest.mock('@Pimcore/modules/auth/permission-helper', () => ({
-  isAllowed: (permission: string) => permission === 'maintenance_mode' && mockAllowed.user
+jest.mock('@Pimcore/modules/auth/permission-helper', () => ({ isAllowed: () => false }))
+jest.mock('@Pimcore/app/store', () => ({ store: { getState: () => ({}) } }))
+jest.mock('@Pimcore/modules/auth/user/user-slice', () => ({
+  selectCurrentUser: () => ({ isAdmin: mockAllowed.admin })
 }))
 
 jest.mock('@Pimcore/modules/perspectives/permission-checker', () => ({
@@ -96,21 +98,23 @@ describe('maintenance mode module', () => {
   })
 
   beforeEach(() => {
-    mockAllowed.user = true
+    mockAllowed.admin = true
     mockAllowed.perspective = true
     mockActivateWithConfirmation.mockClear()
   })
 
-  it('shows the System menu entry with the user and the perspective permission', () => {
-    expect(findEntry()).toEqual(expect.objectContaining({
+  it('shows the System menu entry to admins without a user permission', () => {
+    const entry = findEntry()
+
+    expect(entry).toEqual(expect.objectContaining({
       label: 'navigation.maintenance-mode',
-      permission: 'maintenance_mode',
       perspectivePermission: 'system.maintenanceMode'
     }))
+    expect(entry?.permission).toBeUndefined()
   })
 
-  it('hides the entry without the maintenance_mode user permission', () => {
-    mockAllowed.user = false
+  it('hides the entry from non-admins', () => {
+    mockAllowed.admin = false
 
     expect(findEntry()).toBeUndefined()
   })

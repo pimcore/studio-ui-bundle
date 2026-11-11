@@ -17,15 +17,21 @@ const mockDestroy = jest.fn()
 const mockDeactivate = jest.fn()
 const mockState: { data: { active: boolean } | undefined } = { data: undefined }
 const mockTrackError = jest.fn()
+const mockUseGetQuery = jest.fn()
+const mockUser = { isAdmin: true }
 
 jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: mockConfirm })
 }))
 jest.mock('../maintenance-mode-api-slice-enhanced', () => ({
-  useMaintenanceModeGetQuery: () => ({ data: mockState.data }),
+  useMaintenanceModeGetQuery: (arg: undefined, options: { skip: boolean }) => {
+    mockUseGetQuery(arg, options)
+
+    return { data: mockState.data }
+  },
   useMaintenanceModeDeactivateMutation: () => [mockDeactivate]
 }))
-jest.mock('@Pimcore/modules/auth/permission-helper', () => ({ isAllowed: () => true }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => mockUser }))
 jest.mock('@Pimcore/components/button/button', () => ({
   Button: ({ children, onClick }: { children: React.ReactNode, onClick: () => void }) => <button onClick={ onClick }>{children}</button>
 }))
@@ -58,6 +64,16 @@ describe('useLogoutCheck', () => {
     mockDeactivate.mockReset()
     mockDeactivate.mockResolvedValue({ data: { active: false } })
     mockTrackError.mockReset()
+    mockUseGetQuery.mockReset()
+    mockUser.isAdmin = true
+  })
+
+  it('does not ask for the state for non-admins', () => {
+    mockUser.isAdmin = false
+
+    runCheck(jest.fn())
+
+    expect(mockUseGetQuery).toHaveBeenCalledWith(undefined, { skip: true })
   })
 
   it('logs out right away while maintenance mode is off', () => {

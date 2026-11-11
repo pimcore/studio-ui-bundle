@@ -43,6 +43,5 @@ export enum UserPermission {
   QuantityValues = 'quantityValueUnits',
   AssetMetadata = 'asset_metadata',
   ClearCache = 'clear_cache',
-  McpServers = 'mcp_servers',
-  MaintenanceMode = 'maintenance_mode'
+  McpServers = 'mcp_servers'
 }
