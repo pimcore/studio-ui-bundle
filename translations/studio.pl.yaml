@@ -495,6 +495,10 @@ action-could-not-be-applied: Nie udało się zastosować akcji
 failed-to-assign-tag-to-element: Nie udało się przypisać tagu do elementu
 failed-to-un-assign-tag-to-element: Nie udało się usunąć tagu z elementu
 workflow-modal.perform-action: Wykonaj akcję
+workflow.unsaved-changes.title: Niezapisane zmiany
+workflow.unsaved-changes.warn: Istnieją niezapisane zmiany. Zostaną utracone po zastosowaniu tej akcji. Zastosować mimo to?
+workflow.unsaved-changes.apply-anyway: Zastosuj mimo to
+workflow.unsaved-changes.save-failed: Nie udało się zapisać niezapisanych zmian, dlatego akcja nie została zastosowana.
 workflow-modal.cancel: Anuluj
 workflow-modal.notes: Notatki
 workflow-modal.notes-required: Wprowadź swoje notatki

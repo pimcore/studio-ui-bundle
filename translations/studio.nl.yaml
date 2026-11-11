@@ -495,6 +495,10 @@ action-could-not-be-applied: Actie kon niet worden toegepast
 failed-to-assign-tag-to-element: Tag aan element toewijzen mislukt
 failed-to-un-assign-tag-to-element: Tag van element verwijderen mislukt
 workflow-modal.perform-action: Actie uitvoeren
+workflow.unsaved-changes.title: Niet-opgeslagen wijzigingen
+workflow.unsaved-changes.warn: Er zijn niet-opgeslagen wijzigingen. Deze gaan verloren als deze actie wordt toegepast. Toch toepassen?
+workflow.unsaved-changes.apply-anyway: Toch toepassen
+workflow.unsaved-changes.save-failed: De niet-opgeslagen wijzigingen konden niet worden opgeslagen, dus de actie is niet toegepast.
 workflow-modal.cancel: Annuleren
 workflow-modal.notes: Notities
 workflow-modal.notes-required: Voer je notities in
