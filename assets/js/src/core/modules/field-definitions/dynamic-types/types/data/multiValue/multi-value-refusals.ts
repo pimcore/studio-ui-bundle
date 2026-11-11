@@ -30,9 +30,10 @@ export const getVariantRefusals = (variants: readonly ClassificationStoreVariant
   const duplicated = new Set<string>()
 
   for (const variant of variants ?? []) {
-    const name = variantNameOf(variant)
+    // One reading of the name for the empty and the duplicate check: 'metric' and 'metric ' head the same-looking slot.
+    const name = variantNameOf(variant).trim()
 
-    if (name.trim() === '') {
+    if (name === '') {
       if (!refusals.some((refusal) => refusal.id === REFUSAL_VARIANT_EMPTY)) {
         refusals.push({ id: REFUSAL_VARIANT_EMPTY })
       }

@@ -66,6 +66,14 @@ describe('FieldDefinitionMultiValueVariants', () => {
     expect(screen.getByText(DUPLICATE_REFUSAL)).toBeInTheDocument()
   })
 
+  it('refuses a name that differs from another only by surrounding whitespace', () => {
+    render(<Host initial={ [{ name: 'metric' }] } />)
+    fireEvent.click(screen.getByLabelText(ADD))
+    fireEvent.change(screen.getAllByLabelText(NAME)[1], { target: { value: 'metric ' } })
+
+    expect(screen.getByText(DUPLICATE_REFUSAL)).toBeInTheDocument()
+  })
+
   it('refuses an empty name, with its reason', () => {
     render(<Host initial={ [{ name: 'metric' }] } />)
     fireEvent.change(screen.getByLabelText(NAME), { target: { value: '' } })
