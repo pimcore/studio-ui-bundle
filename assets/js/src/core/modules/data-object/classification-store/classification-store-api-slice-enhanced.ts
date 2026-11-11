@@ -899,6 +899,28 @@ const api = baseApi.enhanceEndpoints({
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
+          // The key's store is read off a cached row, as a delete response names nothing.
+          let deletedStoreId: number | undefined
+          dispatch((_inner: unknown, getState: () => unknown) => {
+            const queries = ((getState() as Record<string, any>).api?.queries ?? {}) as Record<string, any>
+            for (const [queryKey, queryState] of Object.entries(queries)) {
+              if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
+              const row = (queryState?.data as ClassificationStoreConfigurationKeyCollectionApiResponse | undefined)
+                ?.items?.find((k) => k.id === args.id)
+              if (row !== undefined) { deletedStoreId = row.storeId; return }
+            }
+          })
+
+          const isSearch = (a: ClassificationStoreConfigurationKeyCollectionApiArg): boolean =>
+            ((a?.body?.filters?.columnFilters as unknown[] | undefined)?.length ?? 0) > 0
+          // The Deleted view lists disabled keys, which this delete adds to rather than removes from.
+          const isActiveView = (a: ClassificationStoreConfigurationKeyCollectionApiArg): boolean =>
+            a?.body?.disabledOnly !== true
+
+          // Unfiltered pages of the key's own store lose one item from their total whether or not
+          // the row sat on that page. Anything else (another store, a cached search, or any entry
+          // when the store is unknown) drops the row only if it holds it, and lowers the total by
+          // what it actually removed, so a search the key does not match keeps its total.
           patchAllCacheEntries<
             ClassificationStoreConfigurationKeyCollectionApiResponse,
             ClassificationStoreConfigurationKeyCollectionApiArg
@@ -909,8 +931,20 @@ const api = baseApi.enhanceEndpoints({
               draft.items = draft.items.filter((k) => k.id !== args.id)
               draft.totalItems = Math.max(0, draft.totalItems - 1)
             },
-            // The Deleted view lists disabled keys, which this delete adds to rather than removes from.
-            (cacheArgs) => cacheArgs?.body?.disabledOnly !== true
+            (a) => isActiveView(a) && deletedStoreId !== undefined && a.storeId === deletedStoreId && !isSearch(a)
+          )
+          patchAllCacheEntries<
+            ClassificationStoreConfigurationKeyCollectionApiResponse,
+            ClassificationStoreConfigurationKeyCollectionApiArg
+          >(
+            dispatch,
+            'classificationStoreConfigurationKeyCollection',
+            (draft) => {
+              const before = draft.items.length
+              draft.items = draft.items.filter((k) => k.id !== args.id)
+              draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
+            },
+            (a) => isActiveView(a) && !(deletedStoreId !== undefined && a.storeId === deletedStoreId && !isSearch(a))
           )
           // The server unassigns the key from every group when it is disabled, so the cached
           // relation pages of every group drop its rows too.

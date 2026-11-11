@@ -159,7 +159,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const keys = data?.items ?? []
   // Rows come from currentData; the total holds its last known value while a request is in flight
   // so the pagination does not collapse to one page on every page change, search or view switch.
-  const total = (data ?? lastData)?.totalItems ?? 0
+  const total = (data ?? (isFetching && !isError ? lastData : undefined))?.totalItems ?? 0
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -436,7 +436,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     }),
     columnHelper.accessor('type', {
       header: t('classification-store.columns.type'),
-      size: 180
+      size: 180,
+      meta: { type: 'select', config: { options: typeSelectOptions } }
     }),
     columnHelper.accessor('description', {
       header: t('classification-store.columns.description'),
@@ -455,7 +456,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         />
       )
     })
-  ], [t, columnHelper])
+  ], [t, columnHelper, typeSelectOptions])
 
   return (
     <>
