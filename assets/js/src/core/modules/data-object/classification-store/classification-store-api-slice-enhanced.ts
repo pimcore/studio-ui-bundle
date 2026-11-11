@@ -561,6 +561,8 @@ interface KeyCollectionRead {
   /** The store whose keys this read lists; a confirmation from any other store is not its concern. */
   storeId: number
   preserve: Array<{ id: unknown, fields: ConfirmedKeyFields }>
+  /** Keys deleted while this read was in flight: its answer, a pre-delete snapshot, may still carry them. */
+  deleted: Set<unknown>
 }
 
 /** The reads of the key collection now in flight. */
@@ -575,12 +577,29 @@ const keyCollectionReads = new Set<KeyCollectionRead>()
 const openKeyCollectionRead = (
   args: ClassificationStoreConfigurationKeyCollectionApiArg
 ): { settled: (dispatch: (thunk: any) => void) => void } => {
-  const read: KeyCollectionRead = { storeId: args.storeId, preserve: [] }
+  const read: KeyCollectionRead = { storeId: args.storeId, preserve: [], deleted: new Set() }
   keyCollectionReads.add(read)
 
   return {
     settled: (dispatch) => {
       keyCollectionReads.delete(read)
+
+      // A delete confirmed inside this read: the answer is a snapshot from before it, so the row
+      // is taken out again and the entry re-read, which also settles the totals a page-local
+      // removal cannot know. Dispatched after the delete, so the re-read cannot see the key.
+      if (read.deleted.size > 0) {
+        dispatch(baseApi.util.updateQueryData(
+          'classificationStoreConfigurationKeyCollection',
+          args,
+          (draft) => {
+            const page = draft as unknown as ClassificationStoreConfigurationKeyCollectionApiResponse
+            page.items = page.items.filter((k) => !read.deleted.has(k.id))
+          }
+        ))
+        refetchKeyCollection(dispatch, args)
+        return
+      }
+
       if (read.preserve.length === 0) return
 
       // Set from inside the recipe, which `updateQueryData` runs synchronously while this
@@ -622,6 +641,41 @@ const openKeyCollectionRead = (
       refetchKeyCollection(dispatch, args)
     }
   }
+}
+
+/**
+ * The deletion of a key, recorded against the key collection reads in flight that may list it — those
+ * of its own store, or all of them where the store is unknown.
+ */
+const tombstoneAcrossKeyCollectionReads = (id: unknown, storeId: number | undefined): void => {
+  for (const read of keyCollectionReads) {
+    if (storeId === undefined || read.storeId === storeId) read.deleted.add(id)
+  }
+}
+
+/** The reads of a group's key relations now in flight, with the keys deleted while they ran. */
+interface RelationCollectionRead { deleted: Set<unknown> }
+const relationCollectionReads = new Set<RelationCollectionRead>()
+
+const refetchRelationCollection = (
+  dispatch: (thunk: any) => void,
+  args: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
+): void => {
+  dispatch(baseApi.endpoints.classificationStoreConfigurationKeyGroupRelationCollection.initiate(
+    args,
+    { subscribe: false, forceRefetch: true }
+  ))
+}
+
+/** Re-reads every cached relation page: which group and page held a deleted key is not knowable from the key. */
+const refetchRelationCollections = (dispatch: (thunk: any) => void): void => {
+  dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+    const queries = ((getState() as Record<string, any>).api?.queries ?? {}) as Record<string, any>
+    for (const [queryKey, queryState] of Object.entries(queries)) {
+      if (!queryKey.startsWith('classificationStoreConfigurationKeyGroupRelationCollection(')) continue
+      refetchRelationCollection(innerDispatch, queryState.originalArgs as ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg)
+    }
+  })
 }
 
 /**
@@ -1039,6 +1093,10 @@ const api = baseApi.enhanceEndpoints({
             }
           })
 
+          // Reads dispatched before this delete may still answer with the key; see the ledger above.
+          tombstoneAcrossKeyCollectionReads(args.id, deletedStoreId)
+          for (const read of relationCollectionReads) read.deleted.add(args.id)
+
           const isSearch = (a: ClassificationStoreConfigurationKeyCollectionApiArg): boolean =>
             ((a?.body?.filters?.columnFilters as unknown[] | undefined)?.length ?? 0) > 0
           // The Deleted view lists disabled keys, which this delete adds to rather than removes from.
@@ -1085,6 +1143,20 @@ const api = baseApi.enhanceEndpoints({
               draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
             }
           )
+          // The patches above only know the cached page. A search the key matches on another page,
+          // and a relation on a later page of its group, leave a total one too high, so those
+          // entries are re-read rather than counted.
+          dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+            const queries = ((getState() as Record<string, any>).api?.queries ?? {}) as Record<string, any>
+            for (const [queryKey, queryState] of Object.entries(queries)) {
+              if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
+              const a = queryState.originalArgs as ClassificationStoreConfigurationKeyCollectionApiArg
+              if (isActiveView(a) && isSearch(a) && (deletedStoreId === undefined || a.storeId === deletedStoreId)) {
+                refetchKeyCollection(innerDispatch, a)
+              }
+            }
+          })
+          refetchRelationCollections(dispatch)
         } catch {
           // Mutation failed — cache stays stale until next refetch
         }
@@ -1100,7 +1172,21 @@ const api = baseApi.enhanceEndpoints({
     // ─── Key-Group Relations ──────────────────────────────────────────────────
 
     classificationStoreConfigurationKeyGroupRelationCollection: {
-      providesTags: ['Classification Store']
+      providesTags: ['Classification Store'],
+      // Registered while in flight so a key deleted meanwhile cannot be written back by the
+      // pre-delete answer: the entry is re-read once it has landed.
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const read: RelationCollectionRead = { deleted: new Set() }
+        relationCollectionReads.add(read)
+        try {
+          await queryFulfilled
+        } catch {
+          // Nothing was written, so there is nothing to undo.
+        } finally {
+          relationCollectionReads.delete(read)
+          if (read.deleted.size > 0) refetchRelationCollection(dispatch, args)
+        }
+      }
     },
 
     // ─── Sub groups ───────────────────────────────────────────────────────────
