@@ -15,6 +15,7 @@ import { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler/index
 import { ApiErrorViewUI } from '@Pimcore/modules/app/error-handler/components/api-error-view-ui'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 import { store } from '@Pimcore/app/store'
+import { selectIsLockedOut } from '@Pimcore/modules/maintenance-mode/maintenance-mode-slice'
 
 interface IErrorContentProvider {
   getContent: () => IErrorGetContent['data']
@@ -32,12 +33,12 @@ const getErrorContentId = (errorContent: IErrorGetContent['data']): string => {
   return isString(errorContent) ? errorContent : JSON.stringify(errorContent)
 }
 
-// The open maintenance notice already explains an HTML 503 (read by key, the slice injects itself on import)
+// The open maintenance notice already explains an HTML 503
 const isExplainedByMaintenanceNotice = (errorContent: IErrorGetContent['data']): boolean => {
   return !isString(errorContent) &&
     errorContent.errorKey === 'error_response_not_json_with_status' &&
     errorContent.params?.status === 503 &&
-    store.getState()['maintenance-mode']?.isLockedOut === true
+    selectIsLockedOut(store.getState())
 }
 
 const trackError = (data: IErrorContentProvider, handler?: ErrorHandler): never | void => {

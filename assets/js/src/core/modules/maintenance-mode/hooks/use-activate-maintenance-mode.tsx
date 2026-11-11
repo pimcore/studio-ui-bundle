@@ -40,7 +40,6 @@ export const useActivateMaintenanceMode = (): UseActivateMaintenanceModeReturn =
         </Flex>
       ),
       okText: t('maintenance-mode.activate.ok'),
-      okButtonProps: { danger: true },
       cancelText: t('cancel'),
       onOk: async () => {
         const response = await activate()

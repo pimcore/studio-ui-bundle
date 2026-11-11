@@ -3099,5 +3099,5 @@ maintenance-mode.logout.title: Disattivare prima la modalità manutenzione?
 maintenance-mode.logout.text: 'La modalità manutenzione è attiva e solo questa sessione ha accesso. Dopo la disconnessione potrà essere disattivata solo dalla riga di comando.'
 maintenance-mode.logout.deactivate-and-log-out: Disattiva ed esci
 maintenance-mode.locked-out.title: Manutenzione
-maintenance-mode.locked-out.text: "Il sistema è in modalità manutenzione o temporaneamente non disponibile. L'ultima azione non è stata salvata. Questo avviso si chiuderà automaticamente non appena il sistema sarà di nuovo disponibile."
+maintenance-mode.locked-out.text: "Il sistema è in modalità manutenzione o temporaneamente non disponibile. L'ultima azione potrebbe non essere stata salvata. Questo avviso si chiuderà automaticamente non appena il sistema sarà di nuovo disponibile."
 maintenance-mode.locked-out.reload: Ricarica

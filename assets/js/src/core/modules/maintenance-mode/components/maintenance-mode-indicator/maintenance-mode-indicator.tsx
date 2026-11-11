@@ -15,7 +15,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { useMaintenanceModeDeactivateMutation, useMaintenanceModeGetQuery } from '../maintenance-mode-api-slice-enhanced'
+import { useMaintenanceModeDeactivateMutation, useMaintenanceModeGetQuery } from '../../maintenance-mode-api-slice-enhanced'
 
 export const MaintenanceModeIndicator = (): React.JSX.Element => {
   const { t } = useTranslation()

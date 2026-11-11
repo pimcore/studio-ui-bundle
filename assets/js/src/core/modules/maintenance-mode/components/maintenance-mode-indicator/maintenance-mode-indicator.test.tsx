@@ -20,7 +20,7 @@ const mockUser = { isAdmin: true }
 jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: mockConfirm })
 }))
-jest.mock('../maintenance-mode-api-slice-enhanced', () => ({
+jest.mock('../../maintenance-mode-api-slice-enhanced', () => ({
   useMaintenanceModeGetQuery: (arg: undefined, options: { skip: boolean }) => mockUseGetQuery(arg, options),
   useMaintenanceModeDeactivateMutation: () => [mockDeactivate]
 }))

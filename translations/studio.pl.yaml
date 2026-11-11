@@ -3099,5 +3099,5 @@ maintenance-mode.logout.title: Najpierw dezaktywować tryb konserwacji?
 maintenance-mode.logout.text: 'Tryb konserwacji jest aktywny i dostęp ma tylko ta sesja. Po wylogowaniu można go wyłączyć wyłącznie z wiersza poleceń.'
 maintenance-mode.logout.deactivate-and-log-out: Dezaktywuj i wyloguj się
 maintenance-mode.locked-out.title: Konserwacja
-maintenance-mode.locked-out.text: 'System jest w trybie konserwacji lub tymczasowo niedostępny. Ostatnia czynność nie została zapisana. Ten komunikat zamknie się automatycznie, gdy system znów będzie dostępny.'
+maintenance-mode.locked-out.text: 'System jest w trybie konserwacji lub tymczasowo niedostępny. Ostatnia czynność mogła nie zostać zapisana. Ten komunikat zamknie się automatycznie, gdy system znów będzie dostępny.'
 maintenance-mode.locked-out.reload: Przeładuj

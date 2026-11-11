@@ -13,12 +13,14 @@ import { Provider } from 'react-redux'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { store } from '@Pimcore/app/store'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { setLockedOut } from '../maintenance-mode-slice'
+import { setLockedOut } from '../../maintenance-mode-slice'
 import { LockedOutNotice, PING_INTERVAL } from './locked-out-notice'
 
 const mockReloadPage = jest.fn()
 const mockShowError = jest.fn()
 
+// @sdk/app re-exports the store module; the full SDK entry does not load under Jest
+jest.mock('@sdk/app', () => jest.requireActual('@Pimcore/app/store'))
 jest.mock('@Pimcore/app/api/pimcore/route', () => ({
   getPrefix: () => '/pimcore-studio/api'
 }))

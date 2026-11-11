@@ -9,6 +9,7 @@
  */
 
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+// Not @sdk/app: the error handler imports this slice, and @sdk/app imports the error handler
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
 
 interface MaintenanceModeState {

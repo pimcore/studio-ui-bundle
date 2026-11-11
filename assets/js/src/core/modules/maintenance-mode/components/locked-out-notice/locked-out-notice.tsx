@@ -10,17 +10,18 @@
 
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { Button } from '@Pimcore/components/button/button'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { Text } from '@Pimcore/components/text/text'
 import { reloadPage } from '@Pimcore/modules/auth/util/session-end'
-import { selectIsLockedOut, setLockedOut } from '../maintenance-mode-slice'
+import { selectIsLockedOut, setLockedOut } from '../../maintenance-mode-slice'
 
 export const PING_INTERVAL = 30_000
 
+// A plain fetch, not the store: the ping's own 503 must not go through the store's error handling
 const isAvailableAgain = async (): Promise<boolean> => {
   try {
     const response = await fetch(`${getPrefix()}/settings/ping`, { credentials: 'same-origin' })

@@ -3099,5 +3099,5 @@ maintenance-mode.logout.title: Deaktivere vedlikeholdsmodus først?
 maintenance-mode.logout.text: 'Vedlikeholdsmodus er aktiv, og bare denne økten har tilgang. Etter utlogging kan den bare slås av fra kommandolinjen.'
 maintenance-mode.logout.deactivate-and-log-out: Deaktiver og logg ut
 maintenance-mode.locked-out.title: Vedlikehold
-maintenance-mode.locked-out.text: 'Systemet er i vedlikeholdsmodus eller midlertidig utilgjengelig. Den siste handlingen din ble ikke lagret. Denne meldingen lukkes automatisk så snart systemet er tilgjengelig igjen.'
+maintenance-mode.locked-out.text: 'Systemet er i vedlikeholdsmodus eller midlertidig utilgjengelig. Den siste handlingen din ble kanskje ikke lagret. Denne meldingen lukkes automatisk så snart systemet er tilgjengelig igjen.'
 maintenance-mode.locked-out.reload: Last på nytt

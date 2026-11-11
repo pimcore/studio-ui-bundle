@@ -3099,5 +3099,5 @@ maintenance-mode.logout.title: ¿Desactivar primero el modo de mantenimiento?
 maintenance-mode.logout.text: 'El modo de mantenimiento está activo y solo esta sesión tiene acceso. Después de cerrar sesión, solo se podrá desactivar desde la línea de comandos.'
 maintenance-mode.logout.deactivate-and-log-out: Desactivar y cerrar sesión
 maintenance-mode.locked-out.title: Mantenimiento
-maintenance-mode.locked-out.text: 'El sistema está en modo de mantenimiento o no está disponible temporalmente. Su última acción no se ha guardado. Este aviso se cerrará automáticamente en cuanto el sistema vuelva a estar disponible.'
+maintenance-mode.locked-out.text: 'El sistema está en modo de mantenimiento o no está disponible temporalmente. Es posible que su última acción no se haya guardado. Este aviso se cerrará automáticamente en cuanto el sistema vuelva a estar disponible.'
 maintenance-mode.locked-out.reload: Recargar

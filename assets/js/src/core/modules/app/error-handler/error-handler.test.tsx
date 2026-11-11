@@ -13,10 +13,13 @@ import ApiError from './classes/api-error'
 import GeneralError from './classes/general-error'
 import type { ApiErrorData } from './types'
 
-const mockState = { 'maintenance-mode': { isLockedOut: false } }
+const mockLockedOut = { value: false }
 
 jest.mock('@Pimcore/app/store', () => ({
-  store: { getState: () => mockState }
+  store: { getState: () => ({}) }
+}))
+jest.mock('@Pimcore/modules/maintenance-mode/maintenance-mode-slice', () => ({
+  selectIsLockedOut: () => mockLockedOut.value
 }))
 
 const apiError = (errorData: object): ApiError => new ApiError(errorData as ApiErrorData)
@@ -81,11 +84,11 @@ describe('trackError', () => {
 
   describe('while the maintenance notice is open', () => {
     beforeEach(() => {
-      mockState['maintenance-mode'].isLockedOut = true
+      mockLockedOut.value = true
     })
 
     afterEach(() => {
-      mockState['maintenance-mode'].isLockedOut = false
+      mockLockedOut.value = false
     })
 
     it('leaves an HTML 503 to the notice', () => {

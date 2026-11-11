@@ -13,11 +13,14 @@ import { fireEvent, render, renderHook, screen } from '@testing-library/react'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
 import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
-import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator'
+import { type ContextMenuItemProviderUpdate } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
+import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator/maintenance-mode-indicator'
 import { MaintenanceModeProvider } from './context/maintenance-mode-context'
 import './index'
 
 const mockRegisterToSlot = jest.fn()
+const mockUpdateSlotProvider = jest.fn()
+const mockCheckLogout = jest.fn()
 const mockActivateWithConfirmation = jest.fn()
 const mockAllowed = { admin: true, perspective: true }
 
@@ -33,6 +36,9 @@ jest.mock('@Pimcore/app/depency-injection', () => {
         }
         if (serviceId === 'App/ComponentRegistry/ComponentRegistry') {
           return { registerToSlot: mockRegisterToSlot }
+        }
+        if (serviceId === 'App/ContextMenuRegistry/ContextMenuRegistry') {
+          return { updateSlotProvider: mockUpdateSlotProvider }
         }
         throw new Error(`Unexpected service requested: ${serviceId}`)
       }
@@ -58,7 +64,11 @@ jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ id:
 jest.mock('@Pimcore/modules/perspectives/active-perspective-slice', () => ({ selectActivePerspective: jest.fn() }))
 jest.mock('react-redux', () => ({ useSelector: () => ({ id: 'studio_default_perspective' }) }))
 
-jest.mock('./components/maintenance-mode-indicator', () => ({
+jest.mock('./hooks/use-logout-check', () => ({
+  useLogoutCheck: () => mockCheckLogout
+}))
+
+jest.mock('./components/maintenance-mode-indicator/maintenance-mode-indicator', () => ({
   MaintenanceModeIndicator: jest.fn()
 }))
 
@@ -153,6 +163,24 @@ describe('maintenance mode module', () => {
     fireEvent.click(screen.getByRole('button'))
 
     expect(mockActivateWithConfirmation).toHaveBeenCalledTimes(1)
+  })
+
+  it('lets the user menu\'s logout entry go through the maintenance mode check first', () => {
+    expect(mockUpdateSlotProvider).toHaveBeenCalledWith('user-menu', 'logout', expect.any(Function))
+
+    const update = mockUpdateSlotProvider.mock.calls[0][2] as ContextMenuItemProviderUpdate
+    const logout = jest.fn()
+    const decorated = update({ name: 'logout', useMenuItem: () => ({ key: 'logout', label: 'user-menu.log-out', onClick: logout }) })
+    const { result } = renderHook(() => decorated.useMenuItem({}))
+
+    ;(result.current as { onClick: (info: unknown) => void }).onClick({ key: 'logout' })
+
+    expect(mockCheckLogout).toHaveBeenCalledTimes(1)
+    expect(logout).not.toHaveBeenCalled()
+
+    ;(mockCheckLogout.mock.calls[0][0] as () => void)()
+
+    expect(logout).toHaveBeenCalledWith({ key: 'logout' })
   })
 
   it('registers the indicator in the left sidebar', () => {
