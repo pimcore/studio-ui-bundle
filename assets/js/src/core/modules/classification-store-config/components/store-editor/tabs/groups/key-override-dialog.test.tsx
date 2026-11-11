@@ -437,7 +437,7 @@ describe('KeyOverrideDialog', () => {
     expect(await screen.findByText(`${OVERRIDE}.units-unavailable`, undefined, WAIT_BUDGET)).toBeTruthy()
     expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
     expect(screen.queryByText(`${OVERRIDE}.units-stale-only`)).toBeNull()
-    expect((screen.getByRole('button', { name: new RegExp(USE_KEY_UNITS) })).disabled).toBe(true)
+    expect(screen.getByRole('button', { name: new RegExp(USE_KEY_UNITS) })).toBeDisabled()
     await save(user)
     await waitFor(() => { expect(upserts()).toHaveLength(1) }, WAIT_BUDGET)
     expect(upserts()[0].body?.definitionOverride).toEqual({ validUnits: ['kg'], defaultUnit: 'kg' })
