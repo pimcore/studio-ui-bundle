@@ -3089,7 +3089,6 @@ navigation.maintenance-mode: Underhållsläge
 maintenance-mode.activate.title: Aktivera underhållsläge?
 maintenance-mode.activate.text: 'Alla tjänster, inklusive webbplatsen, går in i underhållsläge. Endast den här webbläsarsessionen behåller åtkomst.'
 maintenance-mode.activate.lock-out: 'Om du loggar ut, stänger webbläsaren eller om sessionen går ut blir även du utelåst.'
-maintenance-mode.activate.disable-command: 'För att stänga av det utan Studio, kör:'
 maintenance-mode.activate.background-jobs: 'Bakgrundsjobb och meddelandekonsumenter startar inte medan underhållsläget är aktivt.'
 maintenance-mode.activate.ok: Aktivera
 maintenance-mode.indicator.tooltip: 'Underhållsläget är aktivt. Klicka för att stänga av det'

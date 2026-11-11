@@ -3089,7 +3089,6 @@ navigation.maintenance-mode: Vedlikeholdsmodus
 maintenance-mode.activate.title: Aktivere vedlikeholdsmodus?
 maintenance-mode.activate.text: 'Alle tjenester, inkludert nettstedet, settes i vedlikehold. Bare denne nettleserøkten beholder tilgangen.'
 maintenance-mode.activate.lock-out: 'Hvis du logger ut, lukker nettleseren eller økten utløper, blir også du stengt ute.'
-maintenance-mode.activate.disable-command: 'For å slå den av uten Studio, kjør:'
 maintenance-mode.activate.background-jobs: 'Bakgrunnsjobber og meldingskonsumenter starter ikke mens vedlikeholdsmodus er aktiv.'
 maintenance-mode.activate.ok: Aktiver
 maintenance-mode.indicator.tooltip: 'Vedlikeholdsmodus er aktiv. Klikk for å deaktivere den'

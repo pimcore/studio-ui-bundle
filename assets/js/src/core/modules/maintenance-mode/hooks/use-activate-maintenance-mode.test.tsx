@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { render, renderHook, screen } from '@testing-library/react'
-import { DISABLE_COMMAND, useActivateMaintenanceMode } from './use-activate-maintenance-mode'
+import { useActivateMaintenanceMode } from './use-activate-maintenance-mode'
 
 const mockConfirm = jest.fn()
 const mockActivate = jest.fn()
@@ -57,7 +57,7 @@ describe('useActivateMaintenanceMode', () => {
     mockTrackError.mockReset()
   })
 
-  it('asks first and warns about the lock-out and the CLI command', () => {
+  it('asks first and warns about the lock-out, without a console command as in the classic admin UI', () => {
     const config = openConfirm()
 
     expect(config.title).toBe('maintenance-mode.activate.title')
@@ -66,8 +66,8 @@ describe('useActivateMaintenanceMode', () => {
     render(<>{config.content}</>)
 
     expect(screen.getByText('maintenance-mode.activate.lock-out')).toBeInTheDocument()
-    expect(screen.getByText(DISABLE_COMMAND)).toBeInTheDocument()
-    expect(DISABLE_COMMAND).toBe('bin/console pimcore:maintenance-mode --disable')
+    expect(screen.queryByText(/bin\/console/)).toBeNull()
+    expect(screen.queryByText(/maintenance-mode\.activate\.disable-command/)).toBeNull()
   })
 
   it('does not activate before the user confirms', () => {

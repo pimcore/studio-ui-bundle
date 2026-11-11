@@ -3089,7 +3089,6 @@ navigation.maintenance-mode: Modalità manutenzione
 maintenance-mode.activate.title: Attivare la modalità manutenzione?
 maintenance-mode.activate.text: "Tutti i servizi, incluso il sito web, entrano in manutenzione. Solo questa sessione del browser mantiene l'accesso."
 maintenance-mode.activate.lock-out: "Disconnettendosi, chiudendo il browser o alla scadenza della sessione, anche Lei perderà l'accesso."
-maintenance-mode.activate.disable-command: 'Per disattivarla senza Studio, eseguire:'
 maintenance-mode.activate.background-jobs: 'I job in background e i consumer di messaggi non vengono avviati finché la modalità manutenzione è attiva.'
 maintenance-mode.activate.ok: Attiva
 maintenance-mode.indicator.tooltip: 'La modalità manutenzione è attiva. Fare clic per disattivarla'

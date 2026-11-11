@@ -3093,7 +3093,6 @@ navigation.maintenance-mode: Maintenance Mode
 maintenance-mode.activate.title: Activate maintenance mode?
 maintenance-mode.activate.text: 'All services, including the website, go into maintenance. Only this browser session keeps access.'
 maintenance-mode.activate.lock-out: 'Logging out, closing the browser or an expired session locks you out as well.'
-maintenance-mode.activate.disable-command: 'To switch it off without Studio, run:'
 maintenance-mode.activate.background-jobs: 'Background jobs and message consumers do not start while maintenance mode is active.'
 maintenance-mode.activate.ok: Activate
 maintenance-mode.indicator.tooltip: 'Maintenance mode is active. Click to deactivate it'

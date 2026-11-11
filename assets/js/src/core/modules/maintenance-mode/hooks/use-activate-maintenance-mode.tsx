@@ -17,8 +17,6 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useMaintenanceModeActivateMutation } from '../maintenance-mode-api-slice-enhanced'
 
-export const DISABLE_COMMAND = 'bin/console pimcore:maintenance-mode --disable'
-
 interface UseActivateMaintenanceModeReturn {
   activateWithConfirmation: () => void
 }
@@ -38,9 +36,6 @@ export const useActivateMaintenanceMode = (): UseActivateMaintenanceModeReturn =
         >
           <Text>{t('maintenance-mode.activate.text')}</Text>
           <Text>{t('maintenance-mode.activate.lock-out')}</Text>
-          <Text>
-            {t('maintenance-mode.activate.disable-command')} <Text code>{DISABLE_COMMAND}</Text>
-          </Text>
           <Text>{t('maintenance-mode.activate.background-jobs')}</Text>
         </Flex>
       ),

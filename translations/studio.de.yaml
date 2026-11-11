@@ -3089,7 +3089,6 @@ navigation.maintenance-mode: Wartungsmodus
 maintenance-mode.activate.title: Wartungsmodus aktivieren?
 maintenance-mode.activate.text: 'Alle Dienste, einschließlich der Website, werden in den Wartungsmodus versetzt. Nur diese Browser-Sitzung behält den Zugriff.'
 maintenance-mode.activate.lock-out: 'Wenn Sie sich abmelden, den Browser schließen oder Ihre Sitzung abläuft, werden auch Sie ausgesperrt.'
-maintenance-mode.activate.disable-command: 'Um ihn ohne Studio auszuschalten, führen Sie Folgendes aus:'
 maintenance-mode.activate.background-jobs: 'Hintergrund-Jobs und Message-Consumer starten nicht, solange der Wartungsmodus aktiv ist.'
 maintenance-mode.activate.ok: Aktivieren
 maintenance-mode.indicator.tooltip: 'Der Wartungsmodus ist aktiv. Klicken Sie, um ihn zu deaktivieren'
