@@ -62,6 +62,8 @@ jest.mock('@Pimcore/components/icon-button/icon-button', () => ({ IconButton: st
 jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({ IconTextButton: stub }))
 jest.mock('@Pimcore/components/input/input', () => ({ Input: stub }))
 jest.mock('@Pimcore/components/search-input/search-input', () => ({ SearchInput: stub }))
+jest.mock('@Pimcore/components/segmented/segmented', () => ({ Segmented: stub }))
+jest.mock('@Pimcore/components/text/text', () => ({ Text: stub }))
 jest.mock('@Pimcore/components/content-layout/content-layout', () => ({ ContentLayout: ({ children }: any) => <div>{children}</div> }))
 jest.mock('@Pimcore/components/header/header', () => ({ Header: stub }))
 jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: stub }))
@@ -88,6 +90,7 @@ jest.mock('@Pimcore/modules/data-object/classification-store/classification-stor
   useClassificationStoreConfigurationKeyCollectionQuery: () => ({ data: { items: [], totalItems: 0 }, isLoading: false, isFetching: false, refetch: jest.fn() }),
   useClassificationStoreConfigurationKeyCreateMutation: () => [jest.fn()],
   useClassificationStoreConfigurationKeyDeleteMutation: () => [jest.fn()],
+  useClassificationStoreConfigurationKeyRestoreMutation: () => [jest.fn()],
   useClassificationStoreConfigurationKeyUpdateMutation: () => [jest.fn()]
 }))
 

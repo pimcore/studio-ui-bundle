@@ -397,8 +397,8 @@ function patchAllCacheEntries<T, A = unknown> (
     for (const [queryKey, queryState] of Object.entries(queries)) {
       if (!queryKey.startsWith(`${endpointName}(`)) continue
       const qs = queryState as { originalArgs: unknown }
-      if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
+        if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
         // @ts-expect-error — dynamic endpoint name not in the union
         innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
           patch(draft, queryKey)
@@ -561,6 +561,8 @@ interface KeyCollectionRead {
   /** The store whose keys this read lists; a confirmation from any other store is not its concern. */
   storeId: number
   preserve: Array<{ id: unknown, fields: ConfirmedKeyFields }>
+  /** Keys deleted while this read was in flight: its answer, a pre-delete snapshot, may still carry them. */
+  deleted: Set<unknown>
 }
 
 /** The reads of the key collection now in flight. */
@@ -575,12 +577,29 @@ const keyCollectionReads = new Set<KeyCollectionRead>()
 const openKeyCollectionRead = (
   args: ClassificationStoreConfigurationKeyCollectionApiArg
 ): { settled: (dispatch: (thunk: any) => void) => void } => {
-  const read: KeyCollectionRead = { storeId: args.storeId, preserve: [] }
+  const read: KeyCollectionRead = { storeId: args.storeId, preserve: [], deleted: new Set() }
   keyCollectionReads.add(read)
 
   return {
     settled: (dispatch) => {
       keyCollectionReads.delete(read)
+
+      // A delete confirmed inside this read: the answer is a snapshot from before it, so the row
+      // is taken out again and the entry re-read, which also settles the totals a page-local
+      // removal cannot know. Dispatched after the delete, so the re-read cannot see the key.
+      if (read.deleted.size > 0) {
+        dispatch(baseApi.util.updateQueryData(
+          'classificationStoreConfigurationKeyCollection',
+          args,
+          (draft) => {
+            const page = draft as unknown as ClassificationStoreConfigurationKeyCollectionApiResponse
+            page.items = page.items.filter((k) => !read.deleted.has(k.id))
+          }
+        ))
+        refetchKeyCollection(dispatch, args)
+        return
+      }
+
       if (read.preserve.length === 0) return
 
       // Set from inside the recipe, which `updateQueryData` runs synchronously while this
@@ -622,6 +641,41 @@ const openKeyCollectionRead = (
       refetchKeyCollection(dispatch, args)
     }
   }
+}
+
+/**
+ * The deletion of a key, recorded against the key collection reads in flight that may list it — those
+ * of its own store, or all of them where the store is unknown.
+ */
+const tombstoneAcrossKeyCollectionReads = (id: unknown, storeId: number | undefined): void => {
+  for (const read of keyCollectionReads) {
+    if (storeId === undefined || read.storeId === storeId) read.deleted.add(id)
+  }
+}
+
+/** The reads of a group's key relations now in flight, with the keys deleted while they ran. */
+interface RelationCollectionRead { deleted: Set<unknown> }
+const relationCollectionReads = new Set<RelationCollectionRead>()
+
+const refetchRelationCollection = (
+  dispatch: (thunk: any) => void,
+  args: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
+): void => {
+  dispatch(baseApi.endpoints.classificationStoreConfigurationKeyGroupRelationCollection.initiate(
+    args,
+    { subscribe: false, forceRefetch: true }
+  ))
+}
+
+/** Re-reads every cached relation page: which group and page held a deleted key is not knowable from the key. */
+const refetchRelationCollections = (dispatch: (thunk: any) => void): void => {
+  dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+    const queries = ((getState() as Record<string, any>).api?.queries ?? {}) as Record<string, any>
+    for (const [queryKey, queryState] of Object.entries(queries)) {
+      if (!queryKey.startsWith('classificationStoreConfigurationKeyGroupRelationCollection(')) continue
+      refetchRelationCollection(innerDispatch, queryState.originalArgs as ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg)
+    }
+  })
 }
 
 /**
@@ -1027,24 +1081,112 @@ const api = baseApi.enhanceEndpoints({
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationKeyCollectionApiResponse>(
+          // The key's store is read off a cached row, as a delete response names nothing.
+          let deletedStoreId: number | undefined
+          dispatch((_inner: unknown, getState: () => unknown) => {
+            const queries = ((getState() as Record<string, any>).api?.queries ?? {}) as Record<string, any>
+            for (const [queryKey, queryState] of Object.entries(queries)) {
+              if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
+              const row = (queryState?.data as ClassificationStoreConfigurationKeyCollectionApiResponse | undefined)
+                ?.items?.find((k) => k.id === args.id)
+              if (row !== undefined) { deletedStoreId = row.storeId; return }
+            }
+          })
+
+          // Reads dispatched before this delete may still answer with the key; see the ledger above.
+          tombstoneAcrossKeyCollectionReads(args.id, deletedStoreId)
+          for (const read of relationCollectionReads) read.deleted.add(args.id)
+
+          const isSearch = (a: ClassificationStoreConfigurationKeyCollectionApiArg): boolean =>
+            ((a?.body?.filters?.columnFilters as unknown[] | undefined)?.length ?? 0) > 0
+          // The Deleted view lists disabled keys, which this delete adds to rather than removes from.
+          const isActiveView = (a: ClassificationStoreConfigurationKeyCollectionApiArg): boolean =>
+            a?.body?.disabledOnly !== true
+
+          // Unfiltered pages of the key's own store lose one item from their total whether or not
+          // the row sat on that page. Anything else (another store, a cached search, or any entry
+          // when the store is unknown) drops the row only if it holds it, and lowers the total by
+          // what it actually removed, so a search the key does not match keeps its total.
+          patchAllCacheEntries<
+            ClassificationStoreConfigurationKeyCollectionApiResponse,
+            ClassificationStoreConfigurationKeyCollectionApiArg
+          >(
             dispatch,
             'classificationStoreConfigurationKeyCollection',
             (draft) => {
               draft.items = draft.items.filter((k) => k.id !== args.id)
               draft.totalItems = Math.max(0, draft.totalItems - 1)
+            },
+            (a) => isActiveView(a) && deletedStoreId !== undefined && a.storeId === deletedStoreId && !isSearch(a)
+          )
+          patchAllCacheEntries<
+            ClassificationStoreConfigurationKeyCollectionApiResponse,
+            ClassificationStoreConfigurationKeyCollectionApiArg
+          >(
+            dispatch,
+            'classificationStoreConfigurationKeyCollection',
+            (draft) => {
+              const before = draft.items.length
+              draft.items = draft.items.filter((k) => k.id !== args.id)
+              draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
+            },
+            (a) => isActiveView(a) && !(deletedStoreId !== undefined && a.storeId === deletedStoreId && !isSearch(a))
+          )
+          // The server unassigns the key from every group when it is disabled, so the cached
+          // relation pages of every group drop its rows too.
+          patchAllCacheEntries<ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse>(
+            dispatch,
+            'classificationStoreConfigurationKeyGroupRelationCollection',
+            (draft) => {
+              const before = draft.items.length
+              draft.items = draft.items.filter((r) => r.keyId !== args.id)
+              draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
             }
           )
+          // The patches above only know the cached page. A search the key matches on another page,
+          // and a relation on a later page of its group, leave a total one too high, so those
+          // entries are re-read rather than counted.
+          dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+            const queries = ((getState() as Record<string, any>).api?.queries ?? {}) as Record<string, any>
+            for (const [queryKey, queryState] of Object.entries(queries)) {
+              if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
+              const a = queryState.originalArgs as ClassificationStoreConfigurationKeyCollectionApiArg
+              if (isActiveView(a) && isSearch(a) && (deletedStoreId === undefined || a.storeId === deletedStoreId)) {
+                refetchKeyCollection(innerDispatch, a)
+              }
+            }
+          })
+          refetchRelationCollections(dispatch)
         } catch {
           // Mutation failed — cache stays stale until next refetch
         }
       }
     },
 
+    // Invalidation rather than a hand patch, as for the sub groups below: which view and page a
+    // restored key lands on, and what each total becomes, are the server's decisions.
+    classificationStoreConfigurationKeyRestore: {
+      invalidatesTags: ['Classification Store']
+    },
+
     // ─── Key-Group Relations ──────────────────────────────────────────────────
 
     classificationStoreConfigurationKeyGroupRelationCollection: {
-      providesTags: ['Classification Store']
+      providesTags: ['Classification Store'],
+      // Registered while in flight so a key deleted meanwhile cannot be written back by the
+      // pre-delete answer: the entry is re-read once it has landed.
+      async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const read: RelationCollectionRead = { deleted: new Set() }
+        relationCollectionReads.add(read)
+        try {
+          await queryFulfilled
+        } catch {
+          // Nothing was written, so there is nothing to undo.
+        } finally {
+          relationCollectionReads.delete(read)
+          if (read.deleted.size > 0) refetchRelationCollection(dispatch, args)
+        }
+      }
     },
 
     // ─── Sub groups ───────────────────────────────────────────────────────────
@@ -1317,6 +1459,7 @@ export const {
   // CRUD mutations — keys
   useClassificationStoreConfigurationKeyCreateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
+  useClassificationStoreConfigurationKeyRestoreMutation,
   // CRUD mutations — key-group relations
   useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
   // CRUD mutations — collection-group relations

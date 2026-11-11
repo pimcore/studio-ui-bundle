@@ -17,12 +17,14 @@ import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { kebabCase } from 'lodash'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Input } from '@Pimcore/components/input/input'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -38,6 +40,7 @@ import {
   useClassificationStoreConfigurationKeyCollectionQuery,
   useClassificationStoreConfigurationKeyCreateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
+  useClassificationStoreConfigurationKeyRestoreMutation,
   useClassificationStoreConfigurationKeyUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { isKeyTypeHeldByEngine } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
@@ -51,6 +54,8 @@ import { type PairMap } from './shared/pairs'
 interface IKeysTabProps {
   storeId: number
 }
+
+type KeysView = 'active' | 'deleted'
 
 type KeyRow = ClassificationStoreConfigurationKeyDetail & { title: string | undefined }
 
@@ -100,6 +105,19 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
+  const [view, setView] = useState<KeysView>('active')
+  const isDeletedView = view === 'deleted'
+
+  const viewOptions = useMemo(() => [
+    { label: t('classification-store.keys-view.active'), value: 'active' },
+    { label: t('classification-store.keys-view.deleted'), value: 'deleted' }
+  ], [t])
+
+  const onViewChange = useCallback((newView: string) => {
+    setView(newView as KeysView)
+    setSearchTerm('')
+    setPage(1)
+  }, [])
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)
@@ -123,14 +141,30 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
               }
             }
           : {})
-      }
+      },
+      ...(isDeletedView ? { disabledOnly: true } : {})
     }
-  }), [storeId, page, pageSize, searchTerm, sorting])
+  }), [storeId, page, pageSize, searchTerm, sorting, isDeletedView])
 
-  const { data, error, isError, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyCollectionQuery(queryArgs)
+  // currentData, so a view switch never shows the other view's rows under its own actions; the
+  // Deleted view is re-read when opened, as a key deleted meanwhile is not in a cached page.
+  const {
+    currentData: data,
+    data: lastData,
+    error,
+    isError,
+    isLoading,
+    isFetching,
+    refetch
+  } = useClassificationStoreConfigurationKeyCollectionQuery(
+    queryArgs,
+    { refetchOnMountOrArgChange: isDeletedView }
+  )
 
   const keys = data?.items ?? []
-  const total = data?.totalItems ?? 0
+  // Rows come from currentData; the total holds its last known value while a request is in flight
+  // so the pagination does not collapse to one page on every page change, search or view switch.
+  const total = (data ?? (isFetching && !isError ? lastData : undefined))?.totalItems ?? 0
 
   // A refused list request must not read as an empty store: a 403 or a 500 leaves `data`
   // undefined, so the failure is reported rather than left to look like "nothing here".
@@ -156,6 +190,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const [createKey] = useClassificationStoreConfigurationKeyCreateMutation()
   const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()
   const [deleteKey] = useClassificationStoreConfigurationKeyDeleteMutation()
+  const [restoreKey] = useClassificationStoreConfigurationKeyRestoreMutation()
 
   // The configured title is a column of its own on the key, and the one the object editor
   // labels the key with. Deriving it from the definition blob instead would write the blob's
@@ -247,9 +282,33 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const handleDelete = (key: ClassificationStoreConfigurationKeyDetail): void => {
     void modal.confirm({
       title: t('delete'),
-      content: t('classification-store.delete-key', { keyName: key.name }),
+      content: (
+        <>
+          <p>{ t('classification-store.delete-key', { keyName: key.name }) }</p>
+          <p>{ t('classification-store.delete-key-consequence') }</p>
+        </>
+      ),
       onOk: async () => {
         const response = await deleteKey({ id: key.id })
+
+        if ('error' in response) {
+          trackError(new ApiError(response.error!))
+        }
+      }
+    })
+  }
+
+  const handleRestore = (key: ClassificationStoreConfigurationKeyDetail): void => {
+    void modal.confirm({
+      title: t('classification-store.restore-key'),
+      content: (
+        <>
+          <p>{ t('classification-store.restore-key-question', { keyName: key.name }) }</p>
+          <p>{ t('classification-store.restore-key-consequence') }</p>
+        </>
+      ),
+      onOk: async () => {
+        const response = await restoreKey({ id: key.id })
 
         if ('error' in response) {
           trackError(new ApiError(response.error!))
@@ -339,6 +398,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   handleOpenDefinitionRef.current = handleOpenDefinition
   const handleDeleteRef = useRef(handleDelete)
   handleDeleteRef.current = handleDelete
+  const handleRestoreRef = useRef(handleRestore)
+  handleRestoreRef.current = handleRestore
   const setPairEditorRef = useRef(setPairEditor)
   setPairEditorRef.current = setPairEditor
   const handleTitleChangeRef = useRef(handleTitleChange)
@@ -406,6 +467,44 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     })
   ], [t, columnHelper, typeSelectOptions])
 
+  // A deleted key is a recycle bin row: read-only cells, and Restore as its one action.
+  const deletedColumns = useMemo(() => [
+    columnHelper.accessor('id', {
+      header: t('classification-store.columns.id'),
+      size: 60
+    }),
+    columnHelper.accessor('name', {
+      header: t('classification-store.columns.name'),
+      size: 160
+    }),
+    columnHelper.accessor('title', {
+      header: t('classification-store.columns.title'),
+      size: 160
+    }),
+    columnHelper.accessor('type', {
+      header: t('classification-store.columns.type'),
+      size: 180,
+      meta: { type: 'select', config: { options: typeSelectOptions } }
+    }),
+    columnHelper.accessor('description', {
+      header: t('classification-store.columns.description'),
+      size: 200
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: t('classification-store.columns.actions'),
+      size: 90,
+      cell: (info) => (
+        <IconButton
+          aria-label={ t('classification-store.restore-key') }
+          icon={ { value: 'restore' } }
+          onClick={ () => { handleRestoreRef.current(info.row.original) } }
+          tooltip={ { title: t('classification-store.restore-key') } }
+        />
+      )
+    })
+  ], [t, columnHelper, typeSelectOptions])
+
   return (
     <>
       <ContentLayout
@@ -455,14 +554,25 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                 {t('classification-store.add-key')}
               </IconTextButton>
             </Flex>
-            <SearchInput
-              loading={ isFetching }
-              onSearch={ (value) => {
-                setSearchTerm(value)
-                setPage(1)
-              } }
-              placeholder={ t('search') }
-            />
+            <Flex
+              align="center"
+              gap="small"
+            >
+              <Segmented
+                onChange={ onViewChange }
+                options={ viewOptions }
+                value={ view }
+              />
+              <SearchInput
+                key={ view }
+                loading={ isFetching }
+                onSearch={ (value) => {
+                  setSearchTerm(value)
+                  setPage(1)
+                } }
+                placeholder={ t('search') }
+              />
+            </Flex>
           </Flex>
         }
       >
@@ -471,7 +581,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
           vertical
         >
           <Grid
-            columns={ columns }
+            columns={ isDeletedView ? deletedColumns : columns }
             data={ gridData }
             enableSorting
             isLoading={ isLoading || isFetching }
@@ -509,6 +619,13 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             } }
             sorting={ sorting }
           />
+          {isDeletedView && !isFetching && !isError && data !== undefined && keys.length === 0 && (
+            <Text type="secondary">
+              { searchTerm.length > 0
+                ? t('classification-store.keys-deleted-no-results')
+                : t('classification-store.keys-deleted-empty') }
+            </Text>
+          )}
         </Flex>
       </ContentLayout>
 

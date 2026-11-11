@@ -2204,12 +2204,20 @@ classification-store.rename-collection: Zmień nazwę kolekcji
 classification-store.delete-collection: 'Usunąć kolekcję "{{collectionName}}"?'
 classification-store.add-key: Dodaj klucz
 classification-store.rename-key: Zmień nazwę klucza
-classification-store.delete-key: 'Usunąć klucz "{{keyName}}"?'
+classification-store.delete-key: 'Usunąć klucz "{{keyName}}" ze wszystkich grup?'
 classification-store.delete-key-relation: 'Usunąć klucz "{{keyName}}" z tej grupy?'
 classification-store.delete-group-relation: 'Usunąć grupę "{{groupName}}" z tej kolekcji?'
 classification-store.delete-group-consequence: "Usunięcie tej grupy usuwa także wartości, które każdy obiekt przechowuje w tej grupie. Tej operacji nie można cofnąć."
 classification-store.delete-collection-consequence: "Kolekcja i jej lista grup zostają usunięte. Grupy i ich klucze pozostają w store, a żadne wartości obiektów nie są usuwane."
 classification-store.delete-key-relation-consequence: "Klucz zostaje usunięty tylko z tej grupy. Sam klucz pozostaje w store, a nic, co przechowuje obiekt, nie jest usuwane."
+classification-store.delete-key-consequence: 'Klucz zostaje usunięty ze wszystkich grup, do których należy, i nie jest już nigdzie oferowany. Nic, co przechowuje obiekt, nie jest usuwane, ale te wartości pozostają niedostępne, dopóki klucz nie zostanie przywrócony i ponownie przypisany do grupy. Jego przypisania do grup, ich kolejność, flagi obowiązkowości i nadpisania dla poszczególnych grup nie wracają razem z nim.'
+classification-store.keys-view.active: Aktywne
+classification-store.keys-view.deleted: Usunięte
+classification-store.restore-key: Przywróć
+classification-store.restore-key-question: 'Przywrócić klucz "{{keyName}}"?'
+classification-store.restore-key-consequence: 'Klucz wraca bez przynależności do żadnej grupy. Jego przypisania do grup, ich kolejność, flagi obowiązkowości i nadpisania dla poszczególnych grup przepadły i nie można ich odzyskać. Przypisz klucz ponownie do grupy, aby jego wartości znów były dostępne.'
+classification-store.keys-deleted-empty: Brak usuniętych kluczy.
+classification-store.keys-deleted-no-results: "Żaden usunięty klucz nie pasuje do wyszukiwania."
 classification-store.delete-group-relation-consequence: "Grupa zostaje usunięta tylko z tej kolekcji. Grupa, jej klucze i wartości przechowywane przez obiekty w tej grupie pozostają nienaruszone."
 classification-store.edit-definition: Edytuj definicję
 classification-store.edit-key-definition: "Edytuj definicję klucza: {{keyName}}"

@@ -1411,6 +1411,130 @@ describe('invalidating the classification store tag', () => {
 })
 
 /**
+ * A key delete disables the key, so it leaves the Active view and arrives in the Deleted view.
+ * The cached entries of the two views sit on the same endpoint and differ only in the body.
+ */
+describe('classification store key delete cache patch', () => {
+  const originalFetch = globalThis.fetch
+
+  const deletedViewArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 }, disabledOnly: true } }
+
+  beforeEach(() => {
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.method === 'DELETE') {
+        return new Response('null', { status: 200, headers: { 'Content-Type': 'application/json' } })
+      }
+
+      return new Response(JSON.stringify({ items: [storedKey], totalItems: 1 }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }) as unknown as typeof fetch
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('drops the row and the total from the Active entry only', async () => {
+    const store = createStore()
+    const select = (args: unknown): { items: unknown[], totalItems: number } =>
+      (api.endpoints as any).classificationStoreConfigurationKeyCollection.select(args)(store.getState()).data
+
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(queryArgs))
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyCollection.initiate(deletedViewArgs))
+
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyDelete.initiate({ id: KEY_ID }))
+
+    await waitFor(() => { expect(select(queryArgs)).toEqual({ items: [], totalItems: 0 }) })
+    expect(select(deletedViewArgs)).toEqual({ items: [storedKey], totalItems: 1 })
+  })
+
+  it('drops the key from every cached group relation page', async () => {
+    const GROUP = 7
+    const relation = { keyId: KEY_ID, groupId: GROUP }
+    const otherRelation = { keyId: KEY_ID + 1, groupId: GROUP }
+    let deleted = false
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.method === 'DELETE') deleted = true
+      const body = input.method === 'DELETE'
+        ? null
+        : (deleted ? { items: [otherRelation], totalItems: 1 } : { items: [relation, otherRelation], totalItems: 2 })
+      return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } })
+    }) as unknown as typeof fetch
+    const store = createStore()
+    const relationArgs = { groupId: GROUP, body: { filters: { page: 1, pageSize: 10 } } }
+    const relations = (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection
+
+    await store.dispatch(relations.initiate(relationArgs))
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyDelete.initiate({ id: KEY_ID }))
+
+    await waitFor(() => {
+      expect(relations.select(relationArgs)(store.getState()).data).toEqual({ items: [otherRelation], totalItems: 1 })
+    })
+  })
+
+  it('does not let a relation read dispatched before the delete write the key back', async () => {
+    const GROUP = 7
+    const relation = { keyId: KEY_ID, groupId: GROUP }
+    const otherRelation = { keyId: KEY_ID + 1, groupId: GROUP }
+    let deleted = false
+    let releaseStale: () => void = () => {}
+    const staleGate = new Promise<void>((resolve) => { releaseStale = resolve })
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.method === 'DELETE') {
+        deleted = true
+        return new Response('null', { status: 200, headers: { 'Content-Type': 'application/json' } })
+      }
+      const snapshotBeforeDelete = !deleted
+      if (snapshotBeforeDelete) await staleGate
+      const body = snapshotBeforeDelete
+        ? { items: [relation, otherRelation], totalItems: 2 }
+        : { items: [otherRelation], totalItems: 1 }
+      return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } })
+    }) as unknown as typeof fetch
+    const store = createStore()
+    const relationArgs = { groupId: GROUP, body: { filters: { page: 1, pageSize: 10 } } }
+    const relations = (api.endpoints as any).classificationStoreConfigurationKeyGroupRelationCollection
+
+    const pendingRead = store.dispatch(relations.initiate(relationArgs))
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyDelete.initiate({ id: KEY_ID }))
+    releaseStale()
+    await pendingRead
+
+    await waitFor(() => {
+      expect(relations.select(relationArgs)(store.getState()).data).toEqual({ items: [otherRelation], totalItems: 1 })
+    })
+  })
+
+  it('re-reads a cached search instead of counting only the rows of its page', async () => {
+    let deleted = false
+    const searchArgs = {
+      storeId: STORE_ID,
+      body: { filters: { page: 2, pageSize: 1, columnFilters: [{ type: 'search', filterValue: 'x' }] } }
+    }
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.method === 'DELETE') {
+        deleted = true
+        return new Response('null', { status: 200, headers: { 'Content-Type': 'application/json' } })
+      }
+      const body = input.url.includes('keys') && !deleted
+        ? { items: [{ ...storedKey, id: KEY_ID + 5 }], totalItems: 2 }
+        : { items: [{ ...storedKey, id: KEY_ID + 5 }], totalItems: 1 }
+      return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } })
+    }) as unknown as typeof fetch
+    const store = createStore()
+    const keys = (api.endpoints as any).classificationStoreConfigurationKeyCollection
+
+    await store.dispatch(keys.initiate(queryArgs))
+    await store.dispatch(keys.initiate(searchArgs))
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationKeyDelete.initiate({ id: KEY_ID }))
+
+    await waitFor(() => { expect(keys.select(searchArgs)(store.getState()).data.totalItems).toBe(1) })
+  })
+})
+
+/**
  * A failed group update rolls back only when nothing overlapped it. Undoing restores the value a
  * member had before the failed request, which would also discard the value of a newer overlapping
  * write that succeeded; there the cache is left alone and re-read once the overlap has settled.

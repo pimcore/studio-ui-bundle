@@ -2204,12 +2204,20 @@ classification-store.rename-collection: Renommer la collection
 classification-store.delete-collection: "Supprimer la collection \"{{collectionName}}\" ?"
 classification-store.add-key: Ajouter une clé
 classification-store.rename-key: Renommer la clé
-classification-store.delete-key: "Supprimer la clé \"{{keyName}}\" ?"
+classification-store.delete-key: "Retirer la clé \"{{keyName}}\" de tous les groupes ?"
 classification-store.delete-key-relation: "Retirer la clé \"{{keyName}}\" de ce groupe ?"
 classification-store.delete-group-relation: "Retirer le groupe \"{{groupName}}\" de cette collection ?"
 classification-store.delete-group-consequence: "La suppression de ce groupe supprime aussi les valeurs que chaque objet conserve sous ce groupe. Cette action est irréversible."
 classification-store.delete-collection-consequence: "La collection et sa liste de groupes sont supprimées. Les groupes et leurs clés restent dans le store, et aucune valeur d'objet n'est supprimée."
 classification-store.delete-key-relation-consequence: "La clé est retirée de ce groupe uniquement. La clé elle-même reste dans le store, et rien de ce qu'un objet conserve n'est supprimé."
+classification-store.delete-key-consequence: "La clé est retirée de tous les groupes auxquels elle appartient et n'est plus proposée nulle part. Rien de ce qu'un objet conserve n'est supprimé, mais ces valeurs restent inaccessibles tant que la clé n'est pas restaurée et de nouveau affectée à un groupe. Ses affectations de groupe, leur ordre, leurs indicateurs obligatoires et leurs surcharges par groupe ne reviennent pas avec elle."
+classification-store.keys-view.active: Actives
+classification-store.keys-view.deleted: Supprimées
+classification-store.restore-key: Restaurer
+classification-store.restore-key-question: "Restaurer la clé \"{{keyName}}\" ?"
+classification-store.restore-key-consequence: "La clé revient sans appartenir à aucun groupe. Ses affectations de groupe, leur ordre, leurs indicateurs obligatoires et leurs surcharges par groupe sont perdus et ne peuvent pas être récupérés. Affectez de nouveau la clé à un groupe pour que ses valeurs redeviennent accessibles."
+classification-store.keys-deleted-empty: Aucune clé supprimée.
+classification-store.keys-deleted-no-results: "Aucune clé supprimée ne correspond à la recherche."
 classification-store.delete-group-relation-consequence: "Le groupe est retiré de cette collection uniquement. Le groupe, ses clés et les valeurs que les objets conservent sous lui ne sont pas modifiés."
 classification-store.edit-definition: Modifier la définition
 classification-store.edit-key-definition: "Modifier la définition de la clé : {{keyName}}"

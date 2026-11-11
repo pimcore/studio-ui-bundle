@@ -168,6 +168,16 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
+            classificationStoreConfigurationKeyRestore: build.mutation<
+                ClassificationStoreConfigurationKeyRestoreApiResponse,
+                ClassificationStoreConfigurationKeyRestoreApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/keys/${queryArg.id}/restore`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
             classificationStoreConfigurationKeyGroupRelationCollection: build.query<
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
@@ -524,6 +534,8 @@ export type ClassificationStoreConfigurationKeyCollectionApiArg = {
             sortFilter?: object;
             additionalSortFilters?: object;
         };
+        /** Return the disabled keys instead of the enabled ones */
+        disabledOnly?: boolean;
     };
 };
 export type ClassificationStoreConfigurationKeyCreateApiResponse =
@@ -540,6 +552,12 @@ export type ClassificationStoreConfigurationKeyUpdateApiArg = {
 };
 export type ClassificationStoreConfigurationKeyDeleteApiResponse = unknown;
 export type ClassificationStoreConfigurationKeyDeleteApiArg = {
+    /** Id of the key configuration */
+    id: number;
+};
+export type ClassificationStoreConfigurationKeyRestoreApiResponse =
+    /** status 200 The re-enabled key configuration */ ClassificationStoreConfigurationKeyDetail;
+export type ClassificationStoreConfigurationKeyRestoreApiArg = {
     /** Id of the key configuration */
     id: number;
 };
@@ -1205,6 +1223,7 @@ export const {
     useClassificationStoreConfigurationKeyCreateMutation,
     useClassificationStoreConfigurationKeyUpdateMutation,
     useClassificationStoreConfigurationKeyDeleteMutation,
+    useClassificationStoreConfigurationKeyRestoreMutation,
     useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
     useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
     useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,

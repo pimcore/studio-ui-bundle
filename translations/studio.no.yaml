@@ -2204,12 +2204,20 @@ classification-store.rename-collection: Gi nytt navn til samling
 classification-store.delete-collection: "Slette samling \"{{collectionName}}\"?"
 classification-store.add-key: Legg til nøkkel
 classification-store.rename-key: Gi nytt navn til nøkkel
-classification-store.delete-key: "Slette nøkkel \"{{keyName}}\"?"
+classification-store.delete-key: "Fjerne nøkkel \"{{keyName}}\" fra alle grupper?"
 classification-store.delete-key-relation: "Fjerne nøkkel \"{{keyName}}\" fra denne gruppen?"
 classification-store.delete-group-relation: "Fjerne gruppe \"{{groupName}}\" fra denne samlingen?"
 classification-store.delete-group-consequence: "Når du sletter denne gruppen, slettes også verdiene hvert objekt har under den. Dette kan ikke angres."
 classification-store.delete-collection-consequence: "Samlingen og gruppelisten den inneholder fjernes. Gruppene og nøklene deres blir værende i store, og ingen objektverdier slettes."
 classification-store.delete-key-relation-consequence: "Nøkkelen fjernes bare fra denne gruppen. Selve nøkkelen blir værende i store, og ingenting et objekt har lagret slettes."
+classification-store.delete-key-consequence: "Nøkkelen fjernes fra alle grupper den tilhører, og tilbys ikke lenger noe sted. Ingenting et objekt har lagret slettes, men disse verdiene forblir utilgjengelige til nøkkelen er gjenopprettet og tildelt en gruppe på nytt. Gruppetilordningene, rekkefølgen deres, de obligatoriske flaggene og overstyringene per gruppe følger ikke med tilbake."
+classification-store.keys-view.active: Aktive
+classification-store.keys-view.deleted: Slettede
+classification-store.restore-key: Gjenopprett
+classification-store.restore-key-question: "Gjenopprette nøkkel \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "Nøkkelen kommer tilbake uten å tilhøre noen gruppe. Gruppetilordningene, rekkefølgen deres, de obligatoriske flaggene og overstyringene per gruppe er borte og kan ikke gjenopprettes. Tildel nøkkelen en gruppe på nytt for at verdiene skal bli tilgjengelige igjen."
+classification-store.keys-deleted-empty: Ingen slettede nøkler.
+classification-store.keys-deleted-no-results: "Ingen slettede nøkler samsvarer med søket."
 classification-store.delete-group-relation-consequence: "Gruppen fjernes bare fra denne samlingen. Gruppen, nøklene og verdiene objekter har under den berøres ikke."
 classification-store.edit-definition: Rediger definisjon
 classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"

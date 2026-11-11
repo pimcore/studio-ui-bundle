@@ -2204,12 +2204,20 @@ classification-store.rename-collection: Rinomina collection
 classification-store.delete-collection: "Eliminare la collection \"{{collectionName}}\"?"
 classification-store.add-key: Aggiungi chiave
 classification-store.rename-key: Rinomina chiave
-classification-store.delete-key: "Eliminare la chiave \"{{keyName}}\"?"
+classification-store.delete-key: "Rimuovere la chiave \"{{keyName}}\" da tutti i gruppi?"
 classification-store.delete-key-relation: "Rimuovere la chiave \"{{keyName}}\" da questo gruppo?"
 classification-store.delete-group-relation: "Rimuovere il gruppo \"{{groupName}}\" da questa collection?"
 classification-store.delete-group-consequence: "L'eliminazione di questo gruppo elimina anche i valori che ogni oggetto conserva al suo interno. Questa azione non può essere annullata."
 classification-store.delete-collection-consequence: "La collection e il relativo elenco di gruppi vengono rimossi. I gruppi e le loro chiavi restano nello store e nessun valore degli oggetti viene eliminato."
 classification-store.delete-key-relation-consequence: "La chiave viene rimossa solo da questo gruppo. La chiave stessa resta nello store e nulla di ciò che un oggetto conserva viene eliminato."
+classification-store.delete-key-consequence: "La chiave viene rimossa da ogni gruppo a cui appartiene e non viene più offerta da nessuna parte. Nulla di ciò che un oggetto conserva viene eliminato, ma quei valori restano irraggiungibili finché la chiave non viene ripristinata e assegnata di nuovo a un gruppo. Le sue assegnazioni ai gruppi, il loro ordine, i loro flag di obbligatorietà e i loro override per gruppo non tornano con essa."
+classification-store.keys-view.active: Attive
+classification-store.keys-view.deleted: Eliminate
+classification-store.restore-key: Ripristina
+classification-store.restore-key-question: "Ripristinare la chiave \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "La chiave torna senza appartenere ad alcun gruppo. Le sue assegnazioni ai gruppi, il loro ordine, i loro flag di obbligatorietà e i loro override per gruppo sono andati persi e non possono essere recuperati. Assegna di nuovo la chiave a un gruppo per rendere nuovamente raggiungibili i suoi valori."
+classification-store.keys-deleted-empty: Nessuna chiave eliminata.
+classification-store.keys-deleted-no-results: "Nessuna chiave eliminata corrisponde alla ricerca."
 classification-store.delete-group-relation-consequence: "Il gruppo viene rimosso solo da questa collection. Il gruppo, le sue chiavi e i valori che gli oggetti conservano al suo interno restano invariati."
 classification-store.edit-definition: Modifica definizione
 classification-store.edit-key-definition: "Modifica definizione chiave: {{keyName}}"
