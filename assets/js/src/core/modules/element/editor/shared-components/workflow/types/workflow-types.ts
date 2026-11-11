@@ -69,7 +69,11 @@ interface ActionItem {
   objectLayout?: boolean | number | string
 }
 
-// string values that mean "no custom layout" (the config node is a scalar, so e.g. `objectLayout: 'false'` is passed through unchanged)
+// TEMPORARY client-side guard, see https://github.com/pimcore/platform-version/issues/801
+// The workflow designer can write `objectLayout: 'false'` (string) and studio-backend passes it through untyped.
+// Once both are fixed the backend sends `string | null` and this normalisation can be dropped.
+//
+// string values that mean "no custom layout"
 // '0' is deliberately not listed: it is a valid layout id (the main layout), see use-custom-layouts.ts
 const NO_LAYOUT_VALUES = new Set(['', 'false'])
 
