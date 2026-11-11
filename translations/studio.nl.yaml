@@ -687,6 +687,7 @@ mcp-servers.read-only-notice: Serverdefinities worden in deze omgeving via besta
 mcp-servers.save-success: MCP-server opgeslagen
 mcp-servers.access.users-count: "Gebruikers: {{number}}"
 mcp-servers.access.roles-count: "Rollen: {{number}}"
+mcp-servers.access.service-users-count: 'Servicegebruikers: {{number}}'
 mcp-servers.access.global-extra: elke geauthenticeerde gebruiker
 mcp-servers.access.nobody: "Nog niemand"
 mcp-servers.badge.read: Lezen
@@ -712,11 +713,16 @@ mcp-servers.editor.copy-url: "Server-URL kopiëren"
 mcp-servers.editor.connect-hint: Richt je MCP-client op deze URL en authenticeer je met je Pimcore-account.
 mcp-servers.sharing.title: Delen
 mcp-servers.sharing.share-globally: Globaal delen
-mcp-servers.sharing.share-globally-tooltip: Elke geauthenticeerde gebruiker krijgt Configuratie lezen en MCP-servertoegang (geen Configuratie bewerken)
+mcp-servers.sharing.share-globally-tooltip: Elke geauthenticeerde gebruiker, inclusief servicegebruikers, krijgt Configuratie lezen en MCP-servertoegang (geen Configuratie bewerken)
 mcp-servers.sharing.users: Gebruikers
 mcp-servers.sharing.roles: Rollen
 mcp-servers.sharing.add-user: Gebruiker toevoegen…
 mcp-servers.sharing.add-role: Rol toevoegen…
+mcp-servers.sharing.service-users: Servicegebruikers
+mcp-servers.sharing.add-service-user: Servicegebruiker toevoegen…
+mcp-servers.sharing.service-users-hint: Servicegebruikers kunnen alleen verbinding maken; ze kunnen de configuratie niet lezen of bewerken.
+mcp-servers.sharing.service-users-unavailable: Servicegebruikers worden niet weergegeven omdat je het recht voor gebruikersbeheer niet hebt. Hun bestaande toegang blijft behouden.
+mcp-servers.sharing.inactive: inactief
 mcp-servers.sharing.name: Naam
 mcp-servers.sharing.config-read: Configuratie lezen
 mcp-servers.sharing.config-edit: Configuratie bewerken
@@ -3108,3 +3114,64 @@ tree.actions.edit-tag: Bewerken
 tag-configuration.edit-tag: '"{{name}}" bewerken'
 tag-configuration.name-required: 'Voer een tagnaam in'
 tag-configuration.move-targets-failed: 'De lijst met tags kon niet worden geladen, dus alleen de naam kan worden gewijzigd'
+navigation.service-users: Servicegebruikers
+widget.service-user-management: Servicegebruikers
+service-users.create: Nieuw
+service-users.create.title: Nieuwe servicegebruiker
+service-users.create.ok: Aanmaken
+service-users.create-from-user: Van gebruiker
+service-users.create-from-user.title: Nieuwe servicegebruiker op basis van een gebruiker
+service-users.create-from-user.description: Kopieert de rechten, rollen en workspaces van de gebruiker. De gebruiker wordt niet gewijzigd en beheerdersrechten worden nooit gekopieerd.
+service-users.field.name: Naam
+service-users.field.name.fixed: De naam kan niet worden gewijzigd, omdat MCP-servertoegang op naam wordt verleend.
+service-users.field.name.invalid: Gebruik maximaal 64 letters, cijfers, punten, koppeltekens of underscores, beginnend met een letter of cijfer, bijvoorbeeld svc-erp-sync.
+service-users.field.email: Contact-e-mailadres
+service-users.field.source-user: Gebruiker om van te kopiëren
+service-users.filter.unused-days: Langer dan N dagen ongebruikt
+service-users.status.inactive: Inactief
+service-users.dormancy.never-used: Nooit gebruikt
+service-users.dormancy.warning: 90 dagen ongebruikt
+service-users.dormancy.dormant: Slapend
+service-users.tab.settings: Instellingen
+service-users.tab.permissions: Rechten
+service-users.tab.roles: Rollen
+service-users.tab.workspaces: Workspaces
+service-users.roles: Rollen
+service-users.save.success: Servicegebruiker opgeslagen
+service-users.deactivate: Deactiveren
+service-users.deactivate.confirm: Servicegebruiker "{{name}}" deactiveren? De inloggegevens werken vanaf het volgende verzoek niet meer.
+service-users.delete: Verwijderen
+service-users.delete.confirm: Servicegebruiker "{{name}}" definitief verwijderen? De OAuth-client, de tokens en de MCP-servertoegang worden verwijderd. Dit kan niet ongedaan worden gemaakt.
+service-users.credentials.title: Inloggegevens
+service-users.credentials.client-id: Client-ID
+service-users.credentials.last-used: Laatst gebruikt
+service-users.credentials.never-used: Nooit
+service-users.credentials.no-client: Geen OAuth-client
+service-users.credentials.rotate: Secret vernieuwen
+service-users.credentials.rotate.confirm: Een nieuw client-secret voor "{{name}}" aanmaken? Het huidige secret werkt direct niet meer.
+service-users.credentials.mcp-tokens: MCP-toegangstokens
+service-users.credentials.mcp-tokens.active: Actieve tokens
+service-users.credentials.mcp-tokens.latest-expiry: Laatste vervaldatum
+service-users.credentials.mcp-tokens.none: Geen actieve tokens
+service-users.credentials.issue: Token uitgeven
+service-users.credentials.issue.title: MCP-toegangstoken uitgeven
+service-users.credentials.issue.ttl: Geldigheidsduur in dagen (1 tot 90)
+service-users.credentials.issue.ttl.invalid: Voer een geheel aantal dagen in van 1 tot 90.
+service-users.credentials.issue.hint: Het token wordt maar één keer getoond. Clients sturen het als Bearer-token mee in de Authorization-header.
+service-users.credentials.revoke: Alle tokens intrekken
+service-users.credentials.revoke.confirm: Alle MCP-toegangstokens van deze servicegebruiker intrekken? Verbonden clients werken direct niet meer.
+service-users.credentials.revoke.success: Alle MCP-toegangstokens van de servicegebruiker zijn ingetrokken.
+service-users.credentials.oauth: OAuth-client
+service-users.credentials.oauth.disabled: OAuth-clientgegevens zijn op deze instantie uitgeschakeld; gebruik een MCP-toegangstoken.
+service-users.credentials.oauth.rotate-hint: Toegangstokens die al met het oude secret zijn uitgegeven, blijven geldig tot ze verlopen.
+service-users.credentials.token: Toegangstoken
+service-users.credentials.token.expires: Verloopt
+service-users.create.credentials.title: Inloggegevens
+service-users.create.credentials.skip: Overslaan, later uitgeven
+service-users.create.credentials.which: Gebruik de OAuth-client voor pipelines die de client_credentials-grant kunnen uitvoeren; gebruik voor al het andere een MCP-toegangstoken.
+service-users.create.credentials.token-description: Clients maken verbinding met een MCP-toegangstoken. Geef er nu een uit, of later via de inloggegevens van de servicegebruiker.
+service-users.secret.title: Client-secret
+service-users.secret.client-secret: Client-secret
+service-users.secret.warning: Kopieer het secret nu. Het wordt maar één keer getoond en kan niet opnieuw worden weergegeven.
+service-users.secret.copy: Secret kopiëren
+service-users.secret.close: Sluiten

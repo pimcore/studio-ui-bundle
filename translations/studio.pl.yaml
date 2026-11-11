@@ -687,6 +687,7 @@ mcp-servers.read-only-notice: Definicje serwerów są zarządzane poprzez pliki 
 mcp-servers.save-success: Zapisano serwer MCP
 mcp-servers.access.users-count: "Użytkownicy: {{number}}"
 mcp-servers.access.roles-count: "Role: {{number}}"
+mcp-servers.access.service-users-count: 'Użytkownicy serwisowi: {{number}}'
 mcp-servers.access.global-extra: dowolny uwierzytelniony użytkownik
 mcp-servers.access.nobody: "Jeszcze nikt"
 mcp-servers.badge.read: Odczyt
@@ -712,11 +713,16 @@ mcp-servers.editor.copy-url: "Kopiuj adres URL serwera"
 mcp-servers.editor.connect-hint: Skieruj swojego klienta MCP na ten adres URL i uwierzytelnij się swoim kontem Pimcore.
 mcp-servers.sharing.title: Udostępnianie
 mcp-servers.sharing.share-globally: Udostępnij globalnie
-mcp-servers.sharing.share-globally-tooltip: Każdy uwierzytelniony użytkownik otrzymuje Odczyt konfiguracji i Dostęp do serwera MCP (nie Edycję konfiguracji)
+mcp-servers.sharing.share-globally-tooltip: Każdy uwierzytelniony użytkownik, w tym użytkownicy serwisowi, otrzymuje Odczyt konfiguracji i Dostęp do serwera MCP (nie Edycję konfiguracji)
 mcp-servers.sharing.users: Użytkownicy
 mcp-servers.sharing.roles: Role
 mcp-servers.sharing.add-user: Dodaj użytkownika…
 mcp-servers.sharing.add-role: Dodaj rolę…
+mcp-servers.sharing.service-users: Użytkownicy serwisowi
+mcp-servers.sharing.add-service-user: Dodaj użytkownika serwisowego…
+mcp-servers.sharing.service-users-hint: Użytkownicy serwisowi mogą się tylko łączyć; nie mogą odczytywać ani edytować konfiguracji.
+mcp-servers.sharing.service-users-unavailable: Użytkownicy serwisowi nie są wyświetlani, ponieważ nie masz uprawnienia do zarządzania użytkownikami. Ich dotychczasowy dostęp zostaje zachowany.
+mcp-servers.sharing.inactive: nieaktywny
 mcp-servers.sharing.name: Nazwa
 mcp-servers.sharing.config-read: Odczyt konfiguracji
 mcp-servers.sharing.config-edit: Edycja konfiguracji
@@ -3108,3 +3114,64 @@ tree.actions.edit-tag: Edytuj
 tag-configuration.edit-tag: 'Edytuj "{{name}}"'
 tag-configuration.name-required: 'Wprowadź nazwę tagu'
 tag-configuration.move-targets-failed: 'Nie udało się wczytać listy tagów, dlatego można zmienić tylko nazwę'
+navigation.service-users: Użytkownicy serwisowi
+widget.service-user-management: Użytkownicy serwisowi
+service-users.create: Nowy
+service-users.create.title: Nowy użytkownik serwisowy
+service-users.create.ok: Utwórz
+service-users.create-from-user: Z użytkownika
+service-users.create-from-user.title: Nowy użytkownik serwisowy na podstawie użytkownika
+service-users.create-from-user.description: Kopiuje uprawnienia, role i workspaces użytkownika. Użytkownik nie zostaje zmieniony, a uprawnienia administratora nigdy nie są kopiowane.
+service-users.field.name: Nazwa
+service-users.field.name.fixed: Nazwy nie można zmienić, ponieważ dostęp do serwera MCP jest przyznawany na podstawie nazwy.
+service-users.field.name.invalid: Użyj maksymalnie 64 liter, cyfr, kropek, myślników lub podkreśleń, zaczynając od litery lub cyfry, na przykład svc-erp-sync.
+service-users.field.email: E-mail kontaktowy
+service-users.field.source-user: Użytkownik, z którego kopiować
+service-users.filter.unused-days: Nieużywany dłużej niż N dni
+service-users.status.inactive: Nieaktywny
+service-users.dormancy.never-used: Nigdy nieużywany
+service-users.dormancy.warning: Nieużywany od 90 dni
+service-users.dormancy.dormant: Uśpiony
+service-users.tab.settings: Ustawienia
+service-users.tab.permissions: Uprawnienia
+service-users.tab.roles: Role
+service-users.tab.workspaces: Workspaces
+service-users.roles: Role
+service-users.save.success: Zapisano użytkownika serwisowego
+service-users.deactivate: Dezaktywuj
+service-users.deactivate.confirm: Dezaktywować użytkownika serwisowego "{{name}}"? Jego dane uwierzytelniające przestaną działać przy następnym żądaniu.
+service-users.delete: Usuń
+service-users.delete.confirm: Trwale usunąć użytkownika serwisowego "{{name}}"? Jego klient OAuth, tokeny i dostęp do serwerów MCP zostaną usunięte. Tej operacji nie można cofnąć.
+service-users.credentials.title: Dane uwierzytelniające
+service-users.credentials.client-id: ID klienta
+service-users.credentials.last-used: Ostatnie użycie
+service-users.credentials.never-used: Nigdy
+service-users.credentials.no-client: Brak klienta OAuth
+service-users.credentials.rotate: Wygeneruj nowy sekret
+service-users.credentials.rotate.confirm: Utworzyć nowy sekret klienta dla "{{name}}"? Obecny sekret natychmiast przestanie działać.
+service-users.credentials.mcp-tokens: Tokeny dostępu MCP
+service-users.credentials.mcp-tokens.active: Aktywne tokeny
+service-users.credentials.mcp-tokens.latest-expiry: Najpóźniejsze wygaśnięcie
+service-users.credentials.mcp-tokens.none: Brak aktywnych tokenów
+service-users.credentials.issue: Wystaw token
+service-users.credentials.issue.title: Wystaw token dostępu MCP
+service-users.credentials.issue.ttl: Okres ważności w dniach (od 1 do 90)
+service-users.credentials.issue.ttl.invalid: Podaj pełną liczbę dni od 1 do 90.
+service-users.credentials.issue.hint: Token jest wyświetlany tylko raz. Klienci wysyłają go jako token Bearer w nagłówku Authorization.
+service-users.credentials.revoke: Unieważnij wszystkie tokeny
+service-users.credentials.revoke.confirm: Unieważnić wszystkie tokeny dostępu MCP tego użytkownika serwisowego? Połączeni klienci natychmiast przestaną działać.
+service-users.credentials.revoke.success: Wszystkie tokeny dostępu MCP użytkownika serwisowego zostały unieważnione.
+service-users.credentials.oauth: Klient OAuth
+service-users.credentials.oauth.disabled: Dane uwierzytelniające klienta OAuth są wyłączone w tej instancji; użyj tokenu dostępu MCP.
+service-users.credentials.oauth.rotate-hint: Tokeny dostępu wystawione już przy użyciu starego sekretu pozostają ważne do momentu wygaśnięcia.
+service-users.credentials.token: Token dostępu
+service-users.credentials.token.expires: Wygasa
+service-users.create.credentials.title: Dane uwierzytelniające
+service-users.create.credentials.skip: Pomiń, wystaw później
+service-users.create.credentials.which: Użyj klienta OAuth dla pipeline'ów, które obsługują grant client_credentials; we wszystkich pozostałych przypadkach użyj tokenu dostępu MCP.
+service-users.create.credentials.token-description: Klienci łączą się za pomocą tokenu dostępu MCP. Wystaw go teraz lub później w danych uwierzytelniających użytkownika serwisowego.
+service-users.secret.title: Sekret klienta
+service-users.secret.client-secret: Sekret klienta
+service-users.secret.warning: Skopiuj sekret teraz. Jest wyświetlany tylko raz i nie można go ponownie wyświetlić.
+service-users.secret.copy: Kopiuj sekret
+service-users.secret.close: Zamknij

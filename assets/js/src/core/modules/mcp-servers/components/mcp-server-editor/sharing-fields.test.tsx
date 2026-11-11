@@ -18,14 +18,23 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
 }))
 
+// The users share list holds a service user name here on purpose: the Users grid must not
+// rely on the backend filtering service users out of it.
+const mockUserShareCollection = { items: [{ username: 'owner' }, { username: 'jane' }, { username: 'svc-c' }] }
 jest.mock('@Pimcore/modules/user/user-api-slice-enhanced', () => ({
-  useUserGetShareCollectionQuery: () => ({ data: { items: [{ username: 'owner' }, { username: 'jane' }] } })
+  useUserGetShareCollectionQuery: () => ({ data: mockUserShareCollection, isLoading: false })
 }))
 
+const serviceUsersLoaded = {
+  data: { items: [{ name: 'svc-a', active: true }, { name: 'svc-b', active: false }, { name: 'svc-c', active: true }] },
+  isLoading: false,
+  isError: false
+}
+// A 403 for an owner who may share but has no user management permission.
+const serviceUsersForbidden = { data: undefined, isLoading: false, isError: true }
+let mockServiceUsersResult: { data?: { items: Array<{ name: string, active: boolean }> }, isLoading: boolean, isError: boolean } = serviceUsersLoaded
 jest.mock('@Pimcore/modules/user/service-users/service-users-api-slice-enhanced', () => ({
-  useServiceUserGetCollectionQuery: () => ({
-    data: { items: [{ name: 'svc-a', active: true }, { name: 'svc-b', active: false }, { name: 'svc-c', active: true }] }
-  })
+  useServiceUserGetCollectionQuery: () => mockServiceUsersResult
 }))
 
 jest.mock('@Pimcore/modules/user/roles/roles-api-slice-enhanced', () => ({
@@ -123,6 +132,10 @@ const renderUsers = (sharedUsers: McpServerAccessGrant[], disabled = false, onSh
 }
 
 describe('SharingFields', () => {
+  beforeEach(() => {
+    mockServiceUsersResult = serviceUsersLoaded
+  })
+
   // The owner's row is locked: removing it would drop the owner's MCP Server Access
   // while their implicit Read + Edit stay; revoking Access is done with its checkbox.
   it('does not let the owner row be removed', () => {
@@ -207,8 +220,41 @@ describe('SharingFields', () => {
       renderUsers([svc('svc-a')])
 
       const picks = screen.getAllByTestId(/^pick-/).map((button) => button.dataset.testid)
-      // users picker: owner, jane; service users picker: svc-b, svc-c (svc-a is already granted)
+      // users picker: owner, jane (svc-c from the share list is a service user);
+      // service users picker: svc-b, svc-c (svc-a is already granted)
       expect(picks).toEqual(['pick-owner', 'pick-jane', 'pick-svc-b', 'pick-svc-c'])
+    })
+
+    describe('when the service users cannot be loaded', () => {
+      beforeEach(() => {
+        mockServiceUsersResult = serviceUsersForbidden
+      })
+
+      it('keeps service-user grants out of the Users grid and hides the Service users grid', () => {
+        renderUsers([grant('jane'), svc('svc-x')])
+
+        const users = grids()
+        expect(users).toHaveLength(2)
+        expect(names(users[0])).toEqual(['jane'])
+        expect(screen.queryByText('mcp-servers.sharing.service-users-hint')).not.toBeInTheDocument()
+        expect(screen.getByText('mcp-servers.sharing.service-users-unavailable')).toBeInTheDocument()
+      })
+
+      it('keeps the service-user grants when a human user is added', () => {
+        const onChange = jest.fn()
+        renderUsers([grant('jane'), svc('svc-x')], false, onChange)
+
+        fireEvent.click(screen.getByTestId('pick-owner'))
+
+        expect(onChange).toHaveBeenCalledWith([grant('jane'), expect.objectContaining({ name: 'owner' }), svc('svc-x')])
+      })
+
+      it('still counts the service-user grants as service users in the summary', () => {
+        renderUsers([grant('jane'), svc('svc-x')])
+
+        expect(screen.getByText(/mcp-servers.access.users-count/)).toBeInTheDocument()
+        expect(screen.getByText(/mcp-servers.access.service-users-count/)).toBeInTheDocument()
+      })
     })
 
     it('counts service users separately in the summary', () => {

@@ -17,7 +17,7 @@ import { TypesAndClassesAccordion } from '@Pimcore/modules/user/management/detai
 import { getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { useUserGetAvailablePermissionsQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { type ServiceUserDraft } from '../service-user-draft'
-import { mergePermissions, type PermissionFormValues, splitPermissions } from '../../utils/permissions'
+import { mergePermissions, type PermissionFormValues, splitPermissions, unlistedPermissions } from '../../utils/permissions'
 
 interface PermissionsTabProps {
   draft: Pick<ServiceUserDraft, 'permissions' | 'classes' | 'docTypes'>
@@ -47,7 +47,7 @@ export const PermissionsTab = ({ draft, onChange }: PermissionsTabProps): React.
         layout="vertical"
         onValuesChange={ (_changed: Partial<FormValues>, values: FormValues) => {
           onChange({
-            permissions: mergePermissions(values),
+            permissions: mergePermissions(values, unlistedPermissions(draft.permissions, permissions)),
             classes: values.classes,
             docTypes: values.docTypes
           })

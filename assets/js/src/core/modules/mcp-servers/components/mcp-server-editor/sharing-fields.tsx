@@ -47,20 +47,33 @@ export const SharingFields = ({
 }: SharingFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { data: userList } = useUserGetShareCollectionQuery()
+  const { data: userList, isLoading: loadingUsers } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
 
-  const userNames = useMemo<string[]>(
+  const shareListNames = useMemo<string[]>(
     () => (userList?.items ?? []).map((user) => user.username),
     [userList]
   )
-  const { data: serviceUserList, isLoading: loadingServiceUsers } = useServiceUserGetCollectionQuery()
-  // Until the service users are known a grant cannot be told apart from a human one, so a write would drop it.
-  const grantsDisabled = disabled || loadingServiceUsers
+  const {
+    data: serviceUserList,
+    isLoading: loadingServiceUsers,
+    isError: serviceUsersUnavailable
+  } = useServiceUserGetCollectionQuery()
   const serviceUsers = serviceUserList?.items
+  // Listing service users needs the user management permission, sharing does not. Without the
+  // list, every grant that is not for a human user from the share list is kept as a service-user
+  // grant: it is passed through unchanged on every write and counted as such in the summary.
   const serviceUserNames = useMemo<string[]>(
-    () => (serviceUsers ?? []).map((serviceUser) => serviceUser.name),
-    [serviceUsers]
+    () => serviceUsersUnavailable
+      ? sharedUsers.map((grant) => grant.name).filter((name) => !shareListNames.includes(name))
+      : (serviceUsers ?? []).map((serviceUser) => serviceUser.name),
+    [serviceUsersUnavailable, sharedUsers, shareListNames, serviceUsers]
+  )
+  // Until it is known which grants are service users, a write from either grid would drop them.
+  const grantsDisabled = disabled || loadingServiceUsers || (serviceUsersUnavailable && loadingUsers)
+  const userNames = useMemo<string[]>(
+    () => shareListNames.filter((name) => !serviceUserNames.includes(name)),
+    [shareListNames, serviceUserNames]
   )
   const inactiveServiceUserNames = useMemo<string[]>(
     () => (serviceUsers ?? []).filter((serviceUser) => !serviceUser.active).map((serviceUser) => serviceUser.name),
@@ -122,16 +135,22 @@ export const SharingFields = ({
           />
 
           <Title level={ 5 }>{t('mcp-servers.sharing.service-users')}</Title>
-          <Text type="secondary">{t('mcp-servers.sharing.service-users-hint')}</Text>
-          <SharingGrid
-            accessOnly
-            addPlaceholder={ t('mcp-servers.sharing.add-service-user') }
-            candidateNames={ serviceUserNames }
-            disabled={ grantsDisabled }
-            inactiveNames={ inactiveServiceUserNames }
-            onChange={ (next) => { onSharedUsersChange([...humanGrants, ...next]) } }
-            value={ serviceUserGrants }
-          />
+          {serviceUsersUnavailable
+            ? <Text type="secondary">{t('mcp-servers.sharing.service-users-unavailable')}</Text>
+            : (
+              <>
+                <Text type="secondary">{t('mcp-servers.sharing.service-users-hint')}</Text>
+                <SharingGrid
+                  accessOnly
+                  addPlaceholder={ t('mcp-servers.sharing.add-service-user') }
+                  candidateNames={ serviceUserNames }
+                  disabled={ grantsDisabled }
+                  inactiveNames={ inactiveServiceUserNames }
+                  onChange={ (next) => { onSharedUsersChange([...humanGrants, ...next]) } }
+                  value={ serviceUserGrants }
+                />
+              </>
+              )}
         </>
       )}
 

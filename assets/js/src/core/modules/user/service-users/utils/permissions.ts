@@ -27,7 +27,18 @@ export const splitPermissions = (permissions: string[], grouped: GroupedPermissi
   permissionsBundles: permissions.filter(isIn(grouped.bundles))
 })
 
-export const mergePermissions = ({ permissionsDefault, permissionsBundles }: PermissionFormValues): string[] => [
+/**
+ * The granted permissions that neither select lists, e.g. of a disabled bundle. The form
+ * cannot show them, so they are merged back on every change instead of being dropped.
+ */
+export const unlistedPermissions = (permissions: string[], grouped: GroupedPermissions): string[] =>
+  permissions.filter((permission) => !isIn(grouped.default)(permission) && !isIn(grouped.bundles)(permission))
+
+export const mergePermissions = (
+  { permissionsDefault, permissionsBundles }: PermissionFormValues,
+  unlisted: string[] = []
+): string[] => [
   ...permissionsDefault,
-  ...permissionsBundles
+  ...permissionsBundles,
+  ...unlisted
 ]

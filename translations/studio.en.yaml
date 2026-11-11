@@ -723,6 +723,7 @@ mcp-servers.sharing.add-role: Add a role…
 mcp-servers.sharing.service-users: Service users
 mcp-servers.sharing.add-service-user: Add a service user…
 mcp-servers.sharing.service-users-hint: Service users can only connect; they cannot read or edit the configuration.
+mcp-servers.sharing.service-users-unavailable: Service users are not listed because you lack the user management permission. Their existing access is kept.
 mcp-servers.sharing.inactive: inactive
 mcp-servers.sharing.name: Name
 mcp-servers.sharing.config-read: Config Read
