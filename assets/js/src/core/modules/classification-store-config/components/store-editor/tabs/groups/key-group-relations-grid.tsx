@@ -45,6 +45,7 @@ import { SubGroupSelectionDialog } from './sub-group-selection-dialog'
 import { SubGroupStrip, type SubGroupUsage } from './sub-group-strip'
 import { KeyOverrideDialog } from './key-override-dialog'
 import { overrideTags } from './key-override'
+import { useKeyUnits } from './use-key-units'
 import {
   acquireSubGroupAssignLock,
   releaseSubGroupAssignLock,
@@ -74,6 +75,14 @@ export const KeyGroupRelationsGrid = ({
   onShowSubGroups
 }: IKeyGroupRelationsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const keyUnits = useKeyUnits()
+
+  // A refused unit list leaves the unit tags without a vocabulary; they stay silent, and the refusal is reported.
+  useEffect(() => {
+    if (keyUnits.status === 'failed' && keyUnits.error !== undefined) {
+      trackError(new ApiError(keyUnits.error as ConstructorParameters<typeof ApiError>[0]))
+    }
+  }, [keyUnits.status, keyUnits.error])
   const { token } = theme.useToken()
   const modal = useFormModal()
   const messageApi = useMessage()
@@ -437,7 +446,7 @@ export const KeyGroupRelationsGrid = ({
           <div style={ { flex: '1 1 auto', minWidth: 0, overflow: 'hidden' } }>
             <DefaultCell { ...info } />
           </div>
-          { overrideTags(info.row.original).map((tag) => (
+          { overrideTags(info.row.original, keyUnits).map((tag) => (
             <Tag
               color={ tag.danger ? 'error' : undefined }
               key={ tag.id }
@@ -492,7 +501,7 @@ export const KeyGroupRelationsGrid = ({
         </Flex>
       )
     })
-  ], [t, handleRemove, columnHelper, isAssigning])
+  ], [t, handleRemove, columnHelper, isAssigning, keyUnits])
 
   // Stable array — only recomputed when relations change
   const excludedKeyIds = useMemo(() => relations.map((r) => r.keyId), [relations])

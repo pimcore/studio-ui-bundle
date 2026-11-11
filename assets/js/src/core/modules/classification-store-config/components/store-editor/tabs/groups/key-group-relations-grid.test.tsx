@@ -101,7 +101,7 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import userEvent, { type UserEvent } from '@testing-library/user-event'
 // eslint-disable-next-line import/first
-import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+import { api, type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 // eslint-disable-next-line import/first
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
 // eslint-disable-next-line import/first
@@ -116,6 +116,7 @@ const GROUP_ID = 3
 const SUB_GROUP = 'sg000007'
 const RELATIONS_URL = `/pimcore-studio/api/classification-store/configuration/groups/${GROUP_ID}/key-relations`
 const UPSERT_URL = '/pimcore-studio/api/classification-store/configuration/key-group-relations/add'
+const UNIT_LIST_URL = '/pimcore-studio/api/unit/quantity-value/unit-list'
 const SUB_GROUPS_URL = `/pimcore-studio/api/classification-store/configuration/stores/${STORE_ID}/sub-groups`
 
 /** Every wait here covers a render of the real grid and a request, which outgrows the default second. */
@@ -167,6 +168,14 @@ const requests: RecordedRequest[] = []
 /** Key ids whose upsert the server refuses. */
 let refusedKeyIds: number[] = []
 
+const unitList = {
+  totalItems: 2,
+  items: [
+    { id: 'kg', abbreviation: 'KG', group: null, longName: null, baseUnit: null, reference: null, factor: null, conversionOffset: null, converter: null },
+    { id: 'g', abbreviation: null, group: null, longName: null, baseUnit: null, reference: null, factor: null, conversionOffset: null, converter: null }
+  ]
+}
+
 const jsonResponse = (payload: unknown, status = 200): Response => new Response(JSON.stringify(payload), {
   status,
   headers: { 'Content-Type': 'application/json' }
@@ -181,6 +190,8 @@ const stubFetch = (): void => {
     } catch {
       body = undefined
     }
+
+    if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
 
     requests.push({ url: input.url, method: input.method, body })
 
@@ -315,6 +326,8 @@ describe('KeyGroupRelationsGrid', () => {
     globalThis.fetch = jest.fn(async (input: Request) => {
       const body = JSON.parse(await input.clone().text())
 
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
+
       requests.push({ url: input.url, method: input.method, body })
 
       if (input.url.endsWith(RELATIONS_URL)) {
@@ -345,6 +358,8 @@ describe('KeyGroupRelationsGrid', () => {
 
     globalThis.fetch = jest.fn(async (input: Request) => {
       const body = JSON.parse(await input.clone().text())
+
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
 
       requests.push({ url: input.url, method: input.method, body })
 
@@ -377,6 +392,8 @@ describe('KeyGroupRelationsGrid', () => {
 
     globalThis.fetch = jest.fn(async (input: Request) => {
       const body = JSON.parse(await input.clone().text())
+
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
 
       requests.push({ url: input.url, method: input.method, body })
 
@@ -427,6 +444,8 @@ describe('KeyGroupRelationsGrid', () => {
 
     globalThis.fetch = jest.fn(async (input: Request) => {
       const body = JSON.parse(await input.clone().text())
+
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
 
       requests.push({ url: input.url, method: input.method, body })
 
@@ -581,6 +600,8 @@ describe('KeyGroupRelationsGrid', () => {
     globalThis.fetch = jest.fn(async (input: Request) => {
       const body = JSON.parse(await input.clone().text())
 
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
+
       requests.push({ url: input.url, method: input.method, body })
 
       if (input.url.endsWith(RELATIONS_URL)) {
@@ -630,6 +651,8 @@ describe('KeyGroupRelationsGrid', () => {
 
     globalThis.fetch = jest.fn(async (input: Request) => {
       const body = JSON.parse(await input.clone().text())
+
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
 
       requests.push({ url: input.url, method: input.method, body })
 
@@ -702,6 +725,8 @@ describe('KeyGroupRelationsGrid remove dialog', () => {
         body = undefined
       }
 
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
+
       requests.push({ url: input.url, method: input.method, body })
 
       if (input.method === 'DELETE') {
@@ -769,10 +794,27 @@ describe('KeyGroupRelationsGrid remove dialog', () => {
 
 describe('KeyGroupRelationsGrid override action and tags', () => {
   const originalFetch = globalThis.fetch
-  const UNITS = [{ id: 'kg', symbol: 'kg' }, { id: 'g', symbol: 'g' }, { id: 'lb', symbol: 'lb' }]
-  const COLORS = [{ label: 'Red', value: 'red' }, { label: 'Green', value: 'green' }, { label: 'Blue', value: 'blue' }]
+  const UNITS = { defaultUnit: null, validUnits: ['kg', 'g', 'lb'] }
+  const COLORS = [{ key: 'Red', value: 'red' }, { key: 'Green', value: 'green' }, { key: 'Blue', value: 'blue' }]
   const TAG_PREFIX = 'classification-store.override'
-  let rows: Array<Record<string, unknown>> = []
+  let rows: ClassificationStoreConfigurationKeyGroupRelationDetail[] = []
+
+  const keyRelation = (
+    keyId: number,
+    keyName: string,
+    sorter: number,
+    extra: Partial<ClassificationStoreConfigurationKeyGroupRelationDetail>
+  ): ClassificationStoreConfigurationKeyGroupRelationDetail => ({
+    keyId,
+    groupId: GROUP_ID,
+    sorter,
+    mandatory: false,
+    keyName,
+    keyDescription: null,
+    groupName: 'Dimensions group',
+    subGroup: null,
+    ...extra
+  })
 
   const serveRows = (): void => {
     globalThis.fetch = jest.fn(async (input: Request) => {
@@ -783,6 +825,8 @@ describe('KeyGroupRelationsGrid override action and tags', () => {
       } catch {
         body = undefined
       }
+
+      if (input.url.endsWith(UNIT_LIST_URL)) return jsonResponse(unitList)
 
       requests.push({ url: input.url, method: input.method, body })
 
@@ -796,11 +840,11 @@ describe('KeyGroupRelationsGrid override action and tags', () => {
   beforeEach(() => {
     requests.length = 0
     rows = [
-      { ...relation(11, 'plain', 1, false), keyType: 'select', options: COLORS },
-      { ...relation(12, 'color', 2, false), keyType: 'select', options: COLORS, definitionOverride: { options: ['red', 'green'] } },
-      { ...relation(13, 'weight', 3, false), keyType: 'quantityValue', units: { validUnits: UNITS }, definitionOverride: { defaultUnit: 'kg', validUnits: ['kg', 'g'] } },
-      { ...relation(14, 'empty', 4, false), keyType: 'select', options: COLORS, definitionOverride: { options: [], validUnits: [] } },
-      { ...relation(15, 'bare', 5, false), keyType: 'input', options: null }
+      keyRelation(11, 'plain', 1, { keyType: 'select', options: COLORS }),
+      keyRelation(12, 'color', 2, { keyType: 'select', options: COLORS, definitionOverride: { options: ['red', 'green'] } }),
+      keyRelation(13, 'weight', 3, { keyType: 'quantityValue', units: UNITS, definitionOverride: { defaultUnit: 'kg', validUnits: ['kg', 'g'] } }),
+      keyRelation(14, 'empty', 4, { keyType: 'select', options: COLORS, definitionOverride: { options: [], validUnits: [] } }),
+      keyRelation(15, 'bare', 5, { keyType: 'input', options: null, units: null })
     ]
     serveRows()
   })
@@ -829,9 +873,23 @@ describe('KeyGroupRelationsGrid override action and tags', () => {
     expect(tagsOf('plain')).toEqual([])
     expect(tagsOf('bare')).toEqual([])
     expect(tagsOf('color')).toEqual([`${TAG_PREFIX}.tag-options:2,3`])
-    // default unit as its symbol, and the valid-units narrowing, which is the worst case of two here
-    expect(tagsOf('weight')).toEqual(['kg', `${TAG_PREFIX}.tag-units:2,3`])
+    // default unit as the installation's abbreviation, and the valid-units narrowing, which is the worst case of two here
+    expect(tagsOf('weight')).toEqual(['KG', `${TAG_PREFIX}.tag-units:2,3`])
     expect(tagsOf('empty')).toEqual([`${TAG_PREFIX}.tag-no-options:`, `${TAG_PREFIX}.tag-no-units:`])
+  })
+
+  it('names the default unit by its id where the installation list does not resolve', async () => {
+    const serve = globalThis.fetch
+
+    globalThis.fetch = jest.fn(async (input: Request) => (
+      input.url.endsWith(UNIT_LIST_URL) ? jsonResponse({ message: 'nope' }, 500) : await serve(input)
+    )) as unknown as typeof fetch
+    renderGrid()
+    await screen.findByText('plain', undefined, WAIT_BUDGET)
+
+    const tags = Array.from((screen.getByText('weight').closest('tr') as HTMLElement).querySelectorAll('.ant-tag')).map((tag) => tag.textContent ?? '')
+
+    expect(tags).toEqual(['kg', `${TAG_PREFIX}.tag-units:2,3`])
   })
 
   it('keeps the tags on the name line, so a row with an override is as tall as one without', async () => {
@@ -851,8 +909,8 @@ describe('KeyGroupRelationsGrid override action and tags', () => {
 
   it('tags an empty valid-units subset as no units, and all three members together', async () => {
     rows = [
-      { ...relation(21, 'nounits', 1, false), keyType: 'quantityValue', units: { validUnits: UNITS }, definitionOverride: { validUnits: [] } },
-      { ...relation(22, 'all', 2, false), keyType: 'quantityValue', options: COLORS, units: { validUnits: UNITS }, definitionOverride: { options: ['red'], defaultUnit: 'g', validUnits: ['g', 'gone'] } }
+      keyRelation(21, 'nounits', 1, { keyType: 'quantityValue', units: UNITS, definitionOverride: { validUnits: [] } }),
+      keyRelation(22, 'all', 2, { keyType: 'quantityValue', options: COLORS, units: UNITS, definitionOverride: { options: ['red'], defaultUnit: 'g', validUnits: ['g', 'gone'] } })
     ]
     renderGrid()
     await screen.findByText('nounits', undefined, WAIT_BUDGET)
