@@ -22,7 +22,6 @@ import { SpecialSettingsModal } from '@Pimcore/modules/user/management/detail/ta
 import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
 import { type UserWorkspace } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import { type ServiceUserDraft } from '../service-user-draft'
-import { type UserDocumentWorkspace2 } from '../../service-users-api-slice-enhanced'
 
 type WorkspaceDraft = Pick<ServiceUserDraft, 'assetWorkspaces' | 'dataObjectWorkspaces' | 'documentWorkspaces'>
 
@@ -43,21 +42,25 @@ const TITLE_BY_TYPE: Record<WorkspaceType, string> = {
   [WorkspaceType.OBJECT]: 'user-management.workspaces.objects'
 }
 
-const newWorkspace = (): UserDocumentWorkspace2 => ({
-  cid: new Date().getTime(), // replaced by the element id once a path is chosen
-  cpath: '',
-  list: false,
-  view: false,
-  save: false,
-  publish: false,
-  unpublish: false,
-  delete: false,
-  rename: false,
-  create: false,
-  settings: false,
-  versions: false,
-  properties: false
-})
+const newWorkspace = (type: WorkspaceType): UserWorkspace => {
+  const workspace: UserWorkspace = {
+    cid: Date.now(), // replaced by the element id once a path is chosen
+    cpath: '',
+    list: false,
+    view: false,
+    // Assets have no save/unpublish permission; sending them would leave the asset workspace contract.
+    ...(type === WorkspaceType.ASSET ? {} : { save: false, unpublish: false }),
+    publish: false,
+    delete: false,
+    rename: false,
+    create: false,
+    settings: false,
+    versions: false,
+    properties: false
+  }
+
+  return workspace
+}
 
 export const WorkspacesTab = ({ draft, onChange }: WorkspacesTabProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -89,7 +92,7 @@ export const WorkspacesTab = ({ draft, onChange }: WorkspacesTabProps): React.JS
         info: (
           <IconTextButton
             icon={ { value: 'add-find' } }
-            onClick={ () => { update(type, [...workspacesOf(type), newWorkspace()]) } }
+            onClick={ () => { update(type, [...workspacesOf(type), newWorkspace(type)]) } }
           >
             {t('user-management.workspaces.add')}
           </IconTextButton>

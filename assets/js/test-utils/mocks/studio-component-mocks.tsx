@@ -175,7 +175,7 @@ export const Modal = ({ open, title, children, footer, okText, cancelText, okBut
   }
 
   return (
-    <div role="dialog">
+    <dialog open>
       <div>{title}</div>
       {children}
       {footer ?? (
@@ -191,7 +191,7 @@ export const Modal = ({ open, title, children, footer, okText, cancelText, okBut
           >{okText ?? 'ok'}</button>
         </>
       )}
-    </div>
+    </dialog>
   )
 }
 

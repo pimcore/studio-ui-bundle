@@ -90,9 +90,9 @@ export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: Crea
   }
 
   const finish = (serviceUserId: number, token?: AccessTokenCredential): void => {
-    // The client secret only counts when it authenticates anything on this instance.
+    // The API sends no client secret while the grant is off, so the create response alone decides.
     const credentials: OneTimeCredential[] = []
-    if (clientCredentialsEnabled && !isUndefined(created)) {
+    if (!isUndefined(created) && created.clientSecret !== null) {
       credentials.push({ clientId: created.clientId, clientSecret: created.clientSecret })
     }
     if (!isUndefined(token)) {

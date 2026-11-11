@@ -54,7 +54,9 @@ export const SharingFields = ({
     () => (userList?.items ?? []).map((user) => user.username),
     [userList]
   )
-  const { data: serviceUserList } = useServiceUserGetCollectionQuery()
+  const { data: serviceUserList, isLoading: loadingServiceUsers } = useServiceUserGetCollectionQuery()
+  // Until the service users are known a grant cannot be told apart from a human one, so a write would drop it.
+  const grantsDisabled = disabled || loadingServiceUsers
   const serviceUsers = serviceUserList?.items
   const serviceUserNames = useMemo<string[]>(
     () => (serviceUsers ?? []).map((serviceUser) => serviceUser.name),
@@ -104,7 +106,7 @@ export const SharingFields = ({
           <SharingGrid
             addPlaceholder={ t('mcp-servers.sharing.add-user') }
             candidateNames={ userNames }
-            disabled={ disabled }
+            disabled={ grantsDisabled }
             onChange={ (next) => { onSharedUsersChange([...next, ...serviceUserGrants]) } }
             ownerName={ ownerName }
             value={ humanGrants }
@@ -125,7 +127,7 @@ export const SharingFields = ({
             accessOnly
             addPlaceholder={ t('mcp-servers.sharing.add-service-user') }
             candidateNames={ serviceUserNames }
-            disabled={ disabled }
+            disabled={ grantsDisabled }
             inactiveNames={ inactiveServiceUserNames }
             onChange={ (next) => { onSharedUsersChange([...humanGrants, ...next]) } }
             value={ serviceUserGrants }

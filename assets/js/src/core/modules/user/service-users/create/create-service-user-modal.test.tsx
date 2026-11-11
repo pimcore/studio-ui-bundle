@@ -63,6 +63,10 @@ const instanceWith = (clientCredentialsEnabled: boolean): void => {
       ? { data: undefined, isFetching: false }
       : { data: { id: 9, clientCredentialsEnabled }, isFetching: false }
   )
+  // The API sends the client secret only while the grant is on.
+  const created = { ...credentials, clientSecret: clientCredentialsEnabled ? credentials.clientSecret : null }
+  mockCreate.mockResolvedValue({ data: created })
+  mockCreateFromUser.mockResolvedValue({ data: created })
 }
 
 const onCreated = jest.fn()
@@ -210,6 +214,19 @@ describe('CreateServiceUserModal', () => {
 
       expect(onCreated).toHaveBeenCalledWith(9, [clientSecretCredential])
       expect(mockIssue).not.toHaveBeenCalled()
+    })
+
+    it('hands over the client secret when the token step is skipped while the detail is still loading', async () => {
+      instanceWith(true)
+      mockServiceUserQuery.mockImplementation((args: unknown, options: { skip?: boolean }) => ({
+        data: undefined,
+        isFetching: options.skip !== true
+      }))
+      await createAndContinue()
+
+      fireEvent.click(screen.getByText('service-users.create.credentials.skip'))
+
+      expect(onCreated).toHaveBeenCalledWith(9, [clientSecretCredential])
     })
 
     it('hands over nothing when the grant is off and the token step is skipped', async () => {

@@ -3160,7 +3160,7 @@ service-users.credentials.issue: Issue token
 service-users.credentials.issue.title: Issue an MCP access token
 service-users.credentials.issue.ttl: Lifetime in days (1 to 90)
 service-users.credentials.issue.ttl.invalid: Enter a whole number of days from 1 to 90.
-service-users.credentials.issue.hint: 'The token is shown only once. Clients send it as "Authorization: Bearer <token>".'
+service-users.credentials.issue.hint: The token is shown only once. Clients send it as a Bearer token in the Authorization header.
 service-users.credentials.revoke: Revoke all tokens
 service-users.credentials.revoke.confirm: Revoke every MCP access token of this service user? Connected clients stop working immediately.
 service-users.credentials.revoke.success: All MCP access tokens of the service user are revoked.
