@@ -31,7 +31,7 @@ let storeEngine: { engine: string | null | undefined, engineCapabilities: string
 
 const STORE_ID = 7
 // email is an Input-derived type: it normalizes to `mixed`, so the EAV value columns hold it.
-const TYPE_IDS = ['input', 'email', 'geopoint', 'manyToOneRelation']
+const TYPE_IDS = ['input', 'email', 'geopoint', 'manyToOneRelation', 'multiValue']
 const DOCUMENT_CAPABILITIES = ['StructuredValues', 'Relations']
 
 // a declaration, so it is initialised when the hoisted mock factories run
@@ -109,6 +109,13 @@ describe('KeysTab type select', () => {
 
     expect(typeOptions().map((option) => option.value).sort()).toEqual([...TYPE_IDS].sort())
     expect(disabledTypes()).toEqual([])
+  })
+
+  it('offers multiValue as a key type, held by every engine', () => {
+    storeEngine = { engine: 'eav', engineCapabilities: [] }
+    render(<KeysTab storeId={ STORE_ID } />)
+
+    expect(typeOptions().find((option) => option.value === 'multiValue')).toEqual({ label: 'field-definition.multi-value', value: 'multiValue' })
   })
 
   it('lists the structured types but disables them on an EAV store', () => {

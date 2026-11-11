@@ -32,7 +32,8 @@ import { waitFor } from '@testing-library/react'
 import {
   api,
   type ClassificationStoreConfigurationKeyUpdate,
-  type ClassificationStoreKeyDefinition
+  type ClassificationStoreKeyDefinition,
+  type ClassificationStoreMultiValueEntry
 } from './classification-store-api-slice-enhanced'
 
 /**
@@ -46,6 +47,14 @@ const typedDefinition: ClassificationStoreKeyDefinition = {
   fieldtype: 'input',
   title: 'Weight',
   indexed: true
+}
+
+/**
+ * A real object-data payload for a multiValue key, typed against the shadow: the generated client
+ * types it as `object`, so a drift of the shadow from the payload is caught by `tsc --noEmit` here.
+ */
+const typedMultiValuePayload: Record<string, Record<string, Record<number, ClassificationStoreMultiValueEntry[]>>> = {
+  4: { de: { 11: [{ value: { value: 30, unit: 'cm' }, variant: 'metric' }, { value: { value: 1, unit: 'ft' }, position: 1 }] } }
 }
 
 const STORE_ID = 1
@@ -146,6 +155,16 @@ const flush = async (): Promise<void> => { await new Promise((resolve) => setTim
  * rejection that makes the slice roll its optimistic patch back.
  */
 type Responder = (payload: Record<string, unknown>, status?: number) => void
+
+describe('multiValue entry shadow', () => {
+  it('names the members of one entry of the value of a multiValue key, in the slot it is stored under', () => {
+    const [capped, positioned] = typedMultiValuePayload[4].de[11]
+
+    expect(capped).toEqual({ value: { value: 30, unit: 'cm' }, variant: 'metric' })
+    expect(positioned.position).toBe(1)
+    expect('language' in capped).toBe(false)
+  })
+})
 
 describe('classification store key update cache patch', () => {
   const originalFetch = globalThis.fetch

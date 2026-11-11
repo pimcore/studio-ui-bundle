@@ -40,6 +40,12 @@ import { getKeyLabel } from './utils/key-label'
 import { useStyles } from './classification-store-item.styles'
 import { getKeyCombinedFieldNameParent } from './utils/combined-field-name'
 
+/** The declaration of a `multiValue` key is read from the layout members; a key of any other type adds nothing. */
+const multiValueMembersOf = (key: ClassificationStoreCollection2): Record<string, unknown> =>
+  (key.definition as { fieldtype?: string } | undefined)?.fieldtype === 'multiValue'
+    ? { variants: key.variants, multiValue: key.multiValue, maximum: key.maximum }
+    : {}
+
 /** The language independent slot every key that is not localized is bound to. */
 const LANGUAGE_INDEPENDENT = 'default'
 
@@ -216,6 +222,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         <RestoreInheritanceLocaleContext.Provider value={ slot === LANGUAGE_INDEPENDENT ? undefined : slot }>
           <ObjectComponent
             { ...item.definition }
+            { ...multiValueMembersOf(item) }
             name={ item.id }
             noteditable={ isReadOnly }
             technicalName={ item.name }
