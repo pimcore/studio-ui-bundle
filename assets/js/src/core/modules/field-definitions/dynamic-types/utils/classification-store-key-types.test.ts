@@ -80,7 +80,7 @@ describe('classification store key types', () => {
   const offered = types.filter((type) => type.getTags(context).includes(CLASSIFICATION_STORE_KEY_TYPE_TAG)).map((type) => type.id)
 
   it('finds the data types of the bundle', () => {
-    expect(types).toHaveLength(55)
+    expect(types).toHaveLength(56)
   })
 
   it('classifies every data type as offered or excluded', () => {
@@ -96,10 +96,10 @@ describe('classification store key types', () => {
     expect(offered.filter((id) => CLASSIFICATION_STORE_EXCLUDED_TYPES.includes(id))).toEqual([])
   })
 
-  it('offers 48 types, among them calculatedValue', () => {
+  it('offers 49 types, among them calculatedValue', () => {
     // 2026-11-05 option-A decision: the calculated type stays offered, the exclusion only scopes the unlocked set.
     expect(offered).toContain(CALCULATED_VALUE)
-    expect(offered).toHaveLength(48)
+    expect(offered).toHaveLength(49)
   })
 
   it('offers the 22 structured types next to the ones offered before', () => {

@@ -546,4 +546,68 @@ describe('ClassificationStoreItem', () => {
 
     expect(renderedKeyIds()).toEqual([43, 44])
   })
+
+  // The path every other key takes is pinned here: its own definition spread, and nothing of the multiValue declaration.
+  it('renders a key that is not a multiValue key with its own definition spread and no multiValue member', () => {
+    const layout = {
+      id: 8,
+      name: 'Plain',
+      keys: [{ id: 81, name: 'ef000081', title: 'Plain', multiValue: null, variants: null, definition: { datatype: 'data', fieldtype: 'input', maximum: 5 } }]
+    } as any
+
+    render(
+      <ClassificationStoreItem
+        classificationStoreName='store'
+        currentLayoutData={ [layout] }
+        groupLayout={ layout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    const props = propsOfKey(81)
+
+    expect(props).toMatchObject({ datatype: 'data', fieldtype: 'input', maximum: 5 })
+    expect(props.multiValue).toBeUndefined()
+    expect(props.variants).toBeUndefined()
+  })
+
+  it('hands a multiValue key the declaration its layout publishes', () => {
+    const variants = [{ name: 'metric' }, { name: 'imperial', label: 'Imperial' }]
+    const layout = {
+      id: 9,
+      name: 'Multi',
+      keys: [{ id: 91, name: 'ef000091', title: 'Height', multiValue: true, maximum: 3, variants, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue' } }]
+    } as any
+
+    render(
+      <ClassificationStoreItem
+        classificationStoreName='store'
+        currentLayoutData={ [layout] }
+        groupLayout={ layout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(propsOfKey(91)).toMatchObject({ delegateDatatype: 'quantityValue', multiValue: true, maximum: 3, variants })
+  })
+
+  it('hands a multiValue key the declaration its definition carries where the layout publishes none', () => {
+    const variants = [{ name: 'metric' }, { name: 'imperial', label: 'Imperial' }]
+    const layout = {
+      id: 9,
+      name: 'Multi',
+      keys: [{ id: 92, name: 'ef000092', title: 'Height', multiValue: null, maximum: null, variants: null, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', multiValue: false, variants } }]
+    } as any
+
+    render(
+      <ClassificationStoreItem
+        classificationStoreName='store'
+        currentLayoutData={ [layout] }
+        groupLayout={ layout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(propsOfKey(92)).toMatchObject({ delegateDatatype: 'quantityValue', multiValue: false, variants })
+  })
 })

@@ -37,6 +37,7 @@ import { useClassificationStore } from './provider'
 import { useLanguageEditPermission } from './hooks/use-language-edit-permission'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { getKeyLabel } from './utils/key-label'
+import { multiValueMembersOf } from './utils/multi-value-members'
 import { useStyles } from './classification-store-item.styles'
 import { getKeyCombinedFieldNameParent } from './utils/combined-field-name'
 
@@ -216,6 +217,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         <RestoreInheritanceLocaleContext.Provider value={ slot === LANGUAGE_INDEPENDENT ? undefined : slot }>
           <ObjectComponent
             { ...item.definition }
+            { ...multiValueMembersOf(item) }
             name={ item.id }
             noteditable={ isReadOnly }
             technicalName={ item.name }

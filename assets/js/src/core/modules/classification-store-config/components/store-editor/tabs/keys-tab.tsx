@@ -630,6 +630,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       </ContentLayout>
 
       <KeyDefinitionModal
+        engineCapabilities={ engineCapabilities }
         keyDetail={ definitionKey }
         onClose={ handleCloseDefinition }
         onSaved={ handleDefinitionSaved }

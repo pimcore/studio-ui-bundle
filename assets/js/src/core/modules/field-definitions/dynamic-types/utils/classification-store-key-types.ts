@@ -23,6 +23,9 @@ export const CLASSIFICATION_STORE_EXCLUDED_TYPES: readonly string[] = [
   'reverseObjectRelation'
 ]
 
+// The types that wrap another type; none of them may be the delegate of another wrapper.
+export const CLASSIFICATION_STORE_WRAPPER_TYPES: readonly string[] = ['encryptedField', 'multiValue']
+
 // The name is the core EngineFeature case, as the store response reports it.
 export const ENGINE_CAPABILITY_STRUCTURED_VALUES = 'StructuredValues'
 

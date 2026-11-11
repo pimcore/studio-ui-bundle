@@ -17,6 +17,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { Text } from '@Pimcore/components/text/text'
+import { MULTI_VALUE_OWN_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-own-keys'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { AreaProvider } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { SettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
@@ -28,16 +29,26 @@ import {
   type ClassificationStoreConfigurationKeyDetail,
   type ClassificationStoreConfigurationKeyUpdate,
   type ClassificationStoreKeyDefinition,
+  type ClassificationStoreVariantLayout,
   useClassificationStoreConfigurationKeyUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { Form, type formInstanceType } from '@sdk/components'
+import { Alert } from 'antd'
+import { MultiValueEngineContext } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-engine-context'
+import {
+  getMultiValueRefusals,
+  narrowsDeclaration,
+  type MultiValueRefusal
+} from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-refusals'
 
 interface IKeyDefinitionModalProps {
   open: boolean
   keyDetail: ClassificationStoreConfigurationKeyDetail | undefined
   onClose: () => void
   onSaved: () => void
+  /** What the engine of the key's store reports it can hold; the delegate picker of a multiValue key reads it. */
+  engineCapabilities?: readonly string[] | null
 }
 
 /**
@@ -46,6 +57,31 @@ interface IKeyDefinitionModalProps {
 const AREA = ['classification-store']
 
 const INHERIT = 'inherit'
+const MULTI_VALUE = 'multiValue'
+
+/**
+ * The dialog writes the delegate's own settings at the top level of the blob, and core builds the
+ * delegate from the blob's `delegate` member alone: the settings are packed into it here.
+ */
+const withDelegateMember = (definition: ClassificationStoreKeyDefinition): ClassificationStoreKeyDefinition => {
+  const record = definition as Record<string, unknown>
+  const settings = Object.fromEntries(
+    Object.entries(record).filter(([key, value]) => !MULTI_VALUE_OWN_KEYS.has(key) && value !== undefined)
+  )
+
+  const packed: ClassificationStoreKeyDefinition = {
+    ...definition,
+    // Built from the current settings alone: on open the dialog hoists every delegate member to the top level, and a delegate type change clears the old ones there, so merging the stored `delegate` back would resurrect them.
+    delegate: settings,
+    // Names are saved trimmed: entries address a variant by its trimmed name.
+    variants: Array.isArray(definition.variants)
+      ? (definition.variants as ClassificationStoreVariantLayout[]).map((variant) =>
+          typeof variant?.name === 'string' ? { ...variant, name: variant.name.trim() } : variant)
+      : definition.variants
+  }
+
+  return packed
+}
 const LOCALIZED = 'localized'
 const NOT_LOCALIZED = 'not-localized'
 
@@ -141,7 +177,8 @@ export const KeyDefinitionModal = ({
   open,
   keyDetail,
   onClose,
-  onSaved
+  onSaved,
+  engineCapabilities
 }: IKeyDefinitionModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [updateKey, { isLoading: isSaving }] = useClassificationStoreConfigurationKeyUpdateMutation()
@@ -157,6 +194,13 @@ export const KeyDefinitionModal = ({
     () => localizationOf(keyDetail?.localized)
   )
   const [localization, setLocalization] = useState<KeyLocalization>(baselineLocalization)
+  const [refusals, setRefusals] = useState<MultiValueRefusal[]>([])
+  // The stored definition the form was seeded from, held for the same reason as the localization
+  // above: the narrowing warning states what this edit takes away from what the dialog opened on,
+  // and a refresh of the same key moves the cached definition while the dialog stays open.
+  const [baselineDefinition, setBaselineDefinition] = useState<ClassificationStoreKeyDefinition | null>(
+    () => keyDetail?.definition ?? null
+  )
 
   // Seeded per key, not per mount: the dialog stays mounted between keys, so a key opened after
   // another one would otherwise show the state of the previous one. The baseline is seeded with
@@ -166,6 +210,8 @@ export const KeyDefinitionModal = ({
 
     setBaselineLocalization(seeded)
     setLocalization(seeded)
+    setBaselineDefinition(keyDetail?.definition ?? null)
+    setRefusals([])
   }, [keyDetail?.id])
 
   // Refs to the getLayout function and the form — updated by KeyDefinitionFormBridge
@@ -180,15 +226,23 @@ export const KeyDefinitionModal = ({
     formRef.current = form
   }, [])
 
+  // The form reaches the layout provider through a 300 ms debounce, so a save pressed inside
+  // that window would send the values that predate the last change. The live form is read here.
+  const readDefinition = (): ClassificationStoreKeyDefinition | null => {
+    const layout = getLayoutRef.current?.()
+
+    if (layout === undefined || formRef.current === null) {
+      return null
+    }
+
+    const definition: ClassificationStoreKeyDefinition = { ...layout, ...formRef.current.getFieldsValue(true) }
+
+    return keyDetail?.type === MULTI_VALUE ? withDelegateMember(definition) : definition
+  }
+
   const saveKey = async (): Promise<void> => {
     if (keyDetail === undefined || getLayoutRef.current === null || formRef.current === null) return
-    const layout = getLayoutRef.current()
-
-    // The form reaches the layout provider through a 300 ms debounce, so a save pressed inside
-    // that window would send the values that predate the last change. The live form is read here.
-    const definition: ClassificationStoreKeyDefinition | null = layout === undefined
-      ? null
-      : { ...layout, ...formRef.current.getFieldsValue(true) }
+    const definition = readDefinition()
 
     // This dialog owns the definition and the key's localization, and nothing else on the key, so
     // the payload names nothing else. The configured title, the description and the type are left
@@ -222,16 +276,33 @@ export const KeyDefinitionModal = ({
     // One save at a time: a second one recomputes the stored state from the patch the first wrote.
     if (isSaving) return
 
+    // A multiValue key without its delegate, or with a variant list core would misread, is not sent at all.
+    const definition = keyDetail.type === MULTI_VALUE ? readDefinition() : null
+    const found = keyDetail.type === MULTI_VALUE ? getMultiValueRefusals(definition) : []
+
+    setRefusals(found)
+    if (found.length > 0) return
+
+    const warnings: string[] = []
+
+    if (putsOtherLanguagesAtRisk(baselineLocalization, localization)) {
+      warnings.push(t('classification-store.key-localization-confirm'))
+    }
+
+    if (keyDetail.type === MULTI_VALUE && narrowsDeclaration(baselineDefinition, definition)) {
+      warnings.push(t('classification-store.multi-value.narrowing-confirm'))
+    }
+
     // Warned about on the same baseline the payload is decided on: an untouched control is not a
     // transition, whatever the cached flag has moved to meanwhile.
-    if (!putsOtherLanguagesAtRisk(baselineLocalization, localization)) {
+    if (warnings.length === 0) {
       void saveKey()
       return
     }
 
     modal.confirm({
       content: (
-        <span>{t('classification-store.key-localization-confirm')}</span>
+        <>{warnings.map((warning) => <span key={ warning }>{warning}</span>)}</>
       ),
       okText: t('yes'),
       cancelText: t('no'),
@@ -329,25 +400,34 @@ export const KeyDefinitionModal = ({
             />
           </Flex>
 
-          <AreaProvider area={ AREA }>
-            <SettingsProvider
-              GeneralSettingsFormFields={ NoFormFields }
-              useDetailGeneralSettingsQuery={ useStubQuery }
-              useDetailUpdateMutation={ useStubMutation }
-              useItemsQuery={ useStubQuery }
-            >
-              <LayoutProvider
-                key={ keyDetail.type ?? 'unknown' }
-                layout={ layout }
+          {refusals.length > 0 && (
+            <Alert
+              message={ refusals.map((refusal) => <div key={ refusal.id + (refusal.params?.name ?? '') }>{t(refusal.id, refusal.params)}</div>) }
+              type='error'
+            />
+          )}
+
+          <MultiValueEngineContext.Provider value={ engineCapabilities }>
+            <AreaProvider area={ AREA }>
+              <SettingsProvider
+                GeneralSettingsFormFields={ NoFormFields }
+                useDetailGeneralSettingsQuery={ useStubQuery }
+                useDetailUpdateMutation={ useStubMutation }
+                useItemsQuery={ useStubQuery }
               >
-                <KeyDefinitionFormBridge
-                  noPadding
-                  onGetForm={ handleGetForm }
-                  onGetLayout={ handleGetLayout }
-                />
-              </LayoutProvider>
-            </SettingsProvider>
-          </AreaProvider>
+                <LayoutProvider
+                  key={ keyDetail.type ?? 'unknown' }
+                  layout={ layout }
+                >
+                  <KeyDefinitionFormBridge
+                    noPadding
+                    onGetForm={ handleGetForm }
+                    onGetLayout={ handleGetLayout }
+                  />
+                </LayoutProvider>
+              </SettingsProvider>
+            </AreaProvider>
+          </MultiValueEngineContext.Provider>
         </>
       )}
     </Modal>

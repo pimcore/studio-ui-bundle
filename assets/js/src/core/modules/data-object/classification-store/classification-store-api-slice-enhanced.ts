@@ -207,6 +207,28 @@ export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
   localized?: boolean | null
 }
 
+/**
+ * One entry of the value of a key of type `multiValue`. It shadows a payload the generated client
+ * types as `object`, and is used unchanged for reading and writing. Its members are the ones of
+ * QualifiedValueSerializerInterface: VALUE_MEMBER = 'v', VARIANT_MEMBER = 'var', POSITION_MEMBER = 'p'
+ * (studio-backend-bundle, src/ClassificationStore/Service/QualifiedValueSerializerInterface.php). The payload is keyed by language before it
+ * reaches an entry, so the slot is the authority on language and an entry carries no such member.
+ */
+export interface ClassificationStoreMultiValueEntry {
+  /** The delegate type's own value */
+  v: unknown
+  /** The variant; absent is the default variant */
+  var?: string | null
+  /** The position within the (language, variant) slot; absent reads as 0 */
+  p?: number | null
+}
+
+/** The members of a `multiValue` key definition the schema does not name. */
+export interface ClassificationStoreMultiValueDefinition {
+  delegateDatatype?: string | null
+  delegate?: Record<string, unknown> | null
+}
+
 export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
   keys: ClassificationStoreCollection2[]
   /** Sub groups the keys of this group are assigned to, ordered by their first key */
