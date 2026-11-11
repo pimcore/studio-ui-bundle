@@ -18,6 +18,7 @@ import React from 'react'
 
 export interface ReduceProps {
   layout: Layout
+  registry?: DynamicTypeFieldDefinitionRegistry
 }
 
 export interface ReduceReturn {
@@ -31,7 +32,7 @@ export const reduce = (props: ReduceProps): ReduceReturn | undefined => {
   }
 
   const initialFieldDefinitions: ILayoutContext['fieldDefinitions'] = {}
-  const fieldDefinitionRegistry = container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
+  const fieldDefinitionRegistry = props.registry ?? container.get<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const buildStructure = (layoutItem: Layout): StructureNode => {
     const id = uuid()
