@@ -36,13 +36,14 @@ import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useWorkflowSave } from './use-workflow-save'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
   const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
-  const { isAutoSaveLoading, runningTask } = useSaveContext()
+  const { isAutoSaveLoading, runningTask, runningTaskRef } = useSaveContext()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
@@ -76,18 +77,50 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
   }, [isError, isSchedulesError, error, schedulesError])
 
-  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
-    if (dataObject?.changes === undefined) return
-    Promise.all([
-      saveDataObject(getModifiedDataObjectAttributes(), task, () => {
-        resetModifiedDataObjectAttributes()
+  // Saves the data and the schedules; resolves with the outcome of the schedules save (the data
+  // save reports its success through onFinish).
+  const saveDataAndSchedules = async (task: SaveTaskType, onFinish?: () => void): Promise<boolean> => {
+    if (dataObject?.changes === undefined) return false
+
+    const sentAttributes = getModifiedDataObjectAttributes()
+
+    return await Promise.all([
+      saveDataObject(sentAttributes, task, () => {
+        // edits made while the request was running are not part of it and must stay collected
+        resetModifiedDataObjectAttributes(sentAttributes)
         onFinish?.()
       }),
       saveSchedules()
-    ]).catch((error) => {
+    ]).then(([, schedulesSaved]) => schedulesSaved).catch((error) => {
       console.error(error)
+      return false
     })
   }
+
+  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
+    void saveDataAndSchedules(task, onFinish)
+  }
+
+  // A transition with unsavedChangesBehaviour "save" saves through this same flow, using the
+  // task of the primary button. A user's own save that is still running is not queued behind.
+  useWorkflowSave({
+    getTask: () => {
+      if (dataObject?.changes === undefined) {
+        return undefined
+      }
+
+      if (!isNil(runningTaskRef?.current) && runningTaskRef?.current !== SaveTaskType.AutoSave) {
+        return undefined
+      }
+
+      if (!dataObject.published) {
+        return SaveTaskType.Save
+      }
+
+      return checkElementPermission(dataObject.permissions, 'publish') ? SaveTaskType.Publish : undefined
+    },
+    startSave: saveDataAndSchedules
+  })
 
   const getSecondaryButtons = (): ReactElement[] => {
     if (dataObject?.type === 'folder') {
