@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Header } from '@Pimcore/components/header/header'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -28,7 +29,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -43,11 +44,30 @@ import {
 import { KeyGroupRelationsGrid } from './groups/key-group-relations-grid'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { useStoreImport } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
+import { MetadataModal } from './shared/metadata-modal'
+import { TitlesModal } from './shared/titles-modal'
+import { PairActions } from './shared/pair-actions'
+import { getScrollAffordanceStyle } from './shared/scroll-affordance'
+import { type PairMap } from './shared/pairs'
 
 interface IGroupsTabProps {
   storeId: number
   /** Opens the Sub groups tab of the store, where the vocabulary is managed. */
   onShowSubGroups?: () => void
+}
+
+/** The pair editor being open, and the row it was opened on. */
+interface PairEditorState {
+  kind: 'metadata' | 'titles'
+  row: ClassificationStoreConfigurationGroupDetail
+}
+
+/** The editable fields of a group; name and description are always replaced together. */
+interface GroupDraft {
+  name: string
+  description: string | null
+  /** Carried only once a change names it: absent keeps the stored pairs. */
+  customMetadata?: object | null
 }
 
 interface IGroupDetailFormValues {
@@ -67,6 +87,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
+  const [pairEditor, setPairEditor] = useState<PairEditorState | undefined>(undefined)
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)
@@ -94,10 +115,18 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     }
   }), [storeId, page, pageSize, searchTerm, sorting])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationGroupCollectionQuery(queryArgs)
+  const { data, error, isError, isLoading, isFetching, refetch } = useClassificationStoreConfigurationGroupCollectionQuery(queryArgs)
 
   const groups = data?.items ?? []
   const total = data?.totalItems ?? 0
+
+  // A refused list request must not read as an empty store: a 403 or a 500 leaves `data`
+  // undefined, so the failure is reported rather than left to look like "nothing here".
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -145,6 +174,74 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     setSelectedRows({})
   }, [importCount])
 
+  /** Cumulative pending change of a row, and the chain its saves run on, both keyed by row id. */
+  const draftsRef = useRef(new Map<number, GroupDraft>())
+  const chainsRef = useRef(new Map<number, Promise<void>>())
+  /** Last name and description the server confirmed for a row whose chain is running. */
+  const baseRef = useRef(new Map<number, { name: string, description: string | null }>())
+
+  /**
+   * Saves one changed field of a row, carrying whatever earlier change of that row has not come
+   * back yet. `GroupUpdate` replaces name and description whole, so two unordered writes of the
+   * same row (a metadata save and an inline rename) could land in either order and the later
+   * answer would restore the older name. The draft carries the pending value forward and the
+   * chain keeps the requests in the order they were made; a queued save is rebased onto the
+   * draft when it is sent, not when it is queued.
+   */
+  const handleUpdate = useCallback(async (
+    row: ClassificationStoreConfigurationGroupDetail,
+    change: Partial<GroupDraft>,
+    rethrow = false
+  ): Promise<void> => {
+    const { id } = row
+    // The row the grid shows may already carry the optimistic value of a save still in front of
+    // this one, so while a chain is running the base is the last value the server confirmed (or,
+    // before any has been, the row as it was when the chain began) — never the row read now.
+    const stored: GroupDraft = chainsRef.current.has(id)
+      ? (baseRef.current.get(id) ?? { name: row.name, description: row.description ?? null })
+      : { name: row.name, description: row.description ?? null }
+    if (!chainsRef.current.has(id)) baseRef.current.set(id, stored)
+    const outcome: { failure?: ApiError } = {}
+
+    const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
+      // Rebased here, not at queue time: a save in front of this one that failed drops the draft,
+      // and this change then goes out over the confirmed base, not the refused optimistic name.
+      const next: GroupDraft = { ...(draftsRef.current.get(id) ?? baseRef.current.get(id) ?? stored), ...change }
+
+      draftsRef.current.set(id, next)
+
+      const response = await updateGroup({
+        id,
+        classificationStoreConfigurationGroupUpdate: next
+      })
+
+      if (!('error' in response)) {
+        baseRef.current.set(id, { name: next.name, description: next.description })
+      }
+
+      if ('error' in response) {
+        // The server kept its own value: the next edit starts from the refetched row.
+        draftsRef.current.delete(id)
+        outcome.failure = new ApiError(response.error!)
+        if (!rethrow) trackError(outcome.failure)
+      }
+    })
+
+    chainsRef.current.set(id, chain)
+
+    void chain.then(() => {
+      if (chainsRef.current.get(id) === chain) {
+        chainsRef.current.delete(id)
+        draftsRef.current.delete(id)
+        baseRef.current.delete(id)
+      }
+    })
+
+    await chain
+
+    if (outcome.failure !== undefined && rethrow) throw outcome.failure
+  }, [updateGroup])
+
   const handleDetailChange = useCallback((changedValues: Partial<IGroupDetailFormValues>) => {
     const group = activeGroupRef.current
     if (group === undefined) return
@@ -155,18 +252,11 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
 
     if ('name' in changedValues && newName === '') return
 
-    void updateGroup({
-      id: group.id,
-      classificationStoreConfigurationGroupUpdate: {
-        name: newName !== '' ? newName : group.name,
-        description: newDesc !== '' ? newDesc : null
-      }
-    }).then((response) => {
-      if ('error' in response) {
-        trackError(new ApiError(response.error!))
-      }
+    void handleUpdate(group, {
+      name: newName !== '' ? newName : group.name,
+      description: newDesc !== '' ? newDesc : null
     })
-  }, [detailForm, updateGroup])
+  }, [detailForm, handleUpdate])
 
   const { handleFormChange: handleDetailFormChange } = useDebouncedFormChange(handleDetailChange, { delay: 300 })
 
@@ -257,217 +347,256 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
     })
   }
 
+  // Read at send time, so a name edited inline after the editor opened is the one sent.
+  const groupsRef = useRef(groups)
+  groupsRef.current = groups
+
+  const handleSavePairs = async (next: PairMap | null): Promise<void> => {
+    if (pairEditor === undefined) return
+
+    const group = groupsRef.current.find((g) => g.id === pairEditor.row.id) ?? pairEditor.row
+    await handleUpdate(group, { customMetadata: next }, true)
+  }
+
+  const handleClosePairEditor = (): void => { setPairEditor(undefined) }
+
   const columnHelper = useMemo(() => createColumnHelper<ClassificationStoreConfigurationGroupDetail>(), [])
 
   // Ref-forwarding: keep stable ref so columns useMemo never needs handler deps
   const handleDeleteRef = useRef(handleDelete)
   handleDeleteRef.current = handleDelete
+  const setPairEditorRef = useRef(setPairEditor)
+  setPairEditorRef.current = setPairEditor
 
   const columns = useMemo(() => [
     columnHelper.accessor('id', {
       header: t('classification-store.columns.id'),
-      size: 80
+      size: 60
     }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
-      size: 220,
-      // The name absorbs what the fixed columns leave, so the table never outgrows the pane.
+      size: 120,
+      // Its size is the table minWidth floor: a narrower pane scrolls the grid instead of cutting names.
       meta: { type: 'input', editable: true, autoWidth: true }
     }),
     columnHelper.display({
       id: 'actions',
       header: t('classification-store.columns.actions'),
-      size: 60,
+      size: 124,
       cell: (info) => (
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ () => { handleDeleteRef.current(info.row.original) } }
-          tooltip={ { title: t('delete') } }
-        />
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <PairActions
+            customMetadata={ info.row.original.customMetadata }
+            name={ info.row.original.name }
+            onEditMetadata={ () => { setPairEditorRef.current({ kind: 'metadata', row: info.row.original }) } }
+            onEditTitles={ () => { setPairEditorRef.current({ kind: 'titles', row: info.row.original }) } }
+          />
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ () => { handleDeleteRef.current(info.row.original) } }
+            tooltip={ { title: t('delete') } }
+          />
+        </Flex>
       )
     })
   ], [t, columnHelper])
 
   return (
-    <SplitLayout
-      leftItem={ {
-        size: 35,
-        minSize: 250,
-        children: (
-          <ContentLayout
-            renderToolbar={
-              <Toolbar theme="secondary">
-                { isLoading
-                  ? null
-                  : (
-                    <IconButton
-                      aria-label={ t('toolbar.reload') }
-                      icon={ { value: 'refresh' } }
-                      loading={ isFetching }
-                      onClick={ () => { void refetch() } }
-                      tooltip={ { title: t('toolbar.reload') } }
-                    />
-                    ) }
-                <Pagination
-                  current={ page }
-                  defaultPageSize={ pageSize }
-                  onChange={ (newPage, newPageSize) => {
-                    setPage(newPage)
-                    setPageSize(newPageSize)
-                  } }
-                  showSizeChanger
-                  showTotal={ (total) => t('pagination.show-total', { total }) }
-                  total={ total }
-                />
-              </Toolbar>
-            }
-            renderTopBar={
-              <Flex
-                align="center"
-                justify="space-between"
-                style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
-              >
-                <Flex
-                  align="center"
-                  gap="small"
-                >
-                  <Header title={ t('classification-store.tabs.groups') } />
-                  <IconTextButton
-                    icon={ { value: 'new' } }
-                    onClick={ handleAdd }
-                  >
-                    {t('classification-store.add-group')}
-                  </IconTextButton>
-                </Flex>
-                <SearchInput
-                  loading={ isFetching }
-                  onSearch={ (value) => {
-                    setSearchTerm(value)
-                    setPage(1)
-                  } }
-                  placeholder={ t('search') }
-                />
-              </Flex>
-            }
-          >
-            <Flex
-              style={ { height: '100%', padding: '0 16px' } }
-              vertical
-            >
-              <Grid
-                autoWidth
-                columns={ columns }
-                data={ groups }
-                enableRowSelection
-                enableSorting
-                isLoading={ isLoading || isFetching }
-                manualSorting
-                onSelectedRowsChange={ (rows) => { setSelectedRows(rows) } }
-                onSortingChange={ onSortingChange }
-                onUpdateCellData={ ({ columnId, value, rowData }) => {
-                  if (columnId === 'name') {
-                    const newName = (value as string).trim()
-                    if (newName === '') return
-                    void updateGroup({
-                      id: rowData.id,
-                      classificationStoreConfigurationGroupUpdate: {
-                        name: newName,
-                        description: rowData.description ?? null
-                      }
-                    }).then((response) => {
-                      if ('error' in response) {
-                        trackError(new ApiError(response.error!))
-                      }
-                    })
-                  }
-                } }
-                selectedRows={ selectedRows }
-                setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
-                sorting={ sorting }
-              />
-            </Flex>
-          </ContentLayout>
-        )
-      } }
-      resizeAble
-      rightItem={ {
-        // Widest share that still leaves the groups list its own width; the key grid carries one column more.
-        // The detail carries the strip, the headings and the widest grid, so it takes the larger share.
-        size: 65,
-        minSize: 300,
-        children: activeGroup === undefined
-          ? (
-            <Flex
-              align="center"
-              justify="center"
-              style={ { height: '100%' } }
-            >
-              <NoContent text={ t('classification-store.select-group-hint') } />
-            </Flex>
-            )
-          : (
+    <>
+      <SplitLayout
+        leftItem={ {
+          size: 35,
+          minSize: 300,
+          children: (
             <ContentLayout
+              renderToolbar={
+                <Toolbar theme="secondary">
+                  { isLoading
+                    ? null
+                    : (
+                      <IconButton
+                        aria-label={ t('toolbar.reload') }
+                        icon={ { value: 'refresh' } }
+                        loading={ isFetching }
+                        onClick={ () => { void refetch() } }
+                        tooltip={ { title: t('toolbar.reload') } }
+                      />
+                      ) }
+                  <Pagination
+                    current={ page }
+                    defaultPageSize={ pageSize }
+                    onChange={ (newPage, newPageSize) => {
+                      setPage(newPage)
+                      setPageSize(newPageSize)
+                    } }
+                    showSizeChanger
+                    showTotal={ (total) => t('pagination.show-total', { total }) }
+                    total={ total }
+                  />
+                </Toolbar>
+              }
               renderTopBar={
                 <Flex
                   align="center"
+                  gap="extra-small"
+                  justify="space-between"
                   style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                  wrap="wrap"
                 >
-                  <Header title={ activeGroup.name } />
+                  <Flex
+                    align="center"
+                    gap='extra-small'
+                    wrap="wrap"
+                  >
+                    <Title>{t('classification-store.tabs.groups')}</Title>
+                    <IconTextButton
+                      icon={ { value: 'new' } }
+                      onClick={ handleAdd }
+                    >
+                      {t('classification-store.add-group')}
+                    </IconTextButton>
+                  </Flex>
+                  <SearchInput
+                    loading={ isFetching }
+                    onSearch={ (value) => {
+                      setSearchTerm(value)
+                      setPage(1)
+                    } }
+                    placeholder={ t('search') }
+                    withPrefix={ false }
+                    withoutAddon={ false }
+                  />
                 </Flex>
               }
             >
               <Flex
-                style={ { height: '100%' } }
+                style={ { height: '100%', padding: '0 16px', ...getScrollAffordanceStyle(token.colorBgContainer, token.colorBorder) } }
                 vertical
               >
-                <FormKit
-                  formProps={ {
-                    form: detailForm,
-                    onValuesChange: handleDetailFormChange
+                <Grid
+                  autoWidth
+                  columns={ columns }
+                  data={ groups }
+                  enableRowSelection
+                  enableSorting
+                  isLoading={ isLoading || isFetching }
+                  manualSorting
+                  onSelectedRowsChange={ (rows) => { setSelectedRows(rows) } }
+                  onSortingChange={ onSortingChange }
+                  onUpdateCellData={ ({ columnId, value, rowData }) => {
+                    if (columnId === 'name') {
+                      const newName = (value as string).trim()
+                      if (newName === '') return
+                      void handleUpdate(rowData as ClassificationStoreConfigurationGroupDetail, { name: newName })
+                    }
                   } }
-                  wrapInPanel={ false }
-                >
-                  <Flex
-                    gap="small"
-                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
-                    vertical
-                  >
-                    <Form.Item
-                      label={ t('classification-store.columns.name') }
-                      name="name"
-                      rules={ [{ required: true }] }
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      label={ t('classification-store.columns.description') }
-                      name="description"
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Flex>
-                </FormKit>
-                <Flex style={ { flex: 1, overflowX: 'auto', overflowY: 'hidden' } }>
-                  {/*
-                    Keyed by store and group so switching either remounts the grid. Its row
-                    selection is keyed by sub-group section and key id, and both repeat across
-                    groups, so a carried-over selection would let Assign and Unassign act on
-                    keys of the group the user just left.
-                  */}
-                  <KeyGroupRelationsGrid
-                    groupId={ activeGroup.id }
-                    groupName={ activeGroup.name }
-                    key={ `${storeId}-${activeGroup.id}` }
-                    onShowSubGroups={ onShowSubGroups }
-                    storeId={ storeId }
-                  />
-                </Flex>
+                  selectedRows={ selectedRows }
+                  setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
+                  sorting={ sorting }
+                />
               </Flex>
             </ContentLayout>
-            )
-      } }
-      withDivider
-      withToolbar
-    />
+          )
+        } }
+        resizeAble
+        rightItem={ {
+          // Widest share that still leaves the groups list its own width; the key grid carries one column more.
+          // The detail carries the strip, the headings and the widest grid, so it takes the larger share.
+          size: 65,
+          minSize: 300,
+          children: activeGroup === undefined
+            ? (
+              <Flex
+                align="center"
+                justify="center"
+                style={ { height: '100%' } }
+              >
+                <NoContent text={ t('classification-store.select-group-hint') } />
+              </Flex>
+              )
+            : (
+              <ContentLayout
+                renderTopBar={
+                  <Flex
+                    align="center"
+                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                  >
+                    <Header title={ activeGroup.name } />
+                  </Flex>
+                }
+              >
+                <Flex
+                  style={ { height: '100%' } }
+                  vertical
+                >
+                  <FormKit
+                    formProps={ {
+                      form: detailForm,
+                      onValuesChange: handleDetailFormChange
+                    } }
+                    wrapInPanel={ false }
+                  >
+                    <Flex
+                      gap="small"
+                      style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+                      vertical
+                    >
+                      <Form.Item
+                        label={ t('classification-store.columns.name') }
+                        name="name"
+                        rules={ [{ required: true }] }
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        label={ t('classification-store.columns.description') }
+                        name="description"
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Flex>
+                  </FormKit>
+                  <Flex style={ { flex: 1, minWidth: 0, ...getScrollAffordanceStyle(token.colorBgContainer, token.colorBorder) } }>
+                    {/*
+                      Keyed by store and group so switching either remounts the grid. Its row
+                      selection is keyed by sub-group section and key id, and both repeat across
+                      groups, so a carried-over selection would let Assign and Unassign act on
+                      keys of the group the user just left.
+                    */}
+                    <KeyGroupRelationsGrid
+                      groupId={ activeGroup.id }
+                      groupName={ activeGroup.name }
+                      key={ `${storeId}-${activeGroup.id}` }
+                      onShowSubGroups={ onShowSubGroups }
+                      storeId={ storeId }
+                    />
+                  </Flex>
+                </Flex>
+              </ContentLayout>
+              )
+        } }
+        withDivider
+        withToolbar
+      />
+      <MetadataModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'metadata' }
+        value={ pairEditor?.row.customMetadata }
+      />
+      <TitlesModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'titles' }
+        value={ pairEditor?.row.customMetadata }
+      />
+    </>
   )
 }
