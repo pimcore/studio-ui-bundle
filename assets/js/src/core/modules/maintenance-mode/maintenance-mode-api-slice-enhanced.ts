@@ -8,9 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './maintenance-mode-api-slice.gen'
 
+// Both return the new state; a refetch would run alongside the logout of "Deactivate and log out" and keep the session alive
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.MAINTENANCE_MODE],
   endpoints: {
@@ -18,10 +19,26 @@ export const api = baseApi.enhanceEndpoints({
       providesTags: () => providingTags.MAINTENANCE_MODE()
     },
     maintenanceModeActivate: {
-      invalidatesTags: () => invalidatingTags.MAINTENANCE_MODE()
+      invalidatesTags: () => [],
+      async onQueryStarted (_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          await dispatch(api.util.upsertQueryData('maintenanceModeGet', undefined, data))
+        } catch {
+          // The caller reports the failed request
+        }
+      }
     },
     maintenanceModeDeactivate: {
-      invalidatesTags: () => invalidatingTags.MAINTENANCE_MODE()
+      invalidatesTags: () => [],
+      async onQueryStarted (_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          await dispatch(api.util.upsertQueryData('maintenanceModeGet', undefined, data))
+        } catch {
+          // The caller reports the failed request
+        }
+      }
     }
   }
 })
