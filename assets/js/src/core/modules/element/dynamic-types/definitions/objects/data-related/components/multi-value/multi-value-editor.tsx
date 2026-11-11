@@ -87,6 +87,8 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
   const hasVariants = declaredVariantsOf(props.variants).length > 0
   const heading = slot.label ?? (hasVariants ? t('classification-store.multi-value.default-variant') : null)
   const addAllowed = canAdd(props.maximum, indexes.length)
+  // A variant no longer declared keeps the values it holds, and takes no new ones.
+  const canAddHere = slot.declared
 
   const move = (position: number, delta: -1 | 1): void => {
     const neighbour = indexes[position + delta]
@@ -150,7 +152,7 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
         </Flex>
       ))}
 
-      {isRepeating && isEditable && (
+      {isRepeating && isEditable && canAddHere && (
         <Flex
           align='center'
           gap='extra-small'

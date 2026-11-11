@@ -105,6 +105,18 @@ describe('FieldDefinitionMultiValueVariants', () => {
     expect(screen.getByText(EMPTY_REFUSAL)).toBeInTheDocument()
   })
 
+  it('shows a space as it is typed and trims the name on blur', () => {
+    render(<Host initial={ [{ name: 'metric' }] } />)
+    const input = screen.getAllByLabelText(NAME)[0] as HTMLInputElement
+
+    fireEvent.change(input, { target: { value: 'metric ' } })
+    expect(input.value).toBe('metric ')
+
+    fireEvent.blur(input)
+    expect(emitted).toEqual([{ name: 'metric' }])
+    expect(input.value).toBe('metric')
+  })
+
   it('removes a row', () => {
     render(<Host initial={ [{ name: 'metric' }, { name: 'imperial' }] } />)
     fireEvent.click(screen.getAllByLabelText('delete')[0])

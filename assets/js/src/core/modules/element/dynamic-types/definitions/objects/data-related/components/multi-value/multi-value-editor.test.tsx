@@ -320,6 +320,17 @@ describe('MultiValueEditor', () => {
     expect(await lastEmitted()).toEqual([{ var: 'metric', v: 'm2', p: 0 }, { var: 'legacy', v: 'l', p: 0 }, { v: 'd', p: 0 }])
   })
 
+  it('offers no add control in the slot of an undeclared variant, while declared slots keep theirs', () => {
+    renderEditor({
+      variants: [{ name: 'metric' }],
+      multiValue: true,
+      value: [{ var: 'metric', v: 'm' }, { var: 'legacy', v: 'l' }]
+    })
+
+    expect(inputs()).toHaveLength(2)
+    expect(screen.getAllByText(ADD)).toHaveLength(1)
+  })
+
   // A declared row with no name addresses nothing, so it is no slot of its own; what it must never
   // become is a second unheaded slot beside the default one, or one headed by nothing.
   it('declares no slot for a variant row carrying no name', () => {

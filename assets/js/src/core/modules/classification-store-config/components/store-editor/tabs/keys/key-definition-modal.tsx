@@ -29,6 +29,7 @@ import {
   type ClassificationStoreConfigurationKeyDetail,
   type ClassificationStoreConfigurationKeyUpdate,
   type ClassificationStoreKeyDefinition,
+  type ClassificationStoreVariantLayout,
   useClassificationStoreConfigurationKeyUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
@@ -67,9 +68,17 @@ const withDelegateMember = (definition: ClassificationStoreKeyDefinition): Class
   const settings = Object.fromEntries(
     Object.entries(record).filter(([key, value]) => !MULTI_VALUE_OWN_KEYS.has(key) && value !== undefined)
   )
-  const existing = record.delegate !== null && typeof record.delegate === 'object' ? record.delegate as Record<string, unknown> : {}
 
-  const packed: ClassificationStoreKeyDefinition = { ...definition, delegate: { ...existing, ...settings } }
+  const packed: ClassificationStoreKeyDefinition = {
+    ...definition,
+    // Built from the current settings alone: on open the dialog hoists every delegate member to the top level, and a delegate type change clears the old ones there, so merging the stored `delegate` back would resurrect them.
+    delegate: settings,
+    // Names are saved trimmed: entries address a variant by its trimmed name.
+    variants: Array.isArray(record.variants)
+      ? (record.variants as ClassificationStoreVariantLayout[]).map((variant) =>
+          typeof variant?.name === 'string' ? { ...variant, name: variant.name.trim() } : variant)
+      : record.variants
+  } as ClassificationStoreKeyDefinition
 
   return packed
 }

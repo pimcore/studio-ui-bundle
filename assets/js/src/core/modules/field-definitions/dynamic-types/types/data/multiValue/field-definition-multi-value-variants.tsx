@@ -13,7 +13,6 @@ import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ClassificationStoreVariantLayout } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { getVariantRefusals } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-refusals'
-import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
 
 export interface FieldDefinitionMultiValueVariantsProps {
   value?: ClassificationStoreVariantLayout[] | null
@@ -67,9 +66,14 @@ export const FieldDefinitionMultiValueVariants = ({ value: valueProp, onChange }
         <Space key={ ids.current[index] }>
           <Input
             aria-label={ t('classification-store.multi-value.variant-name') }
+            onBlur={ () => {
+              if (typeof variant.name === 'string' && variant.name !== variant.name.trim()) {
+                edit(index, { name: variant.name.trim() })
+              }
+            } }
             onChange={ (event) => { edit(index, { name: event.target.value }) } }
             placeholder={ t('classification-store.multi-value.variant-name') }
-            value={ variantNameOf(variant) }
+            value={ typeof variant.name === 'string' ? variant.name : '' }
           />
           <Input
             aria-label={ t('classification-store.multi-value.variant-label') }
