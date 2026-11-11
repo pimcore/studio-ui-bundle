@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -28,7 +28,7 @@ export const useActivateMaintenanceMode = (): UseActivateMaintenanceModeReturn =
   const modal = useFormModal()
   const [activate] = useMaintenanceModeActivateMutation()
 
-  const activateWithConfirmation = (): void => {
+  const activateWithConfirmation = useCallback((): void => {
     modal.confirm({
       title: t('maintenance-mode.activate.title'),
       content: (
@@ -55,7 +55,7 @@ export const useActivateMaintenanceMode = (): UseActivateMaintenanceModeReturn =
         }
       }
     })
-  }
+  }, [modal, activate, t])
 
   return { activateWithConfirmation }
 }

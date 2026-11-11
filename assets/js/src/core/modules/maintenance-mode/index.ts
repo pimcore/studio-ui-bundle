@@ -16,7 +16,7 @@ import { type MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
 import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator'
-import { useActivateMaintenanceMode } from './hooks/use-activate-maintenance-mode'
+import { useMaintenanceModeContext } from './context/maintenance-mode-context'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -31,7 +31,7 @@ moduleSystem.registerModule({
       permission: UserPermission.MaintenanceMode,
       perspectivePermission: NavPermission.MaintenanceMode,
       useCustomMainNavItem: () => {
-        const { activateWithConfirmation } = useActivateMaintenanceMode()
+        const { activateWithConfirmation } = useMaintenanceModeContext()
 
         return {
           name: 'SystemMaintenanceMode',

@@ -8,11 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { renderHook } from '@testing-library/react'
+import React from 'react'
+import { fireEvent, render, renderHook, screen } from '@testing-library/react'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
 import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator'
+import { MaintenanceModeProvider } from './context/maintenance-mode-context'
 import './index'
 
 const mockRegisterToSlot = jest.fn()
@@ -59,8 +61,27 @@ jest.mock('./components/maintenance-mode-indicator', () => ({
 }))
 
 jest.mock('./hooks/use-activate-maintenance-mode', () => ({
-  useActivateMaintenanceMode: () => ({ activateWithConfirmation: mockActivateWithConfirmation })
+  useActivateMaintenanceMode: () => {
+    jest.requireActual<typeof React>('react').useState(false)
+
+    return { activateWithConfirmation: mockActivateWithConfirmation }
+  }
 }))
+
+// Like MainNav: hooks of its own, then the entry's hook inline and only while the nav is open
+const NavHost = ({ entry, isOpen }: { entry: IMainNavItem, isOpen: boolean }): React.JSX.Element => {
+  const [label] = React.useState('nav')
+  const navItem = isOpen ? entry.useCustomMainNavItem!() : undefined
+
+  return (
+    <button
+      onClick={ navItem?.onClick }
+      type="button"
+    >
+      {label}
+    </button>
+  )
+}
 
 const findEntry = (): IMainNavItem | undefined => {
   const { result } = renderHook(() => useMainNav())
@@ -77,6 +98,7 @@ describe('maintenance mode module', () => {
   beforeEach(() => {
     mockAllowed.user = true
     mockAllowed.perspective = true
+    mockActivateWithConfirmation.mockClear()
   })
 
   it('shows the System menu entry with the user and the perspective permission', () => {
@@ -101,9 +123,30 @@ describe('maintenance mode module', () => {
 
   it('opens the activation confirm on click', () => {
     const entry = findEntry()
-    const { result } = renderHook(() => entry!.useCustomMainNavItem!())
+    const { result } = renderHook(() => entry!.useCustomMainNavItem!(), { wrapper: MaintenanceModeProvider })
 
     result.current.onClick()
+
+    expect(mockActivateWithConfirmation).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the main nav hook count when the nav opens', () => {
+    const entry = findEntry()!
+    const { rerender } = render(
+      <NavHost
+        entry={ entry }
+        isOpen={ false }
+      />,
+      { wrapper: MaintenanceModeProvider }
+    )
+
+    rerender(
+      <NavHost
+        entry={ entry }
+        isOpen
+      />
+    )
+    fireEvent.click(screen.getByRole('button'))
 
     expect(mockActivateWithConfirmation).toHaveBeenCalledTimes(1)
   })
