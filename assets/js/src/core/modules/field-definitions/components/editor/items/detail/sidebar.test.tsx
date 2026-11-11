@@ -55,10 +55,15 @@ jest.mock('@Pimcore/modules/field-definitions/utils/global-clipboard', () => ({
   useGlobalFieldDefinitionClipboard: () => ({ copiedLayout: undefined })
 }))
 
+// the registry each buildTree call was handed; without one it falls back to the global one
+const mockBuildTreeRegistries: unknown[] = []
+
 // the real buildTree resolves the field-definition registry from the DI container; the
 // sidebar's own item callback is what is under test, so a bare walk feeds it
 jest.mock('@Pimcore/modules/field-definitions/utils/layout-helpers', () => ({
-  buildTree: ({ structure, fieldDefinitions, itemCallback }: any) => {
+  buildTree: ({ structure, fieldDefinitions, itemCallback, registry }: any) => {
+    mockBuildTreeRegistries.push(registry)
+
     const build = (node: any, parentPath: string[]): any => {
       const currentPath: string[] = [...parentPath, String(node.id)]
       const item = {
@@ -135,7 +140,24 @@ const renderSidebar = (overrides: Record<string, unknown>): void => {
 }
 
 describe('DetailSidebar', () => {
-  beforeEach(() => { jest.clearAllMocks() })
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockBuildTreeRegistries.length = 0
+  })
+
+  it('builds the tree against the editor\'s own field definition registry', () => {
+    // pimcore/platform-version#764: without it the tree resolved icons from the global
+    // registry, so a bundle with its own registry had to register its types globally,
+    // and they then leaked into the class editor's add-field dropdown
+    const editorRegistry = {
+      getDropdownActions: () => [],
+      getDynamicType: () => undefined
+    }
+    renderSidebar({ fieldDefinitionRegistry: editorRegistry })
+
+    expect(mockBuildTreeRegistries.length).toBeGreaterThan(0)
+    mockBuildTreeRegistries.forEach((registry) => { expect(registry).toBe(editorRegistry) })
+  })
 
   it('offers actions and drag handles when editing', () => {
     renderSidebar({})
