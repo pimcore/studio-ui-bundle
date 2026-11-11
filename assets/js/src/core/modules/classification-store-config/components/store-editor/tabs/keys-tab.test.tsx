@@ -45,7 +45,9 @@ jest.mock('@Pimcore/components/grid/grid.styles', () => ({
 }))
 
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
+  useTranslation: () => ({
+    t: (key: string, options?: { name?: string }) => options?.name !== undefined ? `${key}:${options.name}` : key
+  }),
   initReactI18next: { type: '3rdParty', init: () => {} }
 }))
 
@@ -78,9 +80,23 @@ jest.mock('@sdk/app', () => ({
   })
 }))
 
-// The dialog is not opened here; the tab renders it closed, which shows nothing.
+// The key definition dialog stays closed here. The pair editors open, and their footer buttons are
+// the stand-in's own.
 jest.mock('@Pimcore/components/modal/modal', () => ({
-  Modal: ({ children, open }: any) => (open === true ? <div>{children}</div> : null)
+  Modal: ({ children, open, onOk }: any) => (open === true
+    ? (
+      <div>
+        {children}
+        <button
+          data-testid="modal-ok"
+          onClick={ onOk }
+          type="button"
+        >
+          ok
+        </button>
+      </div>
+      )
+    : null)
 }))
 
 // The real cell resolves its renderer through the dynamic type registry. This stand-in shows
@@ -751,3 +767,84 @@ describe('KeysTab deleted view', () => {
     expect(screen.queryByText('classification-store.keys-deleted-empty')).toBeNull()
   })
 })
+
+describe('KeysTab pair actions', () => {
+  const originalFetch = globalThis.fetch
+  const withPairs = { ...height, customMetadata: { externalCode: 'EF1', 'title.de': 'Höhe' } }
+  const withoutPairs = { ...width, customMetadata: null }
+
+  const rowButtons = (index: number): HTMLElement[] => within(screen.getAllByRole('row')[index]).getAllByRole('button')
+
+  beforeEach(() => {
+    requests.length = 0
+    stubFetch([withPairs, withoutPairs])
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('puts definition, metadata, titles and delete in that order, named after the key', async () => {
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    const labels = rowButtons(1).map((button) => button.getAttribute('aria-label'))
+
+    expect(labels).toEqual([
+      null,
+      'classification-store.aria.edit-metadata:height',
+      'classification-store.aria.edit-titles:height',
+      null
+    ])
+  })
+
+  it('counts the pairs on the metadata button only and shows no number for none', async () => {
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    expect(within(screen.getAllByRole('row')[1]).getByText('2')).toBeInTheDocument()
+    expect(rowButtons(1)[2].closest('.ant-badge')).toBeNull()
+    expect(screen.getAllByRole('row')[2].querySelector('.ant-scroll-number')).toBeNull()
+  })
+
+  it('declares the wider actions column', async () => {
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    expect(screen.getByText('classification-store.columns.actions').closest('th')!.style.width).toBe('156px')
+  })
+
+  it('sends the name and the pairs with the type and the definition left alone', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByLabelText('classification-store.aria.edit-metadata:height'))
+    await user.type(screen.getAllByLabelText(rowLabel('classification-store.pair-value'))[0], '2')
+    await user.click(screen.getByTestId('modal-ok'))
+
+    await waitFor(() => { expect(updateRequests()).toHaveLength(1) }, WAIT_BUDGET)
+
+    expect(updateRequests()[0].body).toEqual({
+      name: 'height',
+      type: null,
+      definition: null,
+      customMetadata: { externalCode: 'EF12', 'title.de': 'Höhe' }
+    })
+  })
+
+  it('opens an empty editor for a key without pairs', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('width', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getByLabelText('classification-store.aria.edit-metadata:width'))
+
+    expect(screen.getByText('classification-store.pair-no-content')).toBeInTheDocument()
+  })
+})
+
+// Each pair input carries its column heading and its row number.
+const rowLabel = (heading: string): RegExp => new RegExp(`^${heading.replace(/\./g, '\\.')} \\d+$`)

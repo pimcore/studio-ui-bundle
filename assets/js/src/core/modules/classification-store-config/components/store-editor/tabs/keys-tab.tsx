@@ -46,6 +46,10 @@ import {
 import { isKeyTypeHeldByEngine } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
 import { useStoreEngine } from '@Pimcore/modules/classification-store-config/hooks/use-store-engine'
 import { KeyDefinitionModal } from './keys/key-definition-modal'
+import { MetadataModal } from './shared/metadata-modal'
+import { TitlesModal } from './shared/titles-modal'
+import { PairActions } from './shared/pair-actions'
+import { type PairMap } from './shared/pairs'
 
 interface IKeysTabProps {
   storeId: number
@@ -54,6 +58,12 @@ interface IKeysTabProps {
 type KeysView = 'active' | 'deleted'
 
 type KeyRow = ClassificationStoreConfigurationKeyDetail & { title: string | undefined }
+
+/** The pair editor being open, and the key it was opened on. */
+interface PairEditorState {
+  kind: 'metadata' | 'titles'
+  row: ClassificationStoreConfigurationKeyDetail
+}
 
 export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -90,6 +100,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   const [definitionKeyId, setDefinitionKeyId] = useState<number | undefined>(undefined)
   const [definitionModalOpen, setDefinitionModalOpen] = useState(false)
+  const [pairEditor, setPairEditor] = useState<PairEditorState | undefined>(undefined)
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -140,26 +151,28 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const {
     currentData: data,
     data: lastData,
+    error,
+    isError,
     isLoading,
     isFetching,
-    isError,
-    error,
     refetch
   } = useClassificationStoreConfigurationKeyCollectionQuery(
     queryArgs,
     { refetchOnMountOrArgChange: isDeletedView }
   )
 
-  // A failed listing is reported, never read as an empty one: an unreadable Deleted view must not
-  // say the bin is empty.
-  useEffect(() => {
-    if (isError && error !== undefined) trackError(new ApiError(error as ConstructorParameters<typeof ApiError>[0]))
-  }, [isError, error])
-
   const keys = data?.items ?? []
   // Rows come from currentData; the total holds its last known value while a request is in flight
   // so the pagination does not collapse to one page on every page change, search or view switch.
   const total = (data ?? (isFetching && !isError ? lastData : undefined))?.totalItems ?? 0
+
+  // A refused list request must not read as an empty store: a 403 or a 500 leaves `data`
+  // undefined, so the failure is reported rather than left to look like "nothing here".
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -334,6 +347,32 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     }
   }, [updateKey])
 
+  // Sends the pairs and the name the payload requires, and nothing else: an absent title or
+  // description leaves the stored one alone, and a null type or definition does the same.
+  const keysRef = useRef(keys)
+  keysRef.current = keys
+
+  const handleSavePairs = async (next: PairMap | null): Promise<void> => {
+    if (pairEditor === undefined) return
+
+    const key = keysRef.current.find((k) => k.id === pairEditor.row.id) ?? pairEditor.row
+    const response = await updateKey({
+      id: key.id,
+      classificationStoreConfigurationKeyUpdate: {
+        name: key.name,
+        type: null,
+        definition: null,
+        customMetadata: next
+      }
+    })
+
+    if ('error' in response) {
+      throw new ApiError(response.error!)
+    }
+  }
+
+  const handleClosePairEditor = (): void => { setPairEditor(undefined) }
+
   const handleTypeChange = useCallback(async (
     key: ClassificationStoreConfigurationKeyDetail,
     newType: string
@@ -361,6 +400,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   handleDeleteRef.current = handleDelete
   const handleRestoreRef = useRef(handleRestore)
   handleRestoreRef.current = handleRestore
+  const setPairEditorRef = useRef(setPairEditor)
+  setPairEditorRef.current = setPairEditor
   const handleTitleChangeRef = useRef(handleTitleChange)
   handleTitleChangeRef.current = handleTitleChange
   const handleTypeChangeRef = useRef(handleTypeChange)
@@ -399,7 +440,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     columnHelper.display({
       id: 'actions',
       header: t('classification-store.columns.actions'),
-      size: 90,
+      size: 156,
       cell: (info) => (
         <Flex
           align="center"
@@ -409,6 +450,12 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             icon={ { value: 'edit' } }
             onClick={ () => { handleOpenDefinitionRef.current(info.row.original) } }
             tooltip={ { title: t('classification-store.edit-definition') } }
+          />
+          <PairActions
+            customMetadata={ info.row.original.customMetadata }
+            name={ info.row.original.name }
+            onEditMetadata={ () => { setPairEditorRef.current({ kind: 'metadata', row: info.row.original }) } }
+            onEditTitles={ () => { setPairEditorRef.current({ kind: 'titles', row: info.row.original }) } }
           />
           <IconButton
             icon={ { value: 'trash' } }
@@ -490,8 +537,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         renderTopBar={
           <Flex
             align="center"
+            gap="extra-small"
             justify="space-between"
             style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+            wrap="wrap"
           >
             <Flex
               align="center"
@@ -585,6 +634,23 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         onClose={ handleCloseDefinition }
         onSaved={ handleDefinitionSaved }
         open={ definitionModalOpen }
+      />
+
+      <MetadataModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'metadata' }
+        value={ pairEditor?.row.customMetadata }
+      />
+      <TitlesModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'titles' }
+        value={ pairEditor?.row.customMetadata }
       />
     </>
   )

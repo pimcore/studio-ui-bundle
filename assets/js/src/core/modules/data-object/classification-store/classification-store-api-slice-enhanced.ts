@@ -14,6 +14,8 @@ import { type TypedUseMutation } from '@reduxjs/toolkit/query/react'
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import {
   api as baseApi,
+  type ClassificationStoreConfigurationGroupCollectionApiArg,
+  type ClassificationStoreConfigurationCollectionCollectionApiArg,
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
@@ -64,6 +66,8 @@ export interface ClassificationStoreConfigurationSubGroupUpdate {
   name: string
   /** Description of the sub group */
   description: string | null
+  /** Free-form pairs of the sub group; absent keeps the stored ones, null clears them */
+  customMetadata?: object | null
 }
 
 export interface ClassificationStoreConfigurationSubGroupCollectionApiResponse {
@@ -238,7 +242,7 @@ export interface ClassificationStoreGroupLayout2 extends GeneratedGroupLayout {
 // re-read from the server, which is the only authority on what it now holds.
 
 /** The fields of a key whose cached value a confirmation has to decide about. */
-const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition', 'localized'] as const
+const KEY_WRITE_FIELDS = ['title', 'description', 'type', 'definition', 'localized', 'customMetadata'] as const
 type KeyWriteField = typeof KEY_WRITE_FIELDS[number]
 
 interface KeyWriteCounters { pending: number, started: number }
@@ -284,6 +288,7 @@ const keyFieldsWritten = (update: {
   type?: string | null
   definition?: unknown
   localized?: boolean | null
+  customMetadata?: object | null
 }): Record<KeyWriteField, boolean> => ({
   // `title` and `description` are optional: absent leaves the stored value alone, null clears it.
   title: update.title !== undefined,
@@ -293,7 +298,9 @@ const keyFieldsWritten = (update: {
   definition: update.definition !== undefined && update.definition !== null,
   // `localized` is a tri-state: absent leaves the stored value alone, and a present null is a
   // value rather than an absence — it stores NULL, so the key inherits the class field's flag.
-  localized: update.localized !== undefined
+  localized: update.localized !== undefined,
+  // `customMetadata` is a tri-state too: absent leaves the stored pairs alone, null clears them.
+  customMetadata: update.customMetadata !== undefined
 })
 
 /**
@@ -637,6 +644,115 @@ const preserveAcrossKeyCollectionReads = (
   }
 }
 
+// Collections and groups: the same question the key ledger answers, without the corrective
+// re-read. A metadata save and a name edit are separate requests on one row, each answered with
+// the row as the server held it when it read it, so a confirmation may only take the response for
+// a member that no other local write of this client touched while it was in flight.
+type RowWriteField = 'name' | 'description' | 'customMetadata'
+const ROW_WRITE_FIELDS: readonly RowWriteField[] = ['name', 'description', 'customMetadata']
+
+const createRowWriteLedger = () => {
+  // Set when a request failed while another write of the same row overlapped it: its rollback was
+  // skipped (it could not tell its own members from the newer write's), so the cache is re-read
+  // once the last write has settled.
+  let needsReread = false
+  const counters = new Map<string, { pending: number, started: number }>()
+  let inFlight = 0
+  const slot = (id: unknown, field: RowWriteField): { pending: number, started: number } => {
+    const key = `${String(id)}:${field}`
+    let entry = counters.get(key)
+    if (entry === undefined) {
+      entry = { pending: 0, started: 0 }
+      counters.set(key, entry)
+    }
+    return entry
+  }
+
+  return (id: unknown, update: { customMetadata?: object | null }) => {
+    // `name` and `description` are required in the payload, so they are always written.
+    const written: Record<RowWriteField, boolean> = {
+      name: true,
+      description: true,
+      customMetadata: update.customMetadata !== undefined
+    }
+    const contended = new Map<RowWriteField, boolean>()
+    const startedAtDispatch = new Map<RowWriteField, number>()
+    for (const field of ROW_WRITE_FIELDS) {
+      contended.set(field, slot(id, field).pending > 0)
+      startedAtDispatch.set(field, slot(id, field).started)
+    }
+    inFlight += 1
+    for (const field of ROW_WRITE_FIELDS) {
+      if (!written[field]) continue
+      slot(id, field).pending += 1
+      slot(id, field).started += 1
+    }
+
+    return {
+      /** Whether the cached value of `field` is to be replaced by the response. */
+      // Written members are held to the same test as unwritten ones: a response may only decide a
+      // member when no other write of it was in flight at dispatch and none has started since
+      // (this request's own start is the one counted in `started` when it wrote the member).
+      // Otherwise the arrival order of overlapping answers would decide which stale value wins.
+      takesResponseFor: (field: RowWriteField): boolean =>
+        contended.get(field) !== true &&
+        slot(id, field).started === (startedAtDispatch.get(field) ?? 0) + (written[field] ? 1 : 0),
+      /** Whether no other write of a member this request wrote overlapped it, so undoing it is exact. */
+      ownsItsPatch: (): boolean => ROW_WRITE_FIELDS.every((field) => !written[field] || (
+        contended.get(field) !== true &&
+        slot(id, field).started === (startedAtDispatch.get(field) ?? 0) + 1
+      )),
+      /** A rollback was skipped because a newer write overlapped: ask for a re-read at the end. */
+      skippedRollback: (): void => { needsReread = true },
+      /** Closes the request; true when it was the last in flight and a skipped rollback wants a re-read. */
+      settled: (): boolean => {
+        for (const field of ROW_WRITE_FIELDS) {
+          if (written[field]) slot(id, field).pending -= 1
+        }
+        inFlight -= 1
+        if (inFlight !== 0) return false
+        counters.clear()
+        const reread = needsReread
+        needsReread = false
+        return reread
+      }
+    }
+  }
+}
+
+/** Re-reads every cached page of a collection endpoint, ignoring what the cache holds. */
+const refetchCachedPages = (
+  dispatch: (thunk: any) => void,
+  endpointName: 'classificationStoreConfigurationGroupCollection' | 'classificationStoreConfigurationCollectionCollection'
+): void => {
+  dispatch((innerDispatch: (thunk: any) => void, getState: () => unknown) => {
+    const state = getState() as Record<string, unknown>
+    const queries = (state.api as Record<string, unknown>)?.queries as Record<string, unknown> ?? {}
+
+    for (const [queryKey, queryState] of Object.entries(queries)) {
+      if (!queryKey.startsWith(`${endpointName}(`)) continue
+      const qs = queryState as { originalArgs: ClassificationStoreConfigurationGroupCollectionApiArg & ClassificationStoreConfigurationCollectionCollectionApiArg }
+      innerDispatch(baseApi.endpoints[endpointName].initiate(qs.originalArgs, { subscribe: false, forceRefetch: true }))
+    }
+  })
+}
+
+const openGroupWrite = createRowWriteLedger()
+const openCollectionWrite = createRowWriteLedger()
+
+/** The response row, with the cached value kept for every member this request may not decide. */
+const confirmedRow = <T extends { name: string, description?: string | null, customMetadata?: object | null }>(
+  updated: T,
+  cached: T,
+  takes: (field: RowWriteField) => boolean
+): T => {
+  const merged = { ...updated }
+  for (const field of ROW_WRITE_FIELDS) {
+    if (!takes(field)) (merged as Record<RowWriteField, unknown>)[field] = cached[field]
+  }
+  return merged
+}
+
 const api = baseApi.enhanceEndpoints({
   endpoints: {
 
@@ -649,6 +765,7 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationGroupUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const write = openGroupWrite(args.id, args.classificationStoreConfigurationGroupUpdate)
         const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationGroupCollectionApiResponse>(
           dispatch,
           'classificationStoreConfigurationGroupCollection',
@@ -656,7 +773,7 @@ const api = baseApi.enhanceEndpoints({
             const idx = draft.items.findIndex((g) => g.id === args.id)
             if (idx !== -1) {
               const update = args.classificationStoreConfigurationGroupUpdate
-              draft.items[idx] = { ...draft.items[idx], ...update }
+              Object.assign(draft.items[idx], update)
             }
           }
         )
@@ -667,11 +784,17 @@ const api = baseApi.enhanceEndpoints({
             'classificationStoreConfigurationGroupCollection',
             (draft) => {
               const idx = draft.items.findIndex((g) => g.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx !== -1) draft.items[idx] = confirmedRow(updated, draft.items[idx], write.takesResponseFor)
             }
           )
         } catch {
-          patchResults.forEach((r) => { r.undo() })
+          // Undoing restores the pre-request value of each member this request wrote, which would
+          // also discard a newer overlapping write's value for it. Roll back only when nothing
+          // overlapped; otherwise leave the cache and re-read once the overlap has settled.
+          if (write.ownsItsPatch()) patchResults.forEach((r) => { r.undo() })
+          else write.skippedRollback()
+        } finally {
+          if (write.settled()) refetchCachedPages(dispatch, 'classificationStoreConfigurationGroupCollection')
         }
       }
     },
@@ -704,6 +827,7 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationCollectionUpdate: {
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
+        const write = openCollectionWrite(args.id, args.classificationStoreConfigurationCollectionUpdate)
         const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationCollectionCollectionApiResponse>(
           dispatch,
           'classificationStoreConfigurationCollectionCollection',
@@ -711,7 +835,7 @@ const api = baseApi.enhanceEndpoints({
             const idx = draft.items.findIndex((c) => c.id === args.id)
             if (idx !== -1) {
               const update = args.classificationStoreConfigurationCollectionUpdate
-              draft.items[idx] = { ...draft.items[idx], ...update }
+              Object.assign(draft.items[idx], update)
             }
           }
         )
@@ -722,11 +846,14 @@ const api = baseApi.enhanceEndpoints({
             'classificationStoreConfigurationCollectionCollection',
             (draft) => {
               const idx = draft.items.findIndex((c) => c.id === updated.id)
-              if (idx !== -1) draft.items[idx] = updated
+              if (idx !== -1) draft.items[idx] = confirmedRow(updated, draft.items[idx], write.takesResponseFor)
             }
           )
         } catch {
-          patchResults.forEach((r) => { r.undo() })
+          if (write.ownsItsPatch()) patchResults.forEach((r) => { r.undo() })
+          else write.skippedRollback()
+        } finally {
+          if (write.settled()) refetchCachedPages(dispatch, 'classificationStoreConfigurationCollectionCollection')
         }
       }
     },
@@ -871,7 +998,8 @@ const api = baseApi.enhanceEndpoints({
                   ...(keepCached('description') ? { description: cached.description } : {}),
                   ...(keepCached('type') ? { type: cached.type } : {}),
                   ...(keepCached('definition') ? { definition: cached.definition } : {}),
-                  ...(keepCached('localized') ? { localized: cached.localized } : {})
+                  ...(keepCached('localized') ? { localized: cached.localized } : {}),
+                  ...(keepCached('customMetadata') ? { customMetadata: cached.customMetadata } : {})
                 }
               }
             )
