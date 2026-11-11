@@ -21,11 +21,11 @@ import {
   clearOptions,
   draftOf,
   carriesUnits,
+  publishesUnits,
   storesUnitMember,
   optionValuesOf,
   resolveSubset,
   toggleOption,
-  vocabularyOf,
   type IOverrideDraft,
   type IResolvedSubset
 } from './key-override'
@@ -125,7 +125,7 @@ const noOptionsDescriptionKey = (offeredCount: number, status: IResolvedSubset['
 
 export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { options, optionsUnavailableReason: reason } = vocabularyOf(relation)
+  const { options, optionsUnavailableReason: reason } = relation
   const clearLabel = t('classification-store.override.use-all-options')
   const clear = (): void => { onChange(clearOptions(draft)) }
   const heading = <Text strong>{ t('classification-store.override.options-heading') }</Text>
@@ -204,7 +204,7 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
   }
 
   const rows: ISubsetRow[] = [
-    ...options.map((option) => ({ value: option.value, label: option.label, detail: option.value, stale: false })),
+    ...options.map((option) => ({ value: option.value, label: option.key, detail: option.value, stale: false })),
     ...resolved.stale.map((value) => ({ value, label: value, detail: '', stale: true }))
   ]
 
@@ -229,7 +229,7 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
 
 /** True when the key's own definition gives the modal nothing to narrow: no options, no units. */
 export const offersNothing = (relation: Relation): boolean => {
-  const { options, optionsUnavailableReason: reason } = vocabularyOf(relation)
+  const { options, optionsUnavailableReason: reason } = relation
 
-  return !carriesUnits(relation) && !storesUnitMember(relation) && draftOf(relation).options === undefined && (options === undefined || options === null) && (reason === undefined || reason === null)
+  return !carriesUnits(relation) && !publishesUnits(relation) && !storesUnitMember(relation) && draftOf(relation).options === undefined && (options === undefined || options === null) && (reason === undefined || reason === null)
 }
