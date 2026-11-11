@@ -18,7 +18,7 @@ import {
   type ClassificationStoreConfigurationKeyGroupRelationDetail,
   useClassificationStoreConfigurationKeyGroupRelationCreateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import { buildOverride, carriesUnits, clearUnreadable, draftOf, storesUnitMember, type IOverrideDraft } from './key-override'
+import { buildOverride, carriesUnits, clearUnreadable, draftOf, publishesUnits, storesUnitMember, type IOverrideDraft } from './key-override'
 import { offersNothing, OptionsSection, StatedState } from './key-override-sections'
 import { UnitsSection } from './key-override-units-section'
 
@@ -113,7 +113,7 @@ export const KeyOverrideDialog = ({ relation, groupName, onClose }: IKeyOverride
                     onChange={ (next) => { setEdit({ relation, draft: next }) } }
                     relation={ relation }
                   />
-                  { (carriesUnits(relation) || storesUnitMember(relation)) && (
+                  { (carriesUnits(relation) || publishesUnits(relation) || storesUnitMember(relation)) && (
                   <UnitsSection
                     draft={ draft }
                     onChange={ (next) => { setEdit({ relation, draft: next }) } }

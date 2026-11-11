@@ -12,35 +12,26 @@ import { type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pi
 
 type Relation = ClassificationStoreConfigurationKeyGroupRelationDetail
 
-/** What the assignment row publishes about its key; declared here until the regenerated client carries it. */
-export interface IPublishedKeyVocabulary {
-  keyType?: string | null
-  options?: IPublishedOption[] | null
-  optionsUnavailableReason?: string | null
-  units?: { validUnits?: IPublishedUnit[] | null } | null
-}
-
-export interface IPublishedOption {
-  label: string
-  value: string
-}
-
-export interface IPublishedUnit {
-  id: string
-  symbol: string
-}
-
 /** Key types that carry units. */
 const UNIT_TYPES: ReadonlySet<string> = new Set(['quantityValue', 'inputQuantityValue', 'quantityValueRange'])
 
-export const vocabularyOf = (relation: Relation): IPublishedKeyVocabulary => relation as IPublishedKeyVocabulary
+export const carriesUnits = (relation: Relation): boolean => UNIT_TYPES.has(relation.keyType ?? '')
 
-export const carriesUnits = (relation: Relation): boolean => UNIT_TYPES.has(vocabularyOf(relation).keyType ?? '')
+/** True where the key publishes a unit vocabulary; null means its type holds no units. */
+export const publishesUnits = (relation: Relation): boolean => relation.units !== undefined && relation.units !== null
 
-export const keyUnitsOf = (relation: Relation): IPublishedUnit[] => vocabularyOf(relation).units?.validUnits ?? []
+/** The unit IDs the key permits; every installation unit where it restricts nothing, none where it holds no units. */
+export const unitIdsOf = (relation: Relation, installationUnits: string[] = []): string[] => {
+  if (!publishesUnits(relation)) return []
 
-export const unitSymbol = (relation: Relation, id: string): string =>
-  keyUnitsOf(relation).find((unit) => unit.id === id)?.symbol ?? id
+  return relation.units?.validUnits ?? installationUnits
+}
+
+export interface IKeyUnits {
+  installationUnits: string[]
+  /** The installation's abbreviation for the unit, the ID where it names none or the list is not resolved. */
+  unitLabel: (id: string) => string
+}
 
 /**
  * The three members of the override this screen edits, held as stored. `rest` carries every other
@@ -119,13 +110,11 @@ export const resolveSubset = (raw: unknown, offered: string[]): IResolvedSubset 
 }
 
 export const optionValuesOf = (relation: Relation): string[] =>
-  (vocabularyOf(relation).options ?? []).map((option) => option.value)
-
-export const unitIdsOf = (relation: Relation): string[] => keyUnitsOf(relation).map((unit) => unit.id)
+  (relation.options ?? []).map((option) => option.value)
 
 /** The values the default unit may be chosen from. */
-export const defaultUnitChoices = (relation: Relation, draft: IOverrideDraft): string[] => {
-  const resolved = resolveSubset(draft.validUnits, unitIdsOf(relation))
+export const defaultUnitChoices = (relation: Relation, draft: IOverrideDraft, installationUnits: string[]): string[] => {
+  const resolved = resolveSubset(draft.validUnits, unitIdsOf(relation, installationUnits))
 
   if (resolved.status === 'all') return resolved.live
   if (resolved.status === 'narrowed') return resolved.live
@@ -150,9 +139,10 @@ export const toggleUnit = (
   relation: Relation,
   draft: IOverrideDraft,
   id: string,
-  checked: boolean
+  checked: boolean,
+  installationUnits: string[]
 ): IOverrideDraft => {
-  const { stored } = resolveSubset(draft.validUnits, unitIdsOf(relation))
+  const { stored } = resolveSubset(draft.validUnits, unitIdsOf(relation, installationUnits))
   const next = checked ? [...stored.filter((item) => item !== id), id] : stored.filter((item) => item !== id)
 
   return {
@@ -165,10 +155,10 @@ export const toggleUnit = (
 export const clearOptions = (draft: IOverrideDraft): IOverrideDraft => ({ ...draft, options: undefined })
 
 /** Widening back to the key's own units keeps a default only where the key itself permits it. */
-export const clearUnits = (relation: Relation, draft: IOverrideDraft): IOverrideDraft => ({
+export const clearUnits = (relation: Relation, draft: IOverrideDraft, installationUnits: string[]): IOverrideDraft => ({
   ...draft,
   validUnits: undefined,
-  defaultUnit: typeof draft.defaultUnit === 'string' && unitIdsOf(relation).includes(draft.defaultUnit)
+  defaultUnit: typeof draft.defaultUnit === 'string' && unitIdsOf(relation, installationUnits).includes(draft.defaultUnit)
     ? draft.defaultUnit
     : undefined
 })
@@ -200,7 +190,10 @@ export interface IOverrideTag {
 }
 
 /** One tag per member the assignment overrides, none where it overrides nothing. */
-export const overrideTags = (relation: Relation): IOverrideTag[] => {
+export const overrideTags = (
+  relation: Relation,
+  { installationUnits, unitLabel }: IKeyUnits = { installationUnits: [], unitLabel: (id) => id }
+): IOverrideTag[] => {
   const draft = draftOf(relation)
   const tags: IOverrideTag[] = []
 
@@ -210,7 +203,7 @@ export const overrideTags = (relation: Relation): IOverrideTag[] => {
   }
 
   const options = optionValuesOf(relation)
-  const optionsPublished = vocabularyOf(relation).options !== undefined && vocabularyOf(relation).options !== null
+  const optionsPublished = relation.options !== undefined && relation.options !== null
 
   if (draft.options !== undefined && !optionsPublished) {
     // The key's options are unknown, not absent: nothing about the stored subset can be judged.
@@ -232,17 +225,17 @@ export const overrideTags = (relation: Relation): IOverrideTag[] => {
   }
 
   if (typeof draft.defaultUnit === 'string') {
-    const published = keyUnitsOf(relation)
+    const published = unitIdsOf(relation, installationUnits)
     // A default the key no longer permits is a disagreement the row must not present as a valid value.
-    const outside = published.length > 0 && !published.some((unit) => unit.id === draft.defaultUnit)
+    const outside = published.length > 0 && !published.includes(draft.defaultUnit)
 
-    tags.push({ id: 'default-unit', translationKey: null, params: {}, text: unitSymbol(relation, draft.defaultUnit), danger: outside })
+    tags.push({ id: 'default-unit', translationKey: null, params: {}, text: unitLabel(draft.defaultUnit), danger: outside })
   } else if (draft.defaultUnit !== undefined) {
     tags.push({ id: 'default-unit', translationKey: 'classification-store.override.tag-unreadable', params: {}, text: '', danger: true })
   }
 
   if (draft.validUnits !== undefined) {
-    const units = unitIdsOf(relation)
+    const units = unitIdsOf(relation, installationUnits)
     const resolved = resolveSubset(draft.validUnits, units)
 
     if (resolved.status === 'empty' || resolved.status === 'stale-only' || resolved.status === 'invalid') {

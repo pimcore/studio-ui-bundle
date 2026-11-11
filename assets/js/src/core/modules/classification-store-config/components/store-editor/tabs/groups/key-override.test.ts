@@ -9,11 +9,29 @@
  */
 
 import { type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import { buildOverride, draftOf, overrideTags, resolveSubset } from './key-override'
+import {
+  buildOverride,
+  defaultUnitChoices,
+  draftOf,
+  overrideTags,
+  resolveSubset,
+  toggleUnit,
+  unitIdsOf
+} from './key-override'
 
-const rel = (extra: Record<string, unknown>): ClassificationStoreConfigurationKeyGroupRelationDetail => (
-  { keyId: 1, groupId: 2, ...extra } as unknown as ClassificationStoreConfigurationKeyGroupRelationDetail
-)
+const rel = (extra: Partial<ClassificationStoreConfigurationKeyGroupRelationDetail>): ClassificationStoreConfigurationKeyGroupRelationDetail => ({
+  keyId: 1,
+  groupId: 2,
+  sorter: 0,
+  mandatory: false,
+  keyName: null,
+  keyDescription: null,
+  groupName: null,
+  ...extra
+})
+
+// A stored value the contract types as an object but a legacy record may hold as a string.
+const storedString = (value: string): object => JSON.parse(JSON.stringify(value))
 
 describe('key override draft', () => {
   it('keeps unread members of the stored override through a save', () => {
@@ -24,7 +42,7 @@ describe('key override draft', () => {
 
   it('marks a non-object stored override as unreadable', () => {
     expect(draftOf(rel({ definitionOverride: [] })).unreadable).toBe(true)
-    expect(draftOf(rel({ definitionOverride: 'red' })).unreadable).toBe(true)
+    expect(draftOf(rel({ definitionOverride: storedString('red') })).unreadable).toBe(true)
   })
 
   it('does not call a subset empty where the key options are unavailable', () => {
@@ -41,7 +59,7 @@ describe('key override draft', () => {
   })
 
   it('tags a stored override that cannot be read, so the row does not read as having none', () => {
-    expect(overrideTags(rel({ definitionOverride: 'kg' }))).toEqual([
+    expect(overrideTags(rel({ definitionOverride: storedString('kg') }))).toEqual([
       expect.objectContaining({ translationKey: 'classification-store.override.tag-unreadable', danger: true })
     ])
     expect(overrideTags(rel({ keyType: 'quantityValue', definitionOverride: { defaultUnit: 5 } }))).toEqual([
@@ -54,9 +72,33 @@ describe('key override draft', () => {
   })
 
   it('marks a default unit the key does not permit as a disagreement', () => {
-    const units = { validUnits: [{ id: 'kg', symbol: 'kg' }] }
+    const units = { defaultUnit: null, validUnits: ['kg'] }
 
     expect(overrideTags(rel({ keyType: 'quantityValue', units, definitionOverride: { defaultUnit: 'stone' } }))[0].danger).toBe(true)
     expect(overrideTags(rel({ keyType: 'quantityValue', units, definitionOverride: { defaultUnit: 'kg' } }))[0].danger).toBe(false)
+  })
+
+  it('carries the published unit IDs unchanged and in order, and narrows over those strings', () => {
+    const relation = rel({ keyType: 'quantityValue', units: { defaultUnit: null, validUnits: ['kg', 'g', 'lb'] } })
+    const draft = draftOf(relation)
+
+    expect(unitIdsOf(relation)).toEqual(['kg', 'g', 'lb'])
+    expect(defaultUnitChoices(relation, draft, [])).toEqual(['kg', 'g', 'lb'])
+    expect(toggleUnit(relation, draft, 'lb', false, []).validUnits).toEqual(['kg', 'g'])
+  })
+
+  it('reads a null valid-units member as every installation unit, and a null units member as none', () => {
+    const everyUnit = rel({ keyType: 'quantityValue', units: { defaultUnit: null, validUnits: null } })
+    const noUnits = rel({ keyType: 'input', units: null })
+
+    expect(unitIdsOf(everyUnit, ['kg', 'g'])).toEqual(['kg', 'g'])
+    expect(unitIdsOf(noUnits, ['kg', 'g'])).toEqual([])
+  })
+
+  it('names the default unit through the given label, the id otherwise', () => {
+    const relation = rel({ keyType: 'quantityValue', units: { defaultUnit: null, validUnits: ['kg'] }, definitionOverride: { defaultUnit: 'kg' } })
+
+    expect(overrideTags(relation, { installationUnits: [], unitLabel: () => 'KG' })[0].text).toBe('KG')
+    expect(overrideTags(relation)[0].text).toBe('kg')
   })
 })

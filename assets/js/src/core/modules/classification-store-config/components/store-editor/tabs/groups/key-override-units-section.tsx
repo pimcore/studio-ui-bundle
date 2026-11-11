@@ -18,36 +18,38 @@ import { Text } from '@Pimcore/components/text/text'
 import {
   clearUnits,
   defaultUnitChoices,
-  keyUnitsOf,
   resolveSubset,
   setDefaultUnit,
+  publishesUnits,
   toggleUnit,
-  unitSymbol
+  unitIdsOf
 } from './key-override'
 import { StatedState, SubsetPicker, type ISectionProps, type ISubsetRow } from './key-override-sections'
+import { useKeyUnits } from './use-key-units'
 
 const USE_DEFAULT = ''
 
 export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const keyUnits = keyUnitsOf(relation)
-  const resolved = resolveSubset(draft.validUnits, keyUnits.map((unit) => unit.id))
-  const choices = defaultUnitChoices(relation, draft)
+  const { installationUnits, unitLabel } = useKeyUnits()
+  const keyUnits = unitIdsOf(relation, installationUnits)
+  const resolved = resolveSubset(draft.validUnits, keyUnits)
+  const choices = defaultUnitChoices(relation, draft, installationUnits)
   const storedDefault = draft.defaultUnit
   const defaultOutside = storedDefault !== undefined && !(typeof storedDefault === 'string' && choices.includes(storedDefault))
   // The key's own symbol for the stored default; the reason is only given where the key itself dropped the unit,
   // since otherwise it is this group's subset that excludes it, which the sentence below the control states.
   const storedId = storedDefault === undefined ? '' : typeof storedDefault === 'string' ? storedDefault : JSON.stringify(storedDefault)
-  const keyStillOffers = keyUnits.some((unit) => unit.id === storedId)
+  const keyStillOffers = keyUnits.includes(storedId)
   const defaultLabel = keyStillOffers
-    ? unitSymbol(relation, storedId)
+    ? unitLabel(storedId)
     : `${storedId} (${t('classification-store.override.no-longer-offered')})`
   const clearUnitsAction = (
     <div>
       <IconTextButton
         disabled={ draft.validUnits === undefined }
         icon={ { value: 'clear-filter' } }
-        onClick={ () => { onChange(clearUnits(relation, draft)) } }
+        onClick={ () => { onChange(clearUnits(relation, draft, installationUnits)) } }
       >
         { t('classification-store.override.use-key-units') }
       </IconTextButton>
@@ -55,7 +57,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
   )
 
   const renderValidUnits = (): React.JSX.Element => {
-    if (keyUnits.length === 0) {
+    if (!publishesUnits(relation)) {
       return (
         <Flex
           gap="mini"
@@ -82,14 +84,14 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
         <StatedState
           actionLabel={ t('classification-store.override.use-key-units') }
           description={ description }
-          onAction={ () => { onChange(clearUnits(relation, draft)) } }
+          onAction={ () => { onChange(clearUnits(relation, draft, installationUnits)) } }
           title={ t('classification-store.override.no-units-title') }
         />
       )
     }
 
     const rows: ISubsetRow[] = [
-      ...keyUnits.map((unit) => ({ value: unit.id, label: unit.symbol, detail: unit.id === unit.symbol ? '' : unit.id, stale: false })),
+      ...keyUnits.map((id) => ({ value: id, label: unitLabel(id), detail: id === unitLabel(id) ? '' : id, stale: false })),
       ...resolved.stale.map((id) => ({ value: id, label: id, detail: '', stale: true }))
     ]
 
@@ -100,7 +102,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
       >
         <SubsetPicker
           countKey="classification-store.override.units-count"
-          onToggle={ (id, checked) => { onChange(toggleUnit(relation, draft, id, checked)) } }
+          onToggle={ (id, checked) => { onChange(toggleUnit(relation, draft, id, checked, installationUnits)) } }
           resolved={ resolved }
           rows={ rows }
           total={ keyUnits.length }
@@ -128,7 +130,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
             { value: USE_DEFAULT, label: t('classification-store.override.use-key-default') },
             // The stored default stays visible as itself, so it never reads like the reset choice.
             ...(defaultOutside ? [{ value: storedId, label: defaultLabel, disabled: true }] : []),
-            ...choices.map((id) => ({ value: id, label: unitSymbol(relation, id) }))
+            ...choices.map((id) => ({ value: id, label: unitLabel(id) }))
           ] }
           placeholder={ t('classification-store.override.use-key-default') }
           value={ storedDefault === undefined ? USE_DEFAULT : defaultOutside ? storedId : storedDefault }
@@ -136,7 +138,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
         { defaultOutside && (
           <StatedState
             actionLabel={ t('classification-store.override.use-key-default') }
-            description={ t('classification-store.override.default-outside', { unit: unitSymbol(relation, storedId) }) }
+            description={ t('classification-store.override.default-outside', { unit: unitLabel(storedId) }) }
             onAction={ () => { onChange(setDefaultUnit(draft, undefined)) } }
           />
         ) }
