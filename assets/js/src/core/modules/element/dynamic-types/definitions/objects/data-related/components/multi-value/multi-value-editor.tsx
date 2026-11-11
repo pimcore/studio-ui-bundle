@@ -45,10 +45,7 @@ import {
   type MultiValueSlot
 } from './multi-value-slots'
 
-export interface MultiValueEditorProps extends ClassificationStoreMultiValueDefinition {
-  variants?: ClassificationStoreCollection2['variants']
-  multiValue?: ClassificationStoreCollection2['multiValue']
-  maximum?: ClassificationStoreCollection2['maximum']
+export interface MultiValueEditorProps extends ClassificationStoreMultiValueDefinition, Pick<ClassificationStoreCollection2, 'variants' | 'multiValue' | 'maximum'> {
   noteditable?: boolean | null
   value?: unknown
   onChange?: (value: ClassificationStoreMultiValueEntry[]) => void
