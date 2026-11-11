@@ -37,14 +37,9 @@ import { useClassificationStore } from './provider'
 import { useLanguageEditPermission } from './hooks/use-language-edit-permission'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { getKeyLabel } from './utils/key-label'
+import { multiValueMembersOf } from './utils/multi-value-members'
 import { useStyles } from './classification-store-item.styles'
 import { getKeyCombinedFieldNameParent } from './utils/combined-field-name'
-
-/** The declaration of a `multiValue` key is read from the layout members; a key of any other type adds nothing. */
-const multiValueMembersOf = (key: ClassificationStoreCollection2): Record<string, unknown> =>
-  (key.definition as { fieldtype?: string } | undefined)?.fieldtype === 'multiValue'
-    ? { variants: key.variants, multiValue: key.multiValue, maximum: key.maximum }
-    : {}
 
 /** The language independent slot every key that is not localized is bound to. */
 const LANGUAGE_INDEPENDENT = 'default'
