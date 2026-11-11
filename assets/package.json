@@ -148,7 +148,7 @@
     "antd": "5.22.x",
     "antd-style": "3.7.x",
     "classnames": "^2.5.1",
-    "dompurify": "^3.4.8",
+    "dompurify": "^3.4.17",
     "flexlayout-react": "^0.7.15",
     "framer-motion": "^12.43.0",
     "i18next": "^23.16.8",

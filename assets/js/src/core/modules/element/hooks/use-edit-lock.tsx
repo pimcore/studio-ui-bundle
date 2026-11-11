@@ -22,7 +22,6 @@ import { EditLockWarning } from '@Pimcore/modules/element/components/edit-lock-w
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { closeWidget } from '@Pimcore/modules/widget-manager/widget-manager-slice'
-import { elementOpeningService } from '@Pimcore/app/public-api/element/element-api'
 import {
   beginEditLockCheck,
   clearEditLockCheck,
@@ -103,9 +102,9 @@ export const useEditLock = ({ id, elementType, modified, path }: UseEditLockProp
     resolveEditLockCheck(elementType, id, true)
   }, [id, elementType, unlockElement, acquire])
 
-  const closeAndReopen = useCallback((): void => {
+  // Close only: a reopened editor that is dirty on load would run the check again and loop (PEES-2012).
+  const closeEditor = useCallback((): void => {
     dispatch(closeWidget(getWidgetId(elementType, id)))
-    void elementOpeningService.openElement(id, elementType)
   }, [id, elementType, dispatch])
 
   const resolveLockOnFirstEdit = useCallback(async (): Promise<void> => {
@@ -134,9 +133,9 @@ export const useEditLock = ({ id, elementType, modified, path }: UseEditLockProp
             void takeOver()
           },
           onCancel: () => {
-            // Abort the held autosave and discard via close & reopen.
+            // Abort the held autosave and discard the local changes by closing the editor.
             resolveEditLockCheck(elementType, id, false)
-            closeAndReopen()
+            closeEditor()
           }
         })
         return
@@ -151,7 +150,7 @@ export const useEditLock = ({ id, elementType, modified, path }: UseEditLockProp
         trackError(new ApiError(error))
       }
     }
-  }, [id, elementType, path, triggerGetEditlock, modal, t, acquire, takeOver, closeAndReopen])
+  }, [id, elementType, path, triggerGetEditlock, modal, t, acquire, takeOver, closeEditor])
 
   // Arm the gate on mount — some editors flip `modified` and autosave in the same tick.
   useEffect(() => {
