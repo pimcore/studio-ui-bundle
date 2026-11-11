@@ -40,15 +40,27 @@ import {
   useClassificationStoreConfigurationSubGroupDeleteMutation,
   useClassificationStoreConfigurationSubGroupUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+import { MetadataModal } from './shared/metadata-modal'
+import { TitlesModal } from './shared/titles-modal'
+import { PairActions } from './shared/pair-actions'
+import { type PairMap } from './shared/pairs'
 
 interface ISubGroupsTabProps {
   storeId: number
 }
 
-/** The two editable fields of a sub group, which an update always replaces together. */
+/** The editable fields of a sub group; name and description are always replaced together. */
 interface SubGroupDraft {
   name: string
   description: string | null
+  /** Carried only once a change names it: absent keeps the stored pairs. */
+  customMetadata?: object | null
+}
+
+/** The pair editor being open, and the row it was opened on. */
+interface PairEditorState {
+  kind: 'metadata' | 'titles'
+  row: ClassificationStoreConfigurationSubGroupDetail
 }
 
 /** Message of a refused delete, which names the groups still using the sub group. */
@@ -70,6 +82,7 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
+  const [pairEditor, setPairEditor] = useState<PairEditorState | undefined>(undefined)
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)
@@ -252,12 +265,15 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
    * of a rename that was refused in front of it, so a name the server had just rejected went out
    * again and took the perfectly valid description edit behind it down with it.
    */
-  const handleUpdate = useCallback((
+  const handleUpdate = useCallback(async (
     subGroup: ClassificationStoreConfigurationSubGroupDetail,
-    change: Partial<SubGroupDraft>
-  ): void => {
+    change: Partial<SubGroupDraft>,
+    rethrow = false
+  ): Promise<void> => {
     const { id } = subGroup
     const stored: SubGroupDraft = { name: subGroup.name, description: subGroup.description ?? null }
+    // Set when this save is refused, so a caller that waits for it can tell.
+    const outcome: { failure?: ApiError } = {}
 
     const chain = (chainsRef.current.get(id) ?? Promise.resolve()).then(async () => {
       // Rebased here, not above: a save in front of this one that failed drops the draft, so this
@@ -275,7 +291,8 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
         // The server kept its own value, so the next edit of this row has to start from the
         // refetched row rather than from a draft the server refused.
         draftsRef.current.delete(id)
-        trackError(new ApiError(response.error!))
+        outcome.failure = new ApiError(response.error!)
+        if (!rethrow) trackError(outcome.failure)
       }
     })
 
@@ -288,13 +305,34 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
         draftsRef.current.delete(id)
       }
     })
+
+    // The stored chain never rejects; only a caller that asked to be told gets the failure.
+    await chain
+
+    if (outcome.failure !== undefined && rethrow) throw outcome.failure
   }, [updateSubGroup])
+
+  const subGroupsRef = useRef(subGroups as ClassificationStoreConfigurationSubGroupDetail[])
+  subGroupsRef.current = subGroups as ClassificationStoreConfigurationSubGroupDetail[]
+
+  const handleSavePairs = async (next: PairMap | null): Promise<void> => {
+    if (pairEditor === undefined) return
+
+    // The freshest row, so the name carried is not the one the editor was opened on.
+    const subGroup = subGroupsRef.current.find((g) => g.id === pairEditor.row.id) ?? pairEditor.row
+
+    await handleUpdate(subGroup, { customMetadata: next }, true)
+  }
+
+  const handleClosePairEditor = (): void => { setPairEditor(undefined) }
 
   const columnHelper = useMemo(() => createColumnHelper<ClassificationStoreConfigurationSubGroupDetail>(), [])
 
   // Ref-forwarding: keep stable refs so columns useMemo never needs handler deps
   const handleDeleteRef = useRef(handleDelete)
   handleDeleteRef.current = handleDelete
+  const setPairEditorRef = useRef(setPairEditor)
+  setPairEditorRef.current = setPairEditor
 
   const columns = useMemo(() => [
     columnHelper.accessor('id', {
@@ -315,111 +353,142 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
     columnHelper.display({
       id: 'actions',
       header: t('classification-store.columns.actions'),
-      size: 60,
+      size: 124,
       // The label names the row: `IconButton` takes its accessible name from an explicit
       // `aria-label` or from string children, never from `tooltip.title`, so a column of
       // identical "Delete" buttons would not say what each one deletes.
       cell: (info) => (
-        <IconButton
-          aria-label={ t('classification-store.aria.delete-sub-group', { name: info.row.original.name }) }
-          icon={ { value: 'trash' } }
-          onClick={ () => { handleDeleteRef.current(info.row.original) } }
-          tooltip={ { title: t('delete') } }
-        />
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <PairActions
+            customMetadata={ info.row.original.customMetadata }
+            name={ info.row.original.name }
+            onEditMetadata={ () => { setPairEditorRef.current({ kind: 'metadata', row: info.row.original }) } }
+            onEditTitles={ () => { setPairEditorRef.current({ kind: 'titles', row: info.row.original }) } }
+          />
+          <IconButton
+            aria-label={ t('classification-store.aria.delete-sub-group', { name: info.row.original.name }) }
+            icon={ { value: 'trash' } }
+            onClick={ () => { handleDeleteRef.current(info.row.original) } }
+            tooltip={ { title: t('delete') } }
+          />
+        </Flex>
       )
     })
   ], [t, columnHelper])
 
   return (
-    <ContentLayout
-      renderToolbar={
-        <Toolbar theme="secondary">
-          { isLoading
-            ? null
-            : (
-              <IconButton
-                aria-label={ t('refresh') }
-                icon={ { value: 'refresh' } }
-                loading={ isFetching }
-                onClick={ () => { void refetch() } }
-                tooltip={ { title: t('refresh') } }
-              />
-              ) }
-          <Pagination
-            current={ page }
-            defaultPageSize={ pageSize }
-            onChange={ (newPage, newPageSize) => {
-              setPage(newPage)
-              setPageSize(newPageSize)
-            } }
-            showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ total }
-          />
-        </Toolbar>
-      }
-      renderTopBar={
-        <Flex
-          align="center"
-          justify="space-between"
-          style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
-        >
+    <>
+      <ContentLayout
+        renderToolbar={
+          <Toolbar theme="secondary">
+            { isLoading
+              ? null
+              : (
+                <IconButton
+                  aria-label={ t('refresh') }
+                  icon={ { value: 'refresh' } }
+                  loading={ isFetching }
+                  onClick={ () => { void refetch() } }
+                  tooltip={ { title: t('refresh') } }
+                />
+                ) }
+            <Pagination
+              current={ page }
+              defaultPageSize={ pageSize }
+              onChange={ (newPage, newPageSize) => {
+                setPage(newPage)
+                setPageSize(newPageSize)
+              } }
+              showSizeChanger
+              showTotal={ (total) => t('pagination.show-total', { total }) }
+              total={ total }
+            />
+          </Toolbar>
+        }
+        renderTopBar={
           <Flex
             align="center"
-            gap="small"
+            gap="extra-small"
+            justify="space-between"
+            style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+            wrap="wrap"
           >
-            <Header title={ t('classification-store.tabs.sub-groups') } />
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ handleAdd }
+            <Flex
+              align="center"
+              gap="small"
             >
-              {t('classification-store.add-sub-group')}
-            </IconTextButton>
-          </Flex>
-          <SearchInput
-            loading={ isFetching }
-            onSearch={ (value) => {
-              setSearchTerm(value)
-              setPage(1)
-            } }
-            placeholder={ t('search') }
-          />
-        </Flex>
-      }
-    >
-      <Flex
-        style={ { height: '100%', padding: '0 16px' } }
-        vertical
-      >
-        { /* Only a response that arrived can say the store has no sub groups. */ }
-        { !isLoading && !isError && data !== undefined && subGroups.length === 0
-          ? <NoContent text={ t('classification-store.no-sub-groups') } />
-          : (
-            <Grid
-              autoWidth
-              columns={ columns }
-              data={ subGroups }
-              enableSorting
-              isLoading={ isLoading || isFetching }
-              manualSorting
-              onSortingChange={ onSortingChange }
-              onUpdateCellData={ ({ columnId, value, rowData }) => {
-                const typedRow = rowData as ClassificationStoreConfigurationSubGroupDetail
-                // Only the edited field is handed over: the other one comes from the row's
-                // pending draft, never from the row the grid is still rendering.
-                if (columnId === 'name') {
-                  const newName = (value as string).trim()
-                  if (newName === '') return
-                  handleUpdate(typedRow, { name: newName })
-                } else if (columnId === 'description') {
-                  const newDescription = (value as string).trim()
-                  handleUpdate(typedRow, { description: newDescription === '' ? null : newDescription })
-                }
+              <Header title={ t('classification-store.tabs.sub-groups') } />
+              <IconTextButton
+                icon={ { value: 'new' } }
+                onClick={ handleAdd }
+              >
+                {t('classification-store.add-sub-group')}
+              </IconTextButton>
+            </Flex>
+            <SearchInput
+              loading={ isFetching }
+              onSearch={ (value) => {
+                setSearchTerm(value)
+                setPage(1)
               } }
-              sorting={ sorting }
+              placeholder={ t('search') }
             />
-            ) }
-      </Flex>
-    </ContentLayout>
+          </Flex>
+        }
+      >
+        <Flex
+          style={ { height: '100%', padding: '0 16px' } }
+          vertical
+        >
+          { /* Only a response that arrived can say the store has no sub groups. */ }
+          { !isLoading && !isError && data !== undefined && subGroups.length === 0
+            ? <NoContent text={ t('classification-store.no-sub-groups') } />
+            : (
+              <Grid
+                autoWidth
+                columns={ columns }
+                data={ subGroups }
+                enableSorting
+                isLoading={ isLoading || isFetching }
+                manualSorting
+                onSortingChange={ onSortingChange }
+                onUpdateCellData={ ({ columnId, value, rowData }) => {
+                  const typedRow = rowData as ClassificationStoreConfigurationSubGroupDetail
+                  // Only the edited field is handed over: the other one comes from the row's
+                  // pending draft, never from the row the grid is still rendering.
+                  if (columnId === 'name') {
+                    const newName = (value as string).trim()
+                    if (newName === '') return
+                    void handleUpdate(typedRow, { name: newName })
+                  } else if (columnId === 'description') {
+                    const newDescription = (value as string).trim()
+                    void handleUpdate(typedRow, { description: newDescription === '' ? null : newDescription })
+                  }
+                } }
+                sorting={ sorting }
+              />
+              ) }
+        </Flex>
+      </ContentLayout>
+      <MetadataModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'metadata' }
+        value={ pairEditor?.row.customMetadata }
+      />
+      <TitlesModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'titles' }
+        value={ pairEditor?.row.customMetadata }
+      />
+    </>
   )
 }

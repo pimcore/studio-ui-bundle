@@ -45,7 +45,9 @@ jest.mock('@Pimcore/components/grid/grid.styles', () => ({
 // `initReactI18next` is kept because the SDK barrels reached through the layout components
 // initialise i18next at import time.
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
+  useTranslation: () => ({
+    t: (key: string, options?: { name?: string }) => options?.name !== undefined ? `${key}:${options.name}` : key
+  }),
   initReactI18next: { type: '3rdParty', init: () => {} }
 }))
 
@@ -63,6 +65,25 @@ jest.mock('@Pimcore/app/depency-injection', () => ({
 jest.mock('@sdk/components', () => jest.requireActual('@test-utils/mocks/sdk-barrel-mock').sdkComponentsMock)
 jest.mock('@sdk/modules/app', () => jest.requireActual('@test-utils/mocks/sdk-barrel-mock').sdkModulesAppMock)
 jest.mock('@sdk/app', () => jest.requireActual('@test-utils/mocks/sdk-barrel-mock').sdkAppMock)
+
+// The key definition dialog stays closed here. The pair editors open, and their footer buttons are
+// the stand-in's own.
+jest.mock('@Pimcore/components/modal/modal', () => ({
+  Modal: ({ children, open, onOk }: any) => (open === true
+    ? (
+      <div>
+        {children}
+        <button
+          data-testid="modal-ok"
+          onClick={ onOk }
+          type="button"
+        >
+          ok
+        </button>
+      </div>
+      )
+    : null)
+}))
 
 // The real cell resolves its renderer through the dynamic type registry. This stand-in shows
 // the value and reports an edit the way the registered input cell does.
@@ -379,7 +400,7 @@ describe('SubGroupsTab', () => {
 
     // Addressed as the row's one button: its accessible name is the same for every row here,
     // because the translation stand-in returns the key and drops the sub-group name in it.
-    await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
+    await user.click(within(screen.getAllByRole('row')[1]).getByLabelText(/classification-store.aria.delete-sub-group/))
     await user.click(await screen.findByRole('button', { name: 'OK' }))
 
     expect(await screen.findByText(deleteConflictMessage)).toBeInTheDocument()
@@ -530,7 +551,7 @@ describe('SubGroupsTab', () => {
     await user.click(screen.getByLabelText('pagination.last-page'))
     expect(await screen.findByDisplayValue('Sub group 41')).toBeInTheDocument()
 
-    await user.click(within(screen.getAllByRole('row')[1]).getByRole('button'))
+    await user.click(within(screen.getAllByRole('row')[1]).getByLabelText(/classification-store.aria.delete-sub-group/))
     await user.click(await screen.findByRole('button', { name: 'OK' }))
 
     // Page two, the page that still has rows. Judged on the retained response of the page it had
@@ -554,3 +575,149 @@ describe('SubGroupsTab', () => {
     expect(writeRequests()[0].body).toEqual({ name: 'Dimensions', description: 'how big it is' })
   })
 })
+
+describe('SubGroupsTab pair actions', () => {
+  const originalFetch = globalThis.fetch
+  const withPairs = { ...dimensions, customMetadata: { a: '1', 'title.de': 'x' } }
+  const withoutPairs = { ...created, customMetadata: null }
+
+  const rowButtons = (index: number): HTMLElement[] => within(screen.getAllByRole('row')[index]).getAllByRole('button')
+
+  const saveMetadata = async (user: UserEvent, name: string, typed: string): Promise<void> => {
+    await user.click(screen.getByLabelText(`classification-store.aria.edit-metadata:${name}`))
+    await user.type(screen.getAllByLabelText(rowLabel('classification-store.pair-value'))[0], typed)
+    await user.click(screen.getByTestId('modal-ok'))
+  }
+
+  beforeEach(() => {
+    requests.length = 0
+    deleteConflictMessage = null
+    showErrorMock.mockClear()
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  it('puts metadata, titles and delete in that order, named after the row, with the count on metadata', async () => {
+    stubFetch([withPairs, withoutPairs])
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    expect(rowButtons(1).map((button) => button.getAttribute('aria-label'))).toEqual([
+      'classification-store.aria.edit-metadata:Dimensions',
+      'classification-store.aria.edit-titles:Dimensions',
+      'classification-store.aria.delete-sub-group:Dimensions'
+    ])
+    expect(within(screen.getAllByRole('row')[1]).getByText('2')).toBeInTheDocument()
+    expect(rowButtons(1)[1].closest('.ant-badge')).toBeNull()
+    expect(screen.getAllByRole('row')[2].querySelector('.ant-scroll-number')).toBeNull()
+    expect(screen.getByText('classification-store.columns.actions').closest('th')!.style.width).toBe('124px')
+  })
+
+  it('sends the name, the description and the pairs through the update chain', async () => {
+    const user = setupUser()
+
+    stubFetch([withPairs, withoutPairs])
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    await saveMetadata(user, 'Dimensions', '2')
+
+    await waitFor(() => { expect(writeRequests()).toHaveLength(1) })
+
+    expect(writeRequests()[0].body).toEqual({
+      name: 'Dimensions',
+      description: 'size related',
+      customMetadata: { a: '12', 'title.de': 'x' }
+    })
+  })
+
+  it('opens an empty editor for a sub group without pairs', async () => {
+    const user = setupUser()
+
+    stubFetch([withPairs, withoutPairs])
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    await user.click(screen.getByLabelText('classification-store.aria.edit-metadata:Weights'))
+
+    expect(screen.getByText('classification-store.pair-no-content')).toBeInTheDocument()
+  })
+
+  it('queues a metadata save behind a pending rename and carries the new name', async () => {
+    const user = setupUser()
+    let releaseFirstPut: () => void = () => {}
+    const firstPut = new Promise<void>((resolve) => { releaseFirstPut = resolve })
+    let puts = 0
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      let body: Record<string, unknown> | undefined
+
+      try {
+        body = JSON.parse(await input.clone().text())
+      } catch {
+        body = undefined
+      }
+
+      requests.push({ url: input.url, method: input.method, body })
+
+      if (input.url.endsWith(COLLECTION_URL)) {
+        return jsonResponse({ items: [withPairs], totalItems: 1 })
+      }
+
+      puts += 1
+
+      if (puts === 1) await firstPut
+
+      return jsonResponse({ ...withPairs, ...body })
+    }) as unknown as typeof fetch
+
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    fireEvent.change(screen.getByLabelText('name-0'), { target: { value: 'Measures' } })
+    await waitFor(() => { expect(writeRequests()).toHaveLength(1) })
+
+    await saveMetadata(user, 'Dimensions', '2')
+
+    // Held behind the rename rather than racing it
+    expect(writeRequests()).toHaveLength(1)
+
+    releaseFirstPut()
+
+    await waitFor(() => { expect(writeRequests()).toHaveLength(2) })
+
+    expect(writeRequests()[0].body).toEqual({ name: 'Measures', description: 'size related' })
+    expect(writeRequests()[1].body).toEqual({
+      name: 'Measures',
+      description: 'size related',
+      customMetadata: { a: '12', 'title.de': 'x' }
+    })
+  })
+
+  it('reports a refused metadata save and keeps the editor open', async () => {
+    const user = setupUser()
+
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      requests.push({ url: input.url, method: input.method, body: undefined })
+
+      if (input.url.endsWith(COLLECTION_URL)) {
+        return jsonResponse({ items: [withPairs], totalItems: 1 })
+      }
+
+      return jsonResponse({ message: 'refused' }, 422)
+    }) as unknown as typeof fetch
+
+    renderTab()
+    await screen.findByDisplayValue('Dimensions')
+
+    await saveMetadata(user, 'Dimensions', '2')
+
+    await waitFor(() => { expect(showErrorMock).toHaveBeenCalledTimes(1) })
+    expect(screen.getByTestId('modal-ok')).toBeInTheDocument()
+  })
+})
+
+// Each pair input carries its column heading and its row number.
+const rowLabel = (heading: string): RegExp => new RegExp(`^${heading.replace(/\./g, '\\.')} \\d+$`)

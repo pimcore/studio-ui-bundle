@@ -904,6 +904,58 @@ describe('classification store key update cache patch', () => {
     }))
   })
 
+  it('keeps saved custom metadata when an older cell edit answers last', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    const metadataSave = dispatchUpdate(store, keyUpdate({ customMetadata: { externalCode: 'EF1' } }))
+    await flush()
+
+    expect(pendingUpdates).toHaveLength(2)
+
+    pendingUpdates[1]({ ...storedKey, title: 'Shipping weight', customMetadata: { externalCode: 'EF1' } })
+    await metadataSave
+
+    // The cell edit answers last, carrying the pairs as they were before the metadata save.
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', customMetadata: null })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ customMetadata: { externalCode: 'EF1' } }))
+  })
+
+  it('takes the answer for custom metadata when the payload names it as null', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+    const clear = dispatchUpdate(store, keyUpdate({ customMetadata: null }))
+    await flush()
+
+    pendingUpdates[1]({ ...storedKey, customMetadata: null })
+    await clear
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', customMetadata: { stale: 'x' } })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ customMetadata: null }))
+  })
+
+  it('takes the answer for custom metadata nobody here was writing', async () => {
+    const store = createStore()
+    await subscribeToKeys(store)
+
+    const cellEdit = dispatchUpdate(store, keyUpdate({ title: 'Shipping weight' }))
+    await flush()
+
+    // A payload that omits the member does not claim it, so another user's pairs arrive.
+    pendingUpdates[0]({ ...storedKey, title: 'Shipping weight', customMetadata: { fromServer: '1' } })
+    await cellEdit
+
+    expect(cachedKey(store)).toEqual(expect.objectContaining({ customMetadata: { fromServer: '1' } }))
+  })
+
   it('keeps a saved localization when an older cell edit fails after it', async () => {
     // The rollback is the other door into the same staleness the response mask closes, and the
     // mask cannot see it: a failed request may undo the members it wrote and no others, or it
@@ -1259,5 +1311,87 @@ describe('invalidating the classification store tag', () => {
 
 
     before.forEach((url) => { expect(after.filter((requested) => requested === url)).toHaveLength(2) })
+  })
+})
+
+/**
+ * A failed group update rolls back only when nothing overlapped it. Undoing restores the value a
+ * member had before the failed request, which would also discard the value of a newer overlapping
+ * write that succeeded; there the cache is left alone and re-read once the overlap has settled.
+ */
+describe('classification store group update rollback', () => {
+  const originalFetch = globalThis.fetch
+  const GROUP_ID = 3
+  const groupArgs = { storeId: STORE_ID, body: { filters: { page: 1, pageSize: 10 } } }
+  const baseGroup = { id: GROUP_ID, storeId: STORE_ID, name: 'g', description: null, customMetadata: null }
+  let serverGroup: Record<string, unknown>
+  let groupReads: number
+  let pending: Array<(row: Record<string, unknown> | undefined, status?: number) => void>
+
+  const json = (body: unknown, status = 200): Response =>
+    new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
+
+  beforeEach(() => {
+    serverGroup = baseGroup
+    groupReads = 0
+    pending = []
+    globalThis.fetch = jest.fn(async (input: Request) => {
+      if (input.method === 'POST' && input.url.endsWith('/groups')) {
+        groupReads += 1
+        return json({ items: [serverGroup], totalItems: 1 })
+      }
+
+      return await new Promise<Response>((resolve) => {
+        pending.push((row, status = 200) => { resolve(json(row ?? { message: 'no' }, status)) })
+      })
+    }) as unknown as typeof fetch
+  })
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch
+  })
+
+  const cached = (store: ReturnType<typeof createStore>): Record<string, unknown> | undefined =>
+    (api.endpoints as any).classificationStoreConfigurationGroupCollection
+      .select(groupArgs)(store.getState()).data?.items[0]
+
+  const update = (store: ReturnType<typeof createStore>, customMetadata: object | null): void => {
+    void store.dispatch((api.endpoints as any).classificationStoreConfigurationGroupUpdate.initiate({
+      id: GROUP_ID,
+      classificationStoreConfigurationGroupUpdate: { name: 'g', description: null, customMetadata }
+    }))
+  }
+
+  it('keeps the newer write and re-reads when the older overlapping request fails', async () => {
+    const store = createStore()
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationGroupCollection.initiate(groupArgs))
+
+    update(store, { a: 'A' })
+    await waitFor(() => { expect(pending).toHaveLength(1) })
+    update(store, { b: 'B' })
+    await waitFor(() => { expect(pending).toHaveLength(2) })
+
+    serverGroup = { ...baseGroup, customMetadata: { b: 'B' } }
+    pending[1]({ ...baseGroup, customMetadata: { b: 'B' } })
+    await flush()
+    pending[0](undefined, 422)
+    await waitFor(() => { expect(groupReads).toBe(2) })
+
+    expect(cached(store)?.customMetadata).toEqual({ b: 'B' })
+  })
+
+  it('still rolls back a failed request nothing overlapped, without a re-read', async () => {
+    const store = createStore()
+    await store.dispatch((api.endpoints as any).classificationStoreConfigurationGroupCollection.initiate(groupArgs))
+
+    update(store, { a: 'A' })
+    await waitFor(() => { expect(pending).toHaveLength(1) })
+    expect(cached(store)?.customMetadata).toEqual({ a: 'A' })
+
+    pending[0](undefined, 422)
+    await waitFor(() => { expect(cached(store)?.customMetadata).toBeNull() })
+    await flush()
+
+    expect(groupReads).toBe(1)
   })
 })
