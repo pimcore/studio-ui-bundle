@@ -3098,7 +3098,6 @@ maintenance-mode.deactivate.ok: Désactiver
 maintenance-mode.logout.title: Désactiver d'abord le mode maintenance?
 maintenance-mode.logout.text: "Le mode maintenance est actif et seule cette session y a accès. Après la déconnexion, il ne pourra être désactivé qu'en ligne de commande."
 maintenance-mode.logout.deactivate-and-log-out: Désactiver et se déconnecter
-maintenance-mode.logout.log-out-anyway: Se déconnecter quand même
 maintenance-mode.locked-out.title: Maintenance
 maintenance-mode.locked-out.text: "Le système est en mode maintenance ou temporairement indisponible. Votre dernière action n'a pas été enregistrée. Ce message se fermera automatiquement dès que le système sera de nouveau disponible."
 maintenance-mode.locked-out.reload: Recharger

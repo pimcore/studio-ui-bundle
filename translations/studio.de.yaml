@@ -3098,7 +3098,6 @@ maintenance-mode.deactivate.ok: Deaktivieren
 maintenance-mode.logout.title: Wartungsmodus zuerst deaktivieren?
 maintenance-mode.logout.text: 'Der Wartungsmodus ist aktiv und nur diese Sitzung hat Zugriff. Nach dem Abmelden kann er nur noch über die Kommandozeile ausgeschaltet werden.'
 maintenance-mode.logout.deactivate-and-log-out: Deaktivieren und abmelden
-maintenance-mode.logout.log-out-anyway: Trotzdem abmelden
 maintenance-mode.locked-out.title: Wartung
 maintenance-mode.locked-out.text: 'Das System befindet sich im Wartungsmodus oder ist vorübergehend nicht verfügbar. Ihre letzte Aktion wurde nicht gespeichert. Dieser Hinweis schließt sich automatisch, sobald das System wieder verfügbar ist.'
 maintenance-mode.locked-out.reload: Neu laden

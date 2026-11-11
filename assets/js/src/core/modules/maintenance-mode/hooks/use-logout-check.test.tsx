@@ -8,12 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import { useLogoutCheck } from './use-logout-check'
 
 const mockConfirm = jest.fn()
-const mockDestroy = jest.fn()
 const mockDeactivate = jest.fn()
 const mockState: { data: { active: boolean } | undefined } = { data: undefined }
 const mockTrackError = jest.fn()
@@ -32,12 +30,6 @@ jest.mock('../maintenance-mode-api-slice-enhanced', () => ({
   useMaintenanceModeDeactivateMutation: () => [mockDeactivate]
 }))
 jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => mockUser }))
-jest.mock('@Pimcore/components/button/button', () => ({
-  Button: ({ children, onClick }: { children: React.ReactNode, onClick: () => void }) => <button onClick={ onClick }>{children}</button>
-}))
-jest.mock('@Pimcore/components/flex/flex', () => ({
-  Flex: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
-}))
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
   default: (error: unknown) => mockTrackError(error),
@@ -45,22 +37,25 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
+interface ConfirmConfig {
+  title: string
+  okText: string
+  cancelText: string
+  footer?: unknown
+  onOk: () => Promise<void>
+}
+
 const runCheck = (logout: jest.Mock): void => {
   const { result } = renderHook(() => useLogoutCheck())
   result.current(logout)
 }
 
-const renderFooter = (): void => {
-  const { footer } = mockConfirm.mock.calls[0][0] as { footer: () => React.ReactElement }
-  render(<>{footer()}</>)
-}
+const confirmConfig = (): ConfirmConfig => mockConfirm.mock.calls[0][0] as ConfirmConfig
 
 describe('useLogoutCheck', () => {
   beforeEach(() => {
     mockState.data = { active: true }
     mockConfirm.mockReset()
-    mockConfirm.mockReturnValue({ destroy: mockDestroy })
-    mockDestroy.mockReset()
     mockDeactivate.mockReset()
     mockDeactivate.mockResolvedValue({ data: { active: false } })
     mockTrackError.mockReset()
@@ -95,64 +90,39 @@ describe('useLogoutCheck', () => {
     expect(logout).toHaveBeenCalledTimes(1)
   })
 
-  it('asks first while maintenance mode is on and offers three choices', () => {
+  it('asks first while maintenance mode is on, with Cancel and "Deactivate and log out" only', () => {
     const logout = jest.fn()
 
     runCheck(logout)
 
     expect(logout).not.toHaveBeenCalled()
-    expect(mockConfirm).toHaveBeenCalledWith(expect.objectContaining({ title: 'maintenance-mode.logout.title' }))
-    renderFooter()
-    expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual([
-      'cancel',
-      'maintenance-mode.logout.log-out-anyway',
-      'maintenance-mode.logout.deactivate-and-log-out'
-    ])
+    expect(confirmConfig()).toEqual(expect.objectContaining({
+      title: 'maintenance-mode.logout.title',
+      okText: 'maintenance-mode.logout.deactivate-and-log-out',
+      cancelText: 'cancel'
+    }))
+    expect(confirmConfig().footer).toBeUndefined()
   })
 
-  it('does nothing on cancel', () => {
+  it('deactivates, then logs out on OK', async () => {
     const logout = jest.fn()
     runCheck(logout)
-    renderFooter()
 
-    fireEvent.click(screen.getByText('cancel'))
+    await confirmConfig().onOk()
 
-    expect(mockDestroy).toHaveBeenCalled()
-    expect(logout).not.toHaveBeenCalled()
-    expect(mockDeactivate).not.toHaveBeenCalled()
-  })
-
-  it('logs out without deactivating on "log out anyway"', () => {
-    const logout = jest.fn()
-    runCheck(logout)
-    renderFooter()
-
-    fireEvent.click(screen.getByText('maintenance-mode.logout.log-out-anyway'))
-
-    expect(logout).toHaveBeenCalledTimes(1)
-    expect(mockDeactivate).not.toHaveBeenCalled()
-  })
-
-  it('deactivates, then logs out', async () => {
-    const logout = jest.fn()
-    runCheck(logout)
-    renderFooter()
-
-    fireEvent.click(screen.getByText('maintenance-mode.logout.deactivate-and-log-out'))
-
-    await waitFor(() => { expect(logout).toHaveBeenCalledTimes(1) })
     expect(mockDeactivate).toHaveBeenCalledTimes(1)
+    expect(logout).toHaveBeenCalledTimes(1)
+    expect(mockDeactivate.mock.invocationCallOrder[0]).toBeLessThan(logout.mock.invocationCallOrder[0])
   })
 
   it('stays logged in when deactivating fails', async () => {
     mockDeactivate.mockResolvedValue({ error: { status: 500 } })
     const logout = jest.fn()
     runCheck(logout)
-    renderFooter()
 
-    fireEvent.click(screen.getByText('maintenance-mode.logout.deactivate-and-log-out'))
+    await confirmConfig().onOk()
 
-    await waitFor(() => { expect(mockTrackError).toHaveBeenCalledTimes(1) })
+    expect(mockTrackError).toHaveBeenCalledTimes(1)
     expect(logout).not.toHaveBeenCalled()
   })
 })

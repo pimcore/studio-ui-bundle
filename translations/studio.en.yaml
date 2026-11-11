@@ -3102,7 +3102,6 @@ maintenance-mode.deactivate.ok: Deactivate
 maintenance-mode.logout.title: Deactivate maintenance mode first?
 maintenance-mode.logout.text: 'Maintenance mode is active and only this session has access. After logging out it can only be switched off from the command line.'
 maintenance-mode.logout.deactivate-and-log-out: Deactivate and log out
-maintenance-mode.logout.log-out-anyway: Log out anyway
 maintenance-mode.locked-out.title: Maintenance
 maintenance-mode.locked-out.text: 'The system is in maintenance mode or temporarily unavailable. Your last action was not saved. This notice closes itself as soon as the system is available again.'
 maintenance-mode.locked-out.reload: Reload

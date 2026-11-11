@@ -8,11 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
 import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@Pimcore/components/button/button'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
@@ -35,39 +32,21 @@ export const useLogoutCheck = (): ((logout: () => void) => void) => {
       return
     }
 
-    const deactivateAndLogOut = async (): Promise<void> => {
-      const response = await deactivate()
-
-      if (!isUndefined(response.error)) {
-        trackError(new ApiError(response.error))
-        return
-      }
-
-      logout()
-    }
-
-    const dialog = modal.confirm({
+    modal.confirm({
       title: t('maintenance-mode.logout.title'),
       content: t('maintenance-mode.logout.text'),
-      footer: () => (
-        <Flex
-          gap="small"
-          justify="flex-end"
-        >
-          <Button onClick={ () => { dialog.destroy() } }>
-            {t('cancel')}
-          </Button>
-          <Button onClick={ () => { dialog.destroy(); logout() } }>
-            {t('maintenance-mode.logout.log-out-anyway')}
-          </Button>
-          <Button
-            onClick={ () => { dialog.destroy(); void deactivateAndLogOut() } }
-            type="primary"
-          >
-            {t('maintenance-mode.logout.deactivate-and-log-out')}
-          </Button>
-        </Flex>
-      )
+      okText: t('maintenance-mode.logout.deactivate-and-log-out'),
+      cancelText: t('cancel'),
+      onOk: async () => {
+        const response = await deactivate()
+
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+          return
+        }
+
+        logout()
+      }
     })
   }
 }

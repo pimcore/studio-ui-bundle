@@ -3098,7 +3098,6 @@ maintenance-mode.deactivate.ok: Stäng av
 maintenance-mode.logout.title: Stäng av underhållsläge först?
 maintenance-mode.logout.text: 'Underhållsläget är aktivt och endast den här sessionen har åtkomst. Efter utloggning kan det bara stängas av från kommandoraden.'
 maintenance-mode.logout.deactivate-and-log-out: Stäng av och logga ut
-maintenance-mode.logout.log-out-anyway: Logga ut ändå
 maintenance-mode.locked-out.title: Underhåll
 maintenance-mode.locked-out.text: 'Systemet är i underhållsläge eller tillfälligt otillgängligt. Din senaste åtgärd sparades inte. Det här meddelandet stängs automatiskt så snart systemet är tillgängligt igen.'
 maintenance-mode.locked-out.reload: Ladda om

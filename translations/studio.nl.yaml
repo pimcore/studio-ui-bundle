@@ -3098,7 +3098,6 @@ maintenance-mode.deactivate.ok: Deactiveren
 maintenance-mode.logout.title: Onderhoudsmodus eerst deactiveren?
 maintenance-mode.logout.text: 'De onderhoudsmodus is actief en alleen deze sessie heeft toegang. Na het uitloggen kan deze alleen nog via de opdrachtregel worden uitgeschakeld.'
 maintenance-mode.logout.deactivate-and-log-out: Deactiveren en uitloggen
-maintenance-mode.logout.log-out-anyway: Toch uitloggen
 maintenance-mode.locked-out.title: Onderhoud
 maintenance-mode.locked-out.text: 'Het systeem is in onderhoudsmodus of tijdelijk niet beschikbaar. Je laatste actie is niet opgeslagen. Deze melding sluit automatisch zodra het systeem weer beschikbaar is.'
 maintenance-mode.locked-out.reload: Herladen
