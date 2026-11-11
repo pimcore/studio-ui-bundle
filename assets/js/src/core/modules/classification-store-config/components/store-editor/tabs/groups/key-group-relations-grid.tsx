@@ -20,6 +20,8 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Tag } from '@Pimcore/components/tag/tag'
+import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 import { createColumnHelper, functionalUpdate, type RowSelectionState, type Updater } from '@tanstack/react-table'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Header } from '@Pimcore/components/header/header'
@@ -41,6 +43,8 @@ import { KeySelectionDialog } from './key-selection-dialog'
 import { KeyRelationsSection } from './key-relations-section'
 import { SubGroupSelectionDialog } from './sub-group-selection-dialog'
 import { SubGroupStrip, type SubGroupUsage } from './sub-group-strip'
+import { KeyOverrideDialog } from './key-override-dialog'
+import { overrideTags } from './key-override'
 import {
   acquireSubGroupAssignLock,
   releaseSubGroupAssignLock,
@@ -76,6 +80,7 @@ export const KeyGroupRelationsGrid = ({
 
   const [keyDialogOpen, setKeyDialogOpen] = useState(false)
   const [subGroupDialogOpen, setSubGroupDialogOpen] = useState(false)
+  const [overrideRelation, setOverrideRelation] = useState<ClassificationStoreConfigurationKeyGroupRelationDetail>()
   // Held outside this component, keyed by store and group: the Groups tab remounts the grid per
   // group, so a lock in component state was cleared by leaving the group and coming back while
   // its batch was still in flight. See sub-group-assign-lock.ts.
@@ -421,7 +426,28 @@ export const KeyGroupRelationsGrid = ({
     columnHelper.accessor('keyName', {
       header: t('classification-store.columns.name'),
       size: 200,
-      meta: { type: 'input' }
+      // The name stays a DefaultCell (keyboard navigation, clipping, padding); the tags sit beside it.
+      cell: (info) => (
+        <Flex
+          align="center"
+          gap="mini"
+          style={ { width: '100%', flexWrap: 'nowrap' } }
+        >
+          {/* Tags share the name's line: the row has a fixed height, so a wrapped second line would grow or be clipped. */}
+          <div style={ { flex: '1 1 auto', minWidth: 0, overflow: 'hidden' } }>
+            <DefaultCell { ...info } />
+          </div>
+          { overrideTags(info.row.original).map((tag) => (
+            <Tag
+              color={ tag.danger ? 'error' : undefined }
+              key={ tag.id }
+              style={ { flex: 'none' } }
+            >
+              { tag.translationKey === null ? tag.text : t(tag.translationKey, tag.params) }
+            </Tag>
+          )) }
+        </Flex>
+      )
     }),
     // Its size is the floor this column may shrink to, so the table fits panes narrower than its preferred width.
     columnHelper.accessor('keyDescription', {
@@ -444,16 +470,26 @@ export const KeyGroupRelationsGrid = ({
     columnHelper.display({
       id: 'actions',
       header: t('classification-store.columns.actions'),
-      size: 60,
+      size: 92,
       cell: (info) => (
-        <IconButton
-          // Deleting a relation the batch is still upserting would recreate it, because the
-          // upsert creates what it cannot find.
-          disabled={ isAssigning }
-          icon={ { value: 'trash' } }
-          onClick={ () => { handleRemove(info.row.original) } }
-          tooltip={ { title: t('delete') } }
-        />
+        <Flex gap="mini">
+          <IconButton
+            // Deleting a relation the batch is still upserting would recreate it, because the
+            // upsert creates what it cannot find.
+            disabled={ isAssigning }
+            icon={ { value: 'trash' } }
+            onClick={ () => { handleRemove(info.row.original) } }
+            tooltip={ { title: t('delete') } }
+          />
+          <IconButton
+            aria-label={ t('classification-store.aria.edit-key-override', { name: info.row.original.keyName ?? String(info.row.original.keyId) }) }
+            // The override is written through the same upsert as the batch, over the same relations.
+            disabled={ isAssigning }
+            icon={ { value: 'filter' } }
+            onClick={ () => { setOverrideRelation(info.row.original) } }
+            tooltip={ { title: isAssigning ? t('classification-store.assign-sub-group-running') : t('classification-store.override.edit') } }
+          />
+        </Flex>
       )
     })
   ], [t, handleRemove, columnHelper, isAssigning])
@@ -600,6 +636,12 @@ export const KeyGroupRelationsGrid = ({
         onConfirm={ (keys) => { void handleAddKey(keys) } }
         open={ keyDialogOpen }
         storeId={ storeId }
+      />
+
+      <KeyOverrideDialog
+        groupName={ groupName ?? String(groupId) }
+        onClose={ () => { setOverrideRelation(undefined) } }
+        relation={ overrideRelation }
       />
 
       <SubGroupSelectionDialog

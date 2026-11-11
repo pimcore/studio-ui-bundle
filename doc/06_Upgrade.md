@@ -10,6 +10,8 @@ The following steps are necessary when updating to newer versions.
 
 - [Classification Store] Added: sub groups, the per-store vocabulary a key's assignment to a group can be tagged with.
 
+- [Classification Store] Added: a key assignment in a group can narrow the key's options and units for that group, from a new action on each row of the group's key grid.
+
 - [Classification Store] Added: free-form pairs and localized titles on keys, groups, collections and sub groups, edited from two new row actions in the Classification Store configuration screen.
 
 - [Classification Store] Added: Export and Import actions on a store in the Classification Store configuration screen, which write and read the store's whole configuration as one JSON artifact.
