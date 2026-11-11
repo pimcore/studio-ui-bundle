@@ -74,11 +74,11 @@ const withDelegateMember = (definition: ClassificationStoreKeyDefinition): Class
     // Built from the current settings alone: on open the dialog hoists every delegate member to the top level, and a delegate type change clears the old ones there, so merging the stored `delegate` back would resurrect them.
     delegate: settings,
     // Names are saved trimmed: entries address a variant by its trimmed name.
-    variants: Array.isArray(record.variants)
-      ? (record.variants as ClassificationStoreVariantLayout[]).map((variant) =>
+    variants: Array.isArray(definition.variants)
+      ? (definition.variants as ClassificationStoreVariantLayout[]).map((variant) =>
           typeof variant?.name === 'string' ? { ...variant, name: variant.name.trim() } : variant)
-      : record.variants
-  } as ClassificationStoreKeyDefinition
+      : definition.variants
+  }
 
   return packed
 }
