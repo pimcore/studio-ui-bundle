@@ -15,15 +15,20 @@ import { type IKeyUnits } from './key-override'
 
 export const useKeyUnits = (): IKeyUnits => {
   const { getAbbreviation, getSelectOptions } = useQuantityValueUnits()
-  const { data } = useUnitQuantityValueListQuery()
+  const { data, isError, error } = useUnitQuantityValueListQuery()
+  const status = data !== undefined ? 'ready' : isError ? 'failed' : 'loading'
 
   // The list is what both results depend on; the hook's functions are new on every render.
   return useMemo(() => ({
-    installationUnits: getSelectOptions().map((option) => String(option.value)),
+    installationUnits: getSelectOptions()
+      .map((option) => option.value)
+      .filter((value): value is string => typeof value === 'string'),
+    status,
+    error,
     unitLabel: (id: string) => {
       const abbreviation = getAbbreviation(id)
 
       return abbreviation === '' ? id : abbreviation
     }
-  }), [data])
+  }), [data, status, error])
 }

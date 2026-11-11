@@ -98,7 +98,20 @@ describe('key override draft', () => {
   it('names the default unit through the given label, the id otherwise', () => {
     const relation = rel({ keyType: 'quantityValue', units: { defaultUnit: null, validUnits: ['kg'] }, definitionOverride: { defaultUnit: 'kg' } })
 
-    expect(overrideTags(relation, { installationUnits: [], unitLabel: () => 'KG' })[0].text).toBe('KG')
+    expect(overrideTags(relation, { installationUnits: [], status: 'ready', unitLabel: () => 'KG' })[0].text).toBe('KG')
     expect(overrideTags(relation)[0].text).toBe('kg')
+  })
+
+  it('makes no claim from an installation list that has not arrived', () => {
+    const relation = rel({
+      keyType: 'quantityValue',
+      units: { defaultUnit: null, validUnits: null },
+      definitionOverride: { validUnits: ['kg'], defaultUnit: 'kg' }
+    })
+    const unresolved = { installationUnits: [], status: 'failed' as const, unitLabel: (id: string) => id }
+
+    expect(overrideTags(relation, unresolved).map((tag) => tag.id)).toEqual(['default-unit'])
+    expect(overrideTags(relation, unresolved)[0].danger).toBe(false)
+    expect(overrideTags(relation, { ...unresolved, status: 'ready', installationUnits: ['kg', 'g'] }).map((tag) => tag.danger)).toEqual([false, false])
   })
 })

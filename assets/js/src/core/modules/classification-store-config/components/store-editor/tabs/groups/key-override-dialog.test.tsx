@@ -422,6 +422,30 @@ describe('KeyOverrideDialog', () => {
     expect(selectedDefault()).toBe('kg')
   })
 
+  it('shows no picker and offers no clearing while the installation list is refused, and every unit once it is there', async () => {
+    const user = userEvent.setup({ delay: null })
+    const everyUnit = unitRow({
+      units: { defaultUnit: null, validUnits: null },
+      definitionOverride: { validUnits: ['kg'], defaultUnit: 'kg' }
+    })
+
+    unitList = undefined
+    renderDialog(everyUnit)
+
+    expect(await screen.findByText(`${OVERRIDE}.units-unavailable`, undefined, WAIT_BUDGET)).toBeTruthy()
+    expect(screen.queryAllByRole('checkbox')).toHaveLength(0)
+    expect(screen.queryByText(`${OVERRIDE}.units-stale-only`)).toBeNull()
+    expect(screen.queryByRole('button', { name: new RegExp(USE_KEY_UNITS) })).toBeNull()
+    await save(user)
+    await waitFor(() => { expect(upserts()).toHaveLength(1) }, WAIT_BUDGET)
+    expect(upserts()[0].body?.definitionOverride).toEqual({ validUnits: ['kg'], defaultUnit: 'kg' })
+
+    cleanup()
+    unitList = INSTALLATION_UNITS
+    renderDialog(unitRow({ units: { defaultUnit: null, validUnits: null } }))
+    await screen.findByText(`${OVERRIDE}.units-count:3,3`, undefined, WAIT_BUDGET)
+  })
+
   it('stays open with the edit intact and reports the error when the save is refused', async () => {
     const user = userEvent.setup({ delay: null })
 

@@ -76,6 +76,13 @@ export const KeyGroupRelationsGrid = ({
 }: IKeyGroupRelationsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const keyUnits = useKeyUnits()
+
+  // A refused unit list leaves the unit tags without a vocabulary; they stay silent, and the refusal is reported.
+  useEffect(() => {
+    if (keyUnits.status === 'failed' && keyUnits.error !== undefined) {
+      trackError(new ApiError(keyUnits.error as ConstructorParameters<typeof ApiError>[0]))
+    }
+  }, [keyUnits.status, keyUnits.error])
   const { token } = theme.useToken()
   const modal = useFormModal()
   const messageApi = useMessage()

@@ -27,8 +27,15 @@ export const unitIdsOf = (relation: Relation, installationUnits: string[] = []):
   return relation.units?.validUnits ?? installationUnits
 }
 
+/** Where `validUnits: null` is read as every installation unit, the list must have arrived before the vocabulary is known. */
+export const unitsVocabularyKnown = (relation: Relation, ready: boolean): boolean =>
+  ready || !publishesUnits(relation) || (relation.units?.validUnits ?? null) !== null
+
 export interface IKeyUnits {
   installationUnits: string[]
+  /** 'ready' once the installation's unit list has arrived; 'loading' or 'failed' leave `installationUnits` empty. */
+  status: 'loading' | 'failed' | 'ready'
+  error?: unknown
   /** The installation's abbreviation for the unit, the ID where it names none or the list is not resolved. */
   unitLabel: (id: string) => string
 }
@@ -192,7 +199,7 @@ export interface IOverrideTag {
 /** One tag per member the assignment overrides, none where it overrides nothing. */
 export const overrideTags = (
   relation: Relation,
-  { installationUnits, unitLabel }: IKeyUnits = { installationUnits: [], unitLabel: (id) => id }
+  { installationUnits, status, unitLabel }: IKeyUnits = { installationUnits: [], status: 'ready', unitLabel: (id) => id }
 ): IOverrideTag[] => {
   const draft = draftOf(relation)
   const tags: IOverrideTag[] = []
@@ -225,7 +232,7 @@ export const overrideTags = (
   }
 
   if (typeof draft.defaultUnit === 'string') {
-    const published = unitIdsOf(relation, installationUnits)
+    const published = unitsVocabularyKnown(relation, status === 'ready') ? unitIdsOf(relation, installationUnits) : []
     // A default the key no longer permits is a disagreement the row must not present as a valid value.
     const outside = published.length > 0 && !published.includes(draft.defaultUnit)
 
@@ -234,7 +241,7 @@ export const overrideTags = (
     tags.push({ id: 'default-unit', translationKey: 'classification-store.override.tag-unreadable', params: {}, text: '', danger: true })
   }
 
-  if (draft.validUnits !== undefined) {
+  if (draft.validUnits !== undefined && unitsVocabularyKnown(relation, status === 'ready')) {
     const units = unitIdsOf(relation, installationUnits)
     const resolved = resolveSubset(draft.validUnits, units)
 

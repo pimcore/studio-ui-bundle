@@ -22,7 +22,8 @@ import {
   setDefaultUnit,
   publishesUnits,
   toggleUnit,
-  unitIdsOf
+  unitIdsOf,
+  unitsVocabularyKnown
 } from './key-override'
 import { StatedState, SubsetPicker, type ISectionProps, type ISubsetRow } from './key-override-sections'
 import { useKeyUnits } from './use-key-units'
@@ -31,12 +32,13 @@ const USE_DEFAULT = ''
 
 export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { installationUnits, unitLabel } = useKeyUnits()
+  const { installationUnits, status, unitLabel } = useKeyUnits()
+  const known = unitsVocabularyKnown(relation, status === 'ready')
   const keyUnits = unitIdsOf(relation, installationUnits)
   const resolved = resolveSubset(draft.validUnits, keyUnits)
   const choices = defaultUnitChoices(relation, draft, installationUnits)
   const storedDefault = draft.defaultUnit
-  const defaultOutside = storedDefault !== undefined && !(typeof storedDefault === 'string' && choices.includes(storedDefault))
+  const defaultOutside = known && storedDefault !== undefined && !(typeof storedDefault === 'string' && choices.includes(storedDefault))
   // The key's own symbol for the stored default; the reason is only given where the key itself dropped the unit,
   // since otherwise it is this group's subset that excludes it, which the sentence below the control states.
   const storedId = storedDefault === undefined ? '' : typeof storedDefault === 'string' ? storedDefault : JSON.stringify(storedDefault)
@@ -47,7 +49,7 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
   const clearUnitsAction = (
     <div>
       <IconTextButton
-        disabled={ draft.validUnits === undefined }
+        disabled={ draft.validUnits === undefined || !known }
         icon={ { value: 'clear-filter' } }
         onClick={ () => { onChange(clearUnits(relation, draft, installationUnits)) } }
       >
@@ -56,8 +58,21 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
     </div>
   )
 
-  const renderValidUnits = (): React.JSX.Element => {
-    if (!publishesUnits(relation)) {
+  const renderValidUnits = (): React.JSX.Element | null => {
+    // A relation that does not state its units says nothing about the key's type either way.
+    if (relation.units === undefined) return null
+
+    if (!known) {
+      return (
+        <Alert
+          message={ t(status === 'failed' ? 'classification-store.override.units-unavailable' : 'classification-store.override.units-loading') }
+          showIcon
+          type={ status === 'failed' ? 'warning' : 'info' }
+        />
+      )
+    }
+
+    if (!publishesUnits(relation) || keyUnits.length === 0) {
       return (
         <Flex
           gap="mini"
@@ -129,11 +144,12 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
           options={ [
             { value: USE_DEFAULT, label: t('classification-store.override.use-key-default') },
             // The stored default stays visible as itself, so it never reads like the reset choice.
+            ...(!known && storedDefault !== undefined ? [{ value: storedId, label: storedId, disabled: true }] : []),
             ...(defaultOutside ? [{ value: storedId, label: defaultLabel, disabled: true }] : []),
             ...choices.map((id) => ({ value: id, label: unitLabel(id) }))
           ] }
           placeholder={ t('classification-store.override.use-key-default') }
-          value={ storedDefault === undefined ? USE_DEFAULT : defaultOutside ? storedId : storedDefault }
+          value={ storedDefault === undefined ? USE_DEFAULT : defaultOutside || !known ? storedId : storedDefault }
         />
         { defaultOutside && (
           <StatedState
