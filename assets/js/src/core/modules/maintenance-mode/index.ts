@@ -10,7 +10,6 @@
 
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
-import { isNil, isUndefined } from 'lodash'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { store } from '@Pimcore/app/store'
 import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
@@ -21,7 +20,7 @@ import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
 import { MaintenanceModeIndicator } from './components/maintenance-mode-indicator/maintenance-mode-indicator'
 import { useMaintenanceModeContext } from './context/maintenance-mode-context'
-import { useLogoutCheck } from './hooks/use-logout-check'
+import { logoutUserMenuItemUpdate } from './logout-user-menu-item'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -55,23 +54,6 @@ moduleSystem.registerModule({
 
     const contextMenuRegistry = container.get<ContextMenuRegistryInterface>(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry'])
 
-    contextMenuRegistry.updateSlotProvider(contextMenuConfig.userMenu.name, 'logout', (provider) => ({
-      ...provider,
-      useMenuItem: (context) => {
-        const item = provider.useMenuItem(context)
-        const checkLogout = useLogoutCheck()
-
-        if (isNil(item) || !('onClick' in item) || isUndefined(item.onClick)) {
-          return item
-        }
-
-        const logout = item.onClick
-
-        return {
-          ...item,
-          onClick: (info: Parameters<typeof logout>[0]) => { checkLogout(() => { logout(info) }) }
-        }
-      }
-    }))
+    contextMenuRegistry.updateSlotProvider(contextMenuConfig.userMenu.name, 'logout', logoutUserMenuItemUpdate)
   }
 })
