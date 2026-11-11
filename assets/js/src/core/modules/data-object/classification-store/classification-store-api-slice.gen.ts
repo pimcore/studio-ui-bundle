@@ -316,6 +316,7 @@ const injectedRtkApi = api
                         pageSize: queryArg.pageSize,
                         sortKey: queryArg.sortKey,
                         sortDir: queryArg.sortDir,
+                        disabledOnly: queryArg.disabledOnly,
                     },
                 }),
                 providesTags: ["Classification Store"],
@@ -669,6 +670,8 @@ export type ClassificationStoreConfigurationGetPageApiArg = {
     sortKey?: string;
     /** Sort direction (ASC or DESC) */
     sortDir?: string;
+    /** Locate a key in the list of disabled keys instead of the enabled ones (keys only) */
+    disabledOnly?: boolean;
 };
 export type ClassificationStoreGetCollectionsApiResponse = /** status 200 List of classification store collections */ {
     totalItems: number;
@@ -877,6 +880,26 @@ export type ClassificationStoreConfigurationGroupUpdate = {
     /** Free-form pairs of the group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
     customMetadata?: object | null;
 };
+export type SelectOption = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key: string;
+    /** Value */
+    value: string;
+};
+export type ClassificationStoreConfigurationKeyUnits = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the unit the key preselects, as stored, or null where it names none */
+    defaultUnit: string | null;
+    /** IDs of the units the key permits, as stored and in the order the key declares them, or null where the key restricts nothing and every unit is permitted */
+    validUnits: string[] | null;
+};
 export type ClassificationStoreConfigurationKeyDetail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -894,7 +917,7 @@ export type ClassificationStoreConfigurationKeyDetail = {
     enabled: boolean;
     /** Description of the key */
     description: string | null;
-    /** Definition of the key, reported as it is stored. The member "indexed" is reserved: it is this key's own search index flag, where false asks for the key to be left out of the search index wherever it is used and anything else leaves it indexed. Studio stores the flag and queues a remap when it changes; honouring it is the search index's own. The members "variants" and "multiValue" are reserved as well: "variants" is the ordered list of variant names the key permits a value to carry, where a value carrying no variant addresses the default variant, and "multiValue" is whether the key holds more than one value per variant. A key that permits more than the one slot it always had - a "variants" list naming at least one variant, or "multiValue" true - carries its values in the object data payload as a list of entries rather than as a single value. A key that names no usable variant and does not declare "multiValue" true - an absent, empty or non-list "variants" member, with "multiValue" absent or false - permits exactly that one slot, and its values are carried unchanged; a key naming a variant carries a list of entries even with "multiValue" false, and a key declaring "multiValue" true carries one even with no variant named. */
+    /** Definition of the key, reported as it is stored. The member "indexed" is reserved: it is this key's own search index flag, where false asks for the key to be left out of the search index wherever it is used and anything else leaves it indexed. Studio stores the flag and queues a remap when it changes; honouring it is the search index's own. The members "variants" and "multiValue" declare something only in the definition of a key of type "multiValue": there, "variants" is the ordered list of variants the key permits, each a name and an optional label, "multiValue" is whether the key holds more than one value per variant, and the key carries its values in the object data payload as a list of entries rather than as a single value, whatever its variants list holds. In the definition of a key of any other type they are stored and published as written and declare nothing: such a key carries one value, unchanged. */
     definition: object | null;
     /** Creation date as Unix timestamp */
     creationDate: number | null;
@@ -908,6 +931,12 @@ export type ClassificationStoreConfigurationKeyDetail = {
     localized?: boolean | null;
     /** Free-form pairs the key carries, reported as stored. Pimcore reads no member of it, and null where the key holds none. */
     customMetadata?: object | null;
+    /** The resolved view of this key's option vocabulary for this request, whatever its source: its own stored options, or the options of an options provider that reports static options, in the order they are resolved. Null where the key is not a select or multiselect, and where optionsUnavailableReason says why not. The stored definition remains authoritative for storage. */
+    options?: SelectOption[] | null;
+    /** Why options is null for a select or multiselect key: "providerNotStatic" where its options provider reports options that depend on a data object, "resolutionFailed" where the provider could not be resolved or raised, for instance for a deleted select options configuration. Null means nothing failed. */
+    optionsUnavailableReason?: string | null;
+    /** The unit vocabulary of the key's own definition, never of an assignment override, and null where its type holds no units. Where validUnits is null the definition restricts nothing; the type tells that apart from a type with no units at all. */
+    units?: ClassificationStoreConfigurationKeyUnits | null;
 };
 export type ClassificationStoreConfigurationKeyCreate = {
     /** Name of the key */
@@ -926,7 +955,7 @@ export type ClassificationStoreConfigurationKeyUpdate = {
     description?: string | null;
     /** Data type of the key (e.g. input, textarea, select) */
     type: string | null;
-    /** Values for object brick definition metadata. The member "indexed" is reserved: it is this key's own search index flag, where false asks for the key to be left out of the search index wherever it is used and anything else leaves it indexed. Changing it queues a remap of every search index the key's store reaches, which converges in the background; honouring the flag is the search index's own. The members "variants" and "multiValue" are reserved as well: "variants" is the ordered list of variant names the key permits a value to carry, where a value carrying no variant addresses the default variant, and "multiValue" is whether the key holds more than one value per variant. A key that permits more than the one slot it always had - a "variants" list naming at least one variant, or "multiValue" true - carries its values in the object data payload as a list of entries rather than as a single value. A key that names no usable variant and does not declare "multiValue" true - an absent, empty or non-list "variants" member, with "multiValue" absent or false - permits exactly that one slot and its values are carried unchanged; a key naming a variant carries a list of entries even with "multiValue" false, and a key declaring "multiValue" true carries one even with no variant named. Declaring either is accepted whatever the engine of the key's store reports. The whole object replaces the stored one, so a client that rebuilds it from a form has to send the member back to keep it. It is unrelated to the "index" member below, which is about the object query tables. */
+    /** Values for object brick definition metadata. The member "indexed" is reserved: it is this key's own search index flag, where false asks for the key to be left out of the search index wherever it is used and anything else leaves it indexed. Changing it queues a remap of every search index the key's store reaches, which converges in the background; honouring the flag is the search index's own. The members "variants" and "multiValue" declare something only in the definition of a key of type "multiValue": there, "variants" is the ordered list of variants the key permits, each a name and an optional label, "multiValue" is whether the key holds more than one value per variant, and the key carries its values in the object data payload as a list of entries rather than as a single value. In the definition of a key of any other type they are stored as written and declare nothing. Declaring them is accepted whatever the engine of the key's store reports. The whole object replaces the stored one, so a client that rebuilds it from a form has to send the member back to keep it. It is unrelated to the "index" member below, which is about the object query tables. */
     definition: object | null;
     /** Whether the key holds a value per language: true, false, or null to state nothing and let the `localized` flag of the class definition field the key is rendered in decide. Leaving the member out of the request keeps the stored value, sending it as null stores null. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
     localized?: boolean | null;
@@ -960,6 +989,14 @@ export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
     metadata?: object | null;
     /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It belongs to the key, not to this assignment, and is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
     localized?: boolean | null;
+    /** Data type of the key, as the key configuration stores it, or null where the key configuration is gone */
+    keyType?: string | null;
+    /** The resolved view of this key's option vocabulary for this request, whatever its source: its own stored options, or the options of an options provider that reports static options, in the order they are resolved. Null where the key is not a select or multiselect, and where optionsUnavailableReason says why not. The stored definition remains authoritative for storage. */
+    options?: SelectOption[] | null;
+    /** Why options is null for a select or multiselect key: "providerNotStatic" where its options provider reports options that depend on a data object, "resolutionFailed" where the provider could not be resolved or raised, for instance for a deleted select options configuration. Null means nothing failed. */
+    optionsUnavailableReason?: string | null;
+    /** The unit vocabulary of the key's own definition, never of an assignment override, and null where its type holds no units. Where validUnits is null the definition restricts nothing; the type tells that apart from a type with no units at all. */
+    units?: ClassificationStoreConfigurationKeyUnits | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
     /** ID of the key */
@@ -1147,6 +1184,12 @@ export type ClassificationStoreKeyGroupRelation = {
     /** Data type of the key, as the relation stores it; null where the relation states none */
     keyType?: string | null;
 };
+export type ClassificationStoreVariantLayout = {
+    /** Name a value addresses the variant by */
+    name: string;
+    /** Label of the variant */
+    label?: string | null;
+};
 export type ClassificationStoreCollection2 = {
     /** ID */
     id: number;
@@ -1162,10 +1205,12 @@ export type ClassificationStoreCollection2 = {
     subGroup?: string | null;
     /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
     localized?: boolean | null;
-    /** The variant names the key permits, in the order it declares them, as the key stores them; null where the key declares none. A value carrying no variant addresses the default variant, which is never one of these names. */
-    variants?: string[] | null;
-    /** Whether the key holds more than one value per variant, as the key stores it; null where the key declares nothing. */
+    /** The variants a key of type `multiValue` permits, in the order it declares them, each a name and an optional label; null for a key of any other type. A value carrying no variant addresses the default variant, which is never one of these names. */
+    variants?: ClassificationStoreVariantLayout[] | null;
+    /** Whether a key of type `multiValue` holds more than one value per variant; null for a key of any other type. */
     multiValue?: boolean | null;
+    /** How many values one slot of a key of type `multiValue` may hold; null where it declares no limit and for a key of any other type. It is published, not enforced by this endpoint. */
+    maximum?: number | null;
 };
 export type ClassificationStoreSubGroupLayout = {
     /** Identifier the key assignments name this sub group by */
