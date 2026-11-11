@@ -352,6 +352,26 @@ describe('MultiValueEditor', () => {
     duplicateKeys.mockRestore()
   })
 
+  it('reads an entry carrying no position as position 0, as the server does', () => {
+    renderEditor({ multiValue: true, value: [{ v: 'x', p: 1 }, { v: 'y' }] })
+
+    expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['y', 'x'])
+  })
+
+  it.each(['a', { v: 'a' }, 3])('states that a stored value %p is not a list, rendering no input and writing nothing', (value) => {
+    renderEditor({ multiValue: true, value })
+
+    expect(screen.getByText('classification-store.multi-value.unreadable-value')).toBeInTheDocument()
+    expect(inputs()).toHaveLength(0)
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('treats a nil stored value as no value, not as an unreadable one', () => {
+    renderEditor({ multiValue: true, value: null })
+
+    expect(screen.getByText('classification-store.multi-value.empty')).toBeInTheDocument()
+  })
+
   it('reads no position off a list element holding nothing, and keeps the entries around it', () => {
     renderEditor({ multiValue: true, value: [{ v: 'a' }, null as any, { v: 'b' }] })
 

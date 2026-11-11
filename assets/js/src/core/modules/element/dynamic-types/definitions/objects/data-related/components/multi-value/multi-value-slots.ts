@@ -24,6 +24,9 @@ export interface MultiValueSlot {
   declared: boolean
 }
 
+/** Whether a stored value is one this editor can read: nothing stored, or a list of entries. */
+export const isReadableValue = (value: unknown): boolean => isNil(value) || Array.isArray(value)
+
 /** The entries as the editor holds and writes them: in display order, without position (the writer numbers them). */
 export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry[] => {
   if (!Array.isArray(value)) {
@@ -33,7 +36,7 @@ export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry
   return (value as ClassificationStoreMultiValueEntry[])
     // A list element holding nothing is no entry, and is dropped here rather than read for a position.
     .filter((entry) => !isNil(entry))
-    .map((entry, index) => ({ entry, position: entry.p ?? index, index }))
+    .map((entry, index) => ({ entry, position: entry.p ?? 0, index }))
     .sort((a, b) => a.position - b.position || a.index - b.index)
     .map(({ entry: { p, ...rest } }) => rest)
 }

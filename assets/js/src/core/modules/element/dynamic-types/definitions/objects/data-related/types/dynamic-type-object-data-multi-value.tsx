@@ -42,7 +42,7 @@ export class DynamicTypeObjectDataMultiValue extends DynamicTypeObjectDataAbstra
       <SaveProvider>
         <EditFormProvider>
           <SuppressEmptyFieldLabelProvider>
-            {this.getObjectDataComponent({ ...props, title: '', tooltip: '' })}
+            {this.getObjectDataComponent({ ...props, noteditable: true, title: '', tooltip: '' })}
           </SuppressEmptyFieldLabelProvider>
         </EditFormProvider>
       </SaveProvider>

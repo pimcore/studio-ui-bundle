@@ -20,4 +20,4 @@ import { type ClassificationStoreVariantLayout } from '@Pimcore/modules/data-obj
  * the dialog already refuses, rather than a crash there and an unheaded slot in the editor.
  */
 export const variantNameOf = (variant: ClassificationStoreVariantLayout): string =>
-  isString(variant.name) ? variant.name : ''
+  isString(variant.name) ? variant.name.trim() : ''

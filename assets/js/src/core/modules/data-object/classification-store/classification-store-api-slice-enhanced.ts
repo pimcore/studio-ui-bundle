@@ -210,7 +210,8 @@ export interface ClassificationStoreCollection2 extends GeneratedKeyLayout {
 /**
  * One entry of the value of a key of type `multiValue`. It shadows a payload the generated client
  * types as `object`, and is used unchanged for reading and writing. Its members are the ones of
- * QualifiedValueSerializerInterface: `v`, `var` and `p`. The payload is keyed by language before it
+ * QualifiedValueSerializerInterface: VALUE_MEMBER = 'v', VARIANT_MEMBER = 'var', POSITION_MEMBER = 'p'
+ * (studio-backend-bundle, src/ClassificationStore/Service/QualifiedValueSerializerInterface.php). The payload is keyed by language before it
  * reaches an entry, so the slot is the authority on language and an entry carries no such member.
  */
 export interface ClassificationStoreMultiValueEntry {

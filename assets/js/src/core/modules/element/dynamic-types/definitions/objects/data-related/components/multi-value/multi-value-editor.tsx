@@ -37,6 +37,7 @@ import {
   canAdd,
   declaredVariantsOf,
   indexesOf,
+  isReadableValue,
   orderEntries,
   seedEmptySlots,
   slotKeyOf,
@@ -225,6 +226,16 @@ export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Elemen
     return (
       <Alert
         message={ t('classification-store.multi-value.unknown-delegate', { type: delegateDatatype }) }
+        type='warning'
+      />
+    )
+  }
+
+  // A value stored before the key declared itself a multiValue is not a list: say so rather than show it as no value, and write nothing over it.
+  if (!isReadableValue(props.value)) {
+    return (
+      <Alert
+        message={ t('classification-store.multi-value.unreadable-value') }
         type='warning'
       />
     )
