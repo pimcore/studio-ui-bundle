@@ -9,16 +9,18 @@
  */
 
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
 import { useUnitQuantityValueListQuery } from '@Pimcore/modules/data-object/unit-slice.gen'
 import { type IKeyUnits } from './key-override'
 
 export const useKeyUnits = (): IKeyUnits => {
+  const { t } = useTranslation()
   const { getAbbreviation, getSelectOptions } = useQuantityValueUnits()
   const { data, isError, error } = useUnitQuantityValueListQuery()
   const status = data !== undefined ? 'ready' : isError ? 'failed' : 'loading'
 
-  // The list is what both results depend on; the hook's functions are new on every render.
+  // The list is what both results depend on; the hook's functions are new on every render and close over `t`, so a language change rebuilds the labels.
   return useMemo(() => ({
     installationUnits: getSelectOptions()
       .map((option) => option.value)
@@ -30,5 +32,5 @@ export const useKeyUnits = (): IKeyUnits => {
 
       return abbreviation === '' ? id : abbreviation
     }
-  }), [data, status, error])
+  }), [data, status, error, t])
 }

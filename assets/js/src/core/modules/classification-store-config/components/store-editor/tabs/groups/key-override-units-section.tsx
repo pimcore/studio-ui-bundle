@@ -59,9 +59,6 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
   )
 
   const renderValidUnits = (): React.JSX.Element | null => {
-    // A relation that does not state its units says nothing about the key's type either way.
-    if (relation.units === undefined) return null
-
     if (!known) {
       return (
         <Alert
@@ -72,14 +69,22 @@ export const UnitsSection = ({ relation, draft, onChange }: ISectionProps): Reac
       )
     }
 
-    if (!publishesUnits(relation) || keyUnits.length === 0) {
+    // An absent member is read as a null one: the relation names no vocabulary.
+    const emptyKey = publishesUnits(relation) && keyUnits.length === 0
+    if (!publishesUnits(relation) || emptyKey) {
+      const notice = !publishesUnits(relation)
+        ? 'classification-store.override.units-no-vocabulary'
+        : relation.units?.validUnits === null || relation.units?.validUnits === undefined
+          ? 'classification-store.override.units-installation-empty'
+          : 'classification-store.override.units-key-permits-none'
+
       return (
         <Flex
           gap="mini"
           vertical
         >
           <Alert
-            message={ t('classification-store.override.units-no-vocabulary') }
+            message={ t(notice) }
             showIcon
             type="info"
           />

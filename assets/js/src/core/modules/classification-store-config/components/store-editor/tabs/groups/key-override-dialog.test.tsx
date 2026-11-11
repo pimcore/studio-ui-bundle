@@ -312,6 +312,8 @@ describe('KeyOverrideDialog', () => {
     ['a default outside the valid set', unitRow({ definitionOverride: { validUnits: ['g'], defaultUnit: 'kg' } }), `${OVERRIDE}.default-outside:kg`, USE_KEY_DEFAULT, 3],
     ['no options published', selectRow({ options: [] }), `${OVERRIDE}.key-offers-no-options`, undefined, 0],
     ['a key whose type holds no units', unitRow({ units: null }), `${OVERRIDE}.units-no-vocabulary`, undefined, 0],
+    ['a key whose vocabulary names no unit', unitRow({ units: { defaultUnit: null, validUnits: [] } }), `${OVERRIDE}.units-key-permits-none`, undefined, 0],
+    ['a key whose relation omits its units', unitRow({ units: undefined }), `${OVERRIDE}.units-no-vocabulary`, undefined, 0],
     ['neither options nor units', selectRow({ keyType: 'input', options: null }), `${OVERRIDE}.nothing-to-narrow`, undefined, 0],
     ['a stored subset on a key publishing no options', selectRow({ keyType: 'input', options: null, definitionOverride: { options: ['red'] } }), `${OVERRIDE}.options-stored-unlisted`, USE_ALL_OPTIONS, 0],
     ['a stored subset beside units on a key publishing no options', unitRow({ options: null, definitionOverride: { options: ['red'] } }), `${OVERRIDE}.options-stored-unlisted`, USE_ALL_OPTIONS, 3]
