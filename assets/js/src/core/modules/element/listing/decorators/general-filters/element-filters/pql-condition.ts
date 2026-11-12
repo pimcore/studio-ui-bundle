@@ -25,6 +25,27 @@ export const addPqlCondition = (columnFilters: ColumnFilter[], condition: string
   )
 }
 
+// String tokens of the Generic Data Index PQL lexer: their parentheses are not grouping.
+const pqlStringTokens = /query\(".*?"\)|'(?:[^']|'')*'|"(?:[^"]|"")*"/gi
+
+const isSelfContained = (pql: string): boolean => {
+  let depth = 0
+
+  for (const char of pql.replaceAll(pqlStringTokens, '')) {
+    if (char === '(') {
+      depth++
+    } else if (char === ')') {
+      depth--
+    }
+
+    if (depth < 0) {
+      return false
+    }
+  }
+
+  return depth === 0
+}
+
 /** Reverses addPqlCondition: the query without the condition, or undefined when the condition was not added. */
 export const removePqlCondition = (pql: string, condition: string): string | undefined => {
   if (pql === condition) {
@@ -33,5 +54,11 @@ export const removePqlCondition = (pql: string, condition: string): string | und
 
   const suffix = `) AND (${condition})`
 
-  return pql.startsWith('(') && pql.endsWith(suffix) ? pql.slice(1, -suffix.length) : undefined
+  if (!pql.startsWith('(') || !pql.endsWith(suffix)) {
+    return undefined
+  }
+
+  const query = pql.slice(1, -suffix.length)
+
+  return isSelfContained(query) ? query : undefined
 }

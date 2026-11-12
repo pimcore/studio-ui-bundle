@@ -44,4 +44,29 @@ describe('removePqlCondition', () => {
     expect(removePqlCondition('color = "red"', condition)).toBeUndefined()
     expect(removePqlCondition('', condition)).toBeUndefined()
   })
+
+  it('returns undefined when the first parenthesis does not enclose the whole user PQL', () => {
+    expect(removePqlCondition('(color = "red") OR (color = "blue") AND (system_fields.tags = NULL)', condition)).toBeUndefined()
+  })
+
+  it('returns a user PQL that is itself grouped in parentheses', () => {
+    const [combined] = addPqlCondition([{ type: 'system.pql', filterValue: '(color = "red") OR (color = "blue")' }], condition)
+
+    expect(combined.filterValue).toBe('((color = "red") OR (color = "blue")) AND (system_fields.tags = NULL)')
+    expect(removePqlCondition(combined.filterValue as string, condition)).toBe('(color = "red") OR (color = "blue")')
+  })
+
+  it.each([
+    'title = "a) OR (b"',
+    'title = \'it\'\'s (\'',
+    'query("title:\\"(draft\\"")'
+  ])('ignores parentheses inside the PQL string token %s', (userPql) => {
+    const [combined] = addPqlCondition([{ type: 'system.pql', filterValue: userPql }], condition)
+
+    expect(removePqlCondition(combined.filterValue as string, condition)).toBe(userPql)
+  })
+
+  it('does not let quoted parentheses balance the user PQL', () => {
+    expect(removePqlCondition('(title = "(") OR (name = ")") AND (system_fields.tags = NULL)', condition)).toBeUndefined()
+  })
 })
