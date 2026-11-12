@@ -63,6 +63,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     dateTimeLocale: openedUser?.dateTimeLocale ?? '',
     theme: openedUser?.theme,
     welcomeScreen: openedUser?.welcomeScreen,
+    welcomeScreenPath: openedUser?.welcomeScreenPath ?? '',
     memorizeTabs: openedUser?.memorizeTabs,
     allowDirtyClose: openedUser?.allowDirtyClose,
     closeWarning: openedUser?.closeWarning,

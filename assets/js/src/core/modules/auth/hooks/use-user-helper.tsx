@@ -65,6 +65,7 @@ export const useUserHelper = (): UseUserReturn => {
         language: user.language,
         dateTimeLocale: user.dateTimeLocale,
         welcomeScreen: user.welcomeScreen,
+        welcomeScreenPath: user.welcomeScreenPath,
         memorizeTabs: user.memorizeTabs,
         contentLanguages: user.contentLanguages,
         keyBindings: user.keyBindings,

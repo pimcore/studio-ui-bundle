@@ -32,6 +32,7 @@ import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-langu
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 import { TwoFactorAccordion } from '@Pimcore/modules/auth/profile/two-factor-accordion/two-factor-accordion'
+import { WelcomeScreenPathSelect } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/welcome-screen-path-select'
 
 interface IProfileDetail {
   id: number
@@ -66,6 +67,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
         dateTimeLocale: user?.dateTimeLocale ?? '',
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
+        welcomeScreenPath: user?.welcomeScreenPath ?? '',
         keyBindings: user?.keyBindings,
         contentLanguages: user?.contentLanguages,
         theme: user?.theme,
@@ -176,6 +178,8 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
                   >
                     <Switch labelRight={ t('user-management.welcomeScreen') } />
                   </Form.Item>
+
+                  <WelcomeScreenPathSelect />
 
                   <Form.Item
                     name="memorizeTabs"

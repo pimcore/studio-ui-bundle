@@ -1636,6 +1636,7 @@ user-management.email: E-mail
 user-management.language: Langue
 user-management.dateTime: Locale de date et heure
 user-management.welcomeScreen: Afficher l'écran d'accueil au démarrage
+user-management.welcomeScreenPath: Tableau de bord de l'écran d'accueil
 user-management.memorizeTabs: Mémoriser les onglets ouverts
 user-management.allowDirtyClose: Désactiver l'avertissement de contenu non enregistré
 user-management.closeWarning: Afficher l'avertissement de fermeture
