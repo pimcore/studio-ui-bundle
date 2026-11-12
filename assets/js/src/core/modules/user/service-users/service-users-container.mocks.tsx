@@ -34,10 +34,10 @@ export const Tabs = ({ items = [], activeKey, onChange, onClose }: TabsProps): R
         key={ item.key }
         role="tab"
       >
-        <span
+        <button
           onClick={ () => { onChange?.(item.key) } }
-          role="presentation"
-        >{item.label}</span>
+          type="button"
+        >{item.label}</button>
         <button
           aria-label={ `close:${item.key}` }
           onClick={ () => { onClose?.(item.key) } }

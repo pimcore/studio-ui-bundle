@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { ServiceUsersContainer } from './service-users-container'
 import { setServiceUsersDirty } from './dirty/service-users-dirty-slice'
 
@@ -127,7 +127,7 @@ describe('ServiceUsersContainer tabs', () => {
     fireEvent.click(screen.getByText('svc-existing'))
     fireEvent.click(screen.getByText('svc-second'))
     fireEvent.click(screen.getByText('svc-new'))
-    fireEvent.click(screen.getAllByText('svc-second', { selector: 'span' })[0])
+    fireEvent.click(within(screen.getAllByRole('tab')[1]).getByText('svc-second'))
 
     fireEvent.click(screen.getByText('close-others'))
 
