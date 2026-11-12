@@ -88,6 +88,10 @@ class DocumentVersionsControllerTest extends Unit
 
     private function writeTempFile(string $name, string $contents): void
     {
+        if (!is_dir(PIMCORE_SYSTEM_TEMP_DIRECTORY)) {
+            mkdir(PIMCORE_SYSTEM_TEMP_DIRECTORY, 0777, true);
+        }
+
         $path = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . $name;
         file_put_contents($path, $contents);
         $this->createdFiles[] = $path;
