@@ -16,6 +16,7 @@ import { ApiErrorViewUI } from '@Pimcore/modules/app/error-handler/components/ap
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 import { store } from '@Pimcore/app/store'
 import { selectIsLockedOut } from '@Pimcore/modules/maintenance-mode/maintenance-mode-slice'
+import { isInIframe } from '@Pimcore/utils/iframe'
 
 interface IErrorContentProvider {
   getContent: () => IErrorGetContent['data']
@@ -33,9 +34,10 @@ const getErrorContentId = (errorContent: IErrorGetContent['data']): string => {
   return isString(errorContent) ? errorContent : JSON.stringify(errorContent)
 }
 
-// The open maintenance notice already explains an HTML 503
+// The open maintenance notice already explains an HTML 503; the document editor iframe shows no notice
 const isExplainedByMaintenanceNotice = (errorContent: IErrorGetContent['data']): boolean => {
-  return !isString(errorContent) &&
+  return !isInIframe() &&
+    !isString(errorContent) &&
     errorContent.errorKey === 'error_response_not_json_with_status' &&
     errorContent.params?.status === 503 &&
     selectIsLockedOut(store.getState())

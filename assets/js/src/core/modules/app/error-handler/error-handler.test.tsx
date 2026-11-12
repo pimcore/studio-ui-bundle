@@ -14,12 +14,16 @@ import GeneralError from './classes/general-error'
 import type { ApiErrorData } from './types'
 
 const mockLockedOut = { value: false }
+const mockInIframe = { value: false }
 
 jest.mock('@Pimcore/app/store', () => ({
   store: { getState: () => ({}) }
 }))
 jest.mock('@Pimcore/modules/maintenance-mode/maintenance-mode-slice', () => ({
   selectIsLockedOut: () => mockLockedOut.value
+}))
+jest.mock('@Pimcore/utils/iframe', () => ({
+  isInIframe: () => mockInIframe.value
 }))
 
 const apiError = (errorData: object): ApiError => new ApiError(errorData as ApiErrorData)
@@ -106,6 +110,19 @@ describe('trackError', () => {
       trackError(apiError({ status: 503, data: { message: 'Service unavailable' } }), handler)
 
       expect(handler).toHaveBeenCalledTimes(2)
+    })
+
+    it('still shows an HTML 503 in the document editor iframe, which has no notice', () => {
+      mockInIframe.value = true
+      const handler = jest.fn()
+
+      try {
+        trackError(parseError(503), handler)
+      } finally {
+        mockInIframe.value = false
+      }
+
+      expect(handler).toHaveBeenCalledTimes(1)
     })
   })
 
