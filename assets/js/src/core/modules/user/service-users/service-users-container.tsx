@@ -12,7 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Popconfirm } from 'antd'
 import { isUndefined } from 'lodash'
-import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
+import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -90,7 +90,7 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
 
   return (
     <>
-      <ConfigLayout
+      <PageLayout
         leftItem={ {
           size: 25,
           minSize: 220,
@@ -107,7 +107,7 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
             />
           )
         } }
-        resizeAble
+        resizable
         rightItem={ {
           size: 75,
           minSize: 600,
@@ -148,6 +148,7 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
               </div>
               )
         } }
+        variant="config"
         withDivider
       />
 

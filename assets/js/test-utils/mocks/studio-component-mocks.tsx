@@ -22,7 +22,6 @@ interface ChildrenProps {
 interface ClickableProps extends ChildrenProps {
   onClick?: () => void
   disabled?: boolean
-  loading?: boolean
   title?: string
 }
 
@@ -42,7 +41,7 @@ export const Content = ({ children, loading, none }: ChildrenProps & { loading?:
   <div data-testid={ loading === true ? 'content-loading' : none === true ? 'content-none' : 'content' }>{children}</div>
 )
 
-export const ContentLayout = ({ children, renderToolbar }: ChildrenProps & { renderToolbar?: React.ReactNode }): React.JSX.Element => (
+export const PageLayout = ({ children, renderToolbar }: ChildrenProps & { renderToolbar?: React.ReactNode }): React.JSX.Element => (
   <div>{renderToolbar}{children}</div>
 )
 
@@ -132,7 +131,9 @@ interface SelectProps {
 
 export const Select = ({ value, placeholder, mode, options = [], onChange }: SelectProps): React.JSX.Element => {
   const multiple = mode === 'multiple'
-  const selected = multiple ? (value as Array<string | number> ?? []).map(String) : String(value ?? '')
+  const selected = multiple
+    ? (value as Array<string | number> ?? []).map(String)
+    : (typeof value === 'string' || typeof value === 'number' ? String(value) : '')
 
   return (
     <select

@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Content } from '@Pimcore/components/content/content'
-import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ToolbarTree } from '@Pimcore/modules/user/management/toolbar/toolbar-tree'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
@@ -56,7 +56,7 @@ export const ServiceUserList = ({
   )
 
   return (
-    <ContentLayout
+    <PageLayout
       renderToolbar={
         <ToolbarTree
           actions={ [
@@ -76,6 +76,7 @@ export const ServiceUserList = ({
           onReload={ onRefresh }
         />
       }
+      variant="content"
     >
       <Content
         loading={ isLoading }
@@ -131,6 +132,6 @@ export const ServiceUserList = ({
             </Flex>
             )}
       </Content>
-    </ContentLayout>
+    </PageLayout>
   )
 }

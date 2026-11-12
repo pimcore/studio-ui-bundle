@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEqual, isUndefined } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
-import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -137,7 +137,7 @@ export const ServiceUserDetail = ({ id, onDeleted, onDirtyChange }: ServiceUserD
   }
 
   return (
-    <ContentLayout
+    <PageLayout
       renderToolbar={
         <Toolbar justify="space-between">
           <Flex gap="small">
@@ -165,6 +165,7 @@ export const ServiceUserDetail = ({ id, onDeleted, onDirtyChange }: ServiceUserD
           </Button>
         </Toolbar>
       }
+      variant="content"
     >
       <Content padded>
         <Flex
@@ -226,6 +227,6 @@ export const ServiceUserDetail = ({ id, onDeleted, onDirtyChange }: ServiceUserD
           ] }
         />
       </Content>
-    </ContentLayout>
+    </PageLayout>
   )
 }

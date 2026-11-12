@@ -26,8 +26,8 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   default: jest.fn(),
   ApiError: jest.fn()
 }))
-jest.mock('@Pimcore/components/predefined-layouts/config/config-layout', () => ({
-  ConfigLayout: ({ leftItem, rightItem }: { leftItem: { children: React.ReactNode }, rightItem: { children: React.ReactNode } }) => (
+jest.mock('@Pimcore/components/page-layout/page-layout', () => ({
+  PageLayout: ({ leftItem, rightItem }: { leftItem: { children: React.ReactNode }, rightItem: { children: React.ReactNode } }) => (
     <div>{leftItem.children}{rightItem.children}</div>
   )
 }))
