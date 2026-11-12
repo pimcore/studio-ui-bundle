@@ -88,29 +88,28 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type ServiceUserCreateApiResponse =
-    /** status 200 service_user_create_success_response */ ServiceUserCredentials;
+    /** status 200 Client credentials of the new service user. The secret is shown only once. */ ServiceUserCredentials;
 export type ServiceUserCreateApiArg = {
     serviceUserCreate: CreateServiceUser;
 };
 export type ServiceUserCreateFromUserApiResponse =
-    /** status 200 service_user_create_from_user_success_response */ ServiceUserCredentials;
+    /** status 200 Client credentials of the new service user. The secret is shown only once. */ ServiceUserCredentials;
 export type ServiceUserCreateFromUserApiArg = {
     /** Id of the user */
     id: number;
     serviceUserCreateFromUser: CreateServiceUserFromUser;
 };
-export type ServiceUserDeactivateByIdApiResponse =
-    /** status 200 service_user_deactivate_by_id_success_response */ ServiceUser;
+export type ServiceUserDeactivateByIdApiResponse = /** status 200 The deactivated service user */ ServiceUser;
 export type ServiceUserDeactivateByIdApiArg = {
     /** Id of the service user */
     id: number;
 };
-export type ServiceUserGetByIdApiResponse = /** status 200 service_user_get_by_id_success_response */ ServiceUser;
+export type ServiceUserGetByIdApiResponse = /** status 200 The service user */ ServiceUser;
 export type ServiceUserGetByIdApiArg = {
     /** Id of the service user */
     id: number;
 };
-export type ServiceUserUpdateByIdApiResponse = /** status 200 service_user_update_by_id_success_response */ ServiceUser;
+export type ServiceUserUpdateByIdApiResponse = /** status 200 The updated service user */ ServiceUser;
 export type ServiceUserUpdateByIdApiArg = {
     /** Id of the service user */
     id: number;
@@ -121,13 +120,13 @@ export type ServiceUserDeleteByIdApiArg = {
     /** Id of the service user */
     id: number;
 };
-export type ServiceUserGetCollectionApiResponse = /** status 200 service_user_get_collection_success_response */ {
+export type ServiceUserGetCollectionApiResponse = /** status 200 List of service users */ {
     totalItems: number;
     items: ServiceUser[];
 };
 export type ServiceUserGetCollectionApiArg = void;
 export type ServiceUserMcpTokenIssueApiResponse =
-    /** status 200 service_user_mcp_token_issue_success_response */ ServiceUserMcpAccessToken;
+    /** status 200 The MCP access token. It is shown only once. */ ServiceUserMcpAccessToken;
 export type ServiceUserMcpTokenIssueApiArg = {
     /** Id of the service user */
     id: number;
@@ -139,7 +138,7 @@ export type ServiceUserMcpTokenRevokeApiArg = {
     id: number;
 };
 export type ServiceUserRotateSecretApiResponse =
-    /** status 200 service_user_rotate_secret_success_response */ ServiceUserCredentials;
+    /** status 200 Client credentials with the new secret. The secret is shown only once. */ ServiceUserCredentials;
 export type ServiceUserRotateSecretApiArg = {
     /** Id of the service user */
     id: number;
@@ -149,8 +148,8 @@ export type ServiceUserCredentials = {
     serviceUserId: number;
     /** OAuth client id */
     clientId: string;
-    /** OAuth client secret, shown once */
-    clientSecret: string;
+    /** OAuth client secret, shown once; null while the client_credentials grant is disabled */
+    clientSecret: string | null;
 };
 export type Error = {
     /** Message */

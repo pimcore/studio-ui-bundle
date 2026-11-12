@@ -9,7 +9,7 @@
  */
 
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi, type ServiceUserCredentials as GeneratedServiceUserCredentials } from './service-users-api-slice.gen'
+import { api as baseApi } from './service-users-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.SERVICE_USERS, tagNames.SERVICE_USER_DETAIL],
@@ -63,11 +63,6 @@ const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './service-users-api-slice.gen'
-
-// The API returns null while the client_credentials grant is off, which the generated type does not express.
-export type ServiceUserCredentials = Omit<GeneratedServiceUserCredentials, 'clientSecret'> & {
-  clientSecret: string | null
-}
 
 export const {
   useServiceUserGetCollectionQuery,
