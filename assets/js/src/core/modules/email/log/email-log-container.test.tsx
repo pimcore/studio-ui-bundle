@@ -137,7 +137,7 @@ describe('EmailLogContainer', () => {
 
     expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: false })
     expect(searchQuery).toHaveBeenLastCalledWith(
-      { page: 1, pageSize: 20, email: '' },
+      { body: { filters: { page: 1, pageSize: 20, columnFilters: [{ type: 'email', filterValue: '' }] } } },
       { skip: true }
     )
     expect(screen.getByTestId('email-log-items').textContent).toBe('1')
@@ -146,7 +146,7 @@ describe('EmailLogContainer', () => {
 
     expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: true })
     expect(searchQuery).toHaveBeenLastCalledWith(
-      { page: 1, pageSize: 20, email: 'failed@example.com' },
+      { body: { filters: { page: 1, pageSize: 20, columnFilters: [{ type: 'email', filterValue: 'failed@example.com' }] } } },
       { skip: false }
     )
     expect(screen.getByTestId('email-log-items').textContent).toBe('2')

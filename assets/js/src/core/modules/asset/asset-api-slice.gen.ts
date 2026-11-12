@@ -1454,7 +1454,7 @@ export type AssetUploadBatchInfo = {
     exists: boolean;
     /** Id of existing asset */
     assetId: number | null;
-    /** True if an asset with that name exists but the current user may not view it. The name is therefore reported as not existing, since no ID can be handed out. */
+    /** True if an asset with that name exists but the current user may not view it */
     accessDenied: boolean;
 };
 export type VideoThumbnailStatus = {
