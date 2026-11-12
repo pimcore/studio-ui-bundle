@@ -16,6 +16,8 @@ import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setServiceUsersDirty } from './dirty/service-users-dirty-slice'
 import { useServiceUserGetCollectionQuery } from './service-users-api-slice-enhanced'
 import { ServiceUserList } from './list/service-user-list'
 import { ServiceUserDetail } from './detail/service-user-detail'
@@ -23,11 +25,18 @@ import { CreateServiceUserModal, type CreateServiceUserMode } from './create/cre
 import { type OneTimeCredential, OneTimeSecretModal } from './credentials/one-time-secret-modal'
 import { nowInSeconds } from './utils/dormancy'
 
+interface OpenTabs {
+  openIds: number[]
+  activeId: number | undefined
+}
+
 export const ServiceUsersContainer = (): React.JSX.Element => {
   const { data, isLoading, error, refetch } = useServiceUserGetCollectionQuery()
   const { t } = useTranslation()
-  const [openIds, setOpenIds] = useState<number[]>([])
-  const [activeId, setActiveId] = useState<number | undefined>(undefined)
+  // One state for the open tabs and the active one: the tab context menu closes several tabs in one event, so
+  // every close has to work from the latest state rather than from the ids captured at render time.
+  const [tabs, setTabs] = useState<OpenTabs>({ openIds: [], activeId: undefined })
+  const { openIds, activeId } = tabs
   const [dirtyIds, setDirtyIds] = useState<number[]>([])
   const [confirmCloseId, setConfirmCloseId] = useState<number | undefined>(undefined)
   const [createMode, setCreateMode] = useState<CreateServiceUserMode | undefined>(undefined)
@@ -42,21 +51,24 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
   }, [error])
 
   const openServiceUser = (id: number): void => {
-    setOpenIds((current) => current.includes(id) ? current : [...current, id])
-    setActiveId(id)
+    setTabs((current) => ({
+      openIds: current.openIds.includes(id) ? current.openIds : [...current.openIds, id],
+      activeId: id
+    }))
   }
 
   const closeServiceUser = (id: number): void => {
-    const index = openIds.indexOf(id)
-    const remaining = openIds.filter((openId) => openId !== id)
+    setTabs((current) => {
+      const index = current.openIds.indexOf(id)
+      const remaining = current.openIds.filter((openId) => openId !== id)
 
-    setOpenIds(remaining)
+      return {
+        openIds: remaining,
+        activeId: current.activeId === id ? remaining[Math.min(index, remaining.length - 1)] : current.activeId
+      }
+    })
     setDirtyIds((current) => current.filter((dirtyId) => dirtyId !== id))
     setConfirmCloseId(undefined)
-
-    if (activeId === id) {
-      setActiveId(remaining[Math.min(index, remaining.length - 1)])
-    }
   }
 
   const requestClose = (key: string): void => {
@@ -79,6 +91,17 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
       return isDirty ? [...current, id] : current.filter((dirtyId) => dirtyId !== id)
     })
   }
+
+  const dispatch = useAppDispatch()
+  const anyDirty = dirtyIds.length > 0
+
+  // The widget tab title and the widget manager's close checks read the aggregate from the store, so closing the
+  // whole widget asks for confirmation while any opened service user has unsaved edits.
+  useEffect(() => {
+    dispatch(setServiceUsersDirty(anyDirty))
+  }, [dispatch, anyDirty])
+
+  useEffect(() => () => { dispatch(setServiceUsersDirty(false)) }, [dispatch])
 
   const nameOf = (id: number): string => data?.items.find((item) => item.id === id)?.name ?? String(id)
 
@@ -130,7 +153,7 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
                       </Popconfirm>
                     )
                   })) }
-                  onChange={ (key: string) => { setActiveId(Number(key)) } }
+                  onChange={ (key: string) => { setTabs((current) => ({ ...current, activeId: Number(key) })) } }
                   onClose={ requestClose }
                 />
                 {openIds.map((id) => (

@@ -18,11 +18,13 @@ const mockIssue = jest.fn()
 const mockServiceUserQuery = jest.fn()
 const mockCopy = jest.fn()
 const mockTrackError = jest.fn()
+let mockCreating = false
+let mockIssuing = false
 
 jest.mock('../service-users-api-slice-enhanced', () => ({
-  useServiceUserCreateMutation: () => [mockCreate, { isLoading: false }],
+  useServiceUserCreateMutation: () => [mockCreate, { isLoading: mockCreating }],
   useServiceUserCreateFromUserMutation: () => [mockCreateFromUser, { isLoading: false }],
-  useServiceUserMcpTokenIssueMutation: () => [mockIssue, { isLoading: false }],
+  useServiceUserMcpTokenIssueMutation: () => [mockIssue, { isLoading: mockIssuing }],
   useServiceUserGetByIdQuery: (args: unknown, options: unknown) => mockServiceUserQuery(args, options)
 }))
 jest.mock('@Pimcore/utils/clipboard', () => ({
@@ -90,6 +92,8 @@ const type = (label: string, value: string): void => {
 describe('CreateServiceUserModal', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockCreating = false
+    mockIssuing = false
     mockCreate.mockResolvedValue({ data: credentials })
     mockCreateFromUser.mockResolvedValue({ data: credentials })
     mockIssue.mockResolvedValue({ data: accessToken })
@@ -155,6 +159,18 @@ describe('CreateServiceUserModal', () => {
 
     await waitFor(() => { expect(mockTrackError).toHaveBeenCalledTimes(1) })
     expect(onCreated).not.toHaveBeenCalled()
+  })
+
+  it('cannot be dismissed while the creation is pending', () => {
+    mockCreating = true
+    renderModal('create')
+
+    const cancel = screen.getByText('button.cancel')
+    expect(cancel).toBeDisabled()
+    fireEvent.click(cancel)
+
+    expect(onCancel).not.toHaveBeenCalled()
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
   })
 
   describe('credentials step', () => {
@@ -236,6 +252,18 @@ describe('CreateServiceUserModal', () => {
 
       expect(onCreated).toHaveBeenCalledWith(9, [])
       expect(mockIssue).not.toHaveBeenCalled()
+    })
+
+    it('cannot be skipped while the token is being issued', async () => {
+      mockIssuing = true
+      await createAndContinue()
+
+      const skip = screen.getByText('service-users.create.credentials.skip')
+      expect(skip).toBeDisabled()
+      fireEvent.click(skip)
+
+      expect(onCreated).not.toHaveBeenCalled()
+      expect(screen.getByText('service-users.create.credentials.title')).toBeInTheDocument()
     })
 
     it('refuses a lifetime outside 1 to 90 days', async () => {

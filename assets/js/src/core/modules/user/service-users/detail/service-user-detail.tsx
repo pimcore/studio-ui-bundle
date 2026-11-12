@@ -91,12 +91,18 @@ export const ServiceUserDetail = ({ id, onDeleted, onDirtyChange }: ServiceUserD
   }
 
   const handleSave = async (): Promise<void> => {
-    const result = await update({ id, serviceUserUpdate: draft })
+    const submitted = draft
+    const result = await update({ id, serviceUserUpdate: submitted })
 
     if ('error' in result) {
       reportError(result.error)
       return
     }
+
+    // The save invalidates the detail query. Its refetch brings back what was just submitted, so it must
+    // count as "already loaded": an edit made while the refetch was still pending stays instead of being
+    // replaced by the saved snapshot.
+    loadedDraft.current = submitted
 
     void success(t('service-users.save.success'))
   }

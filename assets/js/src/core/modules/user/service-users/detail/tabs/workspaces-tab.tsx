@@ -21,7 +21,7 @@ import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/c
 import { SpecialSettingsModal } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings-modal'
 import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
 import { type UserWorkspace } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
-import { type ServiceUserDraft } from '../service-user-draft'
+import { type ServiceUserDraft, toStringList } from '../service-user-draft'
 
 type WorkspaceDraft = Pick<ServiceUserDraft, 'assetWorkspaces' | 'dataObjectWorkspaces' | 'documentWorkspaces'>
 
@@ -78,8 +78,9 @@ export const WorkspacesTab = ({ draft, onChange }: WorkspacesTabProps): React.JS
   }
 
   const specialSettingsWorkspace = draft.dataObjectWorkspaces.find((workspace) => workspace.cid === specialSettingsId)
+  // Read and written as name lists: that is what the API exchanges, although its schema still says string.
   const specialSettingsValue = (key: 'layouts' | 'localizedEdit' | 'localizedView'): string[] =>
-    (specialSettingsWorkspace as Record<string, unknown> | undefined)?.[key] as string[] | undefined ?? []
+    toStringList((specialSettingsWorkspace as Record<string, unknown> | undefined)?.[key])
 
   const renderAccordion = (type: WorkspaceType): React.JSX.Element => (
     <Accordion
@@ -150,7 +151,14 @@ export const WorkspacesTab = ({ draft, onChange }: WorkspacesTabProps): React.JS
           onApply={ (changes) => {
             onChange({
               dataObjectWorkspaces: draft.dataObjectWorkspaces.map((workspace) =>
-                workspace.cid === specialSettingsId ? { ...workspace, ...changes } : workspace
+                workspace.cid === specialSettingsId
+                  ? {
+                      ...workspace,
+                      layouts: toStringList(changes.layouts),
+                      localizedEdit: toStringList(changes.localizedEdit),
+                      localizedView: toStringList(changes.localizedView)
+                    }
+                  : workspace
               ) as ServiceUserDraft['dataObjectWorkspaces']
             })
             setSpecialSettingsId(null)

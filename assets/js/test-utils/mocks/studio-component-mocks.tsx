@@ -166,11 +166,12 @@ interface ModalProps extends ChildrenProps {
   okText?: React.ReactNode
   cancelText?: React.ReactNode
   okButtonProps?: { disabled?: boolean, loading?: boolean }
+  cancelButtonProps?: { disabled?: boolean }
   onOk?: () => void
   onCancel?: () => void
 }
 
-export const Modal = ({ open, title, children, footer, okText, cancelText, okButtonProps, onOk, onCancel }: ModalProps): React.JSX.Element | null => {
+export const Modal = ({ open, title, children, footer, okText, cancelText, okButtonProps, cancelButtonProps, onOk, onCancel }: ModalProps): React.JSX.Element | null => {
   if (open !== true) {
     return null
   }
@@ -182,6 +183,7 @@ export const Modal = ({ open, title, children, footer, okText, cancelText, okBut
       {footer ?? (
         <>
           <button
+            disabled={ cancelButtonProps?.disabled === true }
             onClick={ onCancel }
             type="button"
           >{cancelText ?? 'cancel'}</button>

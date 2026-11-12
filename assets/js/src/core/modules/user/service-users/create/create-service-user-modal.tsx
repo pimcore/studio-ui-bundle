@@ -76,6 +76,9 @@ export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: Crea
   }, [serviceUserError])
 
   const isFromUser = mode === 'from-user'
+  // While a request is pending the dialog cannot be dismissed: a late success would otherwise reset a dialog
+  // that was reopened meanwhile, or hand over credentials a second time.
+  const creatingAny = creating || creatingFromUser
   const nameIsInvalid = name !== '' && !isValidServiceUserName(name)
   const canSubmit = isValidServiceUserName(name) && (!isFromUser || !isUndefined(sourceUserId))
   // Without the service user loaded the secret stays hidden; it can be rotated later when the grant is on.
@@ -141,13 +144,20 @@ export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: Crea
 
     return (
       <Modal
+        cancelButtonProps={ { disabled: issuing } }
         cancelText={ t('service-users.create.credentials.skip') }
+        closable={ !issuing }
         // The step can show the client secret; a closed antd modal would keep it in the DOM.
         destroyOnClose
+        keyboard={ !issuing }
         maskClosable={ false }
         okButtonProps={ { disabled: loadingServiceUser || !isValidTokenLifetime(ttlDays), loading: issuing } }
         okText={ t('service-users.credentials.issue') }
-        onCancel={ () => { finish(serviceUserId) } }
+        onCancel={ () => {
+          if (!issuing) {
+            finish(serviceUserId)
+          }
+        } }
         onOk={ () => { void handleIssue(serviceUserId) } }
         open={ open }
         title={ t('service-users.create.credentials.title') }
@@ -173,11 +183,19 @@ export const CreateServiceUserModal = ({ mode, open, onCancel, onCreated }: Crea
 
   return (
     <Modal
+      cancelButtonProps={ { disabled: creatingAny } }
       cancelText={ t('button.cancel') }
+      closable={ !creatingAny }
       destroyOnClose
-      okButtonProps={ { disabled: !canSubmit, loading: creating || creatingFromUser } }
+      keyboard={ !creatingAny }
+      maskClosable={ false }
+      okButtonProps={ { disabled: !canSubmit, loading: creatingAny } }
       okText={ t('service-users.create.ok') }
       onCancel={ () => {
+        if (creatingAny) {
+          return
+        }
+
         reset()
         onCancel()
       } }

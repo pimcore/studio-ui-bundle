@@ -172,11 +172,21 @@ export const CredentialsSection = ({ serviceUser }: CredentialsSectionProps): Re
           )
         : <Text type="secondary">{t('service-users.credentials.oauth.disabled')}</Text>}
 
+      {/* Not dismissible while issuing: the token is shown once, and a dialog closed meanwhile (or a tab switch
+          that unmounts this section) would leave a valid token nobody ever saw. */}
       <Modal
+        cancelButtonProps={ { disabled: issuing } }
         cancelText={ t('button.cancel') }
+        closable={ !issuing }
+        keyboard={ !issuing }
+        maskClosable={ false }
         okButtonProps={ { disabled: !isValidTokenLifetime(ttlDays), loading: issuing } }
         okText={ t('service-users.credentials.issue') }
-        onCancel={ closeIssue }
+        onCancel={ () => {
+          if (!issuing) {
+            closeIssue()
+          }
+        } }
         onOk={ () => { void handleIssue() } }
         open={ issueOpen }
         title={ t('service-users.credentials.issue.title') }

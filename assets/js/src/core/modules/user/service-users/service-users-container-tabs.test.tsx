@@ -11,6 +11,7 @@
 import React from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ServiceUsersContainer } from './service-users-container'
+import { setServiceUsersDirty } from './dirty/service-users-dirty-slice'
 
 const token = { token: 'pmcp_shown-once', expiresAt: 1_800_000_000 }
 
@@ -25,6 +26,11 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
   default: jest.fn(),
   ApiError: jest.fn()
+}))
+const mockDispatch = jest.fn()
+jest.mock('@Pimcore/app/store', () => ({
+  useAppDispatch: () => mockDispatch,
+  injectSliceWithState: jest.fn()
 }))
 jest.mock('@Pimcore/components/page-layout/page-layout', () => ({
   PageLayout: ({ leftItem, rightItem }: { leftItem: { children: React.ReactNode }, rightItem: { children: React.ReactNode } }) => (
@@ -57,6 +63,15 @@ jest.mock('@Pimcore/components/tabs/tabs', () => ({
           />
         </div>
       ))}
+      {/* The real tab context menu calls onClose once per tab within a single event. */}
+      <button
+        onClick={ () => { items.forEach((item) => { onClose?.(item.key) }) } }
+        type="button"
+      >close-all</button>
+      <button
+        onClick={ () => { items.filter((item) => item.key !== activeKey).forEach((item) => { onClose?.(item.key) }) } }
+        type="button"
+      >close-others</button>
     </div>
   )
 }))
@@ -214,6 +229,44 @@ describe('ServiceUsersContainer tabs', () => {
     fireEvent.click(screen.getByText('OK'))
 
     await waitFor(() => { expect(screen.queryAllByRole('tab')).toHaveLength(0) })
+  })
+
+  it('closes all tabs from one event of the tab context menu', () => {
+    render(<ServiceUsersContainer />)
+    fireEvent.click(screen.getByText('svc-existing'))
+    fireEvent.click(screen.getByText('svc-second'))
+    fireEvent.click(screen.getByText('svc-new'))
+
+    fireEvent.click(screen.getByText('close-all'))
+
+    expect(screen.queryAllByRole('tab')).toHaveLength(0)
+    expect(screen.getByTestId('content-none')).toBeInTheDocument()
+  })
+
+  it('closes the other tabs from one event and keeps the active one', () => {
+    render(<ServiceUsersContainer />)
+    fireEvent.click(screen.getByText('svc-existing'))
+    fireEvent.click(screen.getByText('svc-second'))
+    fireEvent.click(screen.getByText('svc-new'))
+    fireEvent.click(screen.getAllByText('svc-second', { selector: 'span' })[0])
+
+    fireEvent.click(screen.getByText('close-others'))
+
+    expect(tabNames()).toEqual(['svc-second'])
+    expect(isActive('svc-second')).toBe(true)
+  })
+
+  it('publishes whether any tab has unsaved edits for the widget title', async () => {
+    render(<ServiceUsersContainer />)
+    expect(mockDispatch).toHaveBeenLastCalledWith(setServiceUsersDirty(false))
+
+    fireEvent.click(screen.getByText('svc-existing'))
+    fireEvent.change(screen.getByLabelText('field:4'), { target: { value: 'draft' } })
+    expect(mockDispatch).toHaveBeenLastCalledWith(setServiceUsersDirty(true))
+
+    fireEvent.click(screen.getByLabelText('close:4'))
+    fireEvent.click(await screen.findByText('OK'))
+    await waitFor(() => { expect(mockDispatch).toHaveBeenLastCalledWith(setServiceUsersDirty(false)) })
   })
 
   it('removes the tab of a deleted service user', () => {

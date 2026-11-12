@@ -12,6 +12,9 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { ManagementContainer } from '@Pimcore/modules/user/management/management-container'
 import { RoleContainer } from '@Pimcore/modules/user/roles/container'
 import { ServiceUsersContainer } from '@Pimcore/modules/user/service-users/service-users-container'
+import { ServiceUsersTitle } from '@Pimcore/modules/user/service-users/service-users-title'
+import { selectServiceUsersDirty } from '@Pimcore/modules/user/service-users/dirty/service-users-dirty-slice'
+import { store } from '@Pimcore/app/store'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -115,7 +118,9 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'service-user-management',
-      component: ServiceUsersContainer
+      component: ServiceUsersContainer,
+      titleComponent: ServiceUsersTitle,
+      isModified: () => selectServiceUsersDirty(store.getState())
     })
 
     widgetRegistryService.registerWidget(UserProfileWidget)

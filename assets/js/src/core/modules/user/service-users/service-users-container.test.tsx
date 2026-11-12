@@ -26,6 +26,11 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   default: jest.fn(),
   ApiError: jest.fn()
 }))
+const mockDispatch = jest.fn()
+jest.mock('@Pimcore/app/store', () => ({
+  useAppDispatch: () => mockDispatch,
+  injectSliceWithState: jest.fn()
+}))
 jest.mock('@Pimcore/components/page-layout/page-layout', () => ({
   PageLayout: ({ leftItem, rightItem }: { leftItem: { children: React.ReactNode }, rightItem: { children: React.ReactNode } }) => (
     <div>{leftItem.children}{rightItem.children}</div>

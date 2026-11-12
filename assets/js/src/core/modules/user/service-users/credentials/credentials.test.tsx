@@ -20,10 +20,11 @@ const mockSuccess = jest.fn()
 const mockTrackError = jest.fn()
 const mockCopy = jest.fn()
 const mockConfirm = jest.fn()
+let mockIssuing = false
 
 jest.mock('../service-users-api-slice-enhanced', () => ({
   useServiceUserRotateSecretMutation: () => [mockRotate, { isLoading: false }],
-  useServiceUserMcpTokenIssueMutation: () => [mockIssue, { isLoading: false }],
+  useServiceUserMcpTokenIssueMutation: () => [mockIssue, { isLoading: mockIssuing }],
   useServiceUserMcpTokenRevokeMutation: () => [mockRevoke, { isLoading: false }]
 }))
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
@@ -86,6 +87,7 @@ const serviceUser = (
 describe('CredentialsSection', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockIssuing = false
     mockConfirm.mockImplementation(({ onOk }: { onOk: () => Promise<void> }) => { void onOk() })
     mockRotate.mockResolvedValue({ data: credentials })
     mockIssue.mockResolvedValue({ data: accessToken })
@@ -185,6 +187,19 @@ describe('CredentialsSection', () => {
     fireEvent.click(screen.getByText('service-users.secret.close'))
 
     expect(screen.queryByDisplayValue('pmcp_shown-once')).toBeNull()
+  })
+
+  it('cannot be dismissed while the token is being issued', () => {
+    const { rerender } = render(<CredentialsSection serviceUser={ serviceUser(null) } />)
+    fireEvent.click(screen.getByText('service-users.credentials.issue'))
+
+    mockIssuing = true
+    rerender(<CredentialsSection serviceUser={ serviceUser(null) } />)
+
+    const cancel = within(screen.getByRole('dialog')).getByText('button.cancel')
+    expect(cancel).toBeDisabled()
+    fireEvent.click(cancel)
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
   })
 
   it('refuses a lifetime outside 1 to 90 days', () => {

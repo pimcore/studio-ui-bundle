@@ -199,6 +199,33 @@ describe('ServiceUserDetail', () => {
     expect(within(toolbar()).getByText('save')).not.toBeDisabled()
   })
 
+  it('keeps an edit made while the refetch after a save is still pending', async () => {
+    const { rerender } = render(
+      <ServiceUserDetail
+        id={ 7 }
+        onDeleted={ onDeleted }
+      />
+    )
+
+    fireEvent.click(screen.getByText('add-role'))
+    fireEvent.click(within(toolbar()).getByText('save'))
+    await waitFor(() => { expect(mockSuccess).toHaveBeenCalledTimes(1) })
+
+    // Edited after the save was submitted, before the detail query came back.
+    fireEvent.click(screen.getByText('email:erp@example.com'))
+
+    mockQueryState.data = { ...serviceUser(), roles: [1, 2] }
+    rerender(
+      <ServiceUserDetail
+        id={ 7 }
+        onDeleted={ onDeleted }
+      />
+    )
+
+    expect(screen.getByText('email:new@example.com')).toBeInTheDocument()
+    expect(within(toolbar()).getByText('save')).not.toBeDisabled()
+  })
+
   it('takes over the loaded values when the editable part changed on the server', () => {
     const { rerender } = render(
       <ServiceUserDetail
