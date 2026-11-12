@@ -3112,3 +3112,19 @@ tree.actions.edit-tag: Edytuj
 tag-configuration.edit-tag: 'Edytuj "{{name}}"'
 tag-configuration.name-required: 'Wprowadź nazwę tagu'
 tag-configuration.move-targets-failed: 'Nie udało się wczytać listy tagów, dlatego można zmienić tylko nazwę'
+navigation.maintenance-mode: Tryb konserwacji
+maintenance-mode.activate.title: Aktywować tryb konserwacji?
+maintenance-mode.activate.text: 'Wszystkie usługi, w tym strona internetowa, przechodzą w tryb konserwacji. Dostęp zachowuje tylko ta sesja przeglądarki.'
+maintenance-mode.activate.lock-out: 'Po wylogowaniu, zamknięciu przeglądarki lub wygaśnięciu sesji również stracisz dostęp.'
+maintenance-mode.activate.background-jobs: 'Gdy tryb konserwacji jest aktywny, zadania w tle i konsumenty wiadomości nie są uruchamiane.'
+maintenance-mode.activate.ok: Aktywuj
+maintenance-mode.indicator.tooltip: 'Tryb konserwacji jest aktywny. Kliknij, aby go dezaktywować.'
+maintenance-mode.deactivate.title: Dezaktywować tryb konserwacji?
+maintenance-mode.deactivate.text: 'Wszystkie sesje odzyskują dostęp.'
+maintenance-mode.deactivate.ok: Dezaktywuj
+maintenance-mode.logout.title: Najpierw dezaktywować tryb konserwacji?
+maintenance-mode.logout.text: 'Tryb konserwacji jest aktywny i dostęp ma tylko ta sesja. Po wylogowaniu można go wyłączyć wyłącznie z wiersza poleceń.'
+maintenance-mode.logout.deactivate-and-log-out: Dezaktywuj i wyloguj się
+maintenance-mode.locked-out.title: Konserwacja
+maintenance-mode.locked-out.text: 'System jest w trybie konserwacji lub tymczasowo niedostępny. Ostatnia czynność mogła nie zostać zapisana. Ten komunikat zamknie się automatycznie, gdy system znów będzie dostępny.'
+maintenance-mode.locked-out.reload: Przeładuj

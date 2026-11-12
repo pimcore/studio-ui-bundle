@@ -3112,3 +3112,19 @@ tree.actions.edit-tag: Bearbeiten
 tag-configuration.edit-tag: '"{{name}}" bearbeiten'
 tag-configuration.name-required: 'Bitte geben Sie einen Tag-Namen ein'
 tag-configuration.move-targets-failed: 'Die Liste der Tags konnte nicht geladen werden, daher kann nur der Name geändert werden'
+navigation.maintenance-mode: Wartungsmodus
+maintenance-mode.activate.title: Wartungsmodus aktivieren?
+maintenance-mode.activate.text: 'Alle Dienste, einschließlich der Website, werden in den Wartungsmodus versetzt. Nur diese Browser-Sitzung behält den Zugriff.'
+maintenance-mode.activate.lock-out: 'Wenn Sie sich abmelden, den Browser schließen oder Ihre Sitzung abläuft, werden auch Sie ausgesperrt.'
+maintenance-mode.activate.background-jobs: 'Hintergrund-Jobs und Message-Consumer starten nicht, solange der Wartungsmodus aktiv ist.'
+maintenance-mode.activate.ok: Aktivieren
+maintenance-mode.indicator.tooltip: 'Der Wartungsmodus ist aktiv. Klicken Sie, um ihn zu deaktivieren.'
+maintenance-mode.deactivate.title: Wartungsmodus deaktivieren?
+maintenance-mode.deactivate.text: 'Alle Sitzungen erhalten wieder Zugriff.'
+maintenance-mode.deactivate.ok: Deaktivieren
+maintenance-mode.logout.title: Wartungsmodus zuerst deaktivieren?
+maintenance-mode.logout.text: 'Der Wartungsmodus ist aktiv und nur diese Sitzung hat Zugriff. Nach dem Abmelden kann er nur noch über die Kommandozeile ausgeschaltet werden.'
+maintenance-mode.logout.deactivate-and-log-out: Deaktivieren und abmelden
+maintenance-mode.locked-out.title: Wartung
+maintenance-mode.locked-out.text: 'Das System befindet sich im Wartungsmodus oder ist vorübergehend nicht verfügbar. Ihre letzte Aktion wurde möglicherweise nicht gespeichert. Dieser Hinweis schließt sich automatisch, sobald das System wieder verfügbar ist.'
+maintenance-mode.locked-out.reload: Neu laden

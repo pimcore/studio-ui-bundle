@@ -3112,3 +3112,19 @@ tree.actions.edit-tag: Redigera
 tag-configuration.edit-tag: 'Redigera "{{name}}"'
 tag-configuration.name-required: 'Ange ett taggnamn'
 tag-configuration.move-targets-failed: 'Listan över taggar kunde inte läsas in, så endast namnet kan ändras'
+navigation.maintenance-mode: Underhållsläge
+maintenance-mode.activate.title: Aktivera underhållsläge?
+maintenance-mode.activate.text: 'Alla tjänster, inklusive webbplatsen, går in i underhållsläge. Endast den här webbläsarsessionen behåller åtkomst.'
+maintenance-mode.activate.lock-out: 'Om du loggar ut, stänger webbläsaren eller om sessionen går ut blir även du utelåst.'
+maintenance-mode.activate.background-jobs: 'Bakgrundsjobb och meddelandekonsumenter startar inte medan underhållsläget är aktivt.'
+maintenance-mode.activate.ok: Aktivera
+maintenance-mode.indicator.tooltip: 'Underhållsläget är aktivt. Klicka för att stänga av det.'
+maintenance-mode.deactivate.title: Stäng av underhållsläge?
+maintenance-mode.deactivate.text: 'Alla sessioner får åtkomst igen.'
+maintenance-mode.deactivate.ok: Stäng av
+maintenance-mode.logout.title: Stäng av underhållsläge först?
+maintenance-mode.logout.text: 'Underhållsläget är aktivt och endast den här sessionen har åtkomst. Efter utloggning kan det bara stängas av från kommandoraden.'
+maintenance-mode.logout.deactivate-and-log-out: Stäng av och logga ut
+maintenance-mode.locked-out.title: Underhåll
+maintenance-mode.locked-out.text: 'Systemet är i underhållsläge eller tillfälligt otillgängligt. Din senaste åtgärd sparades kanske inte. Det här meddelandet stängs automatiskt så snart systemet är tillgängligt igen.'
+maintenance-mode.locked-out.reload: Ladda om

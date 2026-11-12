@@ -273,6 +273,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/mcp-servers/mcp-servers-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/mcp\//i)
+    },
+    '../../js/src/core/modules/maintenance-mode/maintenance-mode-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/maintenance-mode/i)
     }
   },
   exportName: 'api',

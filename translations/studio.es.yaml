@@ -3112,3 +3112,19 @@ tree.actions.edit-tag: Editar
 tag-configuration.edit-tag: 'Editar "{{name}}"'
 tag-configuration.name-required: 'Introduzca un nombre de etiqueta'
 tag-configuration.move-targets-failed: 'No se pudo cargar la lista de etiquetas, por lo que solo se puede cambiar el nombre'
+navigation.maintenance-mode: Modo de mantenimiento
+maintenance-mode.activate.title: ¿Activar el modo de mantenimiento?
+maintenance-mode.activate.text: 'Todos los servicios, incluido el sitio web, entran en mantenimiento. Solo esta sesión del navegador conserva el acceso.'
+maintenance-mode.activate.lock-out: 'Si cierra sesión, cierra el navegador o su sesión caduca, usted también perderá el acceso.'
+maintenance-mode.activate.background-jobs: 'Los trabajos en segundo plano y los consumidores de mensajes no se inician mientras el modo de mantenimiento esté activo.'
+maintenance-mode.activate.ok: Activar
+maintenance-mode.indicator.tooltip: 'El modo de mantenimiento está activo. Haga clic para desactivarlo.'
+maintenance-mode.deactivate.title: ¿Desactivar el modo de mantenimiento?
+maintenance-mode.deactivate.text: 'Todas las sesiones recuperan el acceso.'
+maintenance-mode.deactivate.ok: Desactivar
+maintenance-mode.logout.title: ¿Desactivar primero el modo de mantenimiento?
+maintenance-mode.logout.text: 'El modo de mantenimiento está activo y solo esta sesión tiene acceso. Después de cerrar sesión, solo se podrá desactivar desde la línea de comandos.'
+maintenance-mode.logout.deactivate-and-log-out: Desactivar y cerrar sesión
+maintenance-mode.locked-out.title: Mantenimiento
+maintenance-mode.locked-out.text: 'El sistema está en modo de mantenimiento o no está disponible temporalmente. Es posible que su última acción no se haya guardado. Este aviso se cerrará automáticamente en cuanto el sistema vuelva a estar disponible.'
+maintenance-mode.locked-out.reload: Recargar

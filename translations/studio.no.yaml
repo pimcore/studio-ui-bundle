@@ -3112,3 +3112,19 @@ tree.actions.edit-tag: Rediger
 tag-configuration.edit-tag: 'Rediger "{{name}}"'
 tag-configuration.name-required: 'Skriv inn et taggnavn'
 tag-configuration.move-targets-failed: 'Listen over tagger kunne ikke lastes inn, så bare navnet kan endres'
+navigation.maintenance-mode: Vedlikeholdsmodus
+maintenance-mode.activate.title: Aktivere vedlikeholdsmodus?
+maintenance-mode.activate.text: 'Alle tjenester, inkludert nettstedet, settes i vedlikehold. Bare denne nettleserøkten beholder tilgangen.'
+maintenance-mode.activate.lock-out: 'Hvis du logger ut, lukker nettleseren eller økten utløper, blir også du stengt ute.'
+maintenance-mode.activate.background-jobs: 'Bakgrunnsjobber og meldingskonsumenter starter ikke mens vedlikeholdsmodus er aktiv.'
+maintenance-mode.activate.ok: Aktiver
+maintenance-mode.indicator.tooltip: 'Vedlikeholdsmodus er aktiv. Klikk for å deaktivere den.'
+maintenance-mode.deactivate.title: Deaktivere vedlikeholdsmodus?
+maintenance-mode.deactivate.text: 'Alle økter får tilgang igjen.'
+maintenance-mode.deactivate.ok: Deaktiver
+maintenance-mode.logout.title: Deaktivere vedlikeholdsmodus først?
+maintenance-mode.logout.text: 'Vedlikeholdsmodus er aktiv, og bare denne økten har tilgang. Etter utlogging kan den bare slås av fra kommandolinjen.'
+maintenance-mode.logout.deactivate-and-log-out: Deaktiver og logg ut
+maintenance-mode.locked-out.title: Vedlikehold
+maintenance-mode.locked-out.text: 'Systemet er i vedlikeholdsmodus eller midlertidig utilgjengelig. Den siste handlingen din ble kanskje ikke lagret. Denne meldingen lukkes automatisk så snart systemet er tilgjengelig igjen.'
+maintenance-mode.locked-out.reload: Last på nytt

@@ -3116,3 +3116,19 @@ tree.actions.edit-tag: Edit
 tag-configuration.edit-tag: 'Edit "{{name}}"'
 tag-configuration.name-required: 'Please enter a tag name'
 tag-configuration.move-targets-failed: 'The list of tags could not be loaded, so only the name can be changed'
+navigation.maintenance-mode: Maintenance Mode
+maintenance-mode.activate.title: Activate maintenance mode?
+maintenance-mode.activate.text: 'All services, including the website, go into maintenance. Only this browser session keeps access.'
+maintenance-mode.activate.lock-out: 'Logging out, closing the browser or an expired session locks you out as well.'
+maintenance-mode.activate.background-jobs: 'Background jobs and message consumers do not start while maintenance mode is active.'
+maintenance-mode.activate.ok: Activate
+maintenance-mode.indicator.tooltip: 'Maintenance mode is active. Click to deactivate it.'
+maintenance-mode.deactivate.title: Deactivate maintenance mode?
+maintenance-mode.deactivate.text: 'All sessions regain access.'
+maintenance-mode.deactivate.ok: Deactivate
+maintenance-mode.logout.title: Deactivate maintenance mode first?
+maintenance-mode.logout.text: 'Maintenance mode is active and only this session has access. After logging out it can only be switched off from the command line.'
+maintenance-mode.logout.deactivate-and-log-out: Deactivate and log out
+maintenance-mode.locked-out.title: Maintenance
+maintenance-mode.locked-out.text: 'The system is in maintenance mode or temporarily unavailable. Your last action may not have been saved. This notice closes itself as soon as the system is available again.'
+maintenance-mode.locked-out.reload: Reload
