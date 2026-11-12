@@ -8,7 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
+import { Form } from 'antd'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
+import { WelcomeScreenPathSelect } from './welcome-screen-path-select'
 
 const DASHBOARD_PATH = 'Reporting/Dashboards/Sales/Overview'
 
@@ -60,15 +64,6 @@ jest.mock('@Pimcore/components/select/select', () => ({
   )
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
-
-// eslint-disable-next-line import/first
-import React from 'react'
-// eslint-disable-next-line import/first
-import { Form } from 'antd'
-// eslint-disable-next-line import/first
-import { fireEvent, render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { WelcomeScreenPathSelect } from './welcome-screen-path-select'
 
 const renderSelect = (welcomeScreenPath: string, onValuesChange = jest.fn()): HTMLSelectElement => {
   render(

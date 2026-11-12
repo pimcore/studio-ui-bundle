@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type React from 'react'
+import React from 'react'
 import { useWelcomeScreen } from './use-welcome-screen'
 
-export const WelcomeScreenOpener = (): React.JSX.Element | null => {
+export const WelcomeScreenOpener = (): React.JSX.Element => {
   useWelcomeScreen()
-  return null
+
+  return <></>
 }
