@@ -70,7 +70,7 @@ export const DetailSave = ({ useDetailUpdateMutation }: DetailSaveProps): React.
       }
 
       if (structure !== undefined) {
-        const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
+        const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap, fieldDefinitionRegistry)
         const occurrences = namesInNamespace.filter(n => n === name).length
         if (occurrences > 1) {
           duplicateViolations.push({ id: key, label: name })

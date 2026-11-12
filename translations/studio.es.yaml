@@ -464,6 +464,10 @@ action-could-not-be-applied: No se pudo aplicar la acción
 failed-to-assign-tag-to-element: Error al asignar la etiqueta al elemento
 failed-to-un-assign-tag-to-element: Error al desasignar la etiqueta del elemento
 workflow-modal.perform-action: Ejecutar acción
+workflow.unsaved-changes.title: Cambios sin guardar
+workflow.unsaved-changes.warn: Hay cambios sin guardar. Se perderán si se aplica esta acción. ¿Aplicarla de todos modos?
+workflow.unsaved-changes.apply-anyway: Aplicar de todos modos
+workflow.unsaved-changes.save-failed: No se pudieron guardar los cambios sin guardar, por lo que la acción no se aplicó.
 workflow-modal.cancel: Cancelar
 workflow-modal.notes: Notas
 workflow-modal.notes-required: Introduzca sus notas

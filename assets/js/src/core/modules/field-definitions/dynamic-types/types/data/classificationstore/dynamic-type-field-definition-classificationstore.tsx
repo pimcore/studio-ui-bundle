@@ -12,6 +12,7 @@ import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/
 import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionClassificationstoreFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/classificationstore/field-definition-classificationstore-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
+import { isNil } from 'lodash'
 import React from 'react'
 
 export class DynamicTypeFieldDefinitionClassificationstore extends DynamicTypeFieldDefinitionDataAbstract {
@@ -29,9 +30,19 @@ export class DynamicTypeFieldDefinitionClassificationstore extends DynamicTypeFi
     return {
       ...super.getDefaultData(),
       allowedGroupIds: '',
+      storeId: 1,
       visibleGridView: false,
       visibleSearch: false
     }
+  }
+
+  isValid (data: FieldDefinitionData, context?: FieldDefinitionContext): boolean {
+    // Custom layouts do not show the Store select
+    if (context?.area.includes('custom-layout') === true) {
+      return super.isValid(data)
+    }
+
+    return super.isValid(data) && !isNil(data.storeId)
   }
 
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
