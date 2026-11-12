@@ -480,6 +480,8 @@ export type UserInformation = {
     activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Path of the main navigation entry opened as welcome screen */
+    welcomeScreenPath?: string | null;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -606,6 +608,8 @@ export type User = {
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Path of the main navigation entry opened as welcome screen */
+    welcomeScreenPath?: string | null;
 };
 export type User2 = {
     /** Email of the User */
@@ -660,6 +664,8 @@ export type User2 = {
     perspectives: string[];
     /** Theme of the User */
     theme?: string;
+    /** Path of the main navigation entry opened as welcome screen. Omitted or null keeps the stored path, an empty string clears it */
+    welcomeScreenPath?: string | null;
 };
 export type UserPermission = {
     /** AdditionalAttributes */
@@ -728,6 +734,8 @@ export type UserProfile = {
     keyBindings: KeyBindingForAUser[];
     /** Theme of the User */
     theme?: string;
+    /** Path of the main navigation entry opened as welcome screen. Omitted or null keeps the stored path, an empty string clears it */
+    welcomeScreenPath?: string | null;
 };
 export const {
     useUserCloneByIdMutation,
