@@ -691,6 +691,7 @@ mcp-servers.read-only-notice: Serverdefinitionen werden in dieser Umgebung datei
 mcp-servers.save-success: MCP-Server gespeichert
 mcp-servers.access.users-count: "Benutzer: {{number}}"
 mcp-servers.access.roles-count: "Rollen: {{number}}"
+mcp-servers.access.service-users-count: 'Service-Benutzer: {{number}}'
 mcp-servers.access.global-extra: jeder authentifizierte Benutzer
 mcp-servers.access.nobody: "Noch niemand"
 mcp-servers.badge.read: Lesen
@@ -716,11 +717,16 @@ mcp-servers.editor.copy-url: "Server-URL kopieren"
 mcp-servers.editor.connect-hint: Richten Sie Ihren MCP-Client auf diese URL und authentifizieren Sie sich mit Ihrem Pimcore-Konto.
 mcp-servers.sharing.title: Freigabe
 mcp-servers.sharing.share-globally: Global teilen
-mcp-servers.sharing.share-globally-tooltip: Jeder authentifizierte Benutzer erhält Konfiguration lesen und MCP-Serverzugriff (nicht Konfiguration bearbeiten)
+mcp-servers.sharing.share-globally-tooltip: Jeder authentifizierte Benutzer, einschließlich Service-Benutzern, erhält Konfiguration lesen und MCP-Serverzugriff (nicht Konfiguration bearbeiten)
 mcp-servers.sharing.users: Benutzer
 mcp-servers.sharing.roles: Rollen
 mcp-servers.sharing.add-user: Benutzer hinzufügen…
 mcp-servers.sharing.add-role: Rolle hinzufügen…
+mcp-servers.sharing.service-users: Service-Benutzer
+mcp-servers.sharing.add-service-user: Service-Benutzer hinzufügen…
+mcp-servers.sharing.service-users-hint: Service-Benutzer können sich nur verbinden; sie können die Konfiguration weder lesen noch bearbeiten.
+mcp-servers.sharing.service-users-unavailable: Service-Benutzer werden nicht aufgelistet, da Ihnen die Berechtigung für die Benutzerverwaltung fehlt. Deren bestehender Zugriff bleibt erhalten.
+mcp-servers.sharing.inactive: inaktiv
 mcp-servers.sharing.name: Name
 mcp-servers.sharing.config-read: Konfiguration lesen
 mcp-servers.sharing.config-edit: Konfiguration bearbeiten
@@ -3115,3 +3121,64 @@ tree.actions.edit-tag: Bearbeiten
 tag-configuration.edit-tag: '"{{name}}" bearbeiten'
 tag-configuration.name-required: 'Bitte geben Sie einen Tag-Namen ein'
 tag-configuration.move-targets-failed: 'Die Liste der Tags konnte nicht geladen werden, daher kann nur der Name geändert werden'
+navigation.service-users: Service-Benutzer
+widget.service-user-management: Service-Benutzer
+service-users.create: Neu
+service-users.create.title: Neuer Service-Benutzer
+service-users.create.ok: Erstellen
+service-users.create-from-user: Aus Benutzer
+service-users.create-from-user.title: Neuer Service-Benutzer aus einem Benutzer
+service-users.create-from-user.description: Kopiert die Berechtigungen, Rollen und Workspaces des Benutzers. Der Benutzer wird nicht verändert und Admin-Rechte werden nie kopiert.
+service-users.field.name: Name
+service-users.field.name.fixed: Der Name kann nicht geändert werden, da der MCP-Serverzugriff über den Namen gewährt wird.
+service-users.field.name.invalid: Verwenden Sie bis zu 64 Buchstaben, Ziffern, Punkte, Bindestriche oder Unterstriche, beginnend mit einem Buchstaben oder einer Ziffer, zum Beispiel svc-erp-sync.
+service-users.field.email: Kontakt-E-Mail
+service-users.field.source-user: Zu kopierender Benutzer
+service-users.filter.unused-days: Seit mehr als N Tagen ungenutzt
+service-users.status.inactive: Inaktiv
+service-users.dormancy.never-used: Nie verwendet
+service-users.dormancy.warning: Seit 90 Tagen ungenutzt
+service-users.dormancy.dormant: Ruhend
+service-users.tab.settings: Einstellungen
+service-users.tab.permissions: Berechtigungen
+service-users.tab.roles: Rollen
+service-users.tab.workspaces: Workspaces
+service-users.roles: Rollen
+service-users.save.success: Service-Benutzer gespeichert
+service-users.deactivate: Deaktivieren
+service-users.deactivate.confirm: Service-Benutzer "{{name}}" deaktivieren? Seine Zugangsdaten funktionieren ab der nächsten Anfrage nicht mehr.
+service-users.delete: Löschen
+service-users.delete.confirm: Service-Benutzer "{{name}}" endgültig löschen? Sein OAuth-Client, seine Tokens und sein MCP-Serverzugriff werden entfernt. Dies kann nicht rückgängig gemacht werden.
+service-users.credentials.title: Zugangsdaten
+service-users.credentials.client-id: Client-ID
+service-users.credentials.last-used: Zuletzt verwendet
+service-users.credentials.never-used: Nie
+service-users.credentials.no-client: Kein OAuth-Client
+service-users.credentials.rotate: Secret erneuern
+service-users.credentials.rotate.confirm: Ein neues Client-Secret für "{{name}}" erstellen? Das aktuelle Secret funktioniert sofort nicht mehr.
+service-users.credentials.mcp-tokens: MCP-Zugriffstokens
+service-users.credentials.mcp-tokens.active: Aktive Tokens
+service-users.credentials.mcp-tokens.latest-expiry: Spätester Ablauf
+service-users.credentials.mcp-tokens.none: Keine aktiven Tokens
+service-users.credentials.issue: Token ausstellen
+service-users.credentials.issue.title: MCP-Zugriffstoken ausstellen
+service-users.credentials.issue.ttl: Gültigkeitsdauer in Tagen (1 bis 90)
+service-users.credentials.issue.ttl.invalid: Geben Sie eine ganze Zahl von Tagen zwischen 1 und 90 ein.
+service-users.credentials.issue.hint: Das Token wird nur einmal angezeigt. Clients senden es als Bearer-Token im Authorization-Header.
+service-users.credentials.revoke: Alle Tokens widerrufen
+service-users.credentials.revoke.confirm: Alle MCP-Zugriffstokens dieses Service-Benutzers widerrufen? Verbundene Clients funktionieren sofort nicht mehr.
+service-users.credentials.revoke.success: Alle MCP-Zugriffstokens des Service-Benutzers wurden widerrufen.
+service-users.credentials.oauth: OAuth-Client
+service-users.credentials.oauth.disabled: OAuth-Client-Credentials sind auf dieser Instanz deaktiviert; verwenden Sie ein MCP-Zugriffstoken.
+service-users.credentials.oauth.rotate-hint: Bereits mit dem alten Secret ausgestellte Zugriffstokens bleiben bis zu ihrem Ablauf gültig.
+service-users.credentials.token: Zugriffstoken
+service-users.credentials.token.expires: Läuft ab
+service-users.create.credentials.title: Zugangsdaten
+service-users.create.credentials.skip: Überspringen, später ausstellen
+service-users.create.credentials.which: Verwenden Sie den OAuth-Client für Pipelines, die den client_credentials-Grant ausführen können; verwenden Sie für alles andere ein MCP-Zugriffstoken.
+service-users.create.credentials.token-description: Clients verbinden sich mit einem MCP-Zugriffstoken. Stellen Sie jetzt eines aus oder später über die Zugangsdaten des Service-Benutzers.
+service-users.secret.title: Client-Secret
+service-users.secret.client-secret: Client-Secret
+service-users.secret.warning: Kopieren Sie das Secret jetzt. Es wird nur einmal angezeigt und kann nicht erneut angezeigt werden.
+service-users.secret.copy: Secret kopieren
+service-users.secret.close: Schließen
