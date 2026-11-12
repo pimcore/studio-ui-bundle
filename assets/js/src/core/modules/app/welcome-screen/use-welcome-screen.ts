@@ -11,6 +11,7 @@
 import { useEffect } from 'react'
 import { type IJsonModel, Model } from 'flexlayout-react'
 import { isNil } from 'lodash'
+import { useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import {
   openMainWidget,
@@ -35,6 +36,7 @@ const hasTabs = (innerModel: IJsonModel): boolean => {
 
 export const useWelcomeScreen = (): void => {
   const dispatch = useAppDispatch()
+  const location = useLocation()
   const user = useUser()
   const { navItems } = useMainNav()
   const innerModel = useAppSelector(selectInnerModel)
@@ -42,7 +44,10 @@ export const useWelcomeScreen = (): void => {
   const isWidgetManagerRestored = useAppSelector(selectWidgetManagerRestored)
 
   useEffect(() => {
-    if (!isWidgetManagerRestored || !user.welcomeScreen || hasTabs(innerModel)) {
+    // useHandleDeepLink opens the target of an element or reset-password link instead
+    const isLinkLogin = location?.state?.isDeeplink === true || location?.state?.resetPassword === true
+
+    if (!isWidgetManagerRestored || !user.welcomeScreen || isLinkLogin || hasTabs(innerModel)) {
       return
     }
 

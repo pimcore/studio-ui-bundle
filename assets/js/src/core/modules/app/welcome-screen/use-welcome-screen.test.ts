@@ -18,7 +18,12 @@ const dispatch = jest.fn()
 const state: { restored: boolean, innerModel: IJsonModel } = { restored: true, innerModel: getInitialModelJson() }
 let mockUser: { welcomeScreen: boolean, welcomeScreenPath?: string | null } = { welcomeScreen: true }
 let mockNavItems: IMainNavItem[] = []
+let mockLocationState: Record<string, unknown> | null = null
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: () => ({ pathname: '/pimcore-studio/', search: '', hash: '', key: 'default', state: mockLocationState })
+}))
 // Factories, so the real store and the SDK barrel are never loaded
 jest.mock('@sdk/app', () => ({
   useAppDispatch: () => dispatch,
@@ -77,6 +82,7 @@ describe('useWelcomeScreen', () => {
     state.innerModel = getInitialModelJson()
     mockUser = { welcomeScreen: true, welcomeScreenPath: DASHBOARD_PATH }
     mockNavItems = navTree()
+    mockLocationState = null
   })
 
   it('opens the chosen dashboard when no tabs were restored', () => {
@@ -122,5 +128,23 @@ describe('useWelcomeScreen', () => {
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
+  })
+
+  // the route state DeepLink and PasswordReset navigate to the root route with
+  it.each([
+    ['an element link', { isDeeplink: true, id: '12', elementType: 'asset' }],
+    ['the reset-password link', { resetPassword: true }]
+  ])('opens nothing after a login through %s', (_, locationState) => {
+    mockLocationState = locationState
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(dispatch).not.toHaveBeenCalled()
+  })
+
+  it('opens the chosen dashboard when the route state names no link', () => {
+    mockLocationState = { isDeeplink: false, resetPassword: false }
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(dispatch).toHaveBeenCalledTimes(1)
   })
 })
