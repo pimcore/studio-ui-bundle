@@ -19,13 +19,20 @@ import {
 import {
   useTagGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-import { isEmpty, isNull, isUndefined } from 'lodash'
+import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 interface TagsTreeFiltersContainerProps {
   checkedKeys: Key[]
   setCheckedKeys: (keys: Key[]) => void
+  disabled?: boolean
 }
+
+const disableTreeNodes = (nodes: TreeDataItem[]): TreeDataItem[] => nodes.map((node) => ({
+  ...node,
+  disabled: true,
+  children: isNil(node.children) ? node.children : disableTreeNodes(node.children as TreeDataItem[])
+}))
 
 const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
   const result: string[] = []
@@ -39,7 +46,7 @@ const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
   return result
 }
 
-export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTreeFiltersContainerProps): React.JSX.Element => {
+export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys, disabled = false }: TagsTreeFiltersContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [filter, setFilter] = useState<string>('')
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([0])
@@ -50,10 +57,16 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
   })
 
   const treeData = useMemo(
-    () => !isUndefined(tags?.items)
-      ? createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
-      : [],
-    [tags?.items]
+    () => {
+      if (isUndefined(tags?.items)) {
+        return []
+      }
+
+      const structure = createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
+
+      return disabled ? disableTreeNodes(structure) : structure
+    },
+    [tags?.items, disabled]
   )
 
   const activeExpandedKeys = useMemo(
@@ -80,6 +93,7 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
       vertical
     >
       <SearchInput
+        disabled={ disabled }
         loading={ tagsLoading }
         onSearch={ setFilter }
         placeholder={ t('search') }

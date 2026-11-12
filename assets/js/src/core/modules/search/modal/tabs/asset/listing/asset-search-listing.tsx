@@ -9,7 +9,7 @@
  */
 
 import { useDataQueryHelper } from '@Pimcore/modules/asset/listing/data-layer/use-data-query-helper'
-import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
+import { TagFilterDecorator, type TagFilterDecoratorConfig } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 import { useRootElementId } from '@Pimcore/modules/asset/listing/hooks/use-root-element-id'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { ListingContainer, defaultProps as listingDefaultProps } from '@Pimcore/modules/element/listing/abstract/listing-container'
@@ -42,7 +42,7 @@ const defaultProps = {
 const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
   StaticColumnConfigurationDecorator,
-  TagFilterDecorator,
+  [TagFilterDecorator, { showOnlyUntaggedFilter: true } as TagFilterDecoratorConfig],
   [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, showOnlyUnreferencedFilter: true, elementType: elementTypes.asset } as GeneralFiltersDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.asset } as TypeFilterDecoratorConfig],
   SortingDecorator,

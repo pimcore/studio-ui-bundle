@@ -17,6 +17,7 @@ const setPage = jest.fn()
 const setPageSize = jest.fn()
 const setSelectedColumns = jest.fn()
 const setTags = jest.fn()
+const setOnlyUntagged = jest.fn()
 const setDataLoadingState = jest.fn()
 const setType = jest.fn()
 const setSharedSearchTerm = jest.fn()
@@ -42,8 +43,9 @@ jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuratio
   useAvailableColumns: () => ({ availableColumns })
 }))
 
+let showOnlyUntaggedFilter = false
 jest.mock('@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter', () => ({
-  useTagFilter: () => ({ setTags })
+  useTagFilter: () => ({ setTags, setOnlyUntagged, showOnlyUntaggedFilter })
 }))
 
 jest.mock('@Pimcore/modules/element/components/type-select/provider/use-type-select', () => ({
@@ -66,6 +68,52 @@ describe('useApplySavedSearch', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     availableColumns = []
+    showOnlyUntaggedFilter = false
+  })
+
+  it('restores "only untagged" and the user PQL apart from the PQL filter they were sent in', () => {
+    showOnlyUntaggedFilter = true
+    const configuration = buildConfiguration([
+      { type: 'system.pql', filterValue: '(color = "red" OR color = "blue") AND (system_fields.tags = NULL)' }
+    ])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setOnlyUntagged).toHaveBeenCalledWith(true)
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: 'color = "red" OR color = "blue"' }))
+  })
+
+  it('restores "only untagged" without a user PQL', () => {
+    showOnlyUntaggedFilter = true
+    const configuration = buildConfiguration([{ type: 'system.pql', filterValue: 'system_fields.tags = NULL' }])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setOnlyUntagged).toHaveBeenCalledWith(true)
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: '' }))
+  })
+
+  it('resets "only untagged" when the saved PQL does not contain it, so a previous search does not leak in', () => {
+    showOnlyUntaggedFilter = true
+    const configuration = buildConfiguration([{ type: 'system.pql', filterValue: 'color = "red"' }])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setOnlyUntagged).toHaveBeenCalledWith(false)
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: 'color = "red"' }))
+  })
+
+  it('keeps the saved PQL as the user PQL on a listing without the "only untagged" option', () => {
+    const configuration = buildConfiguration([{ type: 'system.pql', filterValue: 'system_fields.tags = NULL' }])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setOnlyUntagged).toHaveBeenCalledWith(false)
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: 'system_fields.tags = NULL' }))
   })
 
   it('restores the type select from the saved `type` column filter', () => {

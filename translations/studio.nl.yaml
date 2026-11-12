@@ -1424,6 +1424,7 @@ element.publish: Publiceren
 element.locate-in-tree: In boom zoeken
 element.sidebar.filter.only-direct-children: alleen directe onderliggende items
 element.sidebar.filter.only-unreferenced: Alleen zonder verwijzingen
+element.sidebar.filter.only-untagged: Alleen assets zonder tags
 element.sidebar.field-filters: Veldfilters
 element.full-information: Volledige informatie
 system-information.id: ID

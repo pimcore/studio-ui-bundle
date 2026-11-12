@@ -1424,6 +1424,7 @@ element.publish: Publicera
 element.locate-in-tree: Hitta i träd
 element.sidebar.filter.only-direct-children: Bara direkta barn
 element.sidebar.filter.only-unreferenced: Bara utan referenser
+element.sidebar.filter.only-untagged: Bara assets utan taggar
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID

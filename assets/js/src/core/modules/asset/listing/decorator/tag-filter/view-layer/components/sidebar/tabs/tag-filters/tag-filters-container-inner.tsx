@@ -17,25 +17,29 @@ import {
 } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
+import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { TagsTreeFiltersContainer } from './tags-tree-filters-container'
 import { useTagFilters } from './provider/tag-filters/use-tag-filters'
 import { useTagFilter as useListingTagFiler } from '../../../../../context-layer/provider/tag-filter/use-tag-filter'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 
 export const TagFiltersContainerInner = (): React.JSX.Element => {
-  const { tags, setTags } = useTagFilters()
-  const { setTags: setListingTags } = useListingTagFiler()
+  const { tags, setTags, onlyUntagged, setOnlyUntagged } = useTagFilters()
+  const { setTags: setListingTags, setOnlyUntagged: setListingOnlyUntagged, showOnlyUntaggedFilter } = useListingTagFiler()
   const { setPage } = usePaging()
 
   const { t } = useTranslation()
 
   const handleApplyClick = (): void => {
-    setListingTags(tags)
+    setListingTags(onlyUntagged ? [] : tags)
+    setListingOnlyUntagged(onlyUntagged)
     setPage(1)
   }
 
   const handleResetAllFiltersClick = (): void => {
     setTags([])
+    setOnlyUntagged(false)
   }
 
   const tagsAsStringArray = tags.map((tag) => tag.toString())
@@ -72,10 +76,26 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
       >
         <Title>{t('sidebar.tag_filters')}</Title>
 
-        <TagsTreeFiltersContainer
-          checkedKeys={ tagsAsStringArray }
-          setCheckedKeys={ onTagsChange }
-        />
+        <Flex
+          gap='small'
+          vertical
+        >
+          {showOnlyUntaggedFilter && (
+            <Checkbox
+              checked={ onlyUntagged }
+              data-testid="listing-tag-filter-only-untagged-checkbox"
+              onChange={ (e) => { setOnlyUntagged(e.target.checked) } }
+            >
+              {t('element.sidebar.filter.only-untagged')}
+            </Checkbox>
+          )}
+
+          <TagsTreeFiltersContainer
+            checkedKeys={ tagsAsStringArray }
+            disabled={ onlyUntagged }
+            setCheckedKeys={ onTagsChange }
+          />
+        </Flex>
       </Content>
     </ContentLayout>
   )

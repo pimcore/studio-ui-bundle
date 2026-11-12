@@ -1424,6 +1424,7 @@ element.publish: Pubblica
 element.locate-in-tree: Individua nell'albero
 element.sidebar.filter.only-direct-children: Solo figli diretti
 element.sidebar.filter.only-unreferenced: Solo non referenziati
+element.sidebar.filter.only-untagged: Solo asset senza tag
 element.sidebar.field-filters: Filtri campo
 element.full-information: Informazioni complete
 system-information.id: ID

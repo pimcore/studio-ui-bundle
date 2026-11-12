@@ -14,6 +14,8 @@ export type SelectedTags = number[]
 
 export const tagFilterType = 'system.tag'
 
+export const untaggedPqlCondition = 'system_fields.tags = NULL'
+
 export interface TagFilter {
   type: typeof tagFilterType
   filterValue: {
@@ -25,6 +27,9 @@ export interface TagFilter {
 export interface TagFilterData {
   tags: SelectedTags
   setTags: (tags: SelectedTags) => void
+  onlyUntagged: boolean
+  setOnlyUntagged: (onlyUntagged: boolean) => void
+  showOnlyUntaggedFilter: boolean
   getDataQueryArg: () => TagFilter | undefined
 }
 
@@ -34,10 +39,13 @@ export const TagFilterContext = createContext<TagFilterContextProps>(undefined)
 
 export interface TagFilterProviderProps {
   children: React.ReactNode
+  showOnlyUntaggedFilter?: boolean
 }
 
 export const TagFilterProvider = (props: TagFilterProviderProps): React.JSX.Element => {
   const [tags, setTags] = useState<TagFilterData['tags']>([])
+  const [onlyUntagged, setOnlyUntagged] = useState<boolean>(false)
+  const showOnlyUntaggedFilter = props.showOnlyUntaggedFilter === true
 
   const getDataQueryArg: TagFilterData['getDataQueryArg'] = () => {
     if (tags === undefined || tags.length === 0) {
@@ -54,8 +62,8 @@ export const TagFilterProvider = (props: TagFilterProviderProps): React.JSX.Elem
   }
 
   return useMemo(() => (
-    <TagFilterContext.Provider value={ { tags, setTags, getDataQueryArg } }>
+    <TagFilterContext.Provider value={ { tags, setTags, onlyUntagged, setOnlyUntagged, showOnlyUntaggedFilter, getDataQueryArg } }>
       {props.children}
     </TagFilterContext.Provider>
-  ), [tags])
+  ), [tags, onlyUntagged, showOnlyUntaggedFilter])
 }
