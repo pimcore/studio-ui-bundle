@@ -76,9 +76,29 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Bundle Custom Reports"],
             }),
+            customReportsConfigExport: build.query<
+                CustomReportsConfigExportApiResponse,
+                CustomReportsConfigExportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/${queryArg.name}/export`,
+                }),
+                providesTags: ["Bundle Custom Reports"],
+            }),
             customReportsReport: build.query<CustomReportsReportApiResponse, CustomReportsReportApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/bundle/custom-reports/report/${queryArg.name}` }),
                 providesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsConfigImport: build.mutation<
+                CustomReportsConfigImportApiResponse,
+                CustomReportsConfigImportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/import`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
             }),
             customReportsConfigGetTree: build.query<
                 CustomReportsConfigGetTreeApiResponse,
@@ -178,10 +198,24 @@ export type CustomReportsConfigDeleteApiArg = {
     /** Name of the custom report to delete */
     name: string;
 };
+export type CustomReportsConfigExportApiResponse =
+    /** status 200 JSON file containing the custom report configuration */ Blob;
+export type CustomReportsConfigExportApiArg = {
+    /** Name of the report to export */
+    name: string;
+};
 export type CustomReportsReportApiResponse = /** status 200 Report data as JSON */ BundleCustomReportsDetails;
 export type CustomReportsReportApiArg = {
     /** Name of the report */
     name: string;
+};
+export type CustomReportsConfigImportApiResponse =
+    /** status 201 Successfully imported custom report configuration */ BundleCustomReportsDetails;
+export type CustomReportsConfigImportApiArg = {
+    body: {
+        /** Custom report JSON export file to upload */
+        file: Blob;
+    };
 };
 export type CustomReportsConfigGetTreeApiResponse =
     /** status 200 Configuration tree with nodes and optional group folders. */ {
@@ -475,7 +509,9 @@ export const {
     useCustomReportsColumnConfigListQuery,
     useCustomReportsConfigUpdateMutation,
     useCustomReportsConfigDeleteMutation,
+    useCustomReportsConfigExportQuery,
     useCustomReportsReportQuery,
+    useCustomReportsConfigImportMutation,
     useCustomReportsConfigGetTreeQuery,
     useCustomReportExportCsvMutation,
     useCustomReportsGetTreeQuery,
