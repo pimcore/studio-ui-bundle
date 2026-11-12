@@ -587,7 +587,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
         onCancel={ handleClosePairEditor }
         onSave={ handleSavePairs }
         open={ pairEditor?.kind === 'metadata' }
-        value={ pairEditor?.row.customMetadata }
+        value={ groups.find((g) => g.id === pairEditor?.row.id)?.customMetadata ?? pairEditor?.row.customMetadata }
       />
       <TitlesModal
         confirmLoading={ false }
@@ -595,7 +595,7 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
         onCancel={ handleClosePairEditor }
         onSave={ handleSavePairs }
         open={ pairEditor?.kind === 'titles' }
-        value={ pairEditor?.row.customMetadata }
+        value={ groups.find((g) => g.id === pairEditor?.row.id)?.customMetadata ?? pairEditor?.row.customMetadata }
       />
     </>
   )

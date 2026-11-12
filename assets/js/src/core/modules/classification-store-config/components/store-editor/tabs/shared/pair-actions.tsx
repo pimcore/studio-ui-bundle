@@ -12,6 +12,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@Pimcore/components/badge/badge'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { isTitleKey } from './pairs'
 
 interface IPairActionsProps {
   name: string
@@ -27,7 +28,7 @@ export const PairActions = ({ name, customMetadata, onEditMetadata, onEditTitles
   return (
     <>
       <Badge
-        count={ Object.keys(customMetadata ?? {}).length }
+        count={ Object.keys(customMetadata ?? {}).filter((key) => !isTitleKey(key)).length }
         // Pulled fully inside the 32px box so the count never paints outside it.
         offset={ [-10, 10] }
         size="small"

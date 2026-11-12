@@ -22,17 +22,28 @@ export interface PairRow {
   touched?: boolean
 }
 
+const TITLE_PREFIX = 'localized_internal_title.'
+
+/** Whether a stored key belongs to the titles view; the generic view is its complement. */
+export const isTitleKey = (storedKey: string): boolean => storedKey.startsWith(TITLE_PREFIX) && storedKey.length > TITLE_PREFIX.length
+
+/** The locale a title key carries, and the title key a locale is stored under. */
+export const toTitleLocale = (storedKey: string): string => storedKey.slice(TITLE_PREFIX.length)
+export const toTitleKey = (locale: string): string => `${TITLE_PREFIX}${locale}`
+
 /** What tells the generic view from the titles view over the same stored map. */
 export interface PairView {
   includes: (storedKey: string) => boolean
   toDisplayKey: (storedKey: string) => string
   toStoredKey: (typedKey: string) => string
+  /** Stored keys a typed row may not use, because another view owns them. */
+  reserves?: (storedKey: string) => boolean
   keyLabel: string
   valueLabel: string
   duplicateMessage: string
 }
 
-export type PairError = 'key-required' | 'value-required' | 'duplicate' | 'list'
+export type PairError = 'key-required' | 'value-required' | 'reserved' | 'duplicate' | 'list'
 
 export interface PairRowErrors {
   key?: PairError
@@ -92,6 +103,7 @@ export const rowErrors = (
 
     const key = stored[index]
     if (key === undefined) return { key: 'key-required' }
+    if (view.reserves?.(key) === true) return { key: 'reserved' }
     if ((counts.get(key) ?? 0) > 1) return { key: 'duplicate' }
     if (wholeIsList) return { key: 'list' }
     // A pair stored with an empty value stays valid until the user touches it.

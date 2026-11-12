@@ -122,6 +122,7 @@ export const PairList = forwardRef<PairListHandle, IPairListProps>(({ value, vie
     return {
       'key-required': t('form.validation.required'),
       'value-required': t('form.validation.required'),
+      reserved: t('classification-store.pair-key-reserved'),
       duplicate: t(view.duplicateMessage),
       list: t('classification-store.pair-key-list')
     }[error]

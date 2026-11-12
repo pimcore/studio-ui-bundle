@@ -578,7 +578,7 @@ describe('SubGroupsTab', () => {
 
 describe('SubGroupsTab pair actions', () => {
   const originalFetch = globalThis.fetch
-  const withPairs = { ...dimensions, customMetadata: { a: '1', 'title.de': 'x' } }
+  const withPairs = { ...dimensions, customMetadata: { a: '1', 'localized_internal_title.de': 'x' } }
   const withoutPairs = { ...created, customMetadata: null }
 
   const rowButtons = (index: number): HTMLElement[] => within(screen.getAllByRole('row')[index]).getAllByRole('button')
@@ -600,7 +600,7 @@ describe('SubGroupsTab pair actions', () => {
   })
 
   it('puts metadata, titles and delete in that order, named after the row, with the count on metadata', async () => {
-    stubFetch([withPairs, withoutPairs])
+    stubFetch([withPairs, { ...withoutPairs, customMetadata: { 'localized_internal_title.de': 'x' } }])
     renderTab()
     await screen.findByDisplayValue('Dimensions')
 
@@ -609,7 +609,7 @@ describe('SubGroupsTab pair actions', () => {
       'classification-store.aria.edit-titles:Dimensions',
       'classification-store.aria.delete-sub-group:Dimensions'
     ])
-    expect(within(screen.getAllByRole('row')[1]).getByText('2')).toBeInTheDocument()
+    expect(within(screen.getAllByRole('row')[1]).getByText('1')).toBeInTheDocument()
     expect(rowButtons(1)[1].closest('.ant-badge')).toBeNull()
     expect(screen.getAllByRole('row')[2].querySelector('.ant-scroll-number')).toBeNull()
     expect(screen.getByText('classification-store.columns.actions').closest('th')!.style.width).toBe('124px')
@@ -629,7 +629,7 @@ describe('SubGroupsTab pair actions', () => {
     expect(writeRequests()[0].body).toEqual({
       name: 'Dimensions',
       description: 'size related',
-      customMetadata: { a: '12', 'title.de': 'x' }
+      customMetadata: { a: '12', 'localized_internal_title.de': 'x' }
     })
   })
 
@@ -692,7 +692,7 @@ describe('SubGroupsTab pair actions', () => {
     expect(writeRequests()[1].body).toEqual({
       name: 'Measures',
       description: 'size related',
-      customMetadata: { a: '12', 'title.de': 'x' }
+      customMetadata: { a: '12', 'localized_internal_title.de': 'x' }
     })
   })
 

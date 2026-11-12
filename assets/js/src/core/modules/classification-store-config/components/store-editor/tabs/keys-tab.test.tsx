@@ -770,7 +770,7 @@ describe('KeysTab deleted view', () => {
 
 describe('KeysTab pair actions', () => {
   const originalFetch = globalThis.fetch
-  const withPairs = { ...height, customMetadata: { externalCode: 'EF1', 'title.de': 'Höhe' } }
+  const withPairs = { ...height, customMetadata: { externalCode: 'EF1', 'localized_internal_title.de': 'Höhe' } }
   const withoutPairs = { ...width, customMetadata: null }
 
   const rowButtons = (index: number): HTMLElement[] => within(screen.getAllByRole('row')[index]).getAllByRole('button')
@@ -798,11 +798,12 @@ describe('KeysTab pair actions', () => {
     ])
   })
 
-  it('counts the pairs on the metadata button only and shows no number for none', async () => {
+  it('counts the pairs on the metadata button only, leaves titles out and shows no number for none', async () => {
+    stubFetch([withPairs, { ...width, customMetadata: { 'localized_internal_title.de': 'x' } }])
     renderTab()
     expect(await screen.findByDisplayValue('height', undefined, WAIT_BUDGET)).toBeInTheDocument()
 
-    expect(within(screen.getAllByRole('row')[1]).getByText('2')).toBeInTheDocument()
+    expect(within(screen.getAllByRole('row')[1]).getByText('1')).toBeInTheDocument()
     expect(rowButtons(1)[2].closest('.ant-badge')).toBeNull()
     expect(screen.getAllByRole('row')[2].querySelector('.ant-scroll-number')).toBeNull()
   })
@@ -830,7 +831,7 @@ describe('KeysTab pair actions', () => {
       name: 'height',
       type: null,
       definition: null,
-      customMetadata: { externalCode: 'EF12', 'title.de': 'Höhe' }
+      customMetadata: { externalCode: 'EF12', 'localized_internal_title.de': 'Höhe' }
     })
   })
 

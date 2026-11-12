@@ -47,6 +47,14 @@ export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps)
       )
     },
     {
+      key: SUB_GROUPS_TAB_KEY,
+      icon: <Icon value='hierarchy' />,
+      label: t('classification-store.tabs.sub-groups'),
+      children: (
+        <SubGroupsTab storeId={ storeId } />
+      )
+    },
+    {
       key: 'groups',
       icon: <Icon value='group' />,
       label: t('classification-store.tabs.groups'),
@@ -63,14 +71,6 @@ export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps)
       label: t('classification-store.tabs.collections'),
       children: (
         <CollectionsTab storeId={ storeId } />
-      )
-    },
-    {
-      key: SUB_GROUPS_TAB_KEY,
-      icon: <Icon value='group-alt' />,
-      label: t('classification-store.tabs.sub-groups'),
-      children: (
-        <SubGroupsTab storeId={ storeId } />
       )
     }
   ]

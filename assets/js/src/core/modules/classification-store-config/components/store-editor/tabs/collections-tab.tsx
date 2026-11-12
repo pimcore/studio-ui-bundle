@@ -558,7 +558,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
         onCancel={ handleClosePairEditor }
         onSave={ handleSavePairs }
         open={ pairEditor?.kind === 'metadata' }
-        value={ pairEditor?.row.customMetadata }
+        value={ collections.find((c) => c.id === pairEditor?.row.id)?.customMetadata ?? pairEditor?.row.customMetadata }
       />
       <TitlesModal
         confirmLoading={ false }
@@ -566,7 +566,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
         onCancel={ handleClosePairEditor }
         onSave={ handleSavePairs }
         open={ pairEditor?.kind === 'titles' }
-        value={ pairEditor?.row.customMetadata }
+        value={ collections.find((c) => c.id === pairEditor?.row.id)?.customMetadata ?? pairEditor?.row.customMetadata }
       />
     </>
   )
