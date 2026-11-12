@@ -28,10 +28,12 @@ export const withTagFilterQueryArg = (useBaseHook: AbstractDecoratorProps['useDa
         ...currentColumnFilters.filter((currentFilter) => currentFilter.type !== tagFilterType)
       ]
 
+      if (tags.length > 0 && !onlyUntagged) {
+        newColumnFilters.push(tagFilter)
+      }
+
       if (onlyUntagged) {
         newColumnFilters = addPqlCondition(newColumnFilters as ColumnFilter[], untaggedPqlCondition)
-      } else if (tags.length > 0) {
-        newColumnFilters.push(tagFilter)
       }
 
       return {

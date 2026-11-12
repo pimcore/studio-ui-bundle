@@ -71,39 +71,19 @@ describe('useApplySavedSearch', () => {
     showOnlyUntaggedFilter = false
   })
 
-  it('restores "only untagged" and the user PQL apart from the PQL filter they were sent in', () => {
+  it.each([
+    ['"only untagged" and the user PQL apart', '(color = "red" OR color = "blue") AND (system_fields.tags = NULL)', true, 'color = "red" OR color = "blue"'],
+    ['"only untagged" without a user PQL', 'system_fields.tags = NULL', true, ''],
+    ['"only untagged" as unticked when the saved PQL does not contain it', 'color = "red"', false, 'color = "red"']
+  ])('restores %s', (_name, savedPql, expectedOnlyUntagged, expectedPql) => {
     showOnlyUntaggedFilter = true
-    const configuration = buildConfiguration([
-      { type: 'system.pql', filterValue: '(color = "red" OR color = "blue") AND (system_fields.tags = NULL)' }
-    ])
+    const configuration = buildConfiguration([{ type: 'system.pql', filterValue: savedPql }])
 
     const { result } = renderHook(() => useApplySavedSearch())
     result.current(configuration)
 
-    expect(setOnlyUntagged).toHaveBeenCalledWith(true)
-    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: 'color = "red" OR color = "blue"' }))
-  })
-
-  it('restores "only untagged" without a user PQL', () => {
-    showOnlyUntaggedFilter = true
-    const configuration = buildConfiguration([{ type: 'system.pql', filterValue: 'system_fields.tags = NULL' }])
-
-    const { result } = renderHook(() => useApplySavedSearch())
-    result.current(configuration)
-
-    expect(setOnlyUntagged).toHaveBeenCalledWith(true)
-    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: '' }))
-  })
-
-  it('resets "only untagged" when the saved PQL does not contain it, so a previous search does not leak in', () => {
-    showOnlyUntaggedFilter = true
-    const configuration = buildConfiguration([{ type: 'system.pql', filterValue: 'color = "red"' }])
-
-    const { result } = renderHook(() => useApplySavedSearch())
-    result.current(configuration)
-
-    expect(setOnlyUntagged).toHaveBeenCalledWith(false)
-    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: 'color = "red"' }))
+    expect(setOnlyUntagged).toHaveBeenCalledWith(expectedOnlyUntagged)
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ pql: expectedPql }))
   })
 
   it('keeps the saved PQL as the user PQL on a listing without the "only untagged" option', () => {
