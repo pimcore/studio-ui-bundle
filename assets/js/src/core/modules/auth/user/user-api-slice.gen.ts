@@ -319,7 +319,8 @@ export type UserTwoFactorResetByIdApiArg = {
     /** Id of the User */
     id: number;
 };
-export type UserTwoFactorSetupApiResponse = /** status 200 The new secret and its otpauth URI. */ TwoFactorSetup;
+export type UserTwoFactorSetupApiResponse =
+    /** status 200 The new secret, its otpauth URI and the number of digits in a code. */ TwoFactorSetup;
 export type UserTwoFactorSetupApiArg = void;
 export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
@@ -535,7 +536,7 @@ export type UserObjectDependencies = {
     dependencies: DependencyToAnObject[];
     /** If it has hidden dependencies */
     hasHidden: boolean;
-    /** Total number of objects referencing this user, including ones the caller is not permitted to view - not the count of objects actually returned via dependencies or the paginated endpoint. */
+    /** Total number of objects referencing this user, including ones the caller may not view */
     totalItems?: number;
 };
 export type User = {
