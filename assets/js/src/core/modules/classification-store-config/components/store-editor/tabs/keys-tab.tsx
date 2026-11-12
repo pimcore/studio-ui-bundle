@@ -643,7 +643,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         onCancel={ handleClosePairEditor }
         onSave={ handleSavePairs }
         open={ pairEditor?.kind === 'metadata' }
-        value={ keys.find((k) => k.id === pairEditor?.row.id)?.customMetadata ?? pairEditor?.row.customMetadata }
+        value={ pairEditor?.row.customMetadata }
       />
       <TitlesModal
         confirmLoading={ false }
@@ -651,7 +651,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         onCancel={ handleClosePairEditor }
         onSave={ handleSavePairs }
         open={ pairEditor?.kind === 'titles' }
-        value={ keys.find((k) => k.id === pairEditor?.row.id)?.customMetadata ?? pairEditor?.row.customMetadata }
+        value={ pairEditor?.row.customMetadata }
       />
     </>
   )
