@@ -38,7 +38,10 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
   const [tabs, setTabs] = useState<OpenTabs>({ openIds: [], activeId: undefined })
   const { openIds, activeId } = tabs
   const [dirtyIds, setDirtyIds] = useState<number[]>([])
-  const [confirmCloseId, setConfirmCloseId] = useState<number | undefined>(undefined)
+  // Dirty tabs whose close still needs confirming, in the order the closes were requested. "Close all" and
+  // "close others" request several in one event, so they queue and are confirmed one after another rather
+  // than overwriting each other; the first of the queue is the one asking.
+  const [pendingCloseIds, setPendingCloseIds] = useState<number[]>([])
   const [createMode, setCreateMode] = useState<CreateServiceUserMode | undefined>(undefined)
   const [credentials, setCredentials] = useState<OneTimeCredential[] | undefined>(undefined)
   // Recomputed on every list load, so the dormancy filter compares against a fresh "now".
@@ -68,14 +71,24 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
       }
     })
     setDirtyIds((current) => current.filter((dirtyId) => dirtyId !== id))
-    setConfirmCloseId(undefined)
+    setPendingCloseIds((current) => current.filter((pendingId) => pendingId !== id))
+  }
+
+  // A click inside a tab's close confirmation bubbles to the tab label and activates it, which for a tab that
+  // was just closed would select nothing; only open tabs can be activated.
+  const activateServiceUser = (id: number): void => {
+    setTabs((current) => current.openIds.includes(id) ? { ...current, activeId: id } : current)
+  }
+
+  const keepOpen = (id: number): void => {
+    setPendingCloseIds((current) => current.filter((pendingId) => pendingId !== id))
   }
 
   const requestClose = (key: string): void => {
     const id = Number(key)
 
     if (dirtyIds.includes(id)) {
-      setConfirmCloseId(id)
+      setPendingCloseIds((current) => current.includes(id) ? current : [...current, id])
       return
     }
 
@@ -144,16 +157,16 @@ export const ServiceUsersContainer = (): React.JSX.Element => {
                     key: id.toString(),
                     label: (
                       <Popconfirm
-                        onCancel={ () => { setConfirmCloseId(undefined) } }
+                        onCancel={ () => { keepOpen(id) } }
                         onConfirm={ () => { closeServiceUser(id) } }
-                        open={ confirmCloseId === id }
+                        open={ pendingCloseIds[0] === id }
                         title={ t('widget-manager.tab-title.close-confirmation') }
                       >
                         {nameOf(id)}{dirtyIds.includes(id) ? ' *' : ''}
                       </Popconfirm>
                     )
                   })) }
-                  onChange={ (key: string) => { setTabs((current) => ({ ...current, activeId: Number(key) })) } }
+                  onChange={ (key: string) => { activateServiceUser(Number(key)) } }
                   onClose={ requestClose }
                 />
                 {openIds.map((id) => (
