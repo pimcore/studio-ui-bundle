@@ -31,12 +31,8 @@ const pqlStringTokens = /query\(".*?"\)|'(?:[^']|'')*'|"(?:[^"]|"")*"/gi
 const isSelfContained = (pql: string): boolean => {
   let depth = 0
 
-  for (const char of pql.replaceAll(pqlStringTokens, '')) {
-    if (char === '(') {
-      depth++
-    } else if (char === ')') {
-      depth--
-    }
+  for (const parenthesis of pql.replaceAll(pqlStringTokens, '').replaceAll(/[^()]/g, '')) {
+    depth += parenthesis === '(' ? 1 : -1
 
     if (depth < 0) {
       return false
