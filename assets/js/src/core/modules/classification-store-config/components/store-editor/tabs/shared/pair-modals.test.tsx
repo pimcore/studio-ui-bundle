@@ -102,11 +102,13 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import userEvent from '@testing-library/user-event'
 // eslint-disable-next-line import/first
-import { MetadataModal } from './metadata-modal'
+import { genericView, MetadataModal } from './metadata-modal'
 // eslint-disable-next-line import/first
-import { TitlesModal } from './titles-modal'
+import { TitlesModal, titlesView } from './titles-modal'
 // eslint-disable-next-line import/first
 import { type IPairModalProps } from './pair-modal-shell'
+// eslint-disable-next-line import/first
+import { isTitleKey } from './pairs'
 
 jest.setTimeout(30000)
 
@@ -161,7 +163,7 @@ const clickOk = async (user: ReturnType<typeof userEvent.setup>): Promise<void> 
 describe('the pair modals', () => {
   it('give both shells the same sizing props and no width or styles override', () => {
     renderMetadata({ a: '1' })
-    renderTitles({ 'title.de': 'x' })
+    renderTitles({ 'localized_internal_title.de': 'x' })
 
     const shells = mockModalProps.filter((modalProps) => modalProps.open === true)
 
@@ -350,9 +352,9 @@ describe('the pair modals', () => {
     await waitFor(() => { expect(onSave).toHaveBeenCalledWith(null) })
   })
 
-  it('keep every non-title pair when a title is saved and show the title in the generic editor', async () => {
+  it('keep every non-title pair when a title is saved and show only the other pairs in the generic editor', async () => {
     const user = userEvent.setup({ delay: null })
-    const stored = { externalCode: 'EF1', 'title.de': 'Höhe' }
+    const stored = { externalCode: 'EF1', 'localized_internal_title.de': 'Höhe' }
     const { unmount } = renderTitles(stored)
 
     expect(screen.queryAllByLabelText(rowLabel(LOCALE_LABEL)).map((input) => (input as HTMLInputElement).value)).toEqual(['de'])
@@ -361,17 +363,49 @@ describe('the pair modals', () => {
     await user.type(valueInputsOf(TITLE_LABEL)[0], 'Hoehe')
     await clickOk(user)
 
-    await waitFor(() => { expect(onSave).toHaveBeenCalledWith({ externalCode: 'EF1', 'title.de': 'Hoehe' }) })
+    await waitFor(() => { expect(onSave).toHaveBeenCalledWith({ externalCode: 'EF1', 'localized_internal_title.de': 'Hoehe' }) })
     unmount()
 
     renderMetadata(stored)
-    expect(keyInputs().map((input) => input.value)).toEqual(['externalCode', 'title.de'])
+    expect(keyInputs().map((input) => input.value)).toEqual(['externalCode'])
+  })
+
+  it('split every key between the two views so exactly one includes it', () => {
+    const keys = [
+      'localized_internal_title.de', 'localized_internal_title.', 'localized_internal_title',
+      'Localized_Internal_Title.de', 'title.de', 'externalCode', '0'
+    ]
+
+    keys.forEach((key) => {
+      expect(titlesView.includes(key)).toBe(isTitleKey(key))
+      expect(genericView.includes(key)).toBe(!isTitleKey(key))
+    })
+    expect(keys.filter(isTitleKey)).toEqual(['localized_internal_title.de'])
+  })
+
+  it('refuse a reserved key in the generic editor, naming the titles dialog, and accept look-alikes', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderMetadata(null)
+    await user.click(screen.getByRole('button', { name: ADD_PAIR }))
+    await user.type(keyInputs()[0], 'localized_internal_title.de')
+    await user.type(valueInputs()[0], 'x')
+
+    expect(await screen.findByText('classification-store.pair-key-reserved')).toBeInTheDocument()
+    await clickOk(user)
+    expect(onSave).not.toHaveBeenCalled()
+
+    await user.clear(keyInputs()[0])
+    await user.type(keyInputs()[0], 'title.de')
+    await clickOk(user)
+
+    await waitFor(() => { expect(onSave).toHaveBeenCalledWith({ 'title.de': 'x' }) })
   })
 
   it('accept a locale that is not configured, say so in a hint and refuse a second row with the same locale', async () => {
     const user = userEvent.setup({ delay: null })
 
-    renderTitles({ 'title.de': 'Höhe' })
+    renderTitles({ 'localized_internal_title.de': 'Höhe' })
     expect(screen.getByText('classification-store.titles-locale-hint')).toBeInTheDocument()
 
     const add = screen.getByRole('button', { name: ADD_PAIR })
@@ -380,7 +414,7 @@ describe('the pair modals', () => {
     await user.type(screen.getAllByLabelText(rowLabel(TITLE_LABEL))[1], 'Hoogte')
     await clickOk(user)
 
-    await waitFor(() => { expect(onSave).toHaveBeenCalledWith({ 'title.de': 'Höhe', 'title.nl-BE': 'Hoogte' }) })
+    await waitFor(() => { expect(onSave).toHaveBeenCalledWith({ 'localized_internal_title.de': 'Höhe', 'localized_internal_title.nl-BE': 'Hoogte' }) })
 
     onSave.mockClear()
     await user.clear(screen.getAllByLabelText(rowLabel(LOCALE_LABEL))[1])

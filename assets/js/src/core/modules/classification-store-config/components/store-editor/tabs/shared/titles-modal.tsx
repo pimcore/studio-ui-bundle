@@ -11,14 +11,12 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { PairModalShell, type IPairModalProps } from './pair-modal-shell'
-import { type PairView } from './pairs'
+import { isTitleKey, toTitleKey, toTitleLocale, type PairView } from './pairs'
 
-const TITLE_PREFIX = 'title.'
-
-const view: PairView = {
-  includes: (storedKey) => storedKey.startsWith(TITLE_PREFIX),
-  toDisplayKey: (storedKey) => storedKey.slice(TITLE_PREFIX.length),
-  toStoredKey: (typedKey) => `${TITLE_PREFIX}${typedKey}`,
+export const titlesView: PairView = {
+  includes: isTitleKey,
+  toDisplayKey: toTitleLocale,
+  toStoredKey: toTitleKey,
   keyLabel: 'classification-store.pair-locale',
   valueLabel: 'classification-store.pair-title',
   duplicateMessage: 'classification-store.pair-locale-duplicate'
@@ -33,7 +31,7 @@ export const TitlesModal = (props: IPairModalProps): React.JSX.Element => {
       hint={ t('classification-store.titles-locale-hint') }
       successKey="classification-store.titles-saved"
       titleKey="classification-store.edit-titles"
-      view={ view }
+      view={ titlesView }
     />
   )
 }

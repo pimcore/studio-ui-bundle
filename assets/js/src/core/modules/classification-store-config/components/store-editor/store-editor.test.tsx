@@ -10,7 +10,7 @@
 
 /**
  * The store editor offers the four configuration surfaces of a store, with the store-level
- * sub-group vocabulary after the keys, groups and collections.
+ * sub-group vocabulary right after the keys.
  */
 
 // antd-style ships untranspiled ESM, which jest does not transform; only the tab bar matters here.
@@ -32,7 +32,7 @@ jest.mock('@Pimcore/components/tabs/tab-context-menu', () => ({
 
 // icons resolve through the dependency injection container, which is not set up here
 jest.mock('@Pimcore/components/icon/icon', () => ({
-  Icon: () => <span />
+  Icon: ({ value }: { value: string }) => <span data-icon={ value } />
 }))
 
 jest.mock('@Pimcore/modules/classification-store-config/components/store-editor/store-engine-indicator', () => ({
@@ -61,14 +61,25 @@ import userEvent from '@testing-library/user-event'
 import { StoreEditor } from './store-editor'
 
 describe('StoreEditor', () => {
-  it('offers the sub groups tab after the keys, groups and collections tabs', () => {
+  it('offers the sub groups tab second, between the keys and groups tabs', () => {
     render(<StoreEditor storeId={ 1 } />)
 
     expect(screen.getAllByRole('tab').map((tab) => tab.textContent)).toEqual([
       'classification-store.tabs.keys',
+      'classification-store.tabs.sub-groups',
       'classification-store.tabs.groups',
-      'classification-store.tabs.collections',
-      'classification-store.tabs.sub-groups'
+      'classification-store.tabs.collections'
+    ])
+  })
+
+  it('gives each tab its own icon', () => {
+    render(<StoreEditor storeId={ 1 } />)
+
+    expect(screen.getAllByRole('tab').map((tab) => tab.querySelector('[data-icon]')?.getAttribute('data-icon'))).toEqual([
+      'group-by-keys',
+      'hierarchy',
+      'group',
+      'collection'
     ])
   })
 

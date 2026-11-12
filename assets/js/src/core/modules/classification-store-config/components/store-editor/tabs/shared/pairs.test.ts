@@ -8,19 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { buildMap, rowErrors, toRows, type PairView } from './pairs'
+import { buildMap, isTitleKey, rowErrors, toRows } from './pairs'
+import { toTitleKey, toTitleLocale, type PairView } from './pairs'
 
 const titles: PairView = {
-  includes: (key) => key.startsWith('title.'),
-  toDisplayKey: (key) => key.slice('title.'.length),
-  toStoredKey: (key) => `title.${key}`,
+  includes: isTitleKey,
+  toDisplayKey: toTitleLocale,
+  toStoredKey: toTitleKey,
   keyLabel: 'k',
   valueLabel: 'v',
   duplicateMessage: 'd'
 }
 
 const generic: PairView = {
-  includes: () => true,
+  includes: (key) => !isTitleKey(key),
   toDisplayKey: (key) => key,
   toStoredKey: (key) => key,
   keyLabel: 'k',
@@ -30,13 +31,34 @@ const generic: PairView = {
 
 describe('pairs', () => {
   it('keeps the stored order when one view saves', () => {
-    const original = { 'title.de': 'Höhe', externalCode: 'EF1' }
+    const original = { 'localized_internal_title.de': 'Höhe', externalCode: 'EF1' }
     const rows = toRows(original, titles)
     rows[0].value = 'Hoehe'
 
-    expect(Object.keys(buildMap(rows, original, titles)!)).toEqual(['title.de', 'externalCode'])
+    expect(Object.keys(buildMap(rows, original, titles)!)).toEqual(['localized_internal_title.de', 'externalCode'])
     expect(buildMap([...rows, { key: 'en', value: 'Height', readOnly: false }], original, titles))
-      .toEqual({ 'title.de': 'Hoehe', externalCode: 'EF1', 'title.en': 'Height' })
+      .toEqual({ 'localized_internal_title.de': 'Hoehe', externalCode: 'EF1', 'localized_internal_title.en': 'Height' })
+  })
+
+  it('leaves the other view\'s members untouched and in order when either view saves', () => {
+    const obj = { x: 1 }
+    const original = { externalCode: 'EF1', 'localized_internal_title.de': 'Höhe', obj }
+    const genericRows = toRows(original, generic)
+    genericRows[0].value = 'EF2'
+    const viaGeneric = buildMap(genericRows, original, generic)!
+
+    expect(Object.keys(viaGeneric)).toEqual(['externalCode', 'localized_internal_title.de', 'obj'])
+    expect(viaGeneric['localized_internal_title.de']).toBe('Höhe')
+    expect(viaGeneric.obj).toBe(obj)
+
+    const titleRows = toRows(original, titles)
+    titleRows[0].value = 'Hoehe'
+    const viaTitles = buildMap(titleRows, original, titles)!
+
+    expect(Object.keys(viaTitles)).toEqual(['externalCode', 'localized_internal_title.de', 'obj'])
+    expect(viaTitles.externalCode).toBe('EF1')
+    expect(viaTitles.obj).toBe(obj)
+    expect(viaTitles['localized_internal_title.de']).toBe('Hoehe')
   })
 
   it('lets a pair stored with an empty value stay empty but requires a value on a new one', () => {

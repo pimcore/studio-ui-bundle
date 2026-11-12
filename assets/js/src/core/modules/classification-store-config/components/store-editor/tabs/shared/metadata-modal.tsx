@@ -10,12 +10,13 @@
 
 import React from 'react'
 import { PairModalShell, type IPairModalProps } from './pair-modal-shell'
-import { type PairView } from './pairs'
+import { isTitleKey, type PairView } from './pairs'
 
-const view: PairView = {
-  includes: () => true,
+export const genericView: PairView = {
+  includes: (storedKey) => !isTitleKey(storedKey),
   toDisplayKey: (storedKey) => storedKey,
   toStoredKey: (typedKey) => typedKey,
+  reserves: isTitleKey,
   keyLabel: 'classification-store.pair-key',
   valueLabel: 'classification-store.pair-value',
   duplicateMessage: 'classification-store.pair-key-duplicate'
@@ -26,6 +27,6 @@ export const MetadataModal = (props: IPairModalProps): React.JSX.Element => (
     { ...props }
     successKey="classification-store.metadata-saved"
     titleKey="classification-store.edit-metadata"
-    view={ view }
+    view={ genericView }
   />
 )

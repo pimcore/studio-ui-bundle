@@ -306,9 +306,9 @@ describe('CollectionsTab pair actions', () => {
   beforeEach(() => {
     updates = []
     rows = [
-      pairRow(ID, ROW_NAME, { a: '1', 'title.de': 'x' }),
+      pairRow(ID, ROW_NAME, { a: '1', 'localized_internal_title.de': 'x' }),
       pairRow(ID + 1, 'weights', null),
-      pairRow(ID + 2, 'volumes', {})
+      pairRow(ID + 2, 'volumes', { 'localized_internal_title.de': 'x' })
     ]
     stubPairFetch()
   })
@@ -331,11 +331,11 @@ describe('CollectionsTab pair actions', () => {
     expect(screen.getByLabelText('classification-store.aria.edit-titles:weights')).toBeInTheDocument()
   })
 
-  it('counts every stored pair on the metadata button only and shows no number for none', async () => {
+  it('counts the generic pairs on the metadata button only and shows no number for none', async () => {
     renderTab()
     expect(await screen.findByDisplayValue(ROW_NAME, undefined, WAIT_BUDGET)).toBeInTheDocument()
 
-    expect(within(screen.getAllByRole('row')[1]).getByText('2')).toBeInTheDocument()
+    expect(within(screen.getAllByRole('row')[1]).getByText('1')).toBeInTheDocument()
     expect(rowButtons(1)[0].closest('.ant-badge')).not.toBeNull()
     expect(rowButtons(1)[1].closest('.ant-badge')).toBeNull()
     expect(screen.getAllByRole('row')[2].querySelector('.ant-scroll-number')).toBeNull()
@@ -371,7 +371,7 @@ describe('CollectionsTab pair actions', () => {
     expect(updates[0]).toEqual({
       name: ROW_NAME,
       description: null,
-      customMetadata: { a: '12', 'title.de': 'x' }
+      customMetadata: { a: '12', 'localized_internal_title.de': 'x' }
     })
   })
 
@@ -387,7 +387,7 @@ describe('CollectionsTab pair actions', () => {
 
     await waitFor(() => { expect(updates).toHaveLength(1) }, WAIT_BUDGET)
 
-    expect(updates[0].customMetadata).toEqual({ a: '1', 'title.de': 'xy' })
+    expect(updates[0].customMetadata).toEqual({ a: '1', 'localized_internal_title.de': 'xy' })
   })
 
   it('opens an empty editor for an entity without pairs', async () => {
