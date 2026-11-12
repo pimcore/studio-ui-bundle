@@ -259,3 +259,35 @@ describe('EditFormProvider auto-save', () => {
     expect(mockSave).not.toHaveBeenCalled()
   })
 })
+
+describe('EditFormProvider resetModifiedDataObjectAttributes', () => {
+  it('clears all collected changes without the sent attributes', () => {
+    const context = renderProvider()
+    context.updateModifiedDataObjectAttributes({ name: 'changed' })
+
+    context.resetModifiedDataObjectAttributes()
+
+    expect(context.getModifiedDataObjectAttributes()).toEqual({})
+  })
+
+  it('clears the changes a save sent when nothing was changed since', () => {
+    const context = renderProvider()
+    context.updateModifiedDataObjectAttributes({ name: 'changed' })
+    const sent = context.getModifiedDataObjectAttributes()
+
+    context.resetModifiedDataObjectAttributes(sent)
+
+    expect(context.getModifiedDataObjectAttributes()).toEqual({})
+  })
+
+  it('keeps the changes collected when the form was edited while the save was running', () => {
+    const context = renderProvider()
+    context.updateModifiedDataObjectAttributes({ name: 'changed' })
+    const sent = context.getModifiedDataObjectAttributes()
+
+    context.updateModifiedDataObjectAttributes({ description: 'edited while saving' })
+    context.resetModifiedDataObjectAttributes(sent)
+
+    expect(context.getModifiedDataObjectAttributes()).toEqual({ name: 'changed', description: 'edited while saving' })
+  })
+})

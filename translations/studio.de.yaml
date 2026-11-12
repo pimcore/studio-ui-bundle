@@ -495,6 +495,10 @@ action-could-not-be-applied: Aktion konnte nicht angewendet werden
 failed-to-assign-tag-to-element: Tag konnte dem Element nicht zugewiesen werden
 failed-to-un-assign-tag-to-element: Tag konnte vom Element nicht entfernt werden
 workflow-modal.perform-action: Aktion ausführen
+workflow.unsaved-changes.title: Ungespeicherte Änderungen
+workflow.unsaved-changes.warn: Es gibt ungespeicherte Änderungen. Sie gehen verloren, wenn diese Aktion angewendet wird. Trotzdem anwenden?
+workflow.unsaved-changes.apply-anyway: Trotzdem anwenden
+workflow.unsaved-changes.save-failed: Die ungespeicherten Änderungen konnten nicht gespeichert werden, daher wurde die Aktion nicht angewendet.
 workflow-modal.cancel: Abbrechen
 workflow-modal.notes: Notizen
 workflow-modal.notes-required: Bitte geben Sie Ihre Notizen ein
@@ -2302,6 +2306,9 @@ reports.field-filters: Feldfilter
 reports.editor.delete.content: Möchten Sie den benutzerdefinierten Bericht "{{reportName}}" wirklich löschen?
 reports.editor.clone.content: Geben Sie den Namen des neuen Eintrags ein (a-zA-Z-_)
 reports.editor.add.content: Geben Sie den Namen des neuen Eintrags ein. Der Name muss alphanumerisch und mindestens 3 Zeichen lang sein (a-zA-Z0-9_-)
+reports.editor.import.title: Benutzerdefinierten Bericht importieren
+reports.editor.import.success: Benutzerdefinierter Bericht erfolgreich importiert
+reports.editor.import.invalid-file: Bitte wählen Sie eine JSON-Exportdatei aus
 reports.editor.content.validation.message: Der Name des benutzerdefinierten Berichts ist ungültig
 reports.editor.general-settings.title: Allgemeine Einstellungen
 reports.editor.general-settings.name-label: Name

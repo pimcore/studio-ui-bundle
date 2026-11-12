@@ -495,6 +495,10 @@ action-could-not-be-applied: Handling kunne ikke utføres
 failed-to-assign-tag-to-element: Kunne ikke tilordne tagg til element
 failed-to-un-assign-tag-to-element: Kunne ikke fjerne tagg fra element
 workflow-modal.perform-action: Utfør handling
+workflow.unsaved-changes.title: Ulagrede endringer
+workflow.unsaved-changes.warn: Det finnes ulagrede endringer. De går tapt når handlingen utføres. Vil du utføre den likevel?
+workflow.unsaved-changes.apply-anyway: Utfør likevel
+workflow.unsaved-changes.save-failed: De ulagrede endringene kunne ikke lagres, så handlingen ble ikke utført.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Notater
 workflow-modal.notes-required: Vennligst skriv inn notatene dine
@@ -2302,6 +2306,9 @@ reports.field-filters: Feltfiltre
 reports.editor.delete.content: Vil du virkelig slette egendefinert rapport "{{reportName}}"?
 reports.editor.clone.content: Oppgi navnet på det nye elementet (a-zA-Z-_)
 reports.editor.add.content: Oppgi navnet på det nye elementet. Navnet må være alfanumerisk og minst 3 tegn langt (a-zA-Z0-9_-)
+reports.editor.import.title: Importer egendefinert rapport
+reports.editor.import.success: Egendefinert rapport ble importert
+reports.editor.import.invalid-file: Velg en JSON-eksportfil
 reports.editor.content.validation.message: Rapportnavnet er ugyldig
 reports.editor.general-settings.title: Generelle innstillinger
 reports.editor.general-settings.name-label: Navn

@@ -495,6 +495,10 @@ action-could-not-be-applied: No se pudo aplicar la acción
 failed-to-assign-tag-to-element: Error al asignar la etiqueta al elemento
 failed-to-un-assign-tag-to-element: Error al desasignar la etiqueta del elemento
 workflow-modal.perform-action: Ejecutar acción
+workflow.unsaved-changes.title: Cambios sin guardar
+workflow.unsaved-changes.warn: Hay cambios sin guardar. Se perderán si se aplica esta acción. ¿Aplicarla de todos modos?
+workflow.unsaved-changes.apply-anyway: Aplicar de todos modos
+workflow.unsaved-changes.save-failed: No se pudieron guardar los cambios sin guardar, por lo que la acción no se aplicó.
 workflow-modal.cancel: Cancelar
 workflow-modal.notes: Notas
 workflow-modal.notes-required: Introduzca sus notas
@@ -2302,6 +2306,9 @@ reports.field-filters: Filtros de campo
 reports.editor.delete.content: ¿Realmente desea eliminar el informe personalizado "{{reportName}}"?
 reports.editor.clone.content: Introduzca el nombre del nuevo elemento (a-zA-Z-_)
 reports.editor.add.content: Introduzca el nombre del nuevo elemento. El nombre debe ser alfanumérico y tener al menos 3 caracteres (a-zA-Z0-9_-)
+reports.editor.import.title: Importar informe personalizado
+reports.editor.import.success: Informe personalizado importado correctamente
+reports.editor.import.invalid-file: Seleccione un archivo de exportación JSON
 reports.editor.content.validation.message: El nombre del informe personalizado no es válido
 reports.editor.general-settings.title: Configuración general
 reports.editor.general-settings.name-label: Nombre

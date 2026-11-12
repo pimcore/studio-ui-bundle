@@ -17,19 +17,25 @@ with an 800ms debounce, creating a version with the `autoSave` task type.
 4. If a manual save or publish is triggered while an auto-save is running, the manual operation is queued
    and executes after the auto-save completes.
 
-## Disabling auto-save for data objects
+## Disabling auto-save
 
-Set `auto_save_interval` to `0` to turn off auto-save for data objects:
+Set `auto_save_interval` to `0` to turn off auto-save for data objects, documents, or both:
 
 ```yaml
 pimcore:
     objects:
         auto_save_interval: 0
+    documents:
+        auto_save_interval: 0
 ```
 
 With auto-save disabled, changes stay in the editor and are only persisted when the user saves or publishes.
-Any other value keeps auto-save enabled; Studio still uses the 800ms debounce described above, not the
+Any other value keeps auto-save enabled; Studio still uses the debounce described above, not the
 configured interval.
+
+Some document editables (for example area blocks, or editables configured with `reload: true`) need the
+server to re-render the page after a change. For those, Studio still stores the current state as an
+auto-save version before reloading the editor, even when document auto-save is disabled.
 
 ## Draft restoration
 
