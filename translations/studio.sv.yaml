@@ -3114,7 +3114,7 @@ maintenance-mode.activate.text: 'Alla tjänster, inklusive webbplatsen, går in 
 maintenance-mode.activate.lock-out: 'Om du loggar ut, stänger webbläsaren eller om sessionen går ut blir även du utelåst.'
 maintenance-mode.activate.background-jobs: 'Bakgrundsjobb och meddelandekonsumenter startar inte medan underhållsläget är aktivt.'
 maintenance-mode.activate.ok: Aktivera
-maintenance-mode.indicator.tooltip: 'Underhållsläget är aktivt. Klicka för att stänga av det'
+maintenance-mode.indicator.tooltip: 'Underhållsläget är aktivt. Klicka för att stänga av det.'
 maintenance-mode.deactivate.title: Stäng av underhållsläge?
 maintenance-mode.deactivate.text: 'Alla sessioner får åtkomst igen.'
 maintenance-mode.deactivate.ok: Stäng av

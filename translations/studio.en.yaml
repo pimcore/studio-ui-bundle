@@ -3118,7 +3118,7 @@ maintenance-mode.activate.text: 'All services, including the website, go into ma
 maintenance-mode.activate.lock-out: 'Logging out, closing the browser or an expired session locks you out as well.'
 maintenance-mode.activate.background-jobs: 'Background jobs and message consumers do not start while maintenance mode is active.'
 maintenance-mode.activate.ok: Activate
-maintenance-mode.indicator.tooltip: 'Maintenance mode is active. Click to deactivate it'
+maintenance-mode.indicator.tooltip: 'Maintenance mode is active. Click to deactivate it.'
 maintenance-mode.deactivate.title: Deactivate maintenance mode?
 maintenance-mode.deactivate.text: 'All sessions regain access.'
 maintenance-mode.deactivate.ok: Deactivate

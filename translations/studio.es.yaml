@@ -3114,7 +3114,7 @@ maintenance-mode.activate.text: 'Todos los servicios, incluido el sitio web, ent
 maintenance-mode.activate.lock-out: 'Si cierra sesión, cierra el navegador o su sesión caduca, usted también perderá el acceso.'
 maintenance-mode.activate.background-jobs: 'Los trabajos en segundo plano y los consumidores de mensajes no se inician mientras el modo de mantenimiento esté activo.'
 maintenance-mode.activate.ok: Activar
-maintenance-mode.indicator.tooltip: 'El modo de mantenimiento está activo. Haga clic para desactivarlo'
+maintenance-mode.indicator.tooltip: 'El modo de mantenimiento está activo. Haga clic para desactivarlo.'
 maintenance-mode.deactivate.title: ¿Desactivar el modo de mantenimiento?
 maintenance-mode.deactivate.text: 'Todas las sesiones recuperan el acceso.'
 maintenance-mode.deactivate.ok: Desactivar

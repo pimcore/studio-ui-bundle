@@ -3114,7 +3114,7 @@ maintenance-mode.activate.text: 'Alle tjenester, inkludert nettstedet, settes i 
 maintenance-mode.activate.lock-out: 'Hvis du logger ut, lukker nettleseren eller økten utløper, blir også du stengt ute.'
 maintenance-mode.activate.background-jobs: 'Bakgrunnsjobber og meldingskonsumenter starter ikke mens vedlikeholdsmodus er aktiv.'
 maintenance-mode.activate.ok: Aktiver
-maintenance-mode.indicator.tooltip: 'Vedlikeholdsmodus er aktiv. Klikk for å deaktivere den'
+maintenance-mode.indicator.tooltip: 'Vedlikeholdsmodus er aktiv. Klikk for å deaktivere den.'
 maintenance-mode.deactivate.title: Deaktivere vedlikeholdsmodus?
 maintenance-mode.deactivate.text: 'Alle økter får tilgang igjen.'
 maintenance-mode.deactivate.ok: Deaktiver

@@ -18,8 +18,12 @@ interface IMaintenanceModeContext {
 
 const MaintenanceModeContext = createContext<IMaintenanceModeContext | undefined>(undefined)
 
+export interface MaintenanceModeProviderProps {
+  children: React.ReactNode
+}
+
 // MainNav calls an entry's hook only while it is open, so the entry may only read this context
-export const MaintenanceModeProvider = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
+export const MaintenanceModeProvider = ({ children }: MaintenanceModeProviderProps): React.JSX.Element => {
   const { activateWithConfirmation } = useActivateMaintenanceMode()
   const value = useMemo(() => ({ activateWithConfirmation }), [activateWithConfirmation])
 

@@ -3114,7 +3114,7 @@ maintenance-mode.activate.text: 'Alle Dienste, einschließlich der Website, werd
 maintenance-mode.activate.lock-out: 'Wenn Sie sich abmelden, den Browser schließen oder Ihre Sitzung abläuft, werden auch Sie ausgesperrt.'
 maintenance-mode.activate.background-jobs: 'Hintergrund-Jobs und Message-Consumer starten nicht, solange der Wartungsmodus aktiv ist.'
 maintenance-mode.activate.ok: Aktivieren
-maintenance-mode.indicator.tooltip: 'Der Wartungsmodus ist aktiv. Klicken Sie, um ihn zu deaktivieren'
+maintenance-mode.indicator.tooltip: 'Der Wartungsmodus ist aktiv. Klicken Sie, um ihn zu deaktivieren.'
 maintenance-mode.deactivate.title: Wartungsmodus deaktivieren?
 maintenance-mode.deactivate.text: 'Alle Sitzungen erhalten wieder Zugriff.'
 maintenance-mode.deactivate.ok: Deaktivieren
