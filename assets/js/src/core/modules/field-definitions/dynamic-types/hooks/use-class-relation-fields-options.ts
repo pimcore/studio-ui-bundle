@@ -12,7 +12,7 @@ import { useMemo } from 'react'
 import { useClassGetFieldsByTypeQuery, useClassDefinitionGetTreeQuery, type ClassDefinitionTreeNodeItem, type ClassDefinitionTreeNodeFolder } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { flatMap, isArray, isEmpty } from 'lodash'
 
-const RELATION_FIELD_TYPES = 'manyToManyObjectRelation,manyToOneRelation'
+const RELATION_FIELD_TYPES = 'manyToManyObjectRelation,advancedManyToManyObjectRelation,manyToOneRelation'
 
 type TreeNode = ClassDefinitionTreeNodeItem | ClassDefinitionTreeNodeFolder
 

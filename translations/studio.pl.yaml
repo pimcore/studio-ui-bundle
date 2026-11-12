@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Nie można przywrócić elementu
 error.error_login_token_as_admin_non_admin_user: Tylko administratorzy mogą wygenerować link logowania dla użytkownika administracyjnego
 error.error_login_token_no_user_password: Nie można wygenerować linku logowania dla tego użytkownika, ponieważ nie ustawiono hasła
 error.syntax_error: Błąd składni
+validation.mandatory: "{{field}} jest wymagane"
+validation.regex_mismatch: "{{field}} nie pasuje do wymaganego wzorca {{regex}}"
+validation.max_length: "{{field}} nie może być dłuższe niż {{max}} znaków"
+validation.min_length: "{{field}} musi mieć co najmniej {{min}} znaków"
+validation.not_numeric: "{{field}} musi być liczbą, otrzymano: {{value}}"
+validation.not_integer: "{{field}} musi być liczbą całkowitą, otrzymano: {{value}}"
+validation.not_unsigned: "{{field}} nie może być ujemne, otrzymano: {{value}}"
+validation.min_value: "{{field}} musi wynosić co najmniej {{min}}, otrzymano: {{value}}"
+validation.max_value: "{{field}} może wynosić co najwyżej {{max}}, otrzymano: {{value}}"
+validation.range_start_after_end: "{{field}}: początek nie może być po końcu"
+validation.invalid_email: "{{field}} nie jest prawidłowym adresem e-mail: {{value}}"
+validation.invalid_option: "{{field}} ma nieprawidłową opcję: {{value}}"
+validation.invalid_time: "{{field}} nie jest prawidłową godziną: {{value}}"
+validation.invalid_relation: "{{field}} zawiera nieprawidłową relację"
+validation.max_relations: "{{field}} dopuszcza co najwyżej {{max}} relacji"
+validation.max_items: "{{field}} dopuszcza co najwyżej {{max}} elementów"
+validation.slug_not_unique: "Slug URL {{value}} w polu {{field}} jest już używany"
+validation.slug_invalid: "{{field}} nie jest prawidłowym slugiem URL"
+validation.slug_reserved_characters: "{{field}} zawiera zarezerwowane znaki: {{characters}}"
+validation.unique_constraint: "Naruszono ograniczenie unikalności"
+validation.missing_required_editables: "Brakuje wartości dla wymaganych elementów edytowalnych"
+validation.image_too_large: "Obraz {{filename}} jest za duży (maks. {{max_megapixels}} megapikseli). Zmień jego rozmiar na {{suggested_width}}×{{suggested_height}} pikseli lub mniej"
+validation.and_more: "i {{n}} więcej"
 sidebar.selected_elements: Wybrane elementy
 sidebar.grid_config: Ustawienia siatki
 sidebar.tag_filters: Filtry tagów
@@ -472,6 +495,10 @@ action-could-not-be-applied: Nie udało się zastosować akcji
 failed-to-assign-tag-to-element: Nie udało się przypisać tagu do elementu
 failed-to-un-assign-tag-to-element: Nie udało się usunąć tagu z elementu
 workflow-modal.perform-action: Wykonaj akcję
+workflow.unsaved-changes.title: Niezapisane zmiany
+workflow.unsaved-changes.warn: Istnieją niezapisane zmiany. Zostaną utracone po zastosowaniu tej akcji. Zastosować mimo to?
+workflow.unsaved-changes.apply-anyway: Zastosuj mimo to
+workflow.unsaved-changes.save-failed: Nie udało się zapisać niezapisanych zmian, dlatego akcja nie została zastosowana.
 workflow-modal.cancel: Anuluj
 workflow-modal.notes: Notatki
 workflow-modal.notes-required: Wprowadź swoje notatki
@@ -1295,6 +1322,7 @@ close-tab: Zamknij kartę
 close-others: Zamknij pozostałe
 close-unmodified: Zamknij niezmienione
 close-all: Zamknij wszystko
+use-full-space: Użyj całej przestrzeni
 asset.tree.context-menu.download: Pobierz
 asset.tree.context-menu.download-as-zip: Pobierz jako ZIP
 element-selector.title.single: Wybierz element
@@ -1400,6 +1428,7 @@ system-information.type: Typ
 system-information.class-id: ID klasy
 system-information.class: Klasa
 system-information.file-size: Rozmiar pliku
+system-information.checksum: Suma kontrolna
 system-information.modification-date: Data modyfikacji
 system-information.creation-date: Data utworzenia
 system-information.user-modification: Użytkownik modyfikacji
@@ -1450,6 +1479,7 @@ relations.create-object.name: Nazwa
 relations.create-object.parent: Nadrzędny
 relations.create-object.parent.placeholder: Wybierz element nadrzędny
 relations.create-object.class: Klasa
+relations.visible-fields.loading-progress: 'Ładowanie widocznych pól… ({{loaded}} z {{total}})'
 relation: relacja
 items-limit-reached: "Osiągnięto maksymalną liczbę elementów ({{maxItems}})."
 asset-upload-type-not-allowed: Typ przesłanego assetu nie jest dozwolony dla tego pola.
@@ -2256,6 +2286,7 @@ user-menu.notification.modal.form.validation.provide-title: Podaj tytuł
 user-menu.notification.modal.form.validation.provide-message: Podaj wiadomość
 reports.reports-title: Raporty
 reports.select-report-name: Wybierz nazwę raportu
+reports.report-load-failed: Nie udało się załadować raportu.
 reports.select-report: Wybierz raport
 reports.export: Eksportuj
 reports.csv-export: Eksportuj CSV
@@ -2283,6 +2314,7 @@ reports.editor.general-settings.report-class-label: Klasa raportu
 reports.editor.general-settings.group-icon-class-label: Klasa ikony grupy
 reports.editor.general-settings.shortcut-menu-label: Utwórz skrót w menu
 reports.editor.source-definition.title: Definicja źródła
+reports.editor.source-definition.not-available: Definicja źródła tego raportu nie jest dostępna. Pakiet, który ją dostarcza, może nie być zainstalowany.
 reports.editor.source-definition.no-content: Brak dostępnych pól. Zacznij od dodania pola.
 reports.editor.source-definition.select-source-definition: Wybierz definicję źródła
 reports.editor.source-definition.sql-select-field: SELECT (np. a,b,c)*
@@ -3050,6 +3082,7 @@ translations.merger.title: "Scalanie tłumaczeń (domena: {{domain}})"
 translations.merger.column.language: Język
 translations.merger.items: elementy
 select.clear-selection: Wyczyść wybór
+select.select-all: Zaznacz wszystko
 asset.folder.preview.image-display: Wyświetlanie obrazów
 asset.folder.preview.image-display.small: Małe
 asset.folder.preview.image-display.large: Duże
@@ -3072,6 +3105,10 @@ saved-search.delete.success: Zapisane wyszukiwanie usunięte
 saved-search.shared-modified.info: Wprowadzono zmiany w oryginalnej konfiguracji. Ponieważ jej właścicielem jest ktoś inny, możesz zapisać ją jako nowe wyszukiwanie.
 saved-search.menu-shortcut-group: Grupa menu
 skip-to-content: Przejdź do treści
+preview-mode.switch: Tryb podglądu
+preview-mode.preview-item: Element podglądu
+preview-mode.no-item: Brak dostępnego elementu podglądu
+preview-mode.preview: Podgląd
 tag-configuration.move-under: 'Przenieś pod'
 tag-configuration.move-search-placeholder: 'Wyszukaj tag'
 tree.actions.edit-tag: Edytuj

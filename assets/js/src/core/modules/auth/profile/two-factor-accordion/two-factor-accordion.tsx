@@ -31,6 +31,8 @@ export const TwoFactorAccordion = (): React.JSX.Element => {
   const twoFactor = user.twoFactorAuthentication
   const isActive = twoFactor.active
   const isRequired = twoFactor.required
+  // As in the classic admin, no status while a stored key is not required: the login does not ask for it then
+  const hasStatus = isRequired || !isActive
 
   const handleConfirmSetup = async (code: string): Promise<void> => {
     await confirmSetup(code)
@@ -68,11 +70,13 @@ export const TwoFactorAccordion = (): React.JSX.Element => {
                 gap={ 'small' }
                 vertical
               >
-                <Text>
-                  {t(isActive
-                    ? 'user-profile.two-factor-authentication.status.active'
-                    : 'user-profile.two-factor-authentication.status.inactive')}
-                </Text>
+                {hasStatus && (
+                  <Text>
+                    {t(isActive
+                      ? 'user-profile.two-factor-authentication.status.active'
+                      : 'user-profile.two-factor-authentication.status.inactive')}
+                  </Text>
+                )}
 
                 {isRequired && (
                   <Text type="secondary">{t('user-profile.two-factor-authentication.required-hint')}</Text>

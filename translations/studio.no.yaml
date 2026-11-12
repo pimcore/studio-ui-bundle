@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet 
 error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
 error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
 error.syntax_error: Syntaksfeil
+validation.mandatory: "{{field}} er obligatorisk"
+validation.regex_mismatch: "{{field}} samsvarer ikke med det påkrevde mønsteret {{regex}}"
+validation.max_length: "{{field}} kan ikke være lengre enn {{max}} tegn"
+validation.min_length: "{{field}} må være minst {{min}} tegn langt"
+validation.not_numeric: "{{field}} må være et tall, fikk: {{value}}"
+validation.not_integer: "{{field}} må være et heltall, fikk: {{value}}"
+validation.not_unsigned: "{{field}} kan ikke være negativt, fikk: {{value}}"
+validation.min_value: "{{field}} må være minst {{min}}, fikk: {{value}}"
+validation.max_value: "{{field}} kan være høyst {{max}}, fikk: {{value}}"
+validation.range_start_after_end: "{{field}}: starten kan ikke være etter slutten"
+validation.invalid_email: "{{field}} er ikke en gyldig e-postadresse: {{value}}"
+validation.invalid_option: "{{field}} har et ugyldig alternativ: {{value}}"
+validation.invalid_time: "{{field}} er ikke et gyldig klokkeslett: {{value}}"
+validation.invalid_relation: "{{field}} inneholder en ugyldig relasjon"
+validation.max_relations: "{{field}} tillater høyst {{max}} relasjoner"
+validation.max_items: "{{field}} tillater høyst {{max}} elementer"
+validation.slug_not_unique: "URL-sluggen {{value}} i {{field}} er allerede i bruk"
+validation.slug_invalid: "{{field}} er ikke en gyldig URL-slug"
+validation.slug_reserved_characters: "{{field}} inneholder reserverte tegn: {{characters}}"
+validation.unique_constraint: "En unikhetsbegrensning brytes"
+validation.missing_required_editables: "Verdier for obligatoriske redigerbare elementer mangler"
+validation.image_too_large: "Bildet {{filename}} er for stort (maks. {{max_megapixels}} megapiksler). Endre størrelsen til {{suggested_width}}×{{suggested_height}} piksler eller mindre"
+validation.and_more: "og {{n}} til"
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
 sidebar.tag_filters: Taggfiltre
@@ -472,6 +495,10 @@ action-could-not-be-applied: Handling kunne ikke utføres
 failed-to-assign-tag-to-element: Kunne ikke tilordne tagg til element
 failed-to-un-assign-tag-to-element: Kunne ikke fjerne tagg fra element
 workflow-modal.perform-action: Utfør handling
+workflow.unsaved-changes.title: Ulagrede endringer
+workflow.unsaved-changes.warn: Det finnes ulagrede endringer. De går tapt når handlingen utføres. Vil du utføre den likevel?
+workflow.unsaved-changes.apply-anyway: Utfør likevel
+workflow.unsaved-changes.save-failed: De ulagrede endringene kunne ikke lagres, så handlingen ble ikke utført.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Notater
 workflow-modal.notes-required: Vennligst skriv inn notatene dine
@@ -1295,6 +1322,7 @@ close-tab: Lukk fane
 close-others: Lukk andre
 close-unmodified: Lukk uendrede
 close-all: Lukk alle
+use-full-space: Bruk hele området
 asset.tree.context-menu.download: Last ned
 asset.tree.context-menu.download-as-zip: Last ned som ZIP
 element-selector.title.single: Velg element
@@ -1400,6 +1428,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Filstørrelse
+system-information.checksum: Kontrollsum
 system-information.modification-date: Endringsdato
 system-information.creation-date: Opprettelsesdato
 system-information.user-modification: Endret av bruker
@@ -1450,6 +1479,7 @@ relations.create-object.name: Navn
 relations.create-object.parent: Overordnet
 relations.create-object.parent.placeholder: Velg et overordnet element
 relations.create-object.class: Klasse
+relations.visible-fields.loading-progress: 'Laster synlige felt… ({{loaded}} av {{total}})'
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
 asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
@@ -2256,6 +2286,7 @@ user-menu.notification.modal.form.validation.provide-title: Vennligst oppgi en t
 user-menu.notification.modal.form.validation.provide-message: Vennligst oppgi en melding
 reports.reports-title: Rapporter
 reports.select-report-name: Velg rapportens navn
+reports.report-load-failed: Rapporten kunne ikke lastes.
 reports.select-report: Velg rapport
 reports.export: Eksporter
 reports.csv-export: CSV-eksport
@@ -2283,6 +2314,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Gruppeikon-klasse
 reports.editor.general-settings.shortcut-menu-label: Opprett snarvei i menyen
 reports.editor.source-definition.title: Kildedefinisjon
+reports.editor.source-definition.not-available: Kildedefinisionen for denne rapporten er ikke tilgjengelig. Bundlen som gir den, er kanskje ikke installert.
 reports.editor.source-definition.no-content: Ingen tilgjengelige felt ennå. Begynn med å legge til et felt.
 reports.editor.source-definition.select-source-definition: Velg en kildedefinisjon
 reports.editor.source-definition.sql-select-field: SELECT (f.eks. a,b,c)*
@@ -3050,6 +3082,7 @@ translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
 select.clear-selection: Fjern valg
+select.select-all: Velg alle
 asset.folder.preview.image-display: Bildevisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
@@ -3072,6 +3105,10 @@ saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
 skip-to-content: Hopp til innhold
+preview-mode.switch: Forhåndsvisningsmodus
+preview-mode.preview-item: Forhåndsvisningselement
+preview-mode.no-item: Ingen forhåndsvisningselement tilgjengelig
+preview-mode.preview: Forhåndsvisning
 tag-configuration.move-under: 'Flytt under'
 tag-configuration.move-search-placeholder: 'Søk etter en tagg'
 tree.actions.edit-tag: Rediger

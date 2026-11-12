@@ -80,13 +80,14 @@ export const TreeContainer = (): React.JSX.Element => {
       renderToolbar={ (
         <Toolbar justify="space-between">
           <IconButton
+            aria-label={ t('toolbar.reload') }
             data-testid="perspective-tree-refresh-button"
             icon={ { value: 'refresh' } }
             loading={ isLoading || isFetching }
             onClick={ async () => {
               await refetch()
             } }
-            title={ t('refresh') }
+            tooltip={ { title: t('toolbar.reload') } }
           />
 
           <IconTextButton

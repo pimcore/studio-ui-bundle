@@ -21,11 +21,15 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
+import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 import { useClassificationStore } from './provider'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
 import { useStyles } from './classification-store-item.styles'
+import { getKeyCombinedFieldNameParent } from './utils/combined-field-name'
 
 export interface ClassificationStoreItemProps {
+  /** Field name of the classification store the group belongs to. */
+  classificationStoreName: string
   groupLayout?: ClassificationStoreGroupLayout2
   currentLayoutData: ClassificationStoreGroupLayout2[]
   updateCurrentLayoutData: (value: ClassificationStoreGroupLayout2[]) => void
@@ -41,6 +45,7 @@ export interface ClassificationStoreItemProps {
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
   const {
+    classificationStoreName,
     groupLayout,
     currentLayoutData,
     updateCurrentLayoutData,
@@ -88,6 +93,11 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     return keys.filter((key) => !hiddenKeyIds.has(key.id))
   }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, operations, isNewGroup])
 
+  const combinedFieldNameParent = useMemo(
+    () => getKeyCombinedFieldNameParent(classificationStoreName, groupLayout?.id ?? ''),
+    [classificationStoreName, groupLayout?.id]
+  )
+
   const handleClose: (e: React.MouseEvent<HTMLButtonElement>) => void = (e) => {
     e.stopPropagation()
 
@@ -125,17 +135,19 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         theme='border-highlight'
         title={ groupLayout?.name }
       >
-        <Panel>
-          {visibleKeys.map((item) => (
-            <ObjectComponent
-              key={ item.id }
-              { ...item.definition }
-              name={ item.id }
-              technicalName={ item.name }
-            />
-          ))}
-        </Panel>
+        <CombinedFieldNameProvider combinedFieldNameParent={ combinedFieldNameParent }>
+          <Panel>
+            {visibleKeys.map((item) => (
+              <ObjectComponent
+                key={ item.id }
+                { ...item.definition }
+                name={ item.id }
+                technicalName={ item.name }
+              />
+            ))}
+          </Panel>
+        </CombinedFieldNameProvider>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, disallowDelete])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, disallowDelete, combinedFieldNameParent])
 }

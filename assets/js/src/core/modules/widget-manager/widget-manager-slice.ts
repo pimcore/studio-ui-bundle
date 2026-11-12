@@ -19,6 +19,7 @@ import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
 import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
 import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
+import { expandMainWidgetTabset } from './utils/expand-main-widget-tabset'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -52,6 +53,19 @@ export const initialState: WidgetManagerState = {
   innerModel: getInitialInnerModelJson(),
   mainWidgetContext: null,
   restored: false
+}
+
+const openOuterWidget = (state: WidgetManagerState, tab: WidgetManagerTabConfig, toNodeId: string): void => {
+  const model = Model.fromJson(state.outerModel)
+  const node = isUndefined(tab.id) ? undefined : model.getNodeById(tab.id)
+
+  if (!isUndefined(node)) {
+    model.doAction(Actions.selectTab(node.getId()))
+  } else {
+    model.doAction(Actions.addNode(tab, toNodeId, DockLocation.CENTER, -1, true))
+  }
+
+  state.outerModel = { ...model.toJson() }
 }
 
 const slice = createSlice({
@@ -102,6 +116,15 @@ const slice = createSlice({
         state.outerModel = { ...model.toJson() }
       } else {
         state.innerModel = { ...model.toJson() }
+        state.mainWidgetContext = resolveMainWidgetContext(model)
+      }
+    },
+
+    expandMainWidget: (state, action: PayloadAction<string>) => {
+      const model = Model.fromJson(state.innerModel)
+
+      if (expandMainWidgetTabset(model, action.payload)) {
+        state.innerModel = restoreCollapsedRows(model.toJson())
         state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     },
@@ -160,78 +183,15 @@ const slice = createSlice({
     },
 
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.outerModel)
-      let node: Node | undefined
-
-      if (action.payload.id !== undefined) {
-        node = model.getNodeById(action.payload.id)
-      }
-
-      if (node !== undefined) {
-        model.doAction(Actions.selectTab(node.getId()))
-      } else {
-        model.doAction(
-          Actions.addNode(
-            action.payload,
-            'bottom_tabset',
-            DockLocation.CENTER,
-            -1,
-            true
-          )
-        )
-      }
-
-      state.outerModel = { ...model.toJson() }
+      openOuterWidget(state, action.payload, 'bottom_tabset')
     },
 
     openLeftWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.outerModel)
-      let node: Node | undefined
-
-      if (action.payload.id !== undefined) {
-        node = model.getNodeById(action.payload.id)
-      }
-
-      if (node !== undefined) {
-        model.doAction(Actions.selectTab(node.getId()))
-      } else {
-        model.doAction(
-          Actions.addNode(
-            action.payload,
-            'border_left',
-            DockLocation.CENTER,
-            -1,
-            true
-          )
-        )
-      }
-
-      state.outerModel = { ...model.toJson() }
+      openOuterWidget(state, action.payload, 'border_left')
     },
 
     openRightWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.outerModel)
-      let node: Node | undefined
-
-      if (action.payload.id !== undefined) {
-        node = model.getNodeById(action.payload.id)
-      }
-
-      if (node !== undefined) {
-        model.doAction(Actions.selectTab(node.getId()))
-      } else {
-        model.doAction(
-          Actions.addNode(
-            action.payload,
-            'border_right',
-            DockLocation.CENTER,
-            -1,
-            true
-          )
-        )
-      }
-
-      state.outerModel = { ...model.toJson() }
+      openOuterWidget(state, action.payload, 'border_right')
     },
 
     closeWidget: (state, action: PayloadAction<string>) => {
@@ -295,5 +255,5 @@ injectSliceWithState({
   reducer: persistedReducer
 })
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, migrateWidget, rebindWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, expandMainWidget, openMainWidget, updateWidget, migrateWidget, rebindWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
 export const { selectInnerModel, selectOuterModel, selectMainWidgetContext, selectWidgetManagerRestored } = slice.selectors

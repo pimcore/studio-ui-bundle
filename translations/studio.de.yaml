@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papie
 error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
 error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
 error.syntax_error: Syntaxfehler
+validation.mandatory: "{{field}} ist ein Pflichtfeld"
+validation.regex_mismatch: "{{field}} entspricht nicht dem erforderlichen Muster {{regex}}"
+validation.max_length: "{{field}} darf nicht länger als {{max}} Zeichen sein"
+validation.min_length: "{{field}} muss mindestens {{min}} Zeichen lang sein"
+validation.not_numeric: "{{field}} muss eine Zahl sein, erhalten: {{value}}"
+validation.not_integer: "{{field}} muss eine ganze Zahl sein, erhalten: {{value}}"
+validation.not_unsigned: "{{field}} darf nicht negativ sein, erhalten: {{value}}"
+validation.min_value: "{{field}} muss mindestens {{min}} sein, erhalten: {{value}}"
+validation.max_value: "{{field}} darf höchstens {{max}} sein, erhalten: {{value}}"
+validation.range_start_after_end: "{{field}}: Der Beginn darf nicht nach dem Ende liegen"
+validation.invalid_email: "{{field}} ist keine gültige E-Mail-Adresse: {{value}}"
+validation.invalid_option: "{{field}} hat eine ungültige Option: {{value}}"
+validation.invalid_time: "{{field}} ist keine gültige Uhrzeit: {{value}}"
+validation.invalid_relation: "{{field}} enthält eine ungültige Relation"
+validation.max_relations: "{{field}} erlaubt höchstens {{max}} Relationen"
+validation.max_items: "{{field}} erlaubt höchstens {{max}} Einträge"
+validation.slug_not_unique: "Der URL-Slug {{value}} in {{field}} wird bereits verwendet"
+validation.slug_invalid: "{{field}} ist kein gültiger URL-Slug"
+validation.slug_reserved_characters: "{{field}} enthält reservierte Zeichen: {{characters}}"
+validation.unique_constraint: "Eine Eindeutigkeitsbedingung wird verletzt"
+validation.missing_required_editables: "Werte für Pflicht-Editables fehlen"
+validation.image_too_large: "Das Bild {{filename}} ist zu groß (max. {{max_megapixels}} Megapixel). Verkleinern Sie es auf {{suggested_width}}×{{suggested_height}} Pixel oder weniger"
+validation.and_more: "und {{n}} weitere"
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter
@@ -472,6 +495,10 @@ action-could-not-be-applied: Aktion konnte nicht angewendet werden
 failed-to-assign-tag-to-element: Tag konnte dem Element nicht zugewiesen werden
 failed-to-un-assign-tag-to-element: Tag konnte vom Element nicht entfernt werden
 workflow-modal.perform-action: Aktion ausführen
+workflow.unsaved-changes.title: Ungespeicherte Änderungen
+workflow.unsaved-changes.warn: Es gibt ungespeicherte Änderungen. Sie gehen verloren, wenn diese Aktion angewendet wird. Trotzdem anwenden?
+workflow.unsaved-changes.apply-anyway: Trotzdem anwenden
+workflow.unsaved-changes.save-failed: Die ungespeicherten Änderungen konnten nicht gespeichert werden, daher wurde die Aktion nicht angewendet.
 workflow-modal.cancel: Abbrechen
 workflow-modal.notes: Notizen
 workflow-modal.notes-required: Bitte geben Sie Ihre Notizen ein
@@ -1295,6 +1322,7 @@ close-tab: Tab schließen
 close-others: Andere schließen
 close-unmodified: Unveränderte schließen
 close-all: Alle schließen
+use-full-space: Ganzen Bereich nutzen
 asset.tree.context-menu.download: Herunterladen
 asset.tree.context-menu.download-as-zip: Als ZIP herunterladen
 element-selector.title.single: Element auswählen
@@ -1400,6 +1428,7 @@ system-information.type: Typ
 system-information.class-id: Klassen-ID
 system-information.class: Klasse
 system-information.file-size: Dateigröße
+system-information.checksum: Prüfsumme
 system-information.modification-date: Änderungsdatum
 system-information.creation-date: Erstellungsdatum
 system-information.user-modification: Benutzer Änderung
@@ -1450,6 +1479,7 @@ relations.create-object.name: Name
 relations.create-object.parent: Übergeordnetes Element
 relations.create-object.parent.placeholder: Übergeordnetes Element wählen
 relations.create-object.class: Klasse
+relations.visible-fields.loading-progress: 'Sichtbare Felder werden geladen… ({{loaded}} von {{total}})'
 relation: Relation
 items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
 asset-upload-type-not-allowed: Der Typ des hochgeladenen Assets ist für dieses Feld nicht zulässig.
@@ -2256,6 +2286,7 @@ user-menu.notification.modal.form.validation.provide-title: Bitte geben Sie eine
 user-menu.notification.modal.form.validation.provide-message: Bitte geben Sie eine Nachricht an
 reports.reports-title: Berichte
 reports.select-report-name: Wählen Sie den Namen des Berichts
+reports.report-load-failed: Der Report konnte nicht geladen werden.
 reports.select-report: Bericht auswählen
 reports.export: Export
 reports.csv-export: CSV-Export
@@ -2283,6 +2314,7 @@ reports.editor.general-settings.report-class-label: Bericht Klasse
 reports.editor.general-settings.group-icon-class-label: Gruppen-Icon Klasse
 reports.editor.general-settings.shortcut-menu-label: Verknüpfung im Menü erstellen
 reports.editor.source-definition.title: Quelldefinition
+reports.editor.source-definition.not-available: Die Quelldefinition dieses Berichts ist nicht verfügbar. Das Bundle, das diese bereitstellt, ist möglicherweise nicht installiert.
 reports.editor.source-definition.no-content: Noch keine verfügbaren Felder. Beginnen Sie mit dem Hinzufügen eines Feldes.
 reports.editor.source-definition.select-source-definition: Quelldefinition auswählen
 reports.editor.source-definition.sql-select-field: SELECT (z.B. a,b,c)*
@@ -3050,6 +3082,7 @@ translations.merger.title: "Übersetzungen zusammenführen (Domain: {{domain}})"
 translations.merger.column.language: Sprache
 translations.merger.items: Einträge
 select.clear-selection: Auswahl löschen
+select.select-all: Alle auswählen
 asset.folder.preview.image-display: Bildanzeige
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groß
@@ -3072,6 +3105,10 @@ saved-search.delete.success: Gespeicherte Suche gelöscht
 saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
 saved-search.menu-shortcut-group: Menügruppe
 skip-to-content: Zum Inhalt springen
+preview-mode.switch: Vorschaumodus
+preview-mode.preview-item: Vorschauelement
+preview-mode.no-item: Kein Vorschauelement verfügbar
+preview-mode.preview: Vorschau
 tag-configuration.move-under: 'Verschieben unter'
 tag-configuration.move-search-placeholder: 'Nach einem Tag suchen'
 tree.actions.edit-tag: Bearbeiten

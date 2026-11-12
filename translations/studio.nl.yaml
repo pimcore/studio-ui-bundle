@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan element niet herstellen uit 
 error.error_login_token_as_admin_non_admin_user: Alleen administratieve gebruikers kunnen een inloglink voor een administratieve gebruiker genereren
 error.error_login_token_no_user_password: Er kan geen inloglink voor deze gebruiker worden gegenereerd omdat er geen wachtwoord is ingesteld
 error.syntax_error: Syntaxisfout
+validation.mandatory: "{{field}} is verplicht"
+validation.regex_mismatch: "{{field}} komt niet overeen met het vereiste patroon {{regex}}"
+validation.max_length: "{{field}} mag niet langer zijn dan {{max}} tekens"
+validation.min_length: "{{field}} moet minimaal {{min}} tekens lang zijn"
+validation.not_numeric: "{{field}} moet een getal zijn, ontvangen: {{value}}"
+validation.not_integer: "{{field}} moet een geheel getal zijn, ontvangen: {{value}}"
+validation.not_unsigned: "{{field}} mag niet negatief zijn, ontvangen: {{value}}"
+validation.min_value: "{{field}} moet minimaal {{min}} zijn, ontvangen: {{value}}"
+validation.max_value: "{{field}} mag maximaal {{max}} zijn, ontvangen: {{value}}"
+validation.range_start_after_end: "{{field}}: het begin mag niet na het einde liggen"
+validation.invalid_email: "{{field}} is geen geldig e-mailadres: {{value}}"
+validation.invalid_option: "{{field}} heeft een ongeldige optie: {{value}}"
+validation.invalid_time: "{{field}} is geen geldige tijd: {{value}}"
+validation.invalid_relation: "{{field}} bevat een ongeldige relatie"
+validation.max_relations: "{{field}} staat maximaal {{max}} relaties toe"
+validation.max_items: "{{field}} staat maximaal {{max}} items toe"
+validation.slug_not_unique: "De URL-slug {{value}} in {{field}} is al in gebruik"
+validation.slug_invalid: "{{field}} is geen geldige URL-slug"
+validation.slug_reserved_characters: "{{field}} bevat gereserveerde tekens: {{characters}}"
+validation.unique_constraint: "Een uniciteitsbeperking wordt geschonden"
+validation.missing_required_editables: "Waarden voor verplichte editables ontbreken"
+validation.image_too_large: "Afbeelding {{filename}} is te groot (max. {{max_megapixels}} megapixels). Verklein haar tot {{suggested_width}}×{{suggested_height}} pixels of minder"
+validation.and_more: "en nog {{n}}"
 sidebar.selected_elements: Geselecteerde elementen
 sidebar.grid_config: Rasterinstelling
 sidebar.tag_filters: Tagfilters
@@ -472,6 +495,10 @@ action-could-not-be-applied: Actie kon niet worden toegepast
 failed-to-assign-tag-to-element: Tag aan element toewijzen mislukt
 failed-to-un-assign-tag-to-element: Tag van element verwijderen mislukt
 workflow-modal.perform-action: Actie uitvoeren
+workflow.unsaved-changes.title: Niet-opgeslagen wijzigingen
+workflow.unsaved-changes.warn: Er zijn niet-opgeslagen wijzigingen. Deze gaan verloren als deze actie wordt toegepast. Toch toepassen?
+workflow.unsaved-changes.apply-anyway: Toch toepassen
+workflow.unsaved-changes.save-failed: De niet-opgeslagen wijzigingen konden niet worden opgeslagen, dus de actie is niet toegepast.
 workflow-modal.cancel: Annuleren
 workflow-modal.notes: Notities
 workflow-modal.notes-required: Voer je notities in
@@ -1295,6 +1322,7 @@ close-tab: Tabblad sluiten
 close-others: Overige sluiten
 close-unmodified: Ongewijzigde sluiten
 close-all: Alles sluiten
+use-full-space: Volledige ruimte gebruiken
 asset.tree.context-menu.download: Downloaden
 asset.tree.context-menu.download-as-zip: Downloaden als ZIP
 element-selector.title.single: Element selecteren
@@ -1400,6 +1428,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Bestandsgrootte
+system-information.checksum: Checksum
 system-information.modification-date: Wijzigingsdatum
 system-information.creation-date: Aanmaakdatum
 system-information.user-modification: Gebruiker wijziging
@@ -1450,6 +1479,7 @@ relations.create-object.name: Naam
 relations.create-object.parent: Bovenliggend
 relations.create-object.parent.placeholder: Selecteer een bovenliggend element
 relations.create-object.class: Klasse
+relations.visible-fields.loading-progress: 'Zichtbare velden laden… ({{loaded}} van {{total}})'
 relation: relatie
 items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
 asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
@@ -2256,6 +2286,7 @@ user-menu.notification.modal.form.validation.provide-title: Geef een titel op
 user-menu.notification.modal.form.validation.provide-message: Geef een bericht op
 reports.reports-title: Rapporten
 reports.select-report-name: Selecteer de naam van het rapport
+reports.report-load-failed: Het rapport kon niet worden geladen.
 reports.select-report: Rapport selecteren
 reports.export: Exporteren
 reports.csv-export: CSV exporteren
@@ -2283,6 +2314,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Groepspictogramklasse
 reports.editor.general-settings.shortcut-menu-label: Snelkoppeling in menu aanmaken
 reports.editor.source-definition.title: Brondefinitie
+reports.editor.source-definition.not-available: De brondefinitie van dit rapport is niet beschikbaar. De bundle die deze levert, is mogelijk niet geïnstalleerd.
 reports.editor.source-definition.no-content: Nog geen velden beschikbaar. Begin met het toevoegen van een veld.
 reports.editor.source-definition.select-source-definition: Selecteer een brondefinitie
 reports.editor.source-definition.sql-select-field: SELECT (bijv. a,b,c)*
@@ -3050,6 +3082,7 @@ translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
 translations.merger.column.language: Taal
 translations.merger.items: items
 select.clear-selection: Selectie wissen
+select.select-all: Alles selecteren
 asset.folder.preview.image-display: Afbeeldingsweergave
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groot
@@ -3072,6 +3105,10 @@ saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
 saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
 saved-search.menu-shortcut-group: Menugroep
 skip-to-content: Naar de inhoud
+preview-mode.switch: Voorbeeldmodus
+preview-mode.preview-item: Voorbeelditem
+preview-mode.no-item: Geen voorbeelditem beschikbaar
+preview-mode.preview: Voorbeeld
 tag-configuration.move-under: 'Verplaatsen onder'
 tag-configuration.move-search-placeholder: 'Zoek een tag'
 tree.actions.edit-tag: Bewerken

@@ -99,6 +99,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
         <Toolbar justify="space-between">
           <div>
             <IconButton
+              aria-label={ t('toolbar.reload') }
               data-testid="perspective-form-refresh-button"
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
@@ -106,7 +107,7 @@ export const PerspectiveForm = ({ perspective }: PerspectiveFormProps): React.JS
                 form.resetFields()
                 form.setFieldsValue(initialValues)
               } }
-              title={ t('refresh') }
+              tooltip={ { title: t('toolbar.reload') } }
             />
 
             <Tooltip

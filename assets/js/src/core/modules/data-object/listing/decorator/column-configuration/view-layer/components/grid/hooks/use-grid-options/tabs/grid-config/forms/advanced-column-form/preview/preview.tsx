@@ -12,7 +12,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import React, { useMemo } from 'react'
-import { Box } from '@Pimcore/components/box/box'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { PreviewLoader } from './preview-loader'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
@@ -31,21 +30,18 @@ export const Preview = (props: PreviewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return useMemo(() => (
-    <Box padding={ { y: 'small', x: 'small' } } >
-      <Flex
-        align="center"
-        gap={ 'small' }
-      >
-        <Text style={ { wordBreak: 'keep-all' } }>{t('grid.advanced-column.preview')}</Text>
-
-        {hasFirstItem
-          ? (
-            <PreviewLoader column={ props.column } />
-            )
-          : (
-            <Text className={ styles.noPreviewText }>{t('grid.advanced-column.no-preview')}</Text>
-            )}
-      </Flex>
-    </Box>
+    // the "Preview" label and the divider come from the shared ColumnPreview row
+    <Flex
+      align="center"
+      gap={ 'small' }
+    >
+      {hasFirstItem
+        ? (
+          <PreviewLoader column={ props.column } />
+          )
+        : (
+          <Text className={ styles.noPreviewText }>{t('grid.advanced-column.no-preview')}</Text>
+          )}
+    </Flex>
   ), [bufferedColumn])
 }

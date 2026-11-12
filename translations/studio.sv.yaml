@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet 
 error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
 error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 error.syntax_error: Syntaxfel
+validation.mandatory: "{{field}} är obligatoriskt"
+validation.regex_mismatch: "{{field}} matchar inte det obligatoriska mönstret {{regex}}"
+validation.max_length: "{{field}} får inte vara längre än {{max}} tecken"
+validation.min_length: "{{field}} måste vara minst {{min}} tecken långt"
+validation.not_numeric: "{{field}} måste vara ett tal, fick: {{value}}"
+validation.not_integer: "{{field}} måste vara ett heltal, fick: {{value}}"
+validation.not_unsigned: "{{field}} får inte vara negativt, fick: {{value}}"
+validation.min_value: "{{field}} måste vara minst {{min}}, fick: {{value}}"
+validation.max_value: "{{field}} får vara högst {{max}}, fick: {{value}}"
+validation.range_start_after_end: "{{field}}: början får inte ligga efter slutet"
+validation.invalid_email: "{{field}} är inte en giltig e-postadress: {{value}}"
+validation.invalid_option: "{{field}} har ett ogiltigt alternativ: {{value}}"
+validation.invalid_time: "{{field}} är inte en giltig tid: {{value}}"
+validation.invalid_relation: "{{field}} innehåller en ogiltig relation"
+validation.max_relations: "{{field}} tillåter högst {{max}} relationer"
+validation.max_items: "{{field}} tillåter högst {{max}} objekt"
+validation.slug_not_unique: "URL-slugen {{value}} i {{field}} används redan"
+validation.slug_invalid: "{{field}} är inte en giltig URL-slug"
+validation.slug_reserved_characters: "{{field}} innehåller reserverade tecken: {{characters}}"
+validation.unique_constraint: "En unikhetsbegränsning bryts"
+validation.missing_required_editables: "Värden för obligatoriska redigerbara element saknas"
+validation.image_too_large: "Bilden {{filename}} är för stor (max. {{max_megapixels}} megapixlar). Ändra storlek till {{suggested_width}}×{{suggested_height}} pixlar eller mindre"
+validation.and_more: "och {{n}} till"
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -472,6 +495,10 @@ action-could-not-be-applied: Åtgärden kunde inte tillämpas
 failed-to-assign-tag-to-element: Kunde inte tilldela tagg till element
 failed-to-un-assign-tag-to-element: Kunde inte ta bort tagg från element
 workflow-modal.perform-action: Utför åtgärd
+workflow.unsaved-changes.title: Osparade ändringar
+workflow.unsaved-changes.warn: Det finns osparade ändringar. De går förlorade när åtgärden tillämpas. Vill du tillämpa den ändå?
+workflow.unsaved-changes.apply-anyway: Tillämpa ändå
+workflow.unsaved-changes.save-failed: De osparade ändringarna kunde inte sparas, så åtgärden tillämpades inte.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Anteckningar
 workflow-modal.notes-required: Ange dina anteckningar
@@ -1295,6 +1322,7 @@ close-tab: Stäng flik
 close-others: Stäng andra
 close-unmodified: Stäng oförändrade
 close-all: Stäng alla
+use-full-space: Använd hela ytan
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
 element-selector.title.single: Välj ett element
@@ -1400,6 +1428,7 @@ system-information.type: Typ
 system-information.class-id: Klass-ID
 system-information.class: Klass
 system-information.file-size: Filstorlek
+system-information.checksum: Kontrollsumma
 system-information.modification-date: Ändringsdatum
 system-information.creation-date: Skapandedatum
 system-information.user-modification: Ändrad av
@@ -1450,6 +1479,7 @@ relations.create-object.name: Namn
 relations.create-object.parent: Överordnad
 relations.create-object.parent.placeholder: Välj en överordnad
 relations.create-object.class: Klass
+relations.visible-fields.loading-progress: 'Läser in synliga fält… ({{loaded}} av {{total}})'
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
 asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
@@ -2256,6 +2286,7 @@ user-menu.notification.modal.form.validation.provide-title: Ange en titel
 user-menu.notification.modal.form.validation.provide-message: Ange ett meddelande
 reports.reports-title: Rapporter
 reports.select-report-name: Välj rapportens namn
+reports.report-load-failed: Rapporten kunde inte laddas.
 reports.select-report: Välj rapport
 reports.export: Exportera
 reports.csv-export: CSV-export
@@ -2283,6 +2314,7 @@ reports.editor.general-settings.report-class-label: Rapportklass
 reports.editor.general-settings.group-icon-class-label: Grupp Icon Class
 reports.editor.general-settings.shortcut-menu-label: Skapa genväg i menyn
 reports.editor.source-definition.title: Källdefinition
+reports.editor.source-definition.not-available: Källdefinitionen för denna rapport är inte tillgänglig. Bundlet som tillhandahåller den kanske inte är installerat.
 reports.editor.source-definition.no-content: Inga tillgängliga fält ännu. Börja med att lägga till ett fält.
 reports.editor.source-definition.select-source-definition: Välj en källdefinition
 reports.editor.source-definition.sql-select-field: SELECT (t.ex. a,b,c)*
@@ -3050,6 +3082,7 @@ translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
 select.clear-selection: Rensa val
+select.select-all: Välj alla
 asset.folder.preview.image-display: Bildvisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
@@ -3072,6 +3105,10 @@ saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
 skip-to-content: Hoppa till innehållet
+preview-mode.switch: Förhandsvisningsläge
+preview-mode.preview-item: Förhandsvisningsobjekt
+preview-mode.no-item: Inget förhandsvisningsobjekt tillgängligt
+preview-mode.preview: Förhandsgranskning
 tag-configuration.move-under: 'Flytta under'
 tag-configuration.move-search-placeholder: 'Sök efter en tagg'
 tree.actions.edit-tag: Redigera

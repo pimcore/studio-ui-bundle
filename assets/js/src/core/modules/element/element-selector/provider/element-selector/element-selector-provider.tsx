@@ -35,9 +35,25 @@ export interface ElementSelectorFinishEvent {
   items: SelectedItem[]
 }
 
+export interface ElementSelectorCustomTabRenderProps<TResult = unknown> {
+  selectionType: SelectionType
+  finish: (result: TResult) => void
+  close: () => void
+}
+
+// Picks what the built-in listings cannot (e.g. elements without an id yet) and reports it to its own onFinish.
+export interface ElementSelectorCustomTab<TResult = unknown> {
+  key: string
+  label: string
+  position?: 'start' | 'end'
+  render: (props: ElementSelectorCustomTabRenderProps<TResult>) => React.ReactNode
+  onFinish: (result: TResult) => void
+}
+
 export interface ElementSelectorConfig {
   selectionType?: SelectionType
   onFinish?: (event: ElementSelectorFinishEvent) => void
+  customTabs?: Array<ElementSelectorCustomTab<any>>
   areas?: {
     asset: boolean
     document: boolean
