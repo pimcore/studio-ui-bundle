@@ -41,6 +41,15 @@ export const prepareFieldFilters = (filters: FieldFilter[], context: ElementFilt
 
     const dynamicTypeFieldFilter = type as DynamicTypeFieldFilterAbstract
 
+    // An operator replaces the value, so the filter applies although it has none
+    if (filter.operator !== undefined) {
+      if (dynamicTypeFieldFilter.isEmptyFilterAvailable(column.frontendType ?? null)) {
+        preparedFilters.push(dynamicTypeFieldFilter.transformOperatorFilterToApiRequest(filter))
+      }
+
+      return
+    }
+
     if (dynamicTypeFieldFilter.shouldApply(filter)) {
       preparedFilters.push(dynamicTypeFieldFilter.transformFilterToApiRequest(filter))
     }
