@@ -211,6 +211,17 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
+            classificationStoreConfigurationStoreApply: build.mutation<
+                ClassificationStoreConfigurationStoreApplyApiResponse,
+                ClassificationStoreConfigurationStoreApplyApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/apply`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
             classificationStoreConfigurationStoreCreate: build.mutation<
                 ClassificationStoreConfigurationStoreCreateApiResponse,
                 ClassificationStoreConfigurationStoreCreateApiArg
@@ -589,6 +600,16 @@ export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiResponse = 
 export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg = {
     classificationStoreConfigurationKeyGroupRelationDelete: ClassificationStoreConfigurationKeyGroupRelationDelete;
 };
+export type ClassificationStoreConfigurationStoreApplyApiResponse =
+    /** status 200 Report of what the apply created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
+export type ClassificationStoreConfigurationStoreApplyApiArg = {
+    body: {
+        /** Store configuration artifact as written by the export endpoint */
+        file: Blob;
+        /** Report what would be decided and write nothing */
+        dryRun?: boolean;
+    };
+};
 export type ClassificationStoreConfigurationStoreCreateApiResponse =
     /** status 200 Created store configuration */ ClassificationStoreConfigurationStoreDetail;
 export type ClassificationStoreConfigurationStoreCreateApiArg = {
@@ -601,7 +622,7 @@ export type ClassificationStoreConfigurationStoreExportApiArg = {
     id: number;
 };
 export type ClassificationStoreConfigurationStoreImportApiResponse =
-    /** status 200 Report of what the import created, updated, adopted and left in place */ ClassificationStoreConfigurationImportReport;
+    /** status 200 Report of what the import created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
 export type ClassificationStoreConfigurationStoreImportApiArg = {
     /** Id of the store configuration */
     id: number;
@@ -991,11 +1012,11 @@ export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
     localized?: boolean | null;
     /** Data type of the key, as the key configuration stores it, or null where the key configuration is gone */
     keyType?: string | null;
-    /** The resolved view of this key's option vocabulary for this request, whatever its source: its own stored options, or the options of an options provider that reports static options, in the order they are resolved. Null where the key is not a select or multiselect, and where optionsUnavailableReason says why not. The stored definition remains authoritative for storage. */
+    /** The resolved view of this assignment's option vocabulary for this request, whatever its source: the stored options, or the options of an options provider that reports static options, in the order they are resolved, narrowed to the option subset of the assignment's definitionOverride. Null where the key is not a select or multiselect, and where optionsUnavailableReason says why not. The stored definition remains authoritative for storage. */
     options?: SelectOption[] | null;
     /** Why options is null for a select or multiselect key: "providerNotStatic" where its options provider reports options that depend on a data object, "resolutionFailed" where the provider could not be resolved or raised, for instance for a deleted select options configuration. Null means nothing failed. */
     optionsUnavailableReason?: string | null;
-    /** The unit vocabulary of the key's own definition, never of an assignment override, and null where its type holds no units. Where validUnits is null the definition restricts nothing; the type tells that apart from a type with no units at all. */
+    /** The unit vocabulary of this assignment: the key's own definition with the assignment's definitionOverride applied, and null where its type holds no units. Where validUnits is null the definition restricts nothing; the type tells that apart from a type with no units at all. */
     units?: ClassificationStoreConfigurationKeyUnits | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
@@ -1019,28 +1040,6 @@ export type ClassificationStoreConfigurationKeyGroupRelationDelete = {
     keyId: number;
     /** ID of the group */
     groupId: number;
-};
-export type ClassificationStoreConfigurationStoreDetail = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the store */
-    id: number;
-    /** Name of the store */
-    name: string;
-    /** Description of the store */
-    description: string | null;
-    /** Opaque identifier of the store, assigned by the system and never writable */
-    identifier?: string | null;
-    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
-    engine?: string | null;
-    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
-    engineCapabilities?: string[] | null;
-};
-export type ClassificationStoreConfigurationStoreCreate = {
-    /** Name of the store */
-    name: string;
 };
 export type ClassificationStoreConfigurationImportReport = {
     /** AdditionalAttributes */
@@ -1067,6 +1066,32 @@ export type ClassificationStoreConfigurationImportReport = {
     targetOnlyEntries: string[];
     /** Empty on a successful import; a refused one answers with 409 and names them in the error message instead */
     conflicts: string[];
+    /** Number of entries the import skipped because the store holds their name under another identifier than the file gives them; the stored rows are left as they are */
+    skipped?: number | null;
+    /** The skipped entries by name and reason, the last element naming how many more there are */
+    skippedEntries?: string[] | null;
+};
+export type ClassificationStoreConfigurationStoreDetail = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the store */
+    id: number;
+    /** Name of the store */
+    name: string;
+    /** Description of the store */
+    description: string | null;
+    /** Opaque identifier of the store, assigned by the system and never writable */
+    identifier?: string | null;
+    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
+    engine?: string | null;
+    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
+    engineCapabilities?: string[] | null;
+};
+export type ClassificationStoreConfigurationStoreCreate = {
+    /** Name of the store */
+    name: string;
 };
 export type ClassificationStoreConfigurationStoreTreeNode = {
     /** AdditionalAttributes */
@@ -1183,6 +1208,10 @@ export type ClassificationStoreKeyGroupRelation = {
     localized?: boolean | null;
     /** Data type of the key, as the relation stores it; null where the relation states none */
     keyType?: string | null;
+    /** Whether a grid filter can be applied to this key: false where filterUnavailableReason says why not; null where the relation states no type or definition to tell. */
+    filterable?: boolean | null;
+    /** Why the key cannot be filtered: "indexExcluded" where its definition leaves it out of the search index, "typeUnsupported" where no filter supports its type, "resolutionFailed" where its definition cannot be read. Null means it can be filtered, or that the relation states no type or definition to tell. */
+    filterUnavailableReason?: string | null;
 };
 export type ClassificationStoreVariantLayout = {
     /** Name a value addresses the variant by */
@@ -1203,7 +1232,7 @@ export type ClassificationStoreCollection2 = {
     title?: string | null;
     /** Identifier of the sub group this key is assigned to within the group */
     subGroup?: string | null;
-    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
+    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. */
     localized?: boolean | null;
     /** The variants a key of type `multiValue` permits, in the order it declares them, each a name and an optional label; null for a key of any other type. A value carrying no variant addresses the default variant, which is never one of these names. */
     variants?: ClassificationStoreVariantLayout[] | null;
@@ -1211,6 +1240,10 @@ export type ClassificationStoreCollection2 = {
     multiValue?: boolean | null;
     /** How many values one slot of a key of type `multiValue` may hold; null where it declares no limit and for a key of any other type. It is published, not enforced by this endpoint. */
     maximum?: number | null;
+    /** Whether a key of type `multiValue` permits a value carrying no variant; null for a key of any other type. It is published, not enforced by this endpoint. */
+    defaultVariant?: boolean | null;
+    /** Label of the default variant of a key of type `multiValue`; null where it declares none and for a key of any other type. */
+    defaultVariantLabel?: string | null;
 };
 export type ClassificationStoreSubGroupLayout = {
     /** Identifier the key assignments name this sub group by */
@@ -1272,6 +1305,7 @@ export const {
     useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
     useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
     useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
+    useClassificationStoreConfigurationStoreApplyMutation,
     useClassificationStoreConfigurationStoreCreateMutation,
     useClassificationStoreConfigurationStoreExportQuery,
     useClassificationStoreConfigurationStoreImportMutation,
