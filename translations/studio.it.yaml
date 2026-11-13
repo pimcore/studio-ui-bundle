@@ -1642,6 +1642,7 @@ user-management.email: Email
 user-management.language: Lingua
 user-management.dateTime: Lingua data e ora
 user-management.welcomeScreen: Mostra schermata di benvenuto all'avvio
+user-management.welcomeScreenPath: Dashboard della schermata di benvenuto
 user-management.memorizeTabs: Memorizza schede aperte
 user-management.allowDirtyClose: Disabilita avviso contenuto non salvato
 user-management.closeWarning: Mostra avviso di chiusura

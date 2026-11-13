@@ -1646,6 +1646,7 @@ user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale
 user-management.welcomeScreen: Show welcome screen on startup
+user-management.welcomeScreenPath: Welcome screen dashboard
 user-management.memorizeTabs: Memorize open tabs
 user-management.allowDirtyClose: Disable unsaved content warning
 user-management.closeWarning: Show close warning

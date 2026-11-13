@@ -1642,6 +1642,7 @@ user-management.email: E-post
 user-management.language: Språk
 user-management.dateTime: Datum- och tidslokal
 user-management.welcomeScreen: Visa välkomstskärm vid start
+user-management.welcomeScreenPath: Instrumentpanel för välkomstskärmen
 user-management.memorizeTabs: Kom ihåg öppna flikar
 user-management.allowDirtyClose: Inaktivera varning för osparat innehåll
 user-management.closeWarning: Visa stängningsvarning
