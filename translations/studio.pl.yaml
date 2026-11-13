@@ -3250,3 +3250,5 @@ classification-store.multi-value.unreadable-value: "Ten klucz zawiera wartość,
 classification-store.multi-value.default-variant-permitted: "Zezwalaj na wartości bez wariantu"
 classification-store.multi-value.default-variant-label: "Etykieta wartości domyślnej"
 classification-store.multi-value.no-writable-slot: "Ten klucz nie deklaruje żadnego wariantu i nie zezwala na wartości bez wariantu, więc nie ma miejsca na wpisanie wartości. Zadeklaruj wariant lub zezwól na wartości bez wariantu."
+classification-store.apply: "Utwórz store z pliku"
+classification-store.apply-upload: "Utwórz store"

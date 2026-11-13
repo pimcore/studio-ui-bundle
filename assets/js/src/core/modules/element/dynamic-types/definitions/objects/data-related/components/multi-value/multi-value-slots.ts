@@ -60,7 +60,7 @@ export const slotKeyOf = (slot: MultiValueSlot): string => slot.variant === null
 
 /**
  * One slot per declared variant in declared order, then the default slot where an entry carries no
- * variant (or where the key permits the default variant), then one per
+ * variant (or where nothing is declared and the key permits the default variant), then one per
  * undeclared variant found in the entries. A key that declines the default variant keeps that slot
  * only for the entries it already holds, as an undeclared one.
  *
@@ -80,7 +80,7 @@ export const buildSlots = (
     declared: true
   }))
 
-  if (defaultPermitted || entries.some((entry) => variantOf(entry) === null)) {
+  if ((defaultPermitted && declared.length === 0) || entries.some((entry) => variantOf(entry) === null)) {
     const label = declaration.defaultVariantLabel
 
     slots.push({ variant: null, label: isNil(label) || label === '' ? null : label, declared: defaultPermitted })

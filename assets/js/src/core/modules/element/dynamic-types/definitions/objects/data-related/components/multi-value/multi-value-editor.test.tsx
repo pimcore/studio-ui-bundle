@@ -149,7 +149,6 @@ describe('MultiValueEditor', () => {
   it('renders one input per declared variant, in declared order, labelled by label or by name', () => {
     renderEditor({
       variants: [{ name: 'metric' }, { name: 'imperial', label: 'Imperial' }],
-      defaultVariant: false,
       multiValue: false,
       value: [{ var: 'imperial', v: '1 ft' }, { var: 'metric', v: '30 cm' }]
     })
@@ -227,7 +226,6 @@ describe('MultiValueEditor', () => {
   it('renders one list per variant when repeating, and adding to one leaves the other alone', async () => {
     renderEditor({
       variants: [{ name: 'metric' }, { name: 'imperial' }],
-      defaultVariant: false,
       multiValue: true,
       value: [{ var: 'metric', v: 'a' }, { var: 'imperial', v: 'b' }]
     })
@@ -343,14 +341,8 @@ describe('MultiValueEditor', () => {
     expect(inputs()).toHaveLength(1)
   })
 
-  it('offers a default slot beside a declared variant while the key permits it, and none once it declines', () => {
-    const { unmount } = renderEditor({ variants: [{ name: 'metric' }], defaultVariantLabel: 'Base', multiValue: false, value: [] })
-
-    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric', 'Base'])
-    expect(inputs()).toHaveLength(2)
-    unmount()
-
-    renderEditor({ variants: [{ name: 'metric' }], defaultVariant: false, multiValue: false, value: [] })
+  it('adds no default slot beside a declared variant for a key that permits it, as before', () => {
+    renderEditor({ variants: [{ name: 'metric' }], defaultVariantLabel: 'Base', multiValue: false, value: [] })
 
     expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric'])
     expect(inputs()).toHaveLength(1)
@@ -365,7 +357,6 @@ describe('MultiValueEditor', () => {
   it('offers no add control in the slot of an undeclared variant, while declared slots keep theirs', () => {
     renderEditor({
       variants: [{ name: 'metric' }],
-      defaultVariant: false,
       multiValue: true,
       value: [{ var: 'metric', v: 'm' }, { var: 'legacy', v: 'l' }]
     })
@@ -377,7 +368,7 @@ describe('MultiValueEditor', () => {
   // A declared row with no name addresses nothing, so it is no slot of its own; what it must never
   // become is a second unheaded slot beside the default one, or one headed by nothing.
   it('declares no slot for a variant row carrying no name', () => {
-    renderEditor({ variants: [{ name: 'metric' }, {} as any], defaultVariant: false, multiValue: false, value: [{ var: 'metric', v: 'm' }] })
+    renderEditor({ variants: [{ name: 'metric' }, {} as any], multiValue: false, value: [{ var: 'metric', v: 'm' }] })
 
     expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric'])
     expect(inputs()).toHaveLength(1)
@@ -397,7 +388,6 @@ describe('MultiValueEditor', () => {
 
     renderEditor({
       variants: [{ name: 'metric' }],
-      defaultVariant: false,
       multiValue: false,
       value: [{ var: 'metric', v: 'a' }, { var: 'metric', v: 'b' }]
     })

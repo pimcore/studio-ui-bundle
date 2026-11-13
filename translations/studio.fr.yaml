@@ -3250,3 +3250,5 @@ classification-store.multi-value.unreadable-value: "Cette clé contient une vale
 classification-store.multi-value.default-variant-permitted: "Autoriser les valeurs sans variante"
 classification-store.multi-value.default-variant-label: "Libellé de la valeur par défaut"
 classification-store.multi-value.no-writable-slot: "Cette clé ne déclare aucune variante et n'autorise pas les valeurs sans variante : il n'y a donc aucun emplacement où saisir une valeur. Déclarez une variante ou autorisez les valeurs sans variante."
+classification-store.apply: "Créer un store depuis un fichier"
+classification-store.apply-upload: "Créer le store"

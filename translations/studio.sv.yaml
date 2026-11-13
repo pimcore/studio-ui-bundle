@@ -3250,3 +3250,5 @@ classification-store.multi-value.unreadable-value: "Den här nyckeln har ett vä
 classification-store.multi-value.default-variant-permitted: "Tillåt värden utan variant"
 classification-store.multi-value.default-variant-label: "Etikett för standardvärdet"
 classification-store.multi-value.no-writable-slot: "Den här nyckeln deklarerar ingen variant och tillåter inga värden utan variant, så det finns ingen plats att ange ett värde. Deklarera en variant eller tillåt värden utan variant."
+classification-store.apply: "Skapa store från fil"
+classification-store.apply-upload: "Skapa store"

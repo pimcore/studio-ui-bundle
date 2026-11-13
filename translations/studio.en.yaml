@@ -3254,3 +3254,5 @@ classification-store.multi-value.unreadable-value: "This key holds a value the e
 classification-store.multi-value.default-variant-permitted: "Allow values without a variant"
 classification-store.multi-value.default-variant-label: "Label of the default value"
 classification-store.multi-value.no-writable-slot: "This key declares no variant and does not allow values without one, so there is nowhere to enter a value. Declare a variant or allow values without a variant."
+classification-store.apply: "Create store from file"
+classification-store.apply-upload: "Create store"

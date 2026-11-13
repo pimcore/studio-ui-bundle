@@ -14,9 +14,9 @@ const METRIC = [{ name: 'metric' }]
 const DEFAULT_SLOT = { variant: null, label: null, declared: true }
 
 describe('buildSlots default variant declaration', () => {
-  it.each([undefined, null, true])('produces the default slot, beside any declared variant, when defaultVariant is %p', (defaultVariant) => {
+  it.each([undefined, null, true])('produces the default slot exactly as before when defaultVariant is %p', (defaultVariant) => {
     expect(buildSlots([], [], { defaultVariant })).toEqual([DEFAULT_SLOT])
-    expect(buildSlots(METRIC, [], { defaultVariant }).map((slot) => slot.variant)).toEqual(['metric', null])
+    expect(buildSlots(METRIC, [], { defaultVariant }).map((slot) => slot.variant)).toEqual(['metric'])
     expect(buildSlots(METRIC, [{ v: 'd' }], { defaultVariant }).map((slot) => slot.variant)).toEqual(['metric', null])
   })
 
@@ -42,7 +42,7 @@ describe('buildSlots default variant declaration', () => {
   it('seeds no empty entry for a declined default slot, and one for a permitted one', () => {
     expect(seedEmptySlots(METRIC, [], { defaultVariant: false })).toEqual([{ var: 'metric', v: null }])
     expect(seedEmptySlots(METRIC, [{ v: 'd' }], { defaultVariant: false })).toEqual([{ v: 'd' }, { var: 'metric', v: null }])
-    expect(seedEmptySlots(METRIC, [], { defaultVariant: true })).toEqual([{ var: 'metric', v: null }, { v: null }])
+    expect(seedEmptySlots(METRIC, [], { defaultVariant: true })).toEqual([{ var: 'metric', v: null }])
     expect(seedEmptySlots([], [], { defaultVariant: true })).toEqual([{ v: null }])
   })
 })

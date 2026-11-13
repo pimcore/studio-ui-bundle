@@ -109,14 +109,14 @@ describe('StoreApplyAction', () => {
     renderAction(true)
 
     expect(isAllowed).toHaveBeenCalledWith(UserPermission.ClassificationStore)
-    expect(screen.getByText('import')).toBeInTheDocument()
+    expect(screen.getByText('classification-store.apply')).toBeInTheDocument()
     expect(screen.getByTestId('import-modal')).toBeInTheDocument()
   })
 
   it('renders nothing without that permission', () => {
     renderAction(false)
 
-    expect(screen.queryByText('import')).not.toBeInTheDocument()
+    expect(screen.queryByText('classification-store.apply')).not.toBeInTheDocument()
     expect(screen.queryByTestId('import-modal')).not.toBeInTheDocument()
   })
 

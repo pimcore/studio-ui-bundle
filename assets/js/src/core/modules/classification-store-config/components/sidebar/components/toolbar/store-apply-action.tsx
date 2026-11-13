@@ -45,7 +45,7 @@ export const StoreApplyAction = (): React.JSX.Element => {
         onClick={ () => { setIsOpen(true) } }
         type="link"
       >
-        {t('import')}
+        {t('classification-store.apply')}
       </IconTextButton>
 
       <ImportModal
@@ -56,8 +56,8 @@ export const StoreApplyAction = (): React.JSX.Element => {
         onUploadSuccess={ handleSuccess }
         open={ isOpen }
         showSuccessMessage={ false }
-        title={ t('classification-store.import') }
-        uploadButtonLabel={ t('import') }
+        title={ t('classification-store.apply') }
+        uploadButtonLabel={ t('classification-store.apply-upload') }
         validateFile={ (file: File) => file.type === 'application/json' || file.name.endsWith('.json') }
       />
     </>
