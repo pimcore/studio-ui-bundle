@@ -222,10 +222,6 @@ export type CreateServiceUser = {
     dataObjectWorkspaces?: UserDocumentWorkspace[];
     /** Document workspaces */
     documentWorkspaces?: UserDocumentWorkspace2[];
-    /** IDs of the users who answer for the service user */
-    responsibleUsers?: number[];
-    /** IDs of the roles whose members answer for the service user */
-    responsibleRoles?: number[];
     /** OAuth scopes the bound client may request; all known scopes when omitted */
     scopes?: string[] | null;
 };
@@ -278,10 +274,6 @@ export type ServiceUser = {
     clientCredentialsEnabled: boolean;
     /** Summary of the MCP access tokens of the service user (never the tokens themselves) */
     mcpTokens: ServiceUserMcpAccessTokenSummary;
-    /** IDs of the users who answer for the service user */
-    responsibleUsers: number[];
-    /** IDs of the roles whose members answer for the service user */
-    responsibleRoles: number[];
 };
 export type UpdateServiceUser = {
     /** Contact email of the team responsible */
@@ -300,10 +292,6 @@ export type UpdateServiceUser = {
     dataObjectWorkspaces?: UserDocumentWorkspace[];
     /** Document workspaces */
     documentWorkspaces?: UserDocumentWorkspace2[];
-    /** IDs of the users who answer for the service user */
-    responsibleUsers?: number[];
-    /** IDs of the roles whose members answer for the service user */
-    responsibleRoles?: number[];
 };
 export type ServiceUserMcpAccessToken = {
     /** The bearer token, shown once */
