@@ -366,6 +366,8 @@ export const KeyDefinitionModal = ({
       // Only an explicit false excludes a key, so a definition stored without the flag — or with
       // an explicit null — opens with the control on rather than reporting the key as excluded.
       indexed: keyDetail.definition?.indexed !== false,
+      // The same shape for a multiValue key: absent or null permits the default variant, only an explicit false declines it.
+      ...(keyDetail.type === MULTI_VALUE ? { defaultVariant: keyDetail.definition?.defaultVariant !== false } : {}),
       fieldType: keyDetail.type,
       fieldtype: keyDetail.type
     } as unknown as Layout

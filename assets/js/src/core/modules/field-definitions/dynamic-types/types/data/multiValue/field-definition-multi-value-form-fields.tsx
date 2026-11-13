@@ -17,7 +17,7 @@ import {
   CLASSIFICATION_STORE_WRAPPER_TYPES,
   isKeyTypeHeldByEngine
 } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
-import { Form, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, Input, InputNumber, Select, Switch } from '@sdk/components'
 import React, { useContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { container, serviceIds } from '@sdk/app'
@@ -33,6 +33,7 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
 
   const selectedType = Form.useWatch('delegateDatatype') as string | null | undefined
   const isRepeating = Form.useWatch('multiValue') as boolean | undefined
+  const defaultVariant = Form.useWatch('defaultVariant') as boolean | null | undefined
 
   // Every type a key may be defined with, except the wrappers, which cannot nest.
   const options = fieldDefinitionRegistry
@@ -100,6 +101,26 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
       >
         <FieldDefinitionMultiValueVariants />
       </Form.Item>
+
+      <Form.Item
+        name='defaultVariant'
+        valuePropName='checked'
+      >
+        <Switch
+          labelRight={ t('classification-store.multi-value.default-variant-permitted') }
+          onChange={ (checked: boolean) => { if (!checked) form.setFieldValue('defaultVariantLabel', null) } }
+        />
+      </Form.Item>
+
+      {defaultVariant !== false && (
+        <Form.Item
+          label={ t('classification-store.multi-value.default-variant-label') }
+          name='defaultVariantLabel'
+          normalize={ (value: string) => value === '' ? null : value }
+        >
+          <Input />
+        </Form.Item>
+      )}
 
       <Form.Item
         name='multiValue'

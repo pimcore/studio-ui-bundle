@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 /**
  * What the key-definition dialog does with a key of type `multiValue`: it refuses to save one that
  * cannot be written, writes the declaration of one that can in the one definition blob, and states
@@ -59,7 +61,16 @@ jest.mock('@sdk/components', () => {
     ),
     Input: AntInput,
     Space: ({ children }: any) => <div>{children}</div>,
-    Switch: () => null,
+    // a real switch, bound by the form item the way the dialog's control is
+    Switch: ({ checked, onChange }: any) => (
+      <button
+        aria-checked={ checked === true }
+        aria-label='default-variant'
+        onClick={ () => { onChange(checked !== true) } }
+        role='switch'
+        type='button'
+      />
+    ),
     TextArea: AntInput.TextArea
   }
 })
@@ -112,6 +123,7 @@ const multiValueType = {
   normalizeFieldDefinition: (fieldDefinition: Record<string, unknown>) => fieldDefinition,
   getFormFields: function MultiValueFormFields () {
     const { Form, Input, InputNumber } = jest.requireActual('antd')
+    const { Switch } = jest.requireMock('@sdk/components')
 
     return (
       <>
@@ -123,6 +135,15 @@ const multiValueType = {
         </Form.Item>
         <Form.Item name='maximum'>
           <InputNumber aria-label='maximum' />
+        </Form.Item>
+        <Form.Item
+          name='defaultVariant'
+          valuePropName='checked'
+        >
+          <Switch />
+        </Form.Item>
+        <Form.Item name='defaultVariantLabel'>
+          <Input aria-label='default-label' />
         </Form.Item>
       </>
     )
@@ -142,6 +163,7 @@ jest.mock('@sdk/app', () => ({
 
 const DELEGATE_REQUIRED = 'classification-store.multi-value.delegate-required'
 const NARROWING = 'classification-store.multi-value.narrowing-confirm'
+const NO_WRITABLE_SLOT = 'classification-store.multi-value.no-writable-slot'
 
 const keyOf = (definition: Record<string, unknown>): ClassificationStoreConfigurationKeyDetail => ({
   id: 7,
@@ -277,6 +299,62 @@ describe('KeyDefinitionModal for a multiValue key', () => {
 
     await savedPayload()
     expect(confirmWarning).not.toHaveBeenCalled()
+  })
+
+  // The same shape as `indexed`: only an explicit false declines the default variant.
+  it.each([
+    [undefined, true],
+    [null, true],
+    [true, true],
+    [false, false]
+  ])('opens the default variant control for a stored %p as checked: %p', (stored, checked) => {
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], ...(stored === undefined ? {} : { defaultVariant: stored }) }))
+
+    expect(screen.getByRole('switch', { name: 'default-variant' })).toHaveAttribute('aria-checked', String(checked))
+  })
+
+  it('writes the default variant declaration at the top level of the definition, and not into the delegate', async () => {
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }] }))
+
+    fireEvent.change(screen.getByLabelText('default-label'), { target: { value: 'Base' } })
+    save()
+
+    const { definition } = await savedPayload()
+
+    expect(definition).toMatchObject({ defaultVariant: true, defaultVariantLabel: 'Base' })
+    expect(definition.delegate).not.toHaveProperty('defaultVariant')
+    expect(definition.delegate).not.toHaveProperty('defaultVariantLabel')
+  })
+
+  it('states the consequence of declining the default variant, and saves only once confirmed', async () => {
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], defaultVariant: true }))
+
+    fireEvent.click(screen.getByRole('switch', { name: 'default-variant' }))
+    save()
+    await flush()
+
+    expect(updateKey).not.toHaveBeenCalled()
+    expect(confirmWarning).toHaveBeenCalledTimes(1)
+    render(<>{confirmWarning.mock.calls[0][0].content as React.ReactNode}</>)
+    expect(screen.getByText(NARROWING)).toBeInTheDocument()
+
+    await confirmWarning.mock.calls[0][0].onOk()
+
+    const { definition } = await savedPayload()
+
+    expect(definition.defaultVariant).toBe(false)
+    expect(definition.delegate).not.toHaveProperty('defaultVariant')
+  })
+
+  it('refuses a key declaring no variant and declining the default variant, and sends no request', async () => {
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [], defaultVariant: false }))
+
+    save()
+    await flush()
+
+    expect(updateKey).not.toHaveBeenCalled()
+    expect(confirmWarning).not.toHaveBeenCalled()
+    expect(screen.getByText(NO_WRITABLE_SLOT)).toBeInTheDocument()
   })
 
   it('states the consequence of lowering the cap, and not of leaving it as it was', async () => {

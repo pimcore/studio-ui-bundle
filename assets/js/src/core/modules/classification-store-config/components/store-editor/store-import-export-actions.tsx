@@ -21,6 +21,9 @@ interface IStoreImportExportActionsProps {
   storeId: number
 }
 
+/** The apply endpoint names no store: the file carries the one it describes. */
+export const getStoreApplyUrl = (): string => `${getPrefix()}/classification-store/configuration/stores/apply`
+
 const storeImportExportConfig: ImportExportConfig = {
   getExportUrl: (id) => `${getPrefix()}/classification-store/configuration/stores/${id}/export`,
   getImportUrl: (id) => `${getPrefix()}/classification-store/configuration/stores/${id}/import`,

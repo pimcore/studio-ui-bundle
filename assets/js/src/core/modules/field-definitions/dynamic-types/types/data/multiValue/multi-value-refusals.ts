@@ -22,6 +22,7 @@ export interface MultiValueRefusal {
 export const REFUSAL_DELEGATE_REQUIRED = 'classification-store.multi-value.delegate-required'
 export const REFUSAL_VARIANT_EMPTY = 'classification-store.multi-value.variant-name-empty'
 export const REFUSAL_VARIANT_DUPLICATE = 'classification-store.multi-value.variant-name-duplicate'
+export const REFUSAL_NO_WRITABLE_SLOT = 'classification-store.multi-value.no-writable-slot'
 
 /** The refusals of the variant list alone, which the list shows beside the rows. */
 export const getVariantRefusals = (variants: readonly ClassificationStoreVariantLayout[] | null | undefined): MultiValueRefusal[] => {
@@ -57,13 +58,20 @@ export const getMultiValueRefusals = (definition: Record<string, unknown> | null
     refusals.push({ id: REFUSAL_DELEGATE_REQUIRED })
   }
 
+  const variants = definition?.variants as ClassificationStoreVariantLayout[] | null | undefined
+
+  // Declining the default variant leaves a key without a named variant no slot a value can be written to.
+  if (definition?.defaultVariant === false && !(variants ?? []).some((variant) => variantNameOf(variant).trim() !== '')) {
+    refusals.push({ id: REFUSAL_NO_WRITABLE_SLOT })
+  }
+
   return [
     ...refusals,
-    ...getVariantRefusals(definition?.variants as ClassificationStoreVariantLayout[] | null | undefined)
+    ...getVariantRefusals(variants)
   ]
 }
 
-/** Whether a save narrows what the key declared: a declared variant removed, or the maximum lowered. */
+/** Whether a save narrows what the key declared: a declared variant removed, the maximum lowered, or the default variant declined. */
 export const narrowsDeclaration = (
   before: Record<string, unknown> | null | undefined,
   after: Record<string, unknown> | null | undefined
@@ -74,5 +82,7 @@ export const narrowsDeclaration = (
   const newMaximum = after?.maximum
   const lowered = typeof newMaximum === 'number' && (typeof oldMaximum !== 'number' || newMaximum < oldMaximum)
 
-  return removed || lowered
+  const declined = before?.defaultVariant !== false && after?.defaultVariant === false
+
+  return removed || lowered || declined
 }

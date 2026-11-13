@@ -14,12 +14,22 @@ let capturedOptions: Array<{ label: string, value: string, disabled?: boolean }>
 // form store and `useWatch` behave as they do in the dialog.
 jest.mock('@sdk/components', () => ({
   Form: jest.requireActual('antd').Form,
+  Input: jest.requireActual('antd').Input,
   InputNumber: () => null,
   Select: ({ options }: any) => {
     capturedOptions = options
     return null
   },
-  Switch: () => null
+  // a real switch for the declaration control, bound the way the form item binds it
+  Switch: ({ checked, onChange, labelRight }: any) => (
+    <button
+      aria-checked={ checked === true }
+      aria-label={ labelRight }
+      onClick={ () => { onChange(checked !== true) } }
+      role='switch'
+      type='button'
+    />
+  )
 }))
 
 jest.mock('./field-definition-multi-value-variants', () => ({
@@ -45,7 +55,7 @@ jest.mock('react-i18next', () => ({
 // eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import { Form } from 'antd'
 // eslint-disable-next-line import/first
@@ -56,10 +66,10 @@ import { MultiValueEngineContext } from './multi-value-engine-context'
 const CONTEXT = { area: ['classification-store'], path: [], fieldDefinitions: {} }
 const NEEDS_ENGINE = 'classification-store.key-type-needs-document-engine'
 
-const renderPicker = (capabilities: readonly string[] | null | undefined): void => {
+const renderPicker = (capabilities: readonly string[] | null | undefined, initialValues: Record<string, unknown> = {}): void => {
   render(
     <MultiValueEngineContext.Provider value={ capabilities }>
-      <Form initialValues={ { delegateDatatype: null } }>
+      <Form initialValues={ { delegateDatatype: null, ...initialValues } }>
         <FieldDefinitionMultiValueFormFields
           context={ CONTEXT }
           id='height'
@@ -92,5 +102,33 @@ describe('FieldDefinitionMultiValueFormFields delegate picker', () => {
     renderPicker(['StructuredValues'])
 
     expect(capturedOptions.some((option) => option.disabled === true)).toBe(false)
+  })
+})
+
+describe('FieldDefinitionMultiValueFormFields default variant control', () => {
+  const PERMITTED = 'classification-store.multi-value.default-variant-permitted'
+  const LABEL = 'classification-store.multi-value.default-variant-label'
+
+  it('offers the label while the default variant is permitted, and not once it is switched off', () => {
+    renderPicker([], { defaultVariant: true })
+
+    expect(screen.getByLabelText(PERMITTED)).toHaveAttribute('aria-checked', 'true')
+    expect(screen.getByLabelText(LABEL)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText(PERMITTED))
+
+    expect(screen.getByLabelText(PERMITTED)).toHaveAttribute('aria-checked', 'false')
+    expect(screen.queryByLabelText(LABEL)).toBeNull()
+  })
+
+  it('clears the label when the control is switched off', () => {
+    renderPicker([], { defaultVariant: true, defaultVariantLabel: 'Base' })
+
+    expect(screen.getByLabelText(LABEL)).toHaveValue('Base')
+
+    fireEvent.click(screen.getByLabelText(PERMITTED))
+    fireEvent.click(screen.getByLabelText(PERMITTED))
+
+    expect(screen.getByLabelText(LABEL)).toHaveValue('')
   })
 })

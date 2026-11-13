@@ -60,6 +60,15 @@ describe('DynamicTypeFieldDefinitionMultiValue', () => {
     expect(getMultiValueRefusals(data).map((refusal) => refusal.id)).toEqual(['classification-store.multi-value.delegate-required'])
   })
 
+  it('starts permitting the default variant, and keeps the declaration out of the delegate', () => {
+    const type = new DynamicTypeFieldDefinitionMultiValue()
+    const hoisted = type.normalizeFieldDefinition({ delegate: { defaultVariant: 'delegate', defaultVariantLabel: 'delegate' } })
+
+    expect(type.getDefaultData().defaultVariant).toBe(true)
+    expect(hoisted).not.toHaveProperty('defaultVariant')
+    expect(hoisted).not.toHaveProperty('defaultVariantLabel')
+  })
+
   it('hoists the delegate settings without overwriting its own members', () => {
     const hoisted = new DynamicTypeFieldDefinitionMultiValue().normalizeFieldDefinition({
       variants: [{ name: 'metric' }],
@@ -93,6 +102,23 @@ describe('getMultiValueRefusals', () => {
   })
 })
 
+describe('getMultiValueRefusals without a writable slot', () => {
+  const delegated = { delegateDatatype: 'input' }
+  const NO_SLOT = ['classification-store.multi-value.no-writable-slot']
+
+  it('refuses a key declaring no named variant and declining the default variant', () => {
+    expect(getMultiValueRefusals({ ...delegated, defaultVariant: false }).map((refusal) => refusal.id)).toEqual(NO_SLOT)
+    expect(getMultiValueRefusals({ ...delegated, defaultVariant: false, variants: [] }).map((refusal) => refusal.id)).toEqual(NO_SLOT)
+  })
+
+  it('accepts a declined default variant beside a named variant, and any key permitting it', () => {
+    expect(getMultiValueRefusals({ ...delegated, defaultVariant: false, variants: [{ name: 'metric' }] })).toEqual([])
+    expect(getMultiValueRefusals({ ...delegated, defaultVariant: true, variants: [] })).toEqual([])
+    expect(getMultiValueRefusals({ ...delegated, defaultVariant: null, variants: [] })).toEqual([])
+    expect(getMultiValueRefusals({ ...delegated, variants: [] })).toEqual([])
+  })
+})
+
 describe('narrowsDeclaration', () => {
   const declared = { variants: [{ name: 'metric' }, { name: 'imperial' }], maximum: 3 }
 
@@ -100,6 +126,17 @@ describe('narrowsDeclaration', () => {
     expect(narrowsDeclaration(declared, { ...declared, variants: [{ name: 'metric' }] })).toBe(true)
     expect(narrowsDeclaration(declared, { ...declared, maximum: 2 })).toBe(true)
     expect(narrowsDeclaration({ ...declared, maximum: null }, declared)).toBe(true)
+  })
+
+  it('is true when the default variant is declined, whether it was declared true, null or absent', () => {
+    for (const before of [true, null, undefined]) {
+      expect(narrowsDeclaration({ ...declared, defaultVariant: before }, { ...declared, defaultVariant: false })).toBe(true)
+    }
+  })
+
+  it('is false when the default variant stays declined or is permitted again', () => {
+    expect(narrowsDeclaration({ ...declared, defaultVariant: false }, { ...declared, defaultVariant: false })).toBe(false)
+    expect(narrowsDeclaration({ ...declared, defaultVariant: false }, { ...declared, defaultVariant: true })).toBe(false)
   })
 
   it('is false when nothing is narrowed, including a cap removed or raised', () => {
