@@ -495,6 +495,10 @@ action-could-not-be-applied: L'action n'a pas pu être appliquée
 failed-to-assign-tag-to-element: Impossible d'assigner le tag à l'élément
 failed-to-un-assign-tag-to-element: Impossible de retirer le tag de l'élément
 workflow-modal.perform-action: Exécuter l'action
+workflow.unsaved-changes.title: Modifications non enregistrées
+workflow.unsaved-changes.warn: Il y a des modifications non enregistrées. Elles seront perdues si cette action est appliquée. Appliquer quand même ?
+workflow.unsaved-changes.apply-anyway: Appliquer quand même
+workflow.unsaved-changes.save-failed: Les modifications non enregistrées n'ont pas pu être enregistrées, l'action n'a donc pas été appliquée.
 workflow-modal.cancel: Annuler
 workflow-modal.notes: Notes
 workflow-modal.notes-required: Veuillez entrer vos notes
@@ -687,6 +691,7 @@ mcp-servers.read-only-notice: Les définitions de serveur sont gérées par fich
 mcp-servers.save-success: Serveur MCP enregistré
 mcp-servers.access.users-count: "Utilisateurs: {{number}}"
 mcp-servers.access.roles-count: "Rôles: {{number}}"
+mcp-servers.access.service-users-count: 'Utilisateurs de service: {{number}}'
 mcp-servers.access.global-extra: tout utilisateur authentifié
 mcp-servers.access.nobody: "Personne pour l'instant"
 mcp-servers.badge.read: Lecture
@@ -712,11 +717,16 @@ mcp-servers.editor.copy-url: "Copier l'URL du serveur"
 mcp-servers.editor.connect-hint: Configurez votre client MCP sur cette URL et authentifiez-vous avec votre compte Pimcore.
 mcp-servers.sharing.title: Partage
 mcp-servers.sharing.share-globally: Partager globalement
-mcp-servers.sharing.share-globally-tooltip: Tout utilisateur authentifié obtient Lecture de la configuration et Accès au serveur MCP (pas Modification de la configuration)
+mcp-servers.sharing.share-globally-tooltip: Tout utilisateur authentifié, y compris les utilisateurs de service, obtient Lecture de la configuration et Accès au serveur MCP (pas Modification de la configuration)
 mcp-servers.sharing.users: Utilisateurs
 mcp-servers.sharing.roles: Rôles
 mcp-servers.sharing.add-user: Ajouter un utilisateur…
 mcp-servers.sharing.add-role: Ajouter un rôle…
+mcp-servers.sharing.service-users: Utilisateurs de service
+mcp-servers.sharing.add-service-user: Ajouter un utilisateur de service…
+mcp-servers.sharing.service-users-hint: Les utilisateurs de service peuvent uniquement se connecter; ils ne peuvent ni lire ni modifier la configuration.
+mcp-servers.sharing.service-users-unavailable: Les utilisateurs de service ne sont pas listés, car vous ne disposez pas de la permission de gestion des utilisateurs. Leurs accès existants sont conservés.
+mcp-servers.sharing.inactive: inactif
 mcp-servers.sharing.name: Nom
 mcp-servers.sharing.config-read: Lecture de la configuration
 mcp-servers.sharing.config-edit: Modification de la configuration
@@ -2296,6 +2306,9 @@ reports.field-filters: Filtres de champs
 reports.editor.delete.content: Voulez-vous vraiment supprimer le rapport personnalisé "{{reportName}}" ?
 reports.editor.clone.content: Entrez le nom du nouvel élément (a-zA-Z-_)
 reports.editor.add.content: Entrez le nom du nouvel élément. Le nom doit être alphanumérique et contenir au moins 3 caractères (a-zA-Z0-9_-)
+reports.editor.import.title: Importer un rapport personnalisé
+reports.editor.import.success: Rapport personnalisé importé avec succès
+reports.editor.import.invalid-file: Veuillez sélectionner un fichier d'export JSON
 reports.editor.content.validation.message: Le nom du rapport personnalisé est invalide
 reports.editor.general-settings.title: Paramètres généraux
 reports.editor.general-settings.name-label: Nom
@@ -3110,3 +3123,64 @@ tree.actions.edit-tag: Modifier
 tag-configuration.edit-tag: 'Modifier "{{name}}"'
 tag-configuration.name-required: 'Saisissez un nom de tag'
 tag-configuration.move-targets-failed: "La liste des tags n'a pas pu être chargée, seul le nom peut donc être modifié"
+navigation.service-users: Utilisateurs de service
+widget.service-user-management: Utilisateurs de service
+service-users.create: Nouveau
+service-users.create.title: Nouvel utilisateur de service
+service-users.create.ok: Créer
+service-users.create-from-user: À partir d'un utilisateur
+service-users.create-from-user.title: Nouvel utilisateur de service à partir d'un utilisateur
+service-users.create-from-user.description: Copie les permissions, les rôles et les workspaces de l'utilisateur. L'utilisateur n'est pas modifié et les droits d'administrateur ne sont jamais copiés.
+service-users.field.name: Nom
+service-users.field.name.fixed: Le nom ne peut pas être modifié, car l'accès au serveur MCP est accordé par nom.
+service-users.field.name.invalid: Utilisez jusqu'à 64 lettres, chiffres, points, tirets ou traits de soulignement, en commençant par une lettre ou un chiffre, par exemple svc-erp-sync.
+service-users.field.email: E-mail de contact
+service-users.field.source-user: Utilisateur à copier
+service-users.filter.unused-days: Inutilisé depuis plus de N jours
+service-users.status.inactive: Inactif
+service-users.dormancy.never-used: Jamais utilisé
+service-users.dormancy.warning: Inutilisé depuis 90 jours
+service-users.dormancy.dormant: Dormant
+service-users.tab.settings: Paramètres
+service-users.tab.permissions: Permissions
+service-users.tab.roles: Rôles
+service-users.tab.workspaces: Workspaces
+service-users.roles: Rôles
+service-users.save.success: Utilisateur de service enregistré
+service-users.deactivate: Désactiver
+service-users.deactivate.confirm: Désactiver l'utilisateur de service "{{name}}"? Ses identifiants cessent de fonctionner dès la prochaine requête.
+service-users.delete: Supprimer
+service-users.delete.confirm: Supprimer définitivement l'utilisateur de service "{{name}}"? Son client OAuth, ses jetons et son accès au serveur MCP sont supprimés. Cette action est irréversible.
+service-users.credentials.title: Identifiants
+service-users.credentials.client-id: ID client
+service-users.credentials.last-used: Dernière utilisation
+service-users.credentials.never-used: Jamais
+service-users.credentials.no-client: Aucun client OAuth
+service-users.credentials.rotate: Renouveler le secret
+service-users.credentials.rotate.confirm: Créer un nouveau secret client pour "{{name}}"? Le secret actuel cesse immédiatement de fonctionner.
+service-users.credentials.mcp-tokens: Jetons d'accès MCP
+service-users.credentials.mcp-tokens.active: Jetons actifs
+service-users.credentials.mcp-tokens.latest-expiry: Dernière expiration
+service-users.credentials.mcp-tokens.none: Aucun jeton actif
+service-users.credentials.issue: Émettre un jeton
+service-users.credentials.issue.title: Émettre un jeton d'accès MCP
+service-users.credentials.issue.ttl: Durée de validité en jours (1 à 90)
+service-users.credentials.issue.ttl.invalid: Saisissez un nombre entier de jours compris entre 1 et 90.
+service-users.credentials.issue.hint: Le jeton n'est affiché qu'une seule fois. Les clients l'envoient comme jeton Bearer dans l'en-tête Authorization.
+service-users.credentials.revoke: Révoquer tous les jetons
+service-users.credentials.revoke.confirm: Révoquer tous les jetons d'accès MCP de cet utilisateur de service? Les clients connectés cessent immédiatement de fonctionner.
+service-users.credentials.revoke.success: Tous les jetons d'accès MCP de l'utilisateur de service sont révoqués.
+service-users.credentials.oauth: Client OAuth
+service-users.credentials.oauth.disabled: Les identifiants client OAuth sont désactivés sur cette instance; utilisez un jeton d'accès MCP.
+service-users.credentials.oauth.rotate-hint: Les jetons d'accès déjà émis avec l'ancien secret restent valides jusqu'à leur expiration.
+service-users.credentials.token: Jeton d'accès
+service-users.credentials.token.expires: Expire le
+service-users.create.credentials.title: Identifiants
+service-users.create.credentials.skip: Ignorer, émettre plus tard
+service-users.create.credentials.which: Utilisez le client OAuth pour les pipelines capables d'exécuter le grant client_credentials; utilisez un jeton d'accès MCP pour tout le reste.
+service-users.create.credentials.token-description: Les clients se connectent avec un jeton d'accès MCP. Émettez-en un maintenant, ou plus tard depuis les identifiants de l'utilisateur de service.
+service-users.secret.title: Secret client
+service-users.secret.client-secret: Secret client
+service-users.secret.warning: Copiez le secret maintenant. Il n'est affiché qu'une seule fois et ne pourra plus être affiché.
+service-users.secret.copy: Copier le secret
+service-users.secret.close: Fermer

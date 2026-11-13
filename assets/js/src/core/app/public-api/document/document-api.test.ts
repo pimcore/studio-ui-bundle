@@ -12,9 +12,14 @@ import type * as DocumentApiModule from './document-api'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
 const saveDocument = jest.fn(async (documentId: number, task: string) => {})
+let mockSettings: Record<string, any> = {}
 
 jest.mock('@Pimcore/app/store', () => ({
   store: { dispatch: jest.fn(), getState: () => ({}) }
+}))
+
+jest.mock('@Pimcore/modules/app/settings/settings-slice', () => ({
+  getSettings: () => mockSettings
 }))
 
 jest.mock('@Pimcore/modules/document/document-draft-slice', () => ({
@@ -112,5 +117,40 @@ describe('documentApi.triggerSaveAndReload', () => {
 
     expect(saveDocument).not.toHaveBeenCalled()
     expect(iframeRef.reload).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('documentApi.triggerValueChange', () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+    saveDocument.mockClear()
+    document.body.innerHTML = ''
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+    mockSettings = {}
+  })
+
+  it('auto-saves the document after an edit', async () => {
+    mockSettings = { document_auto_save_interval: 60 }
+    const module = await loadModule()
+    registerIframe(module, 7)
+
+    module.documentApi.triggerValueChange(7, 'content:1.headline', { data: 'Hello' })
+    jest.runAllTimers()
+
+    expect(saveDocument).toHaveBeenCalledWith(7, 'autoSave')
+  })
+
+  it('does not auto-save the document when the auto-save interval is 0', async () => {
+    mockSettings = { document_auto_save_interval: 0 }
+    const module = await loadModule()
+    registerIframe(module, 7)
+
+    module.documentApi.triggerValueChange(7, 'content:1.headline', { data: 'Hello' })
+    jest.runAllTimers()
+
+    expect(saveDocument).not.toHaveBeenCalled()
   })
 })
