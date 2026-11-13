@@ -57,11 +57,12 @@ jest.mock('@Pimcore/components/form/form', () => {
   return { Form: { Item: Form.Item, useFormInstance: Form.useFormInstance, useWatch: Form.useWatch, Conditional } }
 })
 jest.mock('@Pimcore/components/select/select', () => ({
-  Select: ({ value, onChange, options }: { value?: string, onChange?: (value: string) => void, options: Array<{ value: string, label: string }> }) => (
+  Select: ({ value, onChange, options, placeholder }: { value?: string | null, onChange?: (value: string) => void, options: Array<{ value: string, label: string }>, placeholder?: string }) => (
     <select
       aria-label="welcome-screen-path"
+      data-placeholder={ placeholder }
       onChange={ (event) => onChange?.(event.target.value) }
-      value={ value }
+      value={ value ?? '' }
     >
       {options.map((option) => (
         <option
@@ -74,7 +75,7 @@ jest.mock('@Pimcore/components/select/select', () => ({
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
-const renderForm = (welcomeScreenPath: string, welcomeScreen = true, onValuesChange = jest.fn()): void => {
+const renderForm = (welcomeScreenPath: string | null, welcomeScreen = true, onValuesChange = jest.fn()): void => {
   render(
     <Form
       initialValues={ { welcomeScreen, welcomeScreenPath } }
@@ -96,33 +97,36 @@ const renderForm = (welcomeScreenPath: string, welcomeScreen = true, onValuesCha
 
 const getSelect = (): HTMLSelectElement => screen.getByLabelText<HTMLSelectElement>('welcome-screen-path')
 
-const renderSelect = (welcomeScreenPath: string, onValuesChange = jest.fn()): HTMLSelectElement => {
+const renderSelect = (welcomeScreenPath: string | null, onValuesChange = jest.fn()): HTMLSelectElement => {
   renderForm(welcomeScreenPath, true, onValuesChange)
 
   return getSelect()
 }
 
 describe('WelcomeScreenPathSelect', () => {
-  it('offers only the dashboard entries of the main navigation', () => {
-    const select = renderSelect('')
+  it('offers only the dashboard entries of the main navigation, without a None option', () => {
+    const select = renderSelect(null)
 
     expect(Array.from(select.options).map((option) => [option.value, option.text])).toEqual([
-      ['', 'none'],
       [DASHBOARD_PATH, 'Overview']
     ])
+    expect(select.dataset.placeholder).toBe('user-management.welcomeScreenPath')
   })
 
   it('shows the stored dashboard', () => {
     expect(renderSelect(DASHBOARD_PATH).value).toBe(DASHBOARD_PATH)
   })
 
-  it('sends an empty string when the choice is removed, so the stored one is cleared', () => {
+  it('sends the chosen dashboard', () => {
     const onValuesChange = jest.fn()
-    const select = renderSelect(DASHBOARD_PATH, onValuesChange)
+    const select = renderSelect(null, onValuesChange)
 
-    fireEvent.change(select, { target: { value: '' } })
+    fireEvent.change(select, { target: { value: DASHBOARD_PATH } })
 
-    expect(onValuesChange).toHaveBeenCalledWith({ welcomeScreenPath: '' }, { welcomeScreen: true, welcomeScreenPath: '' })
+    expect(onValuesChange).toHaveBeenCalledWith(
+      { welcomeScreenPath: DASHBOARD_PATH },
+      { welcomeScreen: true, welcomeScreenPath: DASHBOARD_PATH }
+    )
   })
 
   it('is hidden while the welcome screen switch is off', () => {

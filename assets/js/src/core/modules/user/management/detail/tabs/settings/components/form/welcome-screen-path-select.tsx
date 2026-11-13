@@ -15,18 +15,14 @@ import { Select } from '@Pimcore/components/select/select'
 import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
 import { getWelcomeScreenNavItems } from '@Pimcore/modules/app/welcome-screen/welcome-screen-nav-items'
 
-// The empty value clears the stored choice; an unset field would keep it
 export const WelcomeScreenPathSelect = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { navItems } = useMainNav()
 
-  const options = [
-    { value: '', label: t('none') },
-    ...getWelcomeScreenNavItems(navItems).map((item) => ({
-      value: item.path,
-      label: t(`${item.label ?? item.path}`)
-    }))
-  ]
+  const options = getWelcomeScreenNavItems(navItems).map((item) => ({
+    value: item.path,
+    label: t(`${item.label ?? item.path}`)
+  }))
 
   // Hidden while the switch is off; the form keeps the value, so switching on again shows the same choice
   return (
@@ -41,6 +37,7 @@ export const WelcomeScreenPathSelect = (): React.JSX.Element => {
         <Select
           optionFilterProp="label"
           options={ options }
+          placeholder={ t('user-management.welcomeScreenPath') }
           showSearch
         />
       </Form.Item>
