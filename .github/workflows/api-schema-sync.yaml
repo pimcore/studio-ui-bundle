@@ -119,7 +119,7 @@ jobs:
       - name: Install dependencies
         if: steps.diff.outputs.changed == 'true'
         working-directory: assets
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Apply the schema and regenerate the API client
         if: steps.diff.outputs.changed == 'true'
