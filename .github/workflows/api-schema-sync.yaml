@@ -1,0 +1,58 @@
+name: "API schema sync"
+
+# Keeps the committed OpenAPI schema and the generated RTK Query client in step
+# with the backend. All logic lives in the central collection
+# pimcore/workflows-collection-public; this file only says where this repo keeps
+# its frontend and when to run.
+#
+# Kept on every maintained release branch, like the other workflows here, so
+# that a branch is not missing a workflow its siblings have and so
+# `workflow_dispatch` is offered from each one.
+#
+# Be clear about what that does and does not change. A single run already syncs
+# EVERY mapped line — the reusable workflow checks out each release branch
+# itself, so this file is a caller, not a per-branch worker. And GitHub fires
+# `schedule` from the DEFAULT BRANCH ONLY, so the copies on the other branches
+# never trigger themselves; they exist to be dispatched from. There is therefore
+# still exactly one scheduled run per day however many branches carry this file,
+# and the repo-wide concurrency group below serialises any manual run against it.
+#
+# The branch -> nightly map is maintained centrally, not in this file.
+
+on:
+  schedule:
+    # Weekday mornings, after the nightlies have redeployed. The nightly's own
+    # cadence, not the time of a backend merge, is what bounds freshness here.
+    - cron: '0 5 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to sync ('all' for every mapped branch)"
+        required: false
+        default: "all"
+        type: string
+
+concurrency:
+  # One lock for the whole repo: the reusable workflow pushes to release
+  # branches, and two overlapping runs would race on the same refs. Never
+  # cancel in progress — a cancelled run can leave a pushed branch without
+  # its pull request.
+  group: api-schema-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  api-schema-sync:
+    permissions:
+      contents: write
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-api-schema-sync.yaml@main
+    with:
+      branch: ${{ inputs.branch || 'all' }}
+      # This repo predates the assets/studio layout the other bundles use.
+      working-directory: ./assets
+      api-directory: assets/build/api
+      node-version: "24"
+    secrets:
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
