@@ -15,6 +15,8 @@ namespace Pimcore\Bundle\StudioUiBundle\Controller\Backend;
 
 use function basename;
 use function file_exists;
+use function is_string;
+use function preg_match;
 use Pimcore\Bundle\StudioUiBundle\Document\DocumentVersionComparisonService;
 use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionComparisonException;
 use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionNotFoundException;
@@ -31,6 +33,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/documents', methods: ['GET'])]
 final class DocumentVersionsController extends AbstractController
 {
+    /**
+     * Matches only the names {@see DocumentVersionComparisonService} generates for its own
+     * temporary diff artifacts, so the parameter can no longer address an arbitrary file in
+     * PIMCORE_SYSTEM_TEMP_DIRECTORY.
+     */
+    private const DIFF_FILE_NAME_PATTERN = '/^version-diff-tmp-[\w.-]+\.(?:png|html)$/';
+
     public function __construct(
         private readonly DocumentVersionComparisonService $versionComparisonService,
         private readonly TranslatorInterface $translator,
@@ -87,7 +96,12 @@ final class DocumentVersionsController extends AbstractController
 
     public function diffVersionsHtmlAction(Request $request): BinaryFileResponse
     {
-        $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . basename($request->get('id'));
+        $id = $request->get('id');
+        if (!is_string($id) || preg_match(self::DIFF_FILE_NAME_PATTERN, $id) !== 1) {
+            throw $this->createNotFoundException('Version diff file not found');
+        }
+
+        $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . basename($id);
         if (file_exists($file)) {
             return new BinaryFileResponse($file);
         }
