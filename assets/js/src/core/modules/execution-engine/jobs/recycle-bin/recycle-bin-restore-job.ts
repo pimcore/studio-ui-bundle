@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isArray, isNil, isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
@@ -58,7 +58,7 @@ export class RecycleBinRestoreJob implements JobInterface {
           try {
             if (data.isSuccessful) {
               const messages: unknown = data.payload?.messages
-              this.reportRelocated(isArray(messages) ? messages.length : 0)
+              this.reportRelocated(Array.isArray(messages) ? messages.length : 0)
             }
             await this.handleCompletion()
           } catch (error) {
