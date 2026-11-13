@@ -3137,6 +3137,8 @@ service-users.field.name: Name
 service-users.field.name.fixed: 'The name cannot be changed, because MCP server access is granted by name.'
 service-users.field.name.invalid: 'Use up to 64 letters, digits, dots, hyphens or underscores, starting with a letter or a digit, for example svc-erp-sync.'
 service-users.field.email: Contact email
+service-users.field.responsible-users: Responsible users
+service-users.field.responsible-users.help: 'They answer for this service user wherever a human is needed, for example for notices about it.'
 service-users.field.source-user: User to copy from
 service-users.filter.unused-days: Unused for more than N days
 service-users.status.inactive: Inactive

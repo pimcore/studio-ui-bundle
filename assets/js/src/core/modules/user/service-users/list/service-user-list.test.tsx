@@ -50,7 +50,9 @@ const serviceUser = (id: number, name: string, lastLogin: number | null, active 
   clientId: `client-${id}`,
   lastLogin,
   clientCredentialsEnabled: false,
-  mcpTokens: { active: 0, latestExpiresAt: null }
+  mcpTokens: { active: 0, latestExpiresAt: null },
+  responsibleUsers: [],
+  responsibleRoles: []
 })
 
 const items = [

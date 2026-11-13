@@ -3133,6 +3133,8 @@ service-users.field.name: Nombre
 service-users.field.name.fixed: El nombre no se puede cambiar, porque el acceso al servidor MCP se concede por nombre.
 service-users.field.name.invalid: Use hasta 64 letras, dígitos, puntos, guiones o guiones bajos, empezando por una letra o un dígito, por ejemplo svc-erp-sync.
 service-users.field.email: Correo electrónico de contacto
+service-users.field.responsible-users: Usuarios responsables
+service-users.field.responsible-users.help: 'Responden de este usuario de servicio allí donde se necesita a una persona, por ejemplo para los avisos sobre él.'
 service-users.field.source-user: Usuario desde el que copiar
 service-users.filter.unused-days: Sin usar durante más de N días
 service-users.status.inactive: Inactivo

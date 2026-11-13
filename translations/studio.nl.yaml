@@ -3133,6 +3133,8 @@ service-users.field.name: Naam
 service-users.field.name.fixed: De naam kan niet worden gewijzigd, omdat MCP-servertoegang op naam wordt verleend.
 service-users.field.name.invalid: Gebruik maximaal 64 letters, cijfers, punten, koppeltekens of underscores, beginnend met een letter of cijfer, bijvoorbeeld svc-erp-sync.
 service-users.field.email: Contact-e-mailadres
+service-users.field.responsible-users: Verantwoordelijke gebruikers
+service-users.field.responsible-users.help: 'Zij staan in voor deze servicegebruiker waar een mens nodig is, bijvoorbeeld voor meldingen erover.'
 service-users.field.source-user: Gebruiker om van te kopiëren
 service-users.filter.unused-days: Langer dan N dagen ongebruikt
 service-users.status.inactive: Inactief

@@ -24,7 +24,9 @@ export const toDraft = (serviceUser: ServiceUser): ServiceUserDraft => ({
   docTypes: serviceUser.docTypes,
   assetWorkspaces: serviceUser.assetWorkspaces,
   dataObjectWorkspaces: serviceUser.dataObjectWorkspaces,
-  documentWorkspaces: serviceUser.documentWorkspaces
+  documentWorkspaces: serviceUser.documentWorkspaces,
+  responsibleUsers: serviceUser.responsibleUsers ?? [],
+  responsibleRoles: serviceUser.responsibleRoles ?? []
 })
 
 /**
