@@ -12,7 +12,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { QueryStatus } from '@reduxjs/toolkit/query'
 import React from 'react'
 import { type EmailLog } from '../emails-api-slice.gen'
-import { useEmailLogGetCollectionQuery, useEmailLogSearchListQuery } from '../emails-api-slice-enhanced'
+import { useEmailLogGetCollectionQuery, useEmailLogSearchQuery } from '../emails-api-slice-enhanced'
 import { EmailLogContainer } from './email-log-container'
 
 jest.mock('react-i18next', () => ({
@@ -30,7 +30,7 @@ jest.mock('@Pimcore/app/api/pimcore/tags', () => ({
 jest.mock('../emails-api-slice-enhanced', () => ({
   api: { util: { invalidateTags: jest.fn() } },
   useEmailLogGetCollectionQuery: jest.fn(),
-  useEmailLogSearchListQuery: jest.fn()
+  useEmailLogSearchQuery: jest.fn()
 }))
 
 jest.mock('@Pimcore/components/content-layout/content-layout', () => ({
@@ -122,7 +122,7 @@ const collectionResult: ReturnType<typeof useEmailLogGetCollectionQuery> = {
 }
 
 const searchData = { totalItems: 1, items: [failedEmail] }
-const searchResult: ReturnType<typeof useEmailLogSearchListQuery> = {
+const searchResult: ReturnType<typeof useEmailLogSearchQuery> = {
   data: searchData,
   currentData: searchData,
   status: QueryStatus.fulfilled,
@@ -136,7 +136,7 @@ const searchResult: ReturnType<typeof useEmailLogSearchListQuery> = {
 
 describe('EmailLogContainer', () => {
   const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
-  const searchQuery = jest.mocked(useEmailLogSearchListQuery)
+  const searchQuery = jest.mocked(useEmailLogSearchQuery)
 
   beforeEach(() => {
     collectionQuery.mockReturnValue(collectionResult)

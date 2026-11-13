@@ -1,302 +1,351 @@
 import { api } from "@sdk/api";
 export const addTagTypes = ["Role Management"] as const;
 const injectedRtkApi = api
-    .enhanceEndpoints({
-        addTagTypes,
-    })
-    .injectEndpoints({
-        endpoints: (build) => ({
-            roleCloneById: build.mutation<RoleCloneByIdApiResponse, RoleCloneByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/role/clone/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Role Management"],
-            }),
-            roleFolderCreate: build.mutation<RoleFolderCreateApiResponse, RoleFolderCreateApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/role/folder`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Role Management"],
-            }),
-            roleCreate: build.mutation<RoleCreateApiResponse, RoleCreateApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/role`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Role Management"],
-            }),
-            roleFolderDeleteById: build.mutation<RoleFolderDeleteByIdApiResponse, RoleFolderDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/role/folder/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["Role Management"],
-            }),
-            roleGetById: build.query<RoleGetByIdApiResponse, RoleGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/role/${queryArg.id}` }),
-                providesTags: ["Role Management"],
-            }),
-            roleUpdateById: build.mutation<RoleUpdateByIdApiResponse, RoleUpdateByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/role/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.updateRole,
-                }),
-                invalidatesTags: ["Role Management"],
-            }),
-            roleDeleteById: build.mutation<RoleDeleteByIdApiResponse, RoleDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/role/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["Role Management"],
-            }),
-            roleGetCollection: build.query<RoleGetCollectionApiResponse, RoleGetCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/roles` }),
-                providesTags: ["Role Management"],
-            }),
-            roleListWithPermission: build.query<RoleListWithPermissionApiResponse, RoleListWithPermissionApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/roles/with-permission`,
-                    params: {
-                        permission: queryArg.permission,
-                    },
-                }),
-                providesTags: ["Role Management"],
-            }),
-            roleGetTree: build.query<RoleGetTreeApiResponse, RoleGetTreeApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/roles/tree`,
-                    params: {
-                        parentId: queryArg.parentId,
-                    },
-                }),
-                providesTags: ["Role Management"],
-            }),
-            roleGetShareCollection: build.query<RoleGetShareCollectionApiResponse, RoleGetShareCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/roles-share-list` }),
-                providesTags: ["Role Management"],
-            }),
-            roleSearch: build.query<RoleSearchApiResponse, RoleSearchApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/role/search`,
-                    params: {
-                        searchQuery: queryArg.searchQuery,
-                    },
-                }),
-                providesTags: ["Role Management"],
-            }),
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      roleCloneById: build.mutation<
+        RoleCloneByIdApiResponse,
+        RoleCloneByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role/clone/${queryArg.id}`,
+          method: "POST",
+          body: queryArg.body,
         }),
-        overrideExisting: false,
-    });
+        invalidatesTags: ["Role Management"],
+      }),
+      roleFolderCreate: build.mutation<
+        RoleFolderCreateApiResponse,
+        RoleFolderCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role/folder`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Role Management"],
+      }),
+      roleCreate: build.mutation<RoleCreateApiResponse, RoleCreateApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Role Management"],
+      }),
+      roleFolderDeleteById: build.mutation<
+        RoleFolderDeleteByIdApiResponse,
+        RoleFolderDeleteByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role/folder/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Role Management"],
+      }),
+      roleGetById: build.query<RoleGetByIdApiResponse, RoleGetByIdApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role/${queryArg.id}`,
+        }),
+        providesTags: ["Role Management"],
+      }),
+      roleUpdateById: build.mutation<
+        RoleUpdateByIdApiResponse,
+        RoleUpdateByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.updateRole,
+        }),
+        invalidatesTags: ["Role Management"],
+      }),
+      roleDeleteById: build.mutation<
+        RoleDeleteByIdApiResponse,
+        RoleDeleteByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Role Management"],
+      }),
+      roleGetCollection: build.query<
+        RoleGetCollectionApiResponse,
+        RoleGetCollectionApiArg
+      >({
+        query: () => ({ url: `/pimcore-studio/api/roles` }),
+        providesTags: ["Role Management"],
+      }),
+      roleListWithPermission: build.query<
+        RoleListWithPermissionApiResponse,
+        RoleListWithPermissionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/roles/with-permission`,
+          params: {
+            permission: queryArg.permission,
+          },
+        }),
+        providesTags: ["Role Management"],
+      }),
+      roleGetTree: build.query<RoleGetTreeApiResponse, RoleGetTreeApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/roles/tree`,
+          params: {
+            parentId: queryArg.parentId,
+          },
+        }),
+        providesTags: ["Role Management"],
+      }),
+      roleGetShareCollection: build.query<
+        RoleGetShareCollectionApiResponse,
+        RoleGetShareCollectionApiArg
+      >({
+        query: () => ({ url: `/pimcore-studio/api/roles-share-list` }),
+        providesTags: ["Role Management"],
+      }),
+      roleSearch: build.query<RoleSearchApiResponse, RoleSearchApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/role/search`,
+          params: {
+            searchQuery: queryArg.searchQuery,
+          },
+        }),
+        providesTags: ["Role Management"],
+      }),
+    }),
+    overrideExisting: false,
+  });
 export { injectedRtkApi as api };
-export type RoleCloneByIdApiResponse = /** status 200 Node of the cloned Role. */ TreeNode;
+export type RoleCloneByIdApiResponse =
+  /** status 200 Node of the cloned Role. */ TreeNode;
 export type RoleCloneByIdApiArg = {
-    /** Id of the role */
-    id: number;
-    body: {
-        name?: string;
-    };
+  /** Id of the role */
+  id: number;
+  body: {
+    name?: string;
+  };
 };
-export type RoleFolderCreateApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
+export type RoleFolderCreateApiResponse =
+  /** status 200 Node of the new created Folder */ TreeNode;
 export type RoleFolderCreateApiArg = {
-    body: {
-        parentId: number | null;
-        name: string;
-    };
+  body: {
+    parentId: number | null;
+    name: string;
+  };
 };
-export type RoleCreateApiResponse = /** status 200 Node of the new created Role. */ TreeNode;
+export type RoleCreateApiResponse =
+  /** status 200 Node of the new created Role. */ TreeNode;
 export type RoleCreateApiArg = {
-    body: {
-        parentId: number | null;
-        name: string;
-    };
+  body: {
+    parentId: number | null;
+    name: string;
+  };
 };
 export type RoleFolderDeleteByIdApiResponse = unknown;
 export type RoleFolderDeleteByIdApiArg = {
-    /** Id of the folder */
-    id: number;
+  /** Id of the folder */
+  id: number;
 };
-export type RoleGetByIdApiResponse = /** status 200 List of available user roles. */ DetailedUserRole;
+export type RoleGetByIdApiResponse =
+  /** status 200 List of available user roles. */ DetailedUserRole;
 export type RoleGetByIdApiArg = {
-    /** Id of the role */
-    id: number;
+  /** Id of the role */
+  id: number;
 };
-export type RoleUpdateByIdApiResponse = /** status 200 Updated data. */ DetailedUserRole;
+export type RoleUpdateByIdApiResponse =
+  /** status 200 Updated data. */ DetailedUserRole;
 export type RoleUpdateByIdApiArg = {
-    /** Id of the Role */
-    id: number;
-    updateRole: UpdateUserRole;
+  /** Id of the Role */
+  id: number;
+  updateRole: UpdateUserRole;
 };
 export type RoleDeleteByIdApiResponse = unknown;
 export type RoleDeleteByIdApiArg = {
-    /** Id of the role */
-    id: number;
+  /** Id of the role */
+  id: number;
 };
-export type RoleGetCollectionApiResponse = /** status 200 List of available roles. */ {
+export type RoleGetCollectionApiResponse =
+  /** status 200 List of available roles. */ {
     totalItems: number;
     items: SimpleUserRole[];
-};
+  };
 export type RoleGetCollectionApiArg = void;
-export type RoleListWithPermissionApiResponse = /** status 200 List of roles with the given permission */ {
+export type RoleListWithPermissionApiResponse =
+  /** status 200 List of roles with the given permission */ {
     totalItems: number;
     items: SimpleUserRole[];
-};
+  };
 export type RoleListWithPermissionApiArg = {
-    /** List roles with this permission */
-    permission: string;
+  /** List roles with this permission */
+  permission: string;
 };
-export type RoleGetTreeApiResponse = /** status 200 Collection of roles including folders for the given parent id. */ {
+export type RoleGetTreeApiResponse =
+  /** status 200 Collection of roles including folders for the given parent id. */ {
     totalItems: number;
     items: TreeNode[];
-};
+  };
 export type RoleGetTreeApiArg = {
-    /** Filter roles by parent id. */
-    parentId: number;
+  /** Filter roles by parent id. */
+  parentId: number;
 };
-export type RoleGetShareCollectionApiResponse = /** status 200 List of roles for sharing */ {
+export type RoleGetShareCollectionApiResponse =
+  /** status 200 List of roles for sharing */ {
     totalItems: number;
     items: SimpleUserRole[];
-};
+  };
 export type RoleGetShareCollectionApiArg = void;
 export type RoleSearchApiResponse = /** status 200 List of roles */ {
-    totalItems: number;
-    items: SimpleUserRole[];
+  totalItems: number;
+  items: SimpleUserRole[];
 };
 export type RoleSearchApiArg = {
-    /** Query to search for a role. This can be a part of role name or ID. */
-    searchQuery?: string;
+  /** Query to search for a role. This can be a part of role name or ID. */
+  searchQuery?: string;
 };
 export type TreeNode = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Unique Identifier */
-    id: number;
-    /** Name of the tree node */
-    name: string;
-    /** Is ether folder or a specific item in the folder */
-    type: string;
-    /** If a folder has sub items */
-    hasChildren: boolean;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** Unique Identifier */
+  id: number;
+  /** Name of the tree node */
+  name: string;
+  /** Is ether folder or a specific item in the folder */
+  type: string;
+  /** If a folder has sub items */
+  hasChildren: boolean;
 };
 export type Error = {
-    /** Message */
-    message: string;
+  /** Message */
+  message: string;
 };
 export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
+  /** Message */
+  message: string;
+  /** Details */
+  details: string;
 };
 export type UserWorkspace = {
-    /** ID of the element */
-    cid: number;
-    /** Path of the element */
-    cpath: string;
-    /** List Permission */
-    list: boolean;
-    /** View Permission */
-    view: boolean;
-    /** Publish Permission */
-    publish: boolean;
-    /** Delete Permission */
-    delete: boolean;
-    /** Rename Permission */
-    rename: boolean;
-    /** Create Permission */
-    create: boolean;
-    /** Settings Permission */
-    settings: boolean;
-    /** Versions Permission */
-    versions: boolean;
-    /** Properties Permission */
-    properties: boolean;
+  /** ID of the element */
+  cid: number;
+  /** Path of the element */
+  cpath: string;
+  /** List Permission */
+  list: boolean;
+  /** View Permission */
+  view: boolean;
+  /** Publish Permission */
+  publish: boolean;
+  /** Delete Permission */
+  delete: boolean;
+  /** Rename Permission */
+  rename: boolean;
+  /** Create Permission */
+  create: boolean;
+  /** Settings Permission */
+  settings: boolean;
+  /** Versions Permission */
+  versions: boolean;
+  /** Properties Permission */
+  properties: boolean;
 };
 export type ElementIcon = {
-    /** Icon type */
-    type: "name" | "path";
-    /** Icon value */
-    value: string;
+  /** Icon type */
+  type: "name" | "path";
+  /** Icon value */
+  value: string;
 };
 export type PerspectiveConfig = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Perspective ID */
-    id: string;
-    /** Name */
-    name: string;
-    /** Icon */
-    icon: ElementIcon;
-    /** Is Writeable */
-    isWriteable: boolean;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** Perspective ID */
+  id: string;
+  /** Name */
+  name: string;
+  /** Icon */
+  icon: ElementIcon;
+  /** Is Writeable */
+  isWriteable: boolean;
 };
 export type DetailedUserRole = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the User */
-    id: number;
-    /** Name of Folder or Role */
-    name: string | null;
-    /** Classes the user is allows to see */
-    classes: object;
-    /** Parent ID */
-    parentId: number | null;
-    /** List of permissions for the user */
-    permissions: object;
-    /** List of document types for the role */
-    docTypes: object;
-    websiteTranslationLanguagesEdit: object;
-    websiteTranslationLanguagesView: object;
-    /** Asset Workspace */
-    assetWorkspaces: UserWorkspace[];
-    /** Data Object Workspace */
-    dataObjectWorkspaces: UserWorkspace[];
-    /** Document Workspace */
-    documentWorkspaces: UserWorkspace[];
-    /** Allowed studio perspectives */
-    perspectives: PerspectiveConfig[];
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** ID of the User */
+  id: number;
+  /** Name of Folder or Role */
+  name: string | null;
+  /** Classes the user is allows to see */
+  classes: object;
+  /** Parent ID */
+  parentId: number | null;
+  /** List of permissions for the user */
+  permissions: object;
+  /** List of document types for the role */
+  docTypes: object;
+  websiteTranslationLanguagesEdit: object;
+  websiteTranslationLanguagesView: object;
+  /** Asset Workspace */
+  assetWorkspaces: UserWorkspace[];
+  /** Data Object Workspace */
+  dataObjectWorkspaces: UserWorkspace[];
+  /** Document Workspace */
+  documentWorkspaces: UserWorkspace[];
+  /** Allowed studio perspectives */
+  perspectives: PerspectiveConfig[];
 };
 export type UpdateUserRole = {
-    /** Name of Folder or Role */
-    name: string | null;
-    /** Classes the user is allows to see */
-    classes: object;
-    /** Parent ID */
-    parentId: number | null;
-    /** List of permissions for the user */
-    permissions: object;
-    /** List of document types for the role */
-    docTypes: object;
-    websiteTranslationLanguagesEdit: object;
-    websiteTranslationLanguagesView: object;
-    /** Asset Workspace */
-    assetWorkspaces: UserWorkspace[];
-    /** Data Object Workspace */
-    dataObjectWorkspaces: UserWorkspace[];
-    /** Document Workspace */
-    documentWorkspaces: UserWorkspace[];
-    /** Allowed studio perspectives */
-    perspectives: string[];
+  /** Name of Folder or Role */
+  name: string | null;
+  /** Classes the user is allows to see */
+  classes: object;
+  /** Parent ID */
+  parentId: number | null;
+  /** List of permissions for the user */
+  permissions: object;
+  /** List of document types for the role */
+  docTypes: object;
+  websiteTranslationLanguagesEdit: object;
+  websiteTranslationLanguagesView: object;
+  /** Asset Workspace */
+  assetWorkspaces: UserWorkspace[];
+  /** Data Object Workspace */
+  dataObjectWorkspaces: UserWorkspace[];
+  /** Document Workspace */
+  documentWorkspaces: UserWorkspace[];
+  /** Allowed studio perspectives */
+  perspectives: string[];
 };
 export type SimpleUserRole = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the Role */
-    id: number;
-    /** Name of the Role */
-    name: string;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** ID of the Role */
+  id: number;
+  /** Name of the Role */
+  name: string;
 };
 export const {
-    useRoleCloneByIdMutation,
-    useRoleFolderCreateMutation,
-    useRoleCreateMutation,
-    useRoleFolderDeleteByIdMutation,
-    useRoleGetByIdQuery,
-    useRoleUpdateByIdMutation,
-    useRoleDeleteByIdMutation,
-    useRoleGetCollectionQuery,
-    useRoleListWithPermissionQuery,
-    useRoleGetTreeQuery,
-    useRoleGetShareCollectionQuery,
-    useRoleSearchQuery,
+  useRoleCloneByIdMutation,
+  useRoleFolderCreateMutation,
+  useRoleCreateMutation,
+  useRoleFolderDeleteByIdMutation,
+  useRoleGetByIdQuery,
+  useRoleUpdateByIdMutation,
+  useRoleDeleteByIdMutation,
+  useRoleGetCollectionQuery,
+  useRoleListWithPermissionQuery,
+  useRoleGetTreeQuery,
+  useRoleGetShareCollectionQuery,
+  useRoleSearchQuery,
 } = injectedRtkApi;
