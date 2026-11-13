@@ -51,8 +51,14 @@ jest.mock('@Pimcore/components/import-modal/import-modal', () => ({
   )
 }))
 
-jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({
-  IconTextButton: ({ children, onClick }: any) => <button onClick={ onClick }>{children}</button>
+jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
+  IconButton: ({ onClick, tooltip, ...rest }: any) => (
+    <button
+      aria-label={ rest['aria-label'] }
+      data-tooltip={ tooltip?.title }
+      onClick={ onClick }
+    />
+  )
 }))
 
 // The URL builder lives beside the store's own export/import builders, whose module reaches the
@@ -109,14 +115,14 @@ describe('StoreApplyAction', () => {
     renderAction(true)
 
     expect(isAllowed).toHaveBeenCalledWith(UserPermission.ClassificationStore)
-    expect(screen.getByText('classification-store.apply')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'classification-store.apply' })).toHaveAttribute('data-tooltip', 'classification-store.apply')
     expect(screen.getByTestId('import-modal')).toBeInTheDocument()
   })
 
   it('renders nothing without that permission', () => {
     renderAction(false)
 
-    expect(screen.queryByText('classification-store.apply')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'classification-store.apply' })).not.toBeInTheDocument()
     expect(screen.queryByTestId('import-modal')).not.toBeInTheDocument()
   })
 

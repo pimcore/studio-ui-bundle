@@ -13,7 +13,7 @@ import { type ClassificationStoreCollection2 } from '@Pimcore/modules/data-objec
 /** The declaration of a `multiValue` key: the layout members where published, else the ones its definition carries. */
 export const multiValueMembersOf = (key: ClassificationStoreCollection2): Record<string, unknown> => {
   const definition = key.definition as
-    (Pick<ClassificationStoreCollection2, 'variants' | 'multiValue' | 'maximum' | 'defaultVariant' | 'defaultVariantLabel'> & { fieldtype?: string }) | undefined
+    (Pick<ClassificationStoreCollection2, 'variants' | 'multiValue' | 'maximum'> & { fieldtype?: string, unqualifiedValue?: boolean | null, unqualifiedValueLabel?: string | null }) | undefined
 
   if (definition?.fieldtype !== 'multiValue') {
     return {}
@@ -23,7 +23,7 @@ export const multiValueMembersOf = (key: ClassificationStoreCollection2): Record
     variants: key.variants ?? definition.variants,
     multiValue: key.multiValue ?? definition.multiValue,
     maximum: key.maximum ?? definition.maximum,
-    defaultVariant: key.defaultVariant ?? definition.defaultVariant,
-    defaultVariantLabel: key.defaultVariantLabel ?? definition.defaultVariantLabel
+    defaultVariant: key.defaultVariant ?? definition.unqualifiedValue,
+    defaultVariantLabel: key.defaultVariantLabel ?? definition.unqualifiedValueLabel
   }
 }

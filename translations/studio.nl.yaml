@@ -3250,5 +3250,5 @@ classification-store.multi-value.unreadable-value: "Deze sleutel bevat een waard
 classification-store.multi-value.default-variant-permitted: "Waarden zonder variant toestaan"
 classification-store.multi-value.default-variant-label: "Label van de standaardwaarde"
 classification-store.multi-value.no-writable-slot: "Deze sleutel declareert geen variant en staat geen waarden zonder variant toe, dus er is geen plek om een waarde in te voeren. Declareer een variant of sta waarden zonder variant toe."
-classification-store.apply: "Store aanmaken uit bestand"
+classification-store.apply: "Een nieuwe store aanmaken uit een bestand"
 classification-store.apply-upload: "Store aanmaken"

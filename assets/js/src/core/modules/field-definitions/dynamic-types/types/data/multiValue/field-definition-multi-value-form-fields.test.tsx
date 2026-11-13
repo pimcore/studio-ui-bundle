@@ -110,7 +110,7 @@ describe('FieldDefinitionMultiValueFormFields default variant control', () => {
   const LABEL = 'classification-store.multi-value.default-variant-label'
 
   it('offers the label while the default variant is permitted, and not once it is switched off', () => {
-    renderPicker([], { defaultVariant: true })
+    renderPicker([], { unqualifiedValue: true })
 
     expect(screen.getByLabelText(PERMITTED)).toHaveAttribute('aria-checked', 'true')
     expect(screen.getByLabelText(LABEL)).toBeInTheDocument()
@@ -122,7 +122,7 @@ describe('FieldDefinitionMultiValueFormFields default variant control', () => {
   })
 
   it('clears the label when the control is switched off', () => {
-    renderPicker([], { defaultVariant: true, defaultVariantLabel: 'Base' })
+    renderPicker([], { unqualifiedValue: true, unqualifiedValueLabel: 'Base' })
 
     expect(screen.getByLabelText(LABEL)).toHaveValue('Base')
 

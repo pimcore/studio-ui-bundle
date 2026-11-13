@@ -62,11 +62,11 @@ describe('DynamicTypeFieldDefinitionMultiValue', () => {
 
   it('starts permitting the default variant, and keeps the declaration out of the delegate', () => {
     const type = new DynamicTypeFieldDefinitionMultiValue()
-    const hoisted = type.normalizeFieldDefinition({ delegate: { defaultVariant: 'delegate', defaultVariantLabel: 'delegate' } })
+    const hoisted = type.normalizeFieldDefinition({ delegate: { unqualifiedValue: 'delegate', unqualifiedValueLabel: 'delegate' } })
 
-    expect(type.getDefaultData().defaultVariant).toBe(true)
-    expect(hoisted).not.toHaveProperty('defaultVariant')
-    expect(hoisted).not.toHaveProperty('defaultVariantLabel')
+    expect(type.getDefaultData().unqualifiedValue).toBe(true)
+    expect(hoisted).not.toHaveProperty('unqualifiedValue')
+    expect(hoisted).not.toHaveProperty('unqualifiedValueLabel')
   })
 
   it('hoists the delegate settings without overwriting its own members', () => {
@@ -107,14 +107,14 @@ describe('getMultiValueRefusals without a writable slot', () => {
   const NO_SLOT = ['classification-store.multi-value.no-writable-slot']
 
   it('refuses a key declaring no named variant and declining the default variant', () => {
-    expect(getMultiValueRefusals({ ...delegated, defaultVariant: false }).map((refusal) => refusal.id)).toEqual(NO_SLOT)
-    expect(getMultiValueRefusals({ ...delegated, defaultVariant: false, variants: [] }).map((refusal) => refusal.id)).toEqual(NO_SLOT)
+    expect(getMultiValueRefusals({ ...delegated, unqualifiedValue: false }).map((refusal) => refusal.id)).toEqual(NO_SLOT)
+    expect(getMultiValueRefusals({ ...delegated, unqualifiedValue: false, variants: [] }).map((refusal) => refusal.id)).toEqual(NO_SLOT)
   })
 
   it('accepts a declined default variant beside a named variant, and any key permitting it', () => {
-    expect(getMultiValueRefusals({ ...delegated, defaultVariant: false, variants: [{ name: 'metric' }] })).toEqual([])
-    expect(getMultiValueRefusals({ ...delegated, defaultVariant: true, variants: [] })).toEqual([])
-    expect(getMultiValueRefusals({ ...delegated, defaultVariant: null, variants: [] })).toEqual([])
+    expect(getMultiValueRefusals({ ...delegated, unqualifiedValue: false, variants: [{ name: 'metric' }] })).toEqual([])
+    expect(getMultiValueRefusals({ ...delegated, unqualifiedValue: true, variants: [] })).toEqual([])
+    expect(getMultiValueRefusals({ ...delegated, unqualifiedValue: null, variants: [] })).toEqual([])
     expect(getMultiValueRefusals({ ...delegated, variants: [] })).toEqual([])
   })
 })
@@ -130,13 +130,13 @@ describe('narrowsDeclaration', () => {
 
   it('is true when the default variant is declined, whether it was declared true, null or absent', () => {
     for (const before of [true, null, undefined]) {
-      expect(narrowsDeclaration({ ...declared, defaultVariant: before }, { ...declared, defaultVariant: false })).toBe(true)
+      expect(narrowsDeclaration({ ...declared, unqualifiedValue: before }, { ...declared, unqualifiedValue: false })).toBe(true)
     }
   })
 
   it('is false when the default variant stays declined or is permitted again', () => {
-    expect(narrowsDeclaration({ ...declared, defaultVariant: false }, { ...declared, defaultVariant: false })).toBe(false)
-    expect(narrowsDeclaration({ ...declared, defaultVariant: false }, { ...declared, defaultVariant: true })).toBe(false)
+    expect(narrowsDeclaration({ ...declared, unqualifiedValue: false }, { ...declared, unqualifiedValue: false })).toBe(false)
+    expect(narrowsDeclaration({ ...declared, unqualifiedValue: false }, { ...declared, unqualifiedValue: true })).toBe(false)
   })
 
   it('is false when nothing is narrowed, including a cap removed or raised', () => {

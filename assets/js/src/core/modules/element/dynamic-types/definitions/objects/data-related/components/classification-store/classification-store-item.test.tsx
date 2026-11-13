@@ -616,8 +616,8 @@ describe('ClassificationStoreItem', () => {
       id: 9,
       name: 'Multi',
       keys: [
-        { id: 93, name: 'ef000093', title: 'Height', defaultVariant: false, defaultVariantLabel: 'Base', definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', defaultVariant: true, defaultVariantLabel: 'Old' } },
-        { id: 94, name: 'ef000094', title: 'Width', defaultVariant: null, defaultVariantLabel: null, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', defaultVariant: false, defaultVariantLabel: 'Kept' } }
+        { id: 93, name: 'ef000093', title: 'Height', defaultVariant: false, defaultVariantLabel: 'Base', definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', unqualifiedValue: true, unqualifiedValueLabel: 'Old' } },
+        { id: 94, name: 'ef000094', title: 'Width', defaultVariant: null, defaultVariantLabel: null, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', unqualifiedValue: false, unqualifiedValueLabel: 'Kept' } }
       ]
     } as any
 

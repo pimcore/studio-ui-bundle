@@ -43,7 +43,7 @@ export class DynamicTypeFieldDefinitionMultiValue extends DynamicTypeFieldDefini
       variants: [],
       multiValue: false,
       maximum: null,
-      defaultVariant: true
+      unqualifiedValue: true
     }
   }
 

@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { useMessage } from '@sdk/components'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -40,13 +40,12 @@ export const StoreApplyAction = (): React.JSX.Element => {
 
   return (
     <>
-      <IconTextButton
+      <IconButton
+        aria-label={ t('classification-store.apply') }
         icon={ { value: 'upload-import' } }
         onClick={ () => { setIsOpen(true) } }
-        type="link"
-      >
-        {t('classification-store.apply')}
-      </IconTextButton>
+        tooltip={ { title: t('classification-store.apply') } }
+      />
 
       <ImportModal
         accept='.json,application/json'

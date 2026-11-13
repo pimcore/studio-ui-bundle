@@ -61,7 +61,7 @@ export const getMultiValueRefusals = (definition: Record<string, unknown> | null
   const variants = definition?.variants as ClassificationStoreVariantLayout[] | null | undefined
 
   // Declining the default variant leaves a key without a named variant no slot a value can be written to.
-  if (definition?.defaultVariant === false && !(variants ?? []).some((variant) => variantNameOf(variant).trim() !== '')) {
+  if (definition?.unqualifiedValue === false && !(variants ?? []).some((variant) => variantNameOf(variant).trim() !== '')) {
     refusals.push({ id: REFUSAL_NO_WRITABLE_SLOT })
   }
 
@@ -82,7 +82,7 @@ export const narrowsDeclaration = (
   const newMaximum = after?.maximum
   const lowered = typeof newMaximum === 'number' && (typeof oldMaximum !== 'number' || newMaximum < oldMaximum)
 
-  const declined = before?.defaultVariant !== false && after?.defaultVariant === false
+  const declined = before?.unqualifiedValue !== false && after?.unqualifiedValue === false
 
   return removed || lowered || declined
 }

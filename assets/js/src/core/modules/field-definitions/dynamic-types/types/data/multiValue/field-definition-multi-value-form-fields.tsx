@@ -33,7 +33,7 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
 
   const selectedType = Form.useWatch('delegateDatatype') as string | null | undefined
   const isRepeating = Form.useWatch('multiValue') as boolean | undefined
-  const defaultVariant = Form.useWatch('defaultVariant') as boolean | null | undefined
+  const unqualifiedValue = Form.useWatch('unqualifiedValue') as boolean | null | undefined
 
   // Every type a key may be defined with, except the wrappers, which cannot nest.
   const options = fieldDefinitionRegistry
@@ -103,19 +103,19 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
       </Form.Item>
 
       <Form.Item
-        name='defaultVariant'
+        name='unqualifiedValue'
         valuePropName='checked'
       >
         <Switch
           labelRight={ t('classification-store.multi-value.default-variant-permitted') }
-          onChange={ (checked: boolean) => { if (!checked) form.setFieldValue('defaultVariantLabel', null) } }
+          onChange={ (checked: boolean) => { if (!checked) form.setFieldValue('unqualifiedValueLabel', null) } }
         />
       </Form.Item>
 
-      {defaultVariant !== false && (
+      {unqualifiedValue !== false && (
         <Form.Item
           label={ t('classification-store.multi-value.default-variant-label') }
-          name='defaultVariantLabel'
+          name='unqualifiedValueLabel'
           normalize={ (value: string) => value === '' ? null : value }
         >
           <Input />

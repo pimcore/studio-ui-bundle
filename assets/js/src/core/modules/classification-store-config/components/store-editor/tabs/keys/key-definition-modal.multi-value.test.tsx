@@ -137,12 +137,12 @@ const multiValueType = {
           <InputNumber aria-label='maximum' />
         </Form.Item>
         <Form.Item
-          name='defaultVariant'
+          name='unqualifiedValue'
           valuePropName='checked'
         >
           <Switch />
         </Form.Item>
-        <Form.Item name='defaultVariantLabel'>
+        <Form.Item name='unqualifiedValueLabel'>
           <Input aria-label='default-label' />
         </Form.Item>
       </>
@@ -308,7 +308,7 @@ describe('KeyDefinitionModal for a multiValue key', () => {
     [true, true],
     [false, false]
   ])('opens the default variant control for a stored %p as checked: %p', (stored, checked) => {
-    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], ...(stored === undefined ? {} : { defaultVariant: stored }) }))
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], ...(stored === undefined ? {} : { unqualifiedValue: stored }) }))
 
     expect(screen.getByRole('switch', { name: 'default-variant' })).toHaveAttribute('aria-checked', String(checked))
   })
@@ -321,13 +321,13 @@ describe('KeyDefinitionModal for a multiValue key', () => {
 
     const { definition } = await savedPayload()
 
-    expect(definition).toMatchObject({ defaultVariant: true, defaultVariantLabel: 'Base' })
-    expect(definition.delegate).not.toHaveProperty('defaultVariant')
-    expect(definition.delegate).not.toHaveProperty('defaultVariantLabel')
+    expect(definition).toMatchObject({ unqualifiedValue: true, unqualifiedValueLabel: 'Base' })
+    expect(definition.delegate).not.toHaveProperty('unqualifiedValue')
+    expect(definition.delegate).not.toHaveProperty('unqualifiedValueLabel')
   })
 
   it('states the consequence of declining the default variant, and saves only once confirmed', async () => {
-    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], defaultVariant: true }))
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], unqualifiedValue: true }))
 
     fireEvent.click(screen.getByRole('switch', { name: 'default-variant' }))
     save()
@@ -342,12 +342,12 @@ describe('KeyDefinitionModal for a multiValue key', () => {
 
     const { definition } = await savedPayload()
 
-    expect(definition.defaultVariant).toBe(false)
-    expect(definition.delegate).not.toHaveProperty('defaultVariant')
+    expect(definition.unqualifiedValue).toBe(false)
+    expect(definition.delegate).not.toHaveProperty('unqualifiedValue')
   })
 
   it('refuses a key declaring no variant and declining the default variant, and sends no request', async () => {
-    renderModal(keyOf({ delegateDatatype: 'input', variants: [], defaultVariant: false }))
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [], unqualifiedValue: false }))
 
     save()
     await flush()
