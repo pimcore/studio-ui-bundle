@@ -965,7 +965,7 @@ export type GridColumnConfiguration = {
     type: string;
     /** Frontend Type */
     frontendType?: string;
-    /** Config */
+    /** Config. For a Classification Store column the optional `variant` member addresses one declared variant of a multiValue key: a column without it is expanded by the backend into one column per declared variant, in declaration order, followed by the default slot. An expanded column carries its `variant` in this config, and its cell key is suffixed with `#<variant>`. */
     config: object;
 };
 export type SimplePhpCodeTransformer = {

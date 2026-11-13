@@ -14,12 +14,15 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import React, { useMemo } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Alert } from '@Pimcore/components/alert/alert'
+import { delegateDefinitionOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-delegate-props'
 import { type DefaultGridCellDefinition } from '../../../../objects/data-related/dynamic-type-object-data-abstract'
 
 export interface DefaultModeCellProps {
   objectCellDefinition: DefaultGridCellDefinition
   cellProps: DefaultCellProps
 }
+
+const isMultiValue = (definition: { fieldtype?: string, fieldType?: string }): boolean => (definition.fieldType ?? definition.fieldtype) === 'multiValue'
 
 export const DefaultModeCell = (props: DefaultModeCellProps): React.JSX.Element => {
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
@@ -39,6 +42,8 @@ export const DefaultModeCell = (props: DefaultModeCellProps): React.JSX.Element 
       )
     }
 
+    const rawDefinition: { fieldtype?: string, fieldType?: string } = props?.cellProps?.column?.columnDef?.meta?.config?.dataObjectConfig?.fieldDefinition ?? {}
+
     const newCellProps = {
       ...props.cellProps,
       column: {
@@ -49,7 +54,7 @@ export const DefaultModeCell = (props: DefaultModeCellProps): React.JSX.Element 
             ...props.cellProps.column.columnDef.meta,
             type,
             config: {
-              ...props?.cellProps?.column?.columnDef?.meta?.config?.dataObjectConfig?.fieldDefinition ?? {}
+              ...(isMultiValue(rawDefinition) ? delegateDefinitionOf(rawDefinition) : rawDefinition)
             }
           }
         }

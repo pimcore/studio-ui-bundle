@@ -57,9 +57,9 @@ describe('classificationStoreColumnsToAdd', () => {
 
     expect(result).toHaveLength(3)
     expect(result.map((column) => column.config)).toEqual([
-      { groupId: GROUP_ID, keyId: 9, fieldDefinition: widthDefinition },
-      { groupId: GROUP_ID, keyId: 2, fieldDefinition: heightDefinition },
-      { groupId: GROUP_ID, keyId: 5, fieldDefinition: depthDefinition }
+      { groupId: GROUP_ID, keyId: 9, variant: null, fieldDefinition: widthDefinition },
+      { groupId: GROUP_ID, keyId: 2, variant: null, fieldDefinition: heightDefinition },
+      { groupId: GROUP_ID, keyId: 5, variant: null, fieldDefinition: depthDefinition }
     ])
     expect(result.map((column) => column.frontendType)).toEqual([NUMERIC, 'input', NUMERIC])
     expect(result.map((column) => column.key)).toEqual([FIELD_NAME, FIELD_NAME, FIELD_NAME])
@@ -76,7 +76,7 @@ describe('classificationStoreColumnsToAdd', () => {
     const result = classificationStoreColumnsToAdd({ type: TabId.Group, data: [groupLayout] }, baseColumn, columns)
 
     expect(result).toHaveLength(1)
-    expect(result[0].config).toEqual({ groupId: GROUP_ID, keyId: 9, fieldDefinition: widthDefinition })
+    expect(result[0].config).toEqual({ groupId: GROUP_ID, keyId: 9, variant: null, fieldDefinition: widthDefinition })
 
     const applied = [...columns, ...result]
 
@@ -86,7 +86,7 @@ describe('classificationStoreColumnsToAdd', () => {
     expect(applied[2]).toBe(otherField)
   })
 
-  it('adds a column per key picked on Group by Key, without leaving any of them out', () => {
+  it('adds a column per key picked on Group by Key, leaving out a key the draft already shows', () => {
     const columns = [columnForKey(GROUP_ID, 2, 'de', 220)]
 
     const result = classificationStoreColumnsToAdd({
@@ -98,8 +98,7 @@ describe('classificationStoreColumnsToAdd', () => {
     }, baseColumn, columns)
 
     expect(result.map((column) => column.config)).toEqual([
-      { groupId: GROUP_ID, keyId: 2, fieldDefinition: heightDefinition },
-      { groupId: GROUP_ID, keyId: 9, fieldDefinition: widthDefinition }
+      { groupId: GROUP_ID, keyId: 9, variant: null, fieldDefinition: widthDefinition }
     ])
   })
 
@@ -122,5 +121,37 @@ describe('classificationStoreColumnsToAdd', () => {
     const result = classificationStoreColumnsToAdd({ type: TabId.Group, data: [groupLayout] }, baseColumn, columns)
 
     expect(result).toEqual([])
+  })
+
+  describe('a multiValue key', () => {
+    const multiValueDefinition = { fieldtype: 'multiValue', name: 'color', delegateDatatype: 'input' }
+    const keyWith = (variants: any): any => ({ id: 12, name: 'color', description: '', definition: multiValueDefinition, variants })
+    const pick = (key: any): AvailableColumn[] => classificationStoreColumnsToAdd({ type: TabId.GroupByKey, data: [{ ...key, groupId: GROUP_ID }] }, baseColumn, [])
+    const variantsOf = (columns: AvailableColumn[]): unknown[] => columns.map((column) => (column.config as any).variant)
+
+    it('adds one column per declared variant in declaration order, then one for the default slot', () => {
+      const result = pick(keyWith([{ name: 'Metric', label: 'Metric' }, { name: 'Imperial' }]))
+
+      expect(variantsOf(result)).toEqual(['Metric', 'Imperial', null])
+      expect(result[2].config).toHaveProperty('variant', null)
+      expect(result.every((column) => (column.config as any).keyId === 12)).toBe(true)
+    })
+
+    it('adds the default slot alone for a key with no variants', () => {
+      expect(variantsOf(pick(keyWith([])))).toEqual([null])
+      expect(variantsOf(pick(keyWith(null)))).toEqual([null])
+    })
+
+    it('declares no column for a variant row with an empty name', () => {
+      expect(variantsOf(pick(keyWith([{ name: '' }, { name: 'Metric' }])))).toEqual(['Metric', null])
+    })
+
+    it('adds no second column for a variant the draft already holds, picking the key or its group again', () => {
+      const key = keyWith([{ name: 'Metric' }, { name: 'Imperial' }])
+      const held = pick(key).filter((column) => (column.config as any).variant === 'Metric')
+
+      expect(variantsOf(classificationStoreColumnsToAdd({ type: TabId.GroupByKey, data: [{ ...key, groupId: GROUP_ID }] }, baseColumn, held))).toEqual(['Imperial', null])
+      expect(variantsOf(classificationStoreColumnsToAdd({ type: TabId.Group, data: [{ ...groupLayout, keys: [key] }] }, baseColumn, held))).toEqual(['Imperial', null])
+    })
   })
 })

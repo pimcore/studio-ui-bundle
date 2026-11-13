@@ -142,3 +142,41 @@ describe('useDataObjectColumnMapper - dataobject.advanced columns (#927)', () =>
     expect(result.current.shouldMapDataToColumn({ key: 'firstname', locale: null }, column)).toBe(true)
   })
 })
+
+describe('useDataObjectColumnMapper - classification store variant columns', () => {
+  const csColumn = (variant?: string): SelectedColumn => ({
+    key: 'attributes',
+    type: 'dataobject.classificationstore',
+    config: { keyId: 12, groupId: 3, ...(variant === undefined ? {} : { variant }) },
+    sortable: false,
+    editable: true,
+    localizable: false
+  })
+  const cell = (key: string): any => ({ key, locale: null, additionalAttributes: { keyId: 12, groupId: 3 } })
+
+  it('maps a cell key carrying #variant to that variant column only, and an unsuffixed one to the default slot only', () => {
+    const { result } = renderHook(() => useDataObjectColumnMapper())
+    const metric = csColumn('Metric')
+    const imperial = csColumn('Imperial')
+    const defaultSlot = csColumn()
+    const map = (data: any): boolean[] => [metric, imperial, defaultSlot].map((column) => result.current.shouldMapDataToColumn(data, column))
+
+    expect(map(cell('attributes.color#Metric'))).toEqual([true, false, false])
+    expect(map(cell('attributes.color#Imperial'))).toEqual([false, true, false])
+    expect(map(cell('attributes.color'))).toEqual([false, false, true])
+    // an entry whose locale is not viewable carries the column key and the suffix alone
+    expect(map(cell('attributes#Metric'))).toEqual([true, false, false])
+  })
+
+  it('decodes the identifiers of two variant columns of one key apart', () => {
+    const { result } = renderHook(() => useDataObjectColumnMapper())
+    const metric = csColumn('Metric')
+    const imperial = csColumn('Imperial')
+    const defaultSlot = csColumn()
+    const selectedColumns = [metric, imperial, defaultSlot]
+
+    selectedColumns.forEach((column) => {
+      expect(result.current.decodeColumnIdentifier(result.current.encodeColumnIdentifier(column), selectedColumns)).toBe(column)
+    })
+  })
+})

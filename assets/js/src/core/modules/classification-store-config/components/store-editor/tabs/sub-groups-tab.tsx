@@ -339,6 +339,10 @@ export const SubGroupsTab = ({ storeId }: ISubGroupsTabProps): React.JSX.Element
       header: t('classification-store.columns.id'),
       size: 80
     }),
+    columnHelper.accessor('identifier', {
+      header: t('classification-store.columns.matching-id'),
+      size: 180
+    }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
       size: 220,

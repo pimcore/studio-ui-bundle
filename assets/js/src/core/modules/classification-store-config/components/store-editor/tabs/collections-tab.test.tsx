@@ -169,6 +169,7 @@ const DELETE_URL = `/pimcore-studio/api/classification-store/configuration/colle
 
 const item = {
   id: ID,
+  identifier: 'co000005',
   name: 'measurements',
   storeId: STORE_ID,
   description: null,
@@ -221,6 +222,18 @@ describe('CollectionsTab delete dialog', () => {
 
   afterEach(() => {
     globalThis.fetch = originalFetch
+  })
+
+  it('shows the matching ID of the selected entity as text in the detail pane', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('measurements', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getAllByRole('checkbox')[0])
+
+    expect(await screen.findByText('co000005', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    expect(screen.queryByDisplayValue('co000005')).not.toBeInTheDocument()
   })
 
   it('states the consequence without sending a request', async () => {

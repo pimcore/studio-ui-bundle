@@ -2222,6 +2222,7 @@ classification-store.delete-group-relation-consequence: "Il gruppo viene rimosso
 classification-store.edit-definition: Modifica definizione
 classification-store.edit-key-definition: "Modifica definizione chiave: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "ID di corrispondenza"
 classification-store.columns.name: Nome
 classification-store.columns.title: Titolo
 classification-store.columns.type: Tipo
@@ -3247,3 +3248,4 @@ classification-store.multi-value.not-declared: "non dichiarata"
 classification-store.multi-value.no-delegate: "Questa chiave non ha un tipo con cui modificare i suoi valori."
 classification-store.multi-value.unknown-delegate: "L'editor non ha un campo di input per il tipo {{type}}."
 classification-store.multi-value.unreadable-value: "Questa chiave contiene un valore che l'editor non può leggere come elenco di valori; resta invariato."
+classification-store.multi-value.unreadable-entry: "Questo valore non è un numero che il campo può mostrare; resta così com'è finché non viene cancellato."

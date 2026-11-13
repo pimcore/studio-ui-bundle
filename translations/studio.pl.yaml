@@ -2222,6 +2222,7 @@ classification-store.delete-group-relation-consequence: "Grupa zostaje usunięta
 classification-store.edit-definition: Edytuj definicję
 classification-store.edit-key-definition: "Edytuj definicję klucza: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "ID dopasowania"
 classification-store.columns.name: Nazwa
 classification-store.columns.title: Tytuł
 classification-store.columns.type: Typ
@@ -3247,3 +3248,4 @@ classification-store.multi-value.not-declared: "niezadeklarowany"
 classification-store.multi-value.no-delegate: "Ten klucz nie ma typu, którym można edytować jego wartości."
 classification-store.multi-value.unknown-delegate: "Edytor nie ma pola wprowadzania dla typu {{type}}."
 classification-store.multi-value.unreadable-value: "Ten klucz zawiera wartość, której edytor nie może odczytać jako listy wartości; pozostaje bez zmian."
+classification-store.multi-value.unreadable-entry: "Ta wartość nie jest liczbą, którą pole może wyświetlić; pozostaje zapisana bez zmian, dopóki nie zostanie wyczyszczona."

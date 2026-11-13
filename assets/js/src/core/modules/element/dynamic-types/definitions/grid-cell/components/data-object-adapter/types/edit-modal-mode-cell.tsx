@@ -22,6 +22,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { DataObjectProvider } from '@Pimcore/modules/data-object/data-object-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
+import { variantOfCellKey, variantOfColumn, withoutVariantSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { useTranslation } from 'react-i18next'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
@@ -69,13 +70,13 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
 
   const currentApiColumn = apiColumns?.columns?.find((apiColumn) => {
     if (column?.type === 'dataobject.classificationstore') {
-      const apiColumnKey = column.key!.split('.')[0]
+      const apiColumnKey = withoutVariantSuffix(apiColumn.key as string, column.key).split('.')[0]
 
       if (column?.localizable) {
-        return column.key === apiColumnKey && (column.locale ?? currentLanguage) === apiColumn.locale && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
+        return apiColumnKey === column.key && (column.locale ?? currentLanguage) === apiColumn.locale && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId && variantOfCellKey(apiColumn.key as string, column.key) === variantOfColumn(column)
       }
 
-      return column.key === apiColumnKey && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId
+      return apiColumnKey === column.key && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId && variantOfCellKey(apiColumn.key as string, column.key) === variantOfColumn(column)
     }
 
     if (column?.localizable === true) {

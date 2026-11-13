@@ -77,8 +77,11 @@ const EntryInput = ({ index, ...props }: SlotsProps & { index: number }): React.
   </Form.Group>
 )
 
+const storedValueText = (value: unknown): string => typeof value === 'string' ? value : JSON.stringify(value)
+
 const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): React.JSX.Element => {
   const { t } = useTranslation()
+  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { values, operations } = useNumberedList()
   const entries = values as ClassificationStoreMultiValueEntry[]
   const indexes = indexesOf(entries, slot)
@@ -89,6 +92,18 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
   const addAllowed = canAdd(props.maximum, indexes.length)
   // A variant no longer declared keeps the values it holds, and takes no new ones.
   const canAddHere = slot.declared
+
+  const canReadEntry = (index: number): boolean => objectDataRegistry.getDynamicType(props.delegateDatatype).canReadValue(entries[index].v)
+
+  // Clearing keeps a declared slot's entry as an empty one, which the payload leaves out; a slot only an entry named goes with its last entry.
+  const clear = (index: number): void => {
+    if (slot.declared && indexes.length === 1) {
+      operations.update([index, 'v'], null, false)
+      return
+    }
+
+    operations.remove(index)
+  }
 
   const move = (position: number, delta: -1 | 1): void => {
     const neighbour = indexes[position + delta]
@@ -123,11 +138,30 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
           key={ isRepeating ? `entry-${index}` : `${slotKeyOf(slot)}-${position}` }
         >
           <div className='w-full'>
-            <EntryInput
-              { ...props }
-              index={ index }
-            />
+            {canReadEntry(index)
+              ? (
+                <EntryInput
+                  { ...props }
+                  index={ index }
+                />
+                )
+              : (
+                <Flex
+                  align='center'
+                  gap='extra-small'
+                >
+                  <Text>{storedValueText(entries[index].v)}</Text>
+                  <Text type='warning'>{t('classification-store.multi-value.unreadable-entry')}</Text>
+                </Flex>
+                )}
           </div>
+          {!isRepeating && isEditable && (
+            <IconButton
+              icon={ { value: 'trash' } }
+              onClick={ () => { clear(index) } }
+              tooltip={ { title: t('delete') } }
+            />
+          )}
           {isRepeating && isEditable && (
             <>
               <IconButton

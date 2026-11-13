@@ -60,7 +60,14 @@ jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({
 const mockUnregistered = 'somethingUnknown'
 
 jest.mock('@Pimcore/app/depency-injection', () => ({
-  useInjection: () => ({ hasDynamicType: (id: string) => id !== mockUnregistered })
+  useInjection: () => ({
+    hasDynamicType: (id: string) => id !== mockUnregistered,
+    // numeric reads what parses as a finite number, every other type reads everything
+    getDynamicType: (id: string) => ({
+      canReadValue: (value: unknown) => id !== 'numeric' || value === null || value === undefined || value === '' ||
+        ((typeof value === 'number' || typeof value === 'string') && Number.isFinite(Number(value)))
+    })
+  })
 }))
 
 jest.mock('@Pimcore/app/config/services/service-ids', () => ({
@@ -143,7 +150,8 @@ describe('MultiValueEditor', () => {
     expect(inputs()).toHaveLength(1)
     expect(inputs()[0]).toHaveAttribute('data-fieldtype', 'quantityValue')
     expect(screen.queryByText(ADD)).toBeNull()
-    expect(screen.queryByLabelText(REMOVE)).toBeNull()
+    // a key that does not repeat still offers to clear its one value
+    expect(screen.getAllByLabelText(REMOVE)).toHaveLength(1)
   })
 
   it('renders one input per declared variant, in declared order, labelled by label or by name', () => {
@@ -318,6 +326,55 @@ describe('MultiValueEditor', () => {
     fireEvent.change(inputs()[0], { target: { value: 'm2' } })
 
     expect(await lastEmitted()).toEqual([{ var: 'metric', v: 'm2', p: 0 }, { var: 'legacy', v: 'l', p: 0 }, { v: 'd', p: 0 }])
+  })
+
+  it('offers a clear action on every entry of a key that does not repeat, and none to move', async () => {
+    renderEditor({ variants: [{ name: 'metric' }], multiValue: false, value: [{ var: 'metric', v: 'm' }, { v: 'd' }] })
+
+    expect(screen.getAllByLabelText(REMOVE)).toHaveLength(2)
+    expect(screen.queryByLabelText(MOVE_UP)).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getAllByLabelText(REMOVE)[0])
+
+    expect(await lastEmitted()).toEqual([{ v: 'd', p: 0 }])
+    expect(inputs()).toHaveLength(2)
+  })
+
+  it('offers no clear action on a key that does not repeat when it is not editable', () => {
+    renderEditor({ multiValue: false, noteditable: true, value: [{ v: 'd' }] })
+
+    expect(screen.queryByLabelText(REMOVE)).not.toBeInTheDocument()
+  })
+
+  it('drops the slot of an undeclared variant with its last entry, and its tag', async () => {
+    renderEditor({ variants: [{ name: 'metric' }], multiValue: false, value: [{ var: 'legacy', v: 'l' }] })
+
+    expect(screen.getByText('classification-store.multi-value.not-declared')).toBeInTheDocument()
+
+    fireEvent.click(screen.getAllByLabelText(REMOVE)[1])
+
+    expect(await lastEmitted()).toEqual([])
+    expect(screen.queryByText('classification-store.multi-value.not-declared')).not.toBeInTheDocument()
+  })
+
+  it('shows an entry the delegate cannot read as a line, keeps it in the payload and writes nothing on render', async () => {
+    renderEditor({ delegateDatatype: 'numeric', multiValue: true, value: [{ v: 'Unit 1' }, { v: '20' }, { v: 20 }] })
+
+    expect(screen.getByText('Unit 1')).toBeInTheDocument()
+    expect(screen.getByText('classification-store.multi-value.unreadable-entry')).toBeInTheDocument()
+    expect(inputs()).toHaveLength(2)
+    expect(onChange).not.toHaveBeenCalled()
+
+    fireEvent.change(inputs()[0], { target: { value: '21' } })
+
+    expect(await lastEmitted()).toEqual([{ v: 'Unit 1', p: 0 }, { v: '21', p: 1 }, { v: 20, p: 2 }])
+  })
+
+  it('renders an object or list value in the delegate widget of a type that reads every value', () => {
+    renderEditor({ delegateDatatype: 'quantityValue', multiValue: true, value: [{ v: { value: 30, unitId: 1 } }, { v: [['a']] }] })
+
+    expect(screen.queryByText('classification-store.multi-value.unreadable-entry')).not.toBeInTheDocument()
+    expect(inputs()).toHaveLength(2)
   })
 
   it('offers no add control in the slot of an undeclared variant, while declared slots keep theirs', () => {

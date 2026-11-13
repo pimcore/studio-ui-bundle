@@ -22,18 +22,19 @@ import { useBatchEdit } from './hooks/use-batch-edit'
 import { type BatchEdit } from './batch-edit-provider'
 import { areGroupsEqual } from './utils/dropdown-filter'
 import { DefaultBatchEdit } from './default-batch-edit'
+import { keyAddressOf, variantColumnSuffix, variantOfColumn } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 // The form path a row's value is stored under, matching each renderer's Form.Item name.
 // Object-brick builds a non-trivial path and is skipped (null) — its value isn't migrated/cleared.
-const getFormPath = (batchEdit: BatchEdit, locale: string | null): NamePath | null => {
+export const getFormPath = (batchEdit: BatchEdit, locale: string | null): NamePath | null => {
   if (batchEdit.type === 'dataobject.objectbrick') {
     return null
   }
 
   if (batchEdit.type === 'dataobject.classificationstore') {
     const config = batchEdit.config as { keyId?: number, groupId?: number }
-    return [batchEdit.key, `${config.groupId}`, locale ?? 'default', `${config.keyId}`]
+    return [batchEdit.key, `${config.groupId}`, locale ?? 'default', keyAddressOf(config.keyId!, variantOfColumn(batchEdit))]
   }
 
   return batchEdit.localizable ? ['localizedfields', batchEdit.key, locale ?? ''] : [batchEdit.key]
@@ -89,14 +90,14 @@ export const BatchEditListContainer = ({ onRowMount }: BatchEditListContainerPro
           .filter((locale): locale is string => locale !== null)
 
     const batchEditTitle = hasFieldDefinition(batchEdit.config) ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
-    const baseKey = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
+    const baseKey = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}-${variantOfColumn(batchEdit) ?? ''}` : batchEdit.key
     // Include the group so two columns with the same key/locale in different groups stay distinct.
     const key = JSON.stringify({ group: batchEdit.group, baseKey, locale: batchEdit.localizable ? batchEdit.locale ?? null : null })
 
     return ({
       id: key,
       key,
-      children: <Tag>{t(`${batchEditTitle}`)}</Tag>,
+      children: <Tag>{t(`${batchEditTitle}`) + variantColumnSuffix(batchEdit)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable
           ? [

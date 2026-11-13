@@ -15,6 +15,7 @@ import { type UseInlineEditApiUpdateReturn } from '@Pimcore/modules/element/list
 import { isNil, set } from 'lodash'
 import { addBatchAppendMode, BatchAppendMode, META_SUPPORTS_BATCH_APPEND_MODE } from '../../../batch-actions/batch-append-mode/batch-append-mode'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { keyAddressOf, variantOfColumn } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
@@ -91,7 +92,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
         [columnKey]: {
           [columnConfig.groupId]: {
             [locale]: {
-              [columnConfig.keyId]: update.value
+              [keyAddressOf(columnConfig.keyId as number, variantOfColumn(update.column))]: update.value
             }
           }
         }

@@ -2222,6 +2222,7 @@ classification-store.delete-group-relation-consequence: "De groep wordt alleen u
 classification-store.edit-definition: Definitie bewerken
 classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Koppel-ID"
 classification-store.columns.name: Naam
 classification-store.columns.title: Titel
 classification-store.columns.type: Type
@@ -3247,3 +3248,4 @@ classification-store.multi-value.not-declared: "niet gedeclareerd"
 classification-store.multi-value.no-delegate: "Deze sleutel heeft geen type om de waarden mee te bewerken."
 classification-store.multi-value.unknown-delegate: "De editor heeft geen invoerveld voor het type {{type}}."
 classification-store.multi-value.unreadable-value: "Deze sleutel bevat een waarde die de editor niet als lijst met waarden kan lezen; ze blijft ongewijzigd."
+classification-store.multi-value.unreadable-entry: "Deze waarde is geen getal dat het invoerveld kan tonen; ze blijft ongewijzigd opgeslagen tot ze wordt gewist."
