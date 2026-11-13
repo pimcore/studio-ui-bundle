@@ -95,11 +95,11 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
     const url = new URL(appConfig.mercureUrl)
 
     this.getTopics().forEach(topic => {
-      url.searchParams.append('topic', topic)
+      url.searchParams.append('match', topic)
     })
 
     if (this.lastEventId !== undefined) {
-      url.searchParams.append('lastEventID', this.lastEventId)
+      url.searchParams.append('last_event_id', this.lastEventId)
     }
 
     this.eventSource = new EventSource(url.toString(), { withCredentials: true })
@@ -131,7 +131,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
    * Reconnect under our own control, with a freshly issued authorization cookie.
    *
    * The browser reconnects a dropped EventSource on its own, reusing whatever cookie exists at
-   * that moment. Once `mercureAuthorization` has expired that reconnect is anonymous, and a hub
+   * that moment. Once the authorization cookie has expired that reconnect is anonymous, and a hub
    * that allows anonymous subscribers answers it with `200 OK` and then silently drops every
    * private update - no error, no `onerror`, and `isConnected()` keeps reporting a healthy
    * stream. Closing the source here and reconnecting through `connect()` is what keeps the
