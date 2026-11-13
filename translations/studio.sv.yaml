@@ -3133,6 +3133,8 @@ service-users.field.name: Namn
 service-users.field.name.fixed: Namnet kan inte ändras eftersom MCP-serveråtkomst beviljas utifrån namnet.
 service-users.field.name.invalid: Använd upp till 64 bokstäver, siffror, punkter, bindestreck eller understreck, med en bokstav eller siffra först, till exempel svc-erp-sync.
 service-users.field.email: Kontakt-e-post
+service-users.field.responsible-users: Ansvariga användare
+service-users.field.responsible-users.help: 'De ansvarar för den här tjänsteanvändaren överallt där en människa behövs, till exempel för meddelanden om den.'
 service-users.field.source-user: Användare att kopiera från
 service-users.filter.unused-days: Oanvänd i mer än N dagar
 service-users.status.inactive: Inaktiv

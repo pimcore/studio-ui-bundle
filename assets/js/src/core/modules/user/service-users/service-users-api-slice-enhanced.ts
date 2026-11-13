@@ -9,7 +9,11 @@
  */
 
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi } from './service-users-api-slice.gen'
+import {
+  api as baseApi,
+  type ServiceUser as GeneratedServiceUser,
+  type UpdateServiceUser as GeneratedUpdateServiceUser
+} from './service-users-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.SERVICE_USERS, tagNames.SERVICE_USER_DETAIL],
@@ -63,6 +67,21 @@ const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './service-users-api-slice.gen'
+
+/**
+ * The responsible users and roles of a service user. The backend serves them, but the generated client does not
+ * carry them yet. They are optional so the generated types stay assignable; drop this extension once the
+ * generated ServiceUser and UpdateServiceUser declare the fields.
+ */
+export interface ServiceUserResponsibles {
+  /** IDs of the users who answer for the service user */
+  responsibleUsers?: number[] | null
+  /** IDs of the roles whose members answer for the service user */
+  responsibleRoles?: number[] | null
+}
+
+export type ServiceUser = GeneratedServiceUser & ServiceUserResponsibles
+export type UpdateServiceUser = GeneratedUpdateServiceUser & ServiceUserResponsibles
 
 export const {
   useServiceUserGetCollectionQuery,
