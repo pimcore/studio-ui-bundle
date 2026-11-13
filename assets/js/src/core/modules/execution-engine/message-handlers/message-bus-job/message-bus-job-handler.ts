@@ -293,7 +293,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       currentStep: isNil(data.currentStep) ? undefined : data.currentStep + 1,
       totalSteps: data.totalSteps,
       jobRunChildId: data.jobRun.jobRunChildId ?? undefined,
-      messages: !isNil(data.currentMessage) ? [data.currentMessage] : undefined
+      // on success the current message is only the engine's own completion note
+      messages: !isNil(data.currentMessage) && data.status !== 'finished' ? [data.currentMessage] : undefined
     }
 
     // Progress calculators that count finished steps read the step as "steps completed so far",

@@ -2518,6 +2518,8 @@ recycle-bin.actions.delete: Delete
 recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Recycle Bin Items
+recycle-bin.actions.restore.relocated_one: Element located in __restored. The permissions of that folder now apply.
+recycle-bin.actions.restore.relocated_other: '{{count}} elements located in __restored. The permissions of that folder now apply.'
 ownership-management.title: Ownership Management
 ownership-management.show-deleted-owners: Show items from deleted users
 ownership-management.deleted-user: Deleted user

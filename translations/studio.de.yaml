@@ -2514,6 +2514,8 @@ recycle-bin.actions.delete: Löschen
 recycle-bin.actions.delete.title: Papierkorb-Einträge löschen
 recycle-bin.actions.restore: Wiederherstellen
 recycle-bin.actions.restore.title: Papierkorb-Einträge wiederherstellen
+recycle-bin.actions.restore.relocated_one: Element in __restored abgelegt. Es gelten jetzt die Berechtigungen dieses Ordners.
+recycle-bin.actions.restore.relocated_other: "{{count}} Elemente in __restored abgelegt. Es gelten jetzt die Berechtigungen dieses Ordners."
 ownership-management.title: Eigentümerverwaltung
 ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
 ownership-management.deleted-user: Gelöschter Benutzer
