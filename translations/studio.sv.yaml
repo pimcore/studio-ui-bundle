@@ -2514,8 +2514,8 @@ recycle-bin.actions.delete: Ta bort
 recycle-bin.actions.delete.title: Tar bort papperskorgens objekt
 recycle-bin.actions.restore: Återställ
 recycle-bin.actions.restore.title: Återställer papperskorgens objekt
-recycle-bin.actions.restore.relocated_one: Element placerat i __restored
-recycle-bin.actions.restore.relocated_other: "{{count}} element placerade i __restored"
+recycle-bin.actions.restore.relocated_one: Element placerat i __restored. Nu gäller rättigheterna för den mappen.
+recycle-bin.actions.restore.relocated_other: "{{count}} element placerade i __restored. Nu gäller rättigheterna för den mappen."
 ownership-management.title: Ägarskapshantering
 ownership-management.show-deleted-owners: Visa objekt från borttagna användare
 ownership-management.deleted-user: Borttagen användare

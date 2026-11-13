@@ -2514,8 +2514,8 @@ recycle-bin.actions.delete: Verwijderen
 recycle-bin.actions.delete.title: Prullenbakitems verwijderen
 recycle-bin.actions.restore: Herstellen
 recycle-bin.actions.restore.title: Prullenbakitems herstellen
-recycle-bin.actions.restore.relocated_one: Element geplaatst in __restored
-recycle-bin.actions.restore.relocated_other: "{{count}} elementen geplaatst in __restored"
+recycle-bin.actions.restore.relocated_one: Element geplaatst in __restored. Nu gelden de rechten van die map.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementen geplaatst in __restored. Nu gelden de rechten van die map."
 ownership-management.title: Eigendomsbeheer
 ownership-management.show-deleted-owners: Items van verwijderde gebruikers weergeven
 ownership-management.deleted-user: Verwijderde gebruiker

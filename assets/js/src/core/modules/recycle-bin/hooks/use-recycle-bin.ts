@@ -40,7 +40,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
   const showRelocation = (count: number): void => {
     void messageApi.info({
       content: t('recycle-bin.actions.restore.relocated', { count }),
-      duration: 6
+      duration: 8
     })
   }
 

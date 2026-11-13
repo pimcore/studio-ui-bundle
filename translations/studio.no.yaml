@@ -2514,8 +2514,8 @@ recycle-bin.actions.delete: Slett
 recycle-bin.actions.delete.title: Sletter papirkurvelementer
 recycle-bin.actions.restore: Gjenopprett
 recycle-bin.actions.restore.title: Gjenoppretter papirkurvelementer
-recycle-bin.actions.restore.relocated_one: Element plassert i __restored
-recycle-bin.actions.restore.relocated_other: "{{count}} elementer plassert i __restored"
+recycle-bin.actions.restore.relocated_one: Element plassert i __restored. Nå gjelder tillatelsene for denne mappen.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementer plassert i __restored. Nå gjelder tillatelsene for denne mappen."
 ownership-management.title: Eierskapsadministrasjon
 ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
 ownership-management.deleted-user: Slettet bruker

@@ -2514,8 +2514,8 @@ recycle-bin.actions.delete: Supprimer
 recycle-bin.actions.delete.title: Suppression des éléments de la corbeille
 recycle-bin.actions.restore: Restaurer
 recycle-bin.actions.restore.title: Restauration des éléments de la corbeille
-recycle-bin.actions.restore.relocated_one: Élément placé dans __restored
-recycle-bin.actions.restore.relocated_other: "{{count}} éléments placés dans __restored"
+recycle-bin.actions.restore.relocated_one: Élément placé dans __restored. Les permissions de ce dossier s'appliquent désormais.
+recycle-bin.actions.restore.relocated_other: "{{count}} éléments placés dans __restored. Les permissions de ce dossier s'appliquent désormais."
 ownership-management.title: Gestion de la propriété
 ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
 ownership-management.deleted-user: Utilisateur supprimé
