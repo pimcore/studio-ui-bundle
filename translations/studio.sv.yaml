@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Fullständig sökväg
 asset.asset-editor-tabs.list.columns.creationDate: Skapandedatum
 asset.asset-editor-tabs.list.columns.modificationDate: Ändringsdatum
 asset.tree.context-menu.upload-new-version: Ladda upp ny version
+asset.upload-new-version.rename-confirmation.title: Asseten byter namn
+asset.upload-new-version.rename-confirmation.message: 'Den nya filen är av typen .{{extension}} — asseten byter namn från "{{oldFilename}}" till "{{newFilename}}" och dess offentliga URL ändras. Vill du fortsätta?'
+asset.upload-new-version.renamed: 'Asseten har bytt namn från "{{oldFilename}}" till "{{newFilename}}". Dess offentliga URL har ändrats.'
 asset.copy-info: Kopiera & Info
 asset.upload: Ladda upp
 asset.upload.label: Välj fil
