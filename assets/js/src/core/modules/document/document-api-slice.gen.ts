@@ -768,10 +768,10 @@ export type ValidationError = {
     };
 };
 export type ValidationFailedError = {
-    /** Message of the failure in English. It can contain entered data and markup and is untrusted: escape it before rendering it as HTML */
+    /** Failure message in English. Untrusted, may contain markup: escape before rendering */
     message: string;
     /** Error key, not present when the request failed before the element was validated */
-    errorKey?: string | null;
+    errorKey?: string;
     /** Individual validation errors, present when the failure came from the element validation */
     validationErrors?: ValidationError[];
 };

@@ -195,4 +195,28 @@ describe('useSave', () => {
     expect(publishInstance).not.toBe(autoSaveInstance)
     await waitFor(() => { expect(onFinish).toHaveBeenCalledTimes(1) })
   })
+
+  /**
+   * A workflow transition that saves first queues the user's task behind a running
+   * auto save and waits for its onFinish; a save the user issues meanwhile (the publish
+   * shortcut) takes that queued place. The transition must still hear that the data was
+   * saved, or it waits forever and keeps the workflow locked.
+   */
+  it('carries the onFinish of a queued task along when a later task takes its place', async () => {
+    const running = openSave()
+    const workflowOnFinish = jest.fn()
+    const shortcutOnFinish = jest.fn()
+    const { result } = renderHook(() => ({ editForm: useSave(), toolbar: useSave() }), { wrapper })
+
+    await startSave(result.current.editForm.save, { a: 1 }, SaveTaskType.AutoSave)
+    await act(async () => { await result.current.toolbar.save({ a: 1 }, SaveTaskType.Publish, workflowOnFinish) })
+    await act(async () => { await result.current.toolbar.save({ a: 2 }, SaveTaskType.Publish, shortcutOnFinish) })
+
+    await act(async () => { running.finish() })
+
+    await waitFor(() => { expect(saveDataObject).toHaveBeenCalledTimes(2) })
+    expect(sentPayloads()[1]).toMatchObject({ editableData: { a: 2 } })
+    await waitFor(() => { expect(shortcutOnFinish).toHaveBeenCalledTimes(1) })
+    expect(workflowOnFinish).toHaveBeenCalledTimes(1)
+  })
 })

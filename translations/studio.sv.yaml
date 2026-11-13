@@ -495,6 +495,10 @@ action-could-not-be-applied: Åtgärden kunde inte tillämpas
 failed-to-assign-tag-to-element: Kunde inte tilldela tagg till element
 failed-to-un-assign-tag-to-element: Kunde inte ta bort tagg från element
 workflow-modal.perform-action: Utför åtgärd
+workflow.unsaved-changes.title: Osparade ändringar
+workflow.unsaved-changes.warn: Det finns osparade ändringar. De går förlorade när åtgärden tillämpas. Vill du tillämpa den ändå?
+workflow.unsaved-changes.apply-anyway: Tillämpa ändå
+workflow.unsaved-changes.save-failed: De osparade ändringarna kunde inte sparas, så åtgärden tillämpades inte.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Anteckningar
 workflow-modal.notes-required: Ange dina anteckningar
@@ -687,6 +691,7 @@ mcp-servers.read-only-notice: Serverdefinitioner hanteras via filer i den här m
 mcp-servers.save-success: MCP-server sparad
 mcp-servers.access.users-count: "Användare: {{number}}"
 mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.service-users-count: 'Tjänsteanvändare: {{number}}'
 mcp-servers.access.global-extra: alla autentiserade användare
 mcp-servers.access.nobody: "Ingen ännu"
 mcp-servers.badge.read: Läs
@@ -712,11 +717,16 @@ mcp-servers.editor.copy-url: "Kopiera server-URL"
 mcp-servers.editor.connect-hint: Rikta din MCP-klient mot denna URL och autentisera dig med ditt Pimcore-konto.
 mcp-servers.sharing.title: Delning
 mcp-servers.sharing.share-globally: Dela globalt
-mcp-servers.sharing.share-globally-tooltip: Alla autentiserade användare får konfigurationsläsning och MCP-serveråtkomst (inte konfigurationsredigering)
+mcp-servers.sharing.share-globally-tooltip: Alla autentiserade användare, inklusive tjänsteanvändare, får konfigurationsläsning och MCP-serveråtkomst (inte konfigurationsredigering)
 mcp-servers.sharing.users: Användare
 mcp-servers.sharing.roles: Roller
 mcp-servers.sharing.add-user: Lägg till en användare…
 mcp-servers.sharing.add-role: Lägg till en roll…
+mcp-servers.sharing.service-users: Tjänsteanvändare
+mcp-servers.sharing.add-service-user: Lägg till en tjänsteanvändare…
+mcp-servers.sharing.service-users-hint: Tjänsteanvändare kan bara ansluta; de kan inte läsa eller redigera konfigurationen.
+mcp-servers.sharing.service-users-unavailable: Tjänsteanvändare visas inte eftersom du saknar behörighet för användarhantering. Deras befintliga åtkomst behålls.
+mcp-servers.sharing.inactive: inaktiv
 mcp-servers.sharing.name: Namn
 mcp-servers.sharing.config-read: Konfigurationsläsning
 mcp-servers.sharing.config-edit: Konfigurationsredigering
@@ -2413,6 +2423,9 @@ reports.field-filters: Fältfilter
 reports.editor.delete.content: Vill du verkligen ta bort den anpassade rapporten "{{reportName}}"?
 reports.editor.clone.content: Ange namnet på det nya objektet (a-zA-Z-_)
 reports.editor.add.content: Ange namnet på det nya objektet. Namnet måste vara alfanumeriskt och minst 3 tecken långt (a-zA-Z0-9_-)
+reports.editor.import.title: Importera anpassad rapport
+reports.editor.import.success: Anpassad rapport importerades
+reports.editor.import.invalid-file: Välj en JSON-exportfil
 reports.editor.content.validation.message: Rapportnamnet är ogiltigt
 reports.editor.general-settings.title: Allmänna inställningar
 reports.editor.general-settings.name-label: Namn
@@ -3225,6 +3238,67 @@ tree.actions.edit-tag: Redigera
 tag-configuration.edit-tag: 'Redigera "{{name}}"'
 tag-configuration.name-required: 'Ange ett taggnamn'
 tag-configuration.move-targets-failed: 'Listan över taggar kunde inte läsas in, så endast namnet kan ändras'
+navigation.service-users: Tjänsteanvändare
+widget.service-user-management: Tjänsteanvändare
+service-users.create: Ny
+service-users.create.title: Ny tjänsteanvändare
+service-users.create.ok: Skapa
+service-users.create-from-user: Från användare
+service-users.create-from-user.title: Ny tjänsteanvändare från en användare
+service-users.create-from-user.description: Kopierar användarens behörigheter, roller och workspaces. Användaren ändras inte och adminrättigheter kopieras aldrig.
+service-users.field.name: Namn
+service-users.field.name.fixed: Namnet kan inte ändras eftersom MCP-serveråtkomst beviljas utifrån namnet.
+service-users.field.name.invalid: Använd upp till 64 bokstäver, siffror, punkter, bindestreck eller understreck, med en bokstav eller siffra först, till exempel svc-erp-sync.
+service-users.field.email: Kontakt-e-post
+service-users.field.source-user: Användare att kopiera från
+service-users.filter.unused-days: Oanvänd i mer än N dagar
+service-users.status.inactive: Inaktiv
+service-users.dormancy.never-used: Aldrig använd
+service-users.dormancy.warning: Oanvänd i 90 dagar
+service-users.dormancy.dormant: Vilande
+service-users.tab.settings: Inställningar
+service-users.tab.permissions: Behörigheter
+service-users.tab.roles: Roller
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roller
+service-users.save.success: Tjänsteanvändare sparad
+service-users.deactivate: Inaktivera
+service-users.deactivate.confirm: Inaktivera tjänsteanvändaren "{{name}}"? Dess inloggningsuppgifter slutar fungera vid nästa förfrågan.
+service-users.delete: Ta bort
+service-users.delete.confirm: Ta bort tjänsteanvändaren "{{name}}" permanent? Dess OAuth-klient, dess tokens och dess MCP-serveråtkomst tas bort. Detta kan inte ångras.
+service-users.credentials.title: Inloggningsuppgifter
+service-users.credentials.client-id: Klient-ID
+service-users.credentials.last-used: Senast använd
+service-users.credentials.never-used: Aldrig
+service-users.credentials.no-client: Ingen OAuth-klient
+service-users.credentials.rotate: Rotera hemlighet
+service-users.credentials.rotate.confirm: Skapa en ny klienthemlighet för "{{name}}"? Den nuvarande hemligheten slutar fungera omedelbart.
+service-users.credentials.mcp-tokens: MCP-åtkomsttokens
+service-users.credentials.mcp-tokens.active: Aktiva tokens
+service-users.credentials.mcp-tokens.latest-expiry: Senaste utgångsdatum
+service-users.credentials.mcp-tokens.none: Inga aktiva tokens
+service-users.credentials.issue: Utfärda token
+service-users.credentials.issue.title: Utfärda en MCP-åtkomsttoken
+service-users.credentials.issue.ttl: Giltighetstid i dagar (1 till 90)
+service-users.credentials.issue.ttl.invalid: Ange ett heltal mellan 1 och 90 dagar.
+service-users.credentials.issue.hint: Token visas bara en gång. Klienter skickar den som en Bearer-token i Authorization-headern.
+service-users.credentials.revoke: Återkalla alla tokens
+service-users.credentials.revoke.confirm: Återkalla alla MCP-åtkomsttokens för den här tjänsteanvändaren? Anslutna klienter slutar fungera omedelbart.
+service-users.credentials.revoke.success: Alla MCP-åtkomsttokens för tjänsteanvändaren har återkallats.
+service-users.credentials.oauth: OAuth-klient
+service-users.credentials.oauth.disabled: OAuth-klientuppgifter är inaktiverade på den här instansen; använd en MCP-åtkomsttoken.
+service-users.credentials.oauth.rotate-hint: Åtkomsttokens som redan utfärdats med den gamla hemligheten förblir giltiga tills de löper ut.
+service-users.credentials.token: Åtkomsttoken
+service-users.credentials.token.expires: Upphör
+service-users.create.credentials.title: Inloggningsuppgifter
+service-users.create.credentials.skip: Hoppa över, utfärda senare
+service-users.create.credentials.which: Använd OAuth-klienten för pipelines som kan köra client_credentials-flödet; använd en MCP-åtkomsttoken för allt annat.
+service-users.create.credentials.token-description: Klienter ansluter med en MCP-åtkomsttoken. Utfärda en nu, eller senare via tjänsteanvändarens inloggningsuppgifter.
+service-users.secret.title: Klienthemlighet
+service-users.secret.client-secret: Klienthemlighet
+service-users.secret.warning: Kopiera hemligheten nu. Den visas bara en gång och kan inte visas igen.
+service-users.secret.copy: Kopiera hemlighet
+service-users.secret.close: Stäng
 field-definition.multi-value: "Flervärde"
 classification-store.multi-value.delegate: "ett multiValue av"
 classification-store.multi-value.delegate-required: "Välj typen som detta multiValue innehåller innan du sparar."

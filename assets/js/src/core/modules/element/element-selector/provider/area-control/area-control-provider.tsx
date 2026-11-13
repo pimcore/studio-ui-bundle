@@ -11,9 +11,12 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
+// A built-in area or the key of a caller-supplied tab.
+export type ElementSelectorArea = ElementType | string
+
 export interface AreaControlData {
-  activeArea: ElementType | undefined
-  setActiveArea: (area: ElementType) => void
+  activeArea: ElementSelectorArea | undefined
+  setActiveArea: (area: ElementSelectorArea) => void
 }
 
 export type AreaControlContextProps = AreaControlData | undefined
@@ -25,7 +28,7 @@ export interface AreaControlProviderProps {
 }
 
 export const AreaControlProvider = ({ children }: AreaControlProviderProps): React.JSX.Element => {
-  const [activeArea, setActiveArea] = useState<ElementType>()
+  const [activeArea, setActiveArea] = useState<ElementSelectorArea>()
 
   return useMemo(() => (
     <AreaControlContext.Provider value={ { activeArea, setActiveArea } }>

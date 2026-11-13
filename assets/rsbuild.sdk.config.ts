@@ -115,6 +115,7 @@ export default defineConfig({
       './api/perspectives': './js/src/sdk/api/perspectives/index.ts',
       './api/properties': './js/src/sdk/api/properties/index.ts',
       './api/role': './js/src/sdk/api/role/index.ts',
+      './api/service-user': './js/src/sdk/api/service-user/index.ts',
       './api/schedule': './js/src/sdk/api/schedule/index.ts',
       './api/settings': './js/src/sdk/api/settings/index.ts',
       './api/tags': './js/src/sdk/api/tags/index.ts',

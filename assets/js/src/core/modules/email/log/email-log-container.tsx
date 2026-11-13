@@ -20,7 +20,7 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Header } from '@Pimcore/components/header/header'
-import { api, useEmailLogGetCollectionQuery, useEmailLogSearchListQuery } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { api, useEmailLogGetCollectionQuery, useEmailLogSearchQuery } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -40,10 +40,14 @@ export const EmailLogContainer = (): React.JSX.Element => {
   }, {
     skip: normalizedSearchTerm !== ''
   })
-  const { data: searchData, isLoading: isSearchLoading, isFetching: isSearchFetching } = useEmailLogSearchListQuery({
-    page: currentPage,
-    pageSize,
-    email: normalizedSearchTerm
+  const { data: searchData, isLoading: isSearchLoading, isFetching: isSearchFetching } = useEmailLogSearchQuery({
+    body: {
+      filters: {
+        page: currentPage,
+        pageSize,
+        columnFilters: [{ type: 'email', filterValue: normalizedSearchTerm }]
+      }
+    }
   }, {
     skip: normalizedSearchTerm === ''
   })

@@ -16,3 +16,9 @@ import type {
 export const isFolder = (item: BundleCustomReportsConfigurationTreeNode | BundleCustomReportsTreeNodeFolder): item is BundleCustomReportsTreeNodeFolder => {
   return 'children' in item && Array.isArray(item.children)
 }
+
+export const flattenReports = (items: Array<BundleCustomReportsConfigurationTreeNode | BundleCustomReportsTreeNodeFolder>): BundleCustomReportsConfigurationTreeNode[] =>
+  items.flatMap(item => isFolder(item) ? item.children : [item])
+
+export const findReportById = (items: Array<BundleCustomReportsConfigurationTreeNode | BundleCustomReportsTreeNodeFolder> | undefined, id: string): BundleCustomReportsConfigurationTreeNode | undefined =>
+  flattenReports(items ?? []).find(report => report.id === id)
