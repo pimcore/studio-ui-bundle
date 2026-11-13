@@ -153,5 +153,12 @@ describe('classificationStoreColumnsToAdd', () => {
       expect(variantsOf(classificationStoreColumnsToAdd({ type: TabId.GroupByKey, data: [{ ...key, groupId: GROUP_ID }] }, baseColumn, held))).toEqual(['Imperial', null])
       expect(variantsOf(classificationStoreColumnsToAdd({ type: TabId.Group, data: [{ ...groupLayout, keys: [key] }] }, baseColumn, held))).toEqual(['Imperial', null])
     })
+
+    it('shows a repeating key display-only and leaves a non-repeating key editable, in every slot', () => {
+      const repeating = { ...keyWith([{ name: 'Metric' }]), definition: { ...multiValueDefinition, multiValue: true } }
+
+      expect(pick(repeating).map((column) => column.editable)).toEqual([false, false])
+      expect(pick(keyWith([{ name: 'Metric' }])).map((column) => column.editable)).toEqual([true, true])
+    })
   })
 })

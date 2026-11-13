@@ -13,6 +13,7 @@ import {
   type ClassificationStoreMultiValueEntry,
   type ClassificationStoreVariantLayout
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+import { toDisplayString } from '@Pimcore/utils/type-utils'
 import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
 
 /** One place values of the key are edited: a declared variant, the default variant, or an undeclared one. */
@@ -40,6 +41,11 @@ export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry
     .sort((a, b) => a.position - b.position || a.index - b.index)
     .map(({ entry: { p, ...rest } }) => rest)
 }
+
+/** A stored list of entries as the text a cell shows: the values in order, not the storage shape; anything else as it stands. */
+export const displayValueOf = (value: unknown): unknown => Array.isArray(value)
+  ? orderEntries(value).map((entry) => toDisplayString(entry.v)).filter((text) => text !== '').join(', ')
+  : value
 
 export const variantOf = (entry: ClassificationStoreMultiValueEntry): string | null => entry.var ?? null
 

@@ -21,6 +21,10 @@ interface VariantColumnLike {
   config?: { variant?: string | null, fieldDefinition?: unknown } | null
 }
 
+/** Whether a column's key repeats: it holds a list of entries in one slot, which no grid cell or batch edit row writes. */
+export const isRepeatingColumn = (column: VariantColumnLike | undefined): boolean =>
+  (column?.config?.fieldDefinition as { multiValue?: unknown } | undefined | null)?.multiValue === true
+
 /** The variant a column addresses; null is the default slot. */
 export const variantOfColumn = (column: VariantColumnLike | undefined): string | null => column?.config?.variant ?? null
 
@@ -91,6 +95,7 @@ export const variantSlotsOf = (
   variants: readonly ClassificationStoreVariantLayout[] | null | undefined
 ): Array<ClassificationStoreVariantLayout | null> => [
   ...declaredVariantsOf(variants),
-  // Offered unconditionally; once the layout publishes `defaultVariant`, keep this entry unless it is `false`.
+  // Offered unconditionally. When #1774's refreshed snapshot publishes `KeyLayout.defaultVariant` (and
+  // `defaultVariantLabel`), gate this entry on `defaultVariant !== false` instead.
   null
 ]

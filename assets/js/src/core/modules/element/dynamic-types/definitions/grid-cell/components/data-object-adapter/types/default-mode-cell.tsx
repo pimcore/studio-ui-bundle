@@ -15,6 +15,7 @@ import React, { useMemo } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { delegateDefinitionOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-delegate-props'
+import { displayValueOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-slots'
 import { type DefaultGridCellDefinition } from '../../../../objects/data-related/dynamic-type-object-data-abstract'
 
 export interface DefaultModeCellProps {
@@ -46,6 +47,8 @@ export const DefaultModeCell = (props: DefaultModeCellProps): React.JSX.Element 
 
     const newCellProps = {
       ...props.cellProps,
+      // The cell value of a multiValue key is its stored entry list, which a scalar cell would print as JSON.
+      ...(isMultiValue(rawDefinition) ? { getValue: (() => displayValueOf(props.cellProps.getValue())) as typeof props.cellProps.getValue } : {}),
       column: {
         ...props.cellProps.column,
         columnDef: {

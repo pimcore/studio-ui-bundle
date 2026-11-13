@@ -15,7 +15,7 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { declaredVariantsOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-slots'
 import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
-import { variantSlotsOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
+import { isRepeatingColumn, variantSlotsOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
@@ -57,18 +57,24 @@ const toColumn = (
   groupId: number,
   key: ClassificationStoreCollection2,
   variant: ClassificationStoreVariantLayout | null
-): AvailableColumn => ({
-  ...baseColumn,
-  frontendType: (key.definition as ClassificationStoreKeyDefinition).fieldtype,
-  locale: baseColumn.localizable ? 'default' : undefined,
-  config: {
+): AvailableColumn => {
+  const config = {
     keyId: key.id,
     groupId,
     // `variant: null` addresses the default slot; a column without the member would be expanded by the backend.
     variant: variant === null ? null : variantNameOf(variant),
     fieldDefinition: variant === null ? key.definition : { ...key.definition, variants: declaredVariantsOf(key.variants) }
   }
-})
+
+  return {
+    ...baseColumn,
+    // A repeating key is displayed only: its cell value is a list that neither inline edit nor batch edit writes.
+    editable: baseColumn.editable && !isRepeatingColumn({ config }),
+    frontendType: (key.definition as ClassificationStoreKeyDefinition).fieldtype,
+    locale: baseColumn.localizable ? 'default' : undefined,
+    config
+  }
+}
 
 /** Whether the draft already holds a column of this field for that key of that group, in that variant. */
 const hasColumnForKey = (columns: AvailableColumn[], baseColumn: AvailableColumn, groupId: number, keyId: number, variant: string | null): boolean =>
