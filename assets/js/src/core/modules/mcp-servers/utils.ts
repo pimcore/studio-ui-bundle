@@ -9,7 +9,7 @@
  */
 
 import { type TFunction } from 'i18next'
-import { type McpServer, type McpTool } from './mcp-servers-api-slice.gen'
+import { type McpServer, type McpServerAccessGrant, type McpTool } from './mcp-servers-api-slice.gen'
 
 /**
  * Turn a display name into a url-safe slug matching [a-z0-9-]+.
@@ -38,6 +38,21 @@ export const deriveScopes = (toolNames: string[], tools: McpTool[]): string[] =>
   return Array.from(scopes)
 }
 
+/**
+ * Service users share the `sharedUsers` list with human users; they are told apart
+ * by name against the service user collection.
+ */
+export const splitSharedUsers = (
+  sharedUsers: McpServerAccessGrant[],
+  serviceUserNames: string[]
+): { humanGrants: McpServerAccessGrant[], serviceUserGrants: McpServerAccessGrant[] } => {
+  const names = new Set(serviceUserNames)
+  return {
+    humanGrants: sharedUsers.filter((grant) => !names.has(grant.name)),
+    serviceUserGrants: sharedUsers.filter((grant) => names.has(grant.name))
+  }
+}
+
 type AccessInfo = Pick<McpServer, 'shareGlobal' | 'sharedUsers' | 'sharedRoles'>
 
 /**
@@ -46,12 +61,15 @@ type AccessInfo = Pick<McpServer, 'shareGlobal' | 'sharedUsers' | 'sharedRoles'>
  * neither admins nor the owner get it implicitly, and a grant with only Config Read
  * or Edit connects no one, so only grants with `canAccess` are counted.
  */
-export const describeAccess = (server: AccessInfo, t: TFunction): string => {
+export const describeAccess = (server: AccessInfo, t: TFunction, serviceUserNames: string[] = []): string => {
   if (server.shareGlobal) {
     return t('mcp-servers.access.global-extra')
   }
 
-  const userCount = server.sharedUsers.filter((grant) => grant.canAccess).length
+  // Service users are stored in sharedUsers like humans; they are counted separately.
+  const { humanGrants, serviceUserGrants } = splitSharedUsers(server.sharedUsers, serviceUserNames)
+  const userCount = humanGrants.filter((grant) => grant.canAccess).length
+  const serviceUserCount = serviceUserGrants.filter((grant) => grant.canAccess).length
   const roleCount = server.sharedRoles.filter((grant) => grant.canAccess).length
   const parts: string[] = []
 
@@ -65,6 +83,10 @@ export const describeAccess = (server: AccessInfo, t: TFunction): string => {
 
   if (roleCount > 0) {
     parts.push(t('mcp-servers.access.roles-count', { number: roleCount }))
+  }
+
+  if (serviceUserCount > 0) {
+    parts.push(t('mcp-servers.access.service-users-count', { number: serviceUserCount }))
   }
 
   if (parts.length === 0) {

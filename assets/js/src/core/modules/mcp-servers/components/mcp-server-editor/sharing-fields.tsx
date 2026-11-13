@@ -10,171 +10,18 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil } from 'lodash'
-import { createColumnHelper } from '@tanstack/react-table'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Title } from '@Pimcore/components/title/title'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { Select } from '@Pimcore/components/select/select'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { OperationalGrid } from '@Pimcore/components/operational-grid/operational-grid'
 import { useUserGetShareCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useServiceUserGetCollectionQuery } from '@Pimcore/modules/user/service-users/service-users-api-slice-enhanced'
 import { useRoleGetShareCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
 import { type McpServerAccessGrant } from '../../mcp-servers-api-slice.gen'
-import { describeAccess } from '../../utils'
-
-interface SharingGridProps {
-  /** Names available to add (users or roles), from the share collection. */
-  candidateNames: string[]
-  value: McpServerAccessGrant[]
-  onChange: (value: McpServerAccessGrant[]) => void
-  disabled: boolean
-  addPlaceholder: string
-  /** Owner username (users grid only). The owner always has Config Read + Edit. */
-  ownerName?: string | null
-}
-
-const SharingGrid = ({
-  candidateNames,
-  value,
-  onChange,
-  disabled,
-  addPlaceholder,
-  ownerName
-}: SharingGridProps): React.JSX.Element => {
-  const { t } = useTranslation()
-
-  // The owner has implicit Config Read + Config Edit (the backend grants them
-  // regardless of the stored flags), so those two are shown locked-on and only
-  // MCP Server Access is meaningful to toggle for the owner's own row.
-  const isPrivileged = (grant: McpServerAccessGrant): boolean =>
-    !isNil(ownerName) && grant.name === ownerName
-
-  const columns = useMemo(() => {
-    const columnHelper = createColumnHelper<McpServerAccessGrant>()
-
-    return [
-      // Accessor (not a custom display cell) so the grid's default cell renderer
-      // applies the standard horizontal padding — matching agent-config permissions.
-      columnHelper.accessor((row) => row.name, {
-        id: 'name',
-        header: t('mcp-servers.sharing.name'),
-        size: 240,
-        meta: { editable: false, autoWidth: true }
-      }),
-      // Three independent capabilities per grant (issue #1452), in the order the
-      // spec lists them. Each is a real boolean field, so the grid writes it
-      // straight through onChange. Config Read is forced on (and its box disabled)
-      // whenever Edit is set — you cannot edit a config you cannot read.
-      columnHelper.accessor('canRead', {
-        header: t('mcp-servers.sharing.config-read'),
-        size: 130,
-        meta: {
-          type: 'checkbox',
-          editable: (row: McpServerAccessGrant) => !disabled && !row.canEdit && !isPrivileged(row),
-          config: { align: 'center' }
-        }
-      }),
-      columnHelper.accessor('canEdit', {
-        header: t('mcp-servers.sharing.config-edit'),
-        size: 130,
-        meta: {
-          type: 'checkbox',
-          editable: (row: McpServerAccessGrant) => !disabled && !isPrivileged(row),
-          config: { align: 'center' }
-        }
-      }),
-      columnHelper.accessor('canAccess', {
-        header: t('mcp-servers.sharing.mcp-access'),
-        size: 170,
-        meta: {
-          type: 'checkbox',
-          editable: !disabled,
-          config: { align: 'center' }
-        }
-      }),
-      columnHelper.display({
-        id: 'actions',
-        header: '',
-        size: 60,
-        enableResizing: false,
-        enableSorting: false,
-        cell: (info) => (
-          <Flex
-            align="center"
-            justify="center"
-          >
-            {/* The owner's row is locked like its Read/Edit cells: removing it would drop
-                the owner's MCP Server Access; revoking Access is done with its checkbox. */}
-            <IconButton
-              disabled={ disabled || isPrivileged(info.row.original) }
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                const next = [...value]
-                next.splice(info.row.index, 1)
-                onChange(next)
-              } }
-              title={ t('delete') }
-              type="text"
-            />
-          </Flex>
-        )
-      })
-    ]
-  }, [t, disabled, value, onChange, ownerName])
-
-  const options = useMemo(() => {
-    const taken = new Set(value.map((grant) => grant.name))
-    return candidateNames
-      .filter((name) => !taken.has(name))
-      .map((name) => ({ label: name, value: name }))
-  }, [candidateNames, value])
-
-  // Keep every row self-consistent: the owner always has Config Read + Edit, and
-  // no one may have Edit without Read. Applied to both the rendered rows and every
-  // change, so the (disabled) boxes show ticked and never persist a nonsense state.
-  const normalize = (grants: McpServerAccessGrant[]): McpServerAccessGrant[] =>
-    grants.map((grant) => {
-      if (isPrivileged(grant)) {
-        return grant.canRead && grant.canEdit ? grant : { ...grant, canRead: true, canEdit: true }
-      }
-      return grant.canEdit && !grant.canRead ? { ...grant, canRead: true } : grant
-    })
-
-  return (
-    <OperationalGrid
-      autoWidth
-      columns={ columns }
-      onChange={ (next) => { onChange(normalize(next as McpServerAccessGrant[])) } }
-      value={ normalize(value) }
-    >
-      {!disabled && (
-        <OperationalGrid.Operations>
-          {(operations) => (
-            <Select
-              onChange={ (name: string) => {
-                if (!isNil(name) && name !== '') {
-                  // New grant starts read-only; Edit and Access are opt-in.
-                  operations.addRow({ name, canRead: true, canAccess: false, canEdit: false })
-                }
-              } }
-              options={ options }
-              placeholder={ addPlaceholder }
-              showSearch
-              style={ { width: 260 } }
-              // Always render the placeholder — the picked entry is pushed to the grid, never kept here.
-              value={ undefined }
-            />
-          )}
-        </OperationalGrid.Operations>
-      )}
-      <OperationalGrid.Grid />
-    </OperationalGrid>
-  )
-}
+import { SharingGrid } from './sharing-grid'
+import { describeAccess, splitSharedUsers } from '../../utils'
 
 interface SharingFieldsProps {
   shareGlobal: boolean
@@ -200,12 +47,41 @@ export const SharingFields = ({
 }: SharingFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { data: userList } = useUserGetShareCollectionQuery()
+  const { data: userList, isLoading: loadingUsers } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
 
-  const userNames = useMemo<string[]>(
+  const shareListNames = useMemo<string[]>(
     () => (userList?.items ?? []).map((user) => user.username),
     [userList]
+  )
+  const {
+    data: serviceUserList,
+    isLoading: loadingServiceUsers,
+    isError: serviceUsersUnavailable
+  } = useServiceUserGetCollectionQuery()
+  const serviceUsers = serviceUserList?.items
+  // Listing service users needs the user management permission, sharing does not. Without the
+  // list, every grant that is not for a human user from the share list is kept as a service-user
+  // grant: it is passed through unchanged on every write and counted as such in the summary.
+  const serviceUserNames = useMemo<string[]>(
+    () => serviceUsersUnavailable
+      ? sharedUsers.map((grant) => grant.name).filter((name) => !shareListNames.includes(name))
+      : (serviceUsers ?? []).map((serviceUser) => serviceUser.name),
+    [serviceUsersUnavailable, sharedUsers, shareListNames, serviceUsers]
+  )
+  // Until it is known which grants are service users, a write from either grid would drop them.
+  const grantsDisabled = disabled || loadingServiceUsers || (serviceUsersUnavailable && loadingUsers)
+  const userNames = useMemo<string[]>(
+    () => shareListNames.filter((name) => !serviceUserNames.includes(name)),
+    [shareListNames, serviceUserNames]
+  )
+  const inactiveServiceUserNames = useMemo<string[]>(
+    () => (serviceUsers ?? []).filter((serviceUser) => !serviceUser.active).map((serviceUser) => serviceUser.name),
+    [serviceUsers]
+  )
+  const { humanGrants, serviceUserGrants } = useMemo(
+    () => splitSharedUsers(sharedUsers, serviceUserNames),
+    [sharedUsers, serviceUserNames]
   )
   const roleNames = useMemo<string[]>(
     () => (roleList?.items ?? []).map((role) => role.name),
@@ -213,7 +89,7 @@ export const SharingFields = ({
   )
 
   // Who can connect, not who can see the configuration: see describeAccess().
-  const summary = describeAccess({ shareGlobal, sharedUsers, sharedRoles }, t)
+  const summary = describeAccess({ shareGlobal, sharedUsers, sharedRoles }, t, serviceUserNames)
 
   return (
     <Flex
@@ -243,10 +119,10 @@ export const SharingFields = ({
           <SharingGrid
             addPlaceholder={ t('mcp-servers.sharing.add-user') }
             candidateNames={ userNames }
-            disabled={ disabled }
-            onChange={ onSharedUsersChange }
+            disabled={ grantsDisabled }
+            onChange={ (next) => { onSharedUsersChange([...next, ...serviceUserGrants]) } }
             ownerName={ ownerName }
-            value={ sharedUsers }
+            value={ humanGrants }
           />
 
           <Title level={ 5 }>{t('mcp-servers.sharing.roles')}</Title>
@@ -257,6 +133,24 @@ export const SharingFields = ({
             onChange={ onSharedRolesChange }
             value={ sharedRoles }
           />
+
+          <Title level={ 5 }>{t('mcp-servers.sharing.service-users')}</Title>
+          {serviceUsersUnavailable
+            ? <Text type="secondary">{t('mcp-servers.sharing.service-users-unavailable')}</Text>
+            : (
+              <>
+                <Text type="secondary">{t('mcp-servers.sharing.service-users-hint')}</Text>
+                <SharingGrid
+                  accessOnly
+                  addPlaceholder={ t('mcp-servers.sharing.add-service-user') }
+                  candidateNames={ serviceUserNames }
+                  disabled={ grantsDisabled }
+                  inactiveNames={ inactiveServiceUserNames }
+                  onChange={ (next) => { onSharedUsersChange([...humanGrants, ...next]) } }
+                  value={ serviceUserGrants }
+                />
+              </>
+              )}
         </>
       )}
 

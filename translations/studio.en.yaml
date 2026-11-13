@@ -693,6 +693,7 @@ mcp-servers.read-only-notice: Server definitions are file-managed on this enviro
 mcp-servers.save-success: MCP server saved
 mcp-servers.access.users-count: "Users: {{number}}"
 mcp-servers.access.roles-count: "Roles: {{number}}"
+mcp-servers.access.service-users-count: "Service users: {{number}}"
 mcp-servers.access.global-extra: any authenticated user
 mcp-servers.access.nobody: Nobody yet
 mcp-servers.badge.read: Read
@@ -718,11 +719,16 @@ mcp-servers.editor.copy-url: Copy server URL
 mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
 mcp-servers.sharing.title: Sharing
 mcp-servers.sharing.share-globally: Share globally
-mcp-servers.sharing.share-globally-tooltip: Any authenticated user gets Config Read and MCP Server Access (not Config Edit)
+mcp-servers.sharing.share-globally-tooltip: Any authenticated user, including service users, gets Config Read and MCP Server Access (not Config Edit)
 mcp-servers.sharing.users: Users
 mcp-servers.sharing.roles: Roles
 mcp-servers.sharing.add-user: Add a user…
 mcp-servers.sharing.add-role: Add a role…
+mcp-servers.sharing.service-users: Service users
+mcp-servers.sharing.add-service-user: Add a service user…
+mcp-servers.sharing.service-users-hint: Service users can only connect; they cannot read or edit the configuration.
+mcp-servers.sharing.service-users-unavailable: Service users are not listed because you lack the user management permission. Their existing access is kept.
+mcp-servers.sharing.inactive: inactive
 mcp-servers.sharing.name: Name
 mcp-servers.sharing.config-read: Config Read
 mcp-servers.sharing.config-edit: Config Edit
@@ -3120,3 +3126,64 @@ tree.actions.edit-tag: Edit
 tag-configuration.edit-tag: 'Edit "{{name}}"'
 tag-configuration.name-required: 'Please enter a tag name'
 tag-configuration.move-targets-failed: 'The list of tags could not be loaded, so only the name can be changed'
+navigation.service-users: Service Users
+widget.service-user-management: Service Users
+service-users.create: New
+service-users.create.title: New service user
+service-users.create.ok: Create
+service-users.create-from-user: From user
+service-users.create-from-user.title: New service user from a user
+service-users.create-from-user.description: 'Copies the permissions, roles and workspaces of the user. The user is not changed and admin rights are never copied.'
+service-users.field.name: Name
+service-users.field.name.fixed: 'The name cannot be changed, because MCP server access is granted by name.'
+service-users.field.name.invalid: 'Use up to 64 letters, digits, dots, hyphens or underscores, starting with a letter or a digit, for example svc-erp-sync.'
+service-users.field.email: Contact email
+service-users.field.source-user: User to copy from
+service-users.filter.unused-days: Unused for more than N days
+service-users.status.inactive: Inactive
+service-users.dormancy.never-used: Never used
+service-users.dormancy.warning: Unused for 90 days
+service-users.dormancy.dormant: Dormant
+service-users.tab.settings: Settings
+service-users.tab.permissions: Permissions
+service-users.tab.roles: Roles
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roles
+service-users.save.success: Service user saved
+service-users.deactivate: Deactivate
+service-users.deactivate.confirm: 'Deactivate service user "{{name}}"? Its credentials stop working with the next request.'
+service-users.delete: Delete
+service-users.delete.confirm: 'Delete service user "{{name}}" permanently? Its OAuth client, its tokens and its MCP server access are removed. This cannot be undone.'
+service-users.credentials.title: Credentials
+service-users.credentials.client-id: Client ID
+service-users.credentials.last-used: Last used
+service-users.credentials.never-used: Never
+service-users.credentials.no-client: No OAuth client
+service-users.credentials.rotate: Rotate secret
+service-users.credentials.rotate.confirm: 'Create a new client secret for "{{name}}"? The current secret stops working at once.'
+service-users.credentials.mcp-tokens: MCP access tokens
+service-users.credentials.mcp-tokens.active: Active tokens
+service-users.credentials.mcp-tokens.latest-expiry: Latest expiry
+service-users.credentials.mcp-tokens.none: No active tokens
+service-users.credentials.issue: Issue token
+service-users.credentials.issue.title: Issue an MCP access token
+service-users.credentials.issue.ttl: Lifetime in days (1 to 90)
+service-users.credentials.issue.ttl.invalid: Enter a whole number of days from 1 to 90.
+service-users.credentials.issue.hint: The token is shown only once. Clients send it as a Bearer token in the Authorization header.
+service-users.credentials.revoke: Revoke all tokens
+service-users.credentials.revoke.confirm: Revoke every MCP access token of this service user? Connected clients stop working immediately.
+service-users.credentials.revoke.success: All MCP access tokens of the service user are revoked.
+service-users.credentials.oauth: OAuth client
+service-users.credentials.oauth.disabled: OAuth client credentials are disabled on this instance; use an MCP access token.
+service-users.credentials.oauth.rotate-hint: Access tokens already issued with the old secret stay valid until they expire.
+service-users.credentials.token: Access token
+service-users.credentials.token.expires: Expires
+service-users.create.credentials.title: Credentials
+service-users.create.credentials.skip: Skip, issue later
+service-users.create.credentials.which: 'Use the OAuth client for pipelines that can run the client_credentials grant; use an MCP access token for everything else.'
+service-users.create.credentials.token-description: 'Clients connect with an MCP access token. Issue one now, or later from the credentials of the service user.'
+service-users.secret.title: Client secret
+service-users.secret.client-secret: Client secret
+service-users.secret.warning: 'Copy the secret now. It is shown only once and cannot be displayed again.'
+service-users.secret.copy: Copy secret
+service-users.secret.close: Close
