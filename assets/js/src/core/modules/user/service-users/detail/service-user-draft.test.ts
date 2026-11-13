@@ -57,6 +57,13 @@ describe('toDraft', () => {
     expect(draft.responsibleRoles).toEqual([9])
   })
 
+  it('orders the responsibles by id like core returns them', () => {
+    const draft = toDraft({ ...base, responsibleUsers: [5, 3], responsibleRoles: [9, 2] })
+
+    expect(draft.responsibleUsers).toEqual([3, 5])
+    expect(draft.responsibleRoles).toEqual([2, 9])
+  })
+
   it('reads absent responsibles as empty lists', () => {
     const draft = toDraft(base as unknown as Parameters<typeof toDraft>[0])
 

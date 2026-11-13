@@ -14,7 +14,16 @@ import { type ServiceUser, type UpdateServiceUser } from '../service-users-api-s
  * The editable part of a service user. Name and state are not part of it: the name is fixed because MCP
  * server access matches it, and the state changes only through deactivation.
  */
-export type ServiceUserDraft = Required<UpdateServiceUser>
+export type ServiceUserDraft = Required<Omit<UpdateServiceUser, 'responsibleUsers' | 'responsibleRoles'>> & {
+  responsibleUsers: number[]
+  responsibleRoles: number[]
+}
+
+/**
+ * Core returns the responsibles ordered by id, so the draft keeps them in that order too: an order-sensitive
+ * comparison against the refetched value would otherwise see a change where there is none.
+ */
+export const sortIds = (ids: readonly number[] | null | undefined): number[] => [...(ids ?? [])].sort((a, b) => a - b)
 
 export const toDraft = (serviceUser: ServiceUser): ServiceUserDraft => ({
   email: serviceUser.email,
@@ -25,8 +34,8 @@ export const toDraft = (serviceUser: ServiceUser): ServiceUserDraft => ({
   assetWorkspaces: serviceUser.assetWorkspaces,
   dataObjectWorkspaces: serviceUser.dataObjectWorkspaces,
   documentWorkspaces: serviceUser.documentWorkspaces,
-  responsibleUsers: serviceUser.responsibleUsers ?? [],
-  responsibleRoles: serviceUser.responsibleRoles ?? []
+  responsibleUsers: sortIds(serviceUser.responsibleUsers),
+  responsibleRoles: sortIds(serviceUser.responsibleRoles)
 })
 
 /**

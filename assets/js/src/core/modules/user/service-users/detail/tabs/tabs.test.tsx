@@ -14,28 +14,39 @@ import { RolesTab } from './roles-tab'
 import { SettingsTab } from './settings-tab'
 import { type ServiceUser } from '../../service-users-api-slice-enhanced'
 
+let mockRoleList: { totalItems?: number, items: Array<{ id: number, name: string }> } | undefined = {
+  totalItems: 2,
+  items: [{ id: 1, name: 'editors' }, { id: 2, name: 'integrations' }]
+}
 jest.mock('@Pimcore/modules/user/user-api-slice-enhanced', () => ({
-  useUserGetShareCollectionQuery: () => ({ data: { items: [{ id: 3, username: 'jane' }] } })
+  useUserGetCollectionQuery: () => ({ data: { items: [{ id: 3, username: 'jane' }] } })
 }))
 jest.mock('@Pimcore/modules/user/roles/roles-api-slice-enhanced', () => ({
   useRoleGetCollectionQuery: () => ({
     isLoading: false,
-    data: { totalItems: 2, items: [{ id: 1, name: 'editors' }, { id: 2, name: 'integrations' }] }
-  }),
-  useRoleGetShareCollectionQuery: () => ({ data: { items: [{ id: 9, name: 'ops' }] } })
+    data: mockRoleList
+  })
 }))
-jest.mock('@Pimcore/components/users-roles-dropdown/users-roles-dropdown', () => ({
-  UsersRolesDropdown: ({ initialSharedUsers, initialSharedRoles, onChange }: {
-    initialSharedUsers: number[]
-    initialSharedRoles: number[]
-    onChange: (change: { sharedUsers: number[], sharedRoles: number[] }) => void
-  }) => (
-    <button
-      onClick={ () => { onChange({ sharedUsers: [3, 5], sharedRoles: [9] }) } }
-      type="button"
-    >{`responsibles:${initialSharedUsers.join(',')}|${initialSharedRoles.join(',')}`}</button>
-  )
-}))
+jest.mock('@Pimcore/components/users-roles-dropdown/users-roles-dropdown', () => {
+  // Like the real dropdown, it reads its initial value once into its own state.
+  const { useState } = jest.requireActual('react')
+  return {
+    UsersRolesDropdown: ({ initialSharedUsers, initialSharedRoles, onChange }: {
+      initialSharedUsers: number[]
+      initialSharedRoles: number[]
+      onChange: (change: { sharedUsers: number[], sharedRoles: number[] }) => void
+    }) => {
+      const [users] = useState(initialSharedUsers)
+      const [roles] = useState(initialSharedRoles)
+      return (
+        <button
+          onClick={ () => { onChange({ sharedUsers: [5, 3], sharedRoles: [9] }) } }
+          type="button"
+        >{`responsibles:${users.join(',')}|${roles.join(',')}`}</button>
+      )
+    }
+  }
+})
 jest.mock('../../credentials/credentials-section', () => ({
   CredentialsSection: ({ serviceUser }: { serviceUser: { clientId: string } }) => <div>{`credentials:${serviceUser.clientId}`}</div>
 }))
@@ -88,6 +99,10 @@ describe('RolesTab', () => {
 })
 
 describe('SettingsTab', () => {
+  beforeEach(() => {
+    mockRoleList = { items: [{ id: 9, name: 'ops' }] }
+  })
+
   it('shows the name read-only and the credentials', () => {
     render(
       <SettingsTab
@@ -136,5 +151,39 @@ describe('SettingsTab', () => {
     fireEvent.click(screen.getByText('responsibles:3|9'))
 
     expect(onChange).toHaveBeenCalledWith({ responsibleUsers: [3, 5], responsibleRoles: [9] })
+  })
+
+  it('does not offer the field while the role list is unavailable, so stored roles are never reclassified', () => {
+    mockRoleList = undefined
+    render(
+      <SettingsTab
+        draft={ { email: serviceUser.email, responsibleUsers: [3], responsibleRoles: [9] } }
+        onChange={ jest.fn() }
+        serviceUser={ serviceUser }
+      />
+    )
+
+    expect(screen.queryByText('responsibles:3|9')).not.toBeInTheDocument()
+  })
+
+  it('shows the new selection when the saved responsibles change', () => {
+    const props = { onChange: jest.fn(), draft: { email: serviceUser.email, responsibleUsers: [3], responsibleRoles: [9] } }
+    const { rerender } = render(
+      <SettingsTab
+        { ...props }
+        serviceUser={ serviceUser }
+      />
+    )
+    expect(screen.getByText('responsibles:3|9')).toBeInTheDocument()
+
+    rerender(
+      <SettingsTab
+        draft={ { ...props.draft, responsibleUsers: [3, 4] } }
+        onChange={ props.onChange }
+        serviceUser={ { ...serviceUser, responsibleUsers: [3, 4] } }
+      />
+    )
+
+    expect(screen.getByText('responsibles:3,4|9')).toBeInTheDocument()
   })
 })
