@@ -1,0 +1,262 @@
+name: "API schema sync"
+
+# Fetches the Studio Backend OpenAPI spec for each maintained line, regenerates the
+# API client, and commits both directly to the branch when they type-check. Falls back
+# to a pull request when they do not.
+#
+# TIMING: the nightly redeploys on its own cadence, so a run triggered moments after a
+# backend merge may still serve the pre-merge spec. That is harmless — the job is
+# diff-gated and simply no-ops — but it is why the schedule exists rather than relying
+# on the dispatch alone.
+
+on:
+  repository_dispatch:
+    types: [backend-schema-updated]
+  schedule:
+    - cron: '0 5 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to sync ('all' for every mapped branch)"
+        required: false
+        default: "all"
+        type: string
+
+# Branch in THIS repo -> nightly host serving that line's spec. Single source of truth:
+# the targets job rejects anything not listed here, so a dispatch payload cannot inject
+# an arbitrary host.
+env:
+  SCHEMA_SOURCES: >-
+    {"2026.3":"bugfix.nightly.pimcore.app","2026.x":"feature.nightly.pimcore.app"}
+  SCHEMA_PATH: assets/build/api/docs.jsonopenapi.json
+
+permissions:
+  contents: read
+
+jobs:
+  targets:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+    steps:
+      - name: Select target branches
+        id: select
+        env:
+          # Empty for schedule; set by whichever trigger supplied it.
+          REQUESTED: ${{ github.event.client_payload.branch || inputs.branch || '' }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$REQUESTED" || "$REQUESTED" == "all" ]]; then
+            matrix="$(jq -cn --argjson m "$SCHEMA_SOURCES" \
+              '[$m | to_entries[] | {branch: .key, host: .value}]')"
+          else
+            matrix="$(jq -cn --argjson m "$SCHEMA_SOURCES" --arg b "$REQUESTED" \
+              '[$m | to_entries[] | select(.key == $b) | {branch: .key, host: .value}]')"
+            if [[ "$matrix" == "[]" ]]; then
+              echo "::error::Unknown branch '$REQUESTED'. Mapped: $(jq -r 'keys|join(", ")' <<<"$SCHEMA_SOURCES")"
+              exit 1
+            fi
+          fi
+          echo "Targets: $matrix"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  sync:
+    needs: targets
+    if: ${{ needs.targets.outputs.matrix != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJson(needs.targets.outputs.matrix) }}
+    concurrency:
+      group: api-schema-sync-${{ matrix.target.branch }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout ${{ matrix.target.branch }}
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.target.branch }}
+          # PAT, not GITHUB_TOKEN: needed to push to the branch, and — on the PR
+          # fallback path — so that opening the PR actually triggers CI on it.
+          token: ${{ secrets.SYNC_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Fetch the OpenAPI spec
+        env:
+          HOST: ${{ matrix.target.host }}
+        run: |
+          set -euo pipefail
+          url="https://${HOST}/pimcore-studio/api/docs/json"
+          echo "Fetching ${url}"
+          curl -sS --fail --retry 5 --retry-delay 10 --retry-all-errors -m 120 \
+            -o "${RUNNER_TEMP}/spec.json" "$url"
+
+      - name: Validate the spec
+        run: |
+          set -euo pipefail
+          # /docs (without /json) serves Swagger UI HTML. This guard is what stops a
+          # redirect or maintenance page being committed as the schema.
+          jq -e '.openapi and (.paths | length) > 100' "${RUNNER_TEMP}/spec.json" >/dev/null \
+            || { echo "::error::Response is not a plausible OpenAPI document"; exit 1; }
+
+      - name: Compare with the committed schema
+        id: diff
+        run: |
+          set -euo pipefail
+          if cmp -s "${RUNNER_TEMP}/spec.json" "$SCHEMA_PATH"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Schema already up to date; nothing to do."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            cp "$SCHEMA_PATH" "${RUNNER_TEMP}/old.json"
+          fi
+
+      - name: Install dependencies
+        if: steps.diff.outputs.changed == 'true'
+        working-directory: assets
+        run: npm ci
+
+      - name: Apply the schema and regenerate the API client
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          # Verbatim copy: the file is PHP json_encode output, and a jq/node round-trip
+          # re-escapes it into a ~1.4 MB spurious diff.
+          cp "${RUNNER_TEMP}/spec.json" "$SCHEMA_PATH"
+          cd assets && npm run build-api-client
+
+      - name: Type-check against the new client
+        id: typecheck
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          set -uo pipefail
+          # The gate for committing straight to the branch. A backend change that drops
+          # an endpoint the UI still calls fails here, and we fall back to a PR rather
+          # than breaking the branch for everyone.
+          if (cd assets && npm run check-types) 2>&1 | tee "${RUNNER_TEMP}/typecheck.log"; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Type check failed against the new schema; falling back to a pull request."
+          fi
+
+      - name: Commit directly to ${{ matrix.target.branch }}
+        id: direct
+        if: steps.diff.outputs.changed == 'true' && steps.typecheck.outputs.ok == 'true'
+        env:
+          BRANCH: ${{ matrix.target.branch }}
+          HOST: ${{ matrix.target.host }}
+        run: |
+          set -uo pipefail
+          git config user.name  "pimcore-deployments"
+          git config user.email "71881008+pimcore-deployments@users.noreply.github.com"
+
+          pushed=false
+          for attempt in 1 2 3; do
+            # Re-derive on top of the current tip each attempt. Because schema and client
+            # are both generated, there is nothing to merge — we simply rebuild them
+            # against whatever landed meanwhile, so a rebase conflict is impossible.
+            git fetch --quiet origin "$BRANCH"
+            git reset --quiet --hard "origin/${BRANCH}"
+            cp "${RUNNER_TEMP}/spec.json" "$SCHEMA_PATH"
+            ( cd assets && npm run build-api-client ) || break
+
+            if git diff --quiet; then
+              echo "Someone already landed this schema; nothing to commit."
+              pushed=true
+              break
+            fi
+
+            git add -A
+            git commit -q -m "[API] Update the OpenAPI schema and regenerate the client
+
+          Source: https://${HOST}/pimcore-studio/api/docs/json
+          Relates to pimcore/service-operations#1713"
+
+            if git push origin "HEAD:${BRANCH}"; then
+              pushed=true
+              break
+            fi
+            echo "Push rejected (attempt ${attempt}/3); retrying against the new tip."
+            sleep 5
+          done
+          echo "pushed=${pushed}" >> "$GITHUB_OUTPUT"
+
+      - name: Summarise the change
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ matrix.target.branch }}
+          HOST: ${{ matrix.target.host }}
+        run: |
+          set -euo pipefail
+          jq -r '.paths | keys[]' "${RUNNER_TEMP}/old.json"  | sort > "${RUNNER_TEMP}/old.txt"
+          jq -r '.paths | keys[]' "${RUNNER_TEMP}/spec.json" | sort > "${RUNNER_TEMP}/new.txt"
+          added="$(comm -13 "${RUNNER_TEMP}/old.txt" "${RUNNER_TEMP}/new.txt")"
+          removed="$(comm -23 "${RUNNER_TEMP}/old.txt" "${RUNNER_TEMP}/new.txt")"
+
+          {
+            echo "OpenAPI schema for \`${BRANCH}\` from \`${HOST}\`."
+            echo
+            echo "Endpoints: $(wc -l < "${RUNNER_TEMP}/old.txt") -> $(wc -l < "${RUNNER_TEMP}/new.txt")"
+            echo
+            if [[ -n "$removed" ]]; then
+              echo "### Removed endpoints"; echo; echo '```'; echo "$removed"; echo '```'; echo
+            fi
+            if [[ -n "$added" ]]; then
+              echo "### Added endpoints"; echo; echo '```'; echo "$added"; echo '```'; echo
+            fi
+          } > "${RUNNER_TEMP}/summary.md"
+
+          cat "${RUNNER_TEMP}/summary.md" >> "$GITHUB_STEP_SUMMARY"
+
+      # Only reached when the change could NOT be landed directly: the type check failed,
+      # or the branch kept moving under us.
+      - name: Open a pull request instead
+        if: steps.diff.outputs.changed == 'true' && steps.direct.outputs.pushed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          BRANCH: ${{ matrix.target.branch }}
+          TYPECHECK_OK: ${{ steps.typecheck.outputs.ok }}
+        run: |
+          set -euo pipefail
+          head="automation/api-schema-${BRANCH}"
+
+          body="${RUNNER_TEMP}/pr-body.md"
+          {
+            if [[ "$TYPECHECK_OK" != "true" ]]; then
+              echo "The schema could not be committed directly: **\`check-types\` fails**"
+              echo "against the regenerated client. Most likely the backend removed or"
+              echo "renamed something the UI still uses — that needs a code change here."
+              echo
+              echo "<details><summary>Type check output (last 60 lines)</summary>"
+              echo; echo '```'; tail -n 60 "${RUNNER_TEMP}/typecheck.log"; echo '```'
+              echo "</details>"
+            else
+              echo "The schema type-checks cleanly, but the push to \`${BRANCH}\` was"
+              echo "rejected three times — the branch kept moving. Merging this PR is"
+              echo "equivalent to what the direct commit would have done."
+            fi
+            echo
+            cat "${RUNNER_TEMP}/summary.md"
+            echo "Relates to pimcore/service-operations#1713"
+          } > "$body"
+
+          git config user.name  "pimcore-deployments"
+          git config user.email "71881008+pimcore-deployments@users.noreply.github.com"
+          git checkout -B "$head"
+          git add -A
+          git commit -q -m "[API] Update the OpenAPI schema for ${BRANCH}"
+          git push --force-with-lease origin "$head"
+
+          if gh pr view "$head" --json number >/dev/null 2>&1; then
+            gh pr edit "$head" --body-file "$body"
+          else
+            gh pr create --base "$BRANCH" --head "$head" \
+              --title "[API] Update the OpenAPI schema for ${BRANCH}" \
+              --body-file "$body"
+          fi
