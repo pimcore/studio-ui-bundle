@@ -41,7 +41,7 @@ const pathsOverlap = (a: NamePath[], b: NamePath[]): boolean => {
 }
 
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
-  const initialValue = useMemo<KeyedListData['values']>(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
+  const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const { value, valueRef, setValue, store } = useKeyedListValue(initialValue)
   // The value as of the last render, which is the schedule the registration bookkeeping
   // below is written against: a registration is queued against the value it was made in

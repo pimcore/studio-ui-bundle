@@ -33,8 +33,8 @@ export interface KeyedListValue {
  * already reads the new value.
  */
 export const useKeyedListValue = (initialValue: KeyedListData['values']): KeyedListValue => {
-  const [value, setValueState] = useState(cloneDeep(initialValue))
-  const valueRef = useRef(value)
+  const [valueState, setValueState] = useState(cloneDeep(initialValue))
+  const valueRef = useRef(valueState)
   const listenersRef = useRef<Set<() => void>>(new Set())
 
   // Subscribers are notified synchronously, in the same event as the state update, so a
@@ -75,5 +75,5 @@ export const useKeyedListValue = (initialValue: KeyedListData['values']): KeyedL
     getSnapshot: () => valueRef.current
   }), [])
 
-  return { value, valueRef, setValue, store }
+  return { value: valueState, valueRef, setValue, store }
 }
