@@ -1714,6 +1714,10 @@ user-management.add-folder: Ny mapp
 user-management.add-folder.label: Ange namnet på den nya mappen
 user-management.add-user: Ny användare
 user-management.add-user.label: Ange namnet på den nya användaren
+user-management.send-invitation: Send invitation link
+user-management.send-invitation.success: "Invitation sent to {{email}}"
+user-management.send-invitation.no-email: The user has no email address
+user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
 user-management.last-login: Senaste inloggning
 user-management.search.id: ID
 roles.tree.all: Alla roller

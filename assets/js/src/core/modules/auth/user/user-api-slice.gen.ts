@@ -115,6 +115,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
+            userSendInvitation: build.mutation<UserSendInvitationApiResponse, UserSendInvitationApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/invitation/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.invitation,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             userTokenLinkGet: build.query<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
@@ -298,6 +306,12 @@ export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users
 export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
     searchQuery?: string;
+};
+export type UserSendInvitationApiResponse = unknown;
+export type UserSendInvitationApiArg = {
+    /** Id of the user */
+    id: number;
+    invitation: Invitation;
 };
 export type UserTokenLinkGetApiResponse = /** status 200 Token login link for the user */ {
     /** Token link URL including the generated token as parameter. */
@@ -687,6 +701,10 @@ export type ResetPassword = {
     /** Reset password URL */
     resetPasswordUrl: string;
 };
+export type Invitation = {
+    /** URL the invitation link points to. Must belong to a configured domain. */
+    invitationUrl: string;
+};
 export type TokenLink = {
     /** Token login URL */
     tokenLoginUrl: string;
@@ -747,6 +765,7 @@ export const {
     useUserListWithPermissionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
+    useUserSendInvitationMutation,
     useUserTokenLinkGetQuery,
     useUserTwoFactorConfirmMutation,
     useUserTwoFactorDisableMutation,

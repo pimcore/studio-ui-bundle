@@ -1718,6 +1718,10 @@ user-management.add-folder: New folder
 user-management.add-folder.label: Enter the name of the new folder
 user-management.add-user: New user
 user-management.add-user.label: Enter the name of the new user
+user-management.send-invitation: Send invitation link
+user-management.send-invitation.success: "Invitation sent to {{email}}"
+user-management.send-invitation.no-email: The user has no email address
+user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
 user-management.last-login: Last Login
 user-management.search.id: ID
 roles.tree.all: All Roles

@@ -1714,6 +1714,10 @@ user-management.add-folder: Nouveau dossier
 user-management.add-folder.label: Entrez le nom du nouveau dossier
 user-management.add-user: Nouvel utilisateur
 user-management.add-user.label: Entrez le nom du nouvel utilisateur
+user-management.send-invitation: Send invitation link
+user-management.send-invitation.success: "Invitation sent to {{email}}"
+user-management.send-invitation.no-email: The user has no email address
+user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
 user-management.last-login: Dernière connexion
 user-management.search.id: ID
 roles.tree.all: Tous les rôles
