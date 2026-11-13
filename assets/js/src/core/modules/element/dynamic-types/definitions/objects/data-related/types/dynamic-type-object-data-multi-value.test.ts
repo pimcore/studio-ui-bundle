@@ -48,6 +48,13 @@ describe('DynamicTypeObjectDataMultiValue grid cell', () => {
     expect(getGridCellDefinition).toHaveBeenCalledWith({ cellProps, objectProps: { name: 'size', fieldtype: 'numeric', integer: true } })
   })
 
+  it('previews a repeating key read-only instead of offering the delegate single-value cell', () => {
+    mockRegistry.hasDynamicType.mockReturnValue(true)
+
+    expect(type.getGridCellDefinition({ cellProps, objectProps: { name: 'size', delegateDatatype: 'numeric', multiValue: true, variants: [] } })).toEqual({ mode: 'default', type: 'string' })
+    expect(mockRegistry.getDynamicType).not.toHaveBeenCalled()
+  })
+
   it('renders a delegate the registry does not know as a string', () => {
     mockRegistry.hasDynamicType.mockReturnValue(false)
 

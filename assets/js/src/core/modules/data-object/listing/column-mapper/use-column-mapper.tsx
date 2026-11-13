@@ -12,7 +12,7 @@ import { useRef, useCallback } from 'react'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useColumnMapper, type UseColumnMapperReturn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-column-mapper'
 import { uuid } from '@Pimcore/utils/uuid'
-import { variantOfCellKey, variantOfColumn, withoutVariantSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
+import { ownCellKeyOf, variantOfCellKey, variantOfColumn, withoutVariantSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 
 export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
   const languageSelection = useLanguageSelection()
@@ -41,9 +41,10 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
     }
 
     if (column.type === 'dataobject.classificationstore') {
-      const dataKey = withoutVariantSuffix(data.key as string, column.key).split('.')[0]
+      const ownKey = ownCellKeyOf(column)
+      const dataKey = withoutVariantSuffix(data.key as string, ownKey).split('.')[0]
       // A cell key carrying `#<variant>` belongs to that variant's column only; one carrying none, to the default slot's.
-      const sameSlot = dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && variantOfCellKey(data.key as string, column.key) === variantOfColumn(column)
+      const sameSlot = dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && variantOfCellKey(data.key as string, ownKey) === variantOfColumn(column)
 
       if (column.localizable && column.locale === 'default') {
         return sameSlot && data.locale === null

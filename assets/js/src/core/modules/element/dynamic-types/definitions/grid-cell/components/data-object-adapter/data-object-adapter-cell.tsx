@@ -23,7 +23,7 @@ import { InheritanceLayer } from './inheritance-layer'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useEditMode } from '@Pimcore/components/grid/grid'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
-import { variantOfCellKey, variantOfColumn, withoutVariantSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
+import { ownCellKeyOf, variantOfCellKey, variantOfColumn, withoutVariantSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { useResolvedFieldName } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/utils/resolve-field-name'
 
 export interface DataObjectAdapterCellProps extends DefaultCellProps {}
@@ -62,13 +62,14 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
 
   const currentApiColumn = apiColumns?.columns?.find((apiColumn) => {
     if (column?.type === 'dataobject.classificationstore') {
-      const apiColumnKey = withoutVariantSuffix(apiColumn.key as string, column.key).split('.')[0]
+      const ownKey = ownCellKeyOf(column)
+      const apiColumnKey = withoutVariantSuffix(apiColumn.key as string, ownKey).split('.')[0]
 
       if (column?.localizable) {
-        return apiColumnKey === column.key && (column.locale ?? currentLanguage) === apiColumn.locale && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId && variantOfCellKey(apiColumn.key as string, column.key) === variantOfColumn(column)
+        return apiColumnKey === column.key && (column.locale ?? currentLanguage) === apiColumn.locale && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId && variantOfCellKey(apiColumn.key as string, ownKey) === variantOfColumn(column)
       }
 
-      return apiColumnKey === column.key && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId && variantOfCellKey(apiColumn.key as string, column.key) === variantOfColumn(column)
+      return apiColumnKey === column.key && apiColumn.additionalAttributes.groupId === column.config.groupId && apiColumn.additionalAttributes.keyId === column.config.keyId && variantOfCellKey(apiColumn.key as string, ownKey) === variantOfColumn(column)
     }
 
     if (column?.localizable === true) {

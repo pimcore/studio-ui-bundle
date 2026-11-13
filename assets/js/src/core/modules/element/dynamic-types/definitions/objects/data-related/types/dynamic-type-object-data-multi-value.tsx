@@ -65,7 +65,9 @@ export class DynamicTypeObjectDataMultiValue extends DynamicTypeObjectDataAbstra
 
     const delegateDatatype = objectProps.delegateDatatype ?? ''
 
-    if (!objectDataRegistry.hasDynamicType(delegateDatatype) || CLASSIFICATION_STORE_WRAPPER_TYPES.includes(delegateDatatype)) {
+    // A repeating key holds a list of entries in one slot; the delegate's single-value cell can neither show nor edit
+    // that, so it is previewed read-only. Per-entry grid editing is follow-up work.
+    if (objectProps.multiValue === true || !objectDataRegistry.hasDynamicType(delegateDatatype) || CLASSIFICATION_STORE_WRAPPER_TYPES.includes(delegateDatatype)) {
       return {
         mode: 'default',
         type: 'string'

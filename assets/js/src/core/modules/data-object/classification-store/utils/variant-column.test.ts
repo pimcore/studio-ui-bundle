@@ -9,7 +9,7 @@
  */
 
 import { buildColumnPickerGroups, type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { keyAddressOf, variantColumnSuffix, variantOfCellKey, variantOfColumn, variantSlotsOf, withoutVariantSuffix } from './variant-column'
+import { keyAddressOf, ownCellKeyOf, variantColumnSuffix, variantOfCellKey, variantOfColumn, variantSlotsOf, withoutVariantSuffix } from './variant-column'
 
 const definition = { title: 'color_title', variants: [{ name: 'Metric', label: 'Metric system' }, { name: 'Imperial' }] }
 const columnOf = (variant?: string): AvailableColumn => ({
@@ -30,6 +30,16 @@ describe('variant column helpers', () => {
     expect(withoutVariantSuffix('attributes.color')).toBe('attributes.color')
     expect(variantOfColumn(columnOf('Metric'))).toBe('Metric')
     expect(variantOfColumn(columnOf())).toBeNull()
+  })
+
+  it('treats a # inside the key name as part of the name, reading the variant relative to the column key', () => {
+    const own = ownCellKeyOf({ key: 'attributes', config: { fieldDefinition: { name: 'size#1' } } })
+
+    expect(own).toBe('attributes.size#1')
+    expect(variantOfCellKey('attributes.size#1', own)).toBeNull()
+    expect(withoutVariantSuffix('attributes.size#1', own)).toBe('attributes.size#1')
+    expect(variantOfCellKey('attributes.size#1#Metric', own)).toBe('Metric')
+    expect(withoutVariantSuffix('attributes.size#1#Metric', own)).toBe('attributes.size#1')
   })
 
   it('suffixes the key address with the variant, and leaves the default slot bare', () => {

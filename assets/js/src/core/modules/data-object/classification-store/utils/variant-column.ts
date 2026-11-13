@@ -25,6 +25,16 @@ interface VariantColumnLike {
 export const variantOfColumn = (column: VariantColumnLike | undefined): string | null => column?.config?.variant ?? null
 
 /**
+ * The cell key a column's key addresses without any variant: `<fieldName>.<keyName>`. The key's name is read off its
+ * definition; when it is unknown, only the field name is returned (and a `#` is then taken as the variant separator).
+ */
+export const ownCellKeyOf = (column: { key?: string, config?: { fieldDefinition?: unknown } | null }): string | undefined => {
+  const name = (column.config?.fieldDefinition as { name?: unknown } | undefined | null)?.name
+
+  return column.key === undefined || typeof name !== 'string' || name === '' ? column.key : `${column.key}.${name}`
+}
+
+/**
  * The column's own key at the head of a cell key, when the cell key is that key or that key plus a `#<variant>`
  * suffix. A key name may itself contain the separator, so the suffix is read relative to the column's key.
  */
