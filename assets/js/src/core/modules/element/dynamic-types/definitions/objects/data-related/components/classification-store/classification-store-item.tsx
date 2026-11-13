@@ -125,7 +125,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         ) }
         extraPosition="start"
         theme='border-highlight'
-        title={ groupLayout?.name }
+        title={ groupLayout !== undefined ? t(groupLayout.name) : undefined }
       >
         <CombinedFieldNameProvider combinedFieldNameParent={ combinedFieldNameParent }>
           <Panel>
@@ -140,5 +140,5 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         </CombinedFieldNameProvider>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, combinedFieldNameParent])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, combinedFieldNameParent, t])
 }
