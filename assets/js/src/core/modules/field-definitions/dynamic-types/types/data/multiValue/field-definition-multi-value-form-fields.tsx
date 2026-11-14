@@ -78,6 +78,14 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
     prevDelegateTypeRef.current = selectedType
   }, [selectedType])
 
+  // A definition loaded with the default variant declined may still carry a label; the label field is never
+  // mounted then, so `preserve` cannot drop it — clear it here so it is not saved back.
+  useEffect(() => {
+    if (unqualifiedValue === false && !isEmpty(form.getFieldValue('unqualifiedValueLabel'))) {
+      form.setFieldValue('unqualifiedValueLabel', null)
+    }
+  }, [unqualifiedValue])
+
   return (
     <>
       <Form.Item
@@ -117,6 +125,7 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
           label={ t('classification-store.multi-value.default-variant-label') }
           name='unqualifiedValueLabel'
           normalize={ (value: string) => value === '' ? null : value }
+          preserve={ false }
         >
           <Input />
         </Form.Item>
