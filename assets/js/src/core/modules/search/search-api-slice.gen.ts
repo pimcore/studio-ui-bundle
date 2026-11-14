@@ -324,8 +324,6 @@ export type RelationFieldConfig = {
     groupIdentifier?: string | null;
     /** Classification store key identifier */
     keyIdentifier?: string | null;
-    /** Variant of a multiValue key the column shows; null is the default slot */
-    variant?: string | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
@@ -338,8 +336,6 @@ export type SimpleFieldConfig = {
     groupIdentifier?: string | null;
     /** Classification store key identifier */
     keyIdentifier?: string | null;
-    /** Variant of a multiValue key the column shows; null is the default slot */
-    variant?: string | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
