@@ -58,6 +58,46 @@ export interface BatchEditModalProps {
   setBatchEditModalOpen: (showBatchEditModal: boolean) => void
 }
 
+type BatchEditColumn = ReturnType<typeof useBatchEdit>['batchEdits'][number]
+
+const isInBatchEdits = (batchEdits: BatchEditColumn[], baseColumn: AvailableColumn, item, variantName: string | null): boolean => {
+  return batchEdits.some((batchEdit) => {
+    const config = batchEdit.config as { keyId: string, groupId: string } | undefined
+    return batchEdit.key === baseColumn.key && config?.keyId === item.id && config?.groupId === item.groupId && variantOfColumn(batchEdit) === variantName
+  })
+}
+
+const buildClassificationStoreColumns = (baseColumn: AvailableColumn, items, batchEdits: BatchEditColumn[]): AvailableColumn[] => {
+  const columnsToAdd: AvailableColumn[] = []
+
+  for (const item of items) {
+    const itemDefinition = item.definition
+    const variants = item.variants as ClassificationStoreCollection2['variants']
+
+    for (const variant of variantSlotsOf(variants)) {
+      const variantName = variant === null ? null : variantNameOf(variant)
+
+      if (isInBatchEdits(batchEdits, baseColumn, item, variantName)) {
+        continue
+      }
+
+      columnsToAdd.push({
+        ...baseColumn,
+        key: `${baseColumn.key}`,
+        frontendType: itemDefinition?.fieldtype,
+        config: {
+          keyId: item.id,
+          groupId: item.groupId,
+          variant: variantName,
+          fieldDefinition: variant === null ? itemDefinition : { ...itemDefinition, variants: declaredVariantsOf(variants) }
+        }
+      })
+    }
+  }
+
+  return columnsToAdd
+}
+
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
@@ -111,35 +151,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       throw new Error('Could not find base column for classification store field ' + fieldDefinition.name)
     }
 
-    const columnsToAdd: AvailableColumn[] = []
-
     if (data.type === 'group-by-key') {
-      data.data.forEach((item) => {
-        const itemDefinition = item.definition
-
-        variantSlotsOf(item.variants as ClassificationStoreCollection2['variants']).forEach((variant) => {
-          const variantName = variant === null ? null : variantNameOf(variant)
-          const alreadyInBatchEdits = batchEdits.some((batchEdit) => batchEdit.key === baseColumn.key && (batchEdit.config as { keyId: string, groupId: string })?.keyId === item.id && (batchEdit.config as { keyId: string, groupId: string })?.groupId === item.groupId && variantOfColumn(batchEdit) === variantName)
-
-          if (alreadyInBatchEdits) {
-            return
-          }
-
-          columnsToAdd.push({
-            ...baseColumn,
-            key: `${baseColumn.key}`,
-            frontendType: itemDefinition?.fieldtype,
-            config: {
-              keyId: item.id,
-              groupId: item.groupId,
-              variant: variantName,
-              fieldDefinition: variant === null ? itemDefinition : { ...itemDefinition, variants: declaredVariantsOf(item.variants as ClassificationStoreCollection2['variants']) }
-            }
-          })
-        })
-      })
-
-      addOrUpdateBatchEdits(columnsToAdd)
+      addOrUpdateBatchEdits(buildClassificationStoreColumns(baseColumn, data.data, batchEdits))
     }
   }
 

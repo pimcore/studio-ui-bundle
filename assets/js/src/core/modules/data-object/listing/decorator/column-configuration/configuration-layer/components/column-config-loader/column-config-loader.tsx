@@ -28,6 +28,58 @@ export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
 }
 
+type SelectedColumn = SelectedColumnsContextProps['selectedColumns'][number]
+
+const buildSelectedColumn = (column: any, availableColumn: AvailableColumn): SelectedColumn => {
+  const currentColumn = column as AvailableColumn
+  let columnConfig = availableColumn.config
+  if (availableColumn.type === 'dataobject.classificationstore') {
+    columnConfig = ('config' in column ? column.config : undefined) ?? {}
+  }
+
+  const apiColumn = {
+    ...availableColumn,
+    config: columnConfig,
+    __meta: {
+      // Advanced columns share the same reserved 'advanced' key (and often a
+      // blank/duplicate title) from a persisted config, which is not unique -
+      // assign each loaded instance its own id so it can be told apart from
+      // sibling advanced columns (https://github.com/pimcore/service-operations/issues/927).
+      uniqueId: uuid(),
+      advancedColumnConfig: currentColumn.config ?? {}
+    }
+  }
+
+  return {
+    key: column.key,
+    locale: column.locale,
+    type: availableColumn.type,
+    config: columnConfig,
+    sortable: availableColumn.sortable,
+    // A repeating Classification Store key stays display-only after a reload as well.
+    editable: availableColumn.editable && !isRepeatingColumn({ config: columnConfig as { variant?: string | null, fieldDefinition?: unknown } }),
+    localizable: availableColumn.localizable,
+    exportable: availableColumn.exportable,
+    frontendType: availableColumn.frontendType,
+    group: availableColumn.group,
+    width: column.width,
+    originalApiDefinition: apiColumn
+  }
+}
+
+const buildSelectedColumns = (configuredColumns: any[], availableColumns: AvailableColumn[]): SelectedColumn[] => {
+  const selectedColumns: SelectedColumn[] = []
+
+  for (const column of configuredColumns) {
+    const availableColumn = availableColumns.find(candidate => candidate.key === column.key)
+    if (availableColumn !== undefined) {
+      selectedColumns.push(buildSelectedColumn(column, availableColumn))
+    }
+  }
+
+  return selectedColumns
+}
+
 export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Element => {
   const { useElementId, ViewComponent, useDataQueryHelper } = useSettings()
   const { setDataLoadingState } = useDataQueryHelper()
@@ -62,48 +114,8 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     }
     applied.current = { columns: data, configuration: initialConfigurationData }
 
-    const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
-
-    for (const column of initialConfigurationData.columns) {
-      const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
-      const currentColumn = column as AvailableColumn
-      if (availableColumn !== undefined) {
-        let columnConfig = availableColumn.config
-        if (availableColumn.type === 'dataobject.classificationstore') {
-          columnConfig = ('config' in column ? column.config : undefined) ?? {}
-        }
-
-        const apiColumn = {
-          ...availableColumn,
-          config: columnConfig,
-          __meta: {
-            // Advanced columns share the same reserved 'advanced' key (and often a
-            // blank/duplicate title) from a persisted config, which is not unique -
-            // assign each loaded instance its own id so it can be told apart from
-            // sibling advanced columns (https://github.com/pimcore/service-operations/issues/927).
-            uniqueId: uuid(),
-            advancedColumnConfig: currentColumn.config ?? {}
-          }
-        }
-
-        selectedColumns.push({
-          key: column.key,
-          locale: column.locale,
-          type: availableColumn.type,
-          config: columnConfig,
-          sortable: availableColumn.sortable,
-          // A repeating Classification Store key stays display-only after a reload as well.
-          editable: availableColumn.editable && !isRepeatingColumn({ config: columnConfig as { variant?: string | null, fieldDefinition?: unknown } }),
-          localizable: availableColumn.localizable,
-          exportable: availableColumn.exportable,
-          frontendType: availableColumn.frontendType,
-          group: availableColumn.group,
-          width: column.width,
-          originalApiDefinition: apiColumn
-        })
-      }
-    }
+    const selectedColumns = buildSelectedColumns(initialConfigurationData.columns, availableColumns)
 
     setSelectedColumns(selectedColumns)
     setAvailableColumns(availableColumns)
