@@ -9,14 +9,7 @@
  */
 
 import { invalidatingTags, providingTags, tagNames, type Tag } from '@Pimcore/app/api/pimcore/tags'
-import { getPrefix } from '@sdk/api'
-import { api as baseApi, type EmailLogGetCollectionApiResponse } from './emails-api-slice.gen'
-
-interface EmailLogSearchApiArg {
-  page: number
-  pageSize: number
-  email: string
-}
+import { api as baseApi } from './emails-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.EMAIL_BLOCKLIST, tagNames.EMAIL_BLOCKLIST_DETAIL, tagNames.EMAIL_LOG, tagNames.EMAIL_LOG_DETAIL],
@@ -53,36 +46,17 @@ export const api = baseApi.enhanceEndpoints({
         return [...logCollection, ...providingTags.EMAIL_LOG()]
       }
     },
+    emailLogSearch: {
+      providesTags: () => {
+        return providingTags.EMAIL_LOG()
+      }
+    },
     emailLogDelete: {
       invalidatesTags: () => {
         return invalidatingTags.EMAIL_LOG()
       }
     }
   }
-}).injectEndpoints({
-  endpoints: (build) => ({
-    emailLogSearchList: build.query<EmailLogGetCollectionApiResponse, EmailLogSearchApiArg>({
-      query: ({ page, pageSize, email }) => ({
-        url: `${getPrefix()}/emails/search`,
-        method: 'POST',
-        body: {
-          filters: {
-            page,
-            pageSize,
-            columnFilters: [{ type: 'email', filterValue: email }]
-          }
-        }
-      }),
-      providesTags: providingTags.EMAIL_LOG()
-    })
-  }),
-  // Named apart from the generated `emailLogSearch` on purpose. The backend
-  // exposes the search as POST, which the generator renders as a mutation,
-  // and the log view needs query semantics over it: cached results, `skip`
-  // while the search box is empty, and isLoading/isFetching. Reusing the
-  // generated name only collides — the hand-written query is discarded and
-  // the hook resolves to the mutation's types.
-  overrideExisting: false
 })
 
 export type * from './emails-api-slice.gen'
@@ -91,7 +65,7 @@ export const {
   useEmailBlocklistAddMutation,
   useEmailBlocklistDeleteMutation,
   useEmailLogGetCollectionQuery,
-  useEmailLogSearchListQuery,
+  useEmailLogSearchQuery,
   useEmailLogGetByIdQuery,
   useEmailLogDeleteMutation,
   useEmailLogGetHtmlQuery,
