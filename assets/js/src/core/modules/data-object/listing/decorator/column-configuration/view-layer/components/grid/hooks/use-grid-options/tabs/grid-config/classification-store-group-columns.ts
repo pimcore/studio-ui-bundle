@@ -14,6 +14,7 @@ import {
   type ClassificationStoreVariantLayout
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { declaredVariantsOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-slots'
+import { multiValueMembersOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/multi-value-members'
 import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
 import { isRepeatingColumn, variantSlotsOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
@@ -58,12 +59,14 @@ const toColumn = (
   key: ClassificationStoreCollection2,
   variant: ClassificationStoreVariantLayout | null
 ): AvailableColumn => {
+  // The layout publishes `multiValue` on the key itself; merge it so a response that omits it from `definition` still marks a repeating key.
+  const definition = { ...key.definition, ...multiValueMembersOf(key) }
   const config = {
     keyId: key.id,
     groupId,
     // `variant: null` addresses the default slot; a column without the member would be expanded by the backend.
     variant: variant === null ? null : variantNameOf(variant),
-    fieldDefinition: variant === null ? key.definition : { ...key.definition, variants: declaredVariantsOf(key.variants) }
+    fieldDefinition: variant === null ? definition : { ...definition, variants: declaredVariantsOf(key.variants) }
   }
 
   return {

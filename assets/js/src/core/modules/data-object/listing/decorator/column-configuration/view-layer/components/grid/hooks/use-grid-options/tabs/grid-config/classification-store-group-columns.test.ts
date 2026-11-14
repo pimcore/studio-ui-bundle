@@ -160,5 +160,12 @@ describe('classificationStoreColumnsToAdd', () => {
       expect(pick(repeating).map((column) => column.editable)).toEqual([false, false])
       expect(pick(keyWith([{ name: 'Metric' }])).map((column) => column.editable)).toEqual([true, true])
     })
+
+    it('reads a repeating key from the layout member when its definition omits the flag', () => {
+      const result = pick({ ...keyWith([{ name: 'Metric' }]), multiValue: true })
+
+      expect(result.map((column) => column.editable)).toEqual([false, false])
+      expect(result.map((column) => (column.config as any).fieldDefinition.multiValue)).toEqual([true, true])
+    })
   })
 })
