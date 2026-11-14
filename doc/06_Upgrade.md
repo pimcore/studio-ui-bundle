@@ -16,6 +16,8 @@ The following steps are necessary when updating to newer versions.
 
 - [Classification Store] Added: Export and Import actions on a store in the Classification Store configuration screen, which write and read the store's whole configuration as one JSON artifact.
 
+- [Classification Store] Added: an Import action in the configuration screen's sidebar, which creates the store a configuration file describes, and a switch on a multiValue key to decline values without a variant.
+
 - [Data Objects] Added: the Group tab in the data object grid's add-column picker, which adds a column for every key of the picked group, in the order the group lists them, leaving out the keys the configuration already shows.
 
 - [Dependencies] `pimcore/studio-backend-bundle` is now required in `^2026.4`, because the Group tab asks for a group's key layout without an object in context and `2026.3` answers that with a 404.

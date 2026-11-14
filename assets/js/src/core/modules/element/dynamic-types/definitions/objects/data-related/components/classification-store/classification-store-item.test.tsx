@@ -610,4 +610,27 @@ describe('ClassificationStoreItem', () => {
 
     expect(propsOfKey(92)).toMatchObject({ delegateDatatype: 'quantityValue', multiValue: false, variants })
   })
+
+  it('hands a multiValue key the default variant declaration, preferring the layout member over the definition', () => {
+    const layout = {
+      id: 9,
+      name: 'Multi',
+      keys: [
+        { id: 93, name: 'ef000093', title: 'Height', defaultVariant: false, defaultVariantLabel: 'Base', definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', unqualifiedValue: true, unqualifiedValueLabel: 'Old' } },
+        { id: 94, name: 'ef000094', title: 'Width', defaultVariant: null, defaultVariantLabel: null, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', unqualifiedValue: false, unqualifiedValueLabel: 'Kept' } }
+      ]
+    } as any
+
+    render(
+      <ClassificationStoreItem
+        classificationStoreName='store'
+        currentLayoutData={ [layout] }
+        groupLayout={ layout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(propsOfKey(93)).toMatchObject({ defaultVariant: false, defaultVariantLabel: 'Base' })
+    expect(propsOfKey(94)).toMatchObject({ defaultVariant: false, defaultVariantLabel: 'Kept' })
+  })
 })
