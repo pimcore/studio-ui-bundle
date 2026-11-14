@@ -168,6 +168,16 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
+            classificationStoreConfigurationKeyRestore: build.mutation<
+                ClassificationStoreConfigurationKeyRestoreApiResponse,
+                ClassificationStoreConfigurationKeyRestoreApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/keys/${queryArg.id}/restore`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
             classificationStoreConfigurationKeyGroupRelationCollection: build.query<
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
                 ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
@@ -201,6 +211,17 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
+            classificationStoreConfigurationStoreApply: build.mutation<
+                ClassificationStoreConfigurationStoreApplyApiResponse,
+                ClassificationStoreConfigurationStoreApplyApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/apply`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
             classificationStoreConfigurationStoreCreate: build.mutation<
                 ClassificationStoreConfigurationStoreCreateApiResponse,
                 ClassificationStoreConfigurationStoreCreateApiArg
@@ -209,6 +230,26 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/configuration/stores`,
                     method: "POST",
                     body: queryArg.classificationStoreConfigurationStoreCreate,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationStoreExport: build.query<
+                ClassificationStoreConfigurationStoreExportApiResponse,
+                ClassificationStoreConfigurationStoreExportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.id}/export`,
+                }),
+                providesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationStoreImport: build.mutation<
+                ClassificationStoreConfigurationStoreImportApiResponse,
+                ClassificationStoreConfigurationStoreImportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.id}/import`,
+                    method: "POST",
+                    body: queryArg.body,
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
@@ -227,6 +268,49 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.classificationStoreConfigurationStoreUpdate,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationSubGroupCollection: build.query<
+                ClassificationStoreConfigurationSubGroupCollectionApiResponse,
+                ClassificationStoreConfigurationSubGroupCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/sub-groups`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationSubGroupCreate: build.mutation<
+                ClassificationStoreConfigurationSubGroupCreateApiResponse,
+                ClassificationStoreConfigurationSubGroupCreateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/sub-groups/add`,
+                    method: "POST",
+                    body: queryArg.classificationStoreConfigurationSubGroupCreate,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationSubGroupUpdate: build.mutation<
+                ClassificationStoreConfigurationSubGroupUpdateApiResponse,
+                ClassificationStoreConfigurationSubGroupUpdateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/sub-groups/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.classificationStoreConfigurationSubGroupUpdate,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationSubGroupDelete: build.mutation<
+                ClassificationStoreConfigurationSubGroupDeleteApiResponse,
+                ClassificationStoreConfigurationSubGroupDeleteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/sub-groups/${queryArg.id}`,
+                    method: "DELETE",
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
@@ -344,90 +428,6 @@ const injectedRtkApi = api
             >({
                 query: () => ({ url: `/pimcore-studio/api/classification-store/config/collection` }),
                 providesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationKeyRestore: build.mutation<
-                ClassificationStoreConfigurationKeyRestoreApiResponse,
-                ClassificationStoreConfigurationKeyRestoreApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/keys/${queryArg.id}/restore`,
-                    method: "POST",
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationStoreApply: build.mutation<
-                ClassificationStoreConfigurationStoreApplyApiResponse,
-                ClassificationStoreConfigurationStoreApplyApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/apply`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationStoreExport: build.query<
-                ClassificationStoreConfigurationStoreExportApiResponse,
-                ClassificationStoreConfigurationStoreExportApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.id}/export`,
-                }),
-                providesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationStoreImport: build.mutation<
-                ClassificationStoreConfigurationStoreImportApiResponse,
-                ClassificationStoreConfigurationStoreImportApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.id}/import`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationSubGroupCollection: build.query<
-                ClassificationStoreConfigurationSubGroupCollectionApiResponse,
-                ClassificationStoreConfigurationSubGroupCollectionApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/sub-groups`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationSubGroupCreate: build.mutation<
-                ClassificationStoreConfigurationSubGroupCreateApiResponse,
-                ClassificationStoreConfigurationSubGroupCreateApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/sub-groups/add`,
-                    method: "POST",
-                    body: queryArg.classificationStoreConfigurationSubGroupCreate,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationSubGroupUpdate: build.mutation<
-                ClassificationStoreConfigurationSubGroupUpdateApiResponse,
-                ClassificationStoreConfigurationSubGroupUpdateApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/sub-groups/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.classificationStoreConfigurationSubGroupUpdate,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationSubGroupDelete: build.mutation<
-                ClassificationStoreConfigurationSubGroupDeleteApiResponse,
-                ClassificationStoreConfigurationSubGroupDeleteApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/sub-groups/${queryArg.id}`,
-                    method: "DELETE",
-                }),
-                invalidatesTags: ["Classification Store"],
             }),
         }),
         overrideExisting: false,
@@ -567,6 +567,12 @@ export type ClassificationStoreConfigurationKeyDeleteApiArg = {
     /** Id of the key configuration */
     id: number;
 };
+export type ClassificationStoreConfigurationKeyRestoreApiResponse =
+    /** status 200 The re-enabled key configuration */ ClassificationStoreConfigurationKeyDetail;
+export type ClassificationStoreConfigurationKeyRestoreApiArg = {
+    /** Id of the key configuration */
+    id: number;
+};
 export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse =
     /** status 200 Paginated list of key-group relations */ {
         totalItems: number;
@@ -594,10 +600,36 @@ export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiResponse = 
 export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg = {
     classificationStoreConfigurationKeyGroupRelationDelete: ClassificationStoreConfigurationKeyGroupRelationDelete;
 };
+export type ClassificationStoreConfigurationStoreApplyApiResponse =
+    /** status 200 Report of what the apply created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
+export type ClassificationStoreConfigurationStoreApplyApiArg = {
+    body: {
+        /** Store configuration artifact as written by the export endpoint */
+        file: Blob;
+        /** Report what would be decided and write nothing */
+        dryRun?: boolean;
+    };
+};
 export type ClassificationStoreConfigurationStoreCreateApiResponse =
     /** status 200 Created store configuration */ ClassificationStoreConfigurationStoreDetail;
 export type ClassificationStoreConfigurationStoreCreateApiArg = {
     classificationStoreConfigurationStoreCreate: ClassificationStoreConfigurationStoreCreate;
+};
+export type ClassificationStoreConfigurationStoreExportApiResponse =
+    /** status 200 The store configuration as a JSON download */ Blob;
+export type ClassificationStoreConfigurationStoreExportApiArg = {
+    /** Id of the store configuration */
+    id: number;
+};
+export type ClassificationStoreConfigurationStoreImportApiResponse =
+    /** status 200 Report of what the import created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
+export type ClassificationStoreConfigurationStoreImportApiArg = {
+    /** Id of the store configuration */
+    id: number;
+    body: {
+        /** Store configuration artifact as written by the export endpoint */
+        file: Blob;
+    };
 };
 export type ClassificationStoreConfigurationStoreTreeApiResponse =
     /** status 200 List of store tree nodes */ ClassificationStoreConfigurationStoreTreeNode[];
@@ -608,6 +640,41 @@ export type ClassificationStoreConfigurationStoreUpdateApiArg = {
     /** Id of the store configuration */
     id: number;
     classificationStoreConfigurationStoreUpdate: ClassificationStoreConfigurationStoreUpdate;
+};
+export type ClassificationStoreConfigurationSubGroupCollectionApiResponse =
+    /** status 200 Paginated list of sub group configurations */ {
+        totalItems: number;
+        items: ClassificationStoreConfigurationSubGroupDetail[];
+    };
+export type ClassificationStoreConfigurationSubGroupCollectionApiArg = {
+    /** ID of the store to list sub groups for */
+    storeId: number;
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+            additionalSortFilters?: object;
+        };
+    };
+};
+export type ClassificationStoreConfigurationSubGroupCreateApiResponse =
+    /** status 200 Created sub group configuration */ ClassificationStoreConfigurationSubGroupDetail;
+export type ClassificationStoreConfigurationSubGroupCreateApiArg = {
+    classificationStoreConfigurationSubGroupCreate: ClassificationStoreConfigurationSubGroupCreate;
+};
+export type ClassificationStoreConfigurationSubGroupUpdateApiResponse =
+    /** status 200 Updated sub group configuration */ ClassificationStoreConfigurationSubGroupDetail;
+export type ClassificationStoreConfigurationSubGroupUpdateApiArg = {
+    /** Id of the sub group configuration */
+    id: number;
+    classificationStoreConfigurationSubGroupUpdate: ClassificationStoreConfigurationSubGroupUpdate;
+};
+export type ClassificationStoreConfigurationSubGroupDeleteApiResponse = unknown;
+export type ClassificationStoreConfigurationSubGroupDeleteApiArg = {
+    /** Id of the sub group configuration */
+    id: number;
 };
 export type ClassificationStoreConfigurationGetPageApiResponse =
     /** status 200 Page number where the item is located */ ClassificationStoreConfigurationGetPageResponse;
@@ -720,73 +787,6 @@ export type ClassificationStoreGetConfigCollectionApiResponse =
         items: ClassificationStoreConfiguration[];
     };
 export type ClassificationStoreGetConfigCollectionApiArg = void;
-export type ClassificationStoreConfigurationKeyRestoreApiResponse =
-    /** status 200 The re-enabled key configuration */ ClassificationStoreConfigurationKeyDetail;
-export type ClassificationStoreConfigurationKeyRestoreApiArg = {
-    /** Id of the key configuration */
-    id: number;
-};
-export type ClassificationStoreConfigurationStoreApplyApiResponse =
-    /** status 200 Report of what the apply created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
-export type ClassificationStoreConfigurationStoreApplyApiArg = {
-    body: {
-        /** Store configuration artifact as written by the export endpoint */
-        file: Blob;
-        /** Report what would be decided and write nothing */
-        dryRun?: boolean;
-    };
-};
-export type ClassificationStoreConfigurationStoreExportApiResponse =
-    /** status 200 The store configuration as a JSON download */ Blob;
-export type ClassificationStoreConfigurationStoreExportApiArg = {
-    /** Id of the store configuration */
-    id: number;
-};
-export type ClassificationStoreConfigurationStoreImportApiResponse =
-    /** status 200 Report of what the import created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
-export type ClassificationStoreConfigurationStoreImportApiArg = {
-    /** Id of the store configuration */
-    id: number;
-    body: {
-        /** Store configuration artifact as written by the export endpoint */
-        file: Blob;
-    };
-};
-export type ClassificationStoreConfigurationSubGroupCollectionApiResponse =
-    /** status 200 Paginated list of sub group configurations */ {
-        totalItems: number;
-        items: ClassificationStoreConfigurationSubGroupDetail[];
-    };
-export type ClassificationStoreConfigurationSubGroupCollectionApiArg = {
-    /** ID of the store to list sub groups for */
-    storeId: number;
-    body: {
-        filters?: {
-            page?: number;
-            pageSize?: number;
-            columnFilters?: object;
-            sortFilter?: object;
-            additionalSortFilters?: object;
-        };
-    };
-};
-export type ClassificationStoreConfigurationSubGroupCreateApiResponse =
-    /** status 200 Created sub group configuration */ ClassificationStoreConfigurationSubGroupDetail;
-export type ClassificationStoreConfigurationSubGroupCreateApiArg = {
-    classificationStoreConfigurationSubGroupCreate: ClassificationStoreConfigurationSubGroupCreate;
-};
-export type ClassificationStoreConfigurationSubGroupUpdateApiResponse =
-    /** status 200 Updated sub group configuration */ ClassificationStoreConfigurationSubGroupDetail;
-export type ClassificationStoreConfigurationSubGroupUpdateApiArg = {
-    /** Id of the sub group configuration */
-    id: number;
-    classificationStoreConfigurationSubGroupUpdate: ClassificationStoreConfigurationSubGroupUpdate;
-};
-export type ClassificationStoreConfigurationSubGroupDeleteApiResponse = unknown;
-export type ClassificationStoreConfigurationSubGroupDeleteApiArg = {
-    /** Id of the sub group configuration */
-    id: number;
-};
 export type ClassificationStoreConfigurationCollectionDetail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1041,6 +1041,36 @@ export type ClassificationStoreConfigurationKeyGroupRelationDelete = {
     /** ID of the group */
     groupId: number;
 };
+export type ClassificationStoreConfigurationImportReport = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Number of entries the import created */
+    created: number;
+    /** Number of entries the import updated */
+    updated: number;
+    /** Number of entries that carried no identifier and adopted the one of the file */
+    adopted: number;
+    /** Number of entries the store already carried exactly as the file describes them */
+    matchedUnchanged: number;
+    /** Number of entries the store carries and the file does not; they are left in place */
+    targetOnly: number;
+    /** The created entries by name, the last element naming how many more there are */
+    createdEntries: string[];
+    /** The updated entries by name, the last element naming how many more there are */
+    updatedEntries: string[];
+    /** The adopted entries by name, the last element naming how many more there are */
+    adoptedEntries: string[];
+    /** The entries the store carries and the file does not, the last element naming how many more there are */
+    targetOnlyEntries: string[];
+    /** Empty on a successful import; a refused one answers with 409 and names them in the error message instead */
+    conflicts: string[];
+    /** Number of entries the import skipped because the store holds their name under another identifier than the file gives them; the stored rows are left as they are */
+    skipped?: number | null;
+    /** The skipped entries by name and reason, the last element naming how many more there are */
+    skippedEntries?: string[] | null;
+};
 export type ClassificationStoreConfigurationStoreDetail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1086,6 +1116,42 @@ export type ClassificationStoreConfigurationStoreUpdate = {
     name: string;
     /** Description of the store */
     description: string | null;
+};
+export type ClassificationStoreConfigurationSubGroupDetail = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the sub group */
+    id: number;
+    /** Name of the sub group */
+    name: string;
+    /** ID of the store this sub group belongs to */
+    storeId: number;
+    /** Description of the sub group */
+    description: string | null;
+    /** Creation date as Unix timestamp */
+    creationDate: number | null;
+    /** Modification date as Unix timestamp */
+    modificationDate: number | null;
+    /** Generated identifier a key assignment names this sub group by, read-only */
+    identifier?: string | null;
+    /** Free-form pairs the sub group carries, reported as stored. Pimcore reads no member of it, and null where the sub group holds none. */
+    customMetadata?: object | null;
+};
+export type ClassificationStoreConfigurationSubGroupCreate = {
+    /** Name of the sub group */
+    name: string;
+    /** ID of the store this sub group belongs to */
+    storeId: number;
+};
+export type ClassificationStoreConfigurationSubGroupUpdate = {
+    /** Name of the sub group */
+    name: string;
+    /** Description of the sub group */
+    description: string | null;
+    /** Free-form pairs of the sub group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    customMetadata?: object | null;
 };
 export type ClassificationStoreConfigurationGetPageResponse = {
     /** AdditionalAttributes */
@@ -1138,6 +1204,14 @@ export type ClassificationStoreKeyGroupRelation = {
     keyDescription: string | null;
     /** Key Description */
     groupDescription: string | null;
+    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
+    localized?: boolean | null;
+    /** Data type of the key, as the relation stores it; null where the relation states none */
+    keyType?: string | null;
+    /** Whether a grid filter can be applied to this key: false where filterUnavailableReason says why not; null where the relation states no type or definition to tell. */
+    filterable?: boolean | null;
+    /** Why the key cannot be filtered: "indexExcluded" where its definition leaves it out of the search index, "typeUnsupported" where no filter supports its type, "resolutionFailed" where its definition cannot be read. Null means it can be filtered, or that the relation states no type or definition to tell. */
+    filterUnavailableReason?: string | null;
 };
 export type ClassificationStoreVariantLayout = {
     /** Name a value addresses the variant by */
@@ -1211,72 +1285,6 @@ export type ClassificationStoreConfiguration = {
     /** Name */
     name: string;
 };
-export type ClassificationStoreConfigurationImportReport = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Number of entries the import created */
-    created: number;
-    /** Number of entries the import updated */
-    updated: number;
-    /** Number of entries that carried no identifier and adopted the one of the file */
-    adopted: number;
-    /** Number of entries the store already carried exactly as the file describes them */
-    matchedUnchanged: number;
-    /** Number of entries the store carries and the file does not; they are left in place */
-    targetOnly: number;
-    /** The created entries by name, the last element naming how many more there are */
-    createdEntries: string[];
-    /** The updated entries by name, the last element naming how many more there are */
-    updatedEntries: string[];
-    /** The adopted entries by name, the last element naming how many more there are */
-    adoptedEntries: string[];
-    /** The entries the store carries and the file does not, the last element naming how many more there are */
-    targetOnlyEntries: string[];
-    /** Empty on a successful import; a refused one answers with 409 and names them in the error message instead */
-    conflicts: string[];
-    /** Number of entries the import skipped because the store holds their name under another identifier than the file gives them; the stored rows are left as they are */
-    skipped?: number | null;
-    /** The skipped entries by name and reason, the last element naming how many more there are */
-    skippedEntries?: string[] | null;
-};
-export type ClassificationStoreConfigurationSubGroupDetail = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the sub group */
-    id: number;
-    /** Name of the sub group */
-    name: string;
-    /** ID of the store this sub group belongs to */
-    storeId: number;
-    /** Description of the sub group */
-    description: string | null;
-    /** Creation date as Unix timestamp */
-    creationDate: number | null;
-    /** Modification date as Unix timestamp */
-    modificationDate: number | null;
-    /** Generated identifier a key assignment names this sub group by, read-only */
-    identifier?: string | null;
-    /** Free-form pairs the sub group carries, reported as stored. Pimcore reads no member of it, and null where the sub group holds none. */
-    customMetadata?: object | null;
-};
-export type ClassificationStoreConfigurationSubGroupCreate = {
-    /** Name of the sub group */
-    name: string;
-    /** ID of the store this sub group belongs to */
-    storeId: number;
-};
-export type ClassificationStoreConfigurationSubGroupUpdate = {
-    /** Name of the sub group */
-    name: string;
-    /** Description of the sub group */
-    description: string | null;
-    /** Free-form pairs of the sub group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
-    customMetadata?: object | null;
-};
 export const {
     useClassificationStoreConfigurationCollectionCollectionQuery,
     useClassificationStoreConfigurationCollectionCreateMutation,
@@ -1293,12 +1301,20 @@ export const {
     useClassificationStoreConfigurationKeyCreateMutation,
     useClassificationStoreConfigurationKeyUpdateMutation,
     useClassificationStoreConfigurationKeyDeleteMutation,
+    useClassificationStoreConfigurationKeyRestoreMutation,
     useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
     useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
     useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
+    useClassificationStoreConfigurationStoreApplyMutation,
     useClassificationStoreConfigurationStoreCreateMutation,
+    useClassificationStoreConfigurationStoreExportQuery,
+    useClassificationStoreConfigurationStoreImportMutation,
     useClassificationStoreConfigurationStoreTreeQuery,
     useClassificationStoreConfigurationStoreUpdateMutation,
+    useClassificationStoreConfigurationSubGroupCollectionQuery,
+    useClassificationStoreConfigurationSubGroupCreateMutation,
+    useClassificationStoreConfigurationSubGroupUpdateMutation,
+    useClassificationStoreConfigurationSubGroupDeleteMutation,
     useClassificationStoreConfigurationGetPageQuery,
     useClassificationStoreGetCollectionsQuery,
     useClassificationStoreGetGroupsQuery,
@@ -1307,12 +1323,4 @@ export const {
     useClassificationStoreGetLayoutByGroupQuery,
     useClassificationStoreGetLayoutByKeyQuery,
     useClassificationStoreGetConfigCollectionQuery,
-    useClassificationStoreConfigurationKeyRestoreMutation,
-    useClassificationStoreConfigurationStoreApplyMutation,
-    useClassificationStoreConfigurationStoreExportQuery,
-    useClassificationStoreConfigurationStoreImportMutation,
-    useClassificationStoreConfigurationSubGroupCollectionQuery,
-    useClassificationStoreConfigurationSubGroupCreateMutation,
-    useClassificationStoreConfigurationSubGroupUpdateMutation,
-    useClassificationStoreConfigurationSubGroupDeleteMutation,
 } = injectedRtkApi;

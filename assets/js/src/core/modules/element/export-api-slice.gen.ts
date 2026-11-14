@@ -336,6 +336,10 @@ export type RelationFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
@@ -344,6 +348,10 @@ export type SimpleFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
@@ -374,7 +382,7 @@ export type GridColumnRequest = {
     type: string;
     /** Group */
     group?: string[] | null;
-    /** Config */
+    /** Config. A dataobject.classificationstore column names its key by groupId and keyId, or by groupIdentifier and keyIdentifier, which take precedence where both are given. The optional `variant` member addresses one declared variant of a multiValue key: a column without it is expanded by the backend into one column per declared variant, in declaration order, followed by the default slot. An expanded column carries its `variant` in this config, and its cell key is suffixed with `#<variant>`. */
     config?: (string | AdvancedColumnConfig)[];
     /** Width of the Column */
     width?: number | null;
