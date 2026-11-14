@@ -17,7 +17,7 @@ import {
   CLASSIFICATION_STORE_WRAPPER_TYPES,
   isKeyTypeHeldByEngine
 } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
-import { Form, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, Input, InputNumber, Select, Switch } from '@sdk/components'
 import React, { useContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { container, serviceIds } from '@sdk/app'
@@ -33,6 +33,7 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
 
   const selectedType = Form.useWatch('delegateDatatype') as string | null | undefined
   const isRepeating = Form.useWatch('multiValue') as boolean | undefined
+  const unqualifiedValue = Form.useWatch('unqualifiedValue') as boolean | null | undefined
 
   // Every type a key may be defined with, except the wrappers, which cannot nest.
   const options = fieldDefinitionRegistry
@@ -77,6 +78,14 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
     prevDelegateTypeRef.current = selectedType
   }, [selectedType])
 
+  // A definition loaded with the default variant declined may still carry a label; the label field is never
+  // mounted then, so `preserve` cannot drop it — clear it here so it is not saved back.
+  useEffect(() => {
+    if (unqualifiedValue === false && !isEmpty(form.getFieldValue('unqualifiedValueLabel'))) {
+      form.setFieldValue('unqualifiedValueLabel', null)
+    }
+  }, [unqualifiedValue])
+
   return (
     <>
       <Form.Item
@@ -100,6 +109,27 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
       >
         <FieldDefinitionMultiValueVariants />
       </Form.Item>
+
+      <Form.Item
+        name='unqualifiedValue'
+        valuePropName='checked'
+      >
+        <Switch
+          labelRight={ t('classification-store.multi-value.default-variant-permitted') }
+          onChange={ (checked: boolean) => { if (!checked) form.setFieldValue('unqualifiedValueLabel', null) } }
+        />
+      </Form.Item>
+
+      {unqualifiedValue !== false && (
+        <Form.Item
+          label={ t('classification-store.multi-value.default-variant-label') }
+          name='unqualifiedValueLabel'
+          normalize={ (value: string) => value === '' ? null : value }
+          preserve={ false }
+        >
+          <Input />
+        </Form.Item>
+      )}
 
       <Form.Item
         name='multiValue'

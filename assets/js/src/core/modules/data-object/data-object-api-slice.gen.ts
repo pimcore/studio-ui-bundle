@@ -1,1136 +1,1089 @@
 import { api } from "@sdk/api";
 export const addTagTypes = ["Data Objects", "Data Object Grid"] as const;
 const injectedRtkApi = api
-  .enhanceEndpoints({
-    addTagTypes,
-  })
-  .injectEndpoints({
-    endpoints: (build) => ({
-      dataObjectAdd: build.mutation<
-        DataObjectAddApiResponse,
-        DataObjectAddApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/add/${queryArg.parentId}`,
-          method: "POST",
-          body: queryArg.dataObjectAddParameters,
+    .enhanceEndpoints({
+        addTagTypes,
+    })
+    .injectEndpoints({
+        endpoints: (build) => ({
+            dataObjectAdd: build.mutation<DataObjectAddApiResponse, DataObjectAddApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/add/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.dataObjectAddParameters,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectBatchDelete: build.mutation<DataObjectBatchDeleteApiResponse, DataObjectBatchDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/batch-delete`,
+                    method: "DELETE",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectClone: build.mutation<DataObjectCloneApiResponse, DataObjectCloneApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.cloneParameters,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectGetById: build.query<DataObjectGetByIdApiResponse, DataObjectGetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/data-objects/${queryArg.id}` }),
+                providesTags: ["Data Objects"],
+            }),
+            dataObjectUpdateById: build.mutation<DataObjectUpdateByIdApiResponse, DataObjectUpdateByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectGetGridPreview: build.query<DataObjectGetGridPreviewApiResponse, DataObjectGetGridPreviewApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/grid/preview`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectDeleteGridConfigurationByConfigurationId: build.mutation<
+                DataObjectDeleteGridConfigurationByConfigurationIdApiResponse,
+                DataObjectDeleteGridConfigurationByConfigurationIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.configurationId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetGridConfiguration: build.query<
+                DataObjectGetGridConfigurationApiResponse,
+                DataObjectGetGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.folderId}/${queryArg.classId}`,
+                    params: {
+                        configurationId: queryArg.configurationId,
+                    },
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectListGlobalGridConfigurations: build.query<
+                DataObjectListGlobalGridConfigurationsApiResponse,
+                DataObjectListGlobalGridConfigurationsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configurations-global/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectListSavedGridConfigurations: build.query<
+                DataObjectListSavedGridConfigurationsApiResponse,
+                DataObjectListSavedGridConfigurationsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configurations/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectRemoveGridConfigurationAsFavorite: build.mutation<
+                DataObjectRemoveGridConfigurationAsFavoriteApiResponse,
+                DataObjectRemoveGridConfigurationAsFavoriteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/remove-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectSaveGridConfiguration: build.mutation<
+                DataObjectSaveGridConfigurationApiResponse,
+                DataObjectSaveGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/save/${queryArg.classId}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectSetGridConfigurationAsFavorite: build.mutation<
+                DataObjectSetGridConfigurationAsFavoriteApiResponse,
+                DataObjectSetGridConfigurationAsFavoriteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/set-as-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectUpdateGridConfiguration: build.mutation<
+                DataObjectUpdateGridConfigurationApiResponse,
+                DataObjectUpdateGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/update/${queryArg.configurationId}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetAvailableGridColumns: build.query<
+                DataObjectGetAvailableGridColumnsApiResponse,
+                DataObjectGetAvailableGridColumnsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/available-columns`,
+                    params: {
+                        classId: queryArg.classId,
+                        folderId: queryArg.folderId,
+                    },
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetAvailableGridColumnsForRelation: build.query<
+                DataObjectGetAvailableGridColumnsForRelationApiResponse,
+                DataObjectGetAvailableGridColumnsForRelationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/available-columns-for-relation`,
+                    params: {
+                        classId: queryArg.classId,
+                        relationField: queryArg.relationField,
+                    },
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetGrid: build.query<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/grid/${queryArg.classId}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetPhpcodeTransformers: build.query<
+                DataObjectGetPhpcodeTransformersApiResponse,
+                DataObjectGetPhpcodeTransformersApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/data-objects/grid/transformers/services/phpcode` }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout`,
+                    params: {
+                        layoutId: queryArg.layoutId,
+                    },
+                }),
+                providesTags: ["Data Objects"],
+            }),
+            dataObjectPatchById: build.mutation<DataObjectPatchByIdApiResponse, DataObjectPatchByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects`,
+                    method: "PATCH",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectPatchFolderById: build.mutation<
+                DataObjectPatchFolderByIdApiResponse,
+                DataObjectPatchFolderByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/folder/${queryArg.id}`,
+                    method: "PATCH",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectFormatPath: build.query<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/format-path`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Data Objects"],
+            }),
+            dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/preview/${queryArg.id}`,
+                    params: {
+                        site: queryArg.site,
+                    },
+                }),
+                providesTags: ["Data Objects"],
+            }),
+            dataObjectReplaceContent: build.mutation<
+                DataObjectReplaceContentApiResponse,
+                DataObjectReplaceContentApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/${queryArg.sourceId}/replace/${queryArg.targetId}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectGetSelectOptions: build.query<
+                DataObjectGetSelectOptionsApiResponse,
+                DataObjectGetSelectOptionsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/select-options`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Data Objects"],
+            }),
+            dataObjectGetTree: build.query<DataObjectGetTreeApiResponse, DataObjectGetTreeApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/tree`,
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                        parentId: queryArg.parentId,
+                        idSearchTerm: queryArg.idSearchTerm,
+                        pqlQuery: queryArg.pqlQuery,
+                        excludeFolders: queryArg.excludeFolders,
+                        path: queryArg.path,
+                        pathIncludeParent: queryArg.pathIncludeParent,
+                        pathIncludeDescendants: queryArg.pathIncludeDescendants,
+                        className: queryArg.className,
+                        classIds: queryArg.classIds,
+                    },
+                }),
+                providesTags: ["Data Objects"],
+            }),
         }),
-        invalidatesTags: ["Data Objects"],
-      }),
-      dataObjectBatchDelete: build.mutation<
-        DataObjectBatchDeleteApiResponse,
-        DataObjectBatchDeleteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/batch-delete`,
-          method: "DELETE",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Data Objects"],
-      }),
-      dataObjectClone: build.mutation<
-        DataObjectCloneApiResponse,
-        DataObjectCloneApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
-          method: "POST",
-          body: queryArg.cloneParameters,
-        }),
-        invalidatesTags: ["Data Objects"],
-      }),
-      dataObjectGetById: build.query<
-        DataObjectGetByIdApiResponse,
-        DataObjectGetByIdApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/${queryArg.id}`,
-        }),
-        providesTags: ["Data Objects"],
-      }),
-      dataObjectUpdateById: build.mutation<
-        DataObjectUpdateByIdApiResponse,
-        DataObjectUpdateByIdApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/${queryArg.id}`,
-          method: "PUT",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Data Objects"],
-      }),
-      dataObjectGetGridPreview: build.query<
-        DataObjectGetGridPreviewApiResponse,
-        DataObjectGetGridPreviewApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/grid/preview`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectDeleteGridConfigurationByConfigurationId: build.mutation<
-        DataObjectDeleteGridConfigurationByConfigurationIdApiResponse,
-        DataObjectDeleteGridConfigurationByConfigurationIdApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.configurationId}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Data Object Grid"],
-      }),
-      dataObjectGetGridConfiguration: build.query<
-        DataObjectGetGridConfigurationApiResponse,
-        DataObjectGetGridConfigurationApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.folderId}/${queryArg.classId}`,
-          params: {
-            configurationId: queryArg.configurationId,
-          },
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectListGlobalGridConfigurations: build.query<
-        DataObjectListGlobalGridConfigurationsApiResponse,
-        DataObjectListGlobalGridConfigurationsApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configurations-global/${queryArg.classId}`,
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectListSavedGridConfigurations: build.query<
-        DataObjectListSavedGridConfigurationsApiResponse,
-        DataObjectListSavedGridConfigurationsApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configurations/${queryArg.classId}`,
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectRemoveGridConfigurationAsFavorite: build.mutation<
-        DataObjectRemoveGridConfigurationAsFavoriteApiResponse,
-        DataObjectRemoveGridConfigurationAsFavoriteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configuration/remove-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Data Object Grid"],
-      }),
-      dataObjectSaveGridConfiguration: build.mutation<
-        DataObjectSaveGridConfigurationApiResponse,
-        DataObjectSaveGridConfigurationApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configuration/save/${queryArg.classId}`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Data Object Grid"],
-      }),
-      dataObjectSetGridConfigurationAsFavorite: build.mutation<
-        DataObjectSetGridConfigurationAsFavoriteApiResponse,
-        DataObjectSetGridConfigurationAsFavoriteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configuration/set-as-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
-          method: "POST",
-        }),
-        invalidatesTags: ["Data Object Grid"],
-      }),
-      dataObjectUpdateGridConfiguration: build.mutation<
-        DataObjectUpdateGridConfigurationApiResponse,
-        DataObjectUpdateGridConfigurationApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/configuration/update/${queryArg.configurationId}`,
-          method: "PUT",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Data Object Grid"],
-      }),
-      dataObjectGetAvailableGridColumns: build.query<
-        DataObjectGetAvailableGridColumnsApiResponse,
-        DataObjectGetAvailableGridColumnsApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/available-columns`,
-          params: {
-            classId: queryArg.classId,
-            folderId: queryArg.folderId,
-          },
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectGetAvailableGridColumnsForRelation: build.query<
-        DataObjectGetAvailableGridColumnsForRelationApiResponse,
-        DataObjectGetAvailableGridColumnsForRelationApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-object/grid/available-columns-for-relation`,
-          params: {
-            classId: queryArg.classId,
-            relationField: queryArg.relationField,
-          },
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectGetGrid: build.query<
-        DataObjectGetGridApiResponse,
-        DataObjectGetGridApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/grid/${queryArg.classId}`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectGetPhpcodeTransformers: build.query<
-        DataObjectGetPhpcodeTransformersApiResponse,
-        DataObjectGetPhpcodeTransformersApiArg
-      >({
-        query: () => ({
-          url: `/pimcore-studio/api/data-objects/grid/transformers/services/phpcode`,
-        }),
-        providesTags: ["Data Object Grid"],
-      }),
-      dataObjectGetLayoutById: build.query<
-        DataObjectGetLayoutByIdApiResponse,
-        DataObjectGetLayoutByIdApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout`,
-          params: {
-            layoutId: queryArg.layoutId,
-          },
-        }),
-        providesTags: ["Data Objects"],
-      }),
-      dataObjectPatchById: build.mutation<
-        DataObjectPatchByIdApiResponse,
-        DataObjectPatchByIdApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects`,
-          method: "PATCH",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Data Objects"],
-      }),
-      dataObjectPatchFolderById: build.mutation<
-        DataObjectPatchFolderByIdApiResponse,
-        DataObjectPatchFolderByIdApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/folder/${queryArg.id}`,
-          method: "PATCH",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Data Objects"],
-      }),
-      dataObjectFormatPath: build.query<
-        DataObjectFormatPathApiResponse,
-        DataObjectFormatPathApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/format-path`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        providesTags: ["Data Objects"],
-      }),
-      dataObjectPreviewById: build.query<
-        DataObjectPreviewByIdApiResponse,
-        DataObjectPreviewByIdApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/preview/${queryArg.id}`,
-          params: {
-            site: queryArg.site,
-          },
-        }),
-        providesTags: ["Data Objects"],
-      }),
-      dataObjectReplaceContent: build.mutation<
-        DataObjectReplaceContentApiResponse,
-        DataObjectReplaceContentApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/${queryArg.sourceId}/replace/${queryArg.targetId}`,
-          method: "POST",
-        }),
-        invalidatesTags: ["Data Objects"],
-      }),
-      dataObjectGetSelectOptions: build.query<
-        DataObjectGetSelectOptionsApiResponse,
-        DataObjectGetSelectOptionsApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/select-options`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        providesTags: ["Data Objects"],
-      }),
-      dataObjectGetTree: build.query<
-        DataObjectGetTreeApiResponse,
-        DataObjectGetTreeApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/data-objects/tree`,
-          params: {
-            page: queryArg.page,
-            pageSize: queryArg.pageSize,
-            parentId: queryArg.parentId,
-            idSearchTerm: queryArg.idSearchTerm,
-            pqlQuery: queryArg.pqlQuery,
-            excludeFolders: queryArg.excludeFolders,
-            path: queryArg.path,
-            pathIncludeParent: queryArg.pathIncludeParent,
-            pathIncludeDescendants: queryArg.pathIncludeDescendants,
-            className: queryArg.className,
-            classIds: queryArg.classIds,
-          },
-        }),
-        providesTags: ["Data Objects"],
-      }),
-    }),
-    overrideExisting: false,
-  });
+        overrideExisting: false,
+    });
 export { injectedRtkApi as api };
-export type DataObjectAddApiResponse =
-  /** status 200 ID of added data object */ {
+export type DataObjectAddApiResponse = /** status 200 ID of added data object */ {
     /** ID of created data object */
     id: number;
-  };
+};
 export type DataObjectAddApiArg = {
-  /** ParentId of the data-object */
-  parentId: number;
-  dataObjectAddParameters: DataObjectAdd;
+    /** ParentId of the data-object */
+    parentId: number;
+    dataObjectAddParameters: DataObjectAdd;
 };
 export type DataObjectBatchDeleteApiResponse =
-  /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-  };
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type DataObjectBatchDeleteApiArg = {
-  body: {
-    ids?: number[];
-  };
+    body: {
+        ids?: number[];
+    };
 };
 export type DataObjectCloneApiResponse =
-  /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-  };
+    /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type DataObjectCloneApiArg = {
-  /** Id of the data-object */
-  id: number;
-  /** ParentId of the data-object */
-  parentId: number;
-  cloneParameters: DataObjectCloneParameters;
+    /** Id of the data-object */
+    id: number;
+    /** ParentId of the data-object */
+    parentId: number;
+    cloneParameters: DataObjectCloneParameters;
 };
-export type DataObjectGetByIdApiResponse =
-  /** status 200 Successfully retrieved data object data as JSON */
+export type DataObjectGetByIdApiResponse = /** status 200 Successfully retrieved data object data as JSON */
     | DataObjectWithDetailData
     | DataObjectFolder;
 export type DataObjectGetByIdApiArg = {
-  /** Id of the data-object */
-  id: number;
+    /** Id of the data-object */
+    id: number;
 };
-export type DataObjectUpdateByIdApiResponse =
-  /** status 200 Successfully updated data object */
+export type DataObjectUpdateByIdApiResponse = /** status 200 Successfully updated data object */
     | DataObjectWithDetailData
     | DataObjectFolder;
 export type DataObjectUpdateByIdApiArg = {
-  /** Id of the data-object */
-  id: number;
-  body: {
-    data: {
-      parentId?: number | null;
-      index?: number | null;
-      key?: string | null;
-      useDraftData?: boolean | null;
-      task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
-      /** Optional coauthor type stored on versions created by this save */
-      coauthorType?: string;
-      /** Optional coauthor identifier stored on versions created by this save */
-      coauthor?: string;
-      locked?: string | null;
-      childrenSortBy?: string | null;
-      childrenSortOrder?: string | null;
-      published?: boolean | null;
-      editableData?: object | null;
-      properties?: UpdateDataProperty[] | null;
+    /** Id of the data-object */
+    id: number;
+    body: {
+        data: {
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            useDraftData?: boolean | null;
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
+            locked?: string | null;
+            childrenSortBy?: string | null;
+            childrenSortOrder?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
+            properties?: UpdateDataProperty[] | null;
+        };
     };
-  };
 };
 export type DataObjectGetGridPreviewApiResponse =
-  /** status 200 Preview of an Advanced Column Grid for a given Data Object. */ GridColumnData;
+    /** status 200 Preview of an Advanced Column Grid for a given Data Object. */ GridColumnData;
 export type DataObjectGetGridPreviewApiArg = {
-  body: {
-    objectId: number;
-    column: GridColumnRequest;
-  };
+    body: {
+        objectId: number;
+        column: GridColumnRequest;
+    };
 };
 export type DataObjectDeleteGridConfigurationByConfigurationIdApiResponse =
-  /** status 200 Success */ GridDetailedConfiguration;
+    /** status 200 Success */ GridDetailedConfiguration;
 export type DataObjectDeleteGridConfigurationByConfigurationIdApiArg = {
-  /** ConfigurationId of the element */
-  configurationId: number;
+    /** ConfigurationId of the element */
+    configurationId: number;
 };
 export type DataObjectGetGridConfigurationApiResponse =
-  /** status 200 Data Object grid configuration */ GridDetailedConfiguration;
+    /** status 200 Data Object grid configuration */ GridDetailedConfiguration;
 export type DataObjectGetGridConfigurationApiArg = {
-  /** FolderId of the element */
-  folderId: number;
-  /** Class Id of the data object */
-  classId: string;
-  /** Configuration ID */
-  configurationId?: number;
+    /** FolderId of the element */
+    folderId: number;
+    /** Class Id of the data object */
+    classId: string;
+    /** Configuration ID */
+    configurationId?: number;
 };
 export type DataObjectListGlobalGridConfigurationsApiResponse =
-  /** status 200 List of globally-shared grid configurations for data objects */ {
-    totalItems: number;
-    items: GridConfiguration[];
-  };
+    /** status 200 List of globally-shared grid configurations for data objects */ {
+        totalItems: number;
+        items: GridConfiguration[];
+    };
 export type DataObjectListGlobalGridConfigurationsApiArg = {
-  /** Class Id of the data object */
-  classId: string;
+    /** Class Id of the data object */
+    classId: string;
 };
 export type DataObjectListSavedGridConfigurationsApiResponse =
-  /** status 200 List of saved grid configurations for data objects */ {
-    totalItems: number;
-    items: GridConfiguration[];
-  };
+    /** status 200 List of saved grid configurations for data objects */ {
+        totalItems: number;
+        items: GridConfiguration[];
+    };
 export type DataObjectListSavedGridConfigurationsApiArg = {
-  /** Class Id of the data object */
-  classId: string;
+    /** Class Id of the data object */
+    classId: string;
 };
 export type DataObjectRemoveGridConfigurationAsFavoriteApiResponse = unknown;
 export type DataObjectRemoveGridConfigurationAsFavoriteApiArg = {
-  /** ConfigurationId of the configurationId */
-  configurationId: number;
-  /** FolderId of the folderId */
-  folderId: number;
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    /** FolderId of the folderId */
+    folderId: number;
 };
 export type DataObjectSaveGridConfigurationApiResponse =
-  /** status 200 Data Object grid configuration saved successfully */ GridConfiguration;
+    /** status 200 Data Object grid configuration saved successfully */ GridConfiguration;
 export type DataObjectSaveGridConfigurationApiArg = {
-  /** Class Id of the data object */
-  classId: string;
-  body: {
-    folderId: number;
-    pageSize: number;
-    name: string;
-    description: string;
-    shareGlobal?: boolean;
-    setAsFavorite?: boolean;
-    saveFilter?: boolean;
-    sharedUsers?: object;
-    sharedRoles?: object;
-    columns: GridColumnRequest[];
-    filter?: GridFilter | null;
-  };
+    /** Class Id of the data object */
+    classId: string;
+    body: {
+        folderId: number;
+        pageSize: number;
+        name: string;
+        description: string;
+        shareGlobal?: boolean;
+        setAsFavorite?: boolean;
+        saveFilter?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns: GridColumnRequest[];
+        filter?: GridFilter | null;
+    };
 };
 export type DataObjectSetGridConfigurationAsFavoriteApiResponse = unknown;
 export type DataObjectSetGridConfigurationAsFavoriteApiArg = {
-  /** ConfigurationId of the configurationId */
-  configurationId: number;
-  /** FolderId of the folderId */
-  folderId: number;
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    /** FolderId of the folderId */
+    folderId: number;
 };
 export type DataObjectUpdateGridConfigurationApiResponse = unknown;
 export type DataObjectUpdateGridConfigurationApiArg = {
-  /** ConfigurationId of the configurationId */
-  configurationId: number;
-  body: {
-    folderId: number;
-    pageSize: number;
-    name: string;
-    description: string;
-    shareGlobal?: boolean;
-    setAsFavorite?: boolean;
-    saveFilter?: boolean;
-    sharedUsers?: object;
-    sharedRoles?: object;
-    columns: GridColumnRequest[];
-    filter?: GridFilter | null;
-  };
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    body: {
+        folderId: number;
+        pageSize: number;
+        name: string;
+        description: string;
+        shareGlobal?: boolean;
+        setAsFavorite?: boolean;
+        saveFilter?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns: GridColumnRequest[];
+        filter?: GridFilter | null;
+    };
 };
 export type DataObjectGetAvailableGridColumnsApiResponse =
-  /** status 200 List of available grid columns for data objects */ {
-    columns?: GridColumnConfiguration[];
-  };
+    /** status 200 List of available grid columns for data objects */ {
+        columns?: GridColumnConfiguration[];
+    };
 export type DataObjectGetAvailableGridColumnsApiArg = {
-  /** Identifies the class name for which the columns should be retrieved. */
-  classId?: string;
-  /** folderId */
-  folderId?: number;
+    /** Identifies the class name for which the columns should be retrieved. */
+    classId?: string;
+    /** folderId */
+    folderId?: number;
 };
 export type DataObjectGetAvailableGridColumnsForRelationApiResponse =
-  /** status 200 List of available grid columns for data objects Many to many relation field */ {
-    columns?: GridColumnConfiguration[];
-  };
+    /** status 200 List of available grid columns for data objects Many to many relation field */ {
+        columns?: GridColumnConfiguration[];
+    };
 export type DataObjectGetAvailableGridColumnsForRelationApiArg = {
-  /** Identifies the class name for which the columns should be retrieved. */
-  classId?: string;
-  /** relationField as dot notation, e.g. "myBlock.mySubRelationField" */
-  relationField?: string;
+    /** Identifies the class name for which the columns should be retrieved. */
+    classId?: string;
+    /** relationField as dot notation, e.g. "myBlock.mySubRelationField" */
+    relationField?: string;
 };
-export type DataObjectGetGridApiResponse =
-  /** status 200 Data object grid data */ {
+export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
     items: {
-      id?: number;
-      columns?: GridColumnData[];
-      isLocked?: boolean;
-      permissions?: Permissions;
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
     }[];
-  };
-export type DataObjectGetGridApiArg = {
-  /** Identifies the class name for which the the grid should be build. */
-  classId: string;
-  body: {
-    folderId: number;
-    /** When true, empty localized values fall back to configured fallback languages */
-    applyFallbackLanguages?: boolean;
-    columns?: GridColumnRequest[];
-    filters?: GridFilter;
-  };
 };
-export type DataObjectGetPhpcodeTransformersApiResponse =
-  /** status 200 List of available PHPCode transformers */ {
+export type DataObjectGetGridApiArg = {
+    /** Identifies the class name for which the the grid should be build. */
+    classId: string;
+    body: {
+        folderId: number;
+        /** When true, empty localized values fall back to configured fallback languages */
+        applyFallbackLanguages?: boolean;
+        columns?: GridColumnRequest[];
+        filters?: GridFilter;
+    };
+};
+export type DataObjectGetPhpcodeTransformersApiResponse = /** status 200 List of available PHPCode transformers */ {
     totalItems: number;
     items: SimplePhpCodeTransformer[];
-  };
+};
 export type DataObjectGetPhpcodeTransformersApiArg = void;
 export type DataObjectGetLayoutByIdApiResponse =
-  /** status 200 Successfully retrieved data object layout data as JSON */ Layout;
+    /** status 200 Successfully retrieved data object layout data as JSON */ Layout;
 export type DataObjectGetLayoutByIdApiArg = {
-  /** Id of the data-object */
-  id: number;
-  /** ID to get specific layout */
-  layoutId?: string;
+    /** Id of the data-object */
+    id: number;
+    /** ID to get specific layout */
+    layoutId?: string;
 };
 export type DataObjectPatchByIdApiResponse =
-  /** status 201 Successfully created jobRun for patching multiple data objects */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-  };
+    /** status 201 Successfully created jobRun for patching multiple data objects */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type DataObjectPatchByIdApiArg = {
-  body: {
-    data: {
-      /** Data Object ID */
-      id: number;
-      parentId?: number | null;
-      index?: number | null;
-      key?: string | null;
-      task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
-      /** Optional coauthor type stored on versions created by this save */
-      coauthorType?: string;
-      /** Optional coauthor identifier stored on versions created by this save */
-      coauthor?: string;
-      locked?: string | null;
-      childrenSortBy?: string | null;
-      childrenSortOrder?: string | null;
-      published?: boolean | null;
-      editableData?: object | null;
-    }[];
-  };
+    body: {
+        data: {
+            /** Data Object ID */
+            id: number;
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
+            locked?: string | null;
+            childrenSortBy?: string | null;
+            childrenSortOrder?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
+        }[];
+    };
 };
 export type DataObjectPatchFolderByIdApiResponse =
-  /** status 201 Successfully created jobRun for patching multiple data objects */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-  };
-export type DataObjectPatchFolderByIdApiArg = {
-  /** Id of the folder */
-  id: number;
-  body: {
-    data: {
-      parentId?: number | null;
-      index?: number | null;
-      key?: string | null;
-      locked?: string | null;
-      childrenSortBy?: string | null;
-      childrenSortOrder?: string | null;
-      published?: boolean | null;
-      editableData?: object | null;
+    /** status 201 Successfully created jobRun for patching multiple data objects */ {
+        /** ID of created jobRun */
+        jobRunId: number;
     };
-    filters?: ExportAllFilter;
-    classId: string;
-  };
+export type DataObjectPatchFolderByIdApiArg = {
+    /** Id of the folder */
+    id: number;
+    body: {
+        data: {
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            childrenSortBy?: string | null;
+            childrenSortOrder?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
+        };
+        filters?: ExportAllFilter;
+        classId: string;
+    };
 };
-export type DataObjectFormatPathApiResponse =
-  /** status 200 Formatted path of the objects */ {
+export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
     totalItems: number;
     items: SelectOption[];
-  };
+};
 export type DataObjectFormatPathApiArg = {
-  body: {
-    objectId: number;
-    targets: object;
-    /** Fieldname for the PathFormatter. Given as Dot Notation */
-    fieldName?: string;
-  };
+    body: {
+        objectId: number;
+        targets: object;
+        /** Fieldname for the PathFormatter. Given as Dot Notation */
+        fieldName?: string;
+    };
 };
 export type DataObjectPreviewByIdApiResponse = unknown;
 export type DataObjectPreviewByIdApiArg = {
-  /** Id of the data object */
-  id: number;
-  /** Site ID for multi-site setups */
-  site?: number;
+    /** Id of the data object */
+    id: number;
+    /** Site ID for multi-site setups */
+    site?: number;
 };
 export type DataObjectReplaceContentApiResponse = unknown;
 export type DataObjectReplaceContentApiArg = {
-  /** SourceId of the data-object */
-  sourceId: number;
-  /** TargetId of the data-object */
-  targetId: number;
+    /** SourceId of the data-object */
+    sourceId: number;
+    /** TargetId of the data-object */
+    targetId: number;
 };
-export type DataObjectGetSelectOptionsApiResponse =
-  /** status 200 List of dynamic select options */ {
+export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
     items: SelectOption2[];
-  };
+};
 export type DataObjectGetSelectOptionsApiArg = {
-  body: {
-    objectId: number;
-    fieldName: string;
-    changedData?: object;
-    context: object;
-  };
+    body: {
+        objectId: number;
+        fieldName: string;
+        changedData?: object;
+        context: object;
+    };
 };
 export type DataObjectGetTreeApiResponse =
-  /** status 200 Paginated data objects with total count as header param as JSON */ {
-    totalItems: number;
-    items: (DataObject | DataObjectFolder)[];
-  };
+    /** status 200 Paginated data objects with total count as header param as JSON */ {
+        totalItems: number;
+        items: (DataObject | DataObjectFolder)[];
+    };
 export type DataObjectGetTreeApiArg = {
-  /** Page number */
-  page: number;
-  /** Number of items per page */
-  pageSize: number;
-  /** Filter data objects by parent id. */
-  parentId?: number;
-  /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
-  idSearchTerm?: string;
-  /** Pql query filter */
-  pqlQuery?: string;
-  /** Filter folders from result. */
-  excludeFolders?: boolean;
-  /** Filter by path. */
-  path?: string;
-  /** Include the parent item in the result. */
-  pathIncludeParent?: boolean;
-  /** Include all descendants in the result. */
-  pathIncludeDescendants?: boolean;
-  /** When provided, the search is executed on the specific data object class index. */
-  className?: string;
-  /** Filter results based on the provided class IDs. */
-  classIds?: string;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+    /** Filter data objects by parent id. */
+    parentId?: number;
+    /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
+    idSearchTerm?: string;
+    /** Pql query filter */
+    pqlQuery?: string;
+    /** Filter folders from result. */
+    excludeFolders?: boolean;
+    /** Filter by path. */
+    path?: string;
+    /** Include the parent item in the result. */
+    pathIncludeParent?: boolean;
+    /** Include all descendants in the result. */
+    pathIncludeDescendants?: boolean;
+    /** When provided, the search is executed on the specific data object class index. */
+    className?: string;
+    /** Filter results based on the provided class IDs. */
+    classIds?: string;
 };
 export type Error = {
-  /** Message */
-  message: string;
+    /** Message */
+    message: string;
 };
 export type DevError = {
-  /** Message */
-  message: string;
-  /** Details */
-  details: string;
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export type DataObjectAdd = {
-  /** Key */
-  key: string;
-  /** Class Id */
-  classId: string;
-  /** Type */
-  type: "object" | "variant";
+    /** Key */
+    key: string;
+    /** Class Id */
+    classId: string;
+    /** Type */
+    type: "object" | "variant";
 };
 export type DataObjectCloneParameters = {
-  /** Recursive */
-  recursive: boolean;
-  /** Update References */
-  updateReferences: boolean;
+    /** Recursive */
+    recursive: boolean;
+    /** Update References */
+    updateReferences: boolean;
 };
 export type ElementIcon = {
-  /** Icon type */
-  type: "name" | "path";
-  /** Icon value */
-  value: string;
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
 };
 export type Element = {
-  /** ID */
-  id: number;
-  /** ID of parent */
-  parentId: number;
-  /** path */
-  path: string;
-  /** icon */
-  icon: ElementIcon;
-  /** ID of owner */
-  userOwner: number;
-  /** User that modified the element */
-  userModification: number | null;
-  /** Locked */
-  locked: string | null;
-  /** Is locked */
-  isLocked: boolean;
-  /** Creation date */
-  creationDate: number | null;
-  /** Modification date */
-  modificationDate: number | null;
-  /** elementType */
-  elementType: string;
+    /** ID */
+    id: number;
+    /** ID of parent */
+    parentId: number;
+    /** path */
+    path: string;
+    /** icon */
+    icon: ElementIcon;
+    /** ID of owner */
+    userOwner: number;
+    /** User that modified the element */
+    userModification: number | null;
+    /** Locked */
+    locked: string | null;
+    /** Is locked */
+    isLocked: boolean;
+    /** Creation date */
+    creationDate: number | null;
+    /** Modification date */
+    modificationDate: number | null;
+    /** elementType */
+    elementType: string;
 };
 export type CustomAttributes = {
-  /** Custom Icon */
-  icon: ElementIcon | null;
-  /** Custom Tooltip */
-  tooltip: string | null;
-  /** AdditionalIcons */
-  additionalIcons: string[];
-  /** Custom Key/Filename */
-  key: string | null;
-  /** Additional Css Classes */
-  additionalCssClasses: string[];
+    /** Custom Icon */
+    icon: ElementIcon | null;
+    /** Custom Tooltip */
+    tooltip: string | null;
+    /** AdditionalIcons */
+    additionalIcons: string[];
+    /** Custom Key/Filename */
+    key: string | null;
+    /** Additional Css Classes */
+    additionalCssClasses: string[];
 };
 export type Permissions = {
-  /** List */
-  list: boolean;
-  /** View */
-  view: boolean;
-  /** Publish */
-  publish: boolean;
-  /** Delete */
-  delete: boolean;
-  /** Rename */
-  rename: boolean;
-  /** Create */
-  create: boolean;
-  /** Settings */
-  settings: boolean;
-  /** Versions */
-  versions: boolean;
-  /** Properties */
-  properties: boolean;
+    /** List */
+    list: boolean;
+    /** View */
+    view: boolean;
+    /** Publish */
+    publish: boolean;
+    /** Delete */
+    delete: boolean;
+    /** Rename */
+    rename: boolean;
+    /** Create */
+    create: boolean;
+    /** Settings */
+    settings: boolean;
+    /** Versions */
+    versions: boolean;
+    /** Properties */
+    properties: boolean;
 };
 export type DataObjectPermissions = Permissions & {
-  /** Save */
-  save: boolean;
-  /** Unpublish */
-  unpublish: boolean;
-  /** Localized Edit */
-  localizedEdit: string | null;
-  /** Localized View */
-  localizedView: string | null;
+    /** Save */
+    save: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+    /** Localized Edit */
+    localizedEdit: string | null;
+    /** Localized View */
+    localizedView: string | null;
 };
 export type DataObject = Element & {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Custom attributes for the tree */
-  customAttributes: CustomAttributes;
-  /** Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search */
-  score?: number | null;
-  /** Key */
-  key: string;
-  /** Class name */
-  className: string;
-  /** Type */
-  type: string;
-  /** Published */
-  published: boolean;
-  /** Has children */
-  hasChildren: boolean;
-  /** Workflow permissions */
-  hasWorkflowWithPermissions: boolean;
-  /** Full path */
-  fullPath: string;
-  permissions: DataObjectPermissions;
-  /** Custom index */
-  index: number;
-  /** Sort mode of children */
-  childrenSortBy: string;
-  /** Sort order of children */
-  childrenSortOrder: string;
-  /** Allow variants */
-  allowVariants: boolean | null;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Custom attributes for the tree */
+    customAttributes: CustomAttributes;
+    /** Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search */
+    score?: number | null;
+    /** Key */
+    key: string;
+    /** Class name */
+    className: string;
+    /** Type */
+    type: string;
+    /** Published */
+    published: boolean;
+    /** Has children */
+    hasChildren: boolean;
+    /** Workflow permissions */
+    hasWorkflowWithPermissions: boolean;
+    /** Full path */
+    fullPath: string;
+    permissions: DataObjectPermissions;
+    /** Custom index */
+    index: number;
+    /** Sort mode of children */
+    childrenSortBy: string;
+    /** Sort order of children */
+    childrenSortOrder: string;
+    /** Allow variants */
+    allowVariants: boolean | null;
 };
 export type DataObjectDraftData = {
-  /** ID */
-  id: number;
-  /** Modification date */
-  modificationDate: number;
-  /** Is auto save */
-  isAutoSave: boolean;
+    /** ID */
+    id: number;
+    /** Modification date */
+    modificationDate: number;
+    /** Is auto save */
+    isAutoSave: boolean;
 };
 export type DataObjectWithDetailData = DataObject & {
-  /** Show variants */
-  showVariants: boolean;
-  /** Inheritance allowed */
-  allowInheritance: boolean;
-  /** Has preview */
-  hasPreview: boolean;
-  /** Show application logger tab */
-  showAppLoggerTab: boolean;
-  /** Has workflow available */
-  hasWorkflowAvailable: boolean;
-  /** Detail object data */
-  objectData: object;
-  /** Inheritance object data */
-  inheritanceData: object;
-  draftData: DataObjectDraftData | null;
+    /** Show variants */
+    showVariants: boolean;
+    /** Inheritance allowed */
+    allowInheritance: boolean;
+    /** Has preview */
+    hasPreview: boolean;
+    /** Show application logger tab */
+    showAppLoggerTab: boolean;
+    /** Has workflow available */
+    hasWorkflowAvailable: boolean;
+    /** Detail object data */
+    objectData: object;
+    /** Inheritance object data */
+    inheritanceData: object;
+    draftData: DataObjectDraftData | null;
 };
 export type DataObjectFolder = DataObject & {
-  /** Has workflow available */
-  hasWorkflowAvailable: boolean;
+    /** Has workflow available */
+    hasWorkflowAvailable: boolean;
 };
 export type ValidationErrorPath = {
-  /** Field name of this level */
-  field: string;
-  /** Raw, untranslated title */
-  title: string | null;
-  /** Language of this level */
-  language: string | null;
-  /** Row index within a block or field collection */
-  index: number | null;
-  /** Object brick key or field collection type */
-  type: string | null;
-  /** Raw, untranslated title of the object brick or field collection */
-  typeTitle: string | null;
+    /** Field name of this level */
+    field: string;
+    /** Raw, untranslated title */
+    title: string | null;
+    /** Language of this level */
+    language: string | null;
+    /** Row index within a block or field collection */
+    index: number | null;
+    /** Object brick key or field collection type */
+    type: string | null;
+    /** Raw, untranslated title of the object brick or field collection */
+    typeTitle: string | null;
 };
 export type ValidationError = {
-  /** Name of the field that failed */
-  field: string | null;
-  /** Raw, untranslated field title */
-  fieldTitle: string | null;
-  /** Location of the field, innermost level first */
-  path: ValidationErrorPath[];
-  /** Untranslated message, untrusted: escape it before rendering it as HTML */
-  message: string;
-  /** Translation key */
-  messageKey: string | null;
-  /** Translation parameters */
-  parameters: {
-    [key: string]: any;
-  };
+    /** Name of the field that failed */
+    field: string | null;
+    /** Raw, untranslated field title */
+    fieldTitle: string | null;
+    /** Location of the field, innermost level first */
+    path: ValidationErrorPath[];
+    /** Untranslated message, untrusted: escape it before rendering it as HTML */
+    message: string;
+    /** Translation key */
+    messageKey: string | null;
+    /** Translation parameters */
+    parameters: {
+        [key: string]: any;
+    };
 };
 export type ValidationFailedError = {
-  /** Failure message in English. Untrusted, may contain markup: escape before rendering */
-  message: string;
-  /** Error key, not present when the request failed before the element was validated */
-  errorKey?: string;
-  /** Individual validation errors, present when the failure came from the element validation */
-  validationErrors?: ValidationError[];
+    /** Failure message in English. Untrusted, may contain markup: escape before rendering */
+    message: string;
+    /** Error key, not present when the request failed before the element was validated */
+    errorKey?: string;
+    /** Individual validation errors, present when the failure came from the element validation */
+    validationErrors?: ValidationError[];
 };
 export type UpdateDataProperty = {
-  /** key */
-  key: string;
-  /** data */
-  data: any | null;
-  /** type */
-  type: string;
-  /** inheritable */
-  inheritable: boolean;
+    /** key */
+    key: string;
+    /** data */
+    data: any | null;
+    /** type */
+    type: string;
+    /** inheritable */
+    inheritable: boolean;
 };
 export type GridColumnData = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Key */
-  key?: string;
-  /** Locale */
-  locale?: string | null;
-  /** Value */
-  value?: any | null;
-  /** Field Type of the column */
-  fieldType?: string | null;
-  /** inheritance */
-  inheritance?: object | null;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Value */
+    value?: any | null;
+    /** Field Type of the column */
+    fieldType?: string | null;
+    /** inheritance */
+    inheritance?: object | null;
 };
 export type RelationFieldConfig = {
-  /** Relation Getter */
-  relation: string;
-  /** Field getter */
-  field: string;
-  /** Classification store group id */
-  groupId?: number | null;
-  /** Classification store key id */
-  keyId?: number | null;
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type SimpleFieldConfig = {
-  /** Field getter */
-  field: string;
-  /** Classification store group id */
-  groupId?: number | null;
-  /** Classification store key id */
-  keyId?: number | null;
+    /** Field getter */
+    field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type StaticTextConfig = {
-  /** Static Text */
-  text: string;
+    /** Static Text */
+    text: string;
 };
 export type Transformer = {
-  /** Key of the Transformer */
-  key: string;
-  /** Configuration for the transformer */
-  config?: object;
+    /** Key of the Transformer */
+    key: string;
+    /** Configuration for the transformer */
+    config?: object;
 };
 export type AdvancedColumnConfig = {
-  /** advancedColumns */
-  advancedColumns: {
-    /** Type of the column, e.g. "simpleField", "relationField", "staticText" */
-    key: string;
-    config: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
-  }[];
-  /** List if Transformers that should be applied */
-  transformers?: Transformer[];
+    /** advancedColumns */
+    advancedColumns: {
+        /** Type of the column, e.g. "simpleField", "relationField", "staticText" */
+        key: string;
+        config: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    }[];
+    /** List if Transformers that should be applied */
+    transformers?: Transformer[];
 };
 export type GridColumnRequest = {
-  /** Key */
-  key?: string;
-  /** Locale */
-  locale?: string | null;
-  /** Type */
-  type: string;
-  /** Group */
-  group?: string[] | null;
-  /** Config */
-  config?: (string | AdvancedColumnConfig)[];
-  /** Width of the Column */
-  width?: number | null;
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Group */
+    group?: string[] | null;
+    /** Config */
+    config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type Column = {
-  /** Key of the Column */
-  key: string;
-  /** Locale of the Column */
-  locale: string | null;
-  /** Define the group structure */
-  group: object;
-  /** Width of the Column */
-  width?: number | null;
+    /** Key of the Column */
+    key: string;
+    /** Locale of the Column */
+    locale: string | null;
+    /** Define the group structure */
+    group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type GridFilter = {
-  /** Page */
-  page: number;
-  /** Page Size */
-  pageSize: number;
-  /** Include Descendant Items */
-  includeDescendants: boolean;
-  /** Column Filter */
-  columnFilters?: object;
-  /** Sort Filter */
-  sortFilter?: object;
-  /** Additional Sort Filters for multi-column sorting */
-  additionalSortFilters?: object[];
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type GridDetailedConfiguration = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Name */
-  name: string;
-  /** Description */
-  description?: string | null;
-  /** shareGlobal */
-  shareGlobal: boolean;
-  /** saveFilter */
-  saveFilter: boolean;
-  /** setAsFavorite */
-  setAsFavorite: boolean;
-  /** sharedUsers */
-  sharedUsers: object;
-  /** sharedRoles */
-  sharedRoles: object;
-  /** columns */
-  columns: (Column | GridColumnRequest)[];
-  /** filter */
-  filter: GridFilter[];
-  /** Page Size */
-  pageSize: number;
-  /** Modification Date */
-  modificationDate?: number | null;
-  /** Creation Date */
-  creationDate?: number | null;
-  /** ID of the owner */
-  ownerId?: number | null;
-  /** ID of the configuration */
-  id?: number | null;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+    /** Description */
+    description?: string | null;
+    /** shareGlobal */
+    shareGlobal: boolean;
+    /** saveFilter */
+    saveFilter: boolean;
+    /** setAsFavorite */
+    setAsFavorite: boolean;
+    /** sharedUsers */
+    sharedUsers: object;
+    /** sharedRoles */
+    sharedRoles: object;
+    /** columns */
+    columns: (Column | GridColumnRequest)[];
+    /** filter */
+    filter: GridFilter[];
+    /** Page Size */
+    pageSize: number;
+    /** Modification Date */
+    modificationDate?: number | null;
+    /** Creation Date */
+    creationDate?: number | null;
+    /** ID of the owner */
+    ownerId?: number | null;
+    /** ID of the configuration */
+    id?: number | null;
 };
 export type GridConfiguration = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** ID */
-  id: number;
-  /** Name */
-  name: string;
-  /** Description */
-  description?: string | null;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Name */
+    name: string;
+    /** Description */
+    description?: string | null;
 };
 export type GridColumnConfiguration = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Key */
-  key: string;
-  /** Define the group structure */
-  group: object;
-  /** Sortable */
-  sortable: boolean;
-  /** Editable */
-  editable: boolean;
-  /** Exportable */
-  exportable?: boolean;
-  /** Filterable */
-  filterable?: boolean;
-  /** Localizable */
-  localizable: boolean;
-  /** Locale */
-  locale?: string | null;
-  /** Type */
-  type: string;
-  /** Frontend Type */
-  frontendType?: string;
-  /** Config */
-  config: object;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key: string;
+    /** Define the group structure */
+    group: object;
+    /** Sortable */
+    sortable: boolean;
+    /** Editable */
+    editable: boolean;
+    /** Exportable */
+    exportable?: boolean;
+    /** Filterable */
+    filterable?: boolean;
+    /** Localizable */
+    localizable: boolean;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Frontend Type */
+    frontendType?: string;
+    /** Config */
+    config: object;
 };
 export type SimplePhpCodeTransformer = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Unique key of the transformer */
-  key: string;
-  /** Label of the transformer */
-  label: string;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Unique key of the transformer */
+    key: string;
+    /** Label of the transformer */
+    label: string;
 };
 export type PreviewConfigEntry = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Parameter name */
-  name: string;
-  /** Display label */
-  label: string;
-  /** Available values as key-value pairs */
-  values: {
-    key?: string;
-    value?: string;
-  }[];
-  /** Default selected value */
-  defaultValue: string;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Parameter name */
+    name: string;
+    /** Display label */
+    label: string;
+    /** Available values as key-value pairs */
+    values: {
+        key?: string;
+        value?: string;
+    }[];
+    /** Default selected value */
+    defaultValue: string;
 };
 export type Layout = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Name */
-  name: string;
-  /** Data Type */
-  datatype: string;
-  /** Field Type */
-  fieldtype: string;
-  /** Type */
-  type: string | null;
-  /** Layout */
-  layout: string | null;
-  /** Region */
-  region: string | null;
-  /** Title */
-  title: string | null;
-  /** Width */
-  width: number;
-  /** Height */
-  height: number;
-  /** Collapsible */
-  collapsible: boolean;
-  /** Collapsed */
-  collapsed: boolean;
-  /** Body Style */
-  bodyStyle: string | null;
-  /** Locked */
-  locked: boolean;
-  /** Children */
-  children: object[];
-  /** Icon */
-  icon: ElementIcon | null;
-  /** Label Align */
-  labelAlign: string;
-  /** Label Width */
-  labelWidth: number;
-  /** Border */
-  border: boolean;
-  /** Preview configuration for locale/site selectors */
-  previewConfig?: PreviewConfigEntry[] | null;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+    /** Data Type */
+    datatype: string;
+    /** Field Type */
+    fieldtype: string;
+    /** Type */
+    type: string | null;
+    /** Layout */
+    layout: string | null;
+    /** Region */
+    region: string | null;
+    /** Title */
+    title: string | null;
+    /** Width */
+    width: number;
+    /** Height */
+    height: number;
+    /** Collapsible */
+    collapsible: boolean;
+    /** Collapsed */
+    collapsed: boolean;
+    /** Body Style */
+    bodyStyle: string | null;
+    /** Locked */
+    locked: boolean;
+    /** Children */
+    children: object[];
+    /** Icon */
+    icon: ElementIcon | null;
+    /** Label Align */
+    labelAlign: string;
+    /** Label Width */
+    labelWidth: number;
+    /** Border */
+    border: boolean;
+    /** Preview configuration for locale/site selectors */
+    previewConfig?: PreviewConfigEntry[] | null;
 };
 export type ExportAllFilter = {
-  /** Column Filter */
-  columnFilters: object;
-  /** Sort Filter */
-  sortFilter: object;
-  /** Additional Sort Filters for multi-column sorting */
-  additionalSortFilters?: object[];
+    /** Column Filter */
+    columnFilters: object;
+    /** Sort Filter */
+    sortFilter: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type SelectOption = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Object Reference */
-  objectReference: string | number;
-  /** Formated Path */
-  formatedPath: string | number;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Object Reference */
+    objectReference: string | number;
+    /** Formated Path */
+    formatedPath: string | number;
 };
 export type SelectOption2 = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** Key */
-  key: string;
-  /** Value */
-  value: string;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key: string;
+    /** Value */
+    value: string;
 };
 export const {
-  useDataObjectAddMutation,
-  useDataObjectBatchDeleteMutation,
-  useDataObjectCloneMutation,
-  useDataObjectGetByIdQuery,
-  useDataObjectUpdateByIdMutation,
-  useDataObjectGetGridPreviewQuery,
-  useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
-  useDataObjectGetGridConfigurationQuery,
-  useDataObjectListGlobalGridConfigurationsQuery,
-  useDataObjectListSavedGridConfigurationsQuery,
-  useDataObjectRemoveGridConfigurationAsFavoriteMutation,
-  useDataObjectSaveGridConfigurationMutation,
-  useDataObjectSetGridConfigurationAsFavoriteMutation,
-  useDataObjectUpdateGridConfigurationMutation,
-  useDataObjectGetAvailableGridColumnsQuery,
-  useDataObjectGetAvailableGridColumnsForRelationQuery,
-  useDataObjectGetGridQuery,
-  useDataObjectGetPhpcodeTransformersQuery,
-  useDataObjectGetLayoutByIdQuery,
-  useDataObjectPatchByIdMutation,
-  useDataObjectPatchFolderByIdMutation,
-  useDataObjectFormatPathQuery,
-  useDataObjectPreviewByIdQuery,
-  useDataObjectReplaceContentMutation,
-  useDataObjectGetSelectOptionsQuery,
-  useDataObjectGetTreeQuery,
+    useDataObjectAddMutation,
+    useDataObjectBatchDeleteMutation,
+    useDataObjectCloneMutation,
+    useDataObjectGetByIdQuery,
+    useDataObjectUpdateByIdMutation,
+    useDataObjectGetGridPreviewQuery,
+    useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
+    useDataObjectGetGridConfigurationQuery,
+    useDataObjectListGlobalGridConfigurationsQuery,
+    useDataObjectListSavedGridConfigurationsQuery,
+    useDataObjectRemoveGridConfigurationAsFavoriteMutation,
+    useDataObjectSaveGridConfigurationMutation,
+    useDataObjectSetGridConfigurationAsFavoriteMutation,
+    useDataObjectUpdateGridConfigurationMutation,
+    useDataObjectGetAvailableGridColumnsQuery,
+    useDataObjectGetAvailableGridColumnsForRelationQuery,
+    useDataObjectGetGridQuery,
+    useDataObjectGetPhpcodeTransformersQuery,
+    useDataObjectGetLayoutByIdQuery,
+    useDataObjectPatchByIdMutation,
+    useDataObjectPatchFolderByIdMutation,
+    useDataObjectFormatPathQuery,
+    useDataObjectPreviewByIdQuery,
+    useDataObjectReplaceContentMutation,
+    useDataObjectGetSelectOptionsQuery,
+    useDataObjectGetTreeQuery,
 } = injectedRtkApi;

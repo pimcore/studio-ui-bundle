@@ -21,7 +21,14 @@ export interface MultiValueSlot {
   variant: string | null
   /** What the slot is headed with; null where it needs no heading. */
   label: string | null
+  /** Whether a new value can be added: false for an undeclared variant, and for a default slot the key declines but still holds values in. */
   declared: boolean
+}
+
+/** What the key declares about the default variant: absent or null permits it, only an explicit false declines it. */
+export interface DefaultVariantDeclaration {
+  defaultVariant?: boolean | null
+  defaultVariantLabel?: string | null
 }
 
 /** Whether a stored value is one this editor can read: nothing stored, or a list of entries. */
@@ -53,15 +60,19 @@ export const slotKeyOf = (slot: MultiValueSlot): string => slot.variant === null
 
 /**
  * One slot per declared variant in declared order, then the default slot where an entry carries no
- * variant (or where nothing is declared), then one per undeclared variant found in the entries.
+ * variant (or where nothing is declared and the key permits the default variant), then one per
+ * undeclared variant found in the entries. A key that declines the default variant keeps that slot
+ * only for the entries it already holds, as an undeclared one.
  *
  * A declared row carrying no name addresses nothing — no value can name it and none can be written
  * to it — so it declares no slot, rather than one headed by nothing beside the default slot.
  */
 export const buildSlots = (
   variants: readonly ClassificationStoreVariantLayout[] | null | undefined,
-  entries: readonly ClassificationStoreMultiValueEntry[]
+  entries: readonly ClassificationStoreMultiValueEntry[],
+  declaration: DefaultVariantDeclaration = {}
 ): MultiValueSlot[] => {
+  const defaultPermitted = declaration.defaultVariant !== false
   const declared = declaredVariantsOf(variants)
   const slots: MultiValueSlot[] = declared.map((variant) => ({
     variant: variantNameOf(variant),
@@ -69,8 +80,10 @@ export const buildSlots = (
     declared: true
   }))
 
-  if (declared.length === 0 || entries.some((entry) => variantOf(entry) === null)) {
-    slots.push({ variant: null, label: null, declared: true })
+  if ((defaultPermitted && declared.length === 0) || entries.some((entry) => variantOf(entry) === null)) {
+    const label = declaration.defaultVariantLabel
+
+    slots.push({ variant: null, label: isNil(label) || label === '' ? null : label, declared: defaultPermitted })
   }
 
   for (const entry of entries) {
@@ -94,10 +107,11 @@ export const canAdd = (maximum: number | null | undefined, count: number): boole
 /** The entries with an empty one appended for every slot that holds none, for a key whose slots hold one value each. */
 export const seedEmptySlots = (
   variants: readonly ClassificationStoreVariantLayout[] | null | undefined,
-  entries: readonly ClassificationStoreMultiValueEntry[]
+  entries: readonly ClassificationStoreMultiValueEntry[],
+  declaration: DefaultVariantDeclaration = {}
 ): ClassificationStoreMultiValueEntry[] => [
   ...entries,
-  ...buildSlots(variants, entries)
+  ...buildSlots(variants, entries, declaration)
     .filter((slot) => indexesOf(entries, slot).length === 0)
     .map((slot): ClassificationStoreMultiValueEntry => slot.variant === null ? { v: null } : { var: slot.variant, v: null })
 ]
