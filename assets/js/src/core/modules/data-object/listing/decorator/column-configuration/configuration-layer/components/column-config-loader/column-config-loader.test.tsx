@@ -193,3 +193,20 @@ describe('column config loader response pairs', () => {
     expect(setAvailableColumns).not.toHaveBeenCalled()
   })
 })
+
+describe('column config loader classification store columns', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    classId = 'Product'
+    staleAvailableColumnsData = undefined
+  })
+
+  it.each([[true, false], [false, true]])('loads a column of a key with multiValue %s with editable %s', (multiValue, editable) => {
+    availableColumnsData = { columns: [{ key: 'attributes', type: 'dataobject.classificationstore', editable: true, config: {} }] }
+    configurationData = { columns: [{ key: 'attributes', config: { fieldDefinition: { multiValue } } }], saveFilter: false }
+
+    renderLoader()
+
+    expect(setSelectedColumns.mock.calls[0][0][0].editable).toBe(editable)
+  })
+})

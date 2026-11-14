@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { variantColumnSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import React, { createContext, useMemo, useState } from 'react'
@@ -168,7 +169,7 @@ export function buildColumnPickerGroups (
           .filter((column) => column.key !== ADVANCED_COLUMN_KEY)
           .map((column) => ({
             key: column.key,
-            label: t(resolveColumnTranslationKey(column)),
+            label: t(resolveColumnTranslationKey(column)) + variantColumnSuffix(column),
             meta: column
           }))
 

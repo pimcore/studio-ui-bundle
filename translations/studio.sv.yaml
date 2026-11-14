@@ -2232,6 +2232,7 @@ classification-store.delete-group-relation-consequence: "Gruppen tas bara bort f
 classification-store.edit-definition: Redigera definition
 classification-store.edit-key-definition: "Redigera nyckeldefinition: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Matchnings-ID"
 classification-store.columns.name: Namn
 classification-store.columns.title: Titel
 classification-store.columns.type: Typ
@@ -3321,3 +3322,4 @@ classification-store.multi-value.not-declared: "inte deklarerad"
 classification-store.multi-value.no-delegate: "Den här nyckeln har ingen typ att redigera värdena med."
 classification-store.multi-value.unknown-delegate: "Editorn har inget inmatningsfält för typen {{type}}."
 classification-store.multi-value.unreadable-value: "Den här nyckeln har ett värde som editorn inte kan läsa som en lista med värden; det lämnas som det är."
+classification-store.multi-value.unreadable-entry: "Det här värdet är inget tal som fältet kan visa; det behålls som sparat tills det rensas."

@@ -18,7 +18,9 @@ import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definition
 import { type DynamicTypeObjectDataRegistry } from '../../objects/data-related/dynamic-type-object-data-registry'
 import { type AbstractDateObjectDataDefinition } from '../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
 import { BatchEditFormItem } from '../helpers/data-object/batch-edit-form-item'
-import { isNil } from 'lodash'
+import { isNil, omit } from 'lodash'
+import { keyAddressOf, variantOfColumn } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
+import { type MultiValueObjectDataDefinition } from '../../objects/data-related/types/dynamic-type-object-data-multi-value'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const DynamicTypeBatchEditClassificationStoreComponent = ({ batchEdit }: AbstractBatchEditDefinition): React.JSX.Element => {
@@ -37,18 +39,28 @@ export const DynamicTypeBatchEditClassificationStoreComponent = ({ batchEdit }: 
     throw new Error('Field definition is missing in config')
   }
 
-  const dynType = objectDataRegistry.getDynamicType(frontendType!)
-  const component = dynType.getObjectDataComponent({
-    ...config.fieldDefinition as AbstractDateObjectDataDefinition,
+  // A multiValue column addresses one slot, so it is edited with its delegate's own widget.
+  const fieldDefinition = config.fieldDefinition as AbstractDateObjectDataDefinition & MultiValueObjectDataDefinition
+  const isMultiValue = frontendType === 'multiValue'
+  const widgetType = isMultiValue ? fieldDefinition.delegateDatatype! : frontendType!
+
+  if (!objectDataRegistry.hasDynamicType(widgetType)) {
+    return <>Type {widgetType} not supported</>
+  }
+
+  const dynType = objectDataRegistry.getDynamicType(widgetType)
+  const widgetProps = {
+    ...(isMultiValue ? { ...omit(fieldDefinition, ['delegateDatatype', 'delegate', 'variants', 'multiValue', 'maximum']), fieldtype: widgetType, ...fieldDefinition.delegate } : fieldDefinition),
     defaultFieldWidth: fieldWidth
-  })
+  }
+  const component = dynType.getObjectDataComponent(widgetProps as AbstractDateObjectDataDefinition)
 
   if (!('config' in column) || !('groupId' in column.config) || !('keyId' in column.config)) {
     throw new Error('Column config is missing required properties')
   }
 
   const locale = isNil(column.locale) ? 'default' : column.locale
-  const formItemKey = [key, `${column.config.groupId as number}`, locale, `${column.config.keyId as number}`]
+  const formItemKey = [key, `${column.config.groupId as number}`, locale, keyAddressOf(column.config.keyId as number, variantOfColumn(column))]
 
   return (
     <BatchEditFormItem

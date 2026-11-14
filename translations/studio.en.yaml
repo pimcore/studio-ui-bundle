@@ -2236,6 +2236,7 @@ classification-store.delete-group-relation-consequence: "The group is removed fr
 classification-store.edit-definition: Edit definition
 classification-store.edit-key-definition: "Edit key definition: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Matching ID"
 classification-store.columns.name: Name
 classification-store.columns.title: Title
 classification-store.columns.type: Type
@@ -3325,3 +3326,4 @@ classification-store.multi-value.not-declared: "not declared"
 classification-store.multi-value.no-delegate: "This key has no type to edit its values with."
 classification-store.multi-value.unknown-delegate: "The editor has no input for the type {{type}}."
 classification-store.multi-value.unreadable-value: "This key holds a value the editor cannot read as a list of values; it is left as it is."
+classification-store.multi-value.unreadable-entry: "This value is not a number the input can show; it is kept as stored until it is cleared."

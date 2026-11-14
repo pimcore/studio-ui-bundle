@@ -1,141 +1,134 @@
 import { api } from "@sdk/api";
 export const addTagTypes = ["Bundle Application Logger"] as const;
 const injectedRtkApi = api
-  .enhanceEndpoints({
-    addTagTypes,
-  })
-  .injectEndpoints({
-    endpoints: (build) => ({
-      bundleApplicationLoggerGetCollection: build.query<
-        BundleApplicationLoggerGetCollectionApiResponse,
-        BundleApplicationLoggerGetCollectionApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/bundle/application-logger/list`,
-          method: "POST",
-          body: queryArg.body,
+    .enhanceEndpoints({
+        addTagTypes,
+    })
+    .injectEndpoints({
+        endpoints: (build) => ({
+            bundleApplicationLoggerGetCollection: build.query<
+                BundleApplicationLoggerGetCollectionApiResponse,
+                BundleApplicationLoggerGetCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/application-logger/list`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Bundle Application Logger"],
+            }),
+            bundleApplicationLoggerGetFileObject: build.query<
+                BundleApplicationLoggerGetFileObjectApiResponse,
+                BundleApplicationLoggerGetFileObjectApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/application-logger/file-object`,
+                    params: {
+                        filePath: queryArg.filePath,
+                    },
+                }),
+                providesTags: ["Bundle Application Logger"],
+            }),
+            bundleApplicationLoggerListComponents: build.query<
+                BundleApplicationLoggerListComponentsApiResponse,
+                BundleApplicationLoggerListComponentsApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/bundle/application-logger/components` }),
+                providesTags: ["Bundle Application Logger"],
+            }),
+            bundleApplicationLoggerListPriorities: build.query<
+                BundleApplicationLoggerListPrioritiesApiResponse,
+                BundleApplicationLoggerListPrioritiesApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/bundle/application-logger/priorities` }),
+                providesTags: ["Bundle Application Logger"],
+            }),
         }),
-        providesTags: ["Bundle Application Logger"],
-      }),
-      bundleApplicationLoggerGetFileObject: build.query<
-        BundleApplicationLoggerGetFileObjectApiResponse,
-        BundleApplicationLoggerGetFileObjectApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/pimcore-studio/api/bundle/application-logger/file-object`,
-          params: {
-            filePath: queryArg.filePath,
-          },
-        }),
-        providesTags: ["Bundle Application Logger"],
-      }),
-      bundleApplicationLoggerListComponents: build.query<
-        BundleApplicationLoggerListComponentsApiResponse,
-        BundleApplicationLoggerListComponentsApiArg
-      >({
-        query: () => ({
-          url: `/pimcore-studio/api/bundle/application-logger/components`,
-        }),
-        providesTags: ["Bundle Application Logger"],
-      }),
-      bundleApplicationLoggerListPriorities: build.query<
-        BundleApplicationLoggerListPrioritiesApiResponse,
-        BundleApplicationLoggerListPrioritiesApiArg
-      >({
-        query: () => ({
-          url: `/pimcore-studio/api/bundle/application-logger/priorities`,
-        }),
-        providesTags: ["Bundle Application Logger"],
-      }),
-    }),
-    overrideExisting: false,
-  });
+        overrideExisting: false,
+    });
 export { injectedRtkApi as api };
 export type BundleApplicationLoggerGetCollectionApiResponse =
-  /** status 200 Paginated log entries with total count as header param as JSON */ {
-    totalItems: number;
-    items: BundleApplicationLoggerLogEntry[];
-  };
-export type BundleApplicationLoggerGetCollectionApiArg = {
-  body: {
-    filters?: {
-      page?: number;
-      pageSize?: number;
-      columnFilters?: object;
-      sortFilter?: object;
-      additionalSortFilters?: object;
+    /** status 200 Paginated log entries with total count as header param as JSON */ {
+        totalItems: number;
+        items: BundleApplicationLoggerLogEntry[];
     };
-  };
+export type BundleApplicationLoggerGetCollectionApiArg = {
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+            additionalSortFilters?: object;
+        };
+    };
 };
-export type BundleApplicationLoggerGetFileObjectApiResponse =
-  /** status 200 File object content as plain text */ Blob;
+export type BundleApplicationLoggerGetFileObjectApiResponse = /** status 200 File object content as plain text */ Blob;
 export type BundleApplicationLoggerGetFileObjectApiArg = {
-  /** Path to the file object in the application log storage */
-  filePath: string;
+    /** Path to the file object in the application log storage */
+    filePath: string;
 };
-export type BundleApplicationLoggerListComponentsApiResponse =
-  /** status 200 List of available components */ {
+export type BundleApplicationLoggerListComponentsApiResponse = /** status 200 List of available components */ {
     /** Log components used in the ApplicationLogger. */
     items: string[];
-  };
+};
 export type BundleApplicationLoggerListComponentsApiArg = void;
-export type BundleApplicationLoggerListPrioritiesApiResponse =
-  /** status 200 List of available priorities */ {
+export type BundleApplicationLoggerListPrioritiesApiResponse = /** status 200 List of available priorities */ {
     /** Log priority levels used in the ApplicationLogger. */
     priorities: number[];
-  };
+};
 export type BundleApplicationLoggerListPrioritiesApiArg = void;
 export type RelatedElementData = {
-  /** ID */
-  id: number;
-  /** Type of the element */
-  type: string;
-  /** Subtype of the element */
-  subtype: string;
-  /** Full path of the element */
-  fullPath: string;
-  /** Is the element published */
-  isPublished: boolean | null;
-  /** Whether the current user is allowed to view the element */
-  hasViewAccess: boolean;
+    /** ID */
+    id: number;
+    /** Type of the element */
+    type: string;
+    /** Subtype of the element */
+    subtype: string;
+    /** Full path of the element */
+    fullPath: string;
+    /** Is the element published */
+    isPublished: boolean | null;
+    /** Whether the current user is allowed to view the element */
+    hasViewAccess: boolean;
 };
 export type BundleApplicationLoggerLogEntry = {
-  /** AdditionalAttributes */
-  additionalAttributes?: {
-    [key: string]: string | number | boolean | object;
-  };
-  /** ID */
-  id: number;
-  /** Log priority level */
-  priority: number;
-  /** Date */
-  date: string | null;
-  /** PID */
-  pid: number | null;
-  /** Message */
-  message: string | null;
-  /** File object path */
-  fileObject: string | null;
-  /** Data of related element */
-  relatedElementData: RelatedElementData | null;
-  /** Component */
-  component: string | null;
-  /** Source */
-  source: string | null;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Log priority level */
+    priority: number;
+    /** Date */
+    date: string | null;
+    /** PID */
+    pid: number | null;
+    /** Message */
+    message: string | null;
+    /** File object path */
+    fileObject: string | null;
+    /** Data of related element */
+    relatedElementData: RelatedElementData | null;
+    /** Component */
+    component: string | null;
+    /** Source */
+    source: string | null;
 };
 export type Error = {
-  /** Message */
-  message: string;
+    /** Message */
+    message: string;
 };
 export type DevError = {
-  /** Message */
-  message: string;
-  /** Details */
-  details: string;
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export const {
-  useBundleApplicationLoggerGetCollectionQuery,
-  useBundleApplicationLoggerGetFileObjectQuery,
-  useBundleApplicationLoggerListComponentsQuery,
-  useBundleApplicationLoggerListPrioritiesQuery,
+    useBundleApplicationLoggerGetCollectionQuery,
+    useBundleApplicationLoggerGetFileObjectQuery,
+    useBundleApplicationLoggerListComponentsQuery,
+    useBundleApplicationLoggerListPrioritiesQuery,
 } = injectedRtkApi;

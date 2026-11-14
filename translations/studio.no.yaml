@@ -2232,6 +2232,7 @@ classification-store.delete-group-relation-consequence: "Gruppen fjernes bare fr
 classification-store.edit-definition: Rediger definisjon
 classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Samsvars-ID"
 classification-store.columns.name: Navn
 classification-store.columns.title: Tittel
 classification-store.columns.type: Type
@@ -3321,3 +3322,4 @@ classification-store.multi-value.not-declared: "ikke deklarert"
 classification-store.multi-value.no-delegate: "Denne nøkkelen har ingen type å redigere verdiene med."
 classification-store.multi-value.unknown-delegate: "Editoren har ikke noe inndatafelt for typen {{type}}."
 classification-store.multi-value.unreadable-value: "Denne nøkkelen har en verdi som editoren ikke kan lese som en liste med verdier; den blir stående som den er."
+classification-store.multi-value.unreadable-entry: "Denne verdien er ikke et tall som feltet kan vise; den beholdes som lagret til den slettes."

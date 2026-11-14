@@ -130,6 +130,11 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     return null
   }
 
+  /** Whether the editor of the type can show the stored value; a type whose editor cannot overrides it. */
+  canReadValue (_value: unknown): boolean {
+    return true
+  }
+
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
     return {
       className: 'w-full',

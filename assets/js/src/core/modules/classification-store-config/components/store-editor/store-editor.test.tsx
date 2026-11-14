@@ -35,6 +35,10 @@ jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: ({ value }: { value: string }) => <span data-icon={ value } />
 }))
 
+jest.mock('@Pimcore/modules/classification-store-config/components/store-editor/store-identifier', () => ({
+  StoreIdentifier: () => null
+}))
+
 jest.mock('@Pimcore/modules/classification-store-config/components/store-editor/store-engine-indicator', () => ({
   StoreEngineIndicator: () => null
 }))

@@ -16,6 +16,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { ColumnPreview } from '@Pimcore/components/preview-mode/column-preview'
+import { variantColumnSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { Preview } from './forms/advanced-column-form/preview/preview'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -45,7 +46,7 @@ export const renderColumnTitle = (column: AvailableColumn, t: TFunction): ReactN
 
   return (
     <Tooltip title={ Array.isArray(column.group) ? column.group.join('/') : undefined }>
-      <Tag>{t(`${getTranslationKey(column)}`)}</Tag>
+      <Tag>{t(`${getTranslationKey(column)}`) + variantColumnSuffix(column)}</Tag>
     </Tooltip>
   )
 }
