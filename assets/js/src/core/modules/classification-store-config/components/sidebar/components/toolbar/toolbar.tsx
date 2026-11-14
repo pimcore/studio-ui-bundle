@@ -15,6 +15,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Box } from '@Pimcore/components/box/box'
+import { StoreApplyAction } from '@Pimcore/modules/classification-store-config/components/sidebar/components/toolbar/store-apply-action'
 
 interface IToolbarProps {
   isFetching: boolean
@@ -49,6 +50,8 @@ export const Toolbar = ({ isFetching, refetch, handleStoreAdd }: IToolbarProps):
       >
         {t('new')}
       </IconTextButton>
+
+      <StoreApplyAction />
     </ToolbarView>
   )
 }

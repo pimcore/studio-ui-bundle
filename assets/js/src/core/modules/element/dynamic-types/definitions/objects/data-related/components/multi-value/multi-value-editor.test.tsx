@@ -320,6 +320,40 @@ describe('MultiValueEditor', () => {
     expect(await lastEmitted()).toEqual([{ var: 'metric', v: 'm2', p: 0 }, { var: 'legacy', v: 'l', p: 0 }, { v: 'd', p: 0 }])
   })
 
+  it('shows a declined default slot that holds a value as not declared, offers no add there, and writes the entry back unchanged', async () => {
+    renderEditor({ variants: [{ name: 'metric' }], defaultVariant: false, multiValue: true, value: [{ v: 'd' }] })
+
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent))
+      .toEqual(['metric', 'classification-store.multi-value.default-variant'])
+    expect(screen.getByText('classification-store.multi-value.not-declared')).toBeInTheDocument()
+    expect(inputs()).toHaveLength(1)
+    expect(screen.getAllByText(ADD)).toHaveLength(1)
+
+    fireEvent.change(inputs()[0], { target: { value: 'd2' } })
+
+    expect(await lastEmitted()).toEqual([{ v: 'd2', p: 0 }])
+  })
+
+  it('offers no default slot for a declined default variant with nothing stored in it', () => {
+    renderEditor({ variants: [{ name: 'metric' }], defaultVariant: false, multiValue: false, value: [] })
+
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric'])
+    expect(inputs()).toHaveLength(1)
+  })
+
+  it('adds no default slot beside a declared variant for a key that permits it, as before', () => {
+    renderEditor({ variants: [{ name: 'metric' }], defaultVariantLabel: 'Base', multiValue: false, value: [] })
+
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric'])
+    expect(inputs()).toHaveLength(1)
+  })
+
+  it('heads the default slot with the declared label', () => {
+    renderEditor({ variants: [{ name: 'metric' }], defaultVariantLabel: 'Base', multiValue: true, value: [{ v: 'd' }] })
+
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric', 'Base'])
+  })
+
   it('offers no add control in the slot of an undeclared variant, while declared slots keep theirs', () => {
     renderEditor({
       variants: [{ name: 'metric' }],

@@ -45,7 +45,7 @@ import {
   type MultiValueSlot
 } from './multi-value-slots'
 
-export interface MultiValueEditorProps extends ClassificationStoreMultiValueDefinition, Pick<ClassificationStoreCollection2, 'variants' | 'multiValue' | 'maximum'> {
+export interface MultiValueEditorProps extends ClassificationStoreMultiValueDefinition, Pick<ClassificationStoreCollection2, 'variants' | 'multiValue' | 'maximum' | 'defaultVariant' | 'defaultVariantLabel'> {
   noteditable?: boolean | null
   value?: unknown
   onChange?: (value: ClassificationStoreMultiValueEntry[]) => void
@@ -85,9 +85,9 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
   const isRepeating = props.multiValue === true
   const isEditable = props.noteditable !== true
   const hasVariants = declaredVariantsOf(props.variants).length > 0
-  const heading = slot.label ?? (hasVariants ? t('classification-store.multi-value.default-variant') : null)
+  const heading = slot.label ?? (hasVariants || !slot.declared ? t('classification-store.multi-value.default-variant') : null)
   const addAllowed = canAdd(props.maximum, indexes.length)
-  // A variant no longer declared keeps the values it holds, and takes no new ones.
+  // A variant no longer declared, or a default the key now declines, keeps the values it holds and takes no new ones.
   const canAddHere = slot.declared
 
   const move = (position: number, delta: -1 | 1): void => {
@@ -176,7 +176,7 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
 const Slots = (props: SlotsProps): React.JSX.Element => {
   const { values } = useNumberedList()
   const entries = values as ClassificationStoreMultiValueEntry[]
-  const slots = buildSlots(props.variants, entries)
+  const slots = buildSlots(props.variants, entries, props)
 
   return (
     <Flex
@@ -204,8 +204,8 @@ export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Elemen
   const entries = useMemo(() => orderEntries(props.value), [props.value])
   // A slot that holds one value and has none stored is seeded as an empty entry, so the list's initial value already is what the inputs register.
   const base = useMemo(
-    () => props.multiValue === true ? entries : seedEmptySlots(props.variants, entries),
-    [entries, props.variants, props.multiValue]
+    () => props.multiValue === true ? entries : seedEmptySlots(props.variants, entries, props),
+    [entries, props.variants, props.multiValue, props.defaultVariant, props.defaultVariantLabel]
   )
   // What the control holds, empty rows included: only the payload leaves them out, so a row still being worked on survives the value coming back.
   const [draft, setDraft] = useState<ClassificationStoreMultiValueEntry[] | null>(null)
