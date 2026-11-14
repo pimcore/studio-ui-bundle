@@ -559,7 +559,10 @@ export const GroupsTab = ({ storeId, onShowSubGroups }: IGroupsTabProps): React.
                         <Input />
                       </Form.Item>
                       <Form.Item label={ t('classification-store.columns.matching-id') }>
-                        <MatchingId identifier={ activeGroup.identifier } />
+                        <MatchingId
+                          alignWithInputText
+                          identifier={ activeGroup.identifier }
+                        />
                       </Form.Item>
                     </Flex>
                   </FormKit>

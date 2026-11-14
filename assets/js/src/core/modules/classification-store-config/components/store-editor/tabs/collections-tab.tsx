@@ -538,7 +538,10 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                         <Input />
                       </Form.Item>
                       <Form.Item label={ t('classification-store.columns.matching-id') }>
-                        <MatchingId identifier={ activeCollection.identifier } />
+                        <MatchingId
+                          alignWithInputText
+                          identifier={ activeCollection.identifier }
+                        />
                       </Form.Item>
                     </Flex>
                   </FormKit>
