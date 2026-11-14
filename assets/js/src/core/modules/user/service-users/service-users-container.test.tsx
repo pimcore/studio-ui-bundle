@@ -1,0 +1,218 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { ServiceUsersContainer } from './service-users-container'
+
+const token = { token: 'pmcp_shown-once', expiresAt: 1_800_000_000 }
+
+jest.mock('./service-users-api-slice-enhanced', () => ({
+  useServiceUserGetCollectionQuery: () => ({
+    data: { totalItems: 3, items: [{ id: 4, name: 'svc-existing' }, { id: 5, name: 'svc-second' }, { id: 9, name: 'svc-new' }] },
+    isLoading: false,
+    refetch: jest.fn()
+  })
+}))
+jest.mock('@Pimcore/modules/app/error-handler', () => ({
+  __esModule: true,
+  default: jest.fn(),
+  ApiError: jest.fn()
+}))
+const mockDispatch = jest.fn()
+jest.mock('@Pimcore/app/store', () => ({
+  useAppDispatch: () => mockDispatch,
+  injectSliceWithState: jest.fn()
+}))
+jest.mock('@Pimcore/components/page-layout/page-layout', () => ({
+  PageLayout: ({ leftItem, rightItem }: { leftItem: { children: React.ReactNode }, rightItem: { children: React.ReactNode } }) => (
+    <div>{leftItem.children}{rightItem.children}</div>
+  )
+}))
+jest.mock('@Pimcore/components/content/content', () => jest.requireActual('@test-utils/mocks/studio-component-mocks'))
+jest.mock('@Pimcore/components/tabs/tabs', () => ({
+  Tabs: ({ items = [], activeKey, onChange, onClose }: {
+    items?: Array<{ key: string, label: React.ReactNode }>
+    activeKey?: string
+    onChange?: (key: string) => void
+    onClose?: (key: string) => void
+  }) => (
+    <div>
+      {items.map((item) => (
+        <div
+          aria-selected={ item.key === activeKey }
+          key={ item.key }
+          role="tab"
+        >
+          <span
+            onClick={ () => { onChange?.(item.key) } }
+            role="presentation"
+          >{item.label}</span>
+          <button
+            aria-label={ `close:${item.key}` }
+            onClick={ () => { onClose?.(item.key) } }
+            type="button"
+          />
+        </div>
+      ))}
+    </div>
+  )
+}))
+jest.mock('./list/service-user-list', () => ({
+  ServiceUserList: ({ serviceUsers, onSelect, onCreate, onCreateFromUser }: {
+    serviceUsers: Array<{ id: number, name: string }>
+    onSelect: (id: number) => void
+    onCreate: () => void
+    onCreateFromUser: () => void
+  }) => (
+    <div>
+      {serviceUsers.map((item) => (
+        <button
+          key={ item.id }
+          onClick={ () => { onSelect(item.id) } }
+          type="button"
+        >{item.name}</button>
+      ))}
+      <button
+        onClick={ onCreate }
+        type="button"
+      >create</button>
+      <button
+        onClick={ onCreateFromUser }
+        type="button"
+      >create-from-user</button>
+    </div>
+  )
+}))
+jest.mock('./detail/service-user-detail', () => ({
+  ServiceUserDetail: ({ id, onDeleted, onDirtyChange }: {
+    id: number
+    onDeleted: (id: number) => void
+    onDirtyChange: (id: number, isDirty: boolean) => void
+  }) => {
+    const [value, setValue] = React.useState('')
+
+    return (
+      <div>
+        <button
+          onClick={ () => { onDeleted(id) } }
+          type="button"
+        >{`detail:${id}`}</button>
+        <input
+          aria-label={ `field:${id}` }
+          onChange={ (event) => { setValue(event.target.value); onDirtyChange(id, event.target.value !== '') } }
+          value={ value }
+        />
+      </div>
+    )
+  }
+}))
+jest.mock('./create/create-service-user-modal', () => ({
+  CreateServiceUserModal: ({ open, mode, onCreated }: {
+    open: boolean
+    mode: string
+    onCreated: (serviceUserId: number, issued: unknown[]) => void
+  }) => open
+    ? (
+      <>
+        <button
+          onClick={ () => { onCreated(9, [token]) } }
+          type="button"
+        >{`submit:${mode}`}</button>
+        <button
+          onClick={ () => { onCreated(9, [{ clientId: 'svc_9', clientSecret: 'secret-9' }, token]) } }
+          type="button"
+        >{`submit-both:${mode}`}</button>
+        <button
+          onClick={ () => { onCreated(9, []) } }
+          type="button"
+        >{`skip:${mode}`}</button>
+      </>
+      )
+    : null
+}))
+jest.mock('./credentials/one-time-secret-modal', () => ({
+  OneTimeSecretModal: ({ credentials, onClose }: {
+    credentials?: Array<{ token?: string, clientSecret?: string | null }>
+    onClose: () => void
+  }) =>
+    credentials === undefined || credentials.length === 0
+      ? null
+      : (
+        <button
+          onClick={ onClose }
+          type="button"
+        >{`secret:${credentials.map((credential) => credential.token ?? credential.clientSecret).join('+')}`}</button>
+        )
+}))
+
+describe('ServiceUsersContainer', () => {
+  it('opens the editor of the selected service user', () => {
+    render(<ServiceUsersContainer />)
+
+    expect(screen.getByTestId('content-none')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByText('svc-existing'))
+
+    expect(screen.getByText('detail:4')).toBeInTheDocument()
+  })
+
+  it('shows the issued token once after creating and opens the new service user', () => {
+    render(<ServiceUsersContainer />)
+
+    fireEvent.click(screen.getByText('create'))
+    fireEvent.click(screen.getByText('submit:create'))
+
+    expect(screen.queryByText('submit:create')).toBeNull()
+    expect(screen.getByText('detail:9')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByText('secret:pmcp_shown-once'))
+
+    expect(screen.queryByText('secret:pmcp_shown-once')).toBeNull()
+  })
+
+  it('passes every one-time credential of the creation to one modal', () => {
+    render(<ServiceUsersContainer />)
+
+    fireEvent.click(screen.getByText('create'))
+    fireEvent.click(screen.getByText('submit-both:create'))
+
+    fireEvent.click(screen.getByText('secret:secret-9+pmcp_shown-once'))
+
+    expect(screen.queryByText(/^secret:/)).toBeNull()
+  })
+
+  it('opens the new service user without a one-time modal when the token step was skipped', () => {
+    render(<ServiceUsersContainer />)
+
+    fireEvent.click(screen.getByText('create'))
+    fireEvent.click(screen.getByText('skip:create'))
+
+    expect(screen.getByText('detail:9')).toBeInTheDocument()
+    expect(screen.queryByText(/^secret:/)).toBeNull()
+  })
+
+  it('creates from a user in the from-user mode', () => {
+    render(<ServiceUsersContainer />)
+
+    fireEvent.click(screen.getByText('create-from-user'))
+
+    expect(screen.getByText('submit:from-user')).toBeInTheDocument()
+  })
+
+  it('closes the editor after a deletion', () => {
+    render(<ServiceUsersContainer />)
+
+    fireEvent.click(screen.getByText('svc-existing'))
+    fireEvent.click(screen.getByText('detail:4'))
+
+    expect(screen.queryByText('detail:4')).toBeNull()
+  })
+})

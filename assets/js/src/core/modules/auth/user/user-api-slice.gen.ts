@@ -1,761 +1,867 @@
 import { api } from "@sdk/api";
 export const addTagTypes = ["User Management"] as const;
 const injectedRtkApi = api
-    .enhanceEndpoints({
-        addTagTypes,
-    })
-    .injectEndpoints({
-        endpoints: (build) => ({
-            userCloneById: build.mutation<UserCloneByIdApiResponse, UserCloneByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/clone/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userCreate: build.mutation<UserCreateApiResponse, UserCreateApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["User Management"],
-            }),
-            userFolderCreate: build.mutation<UserFolderCreateApiResponse, UserFolderCreateApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["User Management"],
-            }),
-            userGetCurrentInformation: build.query<
-                UserGetCurrentInformationApiResponse,
-                UserGetCurrentInformationApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/user/current-user-information` }),
-                providesTags: ["User Management"],
-            }),
-            userGetById: build.query<UserGetByIdApiResponse, UserGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}` }),
-                providesTags: ["User Management"],
-            }),
-            userUpdateById: build.mutation<UserUpdateByIdApiResponse, UserUpdateByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.updateUser,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userDeleteById: build.mutation<UserDeleteByIdApiResponse, UserDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userFolderDeleteById: build.mutation<UserFolderDeleteByIdApiResponse, UserFolderDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userGetImage: build.query<UserGetImageApiResponse, UserGetImageApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/image/${queryArg.id}` }),
-                providesTags: ["User Management"],
-            }),
-            userImageDeleteById: build.mutation<UserImageDeleteByIdApiResponse, UserImageDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/image/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userDefaultKeyBindings: build.query<UserDefaultKeyBindingsApiResponse, UserDefaultKeyBindingsApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
-                providesTags: ["User Management"],
-            }),
-            userGetObjectDependencies: build.query<
-                UserGetObjectDependenciesApiResponse,
-                UserGetObjectDependenciesApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/${queryArg.id}/object-dependencies`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                    },
-                }),
-                providesTags: ["User Management"],
-            }),
-            userGetAvailablePermissions: build.query<
-                UserGetAvailablePermissionsApiResponse,
-                UserGetAvailablePermissionsApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/user/available-permissions` }),
-                providesTags: ["User Management"],
-            }),
-            userGetCollection: build.query<UserGetCollectionApiResponse, UserGetCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/users` }),
-                providesTags: ["User Management"],
-            }),
-            userListWithPermission: build.query<UserListWithPermissionApiResponse, UserListWithPermissionApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/users/with-permission`,
-                    params: {
-                        permission: queryArg.permission,
-                        includeCurrentUser: queryArg.includeCurrentUser,
-                    },
-                }),
-                providesTags: ["User Management"],
-            }),
-            userResetPassword: build.mutation<UserResetPasswordApiResponse, UserResetPasswordApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/reset-password`,
-                    method: "POST",
-                    body: queryArg.resetPassword,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            pimcoreStudioApiUserSearch: build.query<
-                PimcoreStudioApiUserSearchApiResponse,
-                PimcoreStudioApiUserSearchApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/search`,
-                    params: {
-                        searchQuery: queryArg.searchQuery,
-                    },
-                }),
-                providesTags: ["User Management"],
-            }),
-            userTokenLinkGet: build.query<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.tokenLink,
-                }),
-                providesTags: ["User Management"],
-            }),
-            userTwoFactorConfirm: build.mutation<UserTwoFactorConfirmApiResponse, UserTwoFactorConfirmApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/two-factor/confirm`,
-                    method: "POST",
-                    body: queryArg.twoFactorCode,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userTwoFactorDisable: build.mutation<UserTwoFactorDisableApiResponse, UserTwoFactorDisableApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/user/two-factor`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userTwoFactorResetById: build.mutation<UserTwoFactorResetByIdApiResponse, UserTwoFactorResetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}/two-factor`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userTwoFactorSetup: build.mutation<UserTwoFactorSetupApiResponse, UserTwoFactorSetupApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/user/two-factor/setup`, method: "POST" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userUpdateActivePerspective: build.mutation<
-                UserUpdateActivePerspectiveApiResponse,
-                UserUpdateActivePerspectiveApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/active-perspective/${queryArg.perspectiveId}`,
-                    method: "PUT",
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userUpdatePasswordById: build.mutation<UserUpdatePasswordByIdApiResponse, UserUpdatePasswordByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/${queryArg.id}/password`,
-                    method: "PUT",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userUpdateProfile: build.mutation<UserUpdateProfileApiResponse, UserUpdateProfileApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/update-profile`,
-                    method: "PUT",
-                    body: queryArg.updateUserProfile,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userUploadImage: build.mutation<UserUploadImageApiResponse, UserUploadImageApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/upload-image/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/users/tree`,
-                    params: {
-                        parentId: queryArg.parentId,
-                    },
-                }),
-                providesTags: ["User Management"],
-            }),
-            userGetShareCollection: build.query<UserGetShareCollectionApiResponse, UserGetShareCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/users-share-list` }),
-                providesTags: ["User Management"],
-            }),
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      userCloneById: build.mutation<
+        UserCloneByIdApiResponse,
+        UserCloneByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/clone/${queryArg.id}`,
+          method: "POST",
+          body: queryArg.body,
         }),
-        overrideExisting: false,
-    });
+        invalidatesTags: ["User Management"],
+      }),
+      userCreate: build.mutation<UserCreateApiResponse, UserCreateApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userFolderCreate: build.mutation<
+        UserFolderCreateApiResponse,
+        UserFolderCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/folder`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userGetCurrentInformation: build.query<
+        UserGetCurrentInformationApiResponse,
+        UserGetCurrentInformationApiArg
+      >({
+        query: () => ({
+          url: `/pimcore-studio/api/user/current-user-information`,
+        }),
+        providesTags: ["User Management"],
+      }),
+      userGetById: build.query<UserGetByIdApiResponse, UserGetByIdApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/${queryArg.id}`,
+        }),
+        providesTags: ["User Management"],
+      }),
+      userUpdateById: build.mutation<
+        UserUpdateByIdApiResponse,
+        UserUpdateByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.updateUser,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userDeleteById: build.mutation<
+        UserDeleteByIdApiResponse,
+        UserDeleteByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userFolderDeleteById: build.mutation<
+        UserFolderDeleteByIdApiResponse,
+        UserFolderDeleteByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/folder/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userGetImage: build.query<UserGetImageApiResponse, UserGetImageApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/image/${queryArg.id}`,
+        }),
+        providesTags: ["User Management"],
+      }),
+      userImageDeleteById: build.mutation<
+        UserImageDeleteByIdApiResponse,
+        UserImageDeleteByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/image/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userDefaultKeyBindings: build.query<
+        UserDefaultKeyBindingsApiResponse,
+        UserDefaultKeyBindingsApiArg
+      >({
+        query: () => ({
+          url: `/pimcore-studio/api/users/default-key-bindings`,
+        }),
+        providesTags: ["User Management"],
+      }),
+      userGetObjectDependencies: build.query<
+        UserGetObjectDependenciesApiResponse,
+        UserGetObjectDependenciesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/${queryArg.id}/object-dependencies`,
+          params: {
+            page: queryArg.page,
+            pageSize: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["User Management"],
+      }),
+      userGetAvailablePermissions: build.query<
+        UserGetAvailablePermissionsApiResponse,
+        UserGetAvailablePermissionsApiArg
+      >({
+        query: () => ({
+          url: `/pimcore-studio/api/user/available-permissions`,
+        }),
+        providesTags: ["User Management"],
+      }),
+      userGetCollection: build.query<
+        UserGetCollectionApiResponse,
+        UserGetCollectionApiArg
+      >({
+        query: () => ({ url: `/pimcore-studio/api/users` }),
+        providesTags: ["User Management"],
+      }),
+      userListWithPermission: build.query<
+        UserListWithPermissionApiResponse,
+        UserListWithPermissionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/users/with-permission`,
+          params: {
+            permission: queryArg.permission,
+            includeCurrentUser: queryArg.includeCurrentUser,
+          },
+        }),
+        providesTags: ["User Management"],
+      }),
+      userResetPassword: build.mutation<
+        UserResetPasswordApiResponse,
+        UserResetPasswordApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/reset-password`,
+          method: "POST",
+          body: queryArg.resetPassword,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      pimcoreStudioApiUserSearch: build.query<
+        PimcoreStudioApiUserSearchApiResponse,
+        PimcoreStudioApiUserSearchApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/search`,
+          params: {
+            searchQuery: queryArg.searchQuery,
+          },
+        }),
+        providesTags: ["User Management"],
+      }),
+      userTokenLinkGet: build.query<
+        UserTokenLinkGetApiResponse,
+        UserTokenLinkGetApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
+          method: "POST",
+          body: queryArg.tokenLink,
+        }),
+        providesTags: ["User Management"],
+      }),
+      userTwoFactorConfirm: build.mutation<
+        UserTwoFactorConfirmApiResponse,
+        UserTwoFactorConfirmApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/two-factor/confirm`,
+          method: "POST",
+          body: queryArg.twoFactorCode,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userTwoFactorDisable: build.mutation<
+        UserTwoFactorDisableApiResponse,
+        UserTwoFactorDisableApiArg
+      >({
+        query: () => ({
+          url: `/pimcore-studio/api/user/two-factor`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userTwoFactorResetById: build.mutation<
+        UserTwoFactorResetByIdApiResponse,
+        UserTwoFactorResetByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/${queryArg.id}/two-factor`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userTwoFactorSetup: build.mutation<
+        UserTwoFactorSetupApiResponse,
+        UserTwoFactorSetupApiArg
+      >({
+        query: () => ({
+          url: `/pimcore-studio/api/user/two-factor/setup`,
+          method: "POST",
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userUpdateActivePerspective: build.mutation<
+        UserUpdateActivePerspectiveApiResponse,
+        UserUpdateActivePerspectiveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/active-perspective/${queryArg.perspectiveId}`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userUpdatePasswordById: build.mutation<
+        UserUpdatePasswordByIdApiResponse,
+        UserUpdatePasswordByIdApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/${queryArg.id}/password`,
+          method: "PUT",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userUpdateProfile: build.mutation<
+        UserUpdateProfileApiResponse,
+        UserUpdateProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/update-profile`,
+          method: "PUT",
+          body: queryArg.updateUserProfile,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userUploadImage: build.mutation<
+        UserUploadImageApiResponse,
+        UserUploadImageApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/user/upload-image/${queryArg.id}`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["User Management"],
+      }),
+      userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
+        query: (queryArg) => ({
+          url: `/pimcore-studio/api/users/tree`,
+          params: {
+            parentId: queryArg.parentId,
+          },
+        }),
+        providesTags: ["User Management"],
+      }),
+      userGetShareCollection: build.query<
+        UserGetShareCollectionApiResponse,
+        UserGetShareCollectionApiArg
+      >({
+        query: () => ({ url: `/pimcore-studio/api/users-share-list` }),
+        providesTags: ["User Management"],
+      }),
+    }),
+    overrideExisting: false,
+  });
 export { injectedRtkApi as api };
-export type UserCloneByIdApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
+export type UserCloneByIdApiResponse =
+  /** status 200 Node of the cloned user. */ TreeNode;
 export type UserCloneByIdApiArg = {
-    /** Id of the user */
-    id: number;
-    body: {
-        name?: string;
-    };
+  /** Id of the user */
+  id: number;
+  body: {
+    name?: string;
+  };
 };
-export type UserCreateApiResponse = /** status 200 Node of the new created User. */ TreeNode;
+export type UserCreateApiResponse =
+  /** status 200 Node of the new created User. */ TreeNode;
 export type UserCreateApiArg = {
-    body: {
-        parentId: number | null;
-        name: string;
-    };
+  body: {
+    parentId: number | null;
+    name: string;
+  };
 };
-export type UserFolderCreateApiResponse = /** status 200 Node of the new created Folder. */ TreeNode;
+export type UserFolderCreateApiResponse =
+  /** status 200 Node of the new created Folder. */ TreeNode;
 export type UserFolderCreateApiArg = {
-    body: {
-        parentId: number | null;
-        name: string;
-    };
+  body: {
+    parentId: number | null;
+    name: string;
+  };
 };
-export type UserGetCurrentInformationApiResponse = /** status 200 Current user information's. */ UserInformation;
+export type UserGetCurrentInformationApiResponse =
+  /** status 200 Current user information's. */ UserInformation;
 export type UserGetCurrentInformationApiArg = void;
-export type UserGetByIdApiResponse = /** status 200 Node of the requested user. */ User;
+export type UserGetByIdApiResponse =
+  /** status 200 Node of the requested user. */ User;
 export type UserGetByIdApiArg = {
-    /** Id of the user */
-    id: number;
+  /** Id of the user */
+  id: number;
 };
 export type UserUpdateByIdApiResponse = /** status 200 Updated data. */ User;
 export type UserUpdateByIdApiArg = {
-    /** Id of the User */
-    id: number;
-    updateUser: User2;
+  /** Id of the User */
+  id: number;
+  updateUser: User2;
 };
 export type UserDeleteByIdApiResponse = unknown;
 export type UserDeleteByIdApiArg = {
-    /** Id of the user */
-    id: number;
+  /** Id of the user */
+  id: number;
 };
 export type UserFolderDeleteByIdApiResponse = unknown;
 export type UserFolderDeleteByIdApiArg = {
-    /** Id of the user-folder */
-    id: number;
+  /** Id of the user-folder */
+  id: number;
 };
 export type UserGetImageApiResponse = /** status 200 User profile image */ Blob;
 export type UserGetImageApiArg = {
-    /** Id of the User */
-    id: number;
+  /** Id of the User */
+  id: number;
 };
 export type UserImageDeleteByIdApiResponse = unknown;
 export type UserImageDeleteByIdApiArg = {
-    /** Id of the user */
-    id: number;
+  /** Id of the user */
+  id: number;
 };
-export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default key bindings */ {
+export type UserDefaultKeyBindingsApiResponse =
+  /** status 200 List of default key bindings */ {
     totalItems: number;
     items: KeyBindingForAUser[];
-};
+  };
 export type UserDefaultKeyBindingsApiArg = void;
 export type UserGetObjectDependenciesApiResponse =
-    /** status 200 Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body. */ {
-        totalItems: number;
-        items: DependencyToAnObject[];
-    };
+  /** status 200 Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body. */ {
+    totalItems: number;
+    items: DependencyToAnObject[];
+  };
 export type UserGetObjectDependenciesApiArg = {
-    /** Id of the user */
-    id: number;
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
+  /** Id of the user */
+  id: number;
+  /** Page number */
+  page: number;
+  /** Number of items per page */
+  pageSize: number;
 };
-export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
+export type UserGetAvailablePermissionsApiResponse =
+  /** status 200 List of available user permissions. */ {
     totalItems: number;
     items: UserPermission[];
-};
+  };
 export type UserGetAvailablePermissionsApiArg = void;
 export type UserGetCollectionApiResponse = /** status 200 List of users */ {
-    totalItems: number;
-    items: SimpleUser[];
+  totalItems: number;
+  items: SimpleUser[];
 };
 export type UserGetCollectionApiArg = void;
-export type UserListWithPermissionApiResponse = /** status 200 List of users with the given permission */ {
+export type UserListWithPermissionApiResponse =
+  /** status 200 List of users with the given permission */ {
     totalItems: number;
     items: SimpleUser[];
-};
+  };
 export type UserListWithPermissionApiArg = {
-    /** List users with this permission */
-    permission: string;
-    /** Include current user in the list */
-    includeCurrentUser?: boolean;
+  /** List users with this permission */
+  permission: string;
+  /** Include current user in the list */
+  includeCurrentUser?: boolean;
 };
 export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
-    resetPassword: ResetPassword;
+  resetPassword: ResetPassword;
 };
-export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users */ {
+export type PimcoreStudioApiUserSearchApiResponse =
+  /** status 200 List of users */ {
     totalItems: number;
     items: SimpleUser[];
-};
+  };
 export type PimcoreStudioApiUserSearchApiArg = {
-    /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
-    searchQuery?: string;
+  /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
+  searchQuery?: string;
 };
-export type UserTokenLinkGetApiResponse = /** status 200 Token login link for the user */ {
+export type UserTokenLinkGetApiResponse =
+  /** status 200 Token login link for the user */ {
     /** Token link URL including the generated token as parameter. */
     link: string;
-};
+  };
 export type UserTokenLinkGetApiArg = {
-    /** Id of the user */
-    id: number;
-    tokenLink: TokenLink;
+  /** Id of the user */
+  id: number;
+  tokenLink: TokenLink;
 };
 export type UserTwoFactorConfirmApiResponse = unknown;
 export type UserTwoFactorConfirmApiArg = {
-    twoFactorCode: TwoFactorCode;
+  twoFactorCode: TwoFactorCode;
 };
 export type UserTwoFactorDisableApiResponse = unknown;
 export type UserTwoFactorDisableApiArg = void;
 export type UserTwoFactorResetByIdApiResponse = unknown;
 export type UserTwoFactorResetByIdApiArg = {
-    /** Id of the User */
-    id: number;
+  /** Id of the User */
+  id: number;
 };
 export type UserTwoFactorSetupApiResponse =
-    /** status 200 The new secret, its otpauth URI and the number of digits in a code. */ TwoFactorSetup;
+  /** status 200 The new secret, its otpauth URI and the number of digits in a code. */ TwoFactorSetup;
 export type UserTwoFactorSetupApiArg = void;
 export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
-    /** Set active perspective by Id */
-    perspectiveId: string;
+  /** Set active perspective by Id */
+  perspectiveId: string;
 };
 export type UserUpdatePasswordByIdApiResponse = unknown;
 export type UserUpdatePasswordByIdApiArg = {
-    /** Id of the User */
-    id: number;
-    body: {
-        password: string;
-        passwordConfirmation: string;
-        oldPassword?: string;
-    };
+  /** Id of the User */
+  id: number;
+  body: {
+    password: string;
+    passwordConfirmation: string;
+    oldPassword?: string;
+  };
 };
-export type UserUpdateProfileApiResponse = /** status 200 Successfully updated user profile */ UserInformation;
+export type UserUpdateProfileApiResponse =
+  /** status 200 Successfully updated user profile */ UserInformation;
 export type UserUpdateProfileApiArg = {
-    updateUserProfile: UserProfile;
+  updateUserProfile: UserProfile;
 };
 export type UserUploadImageApiResponse = unknown;
 export type UserUploadImageApiArg = {
-    /** Id of the User */
-    id: number;
-    body: {
-        /** User image to upload */
-        userImage: Blob;
-    };
+  /** Id of the User */
+  id: number;
+  body: {
+    /** User image to upload */
+    userImage: Blob;
+  };
 };
-export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
+export type UserGetTreeApiResponse =
+  /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
     items: TreeNode[];
-};
+  };
 export type UserGetTreeApiArg = {
-    /** Filter users by parent id. */
-    parentId: number;
+  /** Filter users by parent id. */
+  parentId: number;
 };
-export type UserGetShareCollectionApiResponse = /** status 200 List of users for sharing */ {
+export type UserGetShareCollectionApiResponse =
+  /** status 200 List of users for sharing */ {
     totalItems: number;
     items: SimpleUser[];
-};
+  };
 export type UserGetShareCollectionApiArg = void;
 export type TreeNode = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Unique Identifier */
-    id: number;
-    /** Name of the tree node */
-    name: string;
-    /** Is ether folder or a specific item in the folder */
-    type: string;
-    /** If a folder has sub items */
-    hasChildren: boolean;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** Unique Identifier */
+  id: number;
+  /** Name of the tree node */
+  name: string;
+  /** Is ether folder or a specific item in the folder */
+  type: string;
+  /** If a folder has sub items */
+  hasChildren: boolean;
 };
 export type Error = {
-    /** Message */
-    message: string;
+  /** Message */
+  message: string;
 };
 export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
+  /** Message */
+  message: string;
+  /** Details */
+  details: string;
 };
 export type KeyBindingForAUser = {
-    /** ASCII Code for a key on the Keyboard */
-    key: number;
-    /** The action the key binding should execute */
-    action: string;
-    /** If CTRL key should be pressed */
-    ctrl: boolean;
-    /** If ALT key should be pressed */
-    alt: boolean;
-    /** If SHIFT key should be pressed */
-    shift: boolean;
+  /** ASCII Code for a key on the Keyboard */
+  key: number;
+  /** The action the key binding should execute */
+  action: string;
+  /** If CTRL key should be pressed */
+  ctrl: boolean;
+  /** If ALT key should be pressed */
+  alt: boolean;
+  /** If SHIFT key should be pressed */
+  shift: boolean;
 };
 export type TwoFactorAuthenticationData = {
-    /** Required */
-    required: boolean;
-    /** Enabled */
-    enabled: boolean;
-    /** Type */
-    type: string;
-    /** Active */
-    active: boolean;
+  /** Required */
+  required: boolean;
+  /** Enabled */
+  enabled: boolean;
+  /** Type */
+  type: string;
+  /** Active */
+  active: boolean;
 };
 export type ElementIcon = {
-    /** Icon type */
-    type: "name" | "path";
-    /** Icon value */
-    value: string;
+  /** Icon type */
+  type: "name" | "path";
+  /** Icon value */
+  value: string;
 };
 export type PerspectiveConfig = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Perspective ID */
-    id: string;
-    /** Name */
-    name: string;
-    /** Icon */
-    icon: ElementIcon;
-    /** Is Writeable */
-    isWriteable: boolean;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** Perspective ID */
+  id: string;
+  /** Name */
+  name: string;
+  /** Icon */
+  icon: ElementIcon;
+  /** Is Writeable */
+  isWriteable: boolean;
 };
 export type UserInformation = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** User ID */
-    id: number;
-    /** Username */
-    username: string;
-    /** Email */
-    email: string | null;
-    /** Firstname */
-    firstname: string | null;
-    /** Lastname */
-    lastname: string | null;
-    /** Permissions */
-    permissions: string[];
-    /** If user is an admin user */
-    isAdmin: boolean;
-    /** Allowed classes to create */
-    classes: string[];
-    /** Allowed doc types to create */
-    docTypes: string[];
-    /** User Language */
-    language: string;
-    /** Locale for dateTime */
-    dateTimeLocale: string | null;
-    /** Theme of the User */
-    theme: string;
-    /** Welcome Screen */
-    welcomeScreen: boolean;
-    /** Memorize Tabs */
-    memorizeTabs: boolean;
-    /** Allow Dirty Close */
-    allowDirtyClose: boolean;
-    /** Has Image */
-    hasImage: boolean;
-    /** List of available content Language already sorted. */
-    contentLanguages: object;
-    /** List of valid website Languages to edit. */
-    allowedLanguagesForEditingWebsiteTranslations: string[];
-    /** List of valid website Languages to view. */
-    allowedLanguagesForViewingWebsiteTranslations: string[];
-    /** Key Bindings */
-    keyBindings: KeyBindingForAUser[];
-    /** Two Factor Authentication */
-    twoFactorAuthentication: TwoFactorAuthenticationData;
-    /** Active studio perspective ID */
-    activePerspective: string | null;
-    /** Allowed studio perspectives */
-    perspectives: PerspectiveConfig[];
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** User ID */
+  id: number;
+  /** Username */
+  username: string;
+  /** Email */
+  email: string | null;
+  /** Firstname */
+  firstname: string | null;
+  /** Lastname */
+  lastname: string | null;
+  /** Permissions */
+  permissions: string[];
+  /** If user is an admin user */
+  isAdmin: boolean;
+  /** Allowed classes to create */
+  classes: string[];
+  /** Allowed doc types to create */
+  docTypes: string[];
+  /** User Language */
+  language: string;
+  /** Locale for dateTime */
+  dateTimeLocale: string | null;
+  /** Theme of the User */
+  theme: string;
+  /** Welcome Screen */
+  welcomeScreen: boolean;
+  /** Memorize Tabs */
+  memorizeTabs: boolean;
+  /** Allow Dirty Close */
+  allowDirtyClose: boolean;
+  /** Has Image */
+  hasImage: boolean;
+  /** List of available content Language already sorted. */
+  contentLanguages: object;
+  /** List of valid website Languages to edit. */
+  allowedLanguagesForEditingWebsiteTranslations: string[];
+  /** List of valid website Languages to view. */
+  allowedLanguagesForViewingWebsiteTranslations: string[];
+  /** Key Bindings */
+  keyBindings: KeyBindingForAUser[];
+  /** Two Factor Authentication */
+  twoFactorAuthentication: TwoFactorAuthenticationData;
+  /** Active studio perspective ID */
+  activePerspective: string | null;
+  /** Allowed studio perspectives */
+  perspectives: PerspectiveConfig[];
 };
 export type UserWorkspace = {
-    /** ID of the element */
-    cid: number;
-    /** Path of the element */
-    cpath: string;
-    /** List Permission */
-    list: boolean;
-    /** View Permission */
-    view: boolean;
-    /** Publish Permission */
-    publish: boolean;
-    /** Delete Permission */
-    delete: boolean;
-    /** Rename Permission */
-    rename: boolean;
-    /** Create Permission */
-    create: boolean;
-    /** Settings Permission */
-    settings: boolean;
-    /** Versions Permission */
-    versions: boolean;
-    /** Properties Permission */
-    properties: boolean;
+  /** ID of the element */
+  cid: number;
+  /** Path of the element */
+  cpath: string;
+  /** List Permission */
+  list: boolean;
+  /** View Permission */
+  view: boolean;
+  /** Publish Permission */
+  publish: boolean;
+  /** Delete Permission */
+  delete: boolean;
+  /** Rename Permission */
+  rename: boolean;
+  /** Create Permission */
+  create: boolean;
+  /** Settings Permission */
+  settings: boolean;
+  /** Versions Permission */
+  versions: boolean;
+  /** Properties Permission */
+  properties: boolean;
 };
 export type UserDocumentWorkspace = UserWorkspace & {
-    /** Save */
-    save: boolean;
-    /** Unpublish */
-    unpublish: boolean;
-    /** Localized Edit */
-    localizedEdit?: string | null;
-    /** Localized View */
-    localizedView?: string | null;
-    /** Layouts */
-    layouts?: string | null;
+  /** Save */
+  save: boolean;
+  /** Unpublish */
+  unpublish: boolean;
+  /** Localized Edit */
+  localizedEdit?: string | null;
+  /** Localized View */
+  localizedView?: string | null;
+  /** Layouts */
+  layouts?: string | null;
 };
 export type UserDocumentWorkspace2 = UserWorkspace & {
-    /** Save */
-    save: boolean;
-    /** Unpublish */
-    unpublish: boolean;
+  /** Save */
+  save: boolean;
+  /** Unpublish */
+  unpublish: boolean;
 };
 export type DependencyToAnObject = {
-    /** ID of the object */
-    id: number;
-    /** Path to the object */
-    path: string;
-    /** Subtype of the object */
-    subtype: string;
+  /** ID of the object */
+  id: number;
+  /** Path to the object */
+  path: string;
+  /** Subtype of the object */
+  subtype: string;
 };
 export type UserObjectDependencies = {
-    /** Dependencies to objects */
-    dependencies: DependencyToAnObject[];
-    /** If it has hidden dependencies */
-    hasHidden: boolean;
-    /** Total number of objects referencing this user, including ones the caller may not view */
-    totalItems?: number;
+  /** Dependencies to objects */
+  dependencies: DependencyToAnObject[];
+  /** If it has hidden dependencies */
+  hasHidden: boolean;
+  /** Total number of objects referencing this user, including ones the caller may not view */
+  totalItems?: number;
 };
 export type User = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the User */
-    id: number;
-    /** Name of Folder or User */
-    name: string | null;
-    /** Email of the User */
-    email: string | null;
-    /** Firstname of the User */
-    firstname: string | null;
-    /** Lastname of the User */
-    lastname: string | null;
-    /** If a User is active */
-    active: boolean;
-    /** If User is admin */
-    admin: boolean;
-    /** Classes the user is allows to see */
-    classes: object;
-    /** Allowed doc types to create */
-    docTypes: string[];
-    /** Show close warning */
-    closeWarning: boolean;
-    /** Allow Dirty Close */
-    allowDirtyClose: boolean;
-    /** List of available content Language already sorted. */
-    contentLanguages: object;
-    /** If User has an Image */
-    hasImage: boolean;
-    /** Key Bindings */
-    keyBindings: KeyBindingForAUser[];
-    /** Language of the User */
-    language: string;
-    /** Locale for dateTime */
-    dateTimeLocale?: string | null;
-    /** Theme of the User */
-    theme: string;
-    /** Timestamp of the last login */
-    lastLogin?: number | null;
-    /** Memorize Tabs */
-    memorizeTabs: boolean;
-    /** Parent ID */
-    parentId: number | null;
-    /** List of permissions for the user */
-    permissions: object;
-    /** ID List of roles the user is assigned */
-    roles: object;
-    /** Two Factor Authentication */
-    twoFactorAuthentication: TwoFactorAuthenticationData;
-    /** Website Translation Languages Edit */
-    websiteTranslationLanguagesEdit: object;
-    /** Website Translation Languages View */
-    websiteTranslationLanguagesView: object;
-    /** Show Welcome Screen */
-    welcomeScreen: boolean;
-    /** Asset Workspace */
-    assetWorkspaces: UserWorkspace[];
-    /** Data Object Workspace */
-    dataObjectWorkspaces: UserDocumentWorkspace[];
-    /** Document Workspace */
-    documentWorkspaces: UserDocumentWorkspace2[];
-    /** Object Dependencies */
-    objectDependencies: UserObjectDependencies;
-    /** Allowed studio perspectives */
-    perspectives: PerspectiveConfig[];
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** ID of the User */
+  id: number;
+  /** Name of Folder or User */
+  name: string | null;
+  /** Email of the User */
+  email: string | null;
+  /** Firstname of the User */
+  firstname: string | null;
+  /** Lastname of the User */
+  lastname: string | null;
+  /** If a User is active */
+  active: boolean;
+  /** If User is admin */
+  admin: boolean;
+  /** Classes the user is allows to see */
+  classes: object;
+  /** Allowed doc types to create */
+  docTypes: string[];
+  /** Show close warning */
+  closeWarning: boolean;
+  /** Allow Dirty Close */
+  allowDirtyClose: boolean;
+  /** List of available content Language already sorted. */
+  contentLanguages: object;
+  /** If User has an Image */
+  hasImage: boolean;
+  /** Key Bindings */
+  keyBindings: KeyBindingForAUser[];
+  /** Language of the User */
+  language: string;
+  /** Locale for dateTime */
+  dateTimeLocale?: string | null;
+  /** Theme of the User */
+  theme: string;
+  /** Timestamp of the last login */
+  lastLogin?: number | null;
+  /** Memorize Tabs */
+  memorizeTabs: boolean;
+  /** Parent ID */
+  parentId: number | null;
+  /** List of permissions for the user */
+  permissions: object;
+  /** ID List of roles the user is assigned */
+  roles: object;
+  /** Two Factor Authentication */
+  twoFactorAuthentication: TwoFactorAuthenticationData;
+  /** Website Translation Languages Edit */
+  websiteTranslationLanguagesEdit: object;
+  /** Website Translation Languages View */
+  websiteTranslationLanguagesView: object;
+  /** Show Welcome Screen */
+  welcomeScreen: boolean;
+  /** Asset Workspace */
+  assetWorkspaces: UserWorkspace[];
+  /** Data Object Workspace */
+  dataObjectWorkspaces: UserDocumentWorkspace[];
+  /** Document Workspace */
+  documentWorkspaces: UserDocumentWorkspace2[];
+  /** Object Dependencies */
+  objectDependencies: UserObjectDependencies;
+  /** Allowed studio perspectives */
+  perspectives: PerspectiveConfig[];
 };
 export type User2 = {
-    /** Email of the User */
-    email: string | null;
-    /** Firstname of the User */
-    firstname: string | null;
-    /** Lastname of the User */
-    lastname: string | null;
-    /** If User is admin */
-    admin: boolean;
-    /** If User is active */
-    active: boolean;
-    /** Classes the user is allows to see */
-    classes: object;
-    /** Allowed Document types to create */
-    docTypes: object;
-    /** Show Close Warning */
-    closeWarning: boolean;
-    /** Allow Dirty Close */
-    allowDirtyClose: boolean;
-    /** List of available content Language already sorted. */
-    contentLanguages: object;
-    /** Key Bindings */
-    keyBindings: KeyBindingForAUser[];
-    /** Language of the User */
-    language: string;
-    /** Date Time Locale for the User */
-    dateTimeLocale?: string;
-    /** Memorize Tabs */
-    memorizeTabs: boolean;
-    /** Parent ID */
-    parentId: number;
-    /** List of permissions for the user */
-    permissions: object;
-    /** ID List of roles the user is assigned */
-    roles: object;
-    /** Two Factor Authentication Enabled */
-    twoFactorAuthenticationRequired: boolean;
-    /** Website Translation Languages Edit */
-    websiteTranslationLanguagesEdit: object;
-    /** Website Translation Languages View */
-    websiteTranslationLanguagesView: object;
-    /** Show welcome Screen */
-    welcomeScreen: boolean;
-    /** Asset Workspace */
-    assetWorkspaces: UserWorkspace[];
-    /** Data Object Workspace */
-    dataObjectWorkspaces: UserWorkspace[];
-    /** Document Workspace */
-    documentWorkspaces: UserWorkspace[];
-    /** Allowed studio perspectives */
-    perspectives: string[];
-    /** Theme of the User */
-    theme?: string;
+  /** Email of the User */
+  email: string | null;
+  /** Firstname of the User */
+  firstname: string | null;
+  /** Lastname of the User */
+  lastname: string | null;
+  /** If User is admin */
+  admin: boolean;
+  /** If User is active */
+  active: boolean;
+  /** Classes the user is allows to see */
+  classes: object;
+  /** Allowed Document types to create */
+  docTypes: object;
+  /** Show Close Warning */
+  closeWarning: boolean;
+  /** Allow Dirty Close */
+  allowDirtyClose: boolean;
+  /** List of available content Language already sorted. */
+  contentLanguages: object;
+  /** Key Bindings */
+  keyBindings: KeyBindingForAUser[];
+  /** Language of the User */
+  language: string;
+  /** Date Time Locale for the User */
+  dateTimeLocale?: string;
+  /** Memorize Tabs */
+  memorizeTabs: boolean;
+  /** Parent ID */
+  parentId: number;
+  /** List of permissions for the user */
+  permissions: object;
+  /** ID List of roles the user is assigned */
+  roles: object;
+  /** Two Factor Authentication Enabled */
+  twoFactorAuthenticationRequired: boolean;
+  /** Website Translation Languages Edit */
+  websiteTranslationLanguagesEdit: object;
+  /** Website Translation Languages View */
+  websiteTranslationLanguagesView: object;
+  /** Show welcome Screen */
+  welcomeScreen: boolean;
+  /** Asset Workspace */
+  assetWorkspaces: UserWorkspace[];
+  /** Data Object Workspace */
+  dataObjectWorkspaces: UserWorkspace[];
+  /** Document Workspace */
+  documentWorkspaces: UserWorkspace[];
+  /** Allowed studio perspectives */
+  perspectives: string[];
+  /** Theme of the User */
+  theme?: string;
 };
 export type UserPermission = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Key of the Permission */
-    key: string;
-    /** Category of the Permission */
-    category: string;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** Key of the Permission */
+  key: string;
+  /** Category of the Permission */
+  category: string;
 };
 export type SimpleUser = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the User */
-    id: number;
-    /** Name of the User */
-    username: string;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** ID of the User */
+  id: number;
+  /** Name of the User */
+  username: string;
 };
 export type ResetPassword = {
-    /** Username */
-    username: string;
-    /** Reset password URL */
-    resetPasswordUrl: string;
+  /** Username */
+  username: string;
+  /** Reset password URL */
+  resetPasswordUrl: string;
 };
 export type TokenLink = {
-    /** Token login URL */
-    tokenLoginUrl: string;
+  /** Token login URL */
+  tokenLoginUrl: string;
 };
 export type TwoFactorCode = {
-    /** Code */
-    code: string;
+  /** Code */
+  code: string;
 };
 export type TwoFactorSetup = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Secret, for manual entry */
-    secret: string;
-    /** otpauth URI to show as a QR code */
-    otpauthUri: string;
-    /** Number of digits in a code */
-    digits: number;
+  /** AdditionalAttributes */
+  additionalAttributes?: {
+    [key: string]: string | number | boolean | object;
+  };
+  /** Secret, for manual entry */
+  secret: string;
+  /** otpauth URI to show as a QR code */
+  otpauthUri: string;
+  /** Number of digits in a code */
+  digits: number;
 };
 export type UserProfile = {
-    /** Firstname of the User */
-    firstname: string | null;
-    /** Lastname of the User */
-    lastname: string | null;
-    /** Email of the User */
-    email: string | null;
-    /** Language of the User */
-    language: string;
-    /** Date Time Locale for the User */
-    dateTimeLocale: string | null;
-    /** Show Welcome Screen */
-    welcomeScreen: boolean;
-    /** Memorize Tabs */
-    memorizeTabs: boolean;
-    /** List of available content Language already sorted. */
-    contentLanguages: object;
-    /** Key Bindings */
-    keyBindings: KeyBindingForAUser[];
-    /** Theme of the User */
-    theme?: string;
+  /** Firstname of the User */
+  firstname: string | null;
+  /** Lastname of the User */
+  lastname: string | null;
+  /** Email of the User */
+  email: string | null;
+  /** Language of the User */
+  language: string;
+  /** Date Time Locale for the User */
+  dateTimeLocale: string | null;
+  /** Show Welcome Screen */
+  welcomeScreen: boolean;
+  /** Memorize Tabs */
+  memorizeTabs: boolean;
+  /** List of available content Language already sorted. */
+  contentLanguages: object;
+  /** Key Bindings */
+  keyBindings: KeyBindingForAUser[];
+  /** Theme of the User */
+  theme?: string;
 };
 export const {
-    useUserCloneByIdMutation,
-    useUserCreateMutation,
-    useUserFolderCreateMutation,
-    useUserGetCurrentInformationQuery,
-    useUserGetByIdQuery,
-    useUserUpdateByIdMutation,
-    useUserDeleteByIdMutation,
-    useUserFolderDeleteByIdMutation,
-    useUserGetImageQuery,
-    useUserImageDeleteByIdMutation,
-    useUserDefaultKeyBindingsQuery,
-    useUserGetObjectDependenciesQuery,
-    useUserGetAvailablePermissionsQuery,
-    useUserGetCollectionQuery,
-    useUserListWithPermissionQuery,
-    useUserResetPasswordMutation,
-    usePimcoreStudioApiUserSearchQuery,
-    useUserTokenLinkGetQuery,
-    useUserTwoFactorConfirmMutation,
-    useUserTwoFactorDisableMutation,
-    useUserTwoFactorResetByIdMutation,
-    useUserTwoFactorSetupMutation,
-    useUserUpdateActivePerspectiveMutation,
-    useUserUpdatePasswordByIdMutation,
-    useUserUpdateProfileMutation,
-    useUserUploadImageMutation,
-    useUserGetTreeQuery,
-    useUserGetShareCollectionQuery,
+  useUserCloneByIdMutation,
+  useUserCreateMutation,
+  useUserFolderCreateMutation,
+  useUserGetCurrentInformationQuery,
+  useUserGetByIdQuery,
+  useUserUpdateByIdMutation,
+  useUserDeleteByIdMutation,
+  useUserFolderDeleteByIdMutation,
+  useUserGetImageQuery,
+  useUserImageDeleteByIdMutation,
+  useUserDefaultKeyBindingsQuery,
+  useUserGetObjectDependenciesQuery,
+  useUserGetAvailablePermissionsQuery,
+  useUserGetCollectionQuery,
+  useUserListWithPermissionQuery,
+  useUserResetPasswordMutation,
+  usePimcoreStudioApiUserSearchQuery,
+  useUserTokenLinkGetQuery,
+  useUserTwoFactorConfirmMutation,
+  useUserTwoFactorDisableMutation,
+  useUserTwoFactorResetByIdMutation,
+  useUserTwoFactorSetupMutation,
+  useUserUpdateActivePerspectiveMutation,
+  useUserUpdatePasswordByIdMutation,
+  useUserUpdateProfileMutation,
+  useUserUploadImageMutation,
+  useUserGetTreeQuery,
+  useUserGetShareCollectionQuery,
 } = injectedRtkApi;

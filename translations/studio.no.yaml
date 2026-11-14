@@ -495,6 +495,10 @@ action-could-not-be-applied: Handling kunne ikke utføres
 failed-to-assign-tag-to-element: Kunne ikke tilordne tagg til element
 failed-to-un-assign-tag-to-element: Kunne ikke fjerne tagg fra element
 workflow-modal.perform-action: Utfør handling
+workflow.unsaved-changes.title: Ulagrede endringer
+workflow.unsaved-changes.warn: Det finnes ulagrede endringer. De går tapt når handlingen utføres. Vil du utføre den likevel?
+workflow.unsaved-changes.apply-anyway: Utfør likevel
+workflow.unsaved-changes.save-failed: De ulagrede endringene kunne ikke lagres, så handlingen ble ikke utført.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Notater
 workflow-modal.notes-required: Vennligst skriv inn notatene dine
@@ -687,6 +691,7 @@ mcp-servers.read-only-notice: Serverdefinisjoner administreres via filer i dette
 mcp-servers.save-success: MCP-server lagret
 mcp-servers.access.users-count: "Brukere: {{number}}"
 mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.service-users-count: 'Tjenestebrukere: {{number}}'
 mcp-servers.access.global-extra: alle autentiserte brukere
 mcp-servers.access.nobody: "Ingen ennå"
 mcp-servers.badge.read: Les
@@ -712,11 +717,16 @@ mcp-servers.editor.copy-url: "Kopier server-URL"
 mcp-servers.editor.connect-hint: Pek MCP-klienten din mot denne URL-en og autentiser deg med Pimcore-kontoen din.
 mcp-servers.sharing.title: Deling
 mcp-servers.sharing.share-globally: Del globalt
-mcp-servers.sharing.share-globally-tooltip: Alle autentiserte brukere får konfigurasjonslesing og MCP-servertilgang (ikke konfigurasjonsredigering)
+mcp-servers.sharing.share-globally-tooltip: Alle autentiserte brukere, inkludert tjenestebrukere, får konfigurasjonslesing og MCP-servertilgang (ikke konfigurasjonsredigering)
 mcp-servers.sharing.users: Brukere
 mcp-servers.sharing.roles: Roller
 mcp-servers.sharing.add-user: Legg til en bruker…
 mcp-servers.sharing.add-role: Legg til en rolle…
+mcp-servers.sharing.service-users: Tjenestebrukere
+mcp-servers.sharing.add-service-user: Legg til en tjenestebruker…
+mcp-servers.sharing.service-users-hint: Tjenestebrukere kan bare koble til; de kan ikke lese eller redigere konfigurasjonen.
+mcp-servers.sharing.service-users-unavailable: Tjenestebrukere vises ikke fordi du mangler tillatelsen til brukeradministrasjon. Deres eksisterende tilgang beholdes.
+mcp-servers.sharing.inactive: inaktiv
 mcp-servers.sharing.name: Navn
 mcp-servers.sharing.config-read: Konfigurasjonslesing
 mcp-servers.sharing.config-edit: Konfigurasjonsredigering
@@ -2414,6 +2424,9 @@ reports.field-filters: Feltfiltre
 reports.editor.delete.content: Vil du virkelig slette egendefinert rapport "{{reportName}}"?
 reports.editor.clone.content: Oppgi navnet på det nye elementet (a-zA-Z-_)
 reports.editor.add.content: Oppgi navnet på det nye elementet. Navnet må være alfanumerisk og minst 3 tegn langt (a-zA-Z0-9_-)
+reports.editor.import.title: Importer egendefinert rapport
+reports.editor.import.success: Egendefinert rapport ble importert
+reports.editor.import.invalid-file: Velg en JSON-eksportfil
 reports.editor.content.validation.message: Rapportnavnet er ugyldig
 reports.editor.general-settings.title: Generelle innstillinger
 reports.editor.general-settings.name-label: Navn
@@ -3226,6 +3239,67 @@ tree.actions.edit-tag: Rediger
 tag-configuration.edit-tag: 'Rediger "{{name}}"'
 tag-configuration.name-required: 'Skriv inn et taggnavn'
 tag-configuration.move-targets-failed: 'Listen over tagger kunne ikke lastes inn, så bare navnet kan endres'
+navigation.service-users: Tjenestebrukere
+widget.service-user-management: Tjenestebrukere
+service-users.create: Ny
+service-users.create.title: Ny tjenestebruker
+service-users.create.ok: Opprett
+service-users.create-from-user: Fra bruker
+service-users.create-from-user.title: Ny tjenestebruker fra en bruker
+service-users.create-from-user.description: Kopierer tillatelsene, rollene og workspaces til brukeren. Brukeren endres ikke, og admin-rettigheter kopieres aldri.
+service-users.field.name: Navn
+service-users.field.name.fixed: Navnet kan ikke endres, fordi MCP-servertilgang gis basert på navn.
+service-users.field.name.invalid: Bruk opptil 64 bokstaver, tall, punktum, bindestreker eller understreker, og start med en bokstav eller et tall, for eksempel svc-erp-sync.
+service-users.field.email: Kontakt-e-post
+service-users.field.source-user: Bruker å kopiere fra
+service-users.filter.unused-days: Ubrukt i mer enn N dager
+service-users.status.inactive: Inaktiv
+service-users.dormancy.never-used: Aldri brukt
+service-users.dormancy.warning: Ubrukt i 90 dager
+service-users.dormancy.dormant: Hvilende
+service-users.tab.settings: Innstillinger
+service-users.tab.permissions: Tillatelser
+service-users.tab.roles: Roller
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roller
+service-users.save.success: Tjenestebruker lagret
+service-users.deactivate: Deaktiver
+service-users.deactivate.confirm: Deaktivere tjenestebrukeren "{{name}}"? Påloggingsinformasjonen slutter å fungere ved neste forespørsel.
+service-users.delete: Slett
+service-users.delete.confirm: Slette tjenestebrukeren "{{name}}" permanent? OAuth-klienten, tokenene og MCP-servertilgangen fjernes. Dette kan ikke angres.
+service-users.credentials.title: Påloggingsinformasjon
+service-users.credentials.client-id: Klient-ID
+service-users.credentials.last-used: Sist brukt
+service-users.credentials.never-used: Aldri
+service-users.credentials.no-client: Ingen OAuth-klient
+service-users.credentials.rotate: Roter hemmelighet
+service-users.credentials.rotate.confirm: Opprette en ny klienthemmelighet for "{{name}}"? Den nåværende hemmeligheten slutter å fungere umiddelbart.
+service-users.credentials.mcp-tokens: MCP-tilgangstokener
+service-users.credentials.mcp-tokens.active: Aktive tokener
+service-users.credentials.mcp-tokens.latest-expiry: Seneste utløp
+service-users.credentials.mcp-tokens.none: Ingen aktive tokener
+service-users.credentials.issue: Utsted token
+service-users.credentials.issue.title: Utsted et MCP-tilgangstoken
+service-users.credentials.issue.ttl: Levetid i dager (1 til 90)
+service-users.credentials.issue.ttl.invalid: Oppgi et helt antall dager fra 1 til 90.
+service-users.credentials.issue.hint: Tokenet vises bare én gang. Klienter sender det som et Bearer-token i Authorization-headeren.
+service-users.credentials.revoke: Tilbakekall alle tokener
+service-users.credentials.revoke.confirm: Tilbakekalle alle MCP-tilgangstokener for denne tjenestebrukeren? Tilkoblede klienter slutter å fungere umiddelbart.
+service-users.credentials.revoke.success: Alle MCP-tilgangstokener for tjenestebrukeren er tilbakekalt.
+service-users.credentials.oauth: OAuth-klient
+service-users.credentials.oauth.disabled: OAuth-klientlegitimasjon er deaktivert på denne instansen; bruk et MCP-tilgangstoken.
+service-users.credentials.oauth.rotate-hint: Tilgangstokener som allerede er utstedt med den gamle hemmeligheten, forblir gyldige til de utløper.
+service-users.credentials.token: Tilgangstoken
+service-users.credentials.token.expires: Utløper
+service-users.create.credentials.title: Påloggingsinformasjon
+service-users.create.credentials.skip: Hopp over, utsted senere
+service-users.create.credentials.which: Bruk OAuth-klienten for pipelines som kan kjøre client_credentials-grant; bruk et MCP-tilgangstoken for alt annet.
+service-users.create.credentials.token-description: Klienter kobler til med et MCP-tilgangstoken. Utsted et nå, eller senere fra påloggingsinformasjonen til tjenestebrukeren.
+service-users.secret.title: Klienthemmelighet
+service-users.secret.client-secret: Klienthemmelighet
+service-users.secret.warning: Kopier hemmeligheten nå. Den vises bare én gang og kan ikke vises igjen.
+service-users.secret.copy: Kopier hemmelighet
+service-users.secret.close: Lukk
 field-definition.multi-value: "Flerverdi"
 classification-store.multi-value.delegate: "en multiValue av"
 classification-store.multi-value.delegate-required: "Velg typen denne multiValue inneholder før du lagrer."
