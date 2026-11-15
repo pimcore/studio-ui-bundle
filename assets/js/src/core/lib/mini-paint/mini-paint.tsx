@@ -9,13 +9,14 @@
  */
 
 import React from 'react'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Iframe } from '../../components/iframe/iframe'
 
 export const MiniPaint = (): React.JSX.Element => {
   const { id } = useElementContext()
 
-  const iframeSrc = `/pimcore-studio/api/image-editor?id=${id}`
+  const iframeSrc = `${getPrefix()}/image-editor?id=${id}`
 
   return (
     <Iframe

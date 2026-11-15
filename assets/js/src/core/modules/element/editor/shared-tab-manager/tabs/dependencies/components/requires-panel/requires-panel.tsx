@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import {
@@ -28,7 +29,7 @@ export const RequiresPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
 
   const { data, isLoading } = useDependencyGetCollectionByElementTypeQuery({
     elementType,

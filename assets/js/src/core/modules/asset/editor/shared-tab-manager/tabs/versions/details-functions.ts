@@ -10,6 +10,7 @@
 
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import {
   type CustomMetadataVersion,
   type AssetVersion
@@ -65,7 +66,7 @@ export const hydrateVersionData = (dataRaw: AssetVersion, versionId: number, ver
       dimensions: dataRaw.dimensions !== null && dataRaw.dimensions !== undefined ? dataRaw.dimensions.width + ' x ' + dataRaw.dimensions.height : ''
     },
     metadata: formatMetadata(dataRaw.metadata),
-    previewImageUrl: `/pimcore-studio/api/versions/${versionId}/image/stream`,
+    previewImageUrl: `${getPrefix()}/versions/${versionId}/image/stream`,
     dataRaw
   }
 }
@@ -104,7 +105,7 @@ export const loadPreviewImage = async (version: AssetVersion, versionId: number)
   }
   let result: string | null = null
 
-  await fetch(`/pimcore-studio/api/versions/${versionId}/image/stream`, {
+  await fetch(`${getPrefix()}/versions/${versionId}/image/stream`, {
     cache: 'force-cache'
   })
     .then(async (response) => await response.blob())
@@ -121,10 +122,12 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
   const t = i18n.t
   const tableBaseData: object[] = []
   const tableMetaData: object[] = []
-  const fieldColumn = t('field')
+  // Structural keys consumed by the views (e.g. `item.Field`, keys starting
+  // with 'Version') — must stay untranslated, labels get translated on render
+  const fieldColumn = 'Field'
 
   data.forEach((versionData, index) => {
-    const dataColumn = `${t('version.version')} ${versionData.versionCount}`
+    const dataColumn = `Version ${versionData.versionCount}`
 
     Object.keys(versionData.baseDataFormatted).forEach((key) => {
       if (key === 'dimensions' && !checkIsImageVersion(versionData.dataRaw)) {
@@ -166,8 +169,8 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
   })
 
   tableMetaData.sort((a: [], b: []) => {
-    const keyA: string = a[t('field')].key.toLowerCase()
-    const keyB: string = b[t('field')].key.toLowerCase()
+    const keyA: string = a[fieldColumn].key.toLowerCase()
+    const keyB: string = b[fieldColumn].key.toLowerCase()
 
     if (keyA < keyB) {
       return -1

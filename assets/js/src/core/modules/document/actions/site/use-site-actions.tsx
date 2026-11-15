@@ -180,7 +180,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
     void modal.confirm({
       title: t('document.site.remove-site'),
       content: t('document.site.remove-site-confirmation'),
-      okText: t('remove'),
+      okText: t('delete'),
       onOk: async () => {
         await removeSite(id)
       }

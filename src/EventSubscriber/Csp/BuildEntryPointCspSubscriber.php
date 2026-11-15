@@ -55,6 +55,10 @@ final class BuildEntryPointCspSubscriber implements EventSubscriberInterface, Lo
 
     public function onCspEvent(CspEvent $event): void
     {
+        if (!$event->isHtmlResponse()) {
+            return;
+        }
+
         try {
             $origins = $this->extractOriginsFromStaticResources();
 

@@ -9,6 +9,7 @@
  */
 
 import { type FilterValues } from '@Pimcore/components/filters'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type AbstractDecorator } from '../abstract-decorator'
 import { withGeneralFiltersContext } from './context-layer/with-tag-filter-context'
 import { withGeneralFiltersQueryArg } from './data-layer/with-general-filters-query-arg'
@@ -18,6 +19,8 @@ export interface GeneralFiltersDecoratorConfig {
   handleSearchTermInSidebar: boolean
   showOnlyUnreferencedFilter?: boolean
   initialFilters?: FilterValues
+  /** Enables registered search modes (SearchModeRegistry) for this listing; unset = plain search bar. */
+  elementType?: ElementType
 }
 
 export const GeneralFiltersDecorator: AbstractDecorator<GeneralFiltersDecoratorConfig> = (props, config) => {

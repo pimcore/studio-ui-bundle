@@ -18,9 +18,12 @@ import { useElementSelector } from '@Pimcore/modules/element/element-selector/pr
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { isEmpty } from 'lodash'
 import { useStyles } from '../../image-gallery.styles'
-import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
+import { getDraggedElements, isElementDrag } from '@Pimcore/components/drag-and-drop/element-drag'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { imageUploadAccept } from '@Pimcore/modules/asset/utils/upload-accept'
 
 interface ImageGalleryImageTargetProps {
   index: number
@@ -33,9 +36,19 @@ interface ImageGalleryImageTargetProps {
   searchPath?: string
 }
 
+/** The dragged image assets - a single image, or every image of a dragged set. */
+const getDraggedImages = (info: DragAndDropInfo): Array<{ id: number }> => {
+  if (!isElementDrag(info, [elementTypes.asset])) {
+    return []
+  }
+
+  return getDraggedElements<{ id: number, type?: string }>(info).filter(asset => asset.type === 'image')
+}
+
 export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, width, height, uploadPath, searchPath }: ImageGalleryImageTargetProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+  const modal = useAlertModal()
   const { triggerUpload } = useUploadModal({})
 
   const { open: openElementSelector } = useElementSelector({
@@ -72,7 +85,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
   const handleUpload = useCallback(() => {
     triggerUpload({
       targetFolderPath: uploadPath ?? '',
-      accept: 'image/*',
+      accept: imageUploadAccept,
       multiple: false,
       maxItems: 1,
       onSuccess: async (assets) => {
@@ -85,15 +98,35 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
     })
   }, [triggerUpload])
 
-  const handleDroppableDrop = (info): void => {
+  /**
+   * Fills this slot with the dropped images, in the same way the element selector
+   * does for several picked images. Anything that is not an image is skipped.
+   */
+  const handleDroppableDrop = (info: DragAndDropInfo): void => {
+    const images = getDraggedImages(info)
+    const skippedCount = getDraggedElements(info).length - images.length
+
+    if (skippedCount > 0) {
+      modal.warn({
+        content: t('relation.drop.not-allowed-elements-skipped', { count: skippedCount })
+      })
+    }
+
+    if (images.length === 0) {
+      return
+    }
+
+    const newItems: ImageGalleryValueItem[] = images.map(image => (
+      { image: { type: 'asset', id: image.id }, hotspots: [], marker: [], crop: {} }
+    ))
     const newValue = [...value]
-    newValue[index] = { image: { type: 'asset', id: info.data.id as number }, hotspots: [], marker: [], crop: {} }
+    newValue.splice(index, 1, ...newItems)
     setValue(newValue)
   }
 
   return (
     <InlineUpload
-      accept="image/*"
+      accept={ imageUploadAccept }
       assetType="image"
       disabled={ disabled }
       onSuccess={ handleFileSystemUpload }
@@ -102,8 +135,8 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
       <Droppable
         className={ styles.imageItem }
         disabled={ disabled }
-        isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
-        isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+        isValidContext={ (info: DragAndDropInfo) => isElementDrag(info, [elementTypes.asset, elementTypes.document, elementTypes.dataObject]) }
+        isValidData={ (info: DragAndDropInfo) => getDraggedImages(info).length > 0 }
         onDrop={ handleDroppableDrop }
         variant="outline"
       >
@@ -117,8 +150,8 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
                 newValue.splice(index, 1)
                 setValue(newValue)
               } }
-          onSearch={ openElementSelector }
-          onUpload={ handleUpload }
+          onSearch={ disabled === true ? undefined : openElementSelector }
+          onUpload={ disabled === true ? undefined : handleUpload }
           removeLabel={ t('image-gallery.delete-frame') }
           title={ t(disabled === true ? 'empty' : 'image.add.and.dnd') }
           width={ width }

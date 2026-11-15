@@ -11,6 +11,7 @@
 import { type FormItemProps } from 'antd'
 import React, { useCallback, useEffect, useId, useMemo, useRef } from 'react'
 import { ItemProvider } from './provider/item/item-provider'
+import { LabelExtra } from './provider/label-extra/label-extra-provider'
 import { useStyles } from './virtual-item.styles'
 import { Space } from '@Pimcore/components/space/space'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
@@ -36,7 +37,7 @@ function toNamePath (name: FormItemProps['name']): Array<string | number> {
 }
 
 export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX.Element => {
-  const { label, className, hidden, id, rules, validateTrigger, name } = props
+  const { label, className, hidden, id, rules, validateTrigger, name, required } = props
   const { styles } = useStyles()
   const formInstance = useFormInstance()
   const registry = useVirtualValidatorRegistry()
@@ -83,12 +84,15 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
     }
   }, [registry, fieldName, mountId, rules])
 
+  // Same precedence as antd's Form.Item: an explicit `required` prop (e.g. a mandatory
+  // data object field) wins, otherwise the marker is derived from the rules.
   const isRequired = useMemo(() => {
-    if (rules !== undefined && Array.isArray(rules)) {
-      return rules.some(rule => 'required' in rule && rule.required)
-    }
-    return false
-  }, [rules])
+    return required ?? (Array.isArray(rules) && rules.some(rule => 'required' in rule && rule.required === true))
+  }, [required, rules])
+
+  // Only hiding is set inline, so a field's own class can still lay the item out
+  // (for example a checkbox with its label after it).
+  const wrapperStyle = hidden === true ? { display: 'none' } : undefined
 
   const wrapperClassName = [
     className,
@@ -107,7 +111,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
     <ItemProvider item={ itemWithValidation }>
       <div
         className={ wrapperClassName }
-        style={ { display: hidden === true ? 'none' : 'block' } }
+        style={ wrapperStyle }
       >
         {label !== undefined && (
           <div className="virtual-item__label">
@@ -126,7 +130,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
                         : (
                           <Icon
                             options={ { width: 14, height: 14 } }
-                            value="info-circle"
+                            value="info-outline"
                           />
                           )}
                     </Tooltip>
@@ -135,6 +139,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
               </label>
               {isRequired && <span className="required-indicator">*</span>}
             </Space>
+            <LabelExtra />
           </div>
         )}
 

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Alert, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { isNil, isEmpty, omit, isString, isArray } from 'lodash'
@@ -20,9 +20,10 @@ import { SelectionType } from '@Pimcore/modules/element/element-selector/provide
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useDocumentRenderletRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type RenderletValue, type RenderletEditableConfig } from './renderlet-editable'
-import { useParams } from 'react-router-dom'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface RenderletContentProps {
   value?: RenderletValue
@@ -44,8 +45,7 @@ export const RenderletContent = ({
 }: RenderletContentProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [htmlContent, setHtmlContent] = useState<string>('')
-  const { id } = useParams<{ id: string }>()
-  const documentId = !isNil(id) ? parseInt(id) : undefined
+  const { id: documentId } = useContext(DocumentContext)
 
   const defaultHeight = 100
 
@@ -55,10 +55,11 @@ export const RenderletContent = ({
     ? {
         id: value.id!,
         type: value.type!,
+        subtype: value.subtype,
         controller: config.controller,
-        parentDocumentId: documentId ?? undefined,
         template: config?.template,
-        ...omit(config, ['controller', 'template', 'className', 'height', 'width', 'reload', 'title', 'type', 'class'])
+        ...omit(config, ['controller', 'template', 'className', 'height', 'width', 'reload', 'title', 'type', 'class']),
+        parentDocumentId: documentId
       }
     : undefined
 
@@ -120,7 +121,7 @@ export const RenderletContent = ({
     config: {
       objects: !isNil(config?.className)
         ? {
-            allowedTypes: isArray(config.className) ? config.className : [config.className]
+            allowedClasses: isArray(config.className) ? config.className : [config.className]
           }
         : undefined
     },
@@ -129,7 +130,7 @@ export const RenderletContent = ({
         const selectedElement = event.items[0]
         const newValue: RenderletValue = {
           id: selectedElement.data.id,
-          type: selectedElement.elementType,
+          type: mapToLegacyElementType(selectedElement.elementType),
           subtype: selectedElement.data.type ?? selectedElement.data.subtype
         }
         onChange(newValue)

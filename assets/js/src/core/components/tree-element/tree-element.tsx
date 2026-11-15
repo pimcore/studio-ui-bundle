@@ -78,6 +78,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     isHideRootChecker = true,
     hasRoot = true,
     hideExpanders,
+    height,
     titleRender
   } = props
 
@@ -185,6 +186,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
               className={ cn(styles.treeContainer, className) }
               defaultExpandAll={ defaultExpandAll }
               draggable={ draggable }
+              height={ height }
               loadData={ onLoadData !== null ? onLoadData : undefined }
               onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
               onDragStart={ (evt): void => {

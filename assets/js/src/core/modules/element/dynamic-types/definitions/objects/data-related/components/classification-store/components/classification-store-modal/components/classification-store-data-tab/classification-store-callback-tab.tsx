@@ -165,12 +165,14 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
       >
         <Box padding={ { top: 'small', bottom: 'small' } }>
           <Grid
+            autoWidth
             columns={ columns }
             data={ data?.items ?? [] }
             enableMultipleRowSelection={ !singleSelection }
             enableRowSelection={ singleSelection }
             isLoading={ isLoading }
             onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedItems(row) } }
+            resizable
             selectedRows={ selectedItems }
             setRowId={ (row) => isGroupByKey && !isUndefined(row.groupId) ? `${row.groupId}-${row.keyId}` : row.id }
           />

@@ -15,21 +15,21 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
+import { getTwoFactorChallenge, type TwoFactorChallenge } from '@Pimcore/modules/auth/hooks/use-two-factor-authentication'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
-import { routes } from '@Pimcore/app/router/router'
 import { Checkbox, Input } from 'antd'
+import { isUndefined } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
   onPasswordForgotten?: () => void
+  onTwoFactorRequired?: (challenge: TwoFactorChallenge) => void
 }
 
-export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
-  const location = useLocation()
+export const LoginForm = ({ onPasswordForgotten, onTwoFactorRequired }: ILoginFormProps): React.JSX.Element => {
   const user = useUser()
   const { styles } = useStyle()
   const messageApi = useMessage()
@@ -63,16 +63,32 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
         trackError(new ApiError(response.error))
       }
 
+      const twoFactor = response.error === undefined ? getTwoFactorChallenge(response.data) : undefined
+
+      if (!isUndefined(twoFactor)) {
+        setIsLoginLoading(false)
+        onTwoFactorRequired?.(twoFactor)
+        return
+      }
+
       if (response.error === undefined) {
         // Keep the login screen visible until the reload: do NOT flip the auth
         // state (that would start the app's intro/fade animation). Auth is
         // re-established from the session cookie on the fresh boot. The submit
         // button stays in its loading state because we return before clearing it.
-        const redirectPath: string = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? routes.root
-
+        //
+        // Reload rather than navigate: the login screen is rendered at the URL the
+        // user asked for, so that URL is already the target, whatever it carries -
+        // an OAuth `?authorization_id=…`, an element deep link, or nothing. Booting
+        // the application again at the same address lets the route guard render the
+        // route's own content now that the session exists.
+        //
+        // No computed destination is assigned here on purpose. A post-login target
+        // read from anywhere other than the current address would be a redirect this
+        // form performs on someone else's say-so, and reloading cannot leave the origin.
         await sendStatistics(user.isAdmin)
 
-        window.location.href = redirectPath
+        globalThis.location.reload()
         return
       }
 

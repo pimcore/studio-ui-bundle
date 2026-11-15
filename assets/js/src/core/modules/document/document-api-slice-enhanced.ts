@@ -50,6 +50,11 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
     },
 
+    // Only the patched documents; the tree refreshes its source and target nodes itself.
+    documentPatchById: {
+      invalidatesTags: (result, error, args) => args.body.data.flatMap(document => invalidatingTags.DOCUMENT_DETAIL_ID(document.id))
+    },
+
     documentAdd: {
       invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
     },

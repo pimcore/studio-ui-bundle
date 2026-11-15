@@ -50,3 +50,13 @@ export const Link = {
     type: 'link'
   }
 }
+
+// a finished action is confirmed with a check mark that is drawn in place of the label
+export const Success = {
+  args: {
+    ..._default.args,
+    children: 'Save & Publish',
+    success: true,
+    type: 'primary'
+  }
+}

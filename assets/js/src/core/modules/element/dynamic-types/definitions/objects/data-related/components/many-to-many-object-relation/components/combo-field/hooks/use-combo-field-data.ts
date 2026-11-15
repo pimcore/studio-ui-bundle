@@ -19,24 +19,14 @@ import {
   useDataObjectGetAvailableGridColumnsForRelationQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
-import { useUserContentLanguage } from '@Pimcore/modules/auth/hooks/use-user-content-language'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { type ManyToManyRelationValueItem } from '@Pimcore/components/many-to-many-relation/hooks/use-value'
 import { type ManyToManyObjectRelationProps, type VisibleFieldDefinition } from '../../../many-to-many-object-relation'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { processItems } from '../combo-field-utils'
-
-export const COMBO_PAGE_SIZE = 200
-export const BACKGROUND_LOAD_THRESHOLD = 1000
-
-const SEARCH_DEBOUNCE_MS = 300
-const FULLTEXT_FILTER_TYPE = 'system.fulltext'
-
-const SYSTEM_COLUMNS = [
-  { key: 'fullpath', type: 'system.string', locale: null, config: [] as string[] },
-  { key: 'classname', type: 'system.string', locale: null, config: [] as string[] }
-]
+import { useResetOnLanguageChange } from '../../../hooks/use-reset-on-language-change'
+import { BACKGROUND_LOAD_THRESHOLD, COMBO_PAGE_SIZE, FULLTEXT_FILTER_TYPE, processItems, SEARCH_DEBOUNCE_MS, SYSTEM_COLUMNS } from '../combo-field-utils'
 
 export interface ComboOption {
   value: number
@@ -46,7 +36,9 @@ export interface ComboOption {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const useComboFieldData = (props: ManyToManyObjectRelationProps) => {
   const { getByName } = useClassDefinitions()
-  const userLanguage = useUserContentLanguage()
+  // Localized columns follow the content language selected in the editor's
+  // language switcher, like every other localized part of the editor.
+  const { currentLanguage: userLanguage } = useLanguageSelection()
 
   const { id: elementId } = useElementContext()
   const { dataObject } = useDataObjectDraft(elementId)
@@ -83,6 +75,13 @@ export const useComboFieldData = (props: ManyToManyObjectRelationProps) => {
 
   const itemMapRef = useRef<Map<number, ManyToManyRelationValueItem>>(new Map())
   const prevDataRef = useRef<DataObjectGetSearchApiResponse | undefined>(undefined)
+
+  // Drop labels cached or accumulated in the previous content language, so
+  // no stale label survives until the new-language responses arrive.
+  useResetOnLanguageChange(userLanguage, () => {
+    labelCache.size > 0 && setLabelCache(new Map())
+    accumulatedOptions.length > 0 && setAccumulatedOptions([])
+  })
 
   useEffect(() => {
     props.value?.forEach(item => { itemMapRef.current.set(item.id, item) })

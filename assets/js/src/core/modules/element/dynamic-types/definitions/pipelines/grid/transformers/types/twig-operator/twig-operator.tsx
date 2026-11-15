@@ -17,6 +17,7 @@ import { DynamicTypePipelineGridTransformersTwigOperatorComponent } from '@Pimco
 export class DynamicTypePipelineGridTransformersTwigOperator extends DynamicTypePipelineAbstract {
   readonly id = 'twigOperator'
   readonly group = 'other'
+  readonly expandable = true
 
   getComponent (): ReactElement {
     return (

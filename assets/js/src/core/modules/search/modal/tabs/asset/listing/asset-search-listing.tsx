@@ -19,13 +19,16 @@ import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/pag
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { compose } from '@Pimcore/utils/compose'
-import React from 'react'
+import React, { useMemo } from 'react'
+import { type SearchListingProps, withExtraSidebarEntries } from '@Pimcore/modules/search/modal/tabs/search-listing-props'
 import { StaticColumnConfigurationDecorator } from './decorator/static-column-configuration/static-column-configuration-decorator'
 import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { DefaultView } from './view/view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '../../../../../element/listing/decorators/type-filter/type-filter-decorator'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { ElementClickBehaviorProvider } from '@Pimcore/modules/element/providers/element-click-behavior/element-click-behavior-provider'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -36,31 +39,45 @@ const defaultProps = {
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-const listingProps = compose<AbstractDecoratorProps>(
+const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
   StaticColumnConfigurationDecorator,
   TagFilterDecorator,
-  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, showOnlyUnreferencedFilter: true } as GeneralFiltersDecoratorConfig],
+  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, showOnlyUnreferencedFilter: true, elementType: elementTypes.asset } as GeneralFiltersDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.asset } as TypeFilterDecoratorConfig],
   SortingDecorator,
   [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig],
   // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
-  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true } as SavedSearchDecoratorConfig]
+  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true, readOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
-export const AssetSearchListing = (): React.JSX.Element => {
+export const AssetSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
+  const { close } = useSearch()
+  // buildListingProps composes NEW component types per call, and fresh types remount the whole
+  // listing tree — so the composition is memoized apart from the entries, which an embedder may
+  // well pass inline and which only wrap the sidebar hook
+  const baseProps = useMemo(() => buildListingProps(savedSearchReadOnly), [savedSearchReadOnly])
+  const listingProps = useMemo(
+    () => withExtraSidebarEntries(baseProps, extraSidebarEntries),
+    [baseProps, extraSidebarEntries]
+  )
+
   return (
-    <DynamicTypeRegistryProvider serviceIds={ [
-      'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/MetadataRegistry',
-      'DynamicTypes/ListingRegistry',
-      'DynamicTypes/FieldFilterRegistry'
-    ] }
-    >
-      <ListingContainer
-        { ...listingProps }
-      />
-    </DynamicTypeRegistryProvider>
+    <ElementClickBehaviorProvider onElementClick={ close }>
+      <DynamicTypeRegistryProvider serviceIds={ [
+        'DynamicTypes/GridCellRegistry',
+        'DynamicTypes/MetadataRegistry',
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/FieldFilterRegistry'
+      ] }
+      >
+        <ListingContainer
+          { ...listingProps }
+          defaultSidebarTab={ defaultSidebarTab }
+          listingSlot={ listingSlot }
+        />
+      </DynamicTypeRegistryProvider>
+    </ElementClickBehaviorProvider>
   )
 }

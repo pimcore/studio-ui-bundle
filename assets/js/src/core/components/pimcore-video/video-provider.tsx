@@ -42,8 +42,11 @@ export const VideoProvider = ({ children }: IVideoProviderProps): React.JSX.Elem
   )
 }
 
+// for components that also render outside a VideoProvider (e.g. the search preview)
+export const useOptionalVideoContext = (): IVideoContext | undefined => useContext(VideoContext)
+
 export const useVideoContext = (): IVideoContext => {
-  const context = useContext(VideoContext)
+  const context = useOptionalVideoContext()
 
   if (isUndefined(context)) {
     throw new Error('useVideoContext must be used within VideoProvider')

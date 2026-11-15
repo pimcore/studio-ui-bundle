@@ -9,6 +9,7 @@
  */
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
+import { arrowTurnTransition } from '@Pimcore/utils/motion'
 
 export const useStyles = createStyles(({ token, css }) => {
   const themeToken = {
@@ -82,12 +83,29 @@ export const useStyles = createStyles(({ token, css }) => {
           justify-content: center;
           margin: 0 ${token.marginXXS}px;
           align-self: center;
+
+          /* like the tree arrows: only the icon changes color on hover and while pressed, no background */
+          &.ant-btn {
+            transition: color ${token.motionDurationFast} ${token.motionEaseOut};
+
+            &:not(:disabled):hover,
+            &:not(:disabled):active {
+              background: transparent;
+            }
+
+            &:not(:disabled):hover {
+              color: ${token.colorPrimaryHover};
+            }
+
+            &:not(:disabled):active {
+              color: ${token.colorPrimaryActive};
+            }
+          }
         }
 
         .accordion__chevron {
           rotate: 180deg;
-          transition-duration: 0.6s;
-          transition-property: transform;
+          ${arrowTurnTransition()}
         }
 
         .accordion__chevron--up {

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactElement, useState } from 'react'
+import React, { type ReactElement } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import {
   type VideoType,
@@ -16,9 +16,9 @@ import {
 } from './video'
 import { useTranslation } from 'react-i18next'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { VideoModal } from '@Pimcore/modules/element/components/video-modal/video-modal'
-import { isEmpty } from 'lodash'
+import { Tooltip, actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
+import { useVideoModal } from '@Pimcore/modules/element/components/video-modal/hooks/use-video-modal'
+import { isEmpty, isNull } from 'lodash'
 
 interface VideoFooterProps {
   emptyValue?: () => void
@@ -31,19 +31,18 @@ interface VideoFooterProps {
 
 export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [isModalVisible, setIsModalVisible] = useState(false)
+  const { openModal } = useVideoModal({
+    allowedVideoTypes: props.allowedVideoTypes,
+    disabled: props.disabled,
+    onChange: (value: VideoValue | null): void => {
+      if (!isNull(value)) {
+        props.onSave?.(value)
+      }
+    }
+  })
 
   const showModal = (): void => {
-    setIsModalVisible(true)
-  }
-
-  const handleModalOk = (value: VideoValue): void => {
-    props.onSave?.(value)
-    setIsModalVisible(false)
-  }
-
-  const handleModalCancel = (): void => {
-    setIsModalVisible(false)
+    openModal(props.value)
   }
 
   const buttons: ReactElement[] = []
@@ -52,6 +51,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     buttons.push((
       <Tooltip
         key="empty"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('empty') }
       >
         <IconButton
@@ -65,6 +65,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     buttons.push((
       <Tooltip
         key="edit"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('edit') }
       >
         <IconButton
@@ -78,6 +79,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
       buttons.push((
         <Tooltip
           key="upload"
+          mouseEnterDelay={ actionTooltipDelay }
           title={ t('upload') }
         >
           <IconButton
@@ -93,10 +95,11 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     buttons.push((
       <Tooltip
         key="details"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('details') }
       >
         <IconButton
-          icon={ { value: 'info-circle' } }
+          icon={ { value: 'info-outline' } }
           onClick={ showModal }
         />
       </Tooltip>
@@ -104,19 +107,9 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
   }
 
   return (
-    <>
-      <ButtonGroup
-        items={ buttons }
-        noSpacing
-      />
-      <VideoModal
-        allowedVideoTypes={ props.allowedVideoTypes }
-        disabled={ props.disabled }
-        onCancel={ handleModalCancel }
-        onOk={ handleModalOk }
-        open={ isModalVisible }
-        value={ props.value }
-      />
-    </>
+    <ButtonGroup
+      items={ buttons }
+      noSpacing
+    />
   )
 }

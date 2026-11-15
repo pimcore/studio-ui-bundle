@@ -122,6 +122,7 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
               className='w-full'
             >
               <IconButton
+                aria-label={ t('open') }
                 data-testid="action-open-element"
                 icon={ { value: 'open-folder' } }
                 onClick={ async () => {
@@ -131,14 +132,17 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
                                       id: elementId
                                     })
                 } }
+                tooltip={ { title: t('open') } }
                 type="link"
               />
               <IconButton
+                aria-label={ t('details') }
                 data-testid="action-show-details"
                 icon={ { value: 'show-details' } }
                 onClick={ async () => {
                   setNoteDetail(info.row.original)
                 } }
+                tooltip={ { title: t('details') } }
                 type="link"
               />
             </Flex>
@@ -149,11 +153,13 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
               className='w-full'
             >
               <IconButton
+                aria-label={ t('details') }
                 data-testid="action-show-details"
                 icon={ { value: 'show-details' } }
                 onClick={ async () => {
                   setNoteDetail(info.row.original)
                 } }
+                tooltip={ { title: t('details') } }
                 type="link"
               />
             </Flex>

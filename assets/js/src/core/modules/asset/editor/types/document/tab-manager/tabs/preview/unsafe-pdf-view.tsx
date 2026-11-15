@@ -18,6 +18,9 @@ import { Box } from '@Pimcore/components/box/box'
 import { Image } from 'antd'
 import { Spin } from '@sdk/components'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
+import { buildElementPublicUrl } from '@Pimcore/utils/element-public-url'
+import { currentDomain } from '@Pimcore/app/config/app-config'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface UnsafePdfViewProps {
   assetId: number
@@ -28,13 +31,14 @@ const UnsafePdfView = (props: UnsafePdfViewProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
   const { assetId, fullPath } = props
+  const { asset_frontend_prefix: assetFrontendPrefix } = useSettings()
 
   const thumbnailUrl = useMemo(() => {
     return addCacheBusterToUrl(`${getPrefix()}/assets/${assetId}/document/stream/thumbnail/document-thumbnail`)
   }, [assetId])
 
   const handleOpenInNewWindow = (): void => {
-    window.open(fullPath, '_blank')
+    window.open(buildElementPublicUrl({ fullPath, currentDomain, assetFrontendPrefix }), '_blank')
   }
 
   return (

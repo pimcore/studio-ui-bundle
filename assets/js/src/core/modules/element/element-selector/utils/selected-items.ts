@@ -38,3 +38,21 @@ export const getFinishedEventSelectedItems = (eventData: any): SelectedItem[] =>
 
   return selectedItems
 }
+
+export const getSelectedItemFromGridRow = (row: any, elementType: ElementType, systemColumnKeys: string[]): SelectedItem => {
+  const apiData = row?.original?.['__api-data']
+  const data: Record<string, any> = { id: row?.original?.id }
+
+  if (apiData !== undefined && isArray(apiData.columns)) {
+    for (const column of apiData.columns) {
+      if (systemColumnKeys.includes(column.key as string)) {
+        data[column.key] = column.value
+      }
+    }
+  }
+
+  return {
+    elementType,
+    data: data as SelectedItem['data']
+  }
+}

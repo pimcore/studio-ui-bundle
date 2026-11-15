@@ -47,7 +47,9 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
 
     const fieldName = getChangedFieldName(changedValues)
 
-    if (fieldName !== null && inheritanceState?.getInheritanceState(fieldName)?.inherited === true) {
+    // breakInheritance decides by the current state itself: this handler is kept from
+    // the first render (see the memo below), so its inheritanceState is stale
+    if (fieldName !== null) {
       inheritanceState?.breakInheritance(fieldName)
     }
 

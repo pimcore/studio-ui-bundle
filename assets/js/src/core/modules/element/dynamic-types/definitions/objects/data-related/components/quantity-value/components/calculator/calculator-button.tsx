@@ -15,6 +15,7 @@ import { QuantityValueCalculatorContent } from './calculator-content'
 import {
   useUnitQuantityValueConvertAllQuery
 } from '@Pimcore/modules/data-object/unit-slice.gen'
+import { useTranslation } from 'react-i18next'
 
 interface QuantityValueCalculatorButtonProps {
   value: number
@@ -22,6 +23,7 @@ interface QuantityValueCalculatorButtonProps {
 }
 
 export const QuantityValueCalculatorButton = (props: QuantityValueCalculatorButtonProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { data } = useUnitQuantityValueConvertAllQuery({ value: props.value, fromUnitId: props.unitId })
 
   if (data === undefined || data.convertedValues.length === 0) {
@@ -40,7 +42,9 @@ export const QuantityValueCalculatorButton = (props: QuantityValueCalculatorButt
       trigger="click"
     >
       <IconButton
+        aria-label={ t('quantity-value.converted-units') }
         icon={ { value: 'calculator' } }
+        tooltip={ { title: t('quantity-value.converted-units') } }
         type="default"
       />
     </Popover>

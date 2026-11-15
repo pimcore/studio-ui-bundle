@@ -14,6 +14,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { useCommitKeyedListDefault } from '@Pimcore/components/form/controls/keyed-list/hooks/use-commit-keyed-list-default'
 
 export const DynamicTypePipelineGridTransformersPhpCodeComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig()
@@ -27,10 +28,12 @@ export const DynamicTypePipelineGridTransformersPhpCodeComponent = (): React.JSX
 
   const phpCodeKeyOptions = transformerConfig.configOptions.phpCodeKey.options
 
+  // an untouched pre-selected key must still be part of the saved config (see the hook's docs)
+  useCommitKeyedListDefault('phpCodeKey', phpCodeKeyOptions[0]?.value)
+
   return (
     <>
       <Form.Item
-        initialValue={ phpCodeKeyOptions[0]?.value }
         label={ t('grid.advanced-column.advancedColumns.phpCodeKey') }
         name={ 'phpCodeKey' }
       >

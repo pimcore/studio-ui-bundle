@@ -34,7 +34,8 @@ export const useElementSelectorHelper = (): UseElementSelectorHelperReturn => {
   }
 
   const setConfig: UseElementSelectorHelperReturn['setConfig'] = (config) => {
-    const newConfig = { ...context.config, ...config }
+    // Custom tabs belong to one caller; never carry them over to the next opening.
+    const newConfig = { ...context.config, customTabs: undefined, ...config }
     context.setConfig(newConfig)
   }
 

@@ -12,7 +12,7 @@ import React from 'react'
 import { Form, type FormProps } from './form'
 import { Panel } from '../panel'
 import { ConfigProvider } from 'antd'
-import { Tabpanel } from '../tabpanel/tabpanel'
+import { FormKitTabpanel } from './layouts/tabpanel/form-kit-tabpanel'
 import { Region } from '../region/region'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { ItemSpacer } from './layouts/item-spacer/item-spacer'
@@ -51,13 +51,13 @@ const FormKit = (props: FormKitProps): React.JSX.Element => {
 
 const TypedFormKit = FormKit as typeof FormKit & {
   Panel: typeof Panel
-  TabPanel: typeof Tabpanel
+  TabPanel: typeof FormKitTabpanel
   Region: typeof Region
   ItemSpacer: typeof ItemSpacer
 }
 
 TypedFormKit.Panel = Panel
-TypedFormKit.TabPanel = Tabpanel
+TypedFormKit.TabPanel = FormKitTabpanel
 TypedFormKit.Region = Region
 TypedFormKit.ItemSpacer = ItemSpacer
 

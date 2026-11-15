@@ -1,0 +1,274 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { renderHook } from '@testing-library/react'
+import { type NamePath } from 'antd/es/form/interface'
+import { type InheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
+import { useRestoreInheritance } from './use-restore-inheritance'
+import { RestoreInheritanceKeyedListContext } from './restore-inheritance-keyed-list-context'
+import { RestoreInheritanceLocaleContext } from './restore-inheritance-locale-context'
+
+const resetFields = jest.fn()
+const setFieldValue = jest.fn()
+const clearDataObjectAttribute = jest.fn()
+const updateDraft = jest.fn(async () => {})
+const restoreInheritance = jest.fn()
+const onFieldRestore = jest.fn()
+
+let inheritedState: InheritanceState | undefined
+let inheritedValue: unknown
+let hasEditForm = true
+let isDisabled = false
+let locale: string | undefined
+let localizedEdit: string | undefined
+let keyedList: { onFieldRestore?: (field: NamePath) => void } | undefined
+
+jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state', () => ({
+  useInheritanceState: () => ({
+    getInheritanceState: () => inheritedState,
+    // the provider offers a restore for every broken field it knows a restore target of
+    canRestoreInheritance: () => inheritedState?.inherited === 'broken',
+    getInheritedValue: () => inheritedValue,
+    restoreInheritance
+  })
+}))
+
+jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider', () => ({
+  useEditFormContextOptional: () => hasEditForm
+    ? { form: { resetFields, setFieldValue }, clearDataObjectAttribute, updateDraft, disabled: isDisabled }
+    : undefined
+}))
+
+jest.mock('@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/use-localized-fields', () => ({
+  useLocalizedFields: () => locale === undefined ? undefined : { locales: [locale] }
+}))
+
+// the object permissions, as the store holds them
+jest.mock('@sdk/app', () => ({
+  useAppSelector: (selector: () => unknown) => selector()
+}))
+
+jest.mock('@Pimcore/modules/data-object/data-object-draft-slice', () => ({
+  selectDataObjectById: () => ({ permissions: { localizedEdit } })
+}))
+
+jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-optional', () => ({
+  useKeyedListOptional: () => keyedList
+}))
+
+const name = ['manufacturer']
+const broken: InheritanceState = { objectId: 7, inherited: 'broken' }
+
+// Explicit parameter, no default: passing undefined has to reach the hook as undefined.
+const restoreField = (fieldName: NamePath | undefined, emptyValue?: unknown, readOnly?: boolean): boolean => {
+  const { result } = renderHook(() => useRestoreInheritance(fieldName, emptyValue, readOnly))
+  result.current.restore()
+
+  return result.current.canRestore
+}
+
+beforeEach(() => {
+  jest.clearAllMocks()
+  inheritedState = broken
+  inheritedValue = undefined
+  hasEditForm = true
+  isDisabled = false
+  locale = undefined
+  localizedEdit = undefined
+  keyedList = undefined
+})
+
+describe('useRestoreInheritance', () => {
+  describe('a field held by the Ant form store', () => {
+    it('resets the field, persists it as empty and restores the state', () => {
+      expect(restoreField(name)).toBe(true)
+
+      expect(resetFields).toHaveBeenCalledWith([name])
+      expect(setFieldValue).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).toHaveBeenCalledWith(name, null)
+      expect(updateDraft).toHaveBeenCalled()
+      expect(restoreInheritance).toHaveBeenCalledWith(name)
+    })
+
+    it('puts the ancestor value into a field that was overridden when loaded', () => {
+      inheritedValue = 'Parent value'
+
+      expect(restoreField(name)).toBe(true)
+
+      expect(setFieldValue).toHaveBeenCalledWith(name, 'Parent value')
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).toHaveBeenCalledWith(name, null)
+      expect(restoreInheritance).toHaveBeenCalledWith(name)
+    })
+
+    it('clears the field with the empty value the field type asks for', () => {
+      restoreField(name, [])
+
+      expect(clearDataObjectAttribute).toHaveBeenCalledWith(name, [])
+    })
+
+    it('does nothing outside the object editor', () => {
+      hasEditForm = false
+
+      expect(restoreField(name)).toBe(false)
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('a field held by a keyed list', () => {
+    beforeEach(() => {
+      keyedList = { onFieldRestore }
+    })
+
+    it('hands the field to the owner of the list and restores the state', () => {
+      expect(restoreField(name)).toBe(true)
+
+      expect(onFieldRestore).toHaveBeenCalledWith(name)
+      expect(restoreInheritance).toHaveBeenCalledWith(name)
+    })
+
+    it('leaves the Ant form store alone', () => {
+      inheritedValue = 'Parent value'
+      restoreField(name)
+
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(setFieldValue).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+    })
+
+    it('reaches the list through a list that masks it, as in the block header', () => {
+      const outerList = { onFieldRestore }
+      // the block's numbered list hides the keyed list from its title
+      keyedList = undefined
+
+      const { result } = renderHook(() => useRestoreInheritance(name), {
+        wrapper: ({ children }) => (
+          <RestoreInheritanceKeyedListContext.Provider value={ { keyedList: outerList as any } }>
+            {children}
+          </RestoreInheritanceKeyedListContext.Provider>
+        )
+      })
+      result.current.restore()
+
+      expect(onFieldRestore).toHaveBeenCalledWith(name)
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+    })
+
+    it('does nothing when the owner of the list cannot restore', () => {
+      keyedList = {}
+
+      expect(restoreField(name)).toBe(false)
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('localized fields', () => {
+    it('restores a field in a locale the user may edit', () => {
+      locale = 'en'
+      localizedEdit = 'en,de'
+
+      expect(restoreField(name)).toBe(true)
+    })
+
+    it('leaves a field in a locale the user may not edit untouched', () => {
+      locale = 'fr'
+      localizedEdit = 'en,de'
+
+      expect(restoreField(name)).toBe(false)
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('classification store keys, whose locale comes from the locale context', () => {
+    const renderInLocale = (contextLocale: string): boolean => {
+      const { result } = renderHook(() => useRestoreInheritance(name), {
+        wrapper: ({ children }) => (
+          <RestoreInheritanceLocaleContext.Provider value={ contextLocale }>
+            {children}
+          </RestoreInheritanceLocaleContext.Provider>
+        )
+      })
+      result.current.restore()
+
+      return result.current.canRestore
+    }
+
+    beforeEach(() => {
+      keyedList = { onFieldRestore }
+      localizedEdit = 'en,de'
+    })
+
+    it('restores a key in a language the user may edit', () => {
+      expect(renderInLocale('en')).toBe(true)
+      expect(onFieldRestore).toHaveBeenCalledWith(name)
+    })
+
+    it('leaves a key in a language the user may not edit untouched', () => {
+      expect(renderInLocale('fr')).toBe(false)
+      expect(onFieldRestore).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+
+    it('lets the localized fields decide over the locale context', () => {
+      locale = 'en'
+
+      expect(renderInLocale('fr')).toBe(true)
+    })
+  })
+
+  describe('fields that offer no restore', () => {
+    it('leaves a read-only field untouched', () => {
+      expect(restoreField(name, null, true)).toBe(false)
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+
+    it.each([
+      ['held by the Ant form store', undefined],
+      ['held by a keyed list', { onFieldRestore }]
+    ])('leaves a field %s untouched in a read-only editor', (_label, list) => {
+      isDisabled = true
+      keyedList = list
+
+      expect(restoreField(name)).toBe(false)
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+      expect(updateDraft).not.toHaveBeenCalled()
+      expect(onFieldRestore).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+
+    it.each([
+      ['inherited', { objectId: 7, inherited: true } satisfies InheritanceState],
+      ['carrying an own value', { objectId: 1, inherited: false } satisfies InheritanceState]
+    ])('leaves a field %s untouched', (_label, state) => {
+      inheritedState = state
+
+      expect(restoreField(name)).toBe(false)
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+
+    it('leaves a field without inheritance data untouched', () => {
+      inheritedState = undefined
+
+      expect(restoreField(name)).toBe(false)
+    })
+
+    it('leaves a field without a name untouched', () => {
+      expect(restoreField(undefined)).toBe(false)
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+  })
+})

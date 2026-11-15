@@ -9,6 +9,7 @@
  */
 
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -49,7 +50,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
   const modal = useFormModal()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [sorting, setSorting] = useState<SortingState>([])
   const [filter, setFilter] = useState<string>('')
 
@@ -183,9 +184,11 @@ export const QuantityValueContainer = (): React.JSX.Element => {
               <Split>
                 <Flex align='center'>
                   <IconButton
+                    aria-label={ t('toolbar.reload') }
                     disabled={ isFetching }
                     icon={ { value: 'refresh' } }
                     onClick={ handleRefetch }
+                    tooltip={ { title: t('toolbar.reload') } }
                     variant='minimal'
                   />
                 </Flex>
@@ -201,9 +204,11 @@ export const QuantityValueContainer = (): React.JSX.Element => {
             : (
               <Flex align='center'>
                 <IconButton
+                  aria-label={ t('toolbar.reload') }
                   disabled={ isFetching }
                   icon={ { value: 'refresh' } }
                   onClick={ handleRefetch }
+                  tooltip={ { title: t('toolbar.reload') } }
                 />
               </Flex>
               )}

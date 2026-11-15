@@ -19,7 +19,7 @@ import {
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-manager'
-import { SIDEBAR_CONTENT_SETTINGS } from '../../shared-tab-manager/sidebar-definitions'
+import { SIDEBAR_CONTENT_SETTINGS, SIDEBAR_NAVIGATION } from '../../shared-tab-manager/sidebar-definitions'
 import { TAB_FOLDER_PROPERTIES } from './tab-manager/tabs/properties/properties-container'
 
 moduleSystem.registerModule({
@@ -35,5 +35,6 @@ moduleSystem.registerModule({
     const folderSidebarManager = container.get<DocumentSidebarManager>(serviceIds['Document/Editor/Sidebar/FolderSidebarManager'])
 
     folderSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
+    folderSidebarManager.registerEntry(SIDEBAR_NAVIGATION)
   }
 })

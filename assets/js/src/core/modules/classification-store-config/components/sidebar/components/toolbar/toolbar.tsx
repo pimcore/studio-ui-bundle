@@ -35,8 +35,10 @@ export const Toolbar = ({ isFetching, refetch, handleStoreAdd }: IToolbarProps):
           )
         : (
           <IconButton
+            aria-label={ t('toolbar.reload') }
             icon={ { value: 'refresh' } }
             onClick={ () => { refetch() } }
+            tooltip={ { title: t('toolbar.reload') } }
           />
           )}
 

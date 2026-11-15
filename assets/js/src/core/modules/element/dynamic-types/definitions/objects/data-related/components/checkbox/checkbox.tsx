@@ -18,6 +18,7 @@ import { Checkbox as DefaultCheckbox, type ICheckboxProps } from '@Pimcore/compo
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './checkbox.styles'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface CheckboxProps extends Omit<ICheckboxProps, 'value' | 'onChange'> {
   value?: boolean | null
@@ -56,7 +57,10 @@ export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
         onChange={ handleChange }
       />
       { showClearButton && (
-        <Tooltip title={ t('set-to-null') }>
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('set-to-null') }
+        >
           <IconButton
             icon={ { value: 'trash' } }
             onClick={ clearValue }

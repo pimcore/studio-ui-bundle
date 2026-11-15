@@ -54,6 +54,15 @@ const groups: ColumnPickerGroup[] = [
   }
 ]
 
+const manyGroups: ColumnPickerGroup[] = Array.from({ length: 10 }, (_, groupIndex) => ({
+  key: `group-${groupIndex}`,
+  label: `Group ${groupIndex + 1}`,
+  items: Array.from({ length: 40 }, (_, itemIndex) => ({
+    key: `group-${groupIndex}-field-${itemIndex}`,
+    label: `Field ${groupIndex + 1}.${itemIndex + 1}`
+  }))
+}))
+
 const config: Meta<typeof ColumnPicker> = {
   title: 'Components/Data Entry/ColumnPicker',
   component: ColumnPicker,
@@ -71,6 +80,14 @@ export const WithoutSearch: StoryObj<typeof ColumnPicker> = {
   args: {
     groups,
     searchable: false,
+    onSelect: (item) => { console.log('selected', item) }
+  }
+}
+
+export const Virtualized: StoryObj<typeof ColumnPicker> = {
+  args: {
+    groups: manyGroups,
+    height: 360,
     onSelect: (item) => { console.log('selected', item) }
   }
 }

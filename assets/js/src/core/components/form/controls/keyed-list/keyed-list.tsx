@@ -13,9 +13,10 @@ import { Form } from '../../form'
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
-import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
+import { cloneDeep, isArray, isEqual, isNil, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
+import { pathsOverlap } from './utils/paths-overlap'
 
 export interface KeyedListProps {
   children: React.ReactNode
@@ -23,9 +24,11 @@ export interface KeyedListProps {
   onChange?: (value: KeyedListData['values']) => void
   onFieldChange?: (field: NamePath, value: any) => void
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
+  /** Counterpart of onFieldChange: puts a field back to the value it was loaded with. */
+  onFieldRestore?: (field: NamePath) => void
 }
 
-const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
+const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps, onFieldRestore }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
   // Mirror of the current value, kept in sync during render so the (referentially
@@ -44,10 +47,24 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   onFieldChangeRef.current = onFieldChange
   const getAdditionalComponentPropsRef = useRef(getAdditionalComponentProps)
   getAdditionalComponentPropsRef.current = getAdditionalComponentProps
+  const onFieldRestoreRef = useRef(onFieldRestore)
+  onFieldRestoreRef.current = onFieldRestore
+  const supportsFieldRestore = !isUndefined(onFieldRestore)
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
+  // registrations whose value has not been committed yet. The baseline must never run
+  // ahead of the value: it is a ref and moves synchronously, the value is state and
+  // moves a commit later, and the compare effect in between would read the difference
+  // as something the user typed. They are applied once the value carrying them lands.
+  const pendingRegistrations = useRef<Array<{ path: string[], value: any, queuedAgainst: KeyedListData['values'] }>>([])
   const previousInitialValue = useRef(initialValue)
+  // keys added through add() since the last incoming value: their field registrations (e.g. prefilled
+  // defaults) are content the user brought in, not part of the loaded state, so they stay a change
+  const addedKeysRef = useRef<Set<string>>(new Set())
+  // the last value handed to onChange since the last incoming value: reverting to the baseline after that
+  // report still has to be reported, otherwise the consumer keeps the reported state
+  const lastReportedRef = useRef<KeyedListData['values'] | null>(null)
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
@@ -69,6 +86,10 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     previousInitialValue.current = initialValue
+    addedKeysRef.current.clear()
+    lastReportedRef.current = null
+    // queued registrations describe the value that is being replaced
+    pendingRegistrations.current = []
 
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -82,6 +103,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
         return currentValue
       }
 
+      addedKeysRef.current.add(key)
       const _newValue = cloneDeep(currentValue)
       _newValue[key] = newValue
       return _newValue
@@ -93,6 +115,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       const newValue = cloneDeep(currentValue)
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete newValue[key]
+      addedKeysRef.current.delete(key)
       return newValue
     })
   }, [])
@@ -114,17 +137,40 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     const setAsObject = (obj): object => {
-      if (isUndefined(obj)) {
+      // a null intermediate (e.g. localized fields without any value) would stop setWith from writing at all;
+      // registrations keep it, otherwise they would differ from the loaded value and be reported as a change
+      if (isInitialValue ? isUndefined(obj) : isNil(obj)) {
         return {}
       }
 
       return obj
     }
 
-    if (isInitialValue) {
-      const newBaseline = cloneDeep(baselineValue.current)
-      setWith(newBaseline, nameDifference, newSubValue, setAsObject)
-      baselineValue.current = newBaseline
+    if (isInitialValue && !addedKeysRef.current.has(nameDifference[0])) {
+      // registrations that can overwrite one another have to reach the baseline in
+      // the order they were made. The two branches below apply on different
+      // schedules — one now, one once the value commits — so a registration
+      // overlapping one that is already waiting joins the queue instead of
+      // overtaking it. Without that the earlier queued one lands after the later
+      // immediate one and puts the baseline back to a value the field has already
+      // moved off, which the compare effect then reads as content somebody typed.
+      const overlapsPending = pendingRegistrations.current.some(
+        ({ path }) => pathsOverlap(path, nameDifference)
+      )
+
+      const committed = nameDifference.length === 0 ? valueRef.current : get(valueRef.current, nameDifference)
+
+      if (!overlapsPending && isEqual(committed, newSubValue)) {
+        // the value already carries this registration, so taking it into the baseline
+        // now moves the baseline towards the value and can never get ahead of it
+        const newBaseline = cloneDeep(baselineValue.current)
+        // cloned for the same reason the queued branch clones: the baseline must not
+        // end up holding an object the caller can still write to
+        setWith(newBaseline, nameDifference, cloneDeep(newSubValue), setAsObject)
+        baselineValue.current = newBaseline
+      } else {
+        pendingRegistrations.current.push({ path: nameDifference, value: newSubValue, queuedAgainst: valueRef.current })
+      }
     }
 
     setValue((currentValue) => {
@@ -142,9 +188,40 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     })
   }, [itemName])
 
+  // Absorb the registrations the current value has caught up with. A registration is
+  // queued against the value of the commit it was made in, so a value that is still
+  // that one does not carry it yet — only once the reference has moved on is taking it
+  // into the baseline guaranteed not to put the baseline ahead. Declared above the
+  // compare effect on purpose: effects run in order, so the baseline is up to date by
+  // the time the comparison below reads it.
+  useEffect(() => {
+    const landed = pendingRegistrations.current.filter(({ queuedAgainst }) => queuedAgainst !== value)
+    if (landed.length === 0) {
+      return
+    }
+
+    pendingRegistrations.current = pendingRegistrations.current.filter(({ queuedAgainst }) => queuedAgainst === value)
+
+    const newBaseline = cloneDeep(baselineValue.current)
+    landed.forEach(({ path, value: registered }) => {
+      // cloned on the way in: inserting by reference would put the caller's own
+      // object into the baseline, and writing a child path later in this same loop
+      // would then reach back into it — altering both what the field still holds and
+      // the registration it is about to make again
+      setWith(newBaseline, path, cloneDeep(registered), (obj) => isUndefined(obj) ? {} : obj)
+    })
+    baselineValue.current = newBaseline
+  }, [value])
+
   // Trigger onChange when value changes, but outside of setState
   useEffect(() => {
-    if (!isEqual(value, baselineValue.current) && !isEmpty(value)) {
+    // a list that came in empty and is still empty has nothing to report: registrations of
+    // mounting fields only touch the baseline. Emptying a list that came in with entries (removing its last
+    // entry) is a real change, consumers derive their deletion markers from it.
+    const differsFromBaseline = !isEqual(value, baselineValue.current) && !(isEmpty(value) && isEmpty(initialValue))
+    const revertsReported = lastReportedRef.current !== null && !isEqual(value, lastReportedRef.current)
+    if (differsFromBaseline || revertsReported) {
+      lastReportedRef.current = cloneDeep(value)
       onChange(value)
     }
   }, [bufferedValue])
@@ -171,6 +248,11 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     []
   )
 
+  const stableOnFieldRestore = useCallback(
+    (field: NamePath): void => { onFieldRestoreRef.current?.(field) },
+    []
+  )
+
   // Stable external store: subscribers (per-field via useKeyedListValue) read the
   // current value through getSnapshot and are notified whenever it changes.
   const store = useMemo(() => ({
@@ -192,6 +274,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   return (
     <KeyedListProvider
       getAdditionalComponentProps={ stableGetAdditionalComponentProps }
+      onFieldRestore={ supportsFieldRestore ? stableOnFieldRestore : undefined }
       operations={ operations }
       store={ store }
     >

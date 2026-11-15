@@ -266,7 +266,14 @@ export const WithDraggerAndDeleteButton: StoryObj<ToolStripProps> = {
 
 export const WithActivateOnHover: StoryObj<ToolStripProps> = {
   parameters: {
-    layout: 'padded'
+    layout: 'padded',
+    docs: {
+      description: {
+        story: 'The actions are revealed on hover, but also whenever focus is inside the strip: ' +
+          'the strip head is a tab stop, so Tab or a click on it reveals the actions and Tab moves ' +
+          'on into them. Escape collapses the strip again while keeping focus on the head.'
+      }
+    }
   },
   render: (args) => (
     <div style={ { width: 'fit-content' } }>

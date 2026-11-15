@@ -28,7 +28,7 @@ export const useStyle = createStyles(({ token, css }) => {
       .sidebar__navigation {
           display: flex;
           width: ${SIDEBAR_NAV_WIDTH}px;
-          padding: 4px 8px ${token.paddingSM}px 8px;
+          padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingSM}px ${token.paddingXS}px;
           flex-direction: column;
           align-items: center;
           flex-shrink: 0;
@@ -152,6 +152,13 @@ export const useStyle = createStyles(({ token, css }) => {
         &.sidebar__resizer--active .sidebar__resizer-divider {
           opacity: 1;
         }
+      }
+
+      /* the container owns the width, so the panel grows from its sizing rather than
+         being pinned to it */
+      &.sidebar--container-sized .sidebar__content {
+        flex: 1 1 auto;
+        min-width: 0;
       }
 
       .sidebar__resize-overlay {

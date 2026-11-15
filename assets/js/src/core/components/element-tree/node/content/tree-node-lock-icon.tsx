@@ -12,10 +12,9 @@ import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './tree-node-content.styles'
 import { type TreeNodeContentMetaProps } from './tree-node-content'
-import { isEmpty, isNil } from 'lodash'
 
 export const TreeNodeLockIcon = ({ node }: TreeNodeContentMetaProps): React.JSX.Element | null => {
-  const { isLocked, locked } = node
+  const { isLocked } = node
   const { styles } = useStyles()
 
   if (!isLocked) {
@@ -24,7 +23,7 @@ export const TreeNodeLockIcon = ({ node }: TreeNodeContentMetaProps): React.JSX.
 
   return (
     <Icon
-      className={ !isNil(locked) && !isEmpty(locked) ? '' : styles.indirectLockedIcon }
+      className={ styles.lockIcon }
       data-testid={ `tree-node-lock-icon-${node.id}` }
       options={ { width: 14, height: 14 } }
       value='lock'

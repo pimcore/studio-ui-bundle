@@ -25,7 +25,9 @@ export const useStyles = createStyles(({
       width: 56px;
 
       .left-sidebar__avatar {
-        margin: 8px 15px 0 15px;
+        /* marginSM (12px) on top; the 15px sides centre the 26px avatar in the 56px rail and
+           have no token on the scale. */
+        margin: ${token.marginSM}px 15px 0 15px;
         pointer-events: auto;
         cursor: pointer;
       }

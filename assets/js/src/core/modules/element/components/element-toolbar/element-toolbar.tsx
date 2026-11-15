@@ -20,6 +20,7 @@ import { type IElement, useElementActionsMenu } from '@Pimcore/modules/element/h
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyle } from '@Pimcore/modules/element/components/element-toolbar/element-toolbar.styles'
+import { copyToClipboard } from '@Pimcore/utils/clipboard'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const elementRef = useRef<HTMLDivElement>(null)
@@ -68,9 +69,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
             }
             iconPosition="end"
             onClick={ () => {
-              void navigator.clipboard.writeText(
-                element.id.toString()
-              )
+              void copyToClipboard(element.id.toString())
             } }
             size="small"
           >

@@ -8,28 +8,59 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { ClassDefinitionSelect } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/components/class-definition-select/class-definition-select'
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
-import { Flex } from '@Pimcore/components/flex/flex'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useStyles } from '@Pimcore/modules/search/modal/tabs/shared/saved-search-top-bar.styles'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {
+  const { isOpen, setSearchTerm, loadedSavedSearch } = useSearch()
+  const isSavedSearchWidget = loadedSavedSearch !== undefined
+  const { styles } = useStyles()
+
+  const search = <SearchTermFilter onCommit={ isOpen ? setSearchTerm : undefined } />
+
+  if (isSavedSearchWidget) {
+    return (
+      <Header>
+        <Flex
+          align="center"
+          gap='extra-small'
+        >
+          <Title>{loadedSavedSearch.name}</Title>
+          <ProvidedTypeSelect />
+          <ClassDefinitionSelect nullable />
+        </Flex>
+        <div className={ styles.searchContainer }>
+          {search}
+        </div>
+      </Header>
+    )
+  }
+
   return (
     <Toolbar
       padding={ { left: 'none', right: 'none' } }
       position='none'
+      // The search-mode warning line needs a second row.
+      size='auto'
       theme='secondary'
     >
-      <Flex
-        className='w-full'
-        gap={ 'extra-small' }
-      >
-        <ProvidedTypeSelect />
-        <ClassDefinitionSelect nullable />
-        <SearchTermFilter />
-      </Flex>
+      <SearchTermFilter
+        onCommit={ isOpen ? setSearchTerm : undefined }
+        prefixControls={
+          <>
+            <ProvidedTypeSelect />
+            <ClassDefinitionSelect nullable />
+          </>
+        }
+      />
     </Toolbar>
   )
 }

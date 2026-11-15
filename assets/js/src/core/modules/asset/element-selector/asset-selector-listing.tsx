@@ -23,6 +23,7 @@ import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selec
 import { useRootElementId } from '../listing/hooks/use-root-element-id'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { GlobalRowSelectionDecorator, type IGlobalRowSelectionConfig } from '@Pimcore/modules/element/element-selector/listing-decorators/global-row-selection/global-row-selection-decorator'
+import { type ISelectionInteractionConfig, SelectionInteractionDecorator } from '@Pimcore/modules/element/element-selector/listing-decorators/selection-interaction/selection-interaction-decorator'
 import { DefaultView } from './view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { StaticColumnConfigurationDecorator } from '@Pimcore/modules/search/modal/tabs/asset/listing/decorator/static-column-configuration/static-column-configuration-decorator'
@@ -74,6 +75,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
     [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, initialFilters } as GeneralFiltersDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'asset' } as IGlobalRowSelectionConfig],
+    [SelectionInteractionDecorator, { elementType: elementTypes.asset } as ISelectionInteractionConfig],
     [
       TypeFilterDecorator,
       {

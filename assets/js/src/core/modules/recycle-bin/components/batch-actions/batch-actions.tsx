@@ -19,8 +19,9 @@ import { type RecycleBin } from '../../recycle-bin-api-slice.gen'
 
 export const BatchActions = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { selectedRows, selectedRowsTypes, resetSelectedRows } = useSelectedRowsContext()
+  const { selectedRows, selectedRowsTypes, resetSelectedRows, loadingIds, setLoadingIds } = useSelectedRowsContext()
   const { removeItems, restoreItems } = useRecycleBin()
+  const isLoading = loadingIds.restore.length > 0 || loadingIds.delete.length > 0
 
   const getSelectedItems = (): Array<Pick<RecycleBin, 'id' | 'type'>> => {
     return Object.keys(selectedRows).map((id): Pick<RecycleBin, 'id' | 'type'> => ({
@@ -36,7 +37,11 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: () => {
-          void removeItems(getSelectedItems(), () => {
+          const items = getSelectedItems()
+          const ids = items.map((item) => item.id)
+          setLoadingIds('delete', ids, true)
+          void removeItems(items, () => {
+            setLoadingIds('delete', ids, false)
             resetSelectedRows()
           })
         }
@@ -46,7 +51,11 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.restore'),
         icon: <Icon value={ 'restore' } />,
         onClick: () => {
-          void restoreItems(getSelectedItems(), () => {
+          const items = getSelectedItems()
+          const ids = items.map((item) => item.id)
+          setLoadingIds('restore', ids, true)
+          void restoreItems(items, () => {
+            setLoadingIds('restore', ids, false)
             resetSelectedRows()
           })
         }
@@ -56,6 +65,7 @@ export const BatchActions = (): React.JSX.Element => {
 
   return (
     <Dropdown
+      disabled={ isLoading }
       menu={ menu }
     >
       <DropdownButton key={ 'dropdown-button' }>{t('listing.actions')}</DropdownButton>

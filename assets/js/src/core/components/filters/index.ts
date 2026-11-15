@@ -20,10 +20,18 @@ export {
   createFiltersStore,
   type FiltersStore,
   type FiltersStoreInstance,
+  type FilterWriteCounts,
   type FiltersStoreProviderProps,
   type FilterValueSeed
 } from './store/create-filters-store'
 export { useDraftSync } from './store/use-draft-sync'
+export { commitFilterValues } from './store/commit-filter-values'
+export {
+  FilterCommitProvider,
+  useFilterCommitOptional,
+  type FilterCommit,
+  type FilterCommitProviderProps
+} from './store/filter-commit-context'
 export { composeQuery } from './query/compose-query'
 export { FiltersRenderer, type FiltersRendererProps } from './view/filters-renderer'
 export { useFilterQuery, type FilterHostAdapter } from './adapter'

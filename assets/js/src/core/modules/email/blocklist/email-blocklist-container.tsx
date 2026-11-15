@@ -9,6 +9,7 @@
  */
 
 import { useAppDispatch } from '@Pimcore/app/store'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -31,7 +32,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { addNewEmail } = useEmailBlocklist()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { data, isLoading: isRTKLoading, isFetching } = useEmailBlocklistGetCollectionQuery({
     page: currentPage,
@@ -58,6 +59,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
+            aria-label={ t('toolbar.reload') }
             disabled={ isLoading || isRTKLoading }
             icon={ { value: 'refresh' } }
             onClick={ () => {
@@ -68,6 +70,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
                 )
               )
             } }
+            tooltip={ { title: t('toolbar.reload') } }
           />
           <Pagination
             current={ currentPage }

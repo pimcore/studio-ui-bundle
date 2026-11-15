@@ -11,7 +11,7 @@
 import { flatMap, isArray, isNil, isNumber, isObject, isString, values } from 'lodash'
 import type { ElementCellConfig, ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import type { ManyToManyRelationValueItem } from '../hooks/use-value'
+import type { DisplayManyToManyRelationValueItem, ManyToManyRelationValueItem } from '../hooks/use-value'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
@@ -22,7 +22,8 @@ export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
       const elementType = mapToElementType(element.type)
       return {
         elementType: elementType ?? undefined,
-        id: element.id,
+        // without an id the path tag is not clickable, so a denied element cannot be opened
+        id: element.hasViewAccess === false ? undefined : element.id,
         fullPath: element.fullPath,
         published: element.isPublished ?? undefined,
         disabled
@@ -50,3 +51,18 @@ export const flattenValues = (value: unknown): string[] => {
 
   return []
 }
+
+/**
+ * Row identity for the relation grid.
+ *
+ * Positional rather than the element id: with `allowMultipleAssignments` one element occupies
+ * several rows, so element ids are not unique and selecting by id would hit every occurrence.
+ * `originalIndex` is the row's position in the unfiltered value when the caller stamps it,
+ * otherwise the current index is used.
+ *
+ * The grid's `setRowId` and its drag handler must both go through this: matching a drag id
+ * against `row.id` compares a position against an element id and never hits, which silently
+ * turns reordering into a no-op.
+ */
+export const getRelationRowId = (row: DisplayManyToManyRelationValueItem, index: number): string =>
+  String(row.originalIndex ?? index)

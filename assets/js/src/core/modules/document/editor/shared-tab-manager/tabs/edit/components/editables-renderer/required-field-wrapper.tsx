@@ -17,13 +17,15 @@ export interface RequiredFieldWrapperProps {
   editableName: string
 }
 
-export const applyRequiredStyling = (editableName: string, iframeDocument?: Document): void => {
-  const editableElement = (iframeDocument ?? document).getElementById(`pimcore_editable_${editableName}`)
+// editableId is the DOM id of the editable container (AbstractDocumentEditableDefinition.id). It can't be
+// derived from the editable name, as core replaces ":" and "." of nested editables (e.g. "content:1.headline")
+export const applyRequiredStyling = (editableId: string, iframeDocument?: Document): void => {
+  const editableElement = (iframeDocument ?? document).getElementById(editableId)
   editableElement?.setAttribute('data-required-active', 'true')
 }
 
-export const removeRequiredStyling = (editableName: string, iframeDocument?: Document): void => {
-  const editableElement = (iframeDocument ?? document).getElementById(`pimcore_editable_${editableName}`)
+export const removeRequiredStyling = (editableId: string, iframeDocument?: Document): void => {
+  const editableElement = (iframeDocument ?? document).getElementById(editableId)
   editableElement?.removeAttribute('data-required-active')
 }
 

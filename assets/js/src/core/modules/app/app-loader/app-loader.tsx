@@ -19,20 +19,23 @@ import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/e
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { useTranslationLoader } from './loader/translation/loader'
 import { useUserLoader } from './loader/user/loader'
-import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
+import { renewMercureAuthorization } from '@Pimcore/modules/app/mercure/mercure-authorization'
 import { useSettingsLoader } from './loader/settings/loader'
+import { useActiveBundlesLoader } from './loader/active-bundles/loader'
 import { useLanguageLoader } from './loader/language/loader'
 import { useBrandThumbnailUrlLoader } from './loader/brand-thumbnail-urls/loader'
 import { useAdminSettingsLoader } from './loader/admin-settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { App } from 'antd'
+import { withDraggableModals } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
+import { IconMotion } from '@Pimcore/modules/app/icon-motion/icon-motion'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -84,14 +87,14 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
   // Register the modal instance for iframe communication
-  modalApi.setModalInstance(studioModal)
+  modalApi.setModalInstance(withDraggableModals(studioModal))
 
   const { isAuthenticated } = useIsAuthenticated()
 
   const { loadPublicTranslations, loadTranslations } = useTranslationLoader()
   const { loadUser } = useUserLoader()
-  const [fetchMercureCookie] = useMercureCreateCookieMutation()
   const { loadSettings } = useSettingsLoader()
+  const { loadActiveBundles } = useActiveBundlesLoader()
   const { loadAvailableLocales } = useLanguageLoader()
   const { loadBrandThumbnailUrls } = useBrandThumbnailUrlLoader()
   const { loadAdminSettings } = useAdminSettingsLoader()
@@ -135,8 +138,12 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         // silently drops every PRIVATE update on the per-user topic
         // (studio-backend-default/user/{id}) for the whole session — until the
         // next reload, where the cookie already exists. Fetch the cookie first,
-        // then start the subscription.
-        await fetchMercureCookie()
+        // then start the subscription. This also teaches the renewal how long the
+        // cookie lives; every later reconnect renews it on its own.
+        await renewMercureAuthorization().catch(() => {
+          // Studio still has to load. Live updates stay off until a reconnect
+          // manages to authorize again, which every reconnect attempts.
+        })
 
         const user = selectCurrentUser(store.getState())
         if (!isNil(user?.id)) {
@@ -146,6 +153,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         await Promise.all([
           loadTranslations(),
           loadSettings(),
+          loadActiveBundles(),
           loadAdminSettings(),
           loadBrandThumbnailUrls(),
           loadAvailableLocales(),
@@ -179,6 +187,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           </div>
         )}
       </AppLoadingContext.Provider>
+
+      <IconMotion />
     </>
   )
 }

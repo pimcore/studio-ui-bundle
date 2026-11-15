@@ -20,20 +20,20 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 const fetchingDrafts = new Map<number, boolean>()
 
 interface UseDataObjectDraftFetcherReturn {
-  updateDataObjectDraft: (id: number, forceRefetch?: boolean) => Promise<void>
+  updateDataObjectDraft: (id: number, forceRefetch?: boolean, preserveActiveTab?: string | null) => Promise<void>
 }
 
 export const useDataObjectDraftFetcher = (): UseDataObjectDraftFetcherReturn => {
   const dispatch = useAppDispatch()
 
-  const updateDataObjectDraft = async (id: number, forceRefetch: boolean = false): Promise<void> => {
+  const updateDataObjectDraft = async (id: number, forceRefetch: boolean = false, preserveActiveTab?: string | null): Promise<void> => {
     if (fetchingDrafts.get(id) === true && !forceRefetch) {
       return
     }
 
     fetchingDrafts.set(id, true)
     try {
-      const { data: dataObjectData, error } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }, { forceRefetch }))
+      const { data: dataObjectData, error } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }, { forceRefetch, subscribe: false }))
 
       if (!isUndefined(error)) {
         trackError(new ApiError(error))
@@ -51,7 +51,8 @@ export const useDataObjectDraftFetcher = (): UseDataObjectDraftFetcherReturn => 
           changes: {},
           modifiedCells: {},
           modifiedObjectData: {},
-          ...initialTabsStateValue
+          ...initialTabsStateValue,
+          activeTab: preserveActiveTab ?? initialTabsStateValue.activeTab
         }
 
         dispatch(dataObjectReceived(mergedDataObjectData))

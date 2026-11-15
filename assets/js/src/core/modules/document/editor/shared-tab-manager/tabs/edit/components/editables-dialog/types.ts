@@ -29,4 +29,5 @@ export interface DialogConfigItem {
   items?: DialogConfigItem[]
   label?: string
   name?: string
+  description?: string | null
 }

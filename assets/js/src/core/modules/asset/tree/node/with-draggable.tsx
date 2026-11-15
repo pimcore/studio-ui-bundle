@@ -12,13 +12,17 @@ import React, { type ReactElement, type Ref, type ComponentProps, forwardRef } f
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type Asset } from '../../asset-api-slice-enhanced'
 import { type TreeNode } from '@Pimcore/components/element-tree/node/tree-node'
-import { isString } from 'lodash'
+import { isString, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
+import { useElementDragInfo } from '@Pimcore/components/element-tree/hooks/use-element-drag-info'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
   const DraggableNodeContent = (props: ComponentProps<typeof TreeNode>, ref: Ref<HTMLDivElement>): ReactElement => {
     const metaData: Asset | undefined = props.metaData?.asset
     const { t } = useTranslation()
+    const title = isString(metaData?.filename) && metaData?.filename !== '' ? metaData?.filename : t('home')
+    const resolveDragInfo = useElementDragInfo({ node: props, elementType: elementTypes.asset, title })
 
     if (props.metaData?.asset === undefined) {
       return (
@@ -29,17 +33,18 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const title = isString(metaData?.filename) && metaData?.filename !== '' ? metaData?.filename : t('home')
-
     return (
-      <Draggable
-        info={ { icon: props.icon, title, type: 'asset', data: { ...metaData } } }
-      >
-        <Component
-          { ...props }
-          ref={ ref }
-        />
-      </Draggable>
+      <Component
+        { ...props }
+        ref={ ref }
+        wrapNode={ (children) => (
+          <Draggable
+            info={ resolveDragInfo }
+          >
+            {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
+          </Draggable>
+        ) }
+      />
     )
   }
 

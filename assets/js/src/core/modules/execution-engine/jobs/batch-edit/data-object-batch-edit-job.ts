@@ -9,17 +9,18 @@
  */
 
 import { AbstractBatchEditJob, type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
+import { buildPatchData } from '@Pimcore/modules/data-object/listing/batch-actions/batch-edit-modal/utils/build-patch-data'
 
 export interface DataObjectBatchEditJobOptions extends AbstractBatchEditJobOptions {
   patchObjectsByIds: (args: any) => Promise<any>
   selectedRowsIds: number[]
-  values: any
+  values: Record<string, unknown>
 }
 
 export class DataObjectBatchEditJob extends AbstractBatchEditJob {
   private readonly patchObjectsByIds: (args: any) => Promise<any>
   private readonly selectedRowsIds: number[]
-  private readonly values: any
+  private readonly values: Record<string, unknown>
 
   constructor (options: DataObjectBatchEditJobOptions) {
     super(options)
@@ -33,7 +34,7 @@ export class DataObjectBatchEditJob extends AbstractBatchEditJob {
       body: {
         data: this.selectedRowsIds.map((rowId) => ({
           id: rowId,
-          editableData: this.values
+          ...buildPatchData(this.values)
         }))
       }
     })

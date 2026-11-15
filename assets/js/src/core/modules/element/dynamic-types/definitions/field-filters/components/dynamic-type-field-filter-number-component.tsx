@@ -15,13 +15,9 @@ import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { NumberFilterSettingValue } from '../utils/filter-setting-values'
 
-export enum NumberFilterSettingValue {
-  IS = 'is',
-  BETWEEN = 'between',
-  LESS = 'less',
-  MORE = 'more'
-}
+export { NumberFilterSettingValue } from '../utils/filter-setting-values'
 
 export interface NumberValue {
   setting: NumberFilterSettingValue
@@ -119,9 +115,9 @@ export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFil
       gap="extra-small"
     >
       <Select
-        defaultValue={ NumberFilterSettingValue.IS }
         onChange={ (value: NumberFilterSettingValue) => { handleSettingChange(value) } }
         options={ SETTING_OPTIONS }
+        value={ currentSetting }
         width={ currentSetting === NumberFilterSettingValue.MORE ? 100 : 90 }
       />
 

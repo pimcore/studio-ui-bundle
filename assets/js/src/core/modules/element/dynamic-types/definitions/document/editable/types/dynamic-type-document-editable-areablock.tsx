@@ -25,6 +25,11 @@ export interface AreablockEditableDefinition extends Omit<AbstractDocumentEditab
 export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEditableAbstract {
   id: string = 'areablock'
 
+  // Bricks are rendered by the reload; keys and positions are read from that DOM.
+  canDeferReloadOnChange (props: AreablockEditableDefinition): boolean {
+    return false
+  }
+
   getEditableComponent (): React.ComponentType<Omit<AreablockEditableProps, 'renderTrigger'>> {
     return WithAreablockRenderQuery
   }

@@ -11,16 +11,29 @@
 import React from 'react'
 import { Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { defineFilter, type FilterControlProps } from '@Pimcore/components/filters'
+import { defineFilter, useFilterCommitOptional, type FilterControlProps } from '@Pimcore/components/filters'
 import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
+import { useStyles } from './checkbox-filter.styles'
 
 const DirectChildrenControl = ({ value, onChange }: FilterControlProps<boolean>): React.JSX.Element => {
   const { t } = useTranslation()
+  const commit = useFilterCommitOptional()
+  const { styles } = useStyles()
+
+  /**
+   * Ticking the box is the whole interaction, so it applies itself instead of waiting for
+   * "Apply". The draft write below lands in the same render, hence the explicit `committed`.
+   */
+  const onCheckboxChange = (checked: boolean): void => {
+    onChange(checked)
+    commit?.({ directChildren: checked })
+  }
 
   return (
     <Checkbox
       checked={ value }
-      onChange={ (e) => { onChange(e.target.checked) } }
+      className={ styles.checkbox }
+      onChange={ (e) => { onCheckboxChange(e.target.checked) } }
     >
       {t('element.sidebar.filter.only-direct-children')}
     </Checkbox>

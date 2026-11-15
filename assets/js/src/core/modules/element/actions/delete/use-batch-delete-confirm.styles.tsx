@@ -12,7 +12,9 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token }) => ({
   warningText: {
-    color: token.Colors.Brand.Warning.colorWarningText
+    color: token.Colors.Brand.Warning.colorWarningText,
+    // translations may carry line breaks (e.g. the restore note on its own line)
+    whiteSpace: 'pre-line'
   },
   pathList: {
     maxHeight: 200,

@@ -11,7 +11,7 @@
 /* eslint-disable max-lines */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { useGridConfig as useTabGridConfig } from './hooks/use-grid-config'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { EditView } from './views/edit-view'
@@ -28,7 +28,10 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import { type GridColumnRequest, useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type GridColumnRequest, type GridFilter, useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { prepareFieldFilters, useAppliedFiltersOptional, useElementFilterContext } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
+import { normalizeSavedGridFilter } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/configuration-layer/components/column-config-loader/restore-field-filters'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
@@ -36,6 +39,7 @@ import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dyn
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { prepareGridConfigColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/prepare-grid-config-column'
 import { Form } from '@sdk/components'
+import { applyColumnConfigurationDraft, buildColumnConfigurationDraft, withoutSearchModeDraftColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
 
 enum ViewState {
   Edit = 'edit',
@@ -44,7 +48,7 @@ enum ViewState {
 }
 
 const prepareColumns = (columns: AvailableColumn[]): GridColumnRequest[] => {
-  return columns.map((column) => ({
+  return withoutSearchModeDraftColumns(columns).map((column) => ({
     ...prepareGridConfigColumn(column),
     type: column.type,
     config: (column.__meta?.advancedColumnConfig ?? column.config) as GridColumnRequest['config']
@@ -54,7 +58,7 @@ const prepareColumns = (columns: AvailableColumn[]): GridColumnRequest[] => {
 export const GridConfigInner = (): React.JSX.Element => {
   const { useElementId } = useSettings()
   const { availableColumns, getAvailableColumnsTree, getAdvancedColumnTemplate } = useAvailableColumns()
-  const { selectedColumns, setSelectedColumns } = useSelectedColumns()
+  const { visibleColumns, setSelectedColumns, isSearchModeColumn, updateSearchModeColumnPlacements } = useSelectedColumns()
   const { columns, setColumns, addColumn, addColumns } = useTabGridConfig()
   const { getId } = useElementId()
   const userData = useUser()
@@ -77,6 +81,43 @@ export const GridConfigInner = (): React.JSX.Element => {
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useDataObjectSaveGridConfigurationMutation()
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useDataObjectUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useDataObjectDeleteGridConfigurationByConfigurationIdMutation()
+
+  const appliedFiltersStore = useAppliedFiltersOptional()
+  const elementFilterContext = useElementFilterContext()
+
+  /**
+   * Returns undefined when the generalFilters decorator isn't mounted, since the current
+   * filter state can't be computed without it.
+   */
+  const buildFilterPayload = (): GridFilter | undefined => {
+    if (isUndefined(appliedFiltersStore)) {
+      return undefined
+    }
+
+    return {
+      page: 1,
+      pageSize: 0,
+      includeDescendants: false,
+      columnFilters: prepareFieldFilters((appliedFiltersStore.values.fieldFilters ?? []) as FieldFilter[], elementFilterContext)
+    }
+  }
+
+  /**
+   * The save/update API clears a template's saved filter whenever saveFilter is false - it's
+   * not a "leave unchanged" flag. So when generalFilters isn't mounted and buildFilterPayload
+   * can't compute the current filter state, fall back to the source config's own
+   * saveFilter/filter (the template being updated, or the one being cloned via "save as new")
+   * instead of erasing it.
+   */
+  const buildFilterFields = (config: GridConfigData['gridConfig']): { saveFilter: boolean, filter: GridFilter | undefined } => {
+    const filterPayload = buildFilterPayload()
+
+    if (!isUndefined(filterPayload)) {
+      return { saveFilter: true, filter: filterPayload }
+    }
+
+    return { saveFilter: config?.saveFilter ?? false, filter: normalizeSavedGridFilter(config?.filter) }
+  }
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = Form.useForm()
@@ -112,15 +153,14 @@ export const GridConfigInner = (): React.JSX.Element => {
     return []
   }, [data])
 
+  // re-syncs on apply and when the applied search mode adds or drops its columns
   useEffect(() => {
-    setColumns(selectedColumns.map(column => {
-      return {
-        ...column.originalApiDefinition!,
-        locale: column?.locale,
-        width: column.width
-      }
-    }) as AvailableColumn[])
-  }, [selectedColumns])
+    setColumns(buildColumnConfigurationDraft(visibleColumns, isSearchModeColumn, (column): AvailableColumn => ({
+      ...column.originalApiDefinition as AvailableColumn,
+      locale: column?.locale,
+      width: column.width
+    })))
+  }, [visibleColumns])
 
   function onClassificationStoreUpdate (data): void {
     const fieldDefinition = data.modalContext
@@ -198,6 +238,8 @@ export const GridConfigInner = (): React.JSX.Element => {
       return
     }
 
+    const { saveFilter, filter } = buildFilterFields(gridConfig)
+
     fetchUpdateGridConfig({
       configurationId: gridConfig.id!,
       body: {
@@ -209,7 +251,8 @@ export const GridConfigInner = (): React.JSX.Element => {
         shareGlobal: gridConfig.shareGlobal,
         sharedRoles: gridConfig.sharedRoles,
         sharedUsers: gridConfig.sharedUsers,
-        saveFilter: false,
+        saveFilter,
+        filter,
         pageSize: 0
       }
     }).catch((error) => {
@@ -232,6 +275,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Update && isSavedConfiguration) {
+      const { saveFilter, filter } = buildFilterFields(gridConfig)
+
       fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
         body: {
@@ -243,7 +288,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           shareGlobal: values.shareGlobally,
           sharedRoles: gridConfig.sharedRoles,
           sharedUsers: gridConfig.sharedUsers,
-          saveFilter: false,
+          saveFilter,
+          filter,
           pageSize: 0
         }
       }).catch((error) => {
@@ -256,6 +302,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Save) {
+      const { saveFilter, filter } = buildFilterFields(gridConfig)
+
       fetchSaveGridConfig({
         classId: selectedClassDefinition!.id,
         body: {
@@ -267,7 +315,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           shareGlobal: values.shareGlobally,
           sharedRoles: gridConfig?.sharedRoles,
           sharedUsers: gridConfig?.sharedUsers,
-          saveFilter: false,
+          saveFilter,
+          filter,
           pageSize: 0
         }
       }).catch((error) => {
@@ -283,10 +332,12 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
   }
 
-  const onCancelClick = (): void => { setColumns(selectedColumns.map(column => ({ ...column.originalApiDefinition!, width: column.width })) as AvailableColumn[]) }
+  const onCancelClick = (): void => {
+    setColumns(buildColumnConfigurationDraft(visibleColumns, isSearchModeColumn, (column): AvailableColumn => ({ ...column.originalApiDefinition as AvailableColumn, width: column.width })))
+  }
 
   const onApplyClick = (): void => {
-    setSelectedColumns(columns.map(column => {
+    applyColumnConfigurationDraft(columns, column => {
       return {
         key: column.key,
         locale: column.locale === null && column.localizable ? undefined : column.locale,
@@ -301,7 +352,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         width: column.width,
         originalApiDefinition: column
       }
-    }))
+    }, setSelectedColumns, updateSearchModeColumnPlacements)
   }
 
   if (gridConfigIsLoading || isDeleting) {

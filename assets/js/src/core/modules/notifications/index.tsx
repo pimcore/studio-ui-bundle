@@ -12,36 +12,30 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { NotificationsContainer } from './notifications-container'
-import { type WidgetManagerTabConfig } from '../widget-manager/widget-manager-slice'
+import { NotificationsWidget } from './notifications-widget'
 import { type BackgroundProcessor } from '../background-processor/services/background-processor'
 import { DemoProcess } from './process/demo-process'
 import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
 import { type ComponentRegistry } from '../app/component-registry/component-registry'
+import { contextMenuConfig } from '../app/context-menu-registry/context-menu-config'
+import { type ContextMenuRegistryInterface } from '../app/context-menu-registry/context-menu-registry'
+import { notificationsUserMenuItemProvider } from './user-menu-item'
 import { NotificationPopup } from './notification-popup/notification-popup'
-import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { type DynamicTypeNotificationChannelRegistry } from './dynamic-types/registry/dynamic-type-notification-channel-registry'
+import { type DynamicTypeAbstractNotificationChannel } from './dynamic-types/definitions/dynamic-type-abstract-notification-channel'
 
-export const NOTIFICATIONS: WidgetManagerTabConfig = {
-  component: 'notifications',
-  name: 'Notifications',
-  id: 'notifications',
-  permission: UserPermission.Notifications,
-  config: {
-    translationKey: 'notifications.label',
-    icon: {
-      type: 'name',
-      value: 'notification-read'
-    }
-  }
-}
+import { NOTIFICATIONS } from './widget-configs'
+
+export { NOTIFICATIONS } from './widget-configs'
 
 moduleSystem.registerModule({
   onInit: () => {
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
+    // The inbox and the subscription preferences are sections of this one widget.
     widgetRegistryService.registerWidget({
       name: 'notifications',
-      component: NotificationsContainer
+      component: NotificationsWidget
     })
 
     staticWidgetRestorer.registerStaticWidget(NOTIFICATIONS)
@@ -52,7 +46,23 @@ moduleSystem.registerModule({
       component: NotificationPopup
     })
 
+    container
+      .get<ContextMenuRegistryInterface>(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry'])
+      .registerToSlot(contextMenuConfig.userMenu.name, notificationsUserMenuItemProvider)
+
     const BackgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     BackgroundProcessor.registerProcess(new DemoProcess())
+
+    // Presentation for the channels shipped here; a bundle registers its own the same way.
+    const channelRegistry = container.get<DynamicTypeNotificationChannelRegistry>(
+      serviceIds['DynamicTypes/NotificationChannelRegistry']
+    )
+
+    channelRegistry.registerDynamicType(
+      container.get<DynamicTypeAbstractNotificationChannel>(serviceIds['DynamicTypes/NotificationChannel/Popup'])
+    )
+    channelRegistry.registerDynamicType(
+      container.get<DynamicTypeAbstractNotificationChannel>(serviceIds['DynamicTypes/NotificationChannel/Email'])
+    )
   }
 })

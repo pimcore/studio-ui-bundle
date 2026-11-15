@@ -21,10 +21,16 @@ import { isNull } from 'lodash'
 
 export interface AbstractDownloadJobOptions {
   action: () => Promise<number>
+  /**
+   * Names what is being exported (e.g. the folder). It is added to the job title so that notifications of
+   * parallel jobs can be told apart. Not available when a job is rehydrated after a page reload.
+   */
+  context?: string
 }
 
 interface BuildHandlerOptions {
   jobRunId: number
+  context?: string
   hasChildJob?: boolean
   startAtStep?: number
   ancestorJobRunIds?: number[]
@@ -43,6 +49,7 @@ export abstract class AbstractDownloadJob implements JobInterface {
     if (!isNull(jobRunId)) {
       messageBus.registerHandler(this.createHandler({
         jobRunId,
+        context: this.options.context,
         hasChildJob: this.usesChildJob(),
         onRetry: async () => { await this.run(options) }
       }))
@@ -79,7 +86,7 @@ export abstract class AbstractDownloadJob implements JobInterface {
     }
   }
 
-  protected static getTitle (): string { return '' }
+  protected static getTitle (context?: string): string { return '' }
   protected static getDownloadUrl (): string | null { return null }
 
   protected static buildHandler (options: BuildHandlerOptions): MessageBusJobHandler {
@@ -87,7 +94,7 @@ export abstract class AbstractDownloadJob implements JobInterface {
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
       ancestorJobRunIds: options.ancestorJobRunIds,
-      title: this.getTitle(),
+      title: this.getTitle(options.context),
       stepTracker: options.hasChildJob === true
         ? new ChildJobStepTracker({ totalSteps: 2, startAtStep: options.startAtStep })
         : new DefaultStepTracker(),

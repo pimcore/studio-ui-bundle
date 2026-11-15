@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type ModalUploadProps } from '../../modal-upload'
 import { useUploadModal } from '../../hooks/use-upload-modal'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export type ModalUploadButtonProps = ModalUploadProps & {
   showMaxItemsError?: boolean
@@ -27,7 +28,10 @@ export const ModalUploadButton = (props: ModalUploadButtonProps): React.JSX.Elem
 
   if (props.showMaxItemsError === true) {
     return (
-      <Tooltip title={ t('upload') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('upload') }
+      >
         <IconButton
           icon={ { value: 'upload-cloud' } }
           onClick={ () => alertModal.warn({
@@ -40,7 +44,10 @@ export const ModalUploadButton = (props: ModalUploadButtonProps): React.JSX.Elem
   }
 
   return (
-    <Tooltip title={ t('upload') }>
+    <Tooltip
+      mouseEnterDelay={ actionTooltipDelay }
+      title={ t('upload') }
+    >
       <IconButton
         icon={ { value: 'upload-cloud' } }
         onClick={ () => { triggerUpload(props) } }

@@ -27,7 +27,7 @@ export const useStyles = createStyles(({ css, token }) => {
       &:before {
         content: '';
         display: block;
-        margin-bottom: 10px;
+        margin-bottom: ${token.marginXS}px;
         width: 100%;
         height: 1px;
         background-color: ${token.colorSplit};

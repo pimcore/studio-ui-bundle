@@ -15,6 +15,7 @@ import {
   DynamicTypeFieldFilterObjectAdapterComponent,
   type DynamicTypeFieldFilterObjectAdapterProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-object-adapter'
+import { MultiValueFilterSupportProvider } from '../../utils/multi-value-filter-support'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { container, serviceIds } from '@sdk/app'
 import { type DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
@@ -28,8 +29,11 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterObjectAdapterProps): ReactElement<DynamicTypeFieldFilterObjectAdapterProps> {
+    // The classification store filter only takes a single string, whatever the host supports.
     return (
-      <DynamicTypeFieldFilterObjectAdapterComponent { ...props } />
+      <MultiValueFilterSupportProvider supported={ false }>
+        <DynamicTypeFieldFilterObjectAdapterComponent { ...props } />
+      </MultiValueFilterSupportProvider>
     )
   }
 
@@ -50,10 +54,10 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
 
     const splittedType = filterType.split('.')
     splittedType[0] = 'classificationstore'
-    filter.type = splittedType.join('.')
 
     return {
       ...filter,
+      type: splittedType.join('.'),
       filterValue: {
         value: subTypeFilter.filterValue,
         keyId: filter.meta.keyId,

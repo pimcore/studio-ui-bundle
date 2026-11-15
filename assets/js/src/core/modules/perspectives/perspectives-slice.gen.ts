@@ -241,6 +241,8 @@ export type RelatedElementData = {
     fullPath: string;
     /** Is the element published */
     isPublished: boolean | null;
+    /** Whether the current user is allowed to view the element */
+    hasViewAccess: boolean;
 };
 export type ElementTreeWidget = WidgetConfig & {
     /** Context Permissions */

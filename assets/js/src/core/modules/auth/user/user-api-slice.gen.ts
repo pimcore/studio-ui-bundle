@@ -61,6 +61,19 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
                 providesTags: ["User Management"],
             }),
+            userGetObjectDependencies: build.query<
+                UserGetObjectDependenciesApiResponse,
+                UserGetObjectDependenciesApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/${queryArg.id}/object-dependencies`,
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                    },
+                }),
+                providesTags: ["User Management"],
+            }),
             userGetAvailablePermissions: build.query<
                 UserGetAvailablePermissionsApiResponse,
                 UserGetAvailablePermissionsApiArg
@@ -109,6 +122,26 @@ const injectedRtkApi = api
                     body: queryArg.tokenLink,
                 }),
                 providesTags: ["User Management"],
+            }),
+            userTwoFactorConfirm: build.mutation<UserTwoFactorConfirmApiResponse, UserTwoFactorConfirmApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/two-factor/confirm`,
+                    method: "POST",
+                    body: queryArg.twoFactorCode,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
+            userTwoFactorDisable: build.mutation<UserTwoFactorDisableApiResponse, UserTwoFactorDisableApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/user/two-factor`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
+            userTwoFactorResetById: build.mutation<UserTwoFactorResetByIdApiResponse, UserTwoFactorResetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}/two-factor`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
+            userTwoFactorSetup: build.mutation<UserTwoFactorSetupApiResponse, UserTwoFactorSetupApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/user/two-factor/setup`, method: "POST" }),
+                invalidatesTags: ["User Management"],
             }),
             userUpdateActivePerspective: build.mutation<
                 UserUpdateActivePerspectiveApiResponse,
@@ -221,6 +254,19 @@ export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default k
     items: KeyBindingForAUser[];
 };
 export type UserDefaultKeyBindingsApiArg = void;
+export type UserGetObjectDependenciesApiResponse =
+    /** status 200 Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body. */ {
+        totalItems: number;
+        items: DependencyToAnObject[];
+    };
+export type UserGetObjectDependenciesApiArg = {
+    /** Id of the user */
+    id: number;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+};
 export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
     totalItems: number;
     items: UserPermission[];
@@ -262,6 +308,20 @@ export type UserTokenLinkGetApiArg = {
     id: number;
     tokenLink: TokenLink;
 };
+export type UserTwoFactorConfirmApiResponse = unknown;
+export type UserTwoFactorConfirmApiArg = {
+    twoFactorCode: TwoFactorCode;
+};
+export type UserTwoFactorDisableApiResponse = unknown;
+export type UserTwoFactorDisableApiArg = void;
+export type UserTwoFactorResetByIdApiResponse = unknown;
+export type UserTwoFactorResetByIdApiArg = {
+    /** Id of the User */
+    id: number;
+};
+export type UserTwoFactorSetupApiResponse =
+    /** status 200 The new secret, its otpauth URI and the number of digits in a code. */ TwoFactorSetup;
+export type UserTwoFactorSetupApiArg = void;
 export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
     /** Set active perspective by Id */
@@ -396,6 +456,8 @@ export type UserInformation = {
     language: string;
     /** Locale for dateTime */
     dateTimeLocale: string | null;
+    /** Theme of the User */
+    theme: string;
     /** Welcome Screen */
     welcomeScreen: boolean;
     /** Memorize Tabs */
@@ -418,8 +480,6 @@ export type UserInformation = {
     activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
-    /** Theme of the User */
-    theme: string;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -474,8 +534,10 @@ export type DependencyToAnObject = {
 export type UserObjectDependencies = {
     /** Dependencies to objects */
     dependencies: DependencyToAnObject[];
-    /** If is has hidden dependencies */
+    /** If it has hidden dependencies */
     hasHidden: boolean;
+    /** Total number of objects referencing this user, including ones the caller may not view */
+    totalItems?: number;
 };
 export type User = {
     /** AdditionalAttributes */
@@ -514,6 +576,8 @@ export type User = {
     language: string;
     /** Locale for dateTime */
     dateTimeLocale?: string | null;
+    /** Theme of the User */
+    theme: string;
     /** Timestamp of the last login */
     lastLogin?: number | null;
     /** Memorize Tabs */
@@ -542,8 +606,6 @@ export type User = {
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
-    /** Theme of the User */
-    theme: string;
 };
 export type User2 = {
     /** Email of the User */
@@ -629,6 +691,22 @@ export type TokenLink = {
     /** Token login URL */
     tokenLoginUrl: string;
 };
+export type TwoFactorCode = {
+    /** Code */
+    code: string;
+};
+export type TwoFactorSetup = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Secret, for manual entry */
+    secret: string;
+    /** otpauth URI to show as a QR code */
+    otpauthUri: string;
+    /** Number of digits in a code */
+    digits: number;
+};
 export type UserProfile = {
     /** Firstname of the User */
     firstname: string | null;
@@ -663,12 +741,17 @@ export const {
     useUserGetImageQuery,
     useUserImageDeleteByIdMutation,
     useUserDefaultKeyBindingsQuery,
+    useUserGetObjectDependenciesQuery,
     useUserGetAvailablePermissionsQuery,
     useUserGetCollectionQuery,
     useUserListWithPermissionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
     useUserTokenLinkGetQuery,
+    useUserTwoFactorConfirmMutation,
+    useUserTwoFactorDisableMutation,
+    useUserTwoFactorResetByIdMutation,
+    useUserTwoFactorSetupMutation,
     useUserUpdateActivePerspectiveMutation,
     useUserUpdatePasswordByIdMutation,
     useUserUpdateProfileMutation,

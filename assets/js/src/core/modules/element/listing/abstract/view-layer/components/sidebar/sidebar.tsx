@@ -13,7 +13,7 @@ import { Sidebar as BaseSidebar } from '@Pimcore/components/sidebar/sidebar'
 import { useSettings } from '../../../settings/use-settings'
 
 export const Sidebar = (): React.JSX.Element => {
-  const { useSidebarOptions } = useSettings()
+  const { useSidebarOptions, defaultSidebarTab } = useSettings()
   const { getProps } = useSidebarOptions()
 
   const hasEntries = getProps().entries.length > 0
@@ -22,10 +22,11 @@ export const Sidebar = (): React.JSX.Element => {
     <>
       { hasEntries && (
         <BaseSidebar
+          defaultActiveTab={ defaultSidebarTab }
           sizing="large"
           { ...getProps() }
         />
       )}
     </>
-  ), [getProps()])
+  ), [getProps(), defaultSidebarTab])
 }

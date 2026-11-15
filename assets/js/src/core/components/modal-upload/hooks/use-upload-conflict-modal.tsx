@@ -19,10 +19,70 @@ import { Box, Flex } from '@sdk/components'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { UploadConflictAction } from './use-upload-conflict-handler'
 
+export interface UploadConflictCheckResult {
+  exists: boolean
+  id?: number
+  error?: unknown
+}
+
 export interface UploadConflictModalResult {
-  checkFileExists: (fileName: string, folderId: number) => Promise<{ exists: boolean, id?: number, error?: unknown }>
+  checkFileExists: (fileName: string, folderId: number) => Promise<UploadConflictCheckResult>
+  checkFilesExist: (fileNames: string[], folderId: number) => Promise<UploadConflictCheckResult[]>
   askUserOverwrite: (fileName: string) => Promise<UploadConflictAction>
+  /** Resolves to `null` when the user wants to decide file by file instead. */
+  askUserOverwriteAll: (fileNames: string[]) => Promise<UploadConflictAction | null>
   resetApplyToAll: () => void
+}
+
+/** File names listed in the summary prompt before the rest is collapsed into a count. */
+const LISTED_FILE_NAMES = 5
+
+const UploadConflictSummary = ({ fileNames }: { fileNames: string[] }): React.JSX.Element => {
+  const { t } = useTranslation()
+  const hiddenFileNames = fileNames.length - LISTED_FILE_NAMES
+
+  return (
+    <>
+      <Box margin={ { bottom: 'small' } }>
+        {t('asset.upload.files-exist.message', { total: fileNames.length })}
+      </Box>
+      <Box margin={ { bottom: 'small' } }>
+        {fileNames.slice(0, LISTED_FILE_NAMES).map((fileName, index) => (
+          <div key={ `${fileName}-${index}` }>{fileName}</div>
+        ))}
+        {hiddenFileNames > 0 && (
+          <div>{t('asset.upload.files-exist.more', { hidden: hiddenFileNames })}</div>
+        )}
+      </Box>
+    </>
+  )
+}
+
+const UploadConflictSummaryActions = (
+  { onAction }: { onAction: (action: UploadConflictAction | null) => void }
+): React.JSX.Element => {
+  const { t } = useTranslation()
+
+  return (
+    <Flex
+      gap={ { x: 0, y: 'small' } }
+      justify="flex-end"
+      wrap="wrap"
+    >
+      <Button onClick={ () => { onAction(null) } }>
+        {t('asset.upload.review-each')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.SKIP) } }>
+        {t('asset.upload.skip-all')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.KEEP) } }>
+        {t('asset.upload.keep-both-all')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.OVERWRITE) } }>
+        {t('asset.upload.overwrite-all')}
+      </Button>
+    </Flex>
+  )
 }
 
 export const useUploadConflictModal = (): UploadConflictModalResult => {
@@ -32,14 +92,57 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
 
   const applyToAllRef = useRef<{ action: UploadConflictAction | null }>({ action: null })
 
+  /**
+   * Resolves one batch of file names against a single target folder. The result
+   * order mirrors `fileNames`, so callers can map results back positionally.
+   * A failed batch reports the error for every file it contained.
+   */
+  const checkFilesExist = async (
+    fileNames: string[],
+    folderId: number
+  ): Promise<UploadConflictCheckResult[]> => {
+    const { data, error } = await dispatch(
+      assetApi.endpoints.assetUploadBatchInfo.initiate(
+        { parentId: folderId, body: { fileNames } },
+        { forceRefetch: true, subscribe: false }
+      )
+    )
+
+    if (!isNil(error)) {
+      return fileNames.map(() => ({ exists: false, error }))
+    }
+
+    // A differently sized batch cannot be matched to these files at all.
+    if (data?.items?.length !== fileNames.length) {
+      return fileNames.map(() => ({ exists: false, error: { errorKey: 'error_validation_failed' } }))
+    }
+
+    return data.items.map((item) => {
+      // The name is taken by an asset the user may not see, so it can neither be
+      // overwritten nor uploaded over — surface it as that file's own error.
+      if (item.accessDenied) {
+        return {
+          exists: false,
+          error: { errorKey: 'error_permission_denied' }
+        }
+      }
+
+      if (item.exists && !isNil(item.assetId)) {
+        return { exists: true, id: item.assetId }
+      }
+
+      return { exists: false }
+    })
+  }
+
   const checkFileExists = async (
     fileName: string,
     folderId: number
-  ): Promise<{ exists: boolean, id?: number, error?: unknown }> => {
+  ): Promise<UploadConflictCheckResult> => {
     const { data: uploadInfo, error } = await dispatch(
       assetApi.endpoints.assetUploadInfo.initiate(
         { parentId: folderId, fileName },
-        { forceRefetch: true }
+        { forceRefetch: true, subscribe: false }
       )
     )
 
@@ -76,7 +179,7 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
         icon: (
           <Icon
             options={ { width: 24, height: 24 } }
-            value="warning-circle"
+            value="alert-outline"
           />
         ),
         content: (
@@ -120,9 +223,37 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
     })
   }
 
+  const askUserOverwriteAll = async (fileNames: string[]): Promise<UploadConflictAction | null> => {
+    if (!isNil(applyToAllRef.current.action)) {
+      return applyToAllRef.current.action
+    }
+
+    return await new Promise((resolve) => {
+      const handleAction = (action: UploadConflictAction | null): void => {
+        modalInstance.destroy()
+        resolve(action)
+      }
+
+      const modalInstance = modal.confirm({
+        title: t('asset.upload.files-exist.title'),
+        icon: (
+          <Icon
+            options={ { width: 24, height: 24 } }
+            value="warning-circle"
+          />
+        ),
+        content: <UploadConflictSummary fileNames={ fileNames } />,
+        footer: () => <UploadConflictSummaryActions onAction={ handleAction } />,
+        closable: false,
+        maskClosable: false,
+        keyboard: false
+      })
+    })
+  }
+
   const resetApplyToAll = (): void => {
     applyToAllRef.current.action = null
   }
 
-  return { checkFileExists, askUserOverwrite, resetApplyToAll }
+  return { checkFileExists, checkFilesExist, askUserOverwrite, askUserOverwriteAll, resetApplyToAll }
 }

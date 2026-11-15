@@ -34,7 +34,6 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
     revertableCount,
     paginatedRows,
     currentPage,
-    pageSize,
     totalRows,
     setCurrentPage,
     setPageSize,
@@ -75,8 +74,10 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
           </Flex>
           <Flex align="center">
             <IconButton
+              aria-label={ t('reset') }
               icon={ { value: 'refresh' } }
               onClick={ resetRows }
+              tooltip={ { title: t('reset') } }
             />
             <Divider
               style={ { height: 24 } }
@@ -115,11 +116,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
             columns={ columns }
             dataSource={ paginatedRows }
             pagination={ false }
-            rowClassName={ (record: MergerRow) => {
-              if (record.state === 'pending') return 'row-conflict'
-              if (record.state === 'applied' || record.state === 'reverted') return 'row-applied'
-              return ''
-            } }
+            rowClassName={ (record: MergerRow) => record.state === 'applied' ? '' : 'row-conflict' }
             size="small"
           />
         </Box>

@@ -18,7 +18,10 @@ export const SelectionOverview = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
-    <Content padded>
+    <Content
+      padded
+      padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+    >
       <Title>{t('sidebar.selected_elements')}</Title>
 
       <SelectionGrid />

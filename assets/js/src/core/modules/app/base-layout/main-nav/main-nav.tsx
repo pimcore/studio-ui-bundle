@@ -15,6 +15,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Divider } from '@Pimcore/components/divider/divider'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { useMainNav } from './hooks/use-main-nav'
+import { useNavOpenState } from './hooks/use-nav-open-state'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
@@ -48,18 +49,7 @@ export const MainNav = (): React.JSX.Element => {
   const { input } = useFormModal()
   const { openElementByPathOrId } = openElementHelper()
 
-  const [openKeys, setOpenKeys] = React.useState<string[]>([])
-  const handleOpenState = (key: string): void => {
-    if (key.includes('-')) {
-      const searchKey = key.substring(0, key.length - 1)
-      const newOpenKeys = openKeys.filter(k => !k.startsWith(searchKey))
-      setOpenKeys([...newOpenKeys, key])
-    }
-
-    if (!key.includes('-')) {
-      setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
-    }
-  }
+  const { openKeys, handleOpenState, handleItemPointerEnter, cancelHoverPreview } = useNavOpenState(isOpen)
 
   const renderDivider = (show: boolean | undefined): React.JSX.Element | null => {
     if (show === true) {
@@ -114,6 +104,7 @@ export const MainNav = (): React.JSX.Element => {
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
         data-testid={ `nav-item-${createSafeTestIdString(item.path)}` }
         key={ item.path }
+        onPointerEnter={ (event) => { handleItemPointerEnter(event, index, hasChildren) } }
       >
         {!isUndefined(item.useCustomMainNavItem)
           ? (() => {
@@ -129,6 +120,7 @@ export const MainNav = (): React.JSX.Element => {
                       customMainNavItem.onClick?.()
                       setIsOpen(false)
                     } }
+                    type="button"
                   >
                     {!isUndefined(item.icon) && renderMainNavIcon({ iconValue: item.icon, isExpanded: openKeys.includes(index) })}
 
@@ -144,14 +136,15 @@ export const MainNav = (): React.JSX.Element => {
               <button
                 className={ 'main-nav__list-btn' }
                 data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
-                onClick={ () => {
+                onClick={ (event) => {
                   if (hasChildren) {
-                    handleOpenState(index)
+                    handleOpenState(event, index)
                   } else if (!isUndefined(item.widgetConfig)) {
                     openMainWidget(item.widgetConfig)
                     setIsOpen(false)
                   }
                 } }
+                type="button"
               >
                 {!isUndefined(item.icon) && renderMainNavIcon({ iconValue: item.icon, isExpanded: openKeys.includes(index) })}
                 {!isUndefined(elementWithGroupIcon?.groupIcon) && isUndefined(item.icon) && (
@@ -217,6 +210,7 @@ export const MainNav = (): React.JSX.Element => {
 
     return () => {
       document.removeEventListener('click', handleClickOutside)
+      cancelHoverPreview()
     }
   }, [isOpen])
 
@@ -260,9 +254,7 @@ export const MainNav = (): React.JSX.Element => {
       <IconButton
         data-testid="main-nav-trigger"
         icon={ { value: 'menu' } }
-        onClick={ () => {
-          setIsOpen(!isOpen)
-        } }
+        onClick={ () => { setIsOpen(!isOpen) } }
         type={ 'text' }
       />
 
@@ -282,6 +274,7 @@ export const MainNav = (): React.JSX.Element => {
                 <ul
                   className={ 'main-nav__list main-nav__list--level-0' }
                   data-testid="nav-list-main"
+                  onPointerLeave={ cancelHoverPreview }
                   ref={ navRef }
                 >
                   {navItems.map((item, index) => (

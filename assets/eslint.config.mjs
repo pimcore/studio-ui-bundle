@@ -320,7 +320,6 @@ export default tseslint.config(
       // address in a dedicated cleanup PR
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      'no-unused-vars': 'off',
       // -----------------------------------------------------------------------
       '@typescript-eslint/consistent-type-assertions': ['error', {
         assertionStyle: 'as',

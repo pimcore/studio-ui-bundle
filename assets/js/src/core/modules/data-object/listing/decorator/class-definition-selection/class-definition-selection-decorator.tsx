@@ -14,7 +14,7 @@ import { type IRelationAllowedTypesClassDefinition } from '@Pimcore/modules/elem
 import { withClassDefinitionSelectionLayer } from './configuration-layer/with-class-definition-selection-layer'
 
 export interface ClassDefinitionSelectionDecoratorConfig {
-  classRestriction?: IRelationAllowedTypesClassDefinition['classes']
+  classRestriction?: Exclude<IRelationAllowedTypesClassDefinition['classes'], undefined>
   isResolvingClassDefinitionsBasedOnElementId?: boolean
   showConfigLayer?: boolean
 }

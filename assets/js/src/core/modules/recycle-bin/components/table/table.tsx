@@ -16,8 +16,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
 import { buildTestId } from '@Pimcore/utils/test-id-generator'
 import { formatDateTime } from '@sdk/utils'
-import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
-import React, { useState } from 'react'
+import { createColumnHelper, type RowSelectionState, type SortingState } from '@tanstack/react-table'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecycleBin } from '../../hooks/use-recycle-bin'
 import { type RecycleBin } from '../../recycle-bin-api-slice.gen'
@@ -26,19 +26,19 @@ import { useSelectedRowsContext } from '../../context/selected-items-context'
 
 interface TableProps {
   items: RecycleBin[]
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
 interface RecycleBinWithActions extends RecycleBin {
   actions: React.ReactNode
 }
 
-export const Table = ({ items }: TableProps): React.JSX.Element => {
+export const Table = ({ items, sorting, onSortingChange }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const [restoreLoading, setRestoreLoading] = useState<number[]>([])
-  const [removeLoading, setRemoveLoading] = useState<number[]>([])
   const { restoreItems, removeItems } = useRecycleBin()
-  const { selectedRows, setSelectedRows } = useSelectedRowsContext()
+  const { selectedRows, setSelectedRows, loadingIds, setLoadingIds } = useSelectedRowsContext()
 
   const tableItems = items.map((item) => {
     return {
@@ -55,6 +55,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const columns = [
     columnHelper.accessor('type', {
       header: t('recycle-bin.columns.type'),
+      enableSorting: true,
       cell: ({ row }) => {
         const type = row.original.type
 
@@ -85,6 +86,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('path', {
       header: t('recycle-bin.columns.path'),
+      enableSorting: true,
       meta: {
         editable: false,
         clearable: false,
@@ -102,18 +104,22 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('amount', {
       header: t('recycle-bin.columns.amount'),
-      size: 100
+      size: 100,
+      enableSorting: true
     }),
     columnHelper.accessor('deletedBy', {
       header: t('recycle-bin.columns.deleted-by'),
-      size: 100
+      size: 100,
+      enableSorting: true
     }),
     columnHelper.accessor('date', {
       header: t('recycle-bin.columns.date'),
-      size: 150
+      size: 150,
+      enableSorting: true
     }),
     columnHelper.accessor('actions', {
       header: t('recycle-bin.columns.actions'),
+      enableSorting: false,
       cell: ({ row }): React.JSX.Element => {
         return (
           <Flex
@@ -121,28 +127,32 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             justify='center'
           >
             <IconButton
+              aria-label={ t('recycle-bin.actions.restore') }
               data-testid={ buildTestId(['button', 'restore']) }
               icon={ { value: 'restore' } }
-              loading={ restoreLoading.includes(row.original.id) }
+              loading={ loadingIds.restore.includes(row.original.id) }
               onClick={ () => {
-                setRestoreLoading((prev) => [...prev, row.original.id])
+                setLoadingIds('restore', [row.original.id], true)
                 void restoreItems([row.original], () => {
-                  setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
+                  setLoadingIds('restore', [row.original.id], false)
                 })
               } }
+              tooltip={ { title: t('recycle-bin.actions.restore') } }
               type="link"
             />
 
             <IconButton
+              aria-label={ t('recycle-bin.actions.delete') }
               data-testid={ buildTestId(['button', 'delete']) }
               icon={ { value: 'trash' } }
-              loading={ removeLoading.includes(row.original.id) }
+              loading={ loadingIds.delete.includes(row.original.id) }
               onClick={ () => {
-                setRemoveLoading(prev => [...prev, row.original.id])
+                setLoadingIds('delete', [row.original.id], true)
                 void removeItems([row.original], () => {
-                  setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
+                  setLoadingIds('delete', [row.original.id], false)
                 })
               } }
+              tooltip={ { title: t('recycle-bin.actions.delete') } }
               type="link"
             />
           </Flex>
@@ -158,11 +168,15 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       columns={ columns }
       data={ tableItems }
       enableMultipleRowSelection
+      enableSorting
+      manualSorting
       modifiedCells={ [] }
       onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedRows(row, items) } }
+      onSortingChange={ onSortingChange }
       resizable
       selectedRows={ selectedRows }
       setRowId={ (row) => String(row.id) }
+      sorting={ sorting }
     />
   )
 }

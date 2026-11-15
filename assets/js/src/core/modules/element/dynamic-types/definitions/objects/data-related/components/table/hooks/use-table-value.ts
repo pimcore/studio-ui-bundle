@@ -13,6 +13,8 @@ import { type GridCellReference } from '@Pimcore/components/grid/grid'
 
 export type TableValue = Array<Record<string, string> | string[]>
 
+export type TableInsertPosition = 'before' | 'after' | 'end'
+
 interface UseTableValueProps {
   cols: number | null
   rows: number | null
@@ -30,8 +32,8 @@ interface UseTableValueReturn {
   setActiveCell: (cell: GridCellReference | undefined) => void
   key: number
   emptyValue: () => void
-  newRow: () => void
-  newColumn: () => void
+  newRow: (position?: TableInsertPosition) => void
+  newColumn: (position?: TableInsertPosition) => void
   deleteRow: () => void
   deleteColumn: () => void
   duplicateRow: () => void
@@ -87,23 +89,31 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     }
   }
 
-  const newRow = (): void => {
+  const newRow = (position: TableInsertPosition = 'before'): void => {
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
-    const newRow = createEmptyRow()
+    const row = createEmptyRow()
 
-    if (activeCell?.rowIndex !== undefined) {
-      newValue.splice(activeCell.rowIndex, 0, newRow)
+    if (position !== 'end' && activeCell?.rowIndex !== undefined) {
+      newValue.splice(activeCell.rowIndex + (position === 'after' ? 1 : 0), 0, row)
     } else {
-      newValue.push(newRow)
+      newValue.push(row)
     }
 
     handleChange(newValue as TableValue)
   }
 
-  const newColumn = (): void => {
+  const newColumn = (position: TableInsertPosition = 'before'): void => {
     if (props.columnConfigActivated) return
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
-    newValue.forEach(row => (row as string[]).splice(activeCell?.columnIndex ?? (row as string[]).length, 0, ''))
+
+    newValue.forEach(row => {
+      const cells = row as string[]
+      const insertIndex = position === 'end' || activeCell?.columnIndex === undefined
+        ? cells.length
+        : activeCell.columnIndex + (position === 'after' ? 1 : 0)
+
+      cells.splice(insertIndex, 0, '')
+    })
 
     handleChange(newValue as TableValue)
   }

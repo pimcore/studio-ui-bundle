@@ -9,12 +9,12 @@
  */
 
 import { type ElementType } from '../../../../types/enums/element/element-type'
-import { useAppDispatch } from '@sdk/app'
+import { store, useAppDispatch } from '@sdk/app'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { removeAsset } from '@Pimcore/modules/asset/asset-draft-slice'
-import { removeDataObject } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { removeDataObject, selectDataObjectById } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { useDataObjectDraftFetcher } from '@Pimcore/modules/data-object/hooks/use-data-object-draft-fetcher'
 import { useAssetDraftFetcher } from '@Pimcore/modules/asset/hooks/use-asset-draft-fetcher'
 import { removeDocument } from '@Pimcore/modules/document/document-draft-slice'
@@ -48,6 +48,8 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
       }
       void updateAssetDraft(id, true)
     } else if (elementType === 'data-object') {
+      const currentActiveTab = selectDataObjectById(store.getState(), id)?.activeTab ?? null
+
       dispatch(removeDataObject(id))
       dispatch(
         dataObjectApi.util.invalidateTags(
@@ -55,7 +57,7 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
         )
       )
 
-      void updateDataObjectDraft(id, true)
+      void updateDataObjectDraft(id, true, currentActiveTab)
     } else if (elementType === 'document') {
       dispatch(removeDocument(id))
       dispatch(

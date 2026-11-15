@@ -16,6 +16,22 @@ export const useStlyes = createStyles(({ token, css }) => {
       position: absolute;
       overflow: hidden;
       inset: 0;
+    `,
+    skipLink: css`
+      position: absolute;
+      top: -100%;
+      left: ${token.paddingSM}px;
+      z-index: 9999;
+      padding: ${token.paddingXS}px ${token.paddingSM}px;
+      background: ${token.colorPrimary};
+      color: ${token.colorWhite};
+      border-radius: ${token.borderRadiusSM}px;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:focus {
+        top: ${token.paddingSM}px;
+      }
     `
   }
 }, { hashPriority: 'low' })

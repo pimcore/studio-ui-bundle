@@ -56,30 +56,38 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
             menu={ { items: dropDownItems } }
           >
             <IconButton
+              aria-label={ t('add') }
               icon={ { value: 'new' } }
               size='small'
+              tooltip={ { title: t('add') } }
             />
           </Dropdown>
 
           <IconButton
+            aria-label={ t('move-down') }
             disabled={ disallowReorder }
             icon={ { value: 'chevron-down' } }
             onClick={ () => { operations.move(field, field + 1) } }
             size='small'
+            tooltip={ { title: t('move-down') } }
           />
           <IconButton
+            aria-label={ t('move-up') }
             disabled={ disallowReorder }
             icon={ { value: 'chevron-up' } }
             onClick={ () => { operations.move(field, field - 1) } }
             size='small'
+            tooltip={ { title: t('move-up') } }
           />
         </Space>
 
         <IconButton
+          aria-label={ t('delete') }
           disabled={ disallowDelete }
           icon={ { value: 'trash' } }
           onClick={ () => { operations.remove(field) } }
           size='small'
+          tooltip={ { title: t('delete') } }
         />
       </Split>
     </ToolStrip>

@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 export const NotificationButton = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { jobs } = useJobs()
+  const { visibleJobs: jobs } = useJobs()
   const [notificationApi] = useNotification()
 
   if (jobs.length === 0) {
@@ -42,6 +42,7 @@ export const NotificationButton = (): React.JSX.Element => {
             description: <JobList />
           })
         } }
+        tooltip={ { title: t('jobs.notification.tooltip'), placement: 'right' } }
         type={ 'text' }
       />
     </Badge>

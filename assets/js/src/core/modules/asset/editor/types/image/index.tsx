@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { EditTabContainer } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/edit/edit-container'
 import { type ImageTabManager } from './tab-manager/image-tab-manager'
@@ -16,6 +17,8 @@ import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { store } from '@Pimcore/app/store'
+import { getAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import {
   TAB_CUSTOM_METADATA,
   TAB_EMBEDDED_METADATA,
@@ -46,7 +49,12 @@ moduleSystem.registerModule({
       workspacePermission: 'publish',
       label: 'edit',
       children: <EditTabContainer />,
-      icon: <Icon value={ 'edit-pen' } />
+      icon: <Icon value={ 'edit-pen' } />,
+      hidden: () => {
+        const adminSettings = getAdminSettings(store.getState())
+
+        return !isUndefined(adminSettings) && adminSettings.assets.hide_edit_image
+      }
     })
 
     imageEditorTabManager.register(TAB_EMBEDDED_METADATA)

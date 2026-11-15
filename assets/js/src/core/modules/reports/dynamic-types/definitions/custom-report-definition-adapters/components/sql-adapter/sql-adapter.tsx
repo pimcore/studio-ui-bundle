@@ -101,10 +101,7 @@ export const SqlAdapter = ({ currentData, updateFormData }: ISqlAdapterProps): R
         updatedColumnConfigurations = finalConfig
       }
 
-      updateFormData?.({
-        ...currentData,
-        columnConfigurations: updatedColumnConfigurations
-      })
+      updateFormData?.({ columnConfigurations: updatedColumnConfigurations })
     }
   }, [columnConfigData])
 

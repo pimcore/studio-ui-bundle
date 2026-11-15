@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, Input, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, Input, Select, Switch } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -72,61 +72,14 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('tab-position') }
-        name="tabPosition"
-      >
-        <Select
-          options={ [
-            { label: t('top'), value: 'top' },
-            { label: t('left'), value: 'left' },
-            { label: t('right'), value: 'right' },
-            { label: t('bottom'), value: 'bottom' }
-          ] }
-        />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('maximum-tabs') }
-        name="maxTabs"
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('hide-labels-when-tabs-reached') }
-        name="hideLabelsWhenTabsReached"
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('label-width') }
-        name="labelWidth"
-      >
-        <InputNumber
-          min={ 0 }
-          precision={ 0 }
-        />
-      </Form.Item>
-
-      <Form.Item
-        label={ t('label-align') }
-        name="labelAlign"
-      >
-        <Select
-          options={ [
-            { label: t('left'), value: 'left' },
-            { label: t('top'), value: 'top' }
-          ] }
-        />
-      </Form.Item>
+      {/* The tab settings, labelWidth and labelAlign are deliberately not offered.
+          Studio renders one locale at a time, chosen with the global selector, so
+          the tab settings can never mean anything here. labelWidth and labelAlign
+          cannot be honoured either: Localizedfields uses Layout\Traits\LabelTrait,
+          whose defaults are 100 and 'left', so every class definition sends them
+          and a configured container is indistinguishable from an untouched one.
+          The legacy Admin UI that used to consume them is archived, so offering
+          controls the object editor ignores would only mislead. See #704. */}
     </>
   )
 }

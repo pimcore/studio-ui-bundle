@@ -95,6 +95,9 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     return this.isAllowedInBatchEdit
   }
 
+  // The edit form shows the label after the control on one row (as for a checkbox) instead of above it.
+  labelAfterControl: boolean = false
+
   gridCellEditMode: EditMode = 'default'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'M',
@@ -116,6 +119,15 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
     return this.getObjectDataComponent({ ...props, noteditable: true })
+  }
+
+  /**
+   * Value that makes the backend treat the field as empty, used to give an inherited
+   * field back to its origin object (see RestoreInheritanceLabelExtraProvider).
+   * Override it where the API of the type cannot take null.
+   */
+  getEmptyValue (): unknown {
+    return null
   }
 
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {

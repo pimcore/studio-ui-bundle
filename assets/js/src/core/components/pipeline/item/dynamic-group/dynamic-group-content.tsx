@@ -24,8 +24,8 @@ import { useTranslation } from 'react-i18next'
 export interface DynamicGroupContentProps {
   id: DynamicGroupProps['id']
   dynamicTypeRegistryId: DynamicGroupProps['dynamicTypeRegistryId']
-  showTitle?: DynamicGroupProps['showTitle']
-  translationKeyPrefix?: DynamicGroupProps['translationKeyPrefix']
+  showTitle?: Exclude<DynamicGroupProps['showTitle'], undefined>
+  translationKeyPrefix?: Exclude<DynamicGroupProps['translationKeyPrefix'], undefined>
 }
 
 export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = false, translationKeyPrefix = 'grid.advanced-column' }: DynamicGroupContentProps): React.JSX.Element => {
@@ -112,6 +112,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
             <React.Fragment key={ value.vId }>
               <DynamicGroupItem
                 dynamicTypeRegistryId={ dynamicTypeRegistryId }
+                groupId={ id }
                 id={ index }
               />
             </React.Fragment>
@@ -119,7 +120,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
         </Space>
       </SortableContext>
     </DndContext>
-  ), [memoizedValues, items, onDragEnd, sensors, dynamicTypeRegistryId])
+  ), [memoizedValues, items, onDragEnd, sensors, dynamicTypeRegistryId, id])
 
   return (
     <Box padding={ { x: 'mini', y: 'extra-small' } }>

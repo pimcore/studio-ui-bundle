@@ -9,6 +9,7 @@
  */
 
 import { Flex } from '@Pimcore/components/flex/flex'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
@@ -64,7 +65,8 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
     }),
     columnHelper.accessor('pid', {
       header: t('application-logger.columns.pid'),
-      size: 60
+      size: 60,
+      enableSorting: true
     }),
     columnHelper.accessor('message', {
       header: t('application-logger.columns.message'),
@@ -78,14 +80,16 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
     columnHelper.accessor('translatedPriority', {
       header: t('application-logger.columns.type'),
       size: 60,
-      enableSorting: true
+      // Filterable via the sidebar instead: the cell shows a translated label, so any database
+      // side ordering would follow the enum or the untranslated value, not what is on screen.
+      enableSorting: false
     }),
     columnHelper.accessor('fileObject', {
       header: t('application-logger.columns.file-object'),
       enableSorting: true,
       cell: ({ row }): React.JSX.Element => {
         const column = row.original
-        const fileObjectBasePath = '/pimcore-studio/api/bundle/application-logger/file-object?filePath='
+        const fileObjectBasePath = `${getPrefix()}/bundle/application-logger/file-object?filePath=`
 
         if (isNil(column.fileObject)) {
           return <></>
@@ -105,6 +109,10 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
     }),
     columnHelper.accessor('relatedElementData', {
       header: t('application-logger.columns.related-object'),
+      // Filterable via the sidebar instead. The cell is resolved per user through a permission
+      // and existence checked lookup that empties rows after the query sorted and paged them,
+      // so a sorted run would still show gaps.
+      enableSorting: false,
       cell: ({ row }): React.JSX.Element => {
         const column = row.original
 
@@ -151,10 +159,12 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
             className='w-full'
           >
             <IconButton
+              aria-label={ t('details') }
               icon={ { value: 'expand-01' } }
               onClick={ async () => {
                 openModal(column)
               } }
+              tooltip={ { title: t('details') } }
               type="link"
             />
           </Flex>

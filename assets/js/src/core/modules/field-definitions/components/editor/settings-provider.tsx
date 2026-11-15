@@ -11,10 +11,12 @@
 import { type OptionalModalProps } from '@Pimcore/components/modal/factory/modal-factory'
 import { LayoutProvider as DefaultLayoutProvider, useLayout as useDefaultLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
-import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
+import { type FieldDefinition, type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
+import { type TreeDataItem } from '@sdk/components'
 import React, { type ComponentType, createContext, useContext, useMemo } from 'react'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
+import { type UnknownAction } from '@reduxjs/toolkit'
 
 export interface UseDetailLayoutAccessorReturn {
   accessor: (detailData: Record<string, unknown>) => Layout | undefined
@@ -27,7 +29,18 @@ export interface ImportExportConfig {
   acceptFileTypes?: string
   acceptMimeTypes?: string[]
   successMessageKey?: string
+  // The upload posts straight to getImportUrl and never passes through an RTK Query
+  // mutation, so nothing invalidates the cache for it. The whole action rather than a
+  // tag list: only the module that owns the endpoints knows which api has those tag
+  // types registered, and this editor is shared by modules that do not.
+  getImportInvalidation?: (id: number | string) => UnknownAction
 }
+
+/** the last word on a layout-tree item before it renders: add a status class, wrap the title */
+export type TreeItemDecorator = (
+  item: TreeDataItem,
+  context: { fieldDefinition: FieldDefinition | undefined, path: string[] }
+) => TreeDataItem
 
 export interface ISettingsContext {
   AddModal?: ComponentType<OptionalModalProps>
@@ -36,13 +49,16 @@ export interface ISettingsContext {
   useDetailLayoutQuery?: AnyQueryHook
   useDetailLayoutAccessor?: () => UseDetailLayoutAccessorReturn
   useDetailGeneralSettingsQuery: AnyQueryHook
-  useDetailUpdateMutation: AnyMutationHook
+  useDetailUpdateMutation?: AnyMutationHook
   LayoutProvider: typeof DefaultLayoutProvider
   useLayout: typeof useDefaultLayout
   GeneralSettingsFormFields: React.ComponentType
   fieldDefinitionRegistry: DynamicTypeFieldDefinitionRegistry
   importExportConfig?: ImportExportConfig
   hideTreeExpanders?: boolean
+  /** review mode: the editor renders, nothing writes — no save, no tree mutations, forms disabled */
+  readOnly?: boolean
+  decorateTreeItem?: TreeItemDecorator
   customLayouts?: {
     ModalContent?: React.JSX.Element
 

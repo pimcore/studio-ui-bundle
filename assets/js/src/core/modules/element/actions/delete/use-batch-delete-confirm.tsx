@@ -9,11 +9,13 @@
  */
 
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { api as elementApi } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from './use-batch-delete-confirm.styles'
 
@@ -28,6 +30,11 @@ export interface UseBatchDeleteConfirmReturn {
   confirmBatchDelete: (params: ConfirmBatchDeleteParams) => Promise<void>
 }
 
+interface BatchDeleteInfo {
+  isPermanent: boolean
+  hasDependencies: boolean
+}
+
 export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
@@ -36,25 +43,55 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
 
   // The recycle bin threshold is evaluated per item on the backend (a plain item is always
   // recoverable, a folder-like item only if its descendant count is within the configured
-  // limit) - so permanence can't be inferred from the selection size and has to be checked
-  // per item via the same delete-info endpoint the single-item/folder delete flow uses.
-  const isBatchDeletePermanent = async (elementType: ElementType, itemIds: number[]): Promise<boolean> => {
-    const canUseRecycleBinFlags = await Promise.all(
-      itemIds.map(async (id) => {
-        try {
-          const { data } = await dispatch(elementApi.endpoints.elementGetDeleteInfo.initiate({ elementType, id }))
-          return data?.canUseRecycleBin ?? true
-        } catch {
-          return true
-        }
-      })
-    )
+  // limit) - so permanence can't be inferred from the selection size. The batch endpoint
+  // aggregates it over all selected ids in a single request: canUseRecycleBin is false as
+  // soon as one item would be deleted permanently, hasDependencies is true as soon as one
+  // item has children or is referenced by other elements.
+  const fetchBatchDeleteInfo = async (elementType: ElementType, itemIds: number[]): Promise<BatchDeleteInfo | null> => {
+    const request = dispatch(elementApi.endpoints.elementBatchDeleteInfo.initiate({ elementType, body: { ids: itemIds } }))
 
-    return canUseRecycleBinFlags.some((canUseRecycleBin) => !canUseRecycleBin)
+    try {
+      const response = await request
+
+      if ('error' in response) {
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+        }
+        return null
+      }
+
+      return {
+        isPermanent: !response.data.canUseRecycleBin,
+        hasDependencies: response.data.hasDependencies
+      }
+    } finally {
+      request.reset()
+    }
+  }
+
+  // One complete sentence per state - composing fragments does not translate cleanly
+  const getWarningText = (info: BatchDeleteInfo, count: number): string | null => {
+    if (info.isPermanent && info.hasDependencies) {
+      return t('element.delete.batch.note.permanent-dependencies', { count })
+    }
+
+    if (info.isPermanent) {
+      return t('element.delete.batch.note', { count })
+    }
+
+    if (info.hasDependencies) {
+      return t('element.delete.batch.dependencies-warning.confirmed', { count })
+    }
+
+    return null
   }
 
   const confirmBatchDelete = async ({ elementType, itemIds, selectedRowsData, onOk }: ConfirmBatchDeleteParams): Promise<void> => {
-    const isPermanent = await isBatchDeletePermanent(elementType, itemIds)
+    const info = await fetchBatchDeleteInfo(elementType, itemIds)
+
+    if (info === null) {
+      return
+    }
 
     const count = itemIds.length
     const paths = itemIds.map(id => selectedRowsData?.[id]?.fullpath ?? String(id))
@@ -63,6 +100,7 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
         {paths.map((path) => <li key={ path }>{path}</li>)}
       </ul>
     )
+    const warningText = getWarningText(info, count)
 
     modal.confirm({
       title: t('element.delete.batch.title'),
@@ -72,10 +110,10 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
         {count > 5
           ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths')}</span>, children: pathList }] } />
           : pathList}
-        <p><span className={ styles.warningText }>{t('element.delete.batch.dependencies-warning')}</span></p>
+        {warningText !== null && <p><span className={ styles.warningText }>{warningText}</span></p>}
       </>,
       cancelText: t('cancel'),
-      okText: isPermanent ? t('element.delete.batch.ok.permanent') : t('element.delete.batch.ok'),
+      okText: info.isPermanent ? t('element.delete.batch.ok.permanent') : t('element.delete.batch.ok'),
       onOk
     })
   }

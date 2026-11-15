@@ -46,6 +46,11 @@ export const api = baseApi.enhanceEndpoints({
         return [...logCollection, ...providingTags.EMAIL_LOG()]
       }
     },
+    emailLogSearch: {
+      providesTags: () => {
+        return providingTags.EMAIL_LOG()
+      }
+    },
     emailLogDelete: {
       invalidatesTags: () => {
         return invalidatingTags.EMAIL_LOG()
@@ -60,6 +65,7 @@ export const {
   useEmailBlocklistAddMutation,
   useEmailBlocklistDeleteMutation,
   useEmailLogGetCollectionQuery,
+  useEmailLogSearchQuery,
   useEmailLogGetByIdQuery,
   useEmailLogDeleteMutation,
   useEmailLogGetHtmlQuery,

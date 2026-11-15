@@ -10,12 +10,12 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ css }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
     emptyState: css`
       text-align: center;
       color: #999;
-      margin-top: 50px;
+      margin-top: ${token.marginXXL}px;
     `
   }
 })

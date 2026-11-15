@@ -20,7 +20,12 @@ import { ManyToOneRelationInput } from '@Pimcore/components/many-to-one-relation
 import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
 import { Alert } from '@Pimcore/components/alert/alert'
 
-export const SearchReplaceForm = (): React.JSX.Element => {
+interface SearchReplaceFormProps {
+  /** suppresses the page-level heading so the form can be embedded (e.g. in a modal step) */
+  hideHeader?: boolean
+}
+
+export const SearchReplaceForm = ({ hideHeader = false }: SearchReplaceFormProps): React.JSX.Element => {
   const {
     searchFor,
     replaceWith,
@@ -35,9 +40,11 @@ export const SearchReplaceForm = (): React.JSX.Element => {
 
   return (
     <>
-      <Header >
-        <Title>{t('widget.search-replace-assignments')}</Title>
-      </Header>
+      {!hideHeader && (
+        <Header >
+          <Title>{t('widget.search-replace-assignments')}</Title>
+        </Header>
+      )}
       <Content>
         <Box margin={ { x: 'small', bottom: 'small' } }>
 

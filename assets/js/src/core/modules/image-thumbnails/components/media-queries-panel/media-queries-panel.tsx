@@ -15,7 +15,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { MediaQueryTabs } from '../media-query-tabs/media-query-tabs'
-import { generateMediaQueryId, getDisplayName, DEFAULT_MEDIA_QUERY_ID } from '../../utils/media-query-helpers'
+import { generateMediaQueryId, getDisplayName, sanitiseMediaQuery, DEFAULT_MEDIA_QUERY_ID } from '../../utils/media-query-helpers'
 import type { MediaQuery } from '../../types/media-query.types'
 
 interface MediaQueriesPanelProps {
@@ -42,7 +42,7 @@ export const MediaQueriesPanel = ({
         required: true
       },
       onOk: async (query: string) => {
-        const sanitised = query.trim().replaceAll(/[^a-zA-Z0-9_\-+]/g, '')
+        const sanitised = sanitiseMediaQuery(query)
         if (sanitised === '') return
 
         const newMediaQuery: MediaQuery = {

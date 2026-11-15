@@ -9,6 +9,8 @@
  */
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
+import { motionDuration } from '@Pimcore/utils/motion'
+import { sideWidgetMotion } from './widget-manager-motion.styles'
 import { type TabsToken } from 'antd/es/tabs/style'
 
 export const getTabTokens = (token): TabsToken => {
@@ -204,6 +206,8 @@ export const useStyles = createStyles(({ token, css }) => {
           border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-radius: 8px;
         }
+
+        ${sideWidgetMotion}
   
         .widget-manager-inner-container {
           background: transparent;
@@ -231,7 +235,7 @@ export const useStyles = createStyles(({ token, css }) => {
           width: 40px;
           justify-content: center;
           border-radius: ${token.borderRadius}px;
-          transition: all ${token.motionDurationSlow} ${token.motionEaseInOut}, border-top-width 0.1s ease;
+          transition: color ${motionDuration.feedback}ms ease-out, background ${motionDuration.feedback}ms ease-out, border-top-width ${motionDuration.feedback}ms ease-out;
   
           &--selected {
             color: ${tabToken.itemActiveColor};

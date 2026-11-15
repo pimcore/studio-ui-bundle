@@ -17,11 +17,12 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/reports-sidebar'
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
-import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { isFolder } from '@Pimcore/modules/reports/reports-editor/components/helpers'
+import { useReportTabs } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-tabs'
 import { useStyles } from './reports-editor.styles'
 
 export const REFETCH_BTN_PORTAL_ID = 'reports-editor-toolbar-refetch-btn'
@@ -36,8 +37,7 @@ export const ReportsEditor = (): React.JSX.Element => {
     { skip: !hasPermission }
   )
 
-  const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
-  const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
+  const { openedReports, activeTabKey, openReport, closeReport, setActiveTab } = useReportTabs()
   const [modifiedReports, setModifiedReports] = useState<string[]>([])
 
   const { styles } = useStyles()
@@ -64,39 +64,6 @@ export const ReportsEditor = (): React.JSX.Element => {
       }))
   }, [reportsConfigTreeData, openedReports, modifiedReports])
 
-  const handleOpenReport = (report: BundleCustomReportsConfigurationTreeNode): void => {
-    const isAlreadyOpened = openedReports.some(item => item.id === report.id)
-
-    if (!isAlreadyOpened) {
-      setOpenedReports([...openedReports, report])
-    }
-
-    setActiveTabKey(report.id)
-  }
-
-  const handleCloseTab = (key: string): void => {
-    const targetIndex = openedReports.findIndex((tab) => tab?.id === key)
-    const updatedOpenedReports = openedReports.filter((report) => report.id !== key)
-
-    if (key === activeTabKey) {
-      const prevTab = openedReports[targetIndex - 1]
-      const nextTab = openedReports[targetIndex + 1]
-
-      const prevTabId = prevTab?.id
-      const nextTabId = !isUndefined(nextTab) ? nextTab?.id : undefined
-
-      const activeId = !isUndefined(prevTab) ? prevTabId : nextTabId
-
-      setActiveTabKey(activeId)
-    }
-
-    setOpenedReports(updatedOpenedReports)
-  }
-
-  const handleChangeTab = (key: string): void => {
-    setActiveTabKey(key)
-  }
-
   const mainContent = (): React.JSX.Element => {
     if (isUndefined(activeTabKey)) {
       return <Content none />
@@ -117,8 +84,8 @@ export const ReportsEditor = (): React.JSX.Element => {
             className={ styles.tabs }
             hasStickyHeader
             items={ tabItems }
-            onChange={ handleChangeTab }
-            onClose={ handleCloseTab }
+            onChange={ setActiveTab }
+            onClose={ closeReport }
             rootClassName={ styles.tabsContainer }
           />
         </ActiveReportTabContext.Provider>
@@ -134,8 +101,8 @@ export const ReportsEditor = (): React.JSX.Element => {
         size: 180,
         children: (
           <ReportsSidebar
-            handleCloseReport={ handleCloseTab }
-            handleOpenReport={ handleOpenReport }
+            handleCloseReport={ closeReport }
+            handleOpenReport={ openReport }
             isFetching={ isFetching }
             isLoading={ isLoading }
             refetch={ refetch }

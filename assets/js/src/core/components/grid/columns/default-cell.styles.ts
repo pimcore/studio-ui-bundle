@@ -12,7 +12,7 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { type GridProps } from '@Pimcore/types/components/types'
 
 export interface UseStyleProps {
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
 }
 
 export const useStyle = createStyles(({ token, css }, { size = 'normal' }: UseStyleProps) => {

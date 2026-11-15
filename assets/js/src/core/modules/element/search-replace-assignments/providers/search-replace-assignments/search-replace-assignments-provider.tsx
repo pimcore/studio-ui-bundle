@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, type ReactNode, useState, useEffect, useMemo } from 'react'
+import React, { createContext, useContext, type ReactNode, useState, useEffect, useMemo, useRef } from 'react'
 import { type ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -17,7 +17,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
-import { useTranslation } from 'react-i18next'
+import { type JobCompletionData } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler-types'
 
 interface SearchReplaceAssignmentsContextValue {
   // State
@@ -52,16 +52,24 @@ const SearchReplaceAssignmentsContext = createContext<SearchReplaceAssignmentsCo
 
 interface SearchReplaceAssignmentsProviderProps {
   children: ReactNode
+  initialSearchFor?: ManyToOneRelationValue | null
+  initialReplaceWith?: ManyToOneRelationValue | null
+  onApplied?: (data?: JobCompletionData) => void
 }
 
-export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
-  const { t } = useTranslation()
+export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = null, initialReplaceWith = null, onApplied }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
   const defaultPageSize = 50
-  const [searchFor, setSearchFor] = useState<ManyToOneRelationValue | null>(null)
-  const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValue | null>(null)
+  const [searchFor, setSearchFor] = useState<ManyToOneRelationValue | null>(initialSearchFor)
+  const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValue | null>(initialReplaceWith)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(defaultPageSize)
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+
+  const onAppliedRef = useRef(onApplied)
+
+  useEffect(() => {
+    onAppliedRef.current = onApplied
+  }, [onApplied])
 
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const [trigger, { data, isFetching, isLoading }] = api.useLazyElementGetUsageQuery()
@@ -122,9 +130,10 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
         sourceElementId: searchFor.id,
         targetElementType: replaceWith.type as ElementType,
         targetElementId: replaceWith.id,
-        onFinish: () => {
+        onFinish: (data) => {
           handleRefresh()
           setSelectedRows({})
+          onAppliedRef.current?.(data)
         }
       })
 
@@ -155,9 +164,10 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
         targetElementType: replaceWith.type as ElementType,
         targetElementId: replaceWith.id,
         elements: selectedElements,
-        onFinish: () => {
+        onFinish: (data) => {
           handleRefresh()
           setSelectedRows({})
+          onAppliedRef.current?.(data)
         }
       })
 

@@ -8,12 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { convertSelectOptions, normalizeSelectValue, stringifyOptionValue } from './select-options'
+import { convertSelectedOptions, convertSelectOptions, normalizeSelectValue, stringifyOptionValue } from './select-options'
 
-jest.mock('@Pimcore/app/i18n', () => ({
-  __esModule: true,
-  default: { t: (key: string) => key }
-}))
+// Real i18next instance with the app's separator config (keySeparator: false, default nsSeparator ':')
+// so namespace parsing of option keys is exercised.
+jest.mock('@Pimcore/app/i18n', () => {
+  const instance = jest.requireActual('i18next').createInstance()
+  void instance.init({
+    lng: 'en',
+    ns: ['translation'],
+    keySeparator: false,
+    initAsync: false,
+    resources: { en: { translation: { 'TYPE:A': 'Type A' } } }
+  })
+
+  return { __esModule: true, default: instance }
+})
 
 describe('convertSelectOptions', () => {
   it('returns undefined for nil options', () => {
@@ -31,6 +41,24 @@ describe('convertSelectOptions', () => {
     expect(convertSelectOptions([{ key: 'A', value: 'a' }, { key: 'B', value: 'b' }])).toEqual([
       { label: 'A', value: 'a' },
       { label: 'B', value: 'b' }
+    ])
+  })
+
+  it('keeps option keys containing a colon intact instead of parsing a namespace (platform-version#461)', () => {
+    expect(convertSelectOptions([
+      { key: '08:00', value: '08:00' },
+      { key: '16:9', value: '16:9' },
+      { key: 'studio:08:00', value: 'x' }
+    ])).toEqual([
+      { label: '08:00', value: '08:00' },
+      { label: '16:9', value: '16:9' },
+      { label: 'studio:08:00', value: 'x' }
+    ])
+  })
+
+  it('translates option keys containing a colon as a whole key', () => {
+    expect(convertSelectOptions([{ key: 'TYPE:A', value: 'a' }])).toEqual([
+      { label: 'Type A', value: 'a' }
     ])
   })
 })
@@ -56,5 +84,34 @@ describe('stringifyOptionValue', () => {
     expect(stringifyOptionValue(null)).toBeUndefined()
     expect(stringifyOptionValue(1)).toBe('1')
     expect(stringifyOptionValue('a')).toBe('a')
+  })
+})
+
+describe('convertSelectedOptions', () => {
+  const options = [
+    { key: 'One', value: 1 },
+    { key: 'Two', value: 'two' },
+    { key: 'Three', value: 'three' }
+  ]
+
+  it('returns undefined for nil options', () => {
+    expect(convertSelectedOptions(null, 'two')).toBeUndefined()
+  })
+
+  it('converts only the option of a single value, matching numeric provider values', () => {
+    expect(convertSelectedOptions(options, '1')).toEqual([{ label: 'One', value: '1' }])
+  })
+
+  it('converts the options of all values of a multiselect', () => {
+    expect(convertSelectedOptions(options, ['two', 'three'])).toEqual([
+      { label: 'Two', value: 'two' },
+      { label: 'Three', value: 'three' }
+    ])
+  })
+
+  it('returns no option for an empty or unknown value', () => {
+    expect(convertSelectedOptions(options, undefined)).toEqual([])
+    expect(convertSelectedOptions(options, null)).toEqual([])
+    expect(convertSelectedOptions(options, 'missing')).toEqual([])
   })
 })

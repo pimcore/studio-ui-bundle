@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { useNotificationDeleteAllMutation, useNotificationGetCollectionQuery } from './notifications-slice-enhanced'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { useFilterQuery } from '@Pimcore/components/filters'
@@ -22,7 +23,7 @@ interface NotificationsContainerProps {
 
 const NotificationsContent = ({ activeNotification }: NotificationsContainerProps): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
   const { values: appliedValues } = useNotificationsAppliedFilters()
   const buildFilterQuery = useFilterQuery(notificationsFilterAdapter, appliedValues)

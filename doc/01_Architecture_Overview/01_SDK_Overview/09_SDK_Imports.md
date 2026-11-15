@@ -38,6 +38,7 @@ This structure ensures that the imports are intuitive and easy to locate within 
 #### Application Modules
 
 `@pimcore/studio-ui-bundle/modules/*`: The various provided modules and parts of the application, such as the asset editor, data object editor, user management, etc.
+For example, `@pimcore/studio-ui-bundle/modules/execution-engine` lets a plugin run a Generic Execution Engine job and show it in the running-jobs panel; see [How to Run a Background Job](../../04_Extending/02_Plugin_Development_Examples/20_Run_a_Background_Job.md).
 
 #### Utils
 

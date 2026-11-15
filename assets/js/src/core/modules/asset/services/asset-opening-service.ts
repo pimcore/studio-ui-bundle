@@ -11,7 +11,8 @@
 import { store } from '@Pimcore/app/store'
 import { api } from '../asset-api-slice-enhanced'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { getElementIcon, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { openMainWidget, setActiveWidgetById, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
@@ -43,7 +44,7 @@ export class AssetOpeningService {
   }
 
   private async fetchAndStoreAssetDraft (id: number): Promise<void> {
-    const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
+    const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }, { subscribe: false }))
 
     if (!isNil(data)) {
       const mergedAssetData = {
@@ -65,7 +66,7 @@ export class AssetOpeningService {
   }
 
   async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
-    const { data, isError, error } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }, { subscribe: false }))
 
     if (isError && !silent) {
       trackError(new ApiError(error))
@@ -81,7 +82,7 @@ export class AssetOpeningService {
     const widgetId = getWidgetId('asset', id)
 
     return {
-      name: data?.filename,
+      name: getElementKey(data, elementTypes.asset),
       id: widgetId,
       component: 'asset-editor',
       config: {

@@ -19,6 +19,7 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { ModalsProvider } from './modals-provider'
 import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 import { TreeCopyPasteProvider } from '../element/actions/copy-paste/tree-copy-paste-context'
+import { ReloadOnSessionEnd } from '@Pimcore/modules/auth/components/reload-on-session-end/reload-on-session-end'
 
 export interface AppViewProps {
   themeId?: string
@@ -29,6 +30,7 @@ export const AppView = ({ themeId }: AppViewProps = {}): React.JSX.Element => {
     <StrictMode>
       <ErrorBoundary>
         <GlobalProvider themeId={ themeId }>
+          <ReloadOnSessionEnd />
           <AntApp notification={ { stack: false } }>
             <TreeCopyPasteProvider>
               <ModalsProvider>

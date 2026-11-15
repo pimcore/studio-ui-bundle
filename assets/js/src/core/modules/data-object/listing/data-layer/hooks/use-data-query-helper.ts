@@ -16,11 +16,12 @@ import { useClassDefinitionSelection } from '../../decorator/class-definition-se
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
   const { getId } = useElementId()
-  const { selectedColumns } = useSelectedColumns()
+  const { visibleColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
@@ -28,15 +29,21 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
 
-  selectedColumns.forEach(column => {
+  visibleColumns.forEach(column => {
     let advancedColumnConfig: AdvancedColumnConfig | undefined
+    let key = column.key
 
     if (column.type === 'dataobject.advanced') {
       advancedColumnConfig = column.originalApiDefinition?.__meta?.advancedColumnConfig as unknown as AdvancedColumnConfig
+      // Every advanced column shares the same reserved 'advanced' key (and often a
+      // blank/duplicate user-provided title); send its stable per-instance id instead
+      // so the returned ColumnData.key can be uniquely matched back to this column
+      // (https://github.com/pimcore/service-operations/issues/927).
+      key = column.originalApiDefinition?.__meta?.uniqueId ?? column.key
     }
 
     columnsArg.push({
-      key: column.key,
+      key,
       type: column.type,
       locale: column.localizable ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage)) : undefined,
       group: column.group as unknown as string[] | undefined,
@@ -73,7 +80,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
         filters: {
           includeDescendants: true,
           page: 1,
-          pageSize: 20
+          pageSize: appConfig.defaultPageSize
         }
       }
     }

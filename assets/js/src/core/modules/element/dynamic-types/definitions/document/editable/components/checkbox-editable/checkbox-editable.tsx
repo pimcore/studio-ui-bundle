@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { Checkbox, Flex, Text } from '@sdk/components'
+import React, { useId } from 'react'
+import { Checkbox, Flex, Switch, Text } from '@sdk/components'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { isUndefined } from 'lodash'
@@ -22,6 +22,8 @@ export interface CheckboxEditableConfig {
   label?: string
   class?: string
   reload?: boolean
+  /** 'switch' draws the value as an on/off switch, with the label to its right. */
+  display?: 'checkbox' | 'switch'
 }
 
 interface CheckboxEditableProps {
@@ -50,14 +52,45 @@ export const CheckboxEditable = ({
     onChange?.(Boolean(value))
   }
 
+  // The label names the control and toggles it on click, as a native checkbox label would.
+  const controlId = useId()
+
   const checkboxProps = {
+    id: controlId,
     checked: Boolean(value),
     className: className ?? config?.class,
     disabled: inherited,
     onChange: handleChange
   }
 
+  const renderLabel = (label: string): React.JSX.Element => (
+    <label htmlFor={ controlId }>
+      <Text>
+        <FieldLabel
+          label={ label }
+          name={ name }
+        />
+      </Text>
+    </label>
+  )
+
+  const renderSwitch = (): React.JSX.Element => (
+    <Switch
+      checked={ Boolean(value) }
+      className={ checkboxProps.className }
+      disabled={ inherited }
+      id={ controlId }
+      labelRight={ isUndefined(config?.label) ? undefined : renderLabel(config.label) }
+      onChange={ handleChange }
+      size="small"
+    />
+  )
+
   const renderCheckbox = (): React.JSX.Element => {
+    if (config?.display === 'switch') {
+      return renderSwitch()
+    }
+
     if (!isUndefined(config?.label)) {
       return (
         <Flex
@@ -65,12 +98,7 @@ export const CheckboxEditable = ({
           gap="extra-small"
         >
           <Checkbox { ...checkboxProps } />
-          <Text>
-            <FieldLabel
-              label={ config.label }
-              name={ name }
-            />
-          </Text>
+          {renderLabel(config.label)}
         </Flex>
       )
     }

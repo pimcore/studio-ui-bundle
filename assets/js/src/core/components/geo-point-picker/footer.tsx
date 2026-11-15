@@ -12,6 +12,7 @@ import React from 'react'
 import { isUndefined } from 'lodash'
 import { Button, InputNumber } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { getDecimalSeparator } from '@Pimcore/utils/number'
 import { Form } from '@Pimcore/components/form/form'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
@@ -32,8 +33,9 @@ interface GeoPointFormValues {
 }
 
 export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JSX.Element => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { styles } = useStyles()
+  const decimalSeparator = getDecimalSeparator(i18n?.language)
 
   const [form] = Form.useForm()
 
@@ -89,6 +91,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
                         name="latitude"
                       >
                         <InputNumber
+                          decimalSeparator={ decimalSeparator }
                           disabled={ props.disabled }
                           onChange={ handleChange }
                         />
@@ -98,6 +101,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
                         name="longitude"
                       >
                         <InputNumber
+                          decimalSeparator={ decimalSeparator }
                           disabled={ props.disabled }
                           onChange={ handleChange }
                         />

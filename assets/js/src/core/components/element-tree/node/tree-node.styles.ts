@@ -8,7 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { recentlyAddedHighlightDuration } from '../hooks/use-recently-added-ids'
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
+import { arrowTurnTransition } from '@Pimcore/utils/motion'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -22,11 +24,52 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      /* the loading spinner covers the arrow, which stays mounted so it turns once the children are loaded */
+      .tree-expander {
+        position: relative;
+      }
+
+      .tree-expander__spinner {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .tree-expander__arrow {
+        ${arrowTurnTransition()}
+
+        &.tree-expander__arrow--open {
+          transform: rotate(90deg);
+        }
+
+        &.tree-expander__arrow--loading {
+          visibility: hidden;
+        }
+      }
+
+      /* the expand arrow highlights on hover and while pressed */
+      .tree-expander__toggle {
+        display: inline-flex;
+        transition: color ${token.motionDurationFast} ${token.motionEaseOut};
+
+        &:hover {
+          color: ${token.colorPrimaryHover};
+        }
+
+        &:active {
+          color: ${token.colorPrimaryActive};
+        }
+      }
+
       .tree-node__content {
         cursor: pointer;
-        width: 100%;
+        min-width: 100%;
         white-space: nowrap;
         align-items: center;
+        margin-left: -100vw;
+        padding-left: 100vw;
 
         .tree-node__content-wrapper {
           width: 100%;
@@ -39,24 +82,25 @@ export const useStyles = createStyles(({ token, css }) => {
           }
         }
 
-        &:focus {
+        &:focus,
+        &:focus-within {
           outline: none;
           background-color: ${token.controlItemBgActiveHover};
         }
       }
 
       .tree-node__content-inner {
-        padding: 0 ${token.paddingSM}px 0 0;
+        padding: 0 ${token.paddingXS}px 0 0;
 
-        @media (hover: hover) {
-          &:hover {
-            background-color: ${token.controlItemBgActiveHover};
-          }
+        &:focus-visible {
+          outline: 2px solid ${token.colorPrimaryBorder};
+          outline-offset: -2px;
+          border-radius: ${token.borderRadiusSM}px;
+          background-color: ${token.controlItemBgActiveHover};
         }
 
-        &:focus {
+        &:focus:not(:focus-visible) {
           outline: none;
-          background-color: ${token.controlItemBgActiveHover};
         }
       }
 
@@ -66,13 +110,32 @@ export const useStyles = createStyles(({ token, css }) => {
         gap: ${token.paddingXXS}px;
       }
 
+      /* a just added or located node is tinted and fades back to its regular background */
+      .tree-node__content--highlighted {
+        animation: tree-node-highlight ${recentlyAddedHighlightDuration}ms ease-out;
+      }
+
+      @keyframes tree-node-highlight {
+        from {
+          background-color: ${token.colorPrimaryBgHover};
+        }
+      }
+
       .tree-node__content--selected {
         background-color: ${token.controlItemBgActive};
 
-        &:hover,
-        & .tree-node__content-inner {
+        &:hover {
           background-color: ${token.controlItemBgActive};
         }
+      }
+
+      /*
+       * The active node is the one the editor follows. With a single selection it
+       * is the only selected node, so the marker only becomes visible once more
+       * than one node is selected.
+       */
+      .tree-node__content--active {
+        box-shadow: inset 2px 0 0 0 ${token.colorPrimary};
       }
 
       .tree-node-content__label {

@@ -9,7 +9,8 @@
  */
 
 import { toString } from 'lodash'
-import { DatePickerSettingValue, type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
+import type { DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
+import { DatePickerSettingValue } from './filter-setting-values'
 
 export enum DateFilterOperator {
   On = 'on',

@@ -23,7 +23,7 @@ interface ImageEditablePreviewProps {
   minHeight?: number
   containerWidth: number
   className?: string
-  dropdownItems?: DropdownProps['menu']['items']
+  dropdownItems?: Exclude<DropdownProps['menu']['items'], undefined>
   dropClass?: string
   thumbnailSettings?: ImageThumbnailSettings
   thumbnailConfig?: string | object
@@ -97,6 +97,7 @@ export const ImageEditablePreview = ({
       assetId={ assetId }
       minHeight={ minHeight }
       minWidth={ minWidth }
+      onImageLoadedChange={ onImageLoadedChange }
       thumbnailUrl={ thumbnailUrl }
     />
   )

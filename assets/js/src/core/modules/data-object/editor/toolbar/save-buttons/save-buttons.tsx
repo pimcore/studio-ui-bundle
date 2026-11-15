@@ -16,6 +16,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { UnpublishedLabel } from '@Pimcore/modules/element/editor/shared-components/unpublished-label/unpublished-label'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
@@ -35,13 +36,16 @@ import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useTemporaryValue } from '@Pimcore/utils/hooks/use-temporary-value'
+import { confirmWhenSchedulesSaved } from '@Pimcore/modules/element/editor/save-confirmation'
+import { getWorkflowSaveTask, useWorkflowSave } from './use-workflow-save'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
   const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
-  const { isAutoSaveLoading, runningTask } = useSaveContext()
+  const { isAutoSaveLoading, runningTask, runningTaskRef } = useSaveContext()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
@@ -53,6 +57,8 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('data-object')
   const messageApi = useMessage()
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
+  // the button of the save that just succeeded briefly confirms it with a check mark
+  const [savedTask, showSavedTask] = useTemporaryValue<SaveTaskType>()
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
@@ -75,18 +81,40 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
   }, [isError, isSchedulesError, error, schedulesError])
 
-  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
-    if (dataObject?.changes === undefined) return
-    Promise.all([
-      saveDataObject(getModifiedDataObjectAttributes(), task, () => {
-        resetModifiedDataObjectAttributes()
-        onFinish?.()
-      }),
-      saveSchedules()
-    ]).catch((error) => {
+  // Saves the data and the schedules; resolves with the outcome of the schedules save (the data
+  // save reports its success through onFinish).
+  const saveDataAndSchedules = async (task: SaveTaskType, onFinish?: () => void): Promise<boolean> => {
+    if (dataObject?.changes === undefined) return false
+    // The reset compares against the data the save actually sent, not the data read
+    // here: the save may run much later (queued behind another one), take over the data
+    // of an auto save folded into it meanwhile, and the user can keep editing after that.
+    // filled right below; read once the object is saved
+    const action: { schedulesSaved?: Promise<boolean> } = {}
+    const objectSaved = saveDataObject(getModifiedDataObjectAttributes(), task, (savedEditableData) => {
+      resetModifiedDataObjectAttributes(savedEditableData)
+      // only called once this very save has succeeded, also when it was queued; the confirmation
+      // also waits for the schedules saved by the same action
+      void confirmWhenSchedulesSaved(action.schedulesSaved, () => { showSavedTask(task) })
+      onFinish?.()
+    })
+    action.schedulesSaved = saveSchedules()
+
+    return await Promise.all([objectSaved, action.schedulesSaved]).then(([, schedulesSaved]) => schedulesSaved).catch((error) => {
       console.error(error)
+      return false
     })
   }
+
+  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
+    void saveDataAndSchedules(task, onFinish)
+  }
+
+  // A transition with unsavedChangesBehaviour "save" saves through this same flow, using the
+  // task of the primary button. A user's own save that is still running is not queued behind.
+  useWorkflowSave({
+    getTask: () => getWorkflowSaveTask(dataObject, runningTaskRef?.current),
+    startSave: saveDataAndSchedules
+  })
 
   const getSecondaryButtons = (): ReactElement[] => {
     if (dataObject?.type === 'folder') {
@@ -105,6 +133,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Version)
             } }
+            success={ savedTask === SaveTaskType.Version }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -121,6 +150,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Save)
             } }
+            success={ savedTask === SaveTaskType.Save }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -144,9 +174,11 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             } }
           >
             <IconButton
+              aria-label={ t('more-actions') }
               disabled={ isLoading || isSchedulesLoading || isDraftLoading }
               icon={ { value: 'chevron-down' } }
               loading={ isDraftDeleteLoading }
+              tooltip={ { title: t('more-actions') } }
               type="default"
             />
           </Dropdown>
@@ -170,6 +202,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Save)
           } }
+          success={ savedTask === SaveTaskType.Save }
           type="primary"
         >
           {t('toolbar.save')}
@@ -192,6 +225,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
               }
             })
           } }
+          success={ savedTask === SaveTaskType.Publish }
           type="primary"
         >
           {t('toolbar.save-and-publish')}
@@ -241,6 +275,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           <Icon value="auto-save" />
         </Tooltip>
       )}
+      <UnpublishedLabel published={ dataObject?.published } />
       {secondaryButtons.length > 0 && (
         <ButtonGroup
           items={ secondaryButtons }

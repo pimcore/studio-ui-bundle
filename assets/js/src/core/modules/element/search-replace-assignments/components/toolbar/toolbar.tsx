@@ -43,7 +43,7 @@ export const Toolbar = (): React.JSX.Element => {
       {hasSelection && (
         <Flex
           align="center"
-          gap="small"
+          gap="mini"
         >
           <Checkbox
             checked
@@ -74,9 +74,11 @@ export const Toolbar = (): React.JSX.Element => {
       {!hasSelection && <div />}
       <Split size='extra-small'>
         <IconButton
+          aria-label={ t('toolbar.reload') }
           disabled={ isFetching || isLoading }
           icon={ { value: 'refresh' } }
           onClick={ handleRefresh }
+          tooltip={ { title: t('toolbar.reload') } }
         />
         <Pagination
           current={ currentPage }

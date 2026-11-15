@@ -12,7 +12,8 @@ import { store } from '@Pimcore/app/store'
 import { api } from '../document-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { getElementIcon, type Element } from '@Pimcore/modules/element/element-helper'
+import { getElementIcon, getElementKey, type Element } from '@Pimcore/modules/element/element-helper'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { openMainWidget, setActiveWidgetById, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
@@ -46,7 +47,7 @@ export class DocumentOpeningService {
   }
 
   private async fetchAndStoreDocumentDraft (id: number): Promise<void> {
-    const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
+    const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }, { subscribe: false }))
 
     if (!isNil(data)) {
       const mergedDocumentData = {
@@ -65,7 +66,7 @@ export class DocumentOpeningService {
 
   async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
     store.dispatch(api.util.invalidateTags(invalidatingTags.DOCUMENT_DETAIL_ID(id)))
-    const { data, isError, error } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }, { subscribe: false }))
 
     if (isError && !silent) {
       trackError(new ApiError(error))
@@ -82,7 +83,7 @@ export class DocumentOpeningService {
     const widgetId = getWidgetId('document', id)
 
     return {
-      name: data?.key,
+      name: getElementKey(data as Element, elementTypes.document),
       id: widgetId,
       component: 'document-editor',
       config: {

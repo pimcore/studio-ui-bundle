@@ -51,7 +51,7 @@ export const DraftAlert = (): React.JSX.Element => {
   )
 
   return (
-    <Box padding="extra-small">
+    <Box padding={ { x: 'extra-small', y: 'extra-small', bottom: 'none' } }>
       <Alert
         action={ deleteDraftButton }
         icon={ <Icon value="draft" /> }

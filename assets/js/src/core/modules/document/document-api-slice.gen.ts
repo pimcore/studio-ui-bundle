@@ -14,6 +14,14 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
+            documentBatchDelete: build.mutation<DocumentBatchDeleteApiResponse, DocumentBatchDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/batch-delete`,
+                    method: "DELETE",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
             documentClone: build.mutation<DocumentCloneApiResponse, DocumentCloneApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/${queryArg.id}/clone/${queryArg.parentId}`,
@@ -138,6 +146,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Documents"],
             }),
+            documentPatchById: build.mutation<DocumentPatchByIdApiResponse, DocumentPatchByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents`, method: "PATCH", body: queryArg.body }),
+                invalidatesTags: ["Documents"],
+            }),
             documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/renderlet/render`,
@@ -246,6 +258,16 @@ export type DocumentAddApiArg = {
     parentId: number;
     documentAddParameters: DocumentAdd;
 };
+export type DocumentBatchDeleteApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DocumentBatchDeleteApiArg = {
+    body: {
+        ids?: number[];
+    };
+};
 export type DocumentCloneApiResponse =
     /** status 201 Successfully copied parent document and created <strong>jobRun</strong> for copying children */ {
         /** ID of created jobRun */
@@ -312,6 +334,10 @@ export type DocumentUpdateByIdApiArg = {
             index?: number | null;
             key?: string | null;
             task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             locked?: string | null;
             published?: boolean | null;
             editableData?: object | null;
@@ -361,6 +387,24 @@ export type DocumentPageSnippetAreaBlockRenderApiArg = {
         blockStateStack: object | null;
         areaBlockConfig?: object | null;
         areaBlockData?: object | null;
+    };
+};
+export type DocumentPatchByIdApiResponse =
+    /** status 201 Successfully created jobRun for patching multiple documents */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DocumentPatchByIdApiArg = {
+    body: {
+        data: {
+            /** Document ID */
+            id: number;
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            published?: boolean | null;
+        }[];
     };
 };
 export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
@@ -693,6 +737,44 @@ export type DocumentDetailData = Document & {
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
 };
+export type ValidationErrorPath = {
+    /** Field name of this level */
+    field: string;
+    /** Raw, untranslated title */
+    title: string | null;
+    /** Language of this level */
+    language: string | null;
+    /** Row index within a block or field collection */
+    index: number | null;
+    /** Object brick key or field collection type */
+    type: string | null;
+    /** Raw, untranslated title of the object brick or field collection */
+    typeTitle: string | null;
+};
+export type ValidationError = {
+    /** Name of the field that failed */
+    field: string | null;
+    /** Raw, untranslated field title */
+    fieldTitle: string | null;
+    /** Location of the field, innermost level first */
+    path: ValidationErrorPath[];
+    /** Untranslated message, untrusted: escape it before rendering it as HTML */
+    message: string;
+    /** Translation key */
+    messageKey: string | null;
+    /** Translation parameters */
+    parameters: {
+        [key: string]: any;
+    };
+};
+export type ValidationFailedError = {
+    /** Failure message in English. Untrusted, may contain markup: escape before rendering */
+    message: string;
+    /** Error key, not present when the request failed before the element was validated */
+    errorKey?: string;
+    /** Individual validation errors, present when the failure came from the element validation */
+    validationErrors?: ValidationError[];
+};
 export type UpdateDataProperty = {
     /** key */
     key: string;
@@ -776,6 +858,8 @@ export type RelatedElementData = {
     fullPath: string;
     /** Is the element published */
     isPublished: boolean | null;
+    /** Whether the current user is allowed to view the element */
+    hasViewAccess: boolean;
 };
 export type SiteDetailData = {
     /** AdditionalAttributes */
@@ -829,6 +913,7 @@ export type DocumentTranslationParent = {
 };
 export const {
     useDocumentAddMutation,
+    useDocumentBatchDeleteMutation,
     useDocumentCloneMutation,
     useDocumentConvertMutation,
     useDocumentDocTypeAddMutation,
@@ -845,6 +930,7 @@ export const {
     useDocumentAvailableTemplatesListQuery,
     useDocumentPageSnippetChangeMainDocumentMutation,
     useDocumentPageSnippetAreaBlockRenderQuery,
+    useDocumentPatchByIdMutation,
     useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
     useDocumentsListAvailableSitesQuery,

@@ -313,6 +313,10 @@ export type DataObjectUpdateByIdApiArg = {
             key?: string | null;
             useDraftData?: boolean | null;
             task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             locked?: string | null;
             childrenSortBy?: string | null;
             childrenSortOrder?: string | null;
@@ -482,6 +486,10 @@ export type DataObjectPatchByIdApiArg = {
             index?: number | null;
             key?: string | null;
             task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             locked?: string | null;
             childrenSortBy?: string | null;
             childrenSortOrder?: string | null;
@@ -683,6 +691,8 @@ export type DataObject = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes: CustomAttributes;
+    /** Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search */
+    score?: number | null;
     /** Key */
     key: string;
     /** Class name */
@@ -735,6 +745,44 @@ export type DataObjectWithDetailData = DataObject & {
 export type DataObjectFolder = DataObject & {
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
+};
+export type ValidationErrorPath = {
+    /** Field name of this level */
+    field: string;
+    /** Raw, untranslated title */
+    title: string | null;
+    /** Language of this level */
+    language: string | null;
+    /** Row index within a block or field collection */
+    index: number | null;
+    /** Object brick key or field collection type */
+    type: string | null;
+    /** Raw, untranslated title of the object brick or field collection */
+    typeTitle: string | null;
+};
+export type ValidationError = {
+    /** Name of the field that failed */
+    field: string | null;
+    /** Raw, untranslated field title */
+    fieldTitle: string | null;
+    /** Location of the field, innermost level first */
+    path: ValidationErrorPath[];
+    /** Untranslated message, untrusted: escape it before rendering it as HTML */
+    message: string;
+    /** Translation key */
+    messageKey: string | null;
+    /** Translation parameters */
+    parameters: {
+        [key: string]: any;
+    };
+};
+export type ValidationFailedError = {
+    /** Failure message in English. Untrusted, may contain markup: escape before rendering */
+    message: string;
+    /** Error key, not present when the request failed before the element was validated */
+    errorKey?: string;
+    /** Individual validation errors, present when the failure came from the element validation */
+    validationErrors?: ValidationError[];
 };
 export type UpdateDataProperty = {
     /** key */

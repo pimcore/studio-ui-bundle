@@ -13,6 +13,7 @@ import { type VersionComparisonViewProps } from '@Pimcore/modules/element/editor
 import { DocumentVersionsView } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/versions/components/document-versions-view/document-versions-view'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { currentDomain } from '@Pimcore/app/config/app-config'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { useVersionUrl } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/versions/hooks/useVersionUrl'
 
 export const ComparisonView = ({ versionIds }: VersionComparisonViewProps): React.JSX.Element => {
@@ -26,7 +27,7 @@ export const ComparisonView = ({ versionIds }: VersionComparisonViewProps): Reac
 
   useEffect(() => {
     if (!isEmptyValue(comparedVersionId)) {
-      const comparisonVersionUrl = `${currentDomain}/pimcore-studio/api/documents/diff-versions/from/${mainVersionId}/to/${comparedVersionId}`
+      const comparisonVersionUrl = `${currentDomain}${getPrefix()}/documents/diff-versions/from/${mainVersionId}/to/${comparedVersionId}`
 
       setVersionUrl(comparisonVersionUrl)
     } else {

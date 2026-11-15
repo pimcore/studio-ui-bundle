@@ -70,6 +70,10 @@ export const renderSelectOptionLabel = (key: string): { label: React.ReactNode, 
   return { label: key }
 }
 
+// Option keys are user-defined and may contain ':' (e.g. '08:00', '16:9'), so the namespace separator
+// is disabled — otherwise i18next would read '08' as a namespace and render only '00'.
+const OPTION_TRANSLATE_OPTIONS = { nsSeparator: false } as const
+
 // Maps backend { key, value } options to antd options: translates the key and coerces the value to
 // string so it matches the string-stored value. Used by the editor select renderers.
 export const convertSelectOptions = (
@@ -80,7 +84,7 @@ export const convertSelectOptions = (
   }
 
   return options.map(option => ({
-    ...renderSelectOptionLabel(i18n.t(option.key)),
+    ...renderSelectOptionLabel(i18n.t(option.key, OPTION_TRANSLATE_OPTIONS)),
     value: String(option.value)
   }))
 }
@@ -89,6 +93,21 @@ export const convertSelectOptions = (
 // single select, an array for a multiselect. Built on stringifyOptionValue.
 export const normalizeSelectValue = (value: unknown): string | string[] | undefined =>
   Array.isArray(value) ? value.map(String) : stringifyOptionValue(value)
+
+// Converts only the options matching the current value(s). Used to seed the label of a dynamic select
+// from the layout options without translating and rendering a provider list of thousands of entries.
+export const convertSelectedOptions = (
+  options: SelectOptionData[] | null | undefined,
+  value: unknown
+): ConvertedSelectOption[] | undefined => {
+  if (isNil(options)) {
+    return undefined
+  }
+
+  const selectedValues = new Set([normalizeSelectValue(value)].flat().filter(selected => !isUndefined(selected)))
+
+  return convertSelectOptions(options.filter(option => selectedValues.has(String(option.value))))
+}
 
 export const resolveOptions = (
   config: SelectOptionsConfig,

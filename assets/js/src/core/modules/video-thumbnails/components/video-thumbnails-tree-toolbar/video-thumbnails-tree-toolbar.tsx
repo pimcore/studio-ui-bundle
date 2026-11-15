@@ -12,7 +12,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { IconTextButton } from '@sdk/components'
 
 export interface VideoThumbnailsTreeToolbarProps {
@@ -30,12 +30,15 @@ export const VideoThumbnailsTreeToolbar = ({
 
   return (
     <Toolbar justify='space-between'>
-      <Tooltip title={ t('refresh') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('toolbar.reload') }
+      >
         <IconButton
+          aria-label={ t('toolbar.reload') }
           disabled={ isFetching }
           icon={ { value: 'refresh' } }
           onClick={ onRefresh }
-          title={ t('refresh') }
           type="link"
         />
       </Tooltip>

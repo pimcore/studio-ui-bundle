@@ -79,6 +79,24 @@ export const ActionButtons: StoryObj<CollapseItemProps> = {
   }
 }
 
+// small headers with an action button are 40px high, the button sits on the content separator
+export const SmallActionButtons: StoryObj<CollapseItemProps> = {
+  args: {
+    ...ActionButtons.args,
+    defaultActive: true,
+    extra: <Flex>
+      <IconTextButton
+        icon={ { value: 'folder-search' } }
+        onClick={ (e) => { e.stopPropagation(); console.log('click add action button') } }
+        type='action'
+      >
+        Add
+      </IconTextButton>
+    </Flex>,
+    size: 'small'
+  }
+}
+
 export const Borderless: StoryObj<CollapseItemProps> = {
   args: {
     ...Extra.args,
@@ -135,5 +153,20 @@ export const Nested: StoryObj<CollapseItemProps> = {
         Nested content
       </CollapseItem>
     )
+  }
+}
+
+export const NotExpandable: StoryObj<CollapseItemProps> = {
+  args: {
+    ..._default.args,
+    expandable: false,
+    children: 'Never rendered — a non-expandable item has no content box.'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'For rows with nothing to reveal, such as a note that has a title but no description. No expand icon, no content box, and the header is inert — it carries no disclosure role, no disabled state and no tab stop, so it reads as ordinary content rather than an unavailable control.'
+      }
+    }
   }
 }

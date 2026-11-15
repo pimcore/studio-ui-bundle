@@ -15,6 +15,7 @@ import {
   DynamicTypeObjectDataAbstractSelect, type SelectProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { isNil } from 'lodash'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 
 export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTypeObjectDataAbstractSelect {
@@ -33,6 +34,7 @@ export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTy
       editable: props.objectProps.noteditable !== true,
       config: {
         ...this.getGridCellSelectConfig(props),
+        ...(!isNil(props.objectProps.maxItems) ? { maxItems: props.objectProps.maxItems } : {}),
         [META_SUPPORTS_BATCH_APPEND_MODE]: this.supportsBatchAppendModes
       }
     }

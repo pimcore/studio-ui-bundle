@@ -89,6 +89,7 @@ export const {
   setModificationDate,
 
   resetChanges,
+  resetChangesForTypes,
   setModifiedCells,
 
   addImageSettings: addImageSettingsToAsset,

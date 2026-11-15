@@ -16,9 +16,10 @@ import { isUndefined } from 'lodash'
 interface TreeListNodeProps {
   nodeId: string
   level: number
+  isRecentlyAdded?: boolean
 }
 
-export const TreeListNode = ({ nodeId, level }: TreeListNodeProps): React.JSX.Element => {
+export const TreeListNode = ({ nodeId, level, isRecentlyAdded = false }: TreeListNodeProps): React.JSX.Element => {
   const { renderNode: RenderNode } = useContext(TreeContext)
   const node = useElementTreeNode(nodeId)
 
@@ -29,6 +30,7 @@ export const TreeListNode = ({ nodeId, level }: TreeListNodeProps): React.JSX.El
   return (
     <RenderNode
       { ...node.treeNodeProps }
+      isRecentlyAdded={ isRecentlyAdded }
       level={ level }
     />
   )

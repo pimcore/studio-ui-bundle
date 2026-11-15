@@ -14,11 +14,13 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { type DefaultOptionType } from 'antd/es/select'
 import { renderSelectOptionLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
 import { DynamicTypeFieldFilterTextComponent } from './dynamic-type-field-filter-text-component'
+import { useTranslation } from 'react-i18next'
 
 export type MultiselectValue = string[]
 
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
   const { setData, data, config } = useDynamicFilter()
+  const { t } = useTranslation()
   const [value, setValue] = useState<string[]>(data as MultiselectValue)
 
   useEffect(() => {
@@ -40,12 +42,25 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
     }))
   }
 
+  // HTML labels are searched by their title, plain labels by the label itself
+  const hasHtmlLabels = formattedOptions.some(o => o.title !== undefined)
+
+  // An empty select value is matched as "no value" (null or '') by the backend.
+  const offersEmptyOption = config?.fieldDefinition?.fieldtype === 'select' &&
+    !formattedOptions.some(o => o.value === '')
+
+  if (offersEmptyOption) {
+    const emptyLabel = t('empty')
+    formattedOptions = [
+      { label: emptyLabel, value: '', ...(hasHtmlLabels ? { title: emptyLabel } : {}) },
+      ...formattedOptions
+    ]
+  }
+
   const handleChange = (value: MultiselectValue): void => {
     setValue(value)
     setData(value)
   }
-
-  const hasHtmlLabels = formattedOptions.some(o => o.title !== undefined)
 
   return (
     <Select

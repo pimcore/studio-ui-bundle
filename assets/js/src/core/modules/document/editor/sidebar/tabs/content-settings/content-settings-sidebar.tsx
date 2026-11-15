@@ -10,10 +10,9 @@
 
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SidebarTitle } from '@Pimcore/components/sidebar/title'
+import { Title } from '@Pimcore/components/title/title'
 import { Content } from '@sdk/components'
 import { type ManyToOneRelationValueType } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
-import { Box } from '@Pimcore/components/box/box'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { isNil, isUndefined } from 'lodash'
@@ -74,20 +73,20 @@ export const ContentSettingsSidebar = ({
   const isDataReady = hasPropertiesPermission ? (!isLoadingProperties && !isUndefined(propertiesData)) : true
 
   return (
-    <Content loading={ !isDataReady }>
-      <SidebarTitle withBorder>
-        {t('content-settings')}
-      </SidebarTitle>
+    <Content
+      loading={ !isDataReady }
+      padded
+      padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+    >
+      <Title>{t('content-settings')}</Title>
 
-      <Box padding={ { x: 'extra-small', bottom: 'small' } }>
-        <ContentSettingsForm
-          { ...props }
-          documentId={ id }
-          hasPropertiesPermission={ hasPropertiesPermission }
-          hasSavePermission={ hasSavePermission }
-          initialValues={ initialValues }
-        />
-      </Box>
+      <ContentSettingsForm
+        { ...props }
+        documentId={ id }
+        hasPropertiesPermission={ hasPropertiesPermission }
+        hasSavePermission={ hasSavePermission }
+        initialValues={ initialValues }
+      />
     </Content>
   )
 }

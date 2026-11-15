@@ -15,6 +15,7 @@ import { Dropdown, type DropdownMenuProps, Icon, IconTextButton, useMessage } fr
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { isNil } from 'lodash'
 import React, { useState } from 'react'
+import { useAppDispatch } from '@Pimcore/app/store'
 import { useTranslation } from 'react-i18next'
 
 const defaultValidateFile = (file: File): boolean => {
@@ -27,6 +28,7 @@ export const ImportExportActions = (): React.JSX.Element => {
   const { importExportConfig } = useSettings()
   const { refreshLayout } = useRefresh()
   const messageApi = useMessage()
+  const dispatch = useAppDispatch()
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
 
@@ -42,7 +44,8 @@ export const ImportExportActions = (): React.JSX.Element => {
     validateFile = defaultValidateFile,
     acceptFileTypes = '.json,application/json',
     acceptMimeTypes = ['application/json'],
-    successMessageKey = 'class-definition.import-success'
+    successMessageKey = 'class-definition.import-success',
+    getImportInvalidation
   } = importExportConfig
 
   const handleExport = (): void => {
@@ -62,6 +65,14 @@ export const ImportExportActions = (): React.JSX.Element => {
     void messageApi.success(t(successMessageKey))
     setIsImportModalOpen(false)
     void refreshLayout()
+
+    // refreshLayout only reloads this editor. An import changes the same field
+    // definitions a save does, so whatever a save invalidates has to be invalidated
+    // here too - otherwise an open data object grid keeps the columns it was opened
+    // with until the page is reloaded.
+    if (!isNil(getImportInvalidation) && !isNil(itemId)) {
+      dispatch(getImportInvalidation(itemId))
+    }
   }
 
   const uploadUrl = !isNil(itemId)

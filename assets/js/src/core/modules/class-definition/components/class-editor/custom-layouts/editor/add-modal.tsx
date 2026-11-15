@@ -17,6 +17,7 @@ import { Content, Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { type InputRef } from 'antd'
 import React, { useEffect, useRef } from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
 
@@ -63,6 +64,12 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
         name: values.name
       }
     }).then((data) => {
+      // RTK Query resolves (not rejects) on API errors — surface the backend message and keep the modal open.
+      if (!isUndefined(data.error)) {
+        trackError(new ApiError(data.error))
+        return
+      }
+
       form.resetFields()
       closeModal()
 

@@ -1,0 +1,107 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button } from '@Pimcore/components/button/button'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
+import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { usePreviewMode, type PreviewModeItem } from './preview-mode-provider'
+import { useStyles } from './preview-mode-bar.styles'
+
+export interface PreviewModeBarProps {
+  /** Class names the element selector is limited to */
+  allowedClasses?: string[]
+  /** The language switch at the right end of the bar (default: shown) */
+  showLanguageSwitch?: boolean
+  /** The item picker and its description (default: shown); off leaves only the language switch */
+  showItem?: boolean
+}
+
+export const truncatePath = (fullpath: string): string => {
+  const parts = fullpath.split('/').filter(Boolean)
+  if (parts.length <= 2) {
+    return parts.join('/ ')
+  }
+  return `.../ ${parts.at(-2)}/ ${parts.at(-1)}`
+}
+
+const PreviewItemDescription = (): React.JSX.Element => {
+  const { item, fallbackItem } = usePreviewMode()
+  const { t } = useTranslation()
+  const { styles } = useStyles()
+
+  const id = item?.data?.id ?? fallbackItem?.id
+  const rawPath = item !== null ? item.data?.fullpath : fallbackItem?.fullpath
+  const fullpath = typeof rawPath === 'string' ? rawPath : null
+
+  if (id === undefined) {
+    return <Text className={ styles.description }>{t('preview-mode.no-item')}</Text>
+  }
+
+  return (
+    <Tooltip title={ fullpath }>
+      <Text className={ styles.description }>
+        ID: {id}{fullpath !== null && <> {'│'} {truncatePath(fullpath)}</>}
+      </Text>
+    </Tooltip>
+  )
+}
+
+export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true, showItem = true }: PreviewModeBarProps): React.JSX.Element => {
+  const { setItem, language, setLanguage } = usePreviewMode()
+  const { currentLanguage } = useLanguageSelection()
+  const { t } = useTranslation()
+  const { styles } = useStyles()
+
+  const { open } = useElementSelector({
+    selectionType: SelectionType.Single,
+    areas: { object: true, asset: false, document: false },
+    config: { objects: { allowedClasses } },
+    onFinish: (event) => {
+      setItem((event?.items?.[0] as PreviewModeItem | undefined) ?? null)
+    }
+  })
+
+  return (
+    <Flex
+      align="center"
+      className={ styles.bar }
+      gap="extra-small"
+    >
+      {showItem && (
+        <>
+          <Button onClick={ open }>
+            {t('preview-mode.preview-item')}
+          </Button>
+
+          <PreviewItemDescription />
+        </>
+      )}
+
+      {showLanguageSwitch && (
+        <Flex
+          justify="flex-end"
+          style={ { flex: 1 } }
+        >
+          <PermissionBasedLanguageSelectionControl
+            onChange={ (value) => { if (value !== null) setLanguage(value) } }
+            value={ language ?? currentLanguage }
+          />
+        </Flex>
+      )}
+    </Flex>
+  )
+}

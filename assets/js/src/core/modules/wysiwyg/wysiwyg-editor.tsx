@@ -9,13 +9,16 @@
  */
 
 import React, { forwardRef, type MutableRefObject, useEffect } from 'react'
-import { type WysiwygProps } from './interface/wysiwyg'
+import { WysiwygContext, type WysiwygProps } from './interface/wysiwyg'
 import { componentConfig, ComponentRenderer } from '../app/component-registry/component-registry'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/modules/wysiwyg/wysiwyg.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+
+// Matches the min-height of the editable default editor (default-wysiwyg-editor.styles.ts).
+const DATA_OBJECT_MIN_HEIGHT = 100
 
 interface WysiwygEditorProps {
   editorProps: WysiwygProps
@@ -44,7 +47,14 @@ export const WysiwygEditor = forwardRef(function WysiwygEditor (
             className={ cn(styles.disabledEditor, props.editorProps.className) }
             style={ {
               maxWidth: toCssDimension(props.editorProps.width),
-              height: toCssDimension(props.editorProps.height)
+              height: toCssDimension(props.editorProps.height),
+              // Same footprint as the editable editor: the configured height, or its 100px
+              // default on data objects. Documents keep their natural height, since inherited
+              // editables sit in the page layout.
+              minHeight: toCssDimension(
+                props.editorProps.height,
+                props.editorProps.context === WysiwygContext.DATA_OBJECT ? DATA_OBJECT_MIN_HEIGHT : undefined
+              )
             } }
           >
             <SanitizeHtml html={ props.editorProps.value ?? '' } />

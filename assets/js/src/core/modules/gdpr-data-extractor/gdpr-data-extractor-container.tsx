@@ -9,6 +9,7 @@
  */
 
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -38,7 +39,7 @@ export interface SearchOverrides {
 export const GDPRDataExtractorContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([])
   const [sortFilter, setSortFilter] = useState<SortFilter | undefined>(undefined)
   const [provider, setProvider] = useState<string>('data_objects')
@@ -103,9 +104,11 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
           <Flex align="center">
             <Split>
               <IconButton
+                aria-label={ t('toolbar.reload') }
                 disabled={ isLoading || isFetching || provider === '' }
                 icon={ { value: 'refresh' } }
                 onClick={ () => { executeSearch() } }
+                tooltip={ { title: t('toolbar.reload') } }
               />
               <Pagination
                 current={ page }

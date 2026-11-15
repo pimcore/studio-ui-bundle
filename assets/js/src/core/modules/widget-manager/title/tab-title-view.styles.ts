@@ -22,6 +22,30 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-space-item:has(.widget-manager__tab-title-close-button) {
         margin-inline-start: ${token.sizeXXS}px;
       }
+    `,
+
+    label: css`
+      display: inline-flex;
+      align-items: center;
+      gap: ${token.sizeXXS}px;
+
+      &:focus-visible {
+        outline: 2px solid ${token.colorPrimaryBorder};
+        outline-offset: 2px;
+        border-radius: ${token.borderRadiusSM}px;
+      }
+
+      &:focus:not(:focus-visible) {
+        outline: none;
+      }
+    `,
+
+    // same as the unpublished elements in the tree: the icon fades, its "eye-off" sub icon stays opaque
+    unpublishedIcon: css`
+      .pimcore-icon__svg,
+      .pimcore-icon__image {
+        opacity: 0.4;
+      }
     `
   }
 }, { hashPriority: 'low' })

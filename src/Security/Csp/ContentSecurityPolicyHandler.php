@@ -15,14 +15,22 @@ namespace Pimcore\Bundle\StudioUiBundle\Security\Csp;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
+ * Holds the configured policy only; each response is built on a clone, so nothing from one
+ * request reaches the next in a long-running worker. The nonce lives on the main request.
+ *
  * @internal
  */
 final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandlerInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
+
+    private const NONCE_ATTRIBUTE = '_pimcore_studio_csp_nonce';
+
+    private const NONCE_PLACEHOLDER = '{nonce}';
 
     private ?string $nonce = null;
 
@@ -44,7 +52,8 @@ final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandler
 
     public function __construct(
         private readonly bool $cspEnabled,
-        private array $cspHeaderOptions = []
+        private array $cspHeaderOptions = [],
+        private readonly ?RequestStack $requestStack = null
     ) {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
@@ -58,7 +67,7 @@ final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandler
             self::DEFAULT_OPT => self::SELF,
             self::IMG_OPT => '* data: blob:',
             self::MEDIA_OPT => self::SELF . ' data: blob:',
-            self::SCRIPT_OPT => self::SELF . " 'nonce-" . $this->getNonce() . "' 'unsafe-eval'",
+            self::SCRIPT_OPT => self::SELF . " 'nonce-" . self::NONCE_PLACEHOLDER . "' 'unsafe-eval'",
             self::STYLE_OPT => self::SELF . " 'unsafe-inline'",
             self::FRAME_OPT => self::SELF . ' data: blob:',
             self::FRAME_ANCHESTORS => self::SELF,
@@ -68,13 +77,25 @@ final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandler
         ]);
     }
 
+    /**
+     * An independent copy for one response; the policy state is arrays and scalars, so no clone shares it.
+     */
+    public function forResponse(): self
+    {
+        return clone $this;
+    }
+
     public function getCspHeader(): string
     {
         $cspHeaderOptions = array_map(function ($k, $v) {
             return "$k $v " . $this->getAllowedUrls($k);
         }, array_keys($this->cspHeaderOptions), array_values($this->cspHeaderOptions));
 
-        return implode(';', $cspHeaderOptions);
+        $header = implode(';', $cspHeaderOptions);
+
+        return str_contains($header, self::NONCE_PLACEHOLDER)
+            ? str_replace(self::NONCE_PLACEHOLDER, $this->getNonce(), $header)
+            : $header;
     }
 
     private function getAllowedUrls(string $key, bool $flatten = true): array|string
@@ -115,14 +136,23 @@ final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandler
     }
 
     /**
-     * Generates a random nonce parameter.
+     * One nonce per main request, shared by the templates and the header of that response.
      */
     private function getNonce(): string
     {
-        if (!$this->nonce) {
-            $this->nonce = generateRandomSymfonySecret();
+        $request = $this->requestStack?->getMainRequest();
+        if ($request === null) {
+            if ($this->nonce === null) {
+                $this->nonce = generateRandomSymfonySecret();
+            }
+
+            return $this->nonce;
         }
 
-        return $this->nonce;
+        if (!$request->attributes->has(self::NONCE_ATTRIBUTE)) {
+            $request->attributes->set(self::NONCE_ATTRIBUTE, generateRandomSymfonySecret());
+        }
+
+        return (string) $request->attributes->get(self::NONCE_ATTRIBUTE);
     }
 }

@@ -9,7 +9,7 @@
  */
 
 import { Modal as AntModal, type ModalProps as AntModalProps } from 'antd'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useStyle } from '@Pimcore/components/modal/modal.styles'
 import type useModal from 'antd/es/modal/useModal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
@@ -35,6 +35,19 @@ export interface IModalProps extends AntModalProps {
 
 export const Modal = ({ iconName, size = 'M', limitContentHeight, className, title, children, styles: stylesProp, draggable = true, modalRender: modalRenderProp, ...props }: IModalProps): React.JSX.Element => {
   const { styles } = useStyle()
+
+  // Restore focus to the element that triggered the modal when it closes.
+  const triggerRef = useRef<Element | null>(null)
+  useEffect(() => {
+    if (props.open === true) {
+      triggerRef.current = document.activeElement
+    }
+    if (props.open === false && triggerRef.current instanceof HTMLElement) {
+      const el = triggerRef.current
+      triggerRef.current = null
+      requestAnimationFrame(() => { el.focus() })
+    }
+  }, [props.open])
 
   // A caller-provided modalRender wins (e.g. WindowModal supplies its own),
   // which also switches off the built-in drag wrapper.

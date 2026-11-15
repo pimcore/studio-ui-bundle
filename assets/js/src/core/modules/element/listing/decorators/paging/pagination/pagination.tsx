@@ -13,6 +13,7 @@ import { Pagination as BasePagination, type PaginationProps as BasePaginationPro
 import { usePaging } from '../context-layer/paging/provider/use-paging'
 import { useData } from '../../../abstract/data-layer/provider/data/use-data'
 import { t } from 'i18next'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export const Pagination = (): React.JSX.Element => {
   const context = usePaging()
@@ -34,7 +35,7 @@ export const Pagination = (): React.JSX.Element => {
       current={ context.page }
       defaultPageSize={ context.pageSize }
       onChange={ onChange }
-      pageSizeOptions={ [10, 20, 50, 100] }
+      pageSizeOptions={ appConfig.pageSizeOptions }
       showSizeChanger
       showTotal={ (total) => t('pagination.show-total', { total }) }
       total={ data.totalItems }

@@ -1,0 +1,275 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+const mockDispatch = jest.fn()
+
+jest.mock('@Pimcore/app/store', () => ({
+  store: { dispatch: (action: unknown) => mockDispatch(action) }
+}))
+
+// Identify the two endpoints by a marker so the dispatch mock can answer each one independently.
+jest.mock('../telemetry-api-slice.gen', () => ({
+  api: {
+    endpoints: {
+      telemetryOutboxNextBatch: {
+        initiate: (arg: unknown, options: unknown) => ({ endpoint: 'getOutbox', arg, options })
+      },
+      telemetryOutboxAck: { initiate: (arg: unknown) => ({ endpoint: 'ack', arg }) }
+    }
+  }
+}))
+
+// eslint-disable-next-line import/first
+import { drain, telemetryDrainLoader } from './telemetry-drain-loader'
+
+interface Batch {
+  nonce: string
+  instanceIdentifier: string
+  v: number
+  ciphertext: string
+  relayEndpoint: string
+}
+
+const batch = (nonce: string): Batch => ({
+  nonce,
+  instanceIdentifier: 'inst-1',
+  v: 1,
+  ciphertext: 'opaque',
+  relayEndpoint: 'https://license.pimcore.com/telemetry/v1/ingest'
+})
+
+/** Queue of outbox answers; `Error` means the request itself failed. */
+let outbox: Array<Batch | null | Error> = []
+let ackFails = false
+/** What the backend reports the ack removed; 0 means the nonce matched no row. */
+let ackRemoves = 1
+const acked: string[] = []
+
+const relayResponds = (init: { ok?: boolean, body?: unknown, throws?: boolean }): void => {
+  ;(global.fetch as jest.Mock).mockImplementation(async () => {
+    if (init.throws === true) {
+      throw new Error('network down')
+    }
+
+    return {
+      ok: init.ok ?? true,
+      json: async () => init.body ?? { status: 'ok' }
+    }
+  })
+}
+
+beforeEach(() => {
+  outbox = []
+  ackFails = false
+  ackRemoves = 1
+  acked.length = 0
+  global.fetch = jest.fn()
+  relayResponds({})
+
+  mockDispatch.mockImplementation((action: { endpoint: string, arg: { telemetryOutboxAckParameters?: { nonce: string } } }) => {
+    if (action.endpoint === 'getOutbox') {
+      const next = outbox.length > 0 ? outbox.shift() : null
+
+      return {
+        unwrap: async () => {
+          if (next instanceof Error) {
+            throw next
+          }
+
+          return next ?? null
+        }
+      }
+    }
+
+    return {
+      unwrap: async () => {
+        if (ackFails) {
+          throw new Error('ack failed')
+        }
+        acked.push(action.arg.telemetryOutboxAckParameters?.nonce ?? '')
+
+        return { acked: ackRemoves }
+      }
+    }
+  })
+})
+
+afterEach(() => {
+  jest.useRealTimers()
+})
+
+describe('telemetryDrainLoader', () => {
+  it('does nothing when the outbox is empty', async () => {
+    outbox = [null]
+
+    await drain()
+
+    expect(global.fetch).not.toHaveBeenCalled()
+    expect(acked).toEqual([])
+  })
+
+  it('forwards the opaque batch to the relay and only then acks it', async () => {
+    outbox = [batch('n1'), null]
+
+    await drain()
+
+    expect(global.fetch).toHaveBeenCalledTimes(1)
+    const [url, init] = (global.fetch as jest.Mock).mock.calls[0] as [string, { body: string }]
+    const sent = JSON.parse(init.body) as Record<string, unknown>
+    expect(url).toBe('https://license.pimcore.com/telemetry/v1/ingest')
+    expect(sent).toEqual({ instanceIdentifier: 'inst-1', v: 1, ciphertext: 'opaque' })
+    // the nonce is an outbox lease, not part of the relay envelope
+    expect(sent.nonce).toBeUndefined()
+    expect(acked).toEqual(['n1'])
+  })
+
+  it('drains repeatedly until the pool reports empty', async () => {
+    outbox = [batch('n1'), batch('n2'), batch('n3'), null]
+
+    await drain()
+
+    expect(acked).toEqual(['n1', 'n2', 'n3'])
+  })
+
+  it('never acks when the relay rejects the batch', async () => {
+    outbox = [batch('n1'), batch('n2')]
+    relayResponds({ ok: false })
+
+    await drain()
+
+    expect(acked).toEqual([])
+    expect(global.fetch).toHaveBeenCalledTimes(1) // stops on the first failure
+  })
+
+  /**
+   * The guarantee that protects against data loss: a captive portal or proxy answering 200 without
+   * the relay's own confirmation must not cause the batch to be dropped from the pool.
+   */
+  it('never acks on a 2xx that is not a confirmed relay acceptance', async () => {
+    outbox = [batch('n1')]
+    relayResponds({ ok: true, body: { status: 'something-else' } })
+
+    await drain()
+
+    expect(acked).toEqual([])
+  })
+
+  it('never acks when the relay response is not parseable', async () => {
+    outbox = [batch('n1')]
+    ;(global.fetch as jest.Mock).mockImplementation(async () => ({
+      ok: true,
+      json: async () => {
+        throw new Error('not json')
+      }
+    }))
+
+    await drain()
+
+    expect(acked).toEqual([])
+  })
+
+  it('never acks when the relay is unreachable', async () => {
+    outbox = [batch('n1')]
+    relayResponds({ throws: true })
+
+    await drain()
+
+    expect(acked).toEqual([])
+  })
+
+  /**
+   * A relay that accepts the connection and then goes silent - a black-holing proxy or firewall -
+   * is the worst case: without a timeout the request stays pending for the browser's own (minutes-
+   * long) limit. The request must be abandoned and the batch left in the pool.
+   */
+  it('abandons a relay that accepts the connection but never answers', async () => {
+    jest.useFakeTimers()
+    outbox = [batch('n1')]
+    // Settles ONLY on abort - optional chaining on purpose, so that a request sent without a signal
+    // hangs and fails this test rather than rejecting for the wrong reason.
+    ;(global.fetch as jest.Mock).mockImplementation(
+      async (_url: string, init: { signal?: AbortSignal }) =>
+        await new Promise((_resolve, reject) => {
+          init.signal?.addEventListener('abort', () => { reject(new Error('aborted')) })
+        })
+    )
+
+    const drained = drain()
+    // well past RELAY_TIMEOUT_MS; the assertion is that a timeout fires at all, not its exact value
+    await jest.advanceTimersByTimeAsync(60_000)
+
+    await expect(drained).resolves.toBeUndefined()
+    expect(acked).toEqual([])
+  })
+
+  it('stops when the outbox request itself fails', async () => {
+    outbox = [new Error('backend not ready')]
+
+    await drain()
+
+    expect(global.fetch).not.toHaveBeenCalled()
+    expect(acked).toEqual([])
+  })
+
+  it('stops when the ack fails, leaving the batch to be retried', async () => {
+    outbox = [batch('n1'), batch('n2'), null]
+    ackFails = true
+
+    await drain()
+
+    expect(acked).toEqual([])
+    expect(global.fetch).toHaveBeenCalledTimes(1) // did not go on to the second batch
+  })
+
+  /**
+   * The ack endpoint answers 200 with the number of rows it removed. Zero is not an error response,
+   * but it does mean the batch was NOT removed: the lease had expired, the row is pending again and
+   * a delivery attempt was burnt. Continuing would re-deliver the rest of the pool against a lease
+   * we no longer hold.
+   */
+  it('stops when the backend reports that the ack removed nothing', async () => {
+    outbox = [batch('n1'), batch('n2'), null]
+    ackRemoves = 0
+
+    await drain()
+
+    expect(acked).toEqual(['n1']) // asked once
+    expect(global.fetch).toHaveBeenCalledTimes(1) // did not go on to the second batch
+  })
+
+  it('caps the work it does in one session', async () => {
+    // an outbox that never empties must not spin forever during login
+    outbox = Array.from({ length: 200 }, (_, i) => batch(`n${i}`))
+
+    await drain()
+
+    expect(acked).toHaveLength(50)
+  })
+
+  it('never rejects', async () => {
+    outbox = [new Error('everything is broken')]
+
+    await expect(drain()).resolves.toBeUndefined()
+  })
+
+  /**
+   * The guarantee that keeps telemetry off the critical path: AppLoaderRegistry awaits every
+   * loader before the UI is shown, so the loader must schedule the drain and return rather than
+   * wait for it. A request that never settles must therefore not delay onLoad() - if the loader
+   * awaited the drain, this test would hang.
+   */
+  it('returns immediately, so a never-settling request cannot block application loading', async () => {
+    mockDispatch.mockImplementation(() => ({
+      unwrap: async () => await new Promise(() => {}) // never settles
+    }))
+
+    await expect(telemetryDrainLoader.onLoad()).resolves.toBeUndefined()
+  })
+})

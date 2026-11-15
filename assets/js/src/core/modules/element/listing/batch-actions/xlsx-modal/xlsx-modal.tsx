@@ -9,7 +9,7 @@
  */
 
 import { Alert, Space } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { CreateXLSXForm, type XLSXFormValues } from './create-xlsx-form/create-xlsx-form'
 import { XlsxDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/xlsx-download-job'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -21,12 +21,13 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ExportXlsxApiResponse, type ExportXlsxFolderApiResponse, useExportXlsxFolderMutation, useExportXlsxMutation } from '@Pimcore/modules/element/export-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { getExportContextName } from '../get-export-context-name'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/data-object'
 import { Form } from '@sdk/components'
+import { getExportColumns } from '../get-export-columns'
 
 export interface XlsxModalProps {
   open: boolean
@@ -38,7 +39,6 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const executionEngine = useExecutionEngine()
   const { id, elementType } = useElementContext()
   const { element } = useElementDraft(id, elementType)
-  const [jobTitle, setJobTitle] = useState<string>('Element')
   const [fetchCreateXlsx, { isError: isCreateXlsxError, error: createXlsxError }] = useExportXlsxMutation()
   const [fetchCreateFolderXlsx, { isError: isCreateFolderXlsxError, error: createFolderXlsxError }] = useExportXlsxFolderMutation()
   const { selectedRows } = useRowSelection()
@@ -52,20 +52,6 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
     header: 'name'
   }
   const { t } = useTranslation()
-
-  useEffect(() => {
-    if (element === undefined) {
-      return
-    }
-
-    if ('filename' in element) {
-      setJobTitle(element.filename as string)
-    }
-
-    if ('key' in element) {
-      setJobTitle(element.key as string)
-    }
-  }, [element])
 
   useEffect(() => {
     if (isCreateXlsxError) {
@@ -109,29 +95,15 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
 
   function onFinish (values: XLSXFormValues): void {
     const isFolderExport = numberedSelectedRows.length === 0
-    const job = new XlsxDownloadJob({ action: async () => await getDownloadAction(values.header), isFolderExport })
+    const job = new XlsxDownloadJob({ action: async () => await getDownloadAction(values.header), isFolderExport, context: getExportContextName(element?.fullPath) })
     void executionEngine.runJob(job)
 
     props.setOpen(false)
   }
 
   async function getDownloadAction (header: XLSXFormValues['header']): Promise<number> {
-    const extractedColumnsFromColumnArg: GridColumnRequest[] = []
-    const columns = getArgs()?.body?.columns ?? []
-
-    for (const column of columns) {
-      if (selectedColumns.find((selectedColumn) => selectedColumn.key === column.key) === undefined) {
-        continue
-      }
-
-      extractedColumnsFromColumnArg.push({
-        key: column.key,
-        type: column.type,
-        group: column.group as unknown as string[] | undefined,
-        locale: column.locale,
-        config: column.config
-      })
-    }
+    const requestColumns: GridColumnRequest[] = getArgs()?.body?.columns ?? []
+    const extractedColumnsFromColumnArg = getExportColumns(requestColumns, selectedColumns)
 
     if (numberedSelectedRows.length === 0) {
       const filters = getArgs()?.body?.filters ?? {}

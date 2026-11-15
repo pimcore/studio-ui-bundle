@@ -85,9 +85,11 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
       renderRightToolbar: (
         <Space size='mini'>
           <IconButton
+            aria-label={ t('remove') }
             icon={ { value: 'trash' } }
             onClick={ () => { handleRemoveColumn(stableId) } }
             theme='secondary'
+            tooltip={ { title: t('remove') } }
           />
         </Space>
       )
@@ -109,7 +111,10 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+      >
         <Title>{t('reports.grid-config.title-columns')}</Title>
         <Space
           direction='vertical'

@@ -40,6 +40,7 @@ export * from '@Pimcore/modules/app/settings/hooks/use-settings'
 // of the public SDK surface — write actions (setSettings, setAdminSettings, ...)
 // stay internal to the core.
 export { getAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
+export { isBundleActive } from '@Pimcore/modules/app/settings/active-bundles-helper'
 
 export * from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 export * from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'

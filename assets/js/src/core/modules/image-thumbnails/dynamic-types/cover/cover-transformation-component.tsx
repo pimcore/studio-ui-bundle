@@ -60,6 +60,7 @@ export const CoverTransformationComponent: TransformationComponent = () => {
       </Form.Item>
 
       <Form.Item
+        initialValue={ false }
         label={ t('image-thumbnails.transformations.cover.force-resize') }
         name="forceResize"
         valuePropName="checked"

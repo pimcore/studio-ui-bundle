@@ -22,13 +22,15 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface ItemDetailProps {
   configuration: ConfigurationPartial
 }
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
-  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
+  const { t } = useTranslation()
+  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider, useDetailUpdateMutation, readOnly = false } = useSettings()
   const { setDetailView } = useItems()
   const layoutResult = useDetailLayoutQuery?.({
     id: props.configuration.id
@@ -117,16 +119,18 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
               <Toolbar>
                 <Flex gap={ 'mini' }>
                   <IconButton
+                    aria-label={ t('toolbar.reload') }
                     icon={ { value: 'refresh' } }
                     onClick={ () => { void refreshLayout() } }
+                    tooltip={ { title: t('toolbar.reload') } }
                   />
 
-                  <ImportExportActions />
+                  {!readOnly && <ImportExportActions />}
 
-                  {customLayouts?.ModalContent !== undefined && <CustomLayout />}
+                  {!readOnly && customLayouts?.ModalContent !== undefined && <CustomLayout />}
                 </Flex>
 
-                <DetailSave />
+                {!readOnly && useDetailUpdateMutation !== undefined && <DetailSave useDetailUpdateMutation={ useDetailUpdateMutation } />}
               </Toolbar>
             }
           >

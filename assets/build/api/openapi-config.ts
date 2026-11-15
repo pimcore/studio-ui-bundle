@@ -29,6 +29,12 @@ const config: ConfigFile = {
       pattern: 'assetGetGrid',
       type: 'query',
     },
+    // POST only because the file name list does not fit in a query string; it is a
+    // read, so it must not invalidate the Assets cache on every batch.
+    {
+      pattern: 'assetUploadBatchInfo',
+      type: 'query',
+    },
     {
       pattern: 'dataObjectGetGrid',
       type: 'query',
@@ -45,6 +51,11 @@ const config: ConfigFile = {
       pattern: 'noteGetCollection',
       type: 'query'
     },
+    // POST only because the filter payload does not fit in a query string; it is a read.
+    {
+      pattern: 'bundleApplicationLoggerGetCollection',
+      type: 'query'
+    },
     {
       pattern: 'bundleSeoRedirectsGetCollection',
       type: 'query'
@@ -55,6 +66,10 @@ const config: ConfigFile = {
     },
     {
       pattern: 'notificationGetCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'emailLogSearch',
       type: 'query'
     },
     {
@@ -170,6 +185,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/role/i)
     },
+    '../../js/src/core/modules/user/service-users/service-users-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/service-users?(\/|$)/i)
+    },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/version/i)
     },
@@ -201,7 +219,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/thumbnails/i)
     },
     '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/(login|logout)/i)
+      filterEndpoints: pathMatcher(/\/api\/(login|logout|session)/i)
     },
     '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/class\//i)
@@ -250,6 +268,18 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
+    },
+    '../../js/src/core/modules/application-logger/application-logger-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/bundle\/application-logger/i)
+    },
+    '../../js/src/core/modules/telemetry/telemetry-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/telemetry\/?/i)
+    },
+    '../../js/src/core/modules/oauth/oauth-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/oauth\//i)
+    },
+    '../../js/src/core/modules/mcp-servers/mcp-servers-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/mcp\//i)
     }
   },
   exportName: 'api',

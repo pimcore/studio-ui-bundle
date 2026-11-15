@@ -9,7 +9,9 @@
  */
 
 import { App, type ModalFuncProps } from 'antd'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
+import { isUndefined } from 'lodash'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { isInIframe } from '@Pimcore/utils/iframe'
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { withDraggableModalRender } from '@Pimcore/components/modal/hooks/draggable-modal-render'
@@ -20,17 +22,37 @@ type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
 const DRAGGABLE_METHODS = ['confirm', 'info', 'success', 'error', 'warning'] as const
 
 /**
+ * Studio's stand-in for Ant Design's default confirm glyph. It is applied here rather than in
+ * `useFormModal` so that dialogs opened straight off this instance are covered too, and only when
+ * no icon was passed at all: `icon` is a ReactNode, so an explicit `null` means "no icon" and the
+ * form-style dialogs rely on it.
+ */
+const withConfirmIcon = (config: ModalFuncProps): ModalFuncProps => (
+  isUndefined(config.icon)
+    ? {
+        ...config,
+        icon: (
+          <Icon
+            options={ { width: 22, height: 22 } }
+            value='alert'
+          />
+        )
+      }
+    : config
+)
+
+/**
  * Wraps an imperative modal instance so its confirm/info/success/error/warning
  * dialogs are draggable, composing with any `modalRender` the caller already
  * provides (e.g. the form modals' autofocus render).
  */
-function withDraggableModals (modal: ModalStaticFunctions): ModalStaticFunctions {
+export function withDraggableModals (modal: ModalStaticFunctions): ModalStaticFunctions {
   const wrapped = { ...modal }
 
   DRAGGABLE_METHODS.forEach((method) => {
     const original = modal[method]
     wrapped[method] = (config: ModalFuncProps) => original({
-      ...config,
+      ...(method === 'confirm' ? withConfirmIcon(config) : config),
       modalRender: withDraggableModalRender(config.modalRender)
     })
   })
@@ -52,12 +74,15 @@ export function useStudioModal (): StudioModalResponse {
   const { modal: localModal } = App.useApp()
 
   return useMemo<StudioModalResponse>(() => {
-    let studioModal = localModal
+    const draggableLocalModal = withDraggableModals(localModal)
+    let studioModal = draggableLocalModal
 
     // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       try {
-        // Get the parent window's modal instance through the studio API
+        // Get the parent window's modal instance through the studio API.
+        // The parent registers it draggable already: wrapping it here would hand
+        // a component of this window's React to the parent's React to render.
         const { modal } = getPimcoreStudioApi()
         studioModal = modal
       } catch (error) {
@@ -66,8 +91,8 @@ export function useStudioModal (): StudioModalResponse {
     }
 
     return {
-      modal: withDraggableModals(studioModal),
-      localModal: withDraggableModals(localModal)
+      modal: studioModal,
+      localModal: draggableLocalModal
     }
   }, [localModal])
 }

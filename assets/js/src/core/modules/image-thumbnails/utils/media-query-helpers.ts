@@ -18,6 +18,38 @@ import { uuid } from '@Pimcore/utils/uuid'
 
 export const DEFAULT_MEDIA_QUERY_ID = 'default'
 
+/**
+ * The media key is written verbatim into the `media` attribute of the rendered
+ * `<source>` tag, so every character a CSS media query is built from has to
+ * survive: parentheses, colons, spaces, commas, the `*` and `/` of a `calc()`
+ * or a ratio, and the `<`, `>` and `=` of Media Queries Level 4 range syntax —
+ * `(width >= 600px)` is kept as written.
+ *
+ * Removed are the characters that cannot occur in a media query and would
+ * break the generated yaml key: quotes, semicolons, braces, backslashes and
+ * control characters.
+ *
+ * This is a character filter, not a grammar validator: a nonsensical but
+ * well-charactered value passes through unchanged. That is safe because
+ * Pimcore escapes the key with `htmlspecialchars()` when building the tag
+ * (lib/helper-functions.php), and the YAML dumper quotes keys that need it.
+ */
+const UNSAFE_MEDIA_QUERY_CHARACTERS = /[^a-zA-Z0-9_\-+*(): ,./%<>=]/g
+
+/**
+ * Tabs and newlines separate tokens in CSS just as a space does, so they are
+ * normalised to a space before filtering. Dropping them outright would weld
+ * two tokens together — `screen\tand (…)` would become `screenand (…)`, which
+ * no longer matches.
+ */
+const CSS_WHITESPACE = /\s+/g
+
+export const sanitiseMediaQuery = (query: string): string =>
+  query
+    .replaceAll(CSS_WHITESPACE, ' ')
+    .replaceAll(UNSAFE_MEDIA_QUERY_CHARACTERS, '')
+    .trim()
+
 export const createDefaultMediaQuery = (): MediaQuery => ({
   id: DEFAULT_MEDIA_QUERY_ID,
   query: DEFAULT_MEDIA_QUERY_ID,

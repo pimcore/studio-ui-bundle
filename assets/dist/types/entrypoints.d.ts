@@ -5,3 +5,9 @@ export interface PluginOptions {
 }
 
 export function pluginGenerateEntrypoints(options?: PluginOptions): RsbuildPlugin
+
+export interface WriteBuildIdPluginOptions {
+  buildId: string;
+}
+
+export function pluginWriteBuildId(options: WriteBuildIdPluginOptions): RsbuildPlugin

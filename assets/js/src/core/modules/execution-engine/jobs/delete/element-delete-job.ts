@@ -27,7 +27,14 @@ export interface DeleteJobOptions {
   treeId?: string
   nodeId?: string
   parentFolderId?: number
+  /** Runs once the element is really gone, not when the delete request was merely accepted. */
+  onSuccess?: () => void
+  /** Runs once the job settled, whether the element was deleted or not. */
+  onFinished?: () => void
 }
+
+/** The delete request was rejected. Its error has already been reported to the user. */
+class DeleteRequestRejectedError extends Error {}
 
 export class DeleteJob implements JobInterface {
   static readonly jobNames = ['studio_ee_job_delete_assets', 'studio_ee_job_delete_data_objects', 'studio_ee_job_delete_documents'] as const
@@ -37,6 +44,13 @@ export class DeleteJob implements JobInterface {
   private readonly treeId?: string
   private readonly nodeId?: string
   private readonly parentFolderId?: number
+  private readonly onSuccess?: () => void
+  private readonly onFinished?: () => void
+  /**
+   * The terminal update reaches the job through both Mercure and the polling fallback, and neither
+   * cancels the other, so the completion callbacks have to guard against running twice.
+   */
+  private hasSettled = false
 
   constructor (options: DeleteJobOptions) {
     this.elementId = options.elementId
@@ -44,10 +58,15 @@ export class DeleteJob implements JobInterface {
     this.treeId = options.treeId
     this.nodeId = options.nodeId
     this.parentFolderId = options.parentFolderId
+    this.onSuccess = options.onSuccess
+    this.onFinished = options.onFinished
   }
 
   async run (options: JobRunOptions): Promise<void> {
     const { messageBus } = options
+
+    // A retry runs the job again, so the previous attempt must not keep its callbacks disarmed.
+    this.hasSettled = false
 
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: true }))
@@ -64,7 +83,7 @@ export class DeleteJob implements JobInterface {
       const jobRunId = await this.executeDeleteRequest()
 
       if (isNil(jobRunId)) {
-        await this.handleCompletion()
+        await this.handleCompletion(true)
         return
       }
 
@@ -73,7 +92,10 @@ export class DeleteJob implements JobInterface {
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
-              await this.handleCompletion()
+              // A job that finished with errors is finished but not successful: the tree state has to
+              // be cleaned up either way, while the deletion side effects must not run, because some
+              // or all of the elements still exist.
+              await this.handleCompletion(data.isSuccessful)
             } catch (error) {
               await this.handleJobFailure(error)
             }
@@ -89,7 +111,10 @@ export class DeleteJob implements JobInterface {
       messageBus.registerHandler(handler)
     } catch (error: any) {
       await this.handleJobFailure(error)
-      trackError(new GeneralError(error.message as string))
+
+      if (!(error instanceof DeleteRequestRejectedError)) {
+        trackError(new GeneralError(error.message as string))
+      }
     }
   }
 
@@ -103,13 +128,13 @@ export class DeleteJob implements JobInterface {
 
     if (!isUndefined(response.error)) {
       trackError(new ApiError(response.error))
-      return null
+      throw new DeleteRequestRejectedError('Delete request rejected')
     }
 
     return response.data?.jobRunId ?? null
   }
 
-  private async handleCompletion (): Promise<void> {
+  private async handleCompletion (isSuccessful: boolean): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }
@@ -126,6 +151,8 @@ export class DeleteJob implements JobInterface {
         nodeId: this.parentFolderId.toString()
       }))
     }
+
+    this.settle(isSuccessful)
   }
 
   private async handleJobFailure (error: any): Promise<void> {
@@ -140,6 +167,23 @@ export class DeleteJob implements JobInterface {
     }))
 
     console.error('Delete job failed:', error)
+
+    this.settle(false)
+  }
+
+  /** Runs the completion callbacks, at most once per job run. */
+  private settle (isSuccessful: boolean): void {
+    if (this.hasSettled) {
+      return
+    }
+
+    this.hasSettled = true
+
+    if (isSuccessful) {
+      this.onSuccess?.()
+    }
+
+    this.onFinished?.()
   }
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {

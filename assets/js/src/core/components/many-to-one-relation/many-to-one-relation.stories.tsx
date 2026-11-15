@@ -30,6 +30,7 @@ const config: Meta<typeof ManyToOneRelation> = {
 - **Element Selector**: Built-in element selector for browsing and selecting elements
 - **Path Text Input**: Optional mode for entering paths manually as text
 - **Asset Downloads**: Inline download functionality for asset elements
+- **Inline Upload**: Upload button that creates a new asset and assigns it as the relation (opt-out via \`disableInlineUpload\`)
 - **Type Validation**: Configurable allowed types for each element category
 - **Width Customization**: Flexible width configuration with field width provider integration
 
@@ -125,6 +126,7 @@ const ConfigurationsExample = (): React.JSX.Element => {
     objectsOnly: ManyToOneRelationValueType
     withTextInput: ManyToOneRelationValueType
     withDownload: ManyToOneRelationValueType
+    withUpload: ManyToOneRelationValueType
     readOnly: ManyToOneRelationValueType
   }>({
     assetsOnly: null,
@@ -132,6 +134,7 @@ const ConfigurationsExample = (): React.JSX.Element => {
     objectsOnly: null,
     withTextInput: null,
     withDownload: null,
+    withUpload: null,
     readOnly: {
       type: 'document',
       id: 123,
@@ -249,6 +252,22 @@ const ConfigurationsExample = (): React.JSX.Element => {
             </p>
           </div>
 
+          {/* With Inline Upload */}
+          <div style={ { padding: '16px', border: '1px solid #e1e1e1', borderRadius: '8px' } }>
+            <h4 style={ { margin: '0 0 12px 0' } }>With Inline Upload</h4>
+            <ManyToOneRelation
+              allowToClearRelation
+              allowedAssetTypes={ ['image', 'document', 'video'] }
+              assetUploadPath="/examples"
+              assetsAllowed
+              onChange={ (value) => { handleChange('withUpload', value) } }
+              value={ values.withUpload }
+            />
+            <p style={ { fontSize: '12px', color: '#666', margin: '8px 0 0 0' } }>
+              Uploads a new asset into <code>/examples</code> and assigns it as the relation
+            </p>
+          </div>
+
           {/* Read Only */}
           <div style={ { padding: '16px', border: '1px solid #e1e1e1', borderRadius: '8px' } }>
             <h4 style={ { margin: '0 0 12px 0' } }>Read Only</h4>
@@ -294,7 +313,7 @@ export const Configurations: Story = {
     layout: 'fullscreen',
     docs: {
       description: {
-        story: 'Showcase of different ManyToOneRelation configurations: assets-only, documents-only, objects-only, with path text input, with asset download functionality, and read-only mode. Each configuration demonstrates specific use cases and feature combinations.'
+        story: 'Showcase of different ManyToOneRelation configurations: assets-only, documents-only, objects-only, with path text input, with asset download functionality, with inline asset upload, and read-only mode. Each configuration demonstrates specific use cases and feature combinations.'
       }
     }
   }

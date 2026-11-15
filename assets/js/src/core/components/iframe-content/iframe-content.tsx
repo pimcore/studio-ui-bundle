@@ -16,6 +16,7 @@ import { ContentLayout } from '../content-layout/content-layout'
 import { IconButton } from '../icon-button/icon-button'
 import { Iframe, type IframeProps, type IframeRef } from '../iframe/iframe'
 import { Toolbar } from '../toolbar/toolbar'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 interface IframeContentProps {
   iframe: IframeProps
@@ -44,7 +45,10 @@ export const IframeContent = (props: IframeContentProps): React.JSX.Element => {
     }
 
     return (
-      <Tooltip title={ t('toolbar.reload') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('toolbar.reload') }
+      >
         <IconButton
           icon={ { value: 'refresh' } }
           onClick={ () => {
@@ -66,7 +70,10 @@ export const IframeContent = (props: IframeContentProps): React.JSX.Element => {
     }
 
     return (
-      <Tooltip title={ t('open') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('open') }
+      >
         <IconButton
           icon={ { value: 'open-folder' } }
           onClick={ () => {

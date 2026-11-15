@@ -251,6 +251,166 @@ describe('NumberedList', () => {
     })
   })
 
+  describe('entries added through add()', () => {
+    it('reports an added entry whose fields only register null as a change', () => {
+      // e.g. an empty block item: its mandatory fields register null, nothing else is typed
+      const onChange = jest.fn()
+      const props = { value: [], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenCalledWith([{ title: null }])
+    })
+
+    it('still treats registrations of loaded entries as baseline', () => {
+      const onChange = jest.fn()
+      const props = { value: [{ name: 'a' }], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      rerender(numberedListUi(props, (
+        <>
+          <RegisteringField name={ ['attributes', '0', 'title'] } />
+          <RegisteringField name={ ['attributes', '1', 'title'] } />
+        </>
+      )))
+      flushDebounce()
+      onChange.mockClear()
+
+      // unmount the fields so they do not register again once the entry is gone
+      rerender(numberedListUi(props))
+      act(() => { operations.remove(1) })
+      flushDebounce()
+
+      // the loaded entry keeps its registration in the baseline, only the added entry is reverted
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenCalledWith([{ name: 'a', title: null }])
+    })
+
+    it('follows the added entry when an entry is inserted before it', () => {
+      const onChange = jest.fn()
+      const props = { value: [], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      act(() => { operations.add({}, 0) })
+      rerender(numberedListUi(props, (
+        <>
+          <RegisteringField name={ ['attributes', '0', 'title'] } />
+          <RegisteringField name={ ['attributes', '1', 'title'] } />
+        </>
+      )))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith([{ title: null }, { title: null }])
+    })
+
+    it('follows the added entry when it is moved before the fields register', () => {
+      const onChange = jest.fn()
+      const props = { value: [{ name: 'a' }], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      act(() => { operations.move(1, 0) })
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+      onChange.mockClear()
+
+      // the registration of the moved entry must not have reached the baseline of the loaded one
+      rerender(numberedListUi(props))
+      act(() => { operations.remove(0) })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith([{ name: 'a' }])
+    })
+
+    it('reports the removal of an already reported added entry', () => {
+      const onChange = jest.fn()
+      const props = { value: [], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+      expect(onChange).toHaveBeenLastCalledWith([{ title: null }])
+
+      rerender(numberedListUi(props))
+      act(() => { operations.remove(0) })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith([])
+    })
+
+    it('keeps the added marker in place when the last entry is moved down', () => {
+      const onChange = jest.fn()
+      const props = { value: [], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      act(() => { operations.move(0, 1) })
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+
+      expect(onChange).toHaveBeenLastCalledWith([{ title: null }])
+    })
+
+    it('does not report a registration after an add/remove cycle', () => {
+      const onChange = jest.fn()
+      const props = { value: [{ name: 'a' }], onChange }
+
+      const { rerender } = renderNumberedList(props)
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      flushDebounce()
+      act(() => { operations.remove(1) })
+      flushDebounce()
+      expect(onChange).toHaveBeenLastCalledWith([{ name: 'a' }])
+      onChange.mockClear()
+
+      // a loaded field registers late, before the parent echoes the value back
+      rerender(numberedListUi(props, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
+    it('forgets the added entries when the parent echoes the value back', () => {
+      const onChange = jest.fn()
+      const { rerender } = renderNumberedList({ value: [], onChange })
+      flushDebounce()
+
+      act(() => { operations.add({}) })
+      flushDebounce()
+      expect(onChange).toHaveBeenLastCalledWith([{}])
+      onChange.mockClear()
+
+      // after the echo the entry is part of the loaded state: its registration is baseline again
+      rerender(numberedListUi({ value: [{}], onChange }))
+      flushDebounce()
+      rerender(numberedListUi({ value: [{}], onChange }, <RegisteringField name={ ['attributes', '0', 'title'] } />))
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+  })
+
   describe('operations', () => {
     it('add() appends a new entry and reports it as a change', () => {
       const onChange = jest.fn()

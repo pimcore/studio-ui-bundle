@@ -9,12 +9,13 @@
  */
 
 import { AbstractFolderBatchEditJob } from './abstract-folder-batch-edit-job'
+import { buildPatchData } from '@Pimcore/modules/data-object/listing/batch-actions/batch-edit-modal/utils/build-patch-data'
 import { type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
 
 export interface DataObjectFolderBatchEditJobOptions extends AbstractBatchEditJobOptions {
   patchObjectsInFolder: (args: any) => Promise<any>
   folderId: number
-  values: any
+  values: Record<string, unknown>
   filters: any
   classId: string
 }
@@ -22,7 +23,7 @@ export interface DataObjectFolderBatchEditJobOptions extends AbstractBatchEditJo
 export class DataObjectFolderBatchEditJob extends AbstractFolderBatchEditJob {
   private readonly patchObjectsInFolder: (args: any) => Promise<any>
   private readonly folderId: number
-  private readonly values: any
+  private readonly values: Record<string, unknown>
   private readonly filters: any
   private readonly classId: string
 
@@ -39,9 +40,7 @@ export class DataObjectFolderBatchEditJob extends AbstractFolderBatchEditJob {
     const response = await this.patchObjectsInFolder({
       id: this.folderId,
       body: {
-        data: {
-          editableData: this.values
-        },
+        data: buildPatchData(this.values),
         filters: this.filters,
         classId: this.classId
       }

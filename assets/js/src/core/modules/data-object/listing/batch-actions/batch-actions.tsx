@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { useDeleteAllMenuItem } from './delete-all/use-delete-all-menu-item'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
@@ -20,9 +21,11 @@ import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-mod
 import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
 import { useBatchDelete } from '@Pimcore/modules/data-object/actions/batch-delete/use-batch-delete'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { checkElementPermission, type ElementPermissionKeys, type ElementPermissions } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
+  const deleteAllMenuItem = useDeleteAllMenuItem(Object.keys(rowSelection?.selectedRows ?? {}).length > 0)
   const { confirmBatchDelete } = useBatchDelete()
 
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
@@ -40,6 +43,18 @@ export const BatchActions = (): React.JSX.Element => {
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
 
+  // A batch action is only permitted when every currently selected row grants the required permission.
+  // Iterate the current selection (not selectedRowsData, which is an accumulating cache and retains
+  // deselected rows) so stale entries are ignored and rows with missing metadata fail closed.
+  const allSelectedRowsAllow = (permission: ElementPermissionKeys): boolean =>
+    Object.keys(selectedRows ?? {}).every((id) => {
+      const row = selectedRowsData[Number(id)] as { permissions?: ElementPermissions, isLocked?: boolean } | undefined
+      return checkElementPermission(row?.permissions, permission) && row?.isLocked !== true
+    })
+
+  const canBatchEdit = allSelectedRowsAllow('save')
+  const canBatchDelete = allSelectedRowsAllow('delete')
+
   const handleBatchDeleteConfirm = (): void => {
     void confirmBatchDelete(numberedSelectedRows, selectedRowsData, () => { setSelectedRows({}) })
   }
@@ -50,6 +65,7 @@ export const BatchActions = (): React.JSX.Element => {
         key: '1',
         label: t('listing.actions.batch-edit'),
         icon: <Icon value={ 'batch-selection' } />,
+        disabled: hasSelectedItems && !canBatchEdit,
         onClick: () => {
           setBatchEditModalOpen(true)
         }
@@ -80,10 +96,12 @@ export const BatchActions = (): React.JSX.Element => {
       {
         key: '3',
         hidden: !hasSelectedItems,
+        disabled: !canBatchDelete,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDeleteConfirm
-      }
+      },
+      deleteAllMenuItem
     ]
   }
 

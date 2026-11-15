@@ -61,8 +61,18 @@ export const HotspotImageContainer = ({ src, items, styleOptions = defaultStyleO
         {JSON.stringify(hotspots, null, 2)}
       </div>
 
-      <button onClick={ () => { addHotspot('hotspot') } }>Add Hotspot</button>
-      <button onClick={ () => { addHotspot('marker') } }>Add Marker</button>
+      <button
+        onClick={ () => { addHotspot('hotspot') } }
+        type="button"
+      >
+        Add Hotspot
+      </button>
+      <button
+        onClick={ () => { addHotspot('marker') } }
+        type="button"
+      >
+        Add Marker
+      </button>
     </>
   )
 }

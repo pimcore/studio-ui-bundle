@@ -20,6 +20,8 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-checkbox-inner:after {
         border-color: ${token.colorTextDisabled} !important;
+        /* the check mark is a masked shape colored by its background (see motion.styles) */
+        background-color: ${token.colorTextDisabled} !important;
       }
     `
   }
