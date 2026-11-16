@@ -17,7 +17,7 @@ import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/author
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
-import { Checkbox, Input } from 'antd'
+import { Input } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '../../../../components/icon/icon'
@@ -111,11 +111,6 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
           placeholder={ t('login-form.password') }
         />
         <div className={ 'flex-space' }>
-          <Checkbox
-            aria-label={ t('aria.login-form-additional-logins.remember-me-checkbox') }
-          >
-            {t('login-form.remember-me')}
-          </Checkbox>
           <Button
             onClick={ onPasswordForgotten }
             style={ { paddingLeft: 0, paddingRight: 0 } }
