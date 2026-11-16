@@ -16,7 +16,7 @@ import { TreeNodeWorkflowStates } from './tree-node-workflow-states'
 jest.mock('@Pimcore/components/flex/flex', () => ({
   Flex: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>
 }))
-jest.mock('@Pimcore/components/workflow-state/workflow-state-dot', () => ({
+jest.mock('@Pimcore/components/workflow-state/workflow-state-dot/workflow-state-dot', () => ({
   WorkflowStateDot: ({ label, color }: { label: string, color: string }) => <span data-color={ color }>{label}</span>
 }))
 jest.mock('./tree-node-content.styles', () => ({ useStyles: () => ({ styles: {} }) }))

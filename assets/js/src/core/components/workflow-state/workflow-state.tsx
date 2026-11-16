@@ -11,7 +11,7 @@
 import React, { type ReactNode } from 'react'
 import cn from 'classnames'
 import { useStyles } from './workflow-state.styles'
-import { WorkflowStateDot } from './workflow-state-dot'
+import { WorkflowStateDot } from './workflow-state-dot/workflow-state-dot'
 
 export interface WorkflowStateProps {
   label: ReactNode

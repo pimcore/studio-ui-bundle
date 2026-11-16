@@ -10,6 +10,7 @@
 
 import React from 'react'
 import cn from 'classnames'
+import { isUndefined } from 'lodash'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useStyles } from './workflow-state-dot.styles'
 
@@ -25,7 +26,7 @@ export const WorkflowStateDot = ({ label, color, className }: WorkflowStateDotPr
   const dotClassName = cn('workflow-state-dot', styles.workflowStateDot, className)
 
   // without a label the dot is decorative, e.g. next to the visible label in a tag
-  if (label === undefined) {
+  if (isUndefined(label)) {
     return (
       <span
         aria-hidden

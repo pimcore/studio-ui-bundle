@@ -1200,8 +1200,8 @@ export type Asset = Element & {
     score?: number | null;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
-    /** Workflow states visible in the header, only set in tree listings */
-    workflowStates?: WorkflowStatus[];
+    /** Workflow states visible in the header; null outside tree listings and for elements the user may not view */
+    workflowStates?: WorkflowStatus[] | null;
     /** Has children */
     hasChildren: boolean;
     /** Type */

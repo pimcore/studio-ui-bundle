@@ -11,7 +11,6 @@
 import React from 'react'
 import { render, screen, within } from '@testing-library/react'
 import { useWorkflow } from '../hooks/use-workflow'
-import { useSyncTreeWorkflowStates } from '../hooks/use-sync-tree-workflow-states'
 import { EditorToolbarWorkflowMenu } from './workflow-menu'
 
 // Factories, so the real components — and the antd ESM they pull in — are never loaded.
@@ -38,7 +37,6 @@ jest.mock('@Pimcore/components/workflow-state/workflow-state', () => ({
 jest.mock('./workflow-transition-group', () => ({ WorkflowTransitionGroup: () => null }))
 jest.mock('./workflow-menu.styles', () => ({ useStyles: () => ({ styles: {} }) }))
 jest.mock('../hooks/use-workflow', () => ({ useWorkflow: jest.fn() }))
-jest.mock('../hooks/use-sync-tree-workflow-states', () => ({ useSyncTreeWorkflowStates: jest.fn() }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
 const status = (label: string, visibleInDetail: boolean, colorInverted = false): object => ({
@@ -73,11 +71,5 @@ describe('EditorToolbarWorkflowMenu', () => {
 
     expect(screen.getAllByText('visible')).toHaveLength(2)
     expect(screen.getAllByText('hidden')).toHaveLength(1)
-  })
-
-  it('hands the visible states to the tree node', () => {
-    render(<EditorToolbarWorkflowMenu />)
-
-    expect(useSyncTreeWorkflowStates).toHaveBeenLastCalledWith([expect.objectContaining({ label: 'visible' })])
   })
 })

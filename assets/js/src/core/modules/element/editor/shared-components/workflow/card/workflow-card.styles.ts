@@ -10,7 +10,7 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css }) => {
   return {
     workflowCard: css`
       .ant-card-head-title {

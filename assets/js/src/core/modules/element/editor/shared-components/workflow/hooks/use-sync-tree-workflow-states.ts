@@ -8,31 +8,37 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
+import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
-import { setNodeWorkflowStates } from '@Pimcore/components/element-tree/element-tree-slice'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import type {
-  WorkflowStatus
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
+import { updateNodeData } from '@Pimcore/components/element-tree/element-tree-slice'
+import { toTreeNodeWorkflowStates } from '@Pimcore/components/element-tree/utils/tree-node-workflow-states'
+import {
+  useWorkflowGetDetailsQuery
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { getVisibleWorkflowStatuses } from '../types/workflow-types'
 
-/**
- * Keeps the element's tree node in line with the states the editor shows, e.g. after a transition was applied.
- */
-export const useSyncTreeWorkflowStates = (visibleStatuses: WorkflowStatus[] | undefined): void => {
+export const useSyncTreeWorkflowStates = (id: number, elementType: ElementType, enabled: boolean): void => {
   const dispatch = useAppDispatch()
-  const { id, elementType } = useElementContext()
-  const signature = visibleStatuses?.map((status) => `${status.title}:${status.color}:${status.label}`).join('|')
+  const { element } = useElementDraft(id, elementType)
+  const { data } = useWorkflowGetDetailsQuery(
+    { elementType, elementId: id },
+    { skip: !enabled || !isWorkflowAvailable(element, elementType) }
+  )
+
+  const workflowStates = useMemo(
+    () => isUndefined(data) ? undefined : toTreeNodeWorkflowStates(getVisibleWorkflowStatuses(data.items)),
+    [data]
+  )
 
   useEffect(() => {
-    if (visibleStatuses === undefined) {
+    if (isUndefined(workflowStates)) {
       return
     }
 
-    dispatch(setNodeWorkflowStates({
-      nodeId: String(id),
-      elementType,
-      workflowStates: visibleStatuses.map(({ title, label, color }) => ({ title, label, color }))
-    }))
-  }, [id, elementType, signature])
+    dispatch(updateNodeData({ nodeId: String(id), elementType, data: { workflowStates } }))
+  }, [dispatch, id, elementType, workflowStates])
 }

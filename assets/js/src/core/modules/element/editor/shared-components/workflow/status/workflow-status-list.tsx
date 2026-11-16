@@ -30,7 +30,6 @@ export const WorkflowStatusList = ({ statuses }: WorkflowStatusListProps): React
           inverted={ status.colorInverted }
           key={ `${index}-${status.title}` }
           label={ t(status.label) }
-          title={ status.title }
         />
       ))}
     </>

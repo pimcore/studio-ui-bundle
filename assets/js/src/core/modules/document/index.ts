@@ -54,15 +54,15 @@ moduleSystem.registerModule({
     })
 
     componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {
-      name: 'workflowStates',
-      component: TreeNodeWorkflowStates,
-      priority: 400
-    })
-
-    componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {
       name: 'lockIcon',
       component: TreeNodeLockIcon,
       priority: 300
+    })
+
+    componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {
+      name: 'workflowStates',
+      component: TreeNodeWorkflowStates,
+      priority: 400
     })
 
     const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])

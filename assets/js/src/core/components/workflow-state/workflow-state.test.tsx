@@ -15,7 +15,7 @@ import { WorkflowState } from './workflow-state'
 jest.mock('./workflow-state.styles', () => ({
   useStyles: () => ({ styles: new Proxy({}, { get: (_, key) => String(key) }) })
 }))
-jest.mock('./workflow-state-dot.styles', () => ({
+jest.mock('./workflow-state-dot/workflow-state-dot.styles', () => ({
   useStyles: () => ({ styles: new Proxy({}, { get: (_, key) => String(key) }) })
 }))
 jest.mock('@Pimcore/components/tooltip/tooltip', () => ({

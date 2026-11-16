@@ -26,7 +26,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         <>
           <p>{workflow.workflowName}</p>
 
-          <WorkflowStatusList statuses={ workflow.workflowStatus ?? [] } />
+          <WorkflowStatusList statuses={ workflow.workflowStatus } />
         </>
             ) }
     >

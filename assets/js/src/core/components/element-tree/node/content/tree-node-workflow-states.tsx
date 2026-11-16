@@ -11,7 +11,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { WorkflowStateDot } from '@Pimcore/components/workflow-state/workflow-state-dot'
+import { isEmpty, isUndefined } from 'lodash'
+import { WorkflowStateDot } from '@Pimcore/components/workflow-state/workflow-state-dot/workflow-state-dot'
 import { type TreeNodeContentMetaProps } from './tree-node-content'
 import { useStyles } from './tree-node-content.styles'
 
@@ -20,7 +21,7 @@ export const TreeNodeWorkflowStates = ({ node }: TreeNodeContentMetaProps): Reac
   const { styles } = useStyles()
   const { workflowStates } = node
 
-  if (workflowStates === undefined || workflowStates.length === 0) {
+  if (isUndefined(workflowStates) || isEmpty(workflowStates)) {
     return null
   }
 

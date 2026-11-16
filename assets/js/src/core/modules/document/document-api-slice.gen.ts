@@ -712,8 +712,8 @@ export type Document = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
-    /** Workflow states visible in the header, only set in tree listings */
-    workflowStates?: WorkflowStatus[];
+    /** Workflow states visible in the header; null outside tree listings and for elements the user may not view */
+    workflowStates?: WorkflowStatus[] | null;
     /** Full path */
     fullPath: string;
     /** Published */

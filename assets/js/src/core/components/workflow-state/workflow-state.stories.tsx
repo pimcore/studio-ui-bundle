@@ -11,12 +11,12 @@
 import React from 'react'
 import { type Meta } from '@storybook/react'
 import { WorkflowState } from './workflow-state'
-import { WorkflowStateDot } from './workflow-state-dot'
 import { Flex } from '@Pimcore/components/flex/flex'
 
 const config: Meta = {
   title: 'Components/Data Display/WorkflowState',
   component: WorkflowState,
+  tags: ['autodocs'],
   args: {
     label: 'Review License',
     color: '#f5222d'
@@ -56,20 +56,6 @@ export const CustomColors = {
             />
           ))}
         </Flex>
-      ))}
-    </Flex>
-  )
-}
-
-export const Dot = {
-  render: () => (
-    <Flex gap="extra-small">
-      {colors.map((color) => (
-        <WorkflowStateDot
-          color={ color }
-          key={ color }
-          label="Review License"
-        />
       ))}
     </Flex>
   )

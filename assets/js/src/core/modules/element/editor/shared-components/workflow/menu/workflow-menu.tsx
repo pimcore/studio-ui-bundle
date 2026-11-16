@@ -17,7 +17,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu.styles'
-import { useSyncTreeWorkflowStates } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-sync-tree-workflow-states'
+import { getVisibleWorkflowStatuses } from '@Pimcore/modules/element/editor/shared-components/workflow/types/workflow-types'
 import { WorkflowStatusList } from '@Pimcore/modules/element/editor/shared-components/workflow/status/workflow-status-list'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
@@ -47,7 +47,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
             >
               <span>{t(workflow.workflowLabel)}</span>
               <Flex gap="mini">
-                <WorkflowStatusList statuses={ workflow.workflowStatus ?? [] } />
+                <WorkflowStatusList statuses={ workflow.workflowStatus } />
               </Flex>
             </Flex>
           ),
@@ -58,11 +58,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     }
   }, [workflowDetailsData])
 
-  const visibleStatuses = (workflowDetailsData?.items ?? []).flatMap(
-    (workflow) => (workflow.workflowStatus ?? []).filter((status) => status.visibleInDetail)
-  )
-
-  useSyncTreeWorkflowStates(workflowDetailsData === undefined ? undefined : visibleStatuses)
+  const visibleStatuses = getVisibleWorkflowStatuses(workflowDetailsData?.items)
 
   return (
     <Flex
