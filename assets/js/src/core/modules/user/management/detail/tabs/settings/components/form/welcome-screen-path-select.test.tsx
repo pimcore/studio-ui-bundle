@@ -60,6 +60,7 @@ jest.mock('@Pimcore/components/select/select', () => ({
   Select: ({ value, onChange, options, placeholder, 'aria-label': ariaLabel }: { value?: string | null, onChange?: (value: string) => void, options: Array<{ value: string, label: string }>, placeholder?: string, 'aria-label'?: string }) => (
     <select
       aria-label={ ariaLabel }
+      data-has-value={ value !== undefined }
       data-placeholder={ placeholder }
       onChange={ (event) => onChange?.(event.target.value) }
       value={ value ?? '' }
@@ -119,6 +120,10 @@ describe('WelcomeScreenPathSelect', () => {
 
     expect(screen.queryByText(SELECT_NAME)).toBeNull()
     expect(select.dataset.placeholder).toBe('user-management.welcomeScreenPath.placeholder')
+  })
+
+  it('passes no value when the backend has no dashboard stored, so the placeholder shows', () => {
+    expect(renderSelect(null).dataset.hasValue).toBe('false')
   })
 
   it('shows the stored dashboard', () => {

@@ -31,7 +31,11 @@ export const WelcomeScreenPathSelect = (): React.JSX.Element => {
       condition={ (values) => values.welcomeScreen === true }
       watchFields={ ['welcomeScreen'] }
     >
-      <Form.Item name="welcomeScreenPath">
+      <Form.Item
+        // the backend sends null for no choice, antd shows the placeholder only for undefined
+        getValueProps={ (value: string | null | undefined) => ({ value: value ?? undefined }) }
+        name="welcomeScreenPath"
+      >
         <Select
           aria-label={ t('user-management.welcomeScreenPath') }
           optionFilterProp="label"
