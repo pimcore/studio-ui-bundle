@@ -42,6 +42,8 @@ const context: FieldDefinitionContext = { area: ['classification-store'], path: 
 const DATA_TYPES_DIR = path.resolve(__dirname, '../types/data')
 const CALCULATED_VALUE = 'calculatedValue'
 const CONSENT = 'consent'
+const PERMISSION_MANY_TO_MANY_RELATION = 'permissionManyToManyRelation'
+const PERMISSION_MANY_TO_ONE_RELATION = 'permissionManyToOneRelation'
 const NEWLY_OFFERED_TYPES = [
   'advancedManyToManyObjectRelation', 'advancedManyToManyRelation', 'dateRange', 'email', 'externalImage',
   'firstname', 'gender', 'geobounds', 'geopoint', 'geopolygon', 'geopolyline', 'hotspotimage', 'imageGallery',
@@ -125,10 +127,9 @@ describe('classification store key types', () => {
   })
 
   it('withdraws the two permission relations, which this bundle does not ship', () => {
-    expect(CLASSIFICATION_STORE_WITHDRAWN_TYPES).toEqual([CONSENT, 'permissionManyToManyRelation', 'permissionManyToOneRelation'])
-    expect(types.map((type) => type.id)).not.toContain('permissionManyToManyRelation')
-    expect(isOfferedAsKeyType('permissionManyToManyRelation')).toBe(false)
-    expect(isOfferedAsKeyType('permissionManyToOneRelation')).toBe(false)
+    expect(types.map((type) => type.id)).not.toContain(PERMISSION_MANY_TO_MANY_RELATION)
+    expect(isOfferedAsKeyType(PERMISSION_MANY_TO_MANY_RELATION)).toBe(false)
+    expect(isOfferedAsKeyType(PERMISSION_MANY_TO_ONE_RELATION)).toBe(false)
   })
 
   // link is a wanted key type and stays offered; nothing withdraws it.
@@ -138,6 +139,37 @@ describe('classification store key types', () => {
 
   it('declares a capability requirement only for tagged types', () => {
     expect(Object.keys(KEY_TYPE_REQUIRED_CAPABILITIES).filter((id) => !tagged.includes(id))).toEqual([])
+  })
+})
+
+/**
+ * The counterpart of `WithdrawnKeyTypePickerAgreementTest` in core. The withdrawal is decided twice,
+ * once per repository: core refuses the three names in `KeyConfig::save()`, this bundle never offers
+ * them. Neither test run can read the other's list - this job installs npm only, so there is no core
+ * checkout here - so the two are held together by naming the same three types on both sides, each
+ * test naming the other's file. An edit to one list fails a test that says where the other one is.
+ *
+ * Convention held by two tests, not one source of truth. The source of truth is the follow-up: the
+ * backend publishes the withdrawn list and the picker reads it.
+ */
+describe('agreement with core on the withdrawn key types', () => {
+  it('names the three types core names in WITHDRAWN_KEY_TYPES, pimcore models/DataObject/Classificationstore/KeyTypeSupport.php', () => {
+    expect(CLASSIFICATION_STORE_WITHDRAWN_TYPES).toEqual([
+      CONSENT,
+      PERMISSION_MANY_TO_MANY_RELATION,
+      PERMISSION_MANY_TO_ONE_RELATION
+    ])
+  })
+
+  // the filter is what the pickers read, so pinning the list alone would pin nothing they ask
+  it('offers none of the three, as KeyConfig::save() in core refuses all three', () => {
+    expect(CLASSIFICATION_STORE_WITHDRAWN_TYPES.filter(isOfferedAsKeyType)).toEqual([])
+  })
+
+  // the two core relation types the permission ones extend; core answers false for these as well
+  it('keeps the core relation types the withdrawn ones extend offered', () => {
+    expect(isOfferedAsKeyType('manyToOneRelation')).toBe(true)
+    expect(isOfferedAsKeyType('manyToManyRelation')).toBe(true)
   })
 })
 

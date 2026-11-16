@@ -35,6 +35,9 @@ export const CLASSIFICATION_STORE_WRAPPER_TYPES: readonly string[] = ['encrypted
  * The filter is central rather than a tag dropped at the type, because only `consent` declares the
  * tag itself: `permissionManyToManyRelation` and `permissionManyToOneRelation` inherit it from the
  * core relation types they extend, in a bundle of their own that never chose to offer them.
+ *
+ * Core names the same three in `KeyTypeSupport::WITHDRAWN_KEY_TYPES`. Nothing couples the two lists,
+ * so this one is never edited alone; the agreement block in the test beside this file pins both.
  */
 export const CLASSIFICATION_STORE_WITHDRAWN_TYPES: readonly string[] = [
   'consent',
