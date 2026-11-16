@@ -2357,7 +2357,7 @@ classification-store.key-localized-tooltip: "Dieser Schlüssel hält einen eigen
 classification-store.import: Store-Konfiguration importieren
 classification-store.import-success: Store-Konfiguration erfolgreich importiert
 classification-store.import-replace.title: "Store-Konfiguration ersetzen?"
-classification-store.import-replace.warning: 'Dieser Store ist nicht leer. Eine Datei, die einen anderen Store beschreibt, ersetzt dessen Konfiguration!'
+classification-store.import-replace.warning: "Dieser Store ist nicht leer. Eine Datei, die einen anderen Store beschreibt, ersetzt die Konfiguration dieses Stores und löscht die Werte, die jedes Objekt darin speichert. Dies kann nicht rückgängig gemacht werden."
 home: Startseite
 preview.label: Vorschau
 preview.desktop: Desktop

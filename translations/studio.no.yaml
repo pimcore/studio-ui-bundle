@@ -2357,7 +2357,7 @@ classification-store.key-localized-tooltip: "Denne nøkkelen har en egen verdi p
 classification-store.import: Importer store-konfigurasjon
 classification-store.import-success: Store-konfigurasjonen ble importert
 classification-store.import-replace.title: "Erstatte store-konfigurasjonen?"
-classification-store.import-replace.warning: 'Denne butikken er ikke tom. En fil som beskriver en annen butikk erstatter konfigurasjonen!'
+classification-store.import-replace.warning: "Denne butikken er ikke tom. En fil som beskriver en annen butikk erstatter konfigurasjonen til denne butikken og sletter verdiene hvert objekt har i den. Dette kan ikke angres."
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
