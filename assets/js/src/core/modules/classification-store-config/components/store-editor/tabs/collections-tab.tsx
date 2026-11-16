@@ -10,6 +10,7 @@
 
 /* eslint-disable max-lines */
 
+import { MatchingId } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/shared/matching-id'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
@@ -535,6 +536,12 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                         name="description"
                       >
                         <Input />
+                      </Form.Item>
+                      <Form.Item label={ t('classification-store.columns.matching-id') }>
+                        <MatchingId
+                          alignWithInputText
+                          identifier={ activeCollection.identifier }
+                        />
                       </Form.Item>
                     </Flex>
                   </FormKit>

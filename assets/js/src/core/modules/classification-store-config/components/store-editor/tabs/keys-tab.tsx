@@ -412,6 +412,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       header: t('classification-store.columns.id'),
       size: 60
     }),
+    columnHelper.accessor('identifier', {
+      header: t('classification-store.columns.matching-id'),
+      size: 180
+    }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
       size: 160,

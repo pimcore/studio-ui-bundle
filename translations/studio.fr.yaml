@@ -2232,6 +2232,7 @@ classification-store.delete-group-relation-consequence: "Le groupe est retiré d
 classification-store.edit-definition: Modifier la définition
 classification-store.edit-key-definition: "Modifier la définition de la clé : {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "ID de correspondance"
 classification-store.columns.name: Nom
 classification-store.columns.title: Titre
 classification-store.columns.type: Type
@@ -3326,3 +3327,4 @@ classification-store.multi-value.default-variant-label: "Libellé de la valeur p
 classification-store.multi-value.no-writable-slot: "Cette clé ne déclare aucune variante et n'autorise pas les valeurs sans variante : il n'y a donc aucun emplacement où saisir une valeur. Déclarez une variante ou autorisez les valeurs sans variante."
 classification-store.apply: "Créer un nouveau store depuis un fichier"
 classification-store.apply-upload: "Créer le store"
+classification-store.multi-value.unreadable-entry: "Cette valeur n'est pas un nombre que le champ peut afficher ; elle reste telle quelle jusqu'à son effacement."

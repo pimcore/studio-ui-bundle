@@ -2232,6 +2232,7 @@ classification-store.delete-group-relation-consequence: "Die Gruppe wird nur aus
 classification-store.edit-definition: Definition bearbeiten
 classification-store.edit-key-definition: "Schlüsseldefinition bearbeiten: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Abgleichs-ID"
 classification-store.columns.name: Name
 classification-store.columns.title: Titel
 classification-store.columns.type: Typ
@@ -3326,3 +3327,4 @@ classification-store.multi-value.default-variant-label: "Bezeichnung des Standar
 classification-store.multi-value.no-writable-slot: "Dieser Schlüssel deklariert keine Variante und erlaubt keine Werte ohne Variante, daher gibt es keinen Platz für einen Wert. Deklarieren Sie eine Variante oder erlauben Sie Werte ohne Variante."
 classification-store.apply: "Neuen Store aus einer Datei anlegen"
 classification-store.apply-upload: "Store anlegen"
+classification-store.multi-value.unreadable-entry: "Dieser Wert ist keine Zahl, die das Eingabefeld anzeigen kann; er bleibt unverändert gespeichert, bis er gelöscht wird."

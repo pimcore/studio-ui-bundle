@@ -183,6 +183,18 @@ describe('useFieldFilterEditor', () => {
       expect(resolvedIdLists).toContainEqual([OBJECT_ADAPTER_ID, FILTERABLE_TYPE])
     })
 
+    it('offers a multiValue key once, filtered as its delegate, and does not name it as skipped', () => {
+      draftFieldFilters = []
+      filterableColumns = [storeColumn]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      applyKeys([{ ...appliedItem('multiValue', 100), variants: [{ name: 'Metric' }], definition: { fieldtype: 'multiValue', title: 'key 100', delegateDatatype: FILTERABLE_TYPE } }])
+
+      expect(result.current.filters.map((filter) => filter.config.keyId)).toEqual([100])
+      expect(resolvedIdLists).toContainEqual([OBJECT_ADAPTER_ID, FILTERABLE_TYPE])
+      expect(messageInfo).not.toHaveBeenCalled()
+    })
+
     it('names the keys it skipped so a shorter list is not a silent one', () => {
       draftFieldFilters = []
       filterableColumns = [storeColumn]

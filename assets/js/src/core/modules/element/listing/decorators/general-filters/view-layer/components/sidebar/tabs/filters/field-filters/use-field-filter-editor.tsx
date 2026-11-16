@@ -26,6 +26,7 @@ import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dyn
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { useFilterableColumns } from '../../../../../../search-modes/use-filterable-columns'
 import { getKeyLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/key-label'
+import { keyFilterTypeOf } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/key-filter-type'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 // The field filter a classification store key's own type is resolved through, as for any data object field.
@@ -170,7 +171,7 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
     const skippedKeyNames: string[] = []
 
     for (const item of data.data as Array<Record<string, any>>) {
-      if (keyReportsFilter(item.definition.fieldtype as string)) {
+      if (keyReportsFilter(keyFilterTypeOf(item.definition))) {
         filterableItems.push(item)
       } else {
         skippedKeyNames.push(keyLabel(item))

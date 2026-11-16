@@ -12,6 +12,7 @@ import { useContext } from 'react'
 import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-edit-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { variantOfColumn } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { areGroupsEqual } from '../utils/dropdown-filter'
 
 interface UseBatchEditHookReturn extends BatchContext {
@@ -32,7 +33,7 @@ const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
     const aConfig = a.config as { keyId?: unknown, groupId?: unknown }
     const bConfig = b.config as { keyId?: unknown, groupId?: unknown }
 
-    return aConfig.keyId === bConfig.keyId && aConfig.groupId === bConfig.groupId
+    return aConfig.keyId === bConfig.keyId && aConfig.groupId === bConfig.groupId && variantOfColumn(a) === variantOfColumn(b)
   }
 
   return true

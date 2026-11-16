@@ -8,9 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
 import {
   type AbstractObjectDataDefinition,
-  DynamicTypeObjectDataAbstract
+  type ColumnMetaGridCellDefinition,
+  type DefaultGridCellDefinition,
+  DynamicTypeObjectDataAbstract,
+  type GetGridCellDefinitionProps,
+  type WithEditModalGridCellDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { MultiValueEditor, type MultiValueEditorProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-editor'
 import { EditFormProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
@@ -18,7 +24,11 @@ import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/t
 import {
   SuppressEmptyFieldLabelProvider
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
+import { getDefaultGridColumnWidthFromDynamicObjectType } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
+import { CLASSIFICATION_STORE_WRAPPER_TYPES } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
+import { delegateDefinitionOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-delegate-props'
 import React from 'react'
+import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
 
 export type MultiValueObjectDataDefinition = AbstractObjectDataDefinition & MultiValueEditorProps
 
@@ -46,6 +56,38 @@ export class DynamicTypeObjectDataMultiValue extends DynamicTypeObjectDataAbstra
           </SuppressEmptyFieldLabelProvider>
         </EditFormProvider>
       </SaveProvider>
+    )
+  }
+
+  getGridCellDefinition (props: GetGridCellDefinitionProps): DefaultGridCellDefinition | WithEditModalGridCellDefinition | ColumnMetaGridCellDefinition {
+    const objectDataRegistry: DynamicTypeObjectDataRegistry = container.get(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const objectProps: MultiValueObjectDataDefinition = props.objectProps as MultiValueObjectDataDefinition
+
+    const delegateDatatype = objectProps.delegateDatatype ?? ''
+
+    // A repeating key holds a list of entries in one slot; the delegate's single-value cell can neither show nor edit
+    // that, so it is previewed read-only. Per-entry grid editing is follow-up work.
+    if (objectProps.multiValue === true || !objectDataRegistry.hasDynamicType(delegateDatatype) || CLASSIFICATION_STORE_WRAPPER_TYPES.includes(delegateDatatype)) {
+      return {
+        mode: 'default',
+        type: 'string'
+      }
+    }
+
+    return objectDataRegistry.getDynamicType(delegateDatatype).getGridCellDefinition({
+      ...props,
+      objectProps: delegateDefinitionOf(objectProps) as AbstractObjectDataDefinition
+    })
+  }
+
+  getDefaultGridColumnWidth (props?: MultiValueObjectDataDefinition): number | undefined {
+    if (CLASSIFICATION_STORE_WRAPPER_TYPES.includes(props?.delegateDatatype ?? '')) {
+      return undefined
+    }
+
+    return getDefaultGridColumnWidthFromDynamicObjectType(
+      props?.delegateDatatype ?? undefined,
+      props
     )
   }
 }

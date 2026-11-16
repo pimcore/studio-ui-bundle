@@ -169,6 +169,7 @@ const DELETE_URL = `/pimcore-studio/api/classification-store/configuration/group
 
 const item = {
   id: ID,
+  identifier: 'gr000005',
   name: 'dimensions',
   storeId: STORE_ID,
   description: null,
@@ -262,6 +263,18 @@ describe('GroupsTab delete dialog', () => {
     expect(deleteRequests()[0].url.endsWith(DELETE_URL)).toBe(true)
     // The detail pane falls back to its hint once nothing is selected
     expect(await screen.findByText('classification-store.select-group-hint', undefined, WAIT_BUDGET)).toBeInTheDocument()
+  })
+
+  it('shows the matching ID of the selected entity as text in the detail pane', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderTab()
+    expect(await screen.findByDisplayValue('dimensions', undefined, WAIT_BUDGET)).toBeInTheDocument()
+
+    await user.click(screen.getAllByRole('checkbox')[0])
+
+    expect(await screen.findByText('gr000005', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    expect(screen.queryByDisplayValue('gr000005')).not.toBeInTheDocument()
   })
 
   it('lets the key grid container scroll sideways instead of clipping it', async () => {

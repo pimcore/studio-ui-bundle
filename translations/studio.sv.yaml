@@ -2232,6 +2232,7 @@ classification-store.delete-group-relation-consequence: "Gruppen tas bara bort f
 classification-store.edit-definition: Redigera definition
 classification-store.edit-key-definition: "Redigera nyckeldefinition: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Matchnings-ID"
 classification-store.columns.name: Namn
 classification-store.columns.title: Titel
 classification-store.columns.type: Typ
@@ -3326,3 +3327,4 @@ classification-store.multi-value.default-variant-label: "Etikett för standardv�
 classification-store.multi-value.no-writable-slot: "Den här nyckeln deklarerar ingen variant och tillåter inga värden utan variant, så det finns ingen plats att ange ett värde. Deklarera en variant eller tillåt värden utan variant."
 classification-store.apply: "Skapa en ny store från en fil"
 classification-store.apply-upload: "Skapa store"
+classification-store.multi-value.unreadable-entry: "Det här värdet är inget tal som fältet kan visa; det behålls som sparat tills det rensas."

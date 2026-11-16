@@ -12,6 +12,7 @@ import { useRef, useCallback } from 'react'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useColumnMapper, type UseColumnMapperReturn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-column-mapper'
 import { uuid } from '@Pimcore/utils/uuid'
+import { ownCellKeyOf, variantOfCellKey, variantOfColumn, withoutVariantSuffix } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 
 export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
   const languageSelection = useLanguageSelection()
@@ -40,21 +41,24 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
     }
 
     if (column.type === 'dataobject.classificationstore') {
-      const dataKey = data.key.split('.')[0]
+      const ownKey = ownCellKeyOf(column)
+      const dataKey = withoutVariantSuffix(data.key as string, ownKey).split('.')[0]
+      // A cell key carrying `#<variant>` belongs to that variant's column only; one carrying none, to the default slot's.
+      const sameSlot = dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && variantOfCellKey(data.key as string, ownKey) === variantOfColumn(column)
 
       if (column.localizable && column.locale === 'default') {
-        return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === null
+        return sameSlot && data.locale === null
       }
 
       if (column.localizable && (column.locale === null || column.locale === undefined)) {
-        return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === currentLanguage
+        return sameSlot && data.locale === currentLanguage
       }
 
       if (column.localizable) {
-        return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId && data.locale === column.locale
+        return sameSlot && data.locale === column.locale
       }
 
-      return dataKey === column.key && data.additionalAttributes?.keyId === column.config?.keyId && data.additionalAttributes?.groupId === column.config?.groupId
+      return sameSlot
     }
 
     if (column.localizable && (column.locale === null || column.locale === undefined)) {
@@ -71,6 +75,7 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
         key: column.key,
         keyId: column.config?.keyId,
         groupId: column.config?.groupId,
+        variant: variantOfColumn(column),
         locale: column.locale ?? null,
         type: column.type.replaceAll('.', '*||*')
       })
@@ -99,7 +104,7 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
     const type = data.type?.replaceAll('*||*', '.')
 
     if (type === 'dataobject.classificationstore') {
-      return selectedColumns.find((column) => column.key === data.key && column.type === 'dataobject.classificationstore' && column.config?.keyId === data.keyId && column.config?.groupId === data.groupId && (column.locale ?? null) === data.locale)
+      return selectedColumns.find((column) => column.key === data.key && column.type === 'dataobject.classificationstore' && column.config?.keyId === data.keyId && column.config?.groupId === data.groupId && variantOfColumn(column) === (data.variant ?? null) && (column.locale ?? null) === data.locale)
     }
 
     if (type === 'dataobject.advanced') {

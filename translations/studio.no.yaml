@@ -2232,6 +2232,7 @@ classification-store.delete-group-relation-consequence: "Gruppen fjernes bare fr
 classification-store.edit-definition: Rediger definisjon
 classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Samsvars-ID"
 classification-store.columns.name: Navn
 classification-store.columns.title: Tittel
 classification-store.columns.type: Type
@@ -3326,3 +3327,4 @@ classification-store.multi-value.default-variant-label: "Etikett for standardver
 classification-store.multi-value.no-writable-slot: "Denne nøkkelen deklarerer ingen variant og tillater ikke verdier uten variant, så det er ingen plass til å legge inn en verdi. Deklarer en variant eller tillat verdier uten variant."
 classification-store.apply: "Opprett en ny store fra en fil"
 classification-store.apply-upload: "Opprett store"
+classification-store.multi-value.unreadable-entry: "Denne verdien er ikke et tall som feltet kan vise; den beholdes som lagret til den slettes."

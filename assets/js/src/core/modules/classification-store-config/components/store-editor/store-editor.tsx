@@ -17,6 +17,7 @@ import { GroupsTab } from '@Pimcore/modules/classification-store-config/componen
 import { KeysTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/keys-tab'
 import { CollectionsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/collections-tab'
 import { SubGroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/sub-groups-tab'
+import { StoreIdentifier } from '@Pimcore/modules/classification-store-config/components/store-editor/store-identifier'
 import { StoreEngineIndicator } from '@Pimcore/modules/classification-store-config/components/store-editor/store-engine-indicator'
 import { StoreImportProvider } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
 import { useStyles } from '@Pimcore/modules/classification-store-config/classification-store-config.styles'
@@ -89,6 +90,7 @@ export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps)
             align="center"
             gap="small"
           >
+            <StoreIdentifier storeId={ storeId } />
             <StoreEngineIndicator storeId={ storeId } />
             {importExportActions}
           </Flex>

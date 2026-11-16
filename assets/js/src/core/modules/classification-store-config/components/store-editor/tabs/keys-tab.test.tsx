@@ -157,6 +157,7 @@ const TREE_URL = '/pimcore-studio/api/classification-store/configuration/stores/
 const WIDTH_DEFINITION = { name: 'width', fieldtype: 'input', tooltip: 'The width in cm', indexed: true }
 
 const height = {
+  identifier: 'kc000007',
   id: 7,
   name: 'height',
   storeId: STORE_ID,
@@ -374,6 +375,24 @@ describe('KeysTab cell edits', () => {
     expect(Object.keys(updateRequests()[0].body!).sort()).toEqual(expectedKeys)
     expect(updateRequests()[0].body).toMatchObject({ definition: null })
     expect(storedKey(7).definition).toEqual(height.definition)
+  })
+
+  // The matching ID is generated: shown as text, never an input, and named by no update payload.
+  it('shows the matching ID as text and never sends it', async () => {
+    stubFetch([height])
+    renderTab()
+
+    expect(await screen.findByText('kc000007', undefined, WAIT_BUDGET)).toBeInTheDocument()
+    expect(screen.queryByDisplayValue('kc000007')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('identifier-0')).not.toBeInTheDocument()
+
+    editCell('name', 0, 'depth')
+
+    await waitFor(() => {
+      expect(updateRequests()).toHaveLength(1)
+    }, WAIT_BUDGET)
+
+    expect('identifier' in updateRequests()[0].body!).toBe(false)
   })
 
   // The localization of a key is written by the key definition dialog alone. A cell edit that

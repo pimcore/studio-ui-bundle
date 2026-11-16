@@ -2232,6 +2232,7 @@ classification-store.delete-group-relation-consequence: "De groep wordt alleen u
 classification-store.edit-definition: Definitie bewerken
 classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Koppel-ID"
 classification-store.columns.name: Naam
 classification-store.columns.title: Titel
 classification-store.columns.type: Type
@@ -3326,3 +3327,4 @@ classification-store.multi-value.default-variant-label: "Label van de standaardw
 classification-store.multi-value.no-writable-slot: "Deze sleutel declareert geen variant en staat geen waarden zonder variant toe, dus er is geen plek om een waarde in te voeren. Declareer een variant of sta waarden zonder variant toe."
 classification-store.apply: "Een nieuwe store aanmaken uit een bestand"
 classification-store.apply-upload: "Store aanmaken"
+classification-store.multi-value.unreadable-entry: "Deze waarde is geen getal dat het invoerveld kan tonen; ze blijft ongewijzigd opgeslagen tot ze wordt gewist."
