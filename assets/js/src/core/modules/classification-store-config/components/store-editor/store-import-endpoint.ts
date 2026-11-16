@@ -17,11 +17,6 @@ export const getStoreImportUrl = (storeId: number | string): string =>
 
 const IMPORT_DRY_RUN_SUPPORTED = true
 
-/** The generated client is built from a snapshot that predates these members. */
-interface ReplaceAwareImportReport extends ClassificationStoreConfigurationImportReport {
-  replaced?: unknown
-}
-
 const FILE_FIELD = 'file'
 const DRY_RUN_FIELD = 'dryRun'
 
@@ -40,16 +35,15 @@ export const fetchImportReplaces = async (storeId: number, file: File): Promise<
   body.append(DRY_RUN_FIELD, 'true')
 
   try {
-    // Hand-rolled because the generated slice describes `dryRun` on `/stores/apply` only: the
-    // snapshot predates the per-store import taking it. The endpoint reads `dryRun` off the
-    // multipart body and writes nothing for a dry run, and answers with the import report.
+    // Hand-rolled rather than taken from the generated mutation: a dry run is a read, and routing
+    // it through the client would put a write endpoint's cache invalidation behind a question.
     const response = await fetch(getStoreImportUrl(storeId), { method: 'POST', body })
 
     if (!response.ok) {
       return null
     }
 
-    const report = await response.json() as ReplaceAwareImportReport
+    const report = await response.json() as ClassificationStoreConfigurationImportReport
 
     // only a report that states the answer gives one: a body missing the member says nothing
     return typeof report.replaced === 'boolean' ? report.replaced : null

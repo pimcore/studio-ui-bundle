@@ -211,17 +211,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationStoreApply: build.mutation<
-                ClassificationStoreConfigurationStoreApplyApiResponse,
-                ClassificationStoreConfigurationStoreApplyApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/apply`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
             classificationStoreConfigurationStoreCreate: build.mutation<
                 ClassificationStoreConfigurationStoreCreateApiResponse,
                 ClassificationStoreConfigurationStoreCreateApiArg
@@ -600,16 +589,6 @@ export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiResponse = 
 export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg = {
     classificationStoreConfigurationKeyGroupRelationDelete: ClassificationStoreConfigurationKeyGroupRelationDelete;
 };
-export type ClassificationStoreConfigurationStoreApplyApiResponse =
-    /** status 200 Report of what the apply created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
-export type ClassificationStoreConfigurationStoreApplyApiArg = {
-    body: {
-        /** Store configuration artifact as written by the export endpoint */
-        file: Blob;
-        /** Report what would be decided and write nothing */
-        dryRun?: boolean;
-    };
-};
 export type ClassificationStoreConfigurationStoreCreateApiResponse =
     /** status 200 Created store configuration */ ClassificationStoreConfigurationStoreDetail;
 export type ClassificationStoreConfigurationStoreCreateApiArg = {
@@ -622,13 +601,15 @@ export type ClassificationStoreConfigurationStoreExportApiArg = {
     id: number;
 };
 export type ClassificationStoreConfigurationStoreImportApiResponse =
-    /** status 200 Report of what the import created, updated, adopted, skipped and left in place */ ClassificationStoreConfigurationImportReport;
+    /** status 200 Report of what the import created, updated, adopted, skipped, removed and left in place */ ClassificationStoreConfigurationImportReport;
 export type ClassificationStoreConfigurationStoreImportApiArg = {
     /** Id of the store configuration */
     id: number;
     body: {
         /** Store configuration artifact as written by the export endpoint */
         file: Blob;
+        /** Report what would be decided - what a replace would remove included - and write nothing */
+        dryRun?: boolean;
     };
 };
 export type ClassificationStoreConfigurationStoreTreeApiResponse =
@@ -1041,6 +1022,28 @@ export type ClassificationStoreConfigurationKeyGroupRelationDelete = {
     /** ID of the group */
     groupId: number;
 };
+export type ClassificationStoreConfigurationStoreDetail = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the store */
+    id: number;
+    /** Name of the store */
+    name: string;
+    /** Description of the store */
+    description: string | null;
+    /** Opaque identifier of the store, assigned by the system and never writable */
+    identifier?: string | null;
+    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
+    engine?: string | null;
+    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
+    engineCapabilities?: string[] | null;
+};
+export type ClassificationStoreConfigurationStoreCreate = {
+    /** Name of the store */
+    name: string;
+};
 export type ClassificationStoreConfigurationImportReport = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1070,28 +1073,12 @@ export type ClassificationStoreConfigurationImportReport = {
     skipped?: number | null;
     /** The skipped entries by name and reason, the last element naming how many more there are */
     skippedEntries?: string[] | null;
-};
-export type ClassificationStoreConfigurationStoreDetail = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the store */
-    id: number;
-    /** Name of the store */
-    name: string;
-    /** Description of the store */
-    description: string | null;
-    /** Opaque identifier of the store, assigned by the system and never writable */
-    identifier?: string | null;
-    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
-    engine?: string | null;
-    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
-    engineCapabilities?: string[] | null;
-};
-export type ClassificationStoreConfigurationStoreCreate = {
-    /** Name of the store */
-    name: string;
+    /** Whether the file describes another store and was imported as a duplicate: every member identifier was regenerated and the configuration the store held was replaced by the file's */
+    replaced?: boolean | null;
+    /** Number of entries the import removed from the store before writing the file into it; zero unless the import replaced the configuration */
+    removed?: number | null;
+    /** The removed entries by name, the entities before the relations, the last element naming how many more there are */
+    removedEntries?: string[] | null;
 };
 export type ClassificationStoreConfigurationStoreTreeNode = {
     /** AdditionalAttributes */
@@ -1305,7 +1292,6 @@ export const {
     useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
     useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
     useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
-    useClassificationStoreConfigurationStoreApplyMutation,
     useClassificationStoreConfigurationStoreCreateMutation,
     useClassificationStoreConfigurationStoreExportQuery,
     useClassificationStoreConfigurationStoreImportMutation,
