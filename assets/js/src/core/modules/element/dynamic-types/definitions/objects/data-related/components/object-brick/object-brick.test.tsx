@@ -80,8 +80,10 @@ const BrickField = ({ name }: { name: string[] }): React.JSX.Element => (
   </ItemProvider>
 )
 
-const renderObjectBrick = (value: Record<string, any>, onChange: jest.Mock): void => {
-  render(
+// `strict` renders under StrictMode, as the app does (app-view.tsx): effects mount, unmount
+// and mount again, so every field registers twice and every store subscription is renewed
+const renderObjectBrick = (value: Record<string, any>, onChange: jest.Mock, strict = false): void => {
+  const ui = (
     <ItemProvider item={ { name: ['objbrick'] } }>
       <ObjectBrick
         allowedTypes={ ['BrickA', 'BrickB'] }
@@ -93,6 +95,8 @@ const renderObjectBrick = (value: Record<string, any>, onChange: jest.Mock): voi
       />
     </ItemProvider>
   )
+
+  render(strict ? <React.StrictMode>{ui}</React.StrictMode> : ui)
 }
 
 // the KeyedList onChange effect is debounced by 10ms — flush it deterministically
@@ -147,13 +151,18 @@ describe('ObjectBrick', () => {
     expect(onChange).toHaveBeenCalledWith({ BrickA: { action: 'deleted' }, BrickB: { input: 'b' } })
   })
 
-  it('keeps the caret where the character was typed in a brick field (regression #1664)', () => {
+  it.each([
+    ['', false],
+    [' under StrictMode, as the app renders', true]
+  ])('keeps the caret where the character was typed in a brick field%s (regression #1664)', (_, strict) => {
     const onChange = jest.fn()
     objectData = { objbrick: { BrickA: { input: 'ab' } } }
     brickFields = <BrickField name={ ['objbrick', 'BrickA', 'input'] } />
 
-    renderObjectBrick({ BrickA: { input: 'ab' } }, onChange)
+    renderObjectBrick({ BrickA: { input: 'ab' } }, onChange, strict)
     flushDebounce()
+    // mounting the field registers nothing new: its value is the loaded one
+    expect(onChange).not.toHaveBeenCalled()
 
     const input: HTMLTextAreaElement = screen.getByTestId('brick-input')
     expect(input.value).toBe('ab')
