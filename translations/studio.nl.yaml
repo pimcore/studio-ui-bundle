@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Volledig pad
 asset.asset-editor-tabs.list.columns.creationDate: Aanmaakdatum
 asset.asset-editor-tabs.list.columns.modificationDate: Wijzigingsdatum
 asset.tree.context-menu.upload-new-version: Nieuwe versie uploaden
+asset.upload-new-version.rename-confirmation.title: Asset wordt hernoemd
+asset.upload-new-version.rename-confirmation.message: 'Het nieuwe bestand is van het type .{{extension}} — de asset wordt hernoemd van "{{oldFilename}}" naar "{{newFilename}}" en de openbare URL verandert. Doorgaan?'
+asset.upload-new-version.renamed: 'De asset is hernoemd van "{{oldFilename}}" naar "{{newFilename}}". De openbare URL is gewijzigd.'
 asset.copy-info: Kopiëren & info
 asset.upload: Uploaden
 asset.upload.label: Bestand selecteren
@@ -3184,3 +3187,19 @@ service-users.secret.client-secret: Client-secret
 service-users.secret.warning: Kopieer het secret nu. Het wordt maar één keer getoond en kan niet opnieuw worden weergegeven.
 service-users.secret.copy: Secret kopiëren
 service-users.secret.close: Sluiten
+navigation.maintenance-mode: Onderhoudsmodus
+maintenance-mode.activate.title: Onderhoudsmodus activeren?
+maintenance-mode.activate.text: 'Alle services, inclusief de website, gaan in onderhoud. Alleen deze browsersessie behoudt toegang.'
+maintenance-mode.activate.lock-out: 'Als je uitlogt, de browser sluit of je sessie verloopt, word je ook buitengesloten.'
+maintenance-mode.activate.background-jobs: 'Achtergrondtaken en message consumers starten niet zolang de onderhoudsmodus actief is.'
+maintenance-mode.activate.ok: Activeren
+maintenance-mode.indicator.tooltip: 'De onderhoudsmodus is actief. Klik om deze te deactiveren.'
+maintenance-mode.deactivate.title: Onderhoudsmodus deactiveren?
+maintenance-mode.deactivate.text: 'Alle sessies krijgen weer toegang.'
+maintenance-mode.deactivate.ok: Deactiveren
+maintenance-mode.logout.title: Onderhoudsmodus eerst deactiveren?
+maintenance-mode.logout.text: 'De onderhoudsmodus is actief en alleen deze sessie heeft toegang. Na het uitloggen kan deze alleen nog via de opdrachtregel worden uitgeschakeld.'
+maintenance-mode.logout.deactivate-and-log-out: Deactiveren en uitloggen
+maintenance-mode.locked-out.title: Onderhoud
+maintenance-mode.locked-out.text: 'Het systeem is in onderhoudsmodus of tijdelijk niet beschikbaar. Je laatste actie is mogelijk niet opgeslagen. Deze melding sluit automatisch zodra het systeem weer beschikbaar is.'
+maintenance-mode.locked-out.reload: Herladen

@@ -8,7 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { downloadFromUrlWithCheck } from './files'
+import { downloadFromUrlWithCheck, getFileExtension } from './files'
+
+describe('getFileExtension', () => {
+  it('returns the part after the last dot', () => {
+    expect(getFileExtension('archive.tar.gz')).toBe('gz')
+  })
+
+  it('returns an empty string for a name without a dot', () => {
+    expect(getFileExtension('README')).toBe('')
+  })
+})
 
 describe('downloadFromUrlWithCheck', () => {
   let clickSpy: jest.Mock

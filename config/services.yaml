@@ -11,6 +11,7 @@ services:
             $studioPageSizeOptions: '%pimcore_studio_ui.pagination.page_size_options%'
             $studioDefaultPageSize: '%pimcore_studio_ui.pagination.default_page_size%'
             $studioMaxPageSize: '%pimcore_studio_ui.pagination.max_page_size%'
+            $studioLanguageFlagMapping: '%pimcore_studio_ui.language_flag_mapping%'
 
     _instanceof:
         Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface:
