@@ -10,13 +10,14 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../../form'
-import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useMemo, useCallback, useRef } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 import { useFormGroupOptional } from '../../group/provider/use-form-group-optional'
+import { useNumberedListState } from './hooks/use-numbered-list-state'
 
 export interface NumberedListProps {
   children: React.ReactNode
@@ -28,13 +29,7 @@ export interface NumberedListProps {
 
 const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: NumberedListProps): React.JSX.Element => {
   const initialValue = baseValue ?? []
-  const [value, setValue] = useState(cloneDeep(initialValue))
-  // Mirror of the current value, kept in sync during render so the (referentially
-  // stable) operations and the store can read the latest value without depending
-  // on it — that is what keeps the provider context from changing on every keystroke.
-  const valueRef = useRef(value)
-  valueRef.current = value
-  const listenersRef = useRef<Set<() => void>>(new Set())
+  const { value, valueRef, setValue, store } = useNumberedListState(initialValue)
   // Parents recreate these callbacks on every render. Routing them through refs
   // keeps `operations` and the provider context referentially stable.
   const baseOnChangeRef = useRef(baseOnChange)
@@ -218,22 +213,6 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     (componentName: NamePath): Record<string, any> => getAdditionalComponentPropsRef.current?.(componentName) ?? {},
     []
   )
-
-  // Stable external store: subscribers (per-item via useNumberedListValue) read the
-  // current value through getSnapshot and are notified whenever it changes.
-  const store = useMemo(() => ({
-    subscribe: (listener: () => void): (() => void) => {
-      listenersRef.current.add(listener)
-      return () => {
-        listenersRef.current.delete(listener)
-      }
-    },
-    getSnapshot: () => valueRef.current
-  }), [])
-
-  useEffect(() => {
-    listenersRef.current.forEach((listener) => { listener() })
-  }, [value])
 
   return (
     <NumberedListProvider
