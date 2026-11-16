@@ -14,7 +14,7 @@ import { type KeyedListData, type KeyedListStore } from '../provider/keyed-list/
 
 export type KeyedListUpdater = (currentValue: KeyedListData['values']) => KeyedListData['values']
 
-export interface KeyedListValue {
+export interface KeyedListState {
   value: KeyedListData['values']
   // the mirror described below; read where the latest value is needed without depending on it
   valueRef: MutableRefObject<KeyedListData['values']>
@@ -32,7 +32,7 @@ export interface KeyedListValue {
  * update, ahead of the commit carrying it, so a subscriber notified by an operation
  * already reads the new value.
  */
-export const useKeyedListValue = (initialValue: KeyedListData['values']): KeyedListValue => {
+export const useKeyedListState = (initialValue: KeyedListData['values']): KeyedListState => {
   const [valueState, setValueState] = useState(cloneDeep(initialValue))
   const valueRef = useRef(valueState)
   const listenersRef = useRef<Set<() => void>>(new Set())
@@ -61,8 +61,9 @@ export const useKeyedListValue = (initialValue: KeyedListData['values']): KeyedL
     listenersRef.current.forEach((listener) => { listener() })
   }, [])
 
-  // Stable external store: subscribers (per-field via useKeyedListValue) read the current
-  // value through getSnapshot and are notified by setValue whenever it changes.
+  // Stable external store: subscribers (per field, via useKeyedListValue in
+  // provider/keyed-list) read the current value through getSnapshot and are notified
+  // by setValue whenever it changes.
   const store = useMemo<KeyedListStore>(() => ({
     subscribe: (listener: () => void): (() => void) => {
       listenersRef.current.add(listener)

@@ -16,7 +16,7 @@ import { KeyedListIterator } from './iterator/keyed-list-iterator'
 import { cloneDeep, isArray, isEqual, isNil, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
-import { useKeyedListValue } from './hooks/use-keyed-list-value'
+import { useKeyedListState } from './hooks/use-keyed-list-state'
 
 export interface KeyedListProps {
   children: React.ReactNode
@@ -42,11 +42,11 @@ const pathsOverlap = (a: NamePath[], b: NamePath[]): boolean => {
 
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
-  const { value, valueRef, setValue, store } = useKeyedListValue(initialValue)
+  const { value, valueRef, setValue, store } = useKeyedListState(initialValue)
   // The value as of the last render, which is the schedule the registration bookkeeping
   // below is written against: a registration is queued against the value it was made in
   // and absorbed into the baseline once that value has been replaced by a committed one.
-  // Distinct from `valueRef`, which runs ahead of the commit (see useKeyedListValue).
+  // Distinct from `valueRef`, which runs ahead of the commit (see useKeyedListState).
   const committedValueRef = useRef(value)
   committedValueRef.current = value
   // Parents (e.g. ClassificationStore) recreate these callbacks on every render.
