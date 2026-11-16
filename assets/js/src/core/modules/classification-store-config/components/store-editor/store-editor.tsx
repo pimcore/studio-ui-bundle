@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { GroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/groups-tab'
 import { KeysTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/keys-tab'
 import { CollectionsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/collections-tab'
@@ -24,7 +26,7 @@ import { useStyles } from '@Pimcore/modules/classification-store-config/classifi
 
 interface IStoreEditorProps {
   storeId: number
-  /** the store's own export and import actions, rendered next to the tabs */
+  /** the store's own export and import actions, rendered in the footer below the tabs */
   importExportActions?: React.ReactNode
 }
 
@@ -79,23 +81,32 @@ export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps)
   // The actions are rendered inside the provider, so the tabs hear about an import they trigger.
   return (
     <StoreImportProvider>
-      <Tabs
-        activeKey={ activeKey }
-        className={ styles.storeEditorTabsContainer }
-        items={ tabItems }
-        noTabBarMargin
-        onChange={ setActiveKey }
-        tabBarExtraContent={ (
-          <Flex
-            align="center"
-            gap="small"
-          >
-            <StoreIdentifier storeId={ storeId } />
-            <StoreEngineIndicator storeId={ storeId } />
-            {importExportActions}
-          </Flex>
+      <ContentLayout
+        renderToolbar={ (
+          <Toolbar>
+            <Flex gap="mini">
+              {importExportActions}
+            </Flex>
+          </Toolbar>
         ) }
-      />
+      >
+        <Tabs
+          activeKey={ activeKey }
+          className={ styles.storeEditorTabsContainer }
+          items={ tabItems }
+          noTabBarMargin
+          onChange={ setActiveKey }
+          tabBarExtraContent={ (
+            <Flex
+              align="center"
+              gap="small"
+            >
+              <StoreIdentifier storeId={ storeId } />
+              <StoreEngineIndicator storeId={ storeId } />
+            </Flex>
+          ) }
+        />
+      </ContentLayout>
     </StoreImportProvider>
   )
 }

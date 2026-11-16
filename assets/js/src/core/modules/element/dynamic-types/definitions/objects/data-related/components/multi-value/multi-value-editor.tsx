@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React, { useMemo, useState } from 'react'
 import { Alert } from 'antd'
 import { isEqual, isNil, omit } from 'lodash'
@@ -123,7 +125,14 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
           align='center'
           gap='extra-small'
         >
-          <Title level={ 5 }>{heading}</Title>
+          {/* Subordinate to the key's own label, and not the bold sub-group heading it sat beside. */}
+          <Title
+            level={ 5 }
+            theme='secondary'
+            weight='normal'
+          >
+            {heading}
+          </Title>
           {!slot.declared && <Tag>{t('classification-store.multi-value.not-declared')}</Tag>}
         </Flex>
       )}
@@ -231,6 +240,12 @@ const Slots = (props: SlotsProps): React.JSX.Element => {
 const withoutEmpty = (list: ClassificationStoreMultiValueEntry[]): ClassificationStoreMultiValueEntry[] =>
   list.filter((entry) => !isNil(entry) && !isNil(entry.v))
 
+/** What the control holds and the stored entries it was written over, which is what says whether it still stands. */
+interface MultiValueDraft {
+  list: ClassificationStoreMultiValueEntry[]
+  over: ClassificationStoreMultiValueEntry[]
+}
+
 /** The value of a key of type `multiValue`: entries held as a list, shown in one slot per variant. */
 export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -242,8 +257,11 @@ export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Elemen
     [entries, props.variants, props.multiValue, props.defaultVariant, props.defaultVariantLabel]
   )
   // What the control holds, empty rows included: only the payload leaves them out, so a row still being worked on survives the value coming back.
-  const [draft, setDraft] = useState<ClassificationStoreMultiValueEntry[] | null>(null)
-  const seeded = draft !== null && isEqual(withoutEmpty(draft), withoutEmpty(entries)) ? draft : base
+  const [draft, setDraft] = useState<MultiValueDraft | null>(null)
+  // A draft stands while the value it was written over is still the stored one, or has come back as what it wrote: a row being typed into is a divergence by definition, and only a value changed elsewhere takes over from it.
+  const standing = draft !== null &&
+    (isEqual(draft.over, entries) || isEqual(withoutEmpty(draft.list), withoutEmpty(entries)))
+  const seeded = standing ? draft.list : base
   const delegateDatatype = props.delegateDatatype
 
   if (isNil(delegateDatatype) || delegateDatatype === '') {
@@ -277,7 +295,7 @@ export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Elemen
   // An entry holding nothing is left out of what is written, which is how a cleared slot is cleared.
   // What equals the value already held is not a change: the list registers the fields it mounts, and that is not an edit.
   const emit = (list: ClassificationStoreMultiValueEntry[]): void => {
-    setDraft(list)
+    setDraft({ list, over: entries })
 
     const kept = withoutEmpty(list)
 

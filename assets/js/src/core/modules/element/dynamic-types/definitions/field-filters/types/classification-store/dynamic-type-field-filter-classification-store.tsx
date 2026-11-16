@@ -20,6 +20,7 @@ import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/ge
 import { keyFilterTypeOf } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/key-filter-type'
 import { container, serviceIds } from '@sdk/app'
 import { type DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 @injectable()
 export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldFilterAbstract {
@@ -68,13 +69,17 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
     const splittedType = filterType.split('.')
     splittedType[0] = 'classificationstore'
 
+    const variant = filter.meta.variant
+
     return {
       ...filter,
       type: splittedType.join('.'),
       filterValue: {
         value: subTypeFilter.filterValue,
         keyId: filter.meta.keyId,
-        groupId: filter.meta.groupId
+        groupId: filter.meta.groupId,
+        // the default slot carries no variant, and the backend refuses an empty one
+        ...(isNonEmptyString(variant) ? { variant } : {})
       }
     }
   }

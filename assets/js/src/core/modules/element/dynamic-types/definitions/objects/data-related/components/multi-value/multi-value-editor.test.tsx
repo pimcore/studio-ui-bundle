@@ -117,8 +117,11 @@ import { MultiValueEditor, type MultiValueEditorProps } from './multi-value-edit
 import { type ClassificationStoreMultiValueEntry } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
 const ADD = 'add'
+const DEFAULT_HEADING = 'classification-store.multi-value.default-variant'
 const MOVE_UP = 'classification-store.multi-value.move-up'
 const REMOVE = 'delete'
+const METRIC = 'metric'
+const IMPERIAL = 'imperial'
 
 let onChange: jest.Mock<void, [ClassificationStoreMultiValueEntry[]]>
 
@@ -141,6 +144,11 @@ const lastEmitted = async (): Promise<ClassificationStoreMultiValueEntry[]> => {
 
 const inputs = (): HTMLElement[] => screen.queryAllByRole('textbox')
 
+const valuesOf = (): string[] => inputs().map((input) => (input as HTMLInputElement).value)
+
+// the list reports through a debounce, and the report renders again: what the user sees is what stands after that
+const settled = async (): Promise<void> => { await new Promise((resolve) => setTimeout(resolve, 50)) }
+
 describe('MultiValueEditor', () => {
   beforeEach(() => { onChange = jest.fn() })
 
@@ -161,8 +169,8 @@ describe('MultiValueEditor', () => {
       value: [{ var: 'imperial', v: '1 ft' }, { var: 'metric', v: '30 cm' }]
     })
 
-    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric', 'Imperial'])
-    expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['30 cm', '1 ft'])
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric', 'Imperial', DEFAULT_HEADING])
+    expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['30 cm', '1 ft', ''])
   })
 
   it('does not report opening a key whose variant slots hold nothing yet as a change, and tags the first value written', async () => {
@@ -238,7 +246,8 @@ describe('MultiValueEditor', () => {
       value: [{ var: 'metric', v: 'a' }, { var: 'imperial', v: 'b' }]
     })
 
-    expect(screen.getAllByText(ADD)).toHaveLength(2)
+    // metric, imperial and the default slot the key permits
+    expect(screen.getAllByText(ADD)).toHaveLength(3)
     fireEvent.click(screen.getAllByText(ADD)[0])
 
     await waitFor(() => { expect(inputs()).toHaveLength(3) })
@@ -280,6 +289,92 @@ describe('MultiValueEditor', () => {
     expect(inputs()).toHaveLength(3)
   })
 
+  // The first character written into a pending row is the moment the control holds something the
+  // stored value does not: the row has to stand on what it wrote until the value comes back with it.
+  it('keeps a row being typed into for a repeating key that holds nothing yet', async () => {
+    renderEditor({
+      delegateDatatype: 'numeric',
+      variants: [{ name: METRIC }, { name: IMPERIAL }],
+      multiValue: true,
+      value: undefined
+    })
+
+    fireEvent.click(screen.getAllByText(ADD)[0])
+    await waitFor(() => { expect(inputs()).toHaveLength(1) })
+    // the row is reported and rendered before the first character, the way a user reaches it
+    await settled()
+
+    fireEvent.change(inputs()[0], { target: { value: '10' } })
+
+    expect(await lastEmitted()).toEqual([{ var: METRIC, v: '10', p: 0 }])
+    await settled()
+    expect(valuesOf()).toEqual(['10'])
+  })
+
+  it('keeps what is written into a seeded slot of a key that does not repeat after the value came back', async () => {
+    const tree = (value: unknown): React.JSX.Element => (
+      <ItemProvider item={ { name: 'height' } }>
+        <MultiValueEditor
+          delegateDatatype='quantityValue'
+          multiValue={ false }
+          onChange={ onChange }
+          value={ value }
+          variants={ [{ name: METRIC }] }
+        />
+      </ItemProvider>
+    )
+    const { rerender } = render(tree([]))
+
+    fireEvent.change(inputs()[0], { target: { value: '30' } })
+    expect(await lastEmitted()).toEqual([{ var: METRIC, v: '30', p: 0 }])
+
+    rerender(tree(await lastEmitted()))
+    await settled()
+
+    fireEvent.change(inputs()[0], { target: { value: '30 cm' } })
+
+    await settled()
+    expect(await lastEmitted()).toEqual([{ var: METRIC, v: '30 cm', p: 0 }])
+    expect(valuesOf()).toEqual(['30 cm', ''])
+  })
+
+  // A position is the entry's place in its own slot, so two slots' entries each carry a 0. Read as
+  // one sequence they moved past each other, the value came back as a list the editor had not
+  // written, and rebuilding the control from it took the row the user had just added with it.
+  it('keeps a row added in one slot when another slot is reordered', async () => {
+    const tree = (value: unknown): React.JSX.Element => (
+      <ItemProvider item={ { name: 'height' } }>
+        <MultiValueEditor
+          delegateDatatype='quantityValue'
+          multiValue
+          onChange={ onChange }
+          value={ value }
+          variants={ [{ name: METRIC }, { name: IMPERIAL }] }
+        />
+      </ItemProvider>
+    )
+    const { rerender } = render(tree([
+      { var: METRIC, v: 'a', p: 0 },
+      { var: METRIC, v: 'c', p: 1 },
+      { var: IMPERIAL, v: 'b', p: 0 }
+    ]))
+
+    fireEvent.click(screen.getAllByText(ADD)[1])
+    await waitFor(() => { expect(inputs()).toHaveLength(4) })
+
+    fireEvent.click(screen.getAllByLabelText(MOVE_UP)[1])
+
+    expect(await lastEmitted()).toEqual([
+      { var: METRIC, v: 'c', p: 0 },
+      { var: METRIC, v: 'a', p: 1 },
+      { var: IMPERIAL, v: 'b', p: 0 }
+    ])
+
+    rerender(tree(await lastEmitted()))
+
+    expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['c', 'a', 'b', ''])
+  })
+
   it('disables add with a visible reason at the maximum, and shows every stored value past it', () => {
     renderEditor({ multiValue: true, maximum: 2, value: [{ v: 'a' }, { v: 'b' }] })
 
@@ -318,7 +413,7 @@ describe('MultiValueEditor', () => {
 
     const headings = screen.getAllByRole('heading').map((heading) => heading.textContent)
 
-    expect(headings).toEqual(['metric', 'classification-store.multi-value.default-variant', 'legacy'])
+    expect(headings).toEqual(['metric', DEFAULT_HEADING, 'legacy'])
     expect(headings[1]).not.toBe('metric')
     expect(screen.getByText('classification-store.multi-value.not-declared')).toBeInTheDocument()
     expect(inputs()).toHaveLength(3)
@@ -332,7 +427,7 @@ describe('MultiValueEditor', () => {
     renderEditor({ variants: [{ name: 'metric' }], defaultVariant: false, multiValue: true, value: [{ v: 'd' }] })
 
     expect(screen.getAllByRole('heading').map((heading) => heading.textContent))
-      .toEqual(['metric', 'classification-store.multi-value.default-variant'])
+      .toEqual(['metric', DEFAULT_HEADING])
     expect(screen.getByText('classification-store.multi-value.not-declared')).toBeInTheDocument()
     expect(inputs()).toHaveLength(1)
     expect(screen.getAllByText(ADD)).toHaveLength(1)
@@ -349,11 +444,22 @@ describe('MultiValueEditor', () => {
     expect(inputs()).toHaveLength(1)
   })
 
-  it('adds no default slot beside a declared variant for a key that permits it, as before', () => {
+  it('adds the default slot after a declared variant for a key that permits it, headed by its label', () => {
     renderEditor({ variants: [{ name: 'metric' }], defaultVariantLabel: 'Base', multiValue: false, value: [] })
 
-    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric'])
-    expect(inputs()).toHaveLength(1)
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric', 'Base'])
+    expect(screen.queryByText('classification-store.multi-value.not-declared')).not.toBeInTheDocument()
+    expect(inputs()).toHaveLength(2)
+  })
+
+  it('adds the default slot after the declared variants for a key that declares no label for it', async () => {
+    renderEditor({ variants: [{ name: METRIC }], multiValue: false, value: [{ var: METRIC, v: 'm' }] })
+
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual([METRIC, DEFAULT_HEADING])
+
+    fireEvent.change(inputs()[1], { target: { value: 'd' } })
+
+    expect(await lastEmitted()).toEqual([{ var: METRIC, v: 'm', p: 0 }, { v: 'd', p: 0 }])
   })
 
   it('heads the default slot with the declared label', () => {
@@ -385,7 +491,8 @@ describe('MultiValueEditor', () => {
 
     expect(screen.getByText('classification-store.multi-value.not-declared')).toBeInTheDocument()
 
-    fireEvent.click(screen.getAllByLabelText(REMOVE)[1])
+    // after the metric slot and the default slot the key permits
+    fireEvent.click(screen.getAllByLabelText(REMOVE)[2])
 
     expect(await lastEmitted()).toEqual([])
     expect(screen.queryByText('classification-store.multi-value.not-declared')).not.toBeInTheDocument()
@@ -419,7 +526,8 @@ describe('MultiValueEditor', () => {
     })
 
     expect(inputs()).toHaveLength(2)
-    expect(screen.getAllByText(ADD)).toHaveLength(1)
+    // metric and the default slot, not the undeclared one
+    expect(screen.getAllByText(ADD)).toHaveLength(2)
   })
 
   // A declared row with no name addresses nothing, so it is no slot of its own; what it must never
@@ -427,8 +535,8 @@ describe('MultiValueEditor', () => {
   it('declares no slot for a variant row carrying no name', () => {
     renderEditor({ variants: [{ name: 'metric' }, {} as any], multiValue: false, value: [{ var: 'metric', v: 'm' }] })
 
-    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric'])
-    expect(inputs()).toHaveLength(1)
+    expect(screen.getAllByRole('heading').map((heading) => heading.textContent)).toEqual(['metric', DEFAULT_HEADING])
+    expect(inputs()).toHaveLength(2)
   })
 
   it('renders the one unheaded slot of a key whose every variant row carries no name', () => {
@@ -449,7 +557,8 @@ describe('MultiValueEditor', () => {
       value: [{ var: 'metric', v: 'a' }, { var: 'metric', v: 'b' }]
     })
 
-    expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['a', 'b'])
+    // the two stored values of the metric slot, then the empty default slot
+    expect(inputs().map((input) => (input as HTMLInputElement).value)).toEqual(['a', 'b', ''])
     expect(duplicateKeys.mock.calls.map((call) => String(call[0])).join('')).not.toMatch(/same key/)
     duplicateKeys.mockRestore()
   })

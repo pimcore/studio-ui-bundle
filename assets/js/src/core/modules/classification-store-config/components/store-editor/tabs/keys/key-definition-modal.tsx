@@ -34,7 +34,7 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { Form, type formInstanceType } from '@sdk/components'
-import { Alert } from 'antd'
+import { Alert, Spin } from 'antd'
 import { MultiValueEngineContext } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/multi-value-engine-context'
 import {
   getMultiValueRefusals,
@@ -49,6 +49,11 @@ interface IKeyDefinitionModalProps {
   onSaved: () => void
   /** What the engine of the key's store reports it can hold; the delegate picker of a multiValue key reads it. */
   engineCapabilities?: readonly string[] | null
+  /**
+   * Re-reads the key's collection page from the server, once per opening. Resolves false when the
+   * read failed, having reported it — the dialog then closes rather than editing the cached row.
+   */
+  reloadKey?: () => Promise<boolean>
 }
 
 /**
@@ -178,7 +183,8 @@ export const KeyDefinitionModal = ({
   keyDetail,
   onClose,
   onSaved,
-  engineCapabilities
+  engineCapabilities,
+  reloadKey
 }: IKeyDefinitionModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [updateKey, { isLoading: isSaving }] = useClassificationStoreConfigurationKeyUpdateMutation()
@@ -186,6 +192,37 @@ export const KeyDefinitionModal = ({
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(
     serviceIds['DynamicTypes/FieldDefinitionRegistry']
   )
+
+  // The key the dialog has re-read and may seed from. The row it is handed comes out of the
+  // collection cache, which no key write invalidates and which a write made outside this tab never
+  // reaches at all, so the stored key is asked for before anything below reads it.
+  const [seededKeyId, setSeededKeyId] = useState<number | undefined>(undefined)
+
+  // One re-read per opening rather than per render: the dialog is handed a fresh row object on
+  // every cache patch, and the key it is editing is the only thing that has to settle it.
+  useEffect(() => {
+    const id = keyDetail?.id
+    let abandoned = false
+
+    if (!open || id === undefined) {
+      setSeededKeyId(undefined)
+    } else if (reloadKey === undefined) {
+      setSeededKeyId(id)
+    } else {
+      void reloadKey().then((reloaded) => {
+        if (abandoned) return
+        // A failed read leaves the cache holding the very row the re-read was there to replace, so
+        // the dialog closes rather than opening on it; the reader reports the failure itself.
+        if (reloaded) setSeededKeyId(id)
+        else onClose()
+      })
+    }
+
+    return () => { abandoned = true }
+  }, [open, keyDetail?.id])
+
+  /** Whether the stored key is still on its way, so nothing may be seeded from the cached row. */
+  const isReloading = open && keyDetail !== undefined && seededKeyId !== keyDetail.id
 
   // The stored state the control was last seeded from, held rather than read live: the key detail
   // comes from the collection cache, which a refresh of the same key can move while the dialog is
@@ -205,6 +242,9 @@ export const KeyDefinitionModal = ({
   // Seeded per key, not per mount: the dialog stays mounted between keys, so a key opened after
   // another one would otherwise show the state of the previous one. The baseline is seeded with
   // it, so both only move when the dialog is handed a different key.
+  //
+  // Keyed off the re-read and not off the key's id, so these seed from the stored row the dialog
+  // opens on rather than from the cached one it was handed a moment earlier.
   useEffect(() => {
     const seeded = localizationOf(keyDetail?.localized)
 
@@ -212,7 +252,7 @@ export const KeyDefinitionModal = ({
     setLocalization(seeded)
     setBaselineDefinition(keyDetail?.definition ?? null)
     setRefusals([])
-  }, [keyDetail?.id])
+  }, [seededKeyId])
 
   // Refs to the getLayout function and the form — updated by KeyDefinitionFormBridge
   const getLayoutRef = useRef<(() => Layout | undefined) | null>(null)
@@ -273,6 +313,9 @@ export const KeyDefinitionModal = ({
 
   const handleSave = (): void => {
     if (keyDetail === undefined || getLayoutRef.current === null) return
+    // The callback refs survive the body being unmounted, so a save pressed while the key is still
+    // being re-read would otherwise send the layout of the row the dialog opened on before it.
+    if (isReloading) return
     // One save at a time: a second one recomputes the stored state from the patch the first wrote.
     if (isSaving) return
 
@@ -377,7 +420,7 @@ export const KeyDefinitionModal = ({
 
   return (
     <Modal
-      confirmLoading={ isSaving }
+      confirmLoading={ isSaving || isReloading }
       destroyOnClose
       okText={ t('save') }
       onCancel={ onClose }
@@ -387,7 +430,11 @@ export const KeyDefinitionModal = ({
       title={ keyDetail !== undefined ? t('classification-store.edit-key-definition', { keyName: keyDetail.name }) : '' }
       width={ 900 }
     >
-      {keyDetail !== undefined && (
+      {/* The body mounts on the re-read answer alone: the layout provider seeds once and ignores
+          every later refresh, so a body built on the cached row would keep it for this opening. */}
+      {isReloading && <Spin />}
+
+      {keyDetail !== undefined && !isReloading && (
         <>
           {/* outside the definition form on purpose: it is a column of the key, not part of the blob */}
           <Flex

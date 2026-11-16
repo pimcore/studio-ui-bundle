@@ -2356,6 +2356,8 @@ classification-store.key-localized: "Gelokaliseerde sleutel"
 classification-store.key-localized-tooltip: "Deze sleutel bevat een eigen waarde per taal."
 classification-store.import: Storeconfiguratie importeren
 classification-store.import-success: Storeconfiguratie succesvol geïmporteerd
+classification-store.import-replace.title: "Storeconfiguratie vervangen?"
+classification-store.import-replace.warning: 'Deze store is niet leeg. Een bestand dat een andere store beschrijft, vervangt de configuratie ervan!'
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad
@@ -3325,6 +3327,4 @@ classification-store.multi-value.unreadable-value: "Deze sleutel bevat een waard
 classification-store.multi-value.default-variant-permitted: "Waarden zonder variant toestaan"
 classification-store.multi-value.default-variant-label: "Label van de standaardwaarde"
 classification-store.multi-value.no-writable-slot: "Deze sleutel declareert geen variant en staat geen waarden zonder variant toe, dus er is geen plek om een waarde in te voeren. Declareer een variant of sta waarden zonder variant toe."
-classification-store.apply: "Een nieuwe store aanmaken uit een bestand"
-classification-store.apply-upload: "Store aanmaken"
 classification-store.multi-value.unreadable-entry: "Deze waarde is geen getal dat het invoerveld kan tonen; ze blijft ongewijzigd opgeslagen tot ze wordt gewist."

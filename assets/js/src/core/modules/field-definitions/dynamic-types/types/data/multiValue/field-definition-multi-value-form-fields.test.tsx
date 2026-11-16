@@ -37,8 +37,9 @@ jest.mock('./field-definition-multi-value-variants', () => ({
 }))
 
 // Which types the registry offers is the registry's answer: the picker never lists them itself.
+// `consent` is there because a withdrawn type still carries the tag - the picker has to drop it.
 const mockRegistry = {
-  getTypesByTags: () => ['input', 'geopoint', 'multiValue', 'encryptedField'].map((id) => ({ id })),
+  getTypesByTags: () => ['input', 'geopoint', 'multiValue', 'encryptedField', 'consent'].map((id) => ({ id })),
   hasDynamicType: () => true,
   getDynamicType: () => ({ getDefaultData: () => ({}), getSpecificFormFields: () => null })
 }
@@ -85,6 +86,14 @@ describe('FieldDefinitionMultiValueFormFields delegate picker', () => {
     renderPicker([])
 
     expect(capturedOptions.map((option) => option.value).sort()).toEqual(['geopoint', 'input'])
+  })
+
+  // A delegate is refused by core for the same reason the key type is, so it must not be listed
+  // here either - not even disabled, which would read as "wrong engine" rather than "withdrawn".
+  it('offers no delegate of a withdrawn type', () => {
+    renderPicker(['StructuredValues'])
+
+    expect(capturedOptions.map((option) => option.value)).not.toContain('consent')
   })
 
   it('selects a type the engine holds and disables, with its reason, one it does not', () => {

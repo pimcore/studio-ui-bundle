@@ -15,7 +15,8 @@ import { MultiValueEngineContext } from '@Pimcore/modules/field-definitions/dyna
 import {
   CLASSIFICATION_STORE_KEY_TYPE_TAG,
   CLASSIFICATION_STORE_WRAPPER_TYPES,
-  isKeyTypeHeldByEngine
+  isKeyTypeHeldByEngine,
+  isOfferedAsKeyType
 } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
 import { Form, Input, InputNumber, Select, Switch } from '@sdk/components'
 import React, { useContext, useEffect, useRef } from 'react'
@@ -35,10 +36,11 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
   const isRepeating = Form.useWatch('multiValue') as boolean | undefined
   const unqualifiedValue = Form.useWatch('unqualifiedValue') as boolean | null | undefined
 
-  // Every type a key may be defined with, except the wrappers, which cannot nest.
+  // Every type a key may be defined with, except the wrappers, which cannot nest. A withdrawn type
+  // is no more a delegate than it is a key type - core refuses both in KeyConfig::save().
   const options = fieldDefinitionRegistry
     .getTypesByTags([CLASSIFICATION_STORE_KEY_TYPE_TAG], props.context)
-    .filter((type) => !CLASSIFICATION_STORE_WRAPPER_TYPES.includes(type.id))
+    .filter((type) => !CLASSIFICATION_STORE_WRAPPER_TYPES.includes(type.id) && isOfferedAsKeyType(type.id))
     .map((type) => ({ id: type.id, label: t('field-definition.' + kebabCase(type.id)) }))
     .sort((a, b) => a.label.localeCompare(b.label))
     .map(({ id, label }) => isKeyTypeHeldByEngine(id, engineCapabilities)

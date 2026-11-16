@@ -183,16 +183,35 @@ describe('useFieldFilterEditor', () => {
       expect(resolvedIdLists).toContainEqual([OBJECT_ADAPTER_ID, FILTERABLE_TYPE])
     })
 
-    it('offers a multiValue key once, filtered as its delegate, and does not name it as skipped', () => {
+    const variantKey = (overrides: object = {}): object => ({
+      ...appliedItem('multiValue', 100),
+      variants: [{ name: 'Metric', label: 'Metric' }, { name: 'Imperial', label: 'Imperial' }],
+      definition: { fieldtype: 'multiValue', title: 'key 100', delegateDatatype: FILTERABLE_TYPE },
+      ...overrides
+    })
+
+    it('offers a multiValue key one filter per declared variant, then the default slot', () => {
       draftFieldFilters = []
       filterableColumns = [storeColumn]
       const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
 
-      applyKeys([{ ...appliedItem('multiValue', 100), variants: [{ name: 'Metric' }], definition: { fieldtype: 'multiValue', title: 'key 100', delegateDatatype: FILTERABLE_TYPE } }])
+      applyKeys([variantKey()])
 
-      expect(result.current.filters.map((filter) => filter.config.keyId)).toEqual([100])
+      expect(result.current.filters.map((filter) => filter.config.variant)).toEqual(['Metric', 'Imperial', null])
+      expect(result.current.filters.map((filter) => filter.translationKey)).toEqual(['key 100 (Metric)', 'key 100 (Imperial)', 'key 100'])
       expect(resolvedIdLists).toContainEqual([OBJECT_ADAPTER_ID, FILTERABLE_TYPE])
       expect(messageInfo).not.toHaveBeenCalled()
+    })
+
+    it('does not add a variant slot the panel already holds', () => {
+      draftFieldFilters = []
+      filterableColumns = [storeColumn]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      applyKeys([variantKey()])
+      applyKeys([variantKey()])
+
+      expect(result.current.filters.map((filter) => filter.config.variant)).toEqual(['Metric', 'Imperial', null])
     })
 
     it('names the keys it skipped so a shorter list is not a silent one', () => {

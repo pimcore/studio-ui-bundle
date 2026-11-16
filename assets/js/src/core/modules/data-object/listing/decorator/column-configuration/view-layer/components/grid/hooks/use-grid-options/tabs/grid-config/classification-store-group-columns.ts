@@ -14,7 +14,10 @@ import {
   type ClassificationStoreVariantLayout
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { declaredVariantsOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-slots'
-import { multiValueMembersOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/multi-value-members'
+import {
+  defaultVariantDeclarationOf,
+  multiValueMembersOf
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/multi-value-members'
 import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
 import { isRepeatingColumn, variantSlotsOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
@@ -87,14 +90,14 @@ const hasColumnForKey = (columns: AvailableColumn[], baseColumn: AvailableColumn
     return column.key === baseColumn.key && config.groupId === groupId && config.keyId === keyId && (config.variant ?? null) === variant
   })
 
-/** The columns one key is shown as: one per declared variant in declaration order, then the default slot. */
+/** The columns one key is shown as: one per declared variant in declaration order, then the default slot where the key permits it. */
 const columnsOfKey = (
   baseColumn: AvailableColumn,
   groupId: number,
   key: ClassificationStoreCollection2,
   columns: AvailableColumn[]
 ): AvailableColumn[] => {
-  return variantSlotsOf(key.variants)
+  return variantSlotsOf(key.variants, defaultVariantDeclarationOf(key))
     .filter((variant) => !hasColumnForKey(columns, baseColumn, groupId, key.id, variant === null ? null : variantNameOf(variant)))
     .map((variant) => toColumn(baseColumn, groupId, key, variant))
 }

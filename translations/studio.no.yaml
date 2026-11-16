@@ -2356,6 +2356,8 @@ classification-store.key-localized: "Lokalisert nøkkel"
 classification-store.key-localized-tooltip: "Denne nøkkelen har en egen verdi per språk."
 classification-store.import: Importer store-konfigurasjon
 classification-store.import-success: Store-konfigurasjonen ble importert
+classification-store.import-replace.title: "Erstatte store-konfigurasjonen?"
+classification-store.import-replace.warning: 'Denne butikken er ikke tom. En fil som beskriver en annen butikk erstatter konfigurasjonen!'
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
@@ -3325,6 +3327,4 @@ classification-store.multi-value.unreadable-value: "Denne nøkkelen har en verdi
 classification-store.multi-value.default-variant-permitted: "Tillat verdier uten variant"
 classification-store.multi-value.default-variant-label: "Etikett for standardverdien"
 classification-store.multi-value.no-writable-slot: "Denne nøkkelen deklarerer ingen variant og tillater ikke verdier uten variant, så det er ingen plass til å legge inn en verdi. Deklarer en variant eller tillat verdier uten variant."
-classification-store.apply: "Opprett en ny store fra en fil"
-classification-store.apply-upload: "Opprett store"
 classification-store.multi-value.unreadable-entry: "Denne verdien er ikke et tall som feltet kan vise; den beholdes som lagret til den slettes."

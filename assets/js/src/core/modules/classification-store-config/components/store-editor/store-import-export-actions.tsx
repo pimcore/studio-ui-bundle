@@ -12,6 +12,8 @@ import React from 'react'
 import { ImportExportActionsView } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
 import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { useStoreImport } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
+import { getStoreImportUrl } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-endpoint'
+import { useStoreReplaceWarning } from '@Pimcore/modules/classification-store-config/components/store-editor/use-store-replace-warning'
 import { api } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -21,12 +23,9 @@ interface IStoreImportExportActionsProps {
   storeId: number
 }
 
-/** The apply endpoint names no store: the file carries the one it describes. */
-export const getStoreApplyUrl = (): string => `${getPrefix()}/classification-store/configuration/stores/apply`
-
 const storeImportExportConfig: ImportExportConfig = {
   getExportUrl: (id) => `${getPrefix()}/classification-store/configuration/stores/${id}/export`,
-  getImportUrl: (id) => `${getPrefix()}/classification-store/configuration/stores/${id}/import`,
+  getImportUrl: (id) => getStoreImportUrl(id),
   importModalTitleKey: 'classification-store.import',
   successMessageKey: 'classification-store.import-success',
   // The keys, groups, collections and sub groups collections all provide this tag.
@@ -35,15 +34,17 @@ const storeImportExportConfig: ImportExportConfig = {
 
 export const StoreImportExportActions = ({ storeId }: IStoreImportExportActionsProps): React.JSX.Element => {
   const { notifyImported } = useStoreImport()
+  const allowed = isAllowed(UserPermission.ClassificationStore)
+  const confirmImport = useStoreReplaceWarning(storeId, allowed)
 
-  if (!isAllowed(UserPermission.ClassificationStore)) {
+  if (!allowed) {
     return <></>
   }
 
   return (
     <ImportExportActionsView
       config={ storeImportExportConfig }
-      inline
+      confirmImport={ confirmImport }
       itemId={ storeId }
       onImported={ notifyImported }
     />

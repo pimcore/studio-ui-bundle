@@ -32,6 +32,9 @@ let storeEngine: { engine: string | null | undefined, engineCapabilities: string
 const STORE_ID = 7
 // email is an Input-derived type: it normalizes to `mixed`, so the EAV value columns hold it.
 const TYPE_IDS = ['input', 'email', 'geopoint', 'manyToOneRelation', 'multiValue']
+// A withdrawn type still carries the key-type tag, so the registry still answers with it and the
+// tab is what has to drop it. The second one is a type this bundle does not even ship.
+const WITHDRAWN_TYPE_IDS = ['consent', 'permissionManyToOneRelation']
 const DOCUMENT_CAPABILITIES = ['StructuredValues', 'Relations']
 
 // a declaration, so it is initialised when the hoisted mock factories run
@@ -50,10 +53,12 @@ jest.mock('@Pimcore/app/config/app-config', () => ({ appConfig: { defaultPageSiz
 jest.mock('@sdk/app', () => ({
   serviceIds: { 'DynamicTypes/FieldDefinitionRegistry': 'registry' },
   useInjection: () => ({
-    getTypesByTags: () => TYPE_IDS.map((id) => ({ id }))
+    getTypesByTags: () => [...TYPE_IDS, ...WITHDRAWN_TYPE_IDS].map((id) => ({ id }))
   })
 }))
 
+// The tab dispatches the key definition dialog's re-read; nothing here opens it, so the store is a stub.
+jest.mock('@Pimcore/app/store', () => ({ useAppDispatch: () => jest.fn() }))
 jest.mock('@Pimcore/components/modal/hooks/use-studio-modal', () => ({ useStudioModal: () => ({ localModal: { confirm: jest.fn() } }) }))
 jest.mock('@Pimcore/components/tooltip/tooltip', () => ({ Tooltip: ({ children }: any) => <>{children}</> }))
 jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: ({ children }: any) => <div>{children}</div> }))
@@ -109,6 +114,17 @@ describe('KeysTab type select', () => {
 
     expect(typeOptions().map((option) => option.value).sort()).toEqual([...TYPE_IDS].sort())
     expect(disabledTypes()).toEqual([])
+  })
+
+  // Not disabled with a tooltip, which would read as "wrong engine": a withdrawn type is gone from
+  // the picker, on every engine, because core refuses the save whatever the store can hold.
+  it('offers no withdrawn type, not even on an engine that holds everything', () => {
+    storeEngine = { engine: 'document', engineCapabilities: DOCUMENT_CAPABILITIES }
+    render(<KeysTab storeId={ STORE_ID } />)
+
+    const values = typeOptions().map((option) => option.value)
+
+    WITHDRAWN_TYPE_IDS.forEach((id) => { expect(values).not.toContain(id) })
   })
 
   it('offers multiValue as a key type, held by every engine', () => {

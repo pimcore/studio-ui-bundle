@@ -14,8 +14,10 @@ import { type DynamicTypeFieldDefinitionAbstract, type FieldDefinitionContext } 
 import {
   CLASSIFICATION_STORE_EXCLUDED_TYPES,
   CLASSIFICATION_STORE_KEY_TYPE_TAG,
+  CLASSIFICATION_STORE_WITHDRAWN_TYPES,
   ENGINE_CAPABILITY_STRUCTURED_VALUES,
   isKeyTypeHeldByEngine,
+  isOfferedAsKeyType,
   KEY_TYPE_REQUIRED_CAPABILITIES
 } from './classification-store-key-types'
 
@@ -39,8 +41,11 @@ const context: FieldDefinitionContext = { area: ['classification-store'], path: 
 
 const DATA_TYPES_DIR = path.resolve(__dirname, '../types/data')
 const CALCULATED_VALUE = 'calculatedValue'
+const CONSENT = 'consent'
+const PERMISSION_MANY_TO_MANY_RELATION = 'permissionManyToManyRelation'
+const PERMISSION_MANY_TO_ONE_RELATION = 'permissionManyToOneRelation'
 const NEWLY_OFFERED_TYPES = [
-  'advancedManyToManyObjectRelation', 'advancedManyToManyRelation', 'consent', 'dateRange', 'email', 'externalImage',
+  'advancedManyToManyObjectRelation', 'advancedManyToManyRelation', 'dateRange', 'email', 'externalImage',
   'firstname', 'gender', 'geobounds', 'geopoint', 'geopolygon', 'geopolyline', 'hotspotimage', 'imageGallery',
   'lastname', 'link', 'manyToManyObjectRelation', 'manyToManyRelation', 'manyToOneRelation', 'numericRange',
   'structuredTable', 'video'
@@ -77,37 +82,94 @@ const loadDataTypes = (): DynamicTypeFieldDefinitionAbstract[] => {
 
 describe('classification store key types', () => {
   const types = loadDataTypes()
-  const offered = types.filter((type) => type.getTags(context).includes(CLASSIFICATION_STORE_KEY_TYPE_TAG)).map((type) => type.id)
+  // What the pickers ask the registry for: the tag alone, before the withdrawal filter.
+  const tagged = types.filter((type) => type.getTags(context).includes(CLASSIFICATION_STORE_KEY_TYPE_TAG)).map((type) => type.id)
+  // What they put in front of the user.
+  const offered = tagged.filter(isOfferedAsKeyType)
 
   it('finds the data types of the bundle', () => {
     expect(types).toHaveLength(56)
   })
 
-  it('classifies every data type as offered or excluded', () => {
+  it('classifies every data type as tagged or excluded', () => {
     const unclassified = types
       .map((type) => type.id)
-      .filter((id) => !offered.includes(id) && !CLASSIFICATION_STORE_EXCLUDED_TYPES.includes(id))
+      .filter((id) => !tagged.includes(id) && !CLASSIFICATION_STORE_EXCLUDED_TYPES.includes(id))
 
     // The id in the message is the type to tag with classificationStore or to add to the exclusion set.
     expect(unclassified).toEqual([])
   })
 
-  it('offers no type that is excluded', () => {
-    expect(offered.filter((id) => CLASSIFICATION_STORE_EXCLUDED_TYPES.includes(id))).toEqual([])
+  it('tags no type that is excluded', () => {
+    expect(tagged.filter((id) => CLASSIFICATION_STORE_EXCLUDED_TYPES.includes(id))).toEqual([])
   })
 
-  it('offers 49 types, among them calculatedValue', () => {
+  it('tags 49 types, among them calculatedValue', () => {
     // 2026-11-05 option-A decision: the calculated type stays offered, the exclusion only scopes the unlocked set.
-    expect(offered).toContain(CALCULATED_VALUE)
-    expect(offered).toHaveLength(49)
+    expect(tagged).toContain(CALCULATED_VALUE)
+    expect(tagged).toHaveLength(49)
   })
 
-  it('offers the 22 structured types next to the ones offered before', () => {
+  it('offers the 21 structured types that were not withdrawn', () => {
     expect(offered).toEqual(expect.arrayContaining(NEWLY_OFFERED_TYPES))
   })
 
-  it('declares a capability requirement only for offered types', () => {
-    expect(Object.keys(KEY_TYPE_REQUIRED_CAPABILITIES).filter((id) => !offered.includes(id))).toEqual([])
+  /**
+   * The withdrawal cannot be a missing tag, which is why it cannot be read off `tagged`: `consent`
+   * declares the tag here in core, and the two permission relations inherit it from the core
+   * relation types they extend, in a bundle this test never loads. So the picker has to filter, and
+   * the type the filter has to survive against is exactly a tagged one.
+   */
+  it('withdraws consent from what is offered although it still declares the tag', () => {
+    expect(tagged).toContain(CONSENT)
+    expect(offered).not.toContain(CONSENT)
+    expect(offered).toHaveLength(tagged.length - 1)
+  })
+
+  it('withdraws the two permission relations, which this bundle does not ship', () => {
+    expect(types.map((type) => type.id)).not.toContain(PERMISSION_MANY_TO_MANY_RELATION)
+    expect(isOfferedAsKeyType(PERMISSION_MANY_TO_MANY_RELATION)).toBe(false)
+    expect(isOfferedAsKeyType(PERMISSION_MANY_TO_ONE_RELATION)).toBe(false)
+  })
+
+  // link is a wanted key type and stays offered; nothing withdraws it.
+  it('keeps link offered', () => {
+    expect(offered).toContain('link')
+  })
+
+  it('declares a capability requirement only for tagged types', () => {
+    expect(Object.keys(KEY_TYPE_REQUIRED_CAPABILITIES).filter((id) => !tagged.includes(id))).toEqual([])
+  })
+})
+
+/**
+ * The counterpart of `WithdrawnKeyTypePickerAgreementTest` in core. The withdrawal is decided twice,
+ * once per repository: core refuses the three names in `KeyConfig::save()`, this bundle never offers
+ * them. Neither test run can read the other's list - this job installs npm only, so there is no core
+ * checkout here - so the two are held together by naming the same three types on both sides, each
+ * test naming the other's file. An edit to one list fails a test that says where the other one is.
+ *
+ * Convention held by two tests, not one source of truth. The source of truth is the follow-up: the
+ * backend publishes the withdrawn list and the picker reads it.
+ */
+describe('agreement with core on the withdrawn key types', () => {
+  it('names the three types core names in WITHDRAWN_KEY_TYPES, pimcore models/DataObject/Classificationstore/KeyTypeSupport.php', () => {
+    expect(CLASSIFICATION_STORE_WITHDRAWN_TYPES).toEqual([
+      CONSENT,
+      PERMISSION_MANY_TO_MANY_RELATION,
+      PERMISSION_MANY_TO_ONE_RELATION
+    ])
+  })
+
+  // the filter is what the pickers read, so pinning the list alone would pin nothing they ask
+  it('offers none of the three, as KeyConfig::save() in core refuses all three', () => {
+    expect(CLASSIFICATION_STORE_WITHDRAWN_TYPES.filter(isOfferedAsKeyType)).toEqual([])
+  })
+
+  // the two core relation types the permission ones extend; core answers false for these as well
+  it('keeps the core relation types the withdrawn ones extend offered', () => {
+    expect(isOfferedAsKeyType('manyToOneRelation')).toBe(true)
+    expect(isOfferedAsKeyType('manyToManyRelation')).toBe(true)
   })
 })
 

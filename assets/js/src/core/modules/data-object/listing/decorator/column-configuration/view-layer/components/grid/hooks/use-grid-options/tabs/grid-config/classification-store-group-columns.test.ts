@@ -15,6 +15,7 @@ import { classificationStoreColumnsToAdd } from './classification-store-group-co
 
 const FIELD_NAME = 'technicalAttributes'
 const GROUP_ID = 7
+const METRIC = 'Metric'
 const NUMERIC = 'numeric'
 
 const baseColumn: AvailableColumn = {
@@ -144,6 +145,30 @@ describe('classificationStoreColumnsToAdd', () => {
 
     it('declares no column for a variant row with an empty name', () => {
       expect(variantsOf(pick(keyWith([{ name: '' }, { name: 'Metric' }])))).toEqual(['Metric', null])
+    })
+
+    it('adds no column for the default slot of a key that declines the unqualified value', () => {
+      const declared = [{ name: METRIC }]
+
+      expect(variantsOf(pick({ ...keyWith(declared), defaultVariant: false }))).toEqual([METRIC])
+      expect(variantsOf(pick({ ...keyWith([]), defaultVariant: false }))).toEqual([])
+    })
+
+    // a blob that merely omits the field type resolves to no members, and must not read as a key that permits it
+    it('adds no default slot column the layout declines when the definition blob is not recognisably multiValue', () => {
+      const key = { ...keyWith([{ name: METRIC }]), defaultVariant: false, definition: { name: 'color', delegateDatatype: 'input' } }
+
+      expect(variantsOf(pick(key))).toEqual([METRIC])
+    })
+
+    it('reads a declined default slot from the definition when the layout omits the member', () => {
+      const key = { ...keyWith([{ name: METRIC }]), definition: { ...multiValueDefinition, unqualifiedValue: false } }
+
+      expect(variantsOf(pick(key))).toEqual([METRIC])
+    })
+
+    it('adds the default slot column beside the variants of a key that permits the unqualified value', () => {
+      expect(variantsOf(pick({ ...keyWith([{ name: METRIC }]), defaultVariant: true }))).toEqual([METRIC, null])
     })
 
     it('adds no second column for a variant the draft already holds, picking the key or its group again', () => {

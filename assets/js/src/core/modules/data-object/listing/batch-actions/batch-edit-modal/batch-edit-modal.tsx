@@ -40,6 +40,7 @@ import { type ClassificationStoreCollection2 } from '@Pimcore/modules/data-objec
 import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
 import { variantOfColumn, variantSlotsOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { declaredVariantsOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-slots'
+import { defaultVariantDeclarationOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/multi-value-members'
 import { buildPatchData } from './utils/build-patch-data'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
@@ -74,7 +75,7 @@ const buildClassificationStoreColumns = (baseColumn: AvailableColumn, items, bat
     const itemDefinition = item.definition
     const variants = item.variants as ClassificationStoreCollection2['variants']
 
-    for (const variant of variantSlotsOf(variants)) {
+    for (const variant of variantSlotsOf(variants, defaultVariantDeclarationOf(item as ClassificationStoreCollection2))) {
       const variantName = variant === null ? null : variantNameOf(variant)
 
       if (isInBatchEdits(batchEdits, baseColumn, item, variantName)) {

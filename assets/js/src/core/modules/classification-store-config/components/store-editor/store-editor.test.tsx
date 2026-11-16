@@ -64,6 +64,21 @@ import userEvent from '@testing-library/user-event'
 // eslint-disable-next-line import/first
 import { StoreEditor } from './store-editor'
 
+const ACTIONS = 'import-export-actions'
+const FOOTER_SELECTOR = '.content-toolbar-sidebar-layout__toolbar'
+
+// The footer's horizontal scroll observes its size, which jsdom does not provide.
+beforeAll(() => {
+  Object.defineProperty(globalThis, 'ResizeObserver', {
+    writable: true,
+    value: class {
+      observe (): void {}
+      unobserve (): void {}
+      disconnect (): void {}
+    }
+  })
+})
+
 describe('StoreEditor', () => {
   it('offers the sub groups tab second, between the keys and groups tabs', () => {
     render(<StoreEditor storeId={ 1 } />)
@@ -93,5 +108,27 @@ describe('StoreEditor', () => {
     await userEvent.click(screen.getByRole('tab', { name: 'classification-store.tabs.sub-groups' }))
 
     expect(screen.getByTestId('sub-groups-tab')).toBeInTheDocument()
+  })
+
+  it('carries the export and import actions in the footer, as the class definition editor does', () => {
+    const { container } = render(
+      <StoreEditor
+        importExportActions={ <span data-testid={ ACTIONS } /> }
+        storeId={ 1 }
+      />
+    )
+
+    expect(container.querySelector(FOOTER_SELECTOR)).toContainElement(screen.getByTestId(ACTIONS))
+  })
+
+  it('leaves them out of the tab bar they used to sit in', () => {
+    const { container } = render(
+      <StoreEditor
+        importExportActions={ <span data-testid={ ACTIONS } /> }
+        storeId={ 1 }
+      />
+    )
+
+    expect(container.querySelector('.ant-tabs-nav')).not.toContainElement(screen.getByTestId(ACTIONS))
   })
 })

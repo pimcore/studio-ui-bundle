@@ -246,6 +246,61 @@ const renderLocalized = (
   return (refreshed) => { patchCache(keyLocalized(refreshed)) }
 }
 
+/** A tooltip only the server knows about: what an import, a CLI run or another user left stored. */
+const EXTERNAL_TOOLTIP = 'The height in metres'
+
+/** Whether the re-read of the key's collection page answered; false stands in for a failed read. */
+let reloadAnswers = true
+
+/** How many times the dialog asked for the key to be re-read. */
+let reloadCount = 0
+
+/**
+ * The dialog as the keys tab drives it: `keyDetail` is the row the collection cache holds, which
+ * nothing revalidates after a write, and `reloadKey` is that page being re-read. Only the re-read
+ * moves the cached row onto the stored one, so a dialog that seeds before it lands seeds stale.
+ */
+const TabHarness = ({ stored }: { stored: { current: ClassificationStoreConfigurationKeyDetail } }): React.JSX.Element => {
+  const [cached, setCached] = React.useState(stored.current)
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <StyleProvider container={ document.createElement('div') }>
+      <button
+        onClick={ () => { setOpen(true) } }
+        type="button"
+      >
+        open
+      </button>
+      <button
+        onClick={ () => { setOpen(false) } }
+        type="button"
+      >
+        close
+      </button>
+      <KeyDefinitionModal
+        keyDetail={ open ? cached : undefined }
+        onClose={ () => { setOpen(false) } }
+        onSaved={ () => { setOpen(false) } }
+        open={ open }
+        reloadKey={ async () => {
+          reloadCount += 1
+          if (!reloadAnswers) return false
+          setCached(stored.current)
+
+          return true
+        } }
+      />
+    </StyleProvider>
+  )
+}
+
+const openDialog = (): void => { fireEvent.click(screen.getByText('open')) }
+
+const closeDialog = (): void => { fireEvent.click(screen.getByText('close')) }
+
+const tooltipControl = (): HTMLElement => screen.getByLabelText('tooltip')
+
 const indexedControl = (): HTMLElement => screen.getByLabelText('classification-store.key-indexed')
 
 const option = (name: string): HTMLElement => screen.getByRole('radio', { name })
@@ -302,6 +357,8 @@ describe('KeyDefinitionModal', () => {
     updateKey.mockReset()
     updateKey.mockResolvedValue({ data: {} })
     confirmWarning.mockReset()
+    reloadAnswers = true
+    reloadCount = 0
   })
 
   it('opens a key that carries the options the dialog no longer offers', () => {
@@ -657,5 +714,54 @@ describe('KeyDefinitionModal', () => {
     renderModal(response.data)
 
     expect(indexedControl()).toBeChecked()
+  })
+
+  // The cached row the dialog is handed is only as fresh as the last read of that page: a key
+  // update writes no tag, so nothing refetches the collection, and a write made outside this tab
+  // never reaches the cache at all. The dialog re-reads the key before it edits it.
+  it('opens on the stored definition after a write it never saw, not on the one cached at the first open', async () => {
+    const stored = { current: keyDetail }
+
+    render(<TabHarness stored={ stored } />)
+
+    openDialog()
+    await waitFor(() => { expect(tooltipControl()).toHaveValue('The height in cm') })
+    closeDialog()
+
+    // An import, a CLI run or another user moves the stored definition under the cached row.
+    stored.current = keyWithDefinition({ ...keyDetail.definition, tooltip: EXTERNAL_TOOLTIP })
+
+    openDialog()
+
+    await waitFor(() => { expect(tooltipControl()).toHaveValue(EXTERNAL_TOOLTIP) })
+    expect((await savedDefinition()).tooltip).toBe(EXTERNAL_TOOLTIP)
+  })
+
+  it('asks for the key once per opening, not once per render', async () => {
+    const stored = { current: keyDetail }
+
+    render(<TabHarness stored={ stored } />)
+
+    openDialog()
+    await waitFor(() => { expect(tooltipControl()).toBeInTheDocument() })
+
+    fireEvent.change(tooltipControl(), { target: { value: EDITED_TOOLTIP } })
+    fireEvent.click(indexedControl())
+
+    expect(reloadCount).toBe(1)
+  })
+
+  // A read that failed leaves the cache on whatever it held, so opening on it would edit the same
+  // stale row the re-read was there to replace. The tab reports the failure; the dialog stays shut.
+  it('does not open on the cached row when the key could not be re-read', async () => {
+    const stored = { current: keyDetail }
+    reloadAnswers = false
+
+    render(<TabHarness stored={ stored } />)
+
+    openDialog()
+
+    await waitFor(() => { expect(reloadCount).toBe(1) })
+    expect(screen.queryByLabelText('tooltip')).not.toBeInTheDocument()
   })
 })

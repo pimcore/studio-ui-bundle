@@ -52,6 +52,16 @@ describe('variant column helpers', () => {
     expect(variantSlotsOf(null)).toEqual([null])
   })
 
+  it('offers the default slot only where the key permits an unqualified value', () => {
+    expect(variantSlotsOf(definition.variants, { defaultVariant: true })).toEqual([...definition.variants, null])
+    expect(variantSlotsOf(definition.variants, { defaultVariant: false })).toEqual(definition.variants)
+    expect(variantSlotsOf(null, { defaultVariant: false })).toEqual([])
+  })
+
+  it.each([undefined, null])('offers the default slot where the key states nothing (%p)', (defaultVariant) => {
+    expect(variantSlotsOf(definition.variants, { defaultVariant })).toEqual([...definition.variants, null])
+  })
+
   describe('display name', () => {
     it('appends the variant label, falling back to the variant name, and leaves the default slot unchanged', () => {
       expect(variantColumnSuffix(columnOf('Metric'))).toBe(' (Metric system)')

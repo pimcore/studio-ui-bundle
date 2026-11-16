@@ -2356,6 +2356,8 @@ classification-store.key-localized: "Clé localisée"
 classification-store.key-localized-tooltip: "Cette clé contient une valeur propre à chaque langue."
 classification-store.import: Importer la configuration du store
 classification-store.import-success: Configuration du store importée avec succès
+classification-store.import-replace.title: "Remplacer la configuration du store ?"
+classification-store.import-replace.warning: "Ce magasin n'est pas vide. Un fichier décrivant un autre magasin remplace sa configuration !"
 home: Accueil
 preview.label: Aperçu
 preview.desktop: Bureau
@@ -3325,6 +3327,4 @@ classification-store.multi-value.unreadable-value: "Cette clé contient une vale
 classification-store.multi-value.default-variant-permitted: "Autoriser les valeurs sans variante"
 classification-store.multi-value.default-variant-label: "Libellé de la valeur par défaut"
 classification-store.multi-value.no-writable-slot: "Cette clé ne déclare aucune variante et n'autorise pas les valeurs sans variante : il n'y a donc aucun emplacement où saisir une valeur. Déclarez une variante ou autorisez les valeurs sans variante."
-classification-store.apply: "Créer un nouveau store depuis un fichier"
-classification-store.apply-upload: "Créer le store"
 classification-store.multi-value.unreadable-entry: "Cette valeur n'est pas un nombre que le champ peut afficher ; elle reste telle quelle jusqu'à son effacement."
