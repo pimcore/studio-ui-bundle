@@ -41,6 +41,7 @@ interface IProfileDetail {
 
 const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX.Element => {
   const [form] = Form.useForm()
+  const welcomeScreen = Form.useWatch('welcomeScreen', form)
   const { t } = useTranslation()
   const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
@@ -175,6 +176,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
 
                   <Form.Item
                     name="welcomeScreen"
+                    style={ welcomeScreen === true ? { marginBottom: 0 } : undefined }
                   >
                     <Switch labelRight={ t('user-management.welcomeScreen') } />
                   </Form.Item>

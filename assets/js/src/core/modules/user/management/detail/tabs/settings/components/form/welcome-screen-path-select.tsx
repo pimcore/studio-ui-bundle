@@ -25,19 +25,18 @@ export const WelcomeScreenPathSelect = (): React.JSX.Element => {
   }))
 
   // Hidden while the switch is off; the form keeps the value, so switching on again shows the same choice
+  // No visible label: the switch above names the setting
   return (
     <Form.Conditional
       condition={ (values) => values.welcomeScreen === true }
       watchFields={ ['welcomeScreen'] }
     >
-      <Form.Item
-        label={ t('user-management.welcomeScreenPath') }
-        name="welcomeScreenPath"
-      >
+      <Form.Item name="welcomeScreenPath">
         <Select
+          aria-label={ t('user-management.welcomeScreenPath') }
           optionFilterProp="label"
           options={ options }
-          placeholder={ t('user-management.welcomeScreenPath') }
+          placeholder={ t('user-management.welcomeScreenPath.placeholder') }
           showSearch
         />
       </Form.Item>

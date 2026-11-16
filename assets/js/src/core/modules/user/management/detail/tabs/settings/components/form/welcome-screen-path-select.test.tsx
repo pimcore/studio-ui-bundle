@@ -57,9 +57,9 @@ jest.mock('@Pimcore/components/form/form', () => {
   return { Form: { Item: Form.Item, useFormInstance: Form.useFormInstance, useWatch: Form.useWatch, Conditional } }
 })
 jest.mock('@Pimcore/components/select/select', () => ({
-  Select: ({ value, onChange, options, placeholder }: { value?: string | null, onChange?: (value: string) => void, options: Array<{ value: string, label: string }>, placeholder?: string }) => (
+  Select: ({ value, onChange, options, placeholder, 'aria-label': ariaLabel }: { value?: string | null, onChange?: (value: string) => void, options: Array<{ value: string, label: string }>, placeholder?: string, 'aria-label'?: string }) => (
     <select
-      aria-label="welcome-screen-path"
+      aria-label={ ariaLabel }
       data-placeholder={ placeholder }
       onChange={ (event) => onChange?.(event.target.value) }
       value={ value ?? '' }
@@ -95,7 +95,9 @@ const renderForm = (welcomeScreenPath: string | null, welcomeScreen = true, onVa
   )
 }
 
-const getSelect = (): HTMLSelectElement => screen.getByLabelText<HTMLSelectElement>('welcome-screen-path')
+const SELECT_NAME = 'user-management.welcomeScreenPath'
+
+const getSelect = (): HTMLSelectElement => screen.getByLabelText<HTMLSelectElement>(SELECT_NAME)
 
 const renderSelect = (welcomeScreenPath: string | null, onValuesChange = jest.fn()): HTMLSelectElement => {
   renderForm(welcomeScreenPath, true, onValuesChange)
@@ -110,7 +112,13 @@ describe('WelcomeScreenPathSelect', () => {
     expect(Array.from(select.options).map((option) => [option.value, option.text])).toEqual([
       [DASHBOARD_PATH, 'Overview']
     ])
-    expect(select.dataset.placeholder).toBe('user-management.welcomeScreenPath')
+  })
+
+  it('has no visible label, only an accessible name and a select prompt as placeholder', () => {
+    const select = renderSelect(null)
+
+    expect(screen.queryByText(SELECT_NAME)).toBeNull()
+    expect(select.dataset.placeholder).toBe('user-management.welcomeScreenPath.placeholder')
   })
 
   it('shows the stored dashboard', () => {
@@ -132,14 +140,14 @@ describe('WelcomeScreenPathSelect', () => {
   it('is hidden while the welcome screen switch is off', () => {
     renderForm(DASHBOARD_PATH, false)
 
-    expect(screen.queryByLabelText('welcome-screen-path')).toBeNull()
+    expect(screen.queryByLabelText(SELECT_NAME)).toBeNull()
   })
 
   it('shows the kept choice again when the switch is turned off and on', () => {
     renderForm(DASHBOARD_PATH)
 
     fireEvent.click(screen.getByLabelText('welcome-screen'))
-    expect(screen.queryByLabelText('welcome-screen-path')).toBeNull()
+    expect(screen.queryByLabelText(SELECT_NAME)).toBeNull()
 
     fireEvent.click(screen.getByLabelText('welcome-screen'))
     expect(getSelect().value).toBe(DASHBOARD_PATH)
