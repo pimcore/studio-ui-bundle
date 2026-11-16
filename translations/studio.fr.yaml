@@ -2357,7 +2357,7 @@ classification-store.key-localized-tooltip: "Cette clé contient une valeur prop
 classification-store.import: Importer la configuration du store
 classification-store.import-success: Configuration du store importée avec succès
 classification-store.import-replace.title: "Remplacer la configuration du store ?"
-classification-store.import-replace.warning: "Ce magasin n'est pas vide. Un fichier décrivant un autre magasin remplace sa configuration !"
+classification-store.import-replace.warning: "Ce magasin n'est pas vide. Un fichier décrivant un autre magasin remplace la configuration de ce magasin et supprime les valeurs que chaque objet y conserve. Cette action est irréversible."
 home: Accueil
 preview.label: Aperçu
 preview.desktop: Bureau

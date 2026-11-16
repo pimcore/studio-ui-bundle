@@ -2357,7 +2357,7 @@ classification-store.key-localized-tooltip: "Deze sleutel bevat een eigen waarde
 classification-store.import: Storeconfiguratie importeren
 classification-store.import-success: Storeconfiguratie succesvol geïmporteerd
 classification-store.import-replace.title: "Storeconfiguratie vervangen?"
-classification-store.import-replace.warning: 'Deze store is niet leeg. Een bestand dat een andere store beschrijft, vervangt de configuratie ervan!'
+classification-store.import-replace.warning: "Deze store is niet leeg. Een bestand dat een andere store beschrijft, vervangt de configuratie van deze store en verwijdert de waarden die elk object erin bewaart. Dit kan niet ongedaan worden gemaakt."
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad

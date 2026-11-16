@@ -2357,7 +2357,7 @@ classification-store.key-localized-tooltip: "Questa chiave contiene un valore pr
 classification-store.import: Importa la configurazione dello store
 classification-store.import-success: Configurazione dello store importata correttamente
 classification-store.import-replace.title: "Sostituire la configurazione dello store?"
-classification-store.import-replace.warning: 'Questo store non è vuoto. Un file che descrive un altro store ne sostituisce la configurazione!'
+classification-store.import-replace.warning: "Questo store non è vuoto. Un file che descrive un altro store sostituisce la configurazione di questo store ed elimina i valori che ogni oggetto conserva al suo interno. Questa azione non può essere annullata."
 home: Home
 preview.label: Anteprima
 preview.desktop: Desktop

@@ -2361,7 +2361,7 @@ classification-store.key-localized-tooltip: "This key holds its own value per la
 classification-store.import: Import store configuration
 classification-store.import-success: Store configuration imported successfully
 classification-store.import-replace.title: "Replace the store configuration?"
-classification-store.import-replace.warning: 'This store is not empty. A file that describes another store replaces its configuration!'
+classification-store.import-replace.warning: "This store is not empty. A file that describes another store replaces its configuration and deletes the values every object holds under it. This cannot be undone."
 home: Home
 preview.label: Preview
 preview.desktop: Desktop

@@ -2357,7 +2357,7 @@ classification-store.key-localized-tooltip: "Esta clave tiene su propio valor po
 classification-store.import: Importar configuración del store
 classification-store.import-success: Configuración del store importada correctamente
 classification-store.import-replace.title: "¿Reemplazar la configuración del store?"
-classification-store.import-replace.warning: 'Este almacén no está vacío. Un archivo que describe otro almacén sustituye su configuración.'
+classification-store.import-replace.warning: "Este almacén no está vacío. Un archivo que describe otro almacén sustituye la configuración de este almacén y elimina los valores que cada objeto guarda en él. Esta acción no se puede deshacer."
 home: Inicio
 preview.label: Vista previa
 preview.desktop: Escritorio

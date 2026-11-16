@@ -2357,7 +2357,7 @@ classification-store.key-localized-tooltip: "Ten klucz przechowuje własną wart
 classification-store.import: Importuj konfigurację store
 classification-store.import-success: Konfiguracja store została zaimportowana
 classification-store.import-replace.title: "Zastąpić konfigurację store?"
-classification-store.import-replace.warning: 'Ten magazyn nie jest pusty. Plik opisujący inny magazyn zastępuje jego konfigurację!'
+classification-store.import-replace.warning: "Ten magazyn nie jest pusty. Plik opisujący inny magazyn zastępuje konfigurację tego magazynu i usuwa wartości, które każdy obiekt w nim przechowuje. Tej operacji nie można cofnąć."
 home: Strona główna
 preview.label: Podgląd
 preview.desktop: Komputer
