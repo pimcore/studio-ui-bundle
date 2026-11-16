@@ -10,7 +10,8 @@
 
 /* eslint-disable max-lines */
 
-import { type TypedUseMutation } from '@reduxjs/toolkit/query/react'
+import { type SerializedError } from '@reduxjs/toolkit'
+import { type FetchBaseQueryError, type TypedUseMutation } from '@reduxjs/toolkit/query/react'
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import {
   api as baseApi,
@@ -464,6 +465,12 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
   return results
 }
 
+/** What a re-read of one cache entry resolves to once its answer has been written to the cache. */
+export interface KeyCollectionRefetchResult {
+  isError: boolean
+  error?: FetchBaseQueryError | SerializedError
+}
+
 /**
  * Re-reads one cache entry of the key collection from the server, ignoring what the cache holds.
  *
@@ -476,16 +483,21 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
  * grid is already subscribed to, and an entry nobody is reading any more expires as before. An
  * open key definition dialog is unaffected — the layout provider seeds once and ignores later
  * refreshes of the same key (layout-provider-factory.tsx, "Already initialized").
+ *
+ * Exported for the key definition dialog, which re-reads the page before it edits a row: the cache
+ * is maintained by the patches in this file alone, so a write this client never saw — an import, a
+ * CLI run, another user — leaves the cached definition behind with nothing to correct it.
+ *
+ * The returned promise resolves once the answer is in the cache, so a caller can seed from it.
  */
-const refetchKeyCollection = (
-  dispatch: (thunk: any) => void,
+export const refetchKeyCollection = async (
+  dispatch: (thunk: any) => any,
   args: ClassificationStoreConfigurationKeyCollectionApiArg
-): void => {
-  dispatch(baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate(
+): Promise<KeyCollectionRefetchResult> =>
+  await dispatch(baseApi.endpoints.classificationStoreConfigurationKeyCollection.initiate(
     args,
     { subscribe: false, forceRefetch: true }
   ))
-}
 
 /**
  * Re-reads the cached pages of one store's key collection, ignoring what the cache holds.
@@ -515,7 +527,7 @@ const refetchKeyCollections = (dispatch: (thunk: any) => void, storeId?: number)
       if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
       const qs = queryState as { originalArgs: ClassificationStoreConfigurationKeyCollectionApiArg }
       if (storeId !== undefined && qs.originalArgs?.storeId !== storeId) continue
-      refetchKeyCollection(innerDispatch, qs.originalArgs)
+      void refetchKeyCollection(innerDispatch, qs.originalArgs)
     }
   })
 }
@@ -618,7 +630,7 @@ const openKeyCollectionRead = (
             page.items = page.items.filter((k) => !read.deleted.has(k.id))
           }
         ))
-        refetchKeyCollection(dispatch, args)
+        void refetchKeyCollection(dispatch, args)
         return
       }
 
@@ -660,7 +672,7 @@ const openKeyCollectionRead = (
       // asked — for this read's own entry, which is the only one the replay touched. See the
       // section comment above: this is also what gives a save that overlapped only a read the
       // corrective re-read the write ledger would have given it had it overlapped a write.
-      refetchKeyCollection(dispatch, args)
+      void refetchKeyCollection(dispatch, args)
     }
   }
 }
@@ -1174,7 +1186,7 @@ const api = baseApi.enhanceEndpoints({
               if (!queryKey.startsWith('classificationStoreConfigurationKeyCollection(')) continue
               const a = queryState.originalArgs as ClassificationStoreConfigurationKeyCollectionApiArg
               if (isActiveView(a) && isSearch(a) && (deletedStoreId === undefined || a.storeId === deletedStoreId)) {
-                refetchKeyCollection(innerDispatch, a)
+                void refetchKeyCollection(innerDispatch, a)
               }
             }
           })

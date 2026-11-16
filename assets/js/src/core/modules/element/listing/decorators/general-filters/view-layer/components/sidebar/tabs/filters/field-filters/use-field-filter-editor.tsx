@@ -28,6 +28,7 @@ import { useFilterableColumns } from '../../../../../../search-modes/use-filtera
 import { getKeyLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/key-label'
 import { keyFilterTypeOf } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/key-filter-type'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { classificationStoreFilterSlots, filterSlotId } from './classification-store-filter-slots'
 
 // The field filter a classification store key's own type is resolved through, as for any data object field.
 const CLASSIFICATION_STORE_KEY_FILTER_TYPE = 'dataobject.adapter'
@@ -183,34 +184,15 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
       void messageApi.info(t('classification-store.keys-without-field-filter', { keyNames: skippedKeyNames.join(', ') }))
     }
 
-    const newFilters = filterableItems.map((item) => {
-      const fieldDefinition = item.definition
-
-      return {
-        data: undefined,
-        id: column.key,
-        translationKey: fieldDefinition.title,
-        type: column.type,
-        frontendType: fieldDefinition.fieldtype,
-        localizable: column.localizable,
-        locale: column.localizable ? 'default' : undefined,
-        config: {
-          fieldDefinition,
-          groupId: item.groupId,
-          keyId: item.id,
-          translationKey: fieldDefinition.title
-        },
-        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined
-      }
-    })
+    const newFilters = filterableItems.flatMap((item) => classificationStoreFilterSlots(column, item))
 
     setFilters((prevFilters) => {
       // Prevent duplicates in case the user added the same classification store column twice
-      const prevFilterIds = prevFilters.map((filter) => filter.id + JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId }))
+      const prevFilterIds = prevFilters.map(filterSlotId)
 
       return [
         ...prevFilters,
-        ...newFilters.filter((filter) => !prevFilterIds.includes(filter.id + JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })))
+        ...newFilters.filter((filter) => !prevFilterIds.includes(filterSlotId(filter)))
       ]
     })
   }

@@ -77,6 +77,8 @@ export interface ImportExportActionsViewProps {
   inline?: boolean
   /** further actions of the owning surface, shown after export and import */
   extraActions?: ImportExportExtraAction[]
+  /** asked with the chosen file before the import is posted; answering false calls it off */
+  confirmImport?: (files: File[]) => Promise<boolean>
 }
 
 /**
@@ -88,7 +90,8 @@ export const ImportExportActionsView = ({
   itemId,
   onImported,
   inline = false,
-  extraActions = []
+  extraActions = [],
+  confirmImport
 }: ImportExportActionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const messageApi = useMessage()
@@ -210,6 +213,7 @@ export const ImportExportActionsView = ({
         accept={ acceptFileTypes }
         acceptMimeTypes={ acceptMimeTypes }
         action={ uploadUrl }
+        confirmUpload={ confirmImport }
         onOpenChange={ setIsImportModalOpen }
         onUploadSuccess={ handleImportSuccess }
         open={ isImportModalOpen }

@@ -34,16 +34,22 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { serviceIds, useInjection } from '@sdk/app'
+import { useAppDispatch } from '@Pimcore/app/store'
 import {
   asKeyDetail,
   type ClassificationStoreConfigurationKeyDetail,
+  refetchKeyCollection,
   useClassificationStoreConfigurationKeyCollectionQuery,
   useClassificationStoreConfigurationKeyCreateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
   useClassificationStoreConfigurationKeyRestoreMutation,
   useClassificationStoreConfigurationKeyUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import { isKeyTypeHeldByEngine } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
+import {
+  CLASSIFICATION_STORE_KEY_TYPE_TAG,
+  isKeyTypeHeldByEngine,
+  isOfferedAsKeyType
+} from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
 import { useStoreEngine } from '@Pimcore/modules/classification-store-config/hooks/use-store-engine'
 import { KeyDefinitionModal } from './keys/key-definition-modal'
 import { MetadataModal } from './shared/metadata-modal'
@@ -74,10 +80,12 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
   const { engineCapabilities } = useStoreEngine(storeId)
+  const dispatch = useAppDispatch()
 
   const typeSelectOptions = useMemo(() => (
     fieldDefinitionRegistry
-      .getTypesByTags(['classificationStore'], { area: ['classification-store'], path: [], fieldDefinitions: {} })
+      .getTypesByTags([CLASSIFICATION_STORE_KEY_TYPE_TAG], { area: ['classification-store'], path: [], fieldDefinitions: {} })
+      .filter((type) => isOfferedAsKeyType(type.id))
       .map((type) => ({ id: type.id, label: t('field-definition.' + kebabCase(type.id)) }))
       .sort((a, b) => a.label.localeCompare(b.label))
       .map(({ id, label }) => {
@@ -263,6 +271,22 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       }
     })
   }
+
+  // The cached page the dialog's row comes from is only as fresh as the last read of it: a key
+  // update invalidates no tag, and a write made outside this tab never reaches the cache at all. So
+  // the dialog asks for the page it is listed on to be re-read before it seeds its form from it.
+  const handleReloadDefinitionKey = useCallback(async (): Promise<boolean> => {
+    const result = await refetchKeyCollection(dispatch, queryArgs)
+
+    // Reported here rather than in the dialog, which never sees the raw error; it closes instead.
+    if (result.isError) {
+      trackError(new ApiError(result.error!))
+
+      return false
+    }
+
+    return true
+  }, [dispatch, queryArgs])
 
   const handleOpenDefinition = (key: ClassificationStoreConfigurationKeyDetail): void => {
     setDefinitionKeyId(key.id)
@@ -639,6 +663,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         onClose={ handleCloseDefinition }
         onSaved={ handleDefinitionSaved }
         open={ definitionModalOpen }
+        reloadKey={ handleReloadDefinitionKey }
       />
 
       <MetadataModal

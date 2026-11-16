@@ -2356,6 +2356,8 @@ classification-store.key-localized: "Clave localizada"
 classification-store.key-localized-tooltip: "Esta clave tiene su propio valor por idioma."
 classification-store.import: Importar configuración del store
 classification-store.import-success: Configuración del store importada correctamente
+classification-store.import-replace.title: "¿Reemplazar la configuración del store?"
+classification-store.import-replace.warning: 'Este almacén no está vacío. Un archivo que describe otro almacén sustituye su configuración.'
 home: Inicio
 preview.label: Vista previa
 preview.desktop: Escritorio
@@ -3325,6 +3327,4 @@ classification-store.multi-value.unreadable-value: "Esta clave contiene un valor
 classification-store.multi-value.default-variant-permitted: "Permitir valores sin variante"
 classification-store.multi-value.default-variant-label: "Etiqueta del valor predeterminado"
 classification-store.multi-value.no-writable-slot: "Esta clave no declara ninguna variante y no permite valores sin variante, por lo que no hay dónde introducir un valor. Declare una variante o permita valores sin variante."
-classification-store.apply: "Crear un nuevo almacén desde un archivo"
-classification-store.apply-upload: "Crear almacén"
 classification-store.multi-value.unreadable-entry: "Este valor no es un número que el campo pueda mostrar; se conserva tal cual hasta que se borre."

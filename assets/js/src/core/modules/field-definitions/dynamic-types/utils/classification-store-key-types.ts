@@ -26,6 +26,28 @@ export const CLASSIFICATION_STORE_EXCLUDED_TYPES: readonly string[] = [
 // The types that wrap another type; none of them may be the delegate of another wrapper.
 export const CLASSIFICATION_STORE_WRAPPER_TYPES: readonly string[] = ['encryptedField', 'multiValue']
 
+/**
+ * The data types withdrawn as key types. They DO declare the tag above - which is the difference to
+ * the exclusion set - and core refuses them all the same, in `KeyConfig::save()`, as a key's own
+ * type and as a wrapper delegate. A key already defined with one keeps working; only a new one is
+ * refused.
+ *
+ * The filter is central rather than a tag dropped at the type, because only `consent` declares the
+ * tag itself: `permissionManyToManyRelation` and `permissionManyToOneRelation` inherit it from the
+ * core relation types they extend, in a bundle of their own that never chose to offer them.
+ */
+export const CLASSIFICATION_STORE_WITHDRAWN_TYPES: readonly string[] = [
+  'consent',
+  'permissionManyToManyRelation',
+  'permissionManyToOneRelation'
+]
+
+/**
+ * Whether a type carrying the key-type tag may still be offered as one. Every picker reading the
+ * tag has to ask this, or it offers a type whose save core refuses.
+ */
+export const isOfferedAsKeyType = (type: string): boolean => !CLASSIFICATION_STORE_WITHDRAWN_TYPES.includes(type)
+
 // The name is the core EngineFeature case, as the store response reports it.
 export const ENGINE_CAPABILITY_STRUCTURED_VALUES = 'StructuredValues'
 

@@ -2356,6 +2356,8 @@ classification-store.key-localized: "Lokaliserad nyckel"
 classification-store.key-localized-tooltip: "Denna nyckel har ett eget värde per språk."
 classification-store.import: Importera store-konfiguration
 classification-store.import-success: Store-konfigurationen har importerats
+classification-store.import-replace.title: "Ersätta store-konfigurationen?"
+classification-store.import-replace.warning: 'Denna butik är inte tom. En fil som beskriver en annan butik ersätter dess konfiguration!'
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator
@@ -3325,6 +3327,4 @@ classification-store.multi-value.unreadable-value: "Den här nyckeln har ett vä
 classification-store.multi-value.default-variant-permitted: "Tillåt värden utan variant"
 classification-store.multi-value.default-variant-label: "Etikett för standardvärdet"
 classification-store.multi-value.no-writable-slot: "Den här nyckeln deklarerar ingen variant och tillåter inga värden utan variant, så det finns ingen plats att ange ett värde. Deklarera en variant eller tillåt värden utan variant."
-classification-store.apply: "Skapa en ny store från en fil"
-classification-store.apply-upload: "Skapa store"
 classification-store.multi-value.unreadable-entry: "Det här värdet är inget tal som fältet kan visa; det behålls som sparat tills det rensas."

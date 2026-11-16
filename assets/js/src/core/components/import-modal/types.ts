@@ -44,6 +44,9 @@ export interface ImportModalProps {
   filesKey?: string
   onUploadSuccess?: (response: any, file: File) => void
   onUploadError?: (error: Error, file: File) => void
+  /** Asked with the selected files before anything is posted; answering false calls the upload off. */
+  confirmUpload?: (files: File[]) => Promise<boolean>
+
   showSuccessMessage?: boolean
   successMessage?: React.ReactNode
   multiple?: boolean

@@ -14,15 +14,20 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 /**
  * The store's own export and import actions: the two endpoint URLs, the Classification Store
  * translation keys, the tag the four tab collections provide, and the single permission that
- * already gates the screen.
+ * already gates the screen. They sit behind the footer's 'More' menu, as the class definition
+ * editor's do.
  */
 
 const STORE_ID = 7
 const STORES_PATH = `/pimcore-studio/api/classification-store/configuration/stores/${STORE_ID}`
+const EXPORT = 'export'
+const IMPORT = 'import'
+const IMPORT_MODAL = 'import-modal'
 
 const dispatch = jest.fn()
 const isAllowed = jest.fn()
 const success = jest.fn()
+const confirmImport = jest.fn(async () => true)
 
 // antd-style ships untranspiled ESM, which jest does not transform.
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -58,12 +63,18 @@ jest.mock('@Pimcore/modules/app/utils/download', () => ({
   downloadFile: jest.fn()
 }))
 
+// The warning has its own suite; here only that it is handed to the import as the confirmation.
+jest.mock('@Pimcore/modules/classification-store-config/components/store-editor/use-store-replace-warning', () => ({
+  useStoreReplaceWarning: () => confirmImport
+}))
+
 // The real modal pulls antd's untranspiled ESM and an axios upload; the upload URL, the title
 // and the success callback are what this surface contributes.
 jest.mock('@Pimcore/components/import-modal/import-modal', () => ({
-  ImportModal: ({ action, onUploadSuccess, title }: any) => (
+  ImportModal: ({ action, confirmUpload, onUploadSuccess, title }: any) => (
     <button
       data-action={ action }
+      data-confirmed={ confirmUpload !== undefined }
       data-testid="import-modal"
       data-title={ title }
       onClick={ () => { onUploadSuccess({}) } }
@@ -73,9 +84,22 @@ jest.mock('@Pimcore/components/import-modal/import-modal', () => ({
   )
 }))
 
+// The dropdown renders its menu where the test can reach it; the trigger is the 'More' button.
 jest.mock('@sdk/components', () => ({
   ButtonGroup: ({ items }: any) => <div>{items}</div>,
-  Dropdown: ({ children }: any) => <div>{children}</div>,
+  Dropdown: ({ children, menu }: any) => (
+    <div>
+      {children}
+      {menu.items.map(({ key, label, onClick }: any) => (
+        <button
+          key={ key }
+          onClick={ onClick }
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  ),
   Icon: ({ value }: any) => <i>{value}</i>,
   IconTextButton: ({ children, onClick }: any) => <button onClick={ onClick }>{children}</button>,
   useMessage: () => ({ success })
@@ -105,6 +129,7 @@ describe('StoreImportExportActions', () => {
     dispatch.mockClear()
     isAllowed.mockClear()
     success.mockClear()
+    confirmImport.mockClear()
     globalThis.fetch = jest.fn(async () => new Response('{}', { status: 200 })) as unknown as typeof fetch
   })
 
@@ -116,36 +141,48 @@ describe('StoreImportExportActions', () => {
     renderActions(true)
 
     expect(isAllowed).toHaveBeenCalledWith(UserPermission.ClassificationStore)
-    expect(screen.getByText('export')).toBeInTheDocument()
-    expect(screen.getByText('import')).toBeInTheDocument()
+    expect(screen.getByText(EXPORT)).toBeInTheDocument()
+    expect(screen.getByText(IMPORT)).toBeInTheDocument()
+  })
+
+  it('puts both behind the More menu rather than rendering them as buttons of their own', () => {
+    renderActions(true)
+
+    expect(screen.getByText('toolbar.more')).toBeInTheDocument()
   })
 
   it('offers neither action without that permission', () => {
     renderActions(false)
 
-    expect(screen.queryByText('export')).not.toBeInTheDocument()
-    expect(screen.queryByText('import')).not.toBeInTheDocument()
+    expect(screen.queryByText(EXPORT)).not.toBeInTheDocument()
+    expect(screen.queryByText(IMPORT)).not.toBeInTheDocument()
   })
 
   it('exports through the store export endpoint', async () => {
     renderActions(true)
 
-    fireEvent.click(screen.getByText('export'))
+    fireEvent.click(screen.getByText(EXPORT))
 
     await waitFor(() => { expect(globalThis.fetch).toHaveBeenCalledWith(`${STORES_PATH}/export`) })
+  })
+
+  it('gives the import the replace warning to ask before it posts', () => {
+    renderActions(true)
+
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-confirmed', 'true')
   })
 
   it('uploads to the store import endpoint under the classification store title', () => {
     renderActions(true)
 
-    expect(screen.getByTestId('import-modal')).toHaveAttribute('data-action', `${STORES_PATH}/import`)
-    expect(screen.getByTestId('import-modal')).toHaveAttribute('data-title', 'classification-store.import')
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-action', `${STORES_PATH}/import`)
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-title', 'classification-store.import')
   })
 
   it('reports and invalidates what a successful import made stale', () => {
     renderActions(true)
 
-    fireEvent.click(screen.getByTestId('import-modal'))
+    fireEvent.click(screen.getByTestId(IMPORT_MODAL))
 
     expect(success).toHaveBeenCalledWith('classification-store.import-success')
     expect(dispatch).toHaveBeenCalledWith(api.util.invalidateTags(['Classification Store']))

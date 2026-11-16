@@ -10,7 +10,11 @@
 
 import { isNil } from 'lodash'
 import { type ClassificationStoreVariantLayout } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
-import { declaredVariantsOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-slots'
+import {
+  type DefaultVariantDeclaration,
+  declaredVariantsOf,
+  permitsDefaultVariant
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-slots'
 import { variantNameOf } from './variant-name'
 
 /** Separates a variant from the address it qualifies, in a cell key and in the key address of a patch. */
@@ -90,12 +94,15 @@ export const variantColumnSuffix = (column: VariantColumnLike): string => {
   return ` (${isNil(label) || label === '' ? variant : label})`
 }
 
-/** The slots a key is shown in as columns: one per declared variant in declaration order, then the default slot (null). */
+/**
+ * The slots a key is shown in as columns: one per declared variant in declaration order, then the default
+ * slot (null) where the key permits an unqualified value, as the editor and the filter panel read it too.
+ */
 export const variantSlotsOf = (
-  variants: readonly ClassificationStoreVariantLayout[] | null | undefined
+  variants: readonly ClassificationStoreVariantLayout[] | null | undefined,
+  declaration: DefaultVariantDeclaration = {}
 ): Array<ClassificationStoreVariantLayout | null> => [
   ...declaredVariantsOf(variants),
-  // Offered unconditionally. When #1774's refreshed snapshot publishes `KeyLayout.defaultVariant` (and
-  // `defaultVariantLabel`), gate this entry on `defaultVariant !== false` instead.
-  null
+  // a key that declines the unqualified value writes no default entry, so a column on it would always be empty
+  ...(permitsDefaultVariant(declaration) ? [null] : [])
 ]

@@ -32,8 +32,26 @@ export interface DefaultVariantDeclaration {
   defaultVariantLabel?: string | null
 }
 
+/** Whether the key permits a value carrying no variant, which is the one rule every surface reads the default slot by. */
+export const permitsDefaultVariant = (declaration: DefaultVariantDeclaration): boolean => declaration.defaultVariant !== false
+
 /** Whether a stored value is one this editor can read: nothing stored, or a list of entries. */
 export const isReadableValue = (value: unknown): boolean => isNil(value) || Array.isArray(value)
+
+/** The places each slot's entries hold in the list, in list order. */
+const slotPlacesOf = (
+  entries: ReadonlyArray<{ entry: ClassificationStoreMultiValueEntry }>
+): Map<string | null, number[]> => {
+  const places = new Map<string | null, number[]>()
+
+  entries.forEach(({ entry }, at) => {
+    const variant = entry.var ?? null
+
+    places.set(variant, [...(places.get(variant) ?? []), at])
+  })
+
+  return places
+}
 
 /** The entries as the editor holds and writes them: in display order, without position (the writer numbers them). */
 export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry[] => {
@@ -41,12 +59,22 @@ export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry
     return []
   }
 
-  return (value as ClassificationStoreMultiValueEntry[])
+  const entries = (value as ClassificationStoreMultiValueEntry[])
     // A list element holding nothing is no entry, and is dropped here rather than read for a position.
     .filter((entry) => !isNil(entry))
     .map((entry, index) => ({ entry, position: entry.p ?? 0, index }))
-    .sort((a, b) => a.position - b.position || a.index - b.index)
-    .map(({ entry: { p, ...rest } }) => rest)
+  const ordered = [...entries]
+
+  // A position is the entry's place in its own slot, so it orders that slot and leaves the slots where the list holds them.
+  for (const places of slotPlacesOf(entries).values()) {
+    const sorted = places
+      .map((place) => entries[place])
+      .sort((a, b) => a.position - b.position || a.index - b.index)
+
+    places.forEach((place, at) => { ordered[place] = sorted[at] })
+  }
+
+  return ordered.map(({ entry: { p, ...rest } }) => rest)
 }
 
 /** A stored list of entries as the text a cell shows: the values in order, not the storage shape; anything else as it stands. */
@@ -65,10 +93,10 @@ export const declaredVariantsOf = (
 export const slotKeyOf = (slot: MultiValueSlot): string => slot.variant === null ? 'default' : `variant-${slot.variant}`
 
 /**
- * One slot per declared variant in declared order, then the default slot where an entry carries no
- * variant (or where nothing is declared and the key permits the default variant), then one per
- * undeclared variant found in the entries. A key that declines the default variant keeps that slot
- * only for the entries it already holds, as an undeclared one.
+ * One slot per declared variant in declared order, then the default slot where the key permits the
+ * default variant or an entry carries no variant, then one per undeclared variant found in the
+ * entries. A key that declines the default variant keeps that slot only for the entries it already
+ * holds, as an undeclared one.
  *
  * A declared row carrying no name addresses nothing — no value can name it and none can be written
  * to it — so it declares no slot, rather than one headed by nothing beside the default slot.
@@ -78,7 +106,7 @@ export const buildSlots = (
   entries: readonly ClassificationStoreMultiValueEntry[],
   declaration: DefaultVariantDeclaration = {}
 ): MultiValueSlot[] => {
-  const defaultPermitted = declaration.defaultVariant !== false
+  const defaultPermitted = permitsDefaultVariant(declaration)
   const declared = declaredVariantsOf(variants)
   const slots: MultiValueSlot[] = declared.map((variant) => ({
     variant: variantNameOf(variant),
@@ -86,7 +114,7 @@ export const buildSlots = (
     declared: true
   }))
 
-  if ((defaultPermitted && declared.length === 0) || entries.some((entry) => variantOf(entry) === null)) {
+  if (defaultPermitted || entries.some((entry) => variantOf(entry) === null)) {
     const label = declaration.defaultVariantLabel
 
     slots.push({ variant: null, label: isNil(label) || label === '' ? null : label, declared: defaultPermitted })
