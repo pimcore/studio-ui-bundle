@@ -188,7 +188,9 @@ export const useUserManagementHelper = (): UseUserReturn => {
       twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false,
       parentId: user.parentId ?? 0,
       dateTimeLocale: user.dateTimeLocale ?? '',
-      perspectives: toPerspectiveIds(user.perspectives)
+      perspectives: toPerspectiveIds(user.perspectives),
+      // each user picks it in the own profile; left out, the backend keeps the stored choice
+      welcomeScreenPath: undefined
     }
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({

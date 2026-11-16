@@ -32,8 +32,8 @@ export const WelcomeScreenPathSelect = (): React.JSX.Element => {
       watchFields={ ['welcomeScreen'] }
     >
       <Form.Item
-        // no choice is '' in the forms or null from the backend; antd shows the placeholder only for undefined
-        getValueProps={ (value?: string | null) => ({ value: value === null || value === '' ? undefined : value }) }
+        // antd shows the placeholder only for undefined: no choice ('' or null) or a dashboard no longer in the user's menu
+        getValueProps={ (value?: string | null) => ({ value: options.some((option) => option.value === value) ? value : undefined }) }
         name="welcomeScreenPath"
       >
         <Select

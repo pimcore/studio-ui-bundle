@@ -115,6 +115,16 @@ describe('useUserManagementHelper.updateUserById', () => {
     expect(mockMessageSuccess).not.toHaveBeenCalled()
   })
 
+  it('does not send the welcome screen dashboard, so the choice from the user\'s profile stays', async () => {
+    setupDispatch({ userUpdateById: { data: user } })
+
+    const { result } = renderHook(() => useUserManagementHelper())
+    await result.current.updateUserById({ id: 42, user: { ...user, welcomeScreenPath: 'Showcase/Command center' } })
+
+    const [[update]] = mockDispatch.mock.calls.filter(([action]) => action?.endpoint === 'userUpdateById')
+    expect(update.arg.updateUser.welcomeScreenPath).toBeUndefined()
+  })
+
   it('applies the saved user data on success', async () => {
     setupDispatch({ userUpdateById: { data: { ...user, name: 'saved' } } })
 

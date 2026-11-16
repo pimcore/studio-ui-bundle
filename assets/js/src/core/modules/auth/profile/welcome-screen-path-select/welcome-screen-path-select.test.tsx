@@ -126,6 +126,10 @@ describe('WelcomeScreenPathSelect', () => {
     expect(renderSelect(welcomeScreenPath).dataset.hasValue).toBe('false')
   })
 
+  it('shows the placeholder for a stored dashboard that is not in the user\'s menu, not its path', () => {
+    expect(renderSelect('Showcase/Not shared').dataset.hasValue).toBe('false')
+  })
+
   it('shows the stored dashboard', () => {
     expect(renderSelect(DASHBOARD_PATH).value).toBe(DASHBOARD_PATH)
   })
