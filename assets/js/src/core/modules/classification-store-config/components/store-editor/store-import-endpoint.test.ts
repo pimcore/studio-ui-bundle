@@ -72,4 +72,23 @@ describe('fetchImportReplaces', () => {
 
     await expect(fetchImportReplaces(STORE_ID, file())).resolves.toBeNull()
   })
+
+  // a report that states nothing is not a report that states "nothing is replaced"
+  it('says it cannot tell when the report leaves the member out', async () => {
+    answer({ removed: 0, removedEntries: [] })
+
+    await expect(fetchImportReplaces(STORE_ID, file())).resolves.toBeNull()
+  })
+
+  it('says it cannot tell when the member is not a boolean', async () => {
+    answer({ replaced: 'yes' })
+
+    await expect(fetchImportReplaces(STORE_ID, file())).resolves.toBeNull()
+  })
+
+  it('says it cannot tell when the body is not an object at all', async () => {
+    answer(null)
+
+    await expect(fetchImportReplaces(STORE_ID, file())).resolves.toBeNull()
+  })
 })

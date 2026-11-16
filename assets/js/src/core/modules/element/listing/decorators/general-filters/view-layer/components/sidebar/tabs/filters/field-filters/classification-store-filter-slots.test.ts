@@ -9,6 +9,7 @@
  */
 
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { type IDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/dynamic-filter-provider'
 import { classificationStoreFilterSlots, filterSlotId } from './classification-store-filter-slots'
 
 const STORE_COLUMN_KEY = 'cs'
@@ -79,6 +80,30 @@ describe('classificationStoreFilterSlots', () => {
   it('expands a key whose definition blob omits the variants the layout publishes', () => {
     expect(variantsOf(variantKey({ definition: { fieldtype: 'multiValue', title: 'Test Variants', delegateDatatype: 'input' } })))
       .toEqual(['Metric', 'Imperial', null])
+  })
+
+  // the index keeps a key's value under the language the KEY is localized in, never the column's
+  describe('localization', () => {
+    const localizedColumn: AvailableColumn = { ...column, localizable: true, locale: 'en' }
+
+    const slotOf = (col: AvailableColumn, overrides: object): IDynamicFilter =>
+      classificationStoreFilterSlots(col, variantKey({ variants: null, ...overrides }))[0]
+
+    it('offers a language to a key localized in a non-localized field', () => {
+      expect(slotOf(column, { localized: true }).localizable).toBe(true)
+    })
+
+    it('leaves a key that is not localized without a language in a localized field', () => {
+      const slot = slotOf(localizedColumn, { localized: false })
+
+      expect(slot.localizable).toBe(false)
+      expect(slot.locale).toBeUndefined()
+    })
+
+    it('lets the column decide for a key that states no flag of its own', () => {
+      expect(slotOf(localizedColumn, { localized: null }).locale).toBe('en')
+      expect(slotOf(column, {}).localizable).toBe(false)
+    })
   })
 
   it('tells the slots of one key apart and a slot of another key from them', () => {

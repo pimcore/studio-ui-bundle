@@ -19,7 +19,7 @@ const IMPORT_DRY_RUN_SUPPORTED = true
 
 /** The generated client is built from a snapshot that predates these members. */
 interface ReplaceAwareImportReport extends ClassificationStoreConfigurationImportReport {
-  replaced?: boolean
+  replaced?: unknown
 }
 
 const FILE_FIELD = 'file'
@@ -40,6 +40,9 @@ export const fetchImportReplaces = async (storeId: number, file: File): Promise<
   body.append(DRY_RUN_FIELD, 'true')
 
   try {
+    // Hand-rolled because the generated slice describes `dryRun` on `/stores/apply` only: the
+    // snapshot predates the per-store import taking it. The endpoint reads `dryRun` off the
+    // multipart body and writes nothing for a dry run, and answers with the import report.
     const response = await fetch(getStoreImportUrl(storeId), { method: 'POST', body })
 
     if (!response.ok) {
@@ -48,7 +51,8 @@ export const fetchImportReplaces = async (storeId: number, file: File): Promise<
 
     const report = await response.json() as ReplaceAwareImportReport
 
-    return report.replaced === true
+    // only a report that states the answer gives one: a body missing the member says nothing
+    return typeof report.replaced === 'boolean' ? report.replaced : null
   } catch {
     // A preview that cannot be fetched must not stop the warning itself from being shown.
     return null

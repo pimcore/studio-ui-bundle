@@ -38,6 +38,9 @@ export const classificationStoreFilterSlots = (column: AvailableColumn, item: Re
   const fieldDefinition = { ...item.definition, ...members }
   const nameTooltip = Array.isArray(column.group) ? column.group.join('/') : undefined
   const declaration = defaultVariantDeclarationOf(item as ClassificationStoreCollection2)
+  // the index keeps the value under the language the KEY is localized in; a key stating no flag of
+  // its own takes the column field's, which is the rule the search index itself resolves by
+  const localized = (item.localized ?? column.localizable) === true
 
   return variantSlotsOf(item.variants as ClassificationStoreVariantLayout[] | null | undefined, declaration).map((variant) => {
     const config = {
@@ -56,8 +59,8 @@ export const classificationStoreFilterSlots = (column: AvailableColumn, item: Re
       translationKey,
       type: column.type,
       frontendType: fieldDefinition.fieldtype,
-      localizable: column.localizable,
-      locale: column.localizable ? 'default' : undefined,
+      localizable: localized,
+      locale: localized ? column.locale : undefined,
       config: { ...config, translationKey },
       nameTooltip
     }

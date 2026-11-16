@@ -23,10 +23,11 @@ export type ConfirmImport = (files: File[]) => Promise<boolean>
  * store's configuration rather than merging into it, so what the store holds now is removed. An
  * empty store has nothing to lose and is imported into without a word.
  */
-export const useStoreReplaceWarning = (storeId: number): ConfirmImport => {
+export const useStoreReplaceWarning = (storeId: number, enabled = true): ConfirmImport => {
   const { t } = useTranslation()
   const { localModal: modal } = useStudioModal()
-  const hasContent = useStoreHasContent(storeId)
+  // the hook mounts whether or not the surface renders, so the counts are skipped rather than the hook
+  const hasContent = useStoreHasContent(storeId, enabled)
 
   return useCallback(async (files: File[]): Promise<boolean> => {
     const file = files[0]

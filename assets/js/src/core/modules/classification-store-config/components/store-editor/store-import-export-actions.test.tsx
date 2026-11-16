@@ -28,6 +28,7 @@ const dispatch = jest.fn()
 const isAllowed = jest.fn()
 const success = jest.fn()
 const confirmImport = jest.fn(async () => true)
+const useStoreReplaceWarning = jest.fn((storeId: number, enabled: boolean) => confirmImport)
 
 // antd-style ships untranspiled ESM, which jest does not transform.
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -65,7 +66,7 @@ jest.mock('@Pimcore/modules/app/utils/download', () => ({
 
 // The warning has its own suite; here only that it is handed to the import as the confirmation.
 jest.mock('@Pimcore/modules/classification-store-config/components/store-editor/use-store-replace-warning', () => ({
-  useStoreReplaceWarning: () => confirmImport
+  useStoreReplaceWarning: (storeId: number, enabled: boolean) => useStoreReplaceWarning(storeId, enabled)
 }))
 
 // The real modal pulls antd's untranspiled ESM and an axios upload; the upload URL, the title
@@ -130,6 +131,7 @@ describe('StoreImportExportActions', () => {
     isAllowed.mockClear()
     success.mockClear()
     confirmImport.mockClear()
+    useStoreReplaceWarning.mockClear()
     globalThis.fetch = jest.fn(async () => new Response('{}', { status: 200 })) as unknown as typeof fetch
   })
 
@@ -177,6 +179,19 @@ describe('StoreImportExportActions', () => {
 
     expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-action', `${STORES_PATH}/import`)
     expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-title', 'classification-store.import')
+  })
+
+  // the hook still mounts without the permission, so it is the one that has to ask for nothing
+  it('leaves the warning to ask for no count without that permission', () => {
+    renderActions(false)
+
+    expect(useStoreReplaceWarning).toHaveBeenCalledWith(STORE_ID, false)
+  })
+
+  it('lets the warning count what the store holds for a user holding the permission', () => {
+    renderActions(true)
+
+    expect(useStoreReplaceWarning).toHaveBeenCalledWith(STORE_ID, true)
   })
 
   it('reports and invalidates what a successful import made stale', () => {

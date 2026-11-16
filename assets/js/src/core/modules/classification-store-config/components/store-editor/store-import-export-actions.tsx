@@ -34,9 +34,10 @@ const storeImportExportConfig: ImportExportConfig = {
 
 export const StoreImportExportActions = ({ storeId }: IStoreImportExportActionsProps): React.JSX.Element => {
   const { notifyImported } = useStoreImport()
-  const confirmImport = useStoreReplaceWarning(storeId)
+  const allowed = isAllowed(UserPermission.ClassificationStore)
+  const confirmImport = useStoreReplaceWarning(storeId, allowed)
 
-  if (!isAllowed(UserPermission.ClassificationStore)) {
+  if (!allowed) {
     return <></>
   }
 
