@@ -31,6 +31,7 @@ import userEvent from '@testing-library/user-event'
 import { ClassificationStoreItem } from './classification-store-item'
 
 const mockConfirm = jest.fn()
+const mockIsNewKey = jest.fn()
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -51,13 +52,13 @@ jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
   useElementContext: () => ({ id: 42, elementType: 'data-object' })
 }))
 jest.mock('./provider', () => ({
-  useClassificationStore: () => ({ isNewGroup: () => false })
+  useClassificationStore: () => ({ isNewGroup: () => false, isNewKey: mockIsNewKey })
 }))
 jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: mockConfirm })
 }))
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component', () => ({
-  ObjectComponent: () => null
+  ObjectComponent: ({ technicalName }: { technicalName: string }) => <div data-testid='key'>{technicalName}</div>
 }))
 jest.mock('@Pimcore/components/panel/panel', () => ({
   Panel: ({ children }: { children: React.ReactNode }) => <>{children}</>
@@ -68,6 +69,39 @@ const groupLayout = { id: 1, name: 'Dimensions', keys: [] } as any
 describe('ClassificationStoreItem', () => {
   beforeEach(() => {
     mockConfirm.mockClear()
+    mockIsNewKey.mockReset()
+    mockIsNewKey.mockReturnValue(false)
+  })
+
+  describe('hide empty data', () => {
+    const keyLayout = (id: number, name: string, mandatory = false): object => ({ id, name, definition: { mandatory } })
+    const layoutWithKeys = { id: 1, name: 'Dimensions', keys: [keyLayout(1, 'old'), keyLayout(2, 'arrived'), keyLayout(3, 'required', true)] } as any
+
+    const renderHidden = (): void => {
+      render(
+        <ClassificationStoreItem
+          classificationStoreName='technicalAttributes'
+          currentLayoutData={ [layoutWithKeys] }
+          groupLayout={ layoutWithKeys }
+          hideEmptyData
+          updateCurrentLayoutData={ jest.fn() }
+        />
+      )
+    }
+
+    it('hides empty keys except mandatory ones', () => {
+      renderHidden()
+
+      expect(screen.getAllByTestId('key').map((node) => node.textContent)).toEqual(['required'])
+    })
+
+    it('shows a key that arrived through a configuration refresh although it is empty', () => {
+      mockIsNewKey.mockImplementation((groupId: string, keyId: string) => groupId === '1' && keyId === '2')
+
+      renderHidden()
+
+      expect(screen.getAllByTestId('key').map((node) => node.textContent)).toEqual(['arrived', 'required'])
+    })
   })
 
   it('asks for confirmation when the group is deleted', async () => {

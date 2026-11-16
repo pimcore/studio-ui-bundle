@@ -21,6 +21,8 @@ export interface ClassificationStoreContextData {
   setCurrentLayoutData: (layoutData: ClassificationStoreGroupLayout2[]) => void
   markGroupsAsNew: (groupIds: string[]) => void
   isNewGroup: (groupId: string) => boolean
+  markKeysAsNew: (groupId: string, keyIds: string[]) => void
+  isNewKey: (groupId: string, keyId: string) => boolean
 }
 
 export const ClassificationStoreContext = createContext<ClassificationStoreContextData | undefined>(undefined)
@@ -47,6 +49,20 @@ const ClassificationStoreProvider = ({ children }: ClassificationStoreProviderPr
     return newGroupIdsRef.current.has(groupId)
   }, [])
 
+  // Keys that arrived in a group through a configuration refresh. Like a new group they have
+  // no data yet, so "hide empty data" must not hide them.
+  const newKeyIdsRef = useRef<Map<string, Set<string>>>(new Map())
+
+  const markKeysAsNew = useCallback((groupId: string, keyIds: string[]): void => {
+    const groupKeyIds = newKeyIdsRef.current.get(groupId) ?? new Set<string>()
+    keyIds.forEach((keyId) => groupKeyIds.add(keyId))
+    newKeyIdsRef.current.set(groupId, groupKeyIds)
+  }, [])
+
+  const isNewKey = useCallback((groupId: string, keyId: string): boolean => {
+    return newKeyIdsRef.current.get(groupId)?.has(keyId) ?? false
+  }, [])
+
   const getSearchValue = useCallback((tabId: string): string => {
     return searchValues[tabId] ?? ''
   }, [searchValues])
@@ -71,8 +87,10 @@ const ClassificationStoreProvider = ({ children }: ClassificationStoreProviderPr
     currentLayoutData,
     setCurrentLayoutData,
     markGroupsAsNew,
-    isNewGroup
-  }), [getSearchValue, setSearchValue, isOpen, open, close, currentLayoutData, setCurrentLayoutData, markGroupsAsNew, isNewGroup])
+    isNewGroup,
+    markKeysAsNew,
+    isNewKey
+  }), [getSearchValue, setSearchValue, isOpen, open, close, currentLayoutData, setCurrentLayoutData, markGroupsAsNew, isNewGroup, markKeysAsNew, isNewKey])
 
   return (
     <ClassificationStoreContext.Provider value={ contextValue }>

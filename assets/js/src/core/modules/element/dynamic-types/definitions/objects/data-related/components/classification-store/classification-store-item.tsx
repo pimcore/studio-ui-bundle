@@ -58,7 +58,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { name } = useItem()
   const { operations } = useKeyedListContext()
   const { id } = useElementContext()
-  const { isNewGroup } = useClassificationStore()
+  const { isNewGroup, isNewKey } = useClassificationStore()
 
   const modal = useFormModal()
   const { styles } = useStyles()
@@ -76,7 +76,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   // The group values are read through the keyed-list operations instead of a
   // subscription on purpose: subscribing would re-render the whole group on every
   // keystroke, and a field must not disappear while its value is being cleared.
-  // Re-evaluated only when the group, its localization or the hide revision changes.
+  // Re-evaluated only when the group layout (also after a configuration refresh), its localization or the hide revision changes.
   const visibleKeys = useMemo(() => {
     const keys = groupLayout?.keys ?? []
     const groupId = groupLayout?.id
@@ -90,8 +90,8 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
       groupValue: operations.getValue([String(groupId), localizationGroup])
     })
 
-    return keys.filter((key) => !hiddenKeyIds.has(key.id))
-  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, operations, isNewGroup])
+    return keys.filter((key) => !hiddenKeyIds.has(key.id) || isNewKey(String(groupId), String(key.id)))
+  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, operations, isNewGroup, isNewKey])
 
   const combinedFieldNameParent = useMemo(
     () => getKeyCombinedFieldNameParent(classificationStoreName, groupLayout?.id ?? ''),

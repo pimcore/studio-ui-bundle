@@ -65,6 +65,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   ), [fieldDefinitionRegistry, t])
 
   const [definitionKeyId, setDefinitionKeyId] = useState<number | undefined>(undefined)
+  const [openedDefinitionKey, setOpenedDefinitionKey] = useState<ClassificationStoreConfigurationKeyDetail | undefined>(undefined)
   const [definitionModalOpen, setDefinitionModalOpen] = useState(false)
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
@@ -109,9 +110,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   }, [data, page])
 
   // Derive the current key object from the live cache by ID so the definition
-  // modal always receives the latest values (e.g. after an optimistic type change).
+  // modal always receives the latest values (e.g. after an optimistic type change). The key the
+  // modal was opened with is the fallback while the live page does not hold it (other page, search).
   const definitionKey = definitionKeyId !== undefined
-    ? keys.find((k) => k.id === definitionKeyId)
+    ? keys.find((k) => k.id === definitionKeyId) ?? openedDefinitionKey
     : undefined
 
   const [createKey] = useClassificationStoreConfigurationKeyCreateMutation()
@@ -193,17 +195,20 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   const handleOpenDefinition = (key: ClassificationStoreConfigurationKeyDetail): void => {
     setDefinitionKeyId(key.id)
+    setOpenedDefinitionKey(key)
     setDefinitionModalOpen(true)
   }
 
   const handleCloseDefinition = (): void => {
     setDefinitionModalOpen(false)
     setDefinitionKeyId(undefined)
+    setOpenedDefinitionKey(undefined)
   }
 
   const handleDefinitionSaved = (): void => {
     setDefinitionModalOpen(false)
     setDefinitionKeyId(undefined)
+    setOpenedDefinitionKey(undefined)
   }
 
   const handleDelete = (key: ClassificationStoreConfigurationKeyDetail): void => {
