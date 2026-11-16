@@ -12,9 +12,10 @@ import React from 'react'
 import { Form } from 'antd'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
-import { WelcomeScreenPathSelect } from './welcome-screen-path-select'
+import { WelcomeScreenDashboardSelect } from './welcome-screen-dashboard-select'
 
 const DASHBOARD_PATH = 'Reporting/Dashboards/Sales/Overview'
+const DASHBOARD_ID = '0196a7c2_1b2d_7c3e_9f40_5a6b7c8d9e0f'
 
 const mockNavItems: IMainNavItem[] = [{
   path: 'Reporting',
@@ -32,7 +33,7 @@ const mockNavItems: IMainNavItem[] = [{
           children: [{
             path: DASHBOARD_PATH,
             label: 'Overview',
-            widgetConfig: { component: 'dashboard-single-container', id: '7', config: {} }
+            widgetConfig: { component: 'dashboard-single-container', id: DASHBOARD_ID, config: {} }
           }]
         }
       ]
@@ -76,10 +77,10 @@ jest.mock('@Pimcore/components/select/select', () => ({
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
-const renderForm = (welcomeScreenPath: string | null, welcomeScreen = true, onValuesChange = jest.fn()): void => {
+const renderForm = (welcomeScreenDashboardId: string | null, welcomeScreen = true, onValuesChange = jest.fn()): void => {
   render(
     <Form
-      initialValues={ { welcomeScreen, welcomeScreenPath } }
+      initialValues={ { welcomeScreen, welcomeScreenDashboardId } }
       onValuesChange={ onValuesChange }
     >
       <Form.Item
@@ -91,27 +92,27 @@ const renderForm = (welcomeScreenPath: string | null, welcomeScreen = true, onVa
           type="checkbox"
         />
       </Form.Item>
-      <WelcomeScreenPathSelect />
+      <WelcomeScreenDashboardSelect />
     </Form>
   )
 }
 
-const SELECT_NAME = 'user-management.welcomeScreenPath'
+const SELECT_NAME = 'user-management.welcomeScreenDashboard'
 
 const getSelect = (): HTMLSelectElement => screen.getByLabelText<HTMLSelectElement>(SELECT_NAME)
 
-const renderSelect = (welcomeScreenPath: string | null, onValuesChange = jest.fn()): HTMLSelectElement => {
-  renderForm(welcomeScreenPath, true, onValuesChange)
+const renderSelect = (welcomeScreenDashboardId: string | null, onValuesChange = jest.fn()): HTMLSelectElement => {
+  renderForm(welcomeScreenDashboardId, true, onValuesChange)
 
   return getSelect()
 }
 
-describe('WelcomeScreenPathSelect', () => {
+describe('WelcomeScreenDashboardSelect', () => {
   it('offers only the dashboard entries of the main navigation, without a None option', () => {
     const select = renderSelect(null)
 
     expect(Array.from(select.options).map((option) => [option.value, option.text])).toEqual([
-      [DASHBOARD_PATH, 'Overview']
+      [DASHBOARD_ID, 'Overview']
     ])
   })
 
@@ -119,46 +120,50 @@ describe('WelcomeScreenPathSelect', () => {
     const select = renderSelect(null)
 
     expect(screen.queryByText(SELECT_NAME)).toBeNull()
-    expect(select.dataset.placeholder).toBe('user-management.welcomeScreenPath.placeholder')
+    expect(select.dataset.placeholder).toBe('user-management.welcomeScreenDashboard.placeholder')
   })
 
-  it.each([[''], [null]])('passes no value when no dashboard is stored (%p), so the placeholder shows', (welcomeScreenPath) => {
-    expect(renderSelect(welcomeScreenPath).dataset.hasValue).toBe('false')
+  it.each([[''], [null]])('passes no value when no dashboard is stored (%p), so the placeholder shows', (welcomeScreenDashboardId) => {
+    expect(renderSelect(welcomeScreenDashboardId).dataset.hasValue).toBe('false')
   })
 
   it('shows the placeholder for a stored dashboard that is not in the user\'s menu, not its path', () => {
-    expect(renderSelect('Showcase/Not shared').dataset.hasValue).toBe('false')
+    expect(renderSelect('0196a7c2_0000_7000_8000_000000000000').dataset.hasValue).toBe('false')
+  })
+
+  it('shows the placeholder for a navigation path stored before the switch to IDs', () => {
+    expect(renderSelect(DASHBOARD_PATH).dataset.hasValue).toBe('false')
   })
 
   it('shows the stored dashboard', () => {
-    expect(renderSelect(DASHBOARD_PATH).value).toBe(DASHBOARD_PATH)
+    expect(renderSelect(DASHBOARD_ID).value).toBe(DASHBOARD_ID)
   })
 
   it('sends the chosen dashboard', () => {
     const onValuesChange = jest.fn()
     const select = renderSelect(null, onValuesChange)
 
-    fireEvent.change(select, { target: { value: DASHBOARD_PATH } })
+    fireEvent.change(select, { target: { value: DASHBOARD_ID } })
 
     expect(onValuesChange).toHaveBeenCalledWith(
-      { welcomeScreenPath: DASHBOARD_PATH },
-      { welcomeScreen: true, welcomeScreenPath: DASHBOARD_PATH }
+      { welcomeScreenDashboardId: DASHBOARD_ID },
+      { welcomeScreen: true, welcomeScreenDashboardId: DASHBOARD_ID }
     )
   })
 
   it('is hidden while the welcome screen switch is off', () => {
-    renderForm(DASHBOARD_PATH, false)
+    renderForm(DASHBOARD_ID, false)
 
     expect(screen.queryByLabelText(SELECT_NAME)).toBeNull()
   })
 
   it('shows the kept choice again when the switch is turned off and on', () => {
-    renderForm(DASHBOARD_PATH)
+    renderForm(DASHBOARD_ID)
 
     fireEvent.click(screen.getByLabelText('welcome-screen'))
     expect(screen.queryByLabelText(SELECT_NAME)).toBeNull()
 
     fireEvent.click(screen.getByLabelText('welcome-screen'))
-    expect(getSelect().value).toBe(DASHBOARD_PATH)
+    expect(getSelect().value).toBe(DASHBOARD_ID)
   })
 })

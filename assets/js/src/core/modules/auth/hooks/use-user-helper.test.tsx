@@ -43,7 +43,7 @@ jest.mock('@Pimcore/components/message/useMessage', () => ({
   useMessage: () => ({ error: mockMessageError, success: mockMessageSuccess })
 }))
 
-const DASHBOARD_PATH = 'dashboards/sales'
+const DASHBOARD_ID = '019c7555_49f6_712b_af5f_bd0c22b3d1f7'
 
 const setupDispatch = (results: Record<string, Record<string, unknown>>): void => {
   mockDispatch.mockImplementation((action: { endpoint?: string }): unknown => {
@@ -72,23 +72,23 @@ describe('useUserHelper.updateUserProfile', () => {
     setupDispatch({ userUpdateProfile: { data: profile } })
   })
 
-  it('sends the chosen welcome screen path', async () => {
-    await saveProfile({ ...profile, welcomeScreenPath: '', modifiedCells: { welcomeScreenPath: DASHBOARD_PATH } })
+  it('sends the chosen welcome screen dashboard', async () => {
+    await saveProfile({ ...profile, welcomeScreenDashboardId: '', modifiedCells: { welcomeScreenDashboardId: DASHBOARD_ID } })
 
-    expect(dispatchedProfile()).toMatchObject({ welcomeScreen: true, welcomeScreenPath: DASHBOARD_PATH })
+    expect(dispatchedProfile()).toMatchObject({ welcomeScreen: true, welcomeScreenDashboardId: DASHBOARD_ID })
     expect(mockMessageSuccess).toHaveBeenCalledWith('user-management.save-user.success')
   })
 
-  it('sends an empty welcome screen path when the choice was cleared', async () => {
-    await saveProfile({ ...profile, welcomeScreenPath: DASHBOARD_PATH, modifiedCells: { welcomeScreenPath: '' } })
+  it('sends an empty welcome screen dashboard when the choice was cleared', async () => {
+    await saveProfile({ ...profile, welcomeScreenDashboardId: DASHBOARD_ID, modifiedCells: { welcomeScreenDashboardId: '' } })
 
-    expect(dispatchedProfile()).toMatchObject({ welcomeScreen: true, welcomeScreenPath: '' })
+    expect(dispatchedProfile()).toMatchObject({ welcomeScreen: true, welcomeScreenDashboardId: '' })
   })
 
-  it('leaves the welcome screen path undefined when the backend did not return it', async () => {
+  it('leaves the welcome screen dashboard undefined when the backend did not return it', async () => {
     await saveProfile(profile)
 
     expect(dispatchedProfile()).toMatchObject({ welcomeScreen: true, firstname: 'Jane' })
-    expect(dispatchedProfile()?.welcomeScreenPath).toBeUndefined()
+    expect(dispatchedProfile()?.welcomeScreenDashboardId).toBeUndefined()
   })
 })

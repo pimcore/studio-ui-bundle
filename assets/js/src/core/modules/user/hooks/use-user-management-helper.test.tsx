@@ -119,10 +119,10 @@ describe('useUserManagementHelper.updateUserById', () => {
     setupDispatch({ userUpdateById: { data: user } })
 
     const { result } = renderHook(() => useUserManagementHelper())
-    await result.current.updateUserById({ id: 42, user: { ...user, welcomeScreenPath: 'Showcase/Command center' } })
+    await result.current.updateUserById({ id: 42, user: { ...user, welcomeScreenDashboardId: '019c7555_49f6_712b_af5f_bd0c22b3d1f7' } })
 
     const [[update]] = mockDispatch.mock.calls.filter(([action]) => action?.endpoint === 'userUpdateById')
-    expect(update.arg.updateUser.welcomeScreenPath).toBeUndefined()
+    expect(update.arg.updateUser.welcomeScreenDashboardId).toBeUndefined()
   })
 
   it('applies the saved user data on success', async () => {

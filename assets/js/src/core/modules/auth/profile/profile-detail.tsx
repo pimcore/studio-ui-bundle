@@ -32,7 +32,7 @@ import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-langu
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 import { TwoFactorAccordion } from '@Pimcore/modules/auth/profile/two-factor-accordion/two-factor-accordion'
-import { WelcomeScreenPathSelect } from '@Pimcore/modules/auth/profile/welcome-screen-path-select/welcome-screen-path-select'
+import { WelcomeScreenDashboardSelect } from '@Pimcore/modules/auth/profile/welcome-screen-dashboard-select/welcome-screen-dashboard-select'
 
 interface IProfileDetail {
   id: number
@@ -68,7 +68,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
         dateTimeLocale: user?.dateTimeLocale ?? '',
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
-        welcomeScreenPath: user?.welcomeScreenPath ?? '',
+        welcomeScreenDashboardId: user?.welcomeScreenDashboardId ?? '',
         keyBindings: user?.keyBindings,
         contentLanguages: user?.contentLanguages,
         theme: user?.theme,
@@ -181,7 +181,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
                     <Switch labelRight={ t('user-management.welcomeScreen') } />
                   </Form.Item>
 
-                  <WelcomeScreenPathSelect />
+                  <WelcomeScreenDashboardSelect />
 
                   <Form.Item
                     name="memorizeTabs"

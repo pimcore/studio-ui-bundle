@@ -13,10 +13,11 @@ import { Actions, DockLocation, type IJsonModel, Model } from 'flexlayout-react'
 import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { getInitialModelJson } from '@Pimcore/modules/widget-manager/utils/widget-manager-inner-model'
 import { useWelcomeScreen } from './use-welcome-screen'
+import { resetWelcomeScreen } from './welcome-screen-session'
 
 const dispatch = jest.fn()
 const state: { restored: boolean, innerModel: IJsonModel } = { restored: true, innerModel: getInitialModelJson() }
-let mockUser: { welcomeScreen: boolean, welcomeScreenPath?: string | null } = { welcomeScreen: true }
+let mockUser: { welcomeScreen: boolean, welcomeScreenDashboardId?: string | null } = { welcomeScreen: true }
 let mockNavItems: IMainNavItem[] = []
 let mockLocationState: Record<string, unknown> | null = null
 
@@ -38,11 +39,12 @@ jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => mockUs
 jest.mock('@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav', () => ({ useMainNav: () => ({ navItems: mockNavItems }) }))
 
 const DASHBOARD_PATH = 'Reporting/Dashboards/Sales/Overview'
+const DASHBOARD_ID = '7'
 
 const dashboardWidget = {
   component: 'dashboard-single-container',
-  id: '7',
-  config: { translationKey: 'Overview', dashboardId: '7', mainNavPath: DASHBOARD_PATH }
+  id: DASHBOARD_ID,
+  config: { translationKey: 'Overview', dashboardId: DASHBOARD_ID, mainNavPath: DASHBOARD_PATH }
 }
 
 // the main nav tree as useMainNav returns it, already filtered for the current user
@@ -80,9 +82,10 @@ describe('useWelcomeScreen', () => {
     dispatch.mockClear()
     state.restored = true
     state.innerModel = getInitialModelJson()
-    mockUser = { welcomeScreen: true, welcomeScreenPath: DASHBOARD_PATH }
+    mockUser = { welcomeScreen: true, welcomeScreenDashboardId: DASHBOARD_ID }
     mockNavItems = navTree()
     mockLocationState = null
+    sessionStorage.clear()
   })
 
   it('opens the chosen dashboard when no tabs were restored', () => {
@@ -103,15 +106,40 @@ describe('useWelcomeScreen', () => {
     expect(dispatch).toHaveBeenCalledTimes(1)
   })
 
-  it('opens nothing when tabs were restored', () => {
+  it('opens the chosen dashboard in front of the tabs restored from the previous session', () => {
     state.innerModel = layoutWithTab()
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(dispatch).toHaveBeenCalledWith({ type: 'openMainWidget', payload: dashboardWidget })
+  })
+
+  it('opens it once per browser tab, not again after a reload', () => {
+    renderHook(() => { useWelcomeScreen() }).unmount()
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(dispatch).toHaveBeenCalledTimes(1)
+  })
+
+  it('opens it again on the first load after a logout', () => {
+    renderHook(() => { useWelcomeScreen() }).unmount()
+    resetWelcomeScreen()
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(dispatch).toHaveBeenCalledTimes(2)
+  })
+
+  it('opens nothing when the switch is off', () => {
+    mockUser = { welcomeScreen: false, welcomeScreenDashboardId: DASHBOARD_ID }
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
   })
 
-  it('opens nothing when the switch is off', () => {
-    mockUser = { welcomeScreen: false, welcomeScreenPath: DASHBOARD_PATH }
+  it('waits for the next login when the switch is turned on during the session', () => {
+    mockUser = { welcomeScreen: false, welcomeScreenDashboardId: DASHBOARD_ID }
+    renderHook(() => { useWelcomeScreen() }).unmount()
+
+    mockUser = { welcomeScreen: true, welcomeScreenDashboardId: DASHBOARD_ID }
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
@@ -119,12 +147,14 @@ describe('useWelcomeScreen', () => {
 
   it.each([
     ['nothing is chosen', null],
+    ['nothing is chosen in the form', ''],
     ['the backend does not return the field', undefined],
-    ['the dashboard is not in the navigation of the user', 'Reporting/Dashboards/Sales/Removed'],
-    ['the entry is not a dashboard', 'Reporting/Reports'],
-    ['the entry is the dashboards overview', 'Reporting/Dashboards/Dashboards']
-  ])('opens nothing when %s', (_, welcomeScreenPath) => {
-    mockUser = { welcomeScreen: true, welcomeScreenPath }
+    ['the dashboard is not in the navigation of the user', '99'],
+    ['the entry is not a dashboard', 'reports'],
+    ['the entry is the dashboards overview', 'dashboard-container'],
+    ['a navigation path is stored instead of an ID', DASHBOARD_PATH]
+  ])('opens nothing when %s', (_, welcomeScreenDashboardId) => {
+    mockUser = { welcomeScreen: true, welcomeScreenDashboardId }
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
