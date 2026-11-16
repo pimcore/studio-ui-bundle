@@ -122,8 +122,8 @@ describe('WelcomeScreenPathSelect', () => {
     expect(select.dataset.placeholder).toBe('user-management.welcomeScreenPath.placeholder')
   })
 
-  it('passes no value when the backend has no dashboard stored, so the placeholder shows', () => {
-    expect(renderSelect(null).dataset.hasValue).toBe('false')
+  it.each([[''], [null]])('passes no value when no dashboard is stored (%p), so the placeholder shows', (welcomeScreenPath) => {
+    expect(renderSelect(welcomeScreenPath).dataset.hasValue).toBe('false')
   })
 
   it('shows the stored dashboard', () => {
