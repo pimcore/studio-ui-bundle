@@ -1641,9 +1641,9 @@ user-management.lastname: Etternavn
 user-management.email: E-post
 user-management.language: Språk
 user-management.dateTime: Dato og tid-locale
-user-management.welcomeScreen: Vis velkomstskjerm ved oppstart
+user-management.welcomeScreen: Vis et dashbord som velkomstskjerm
 user-management.welcomeScreenPath: Dashbord for velkomstskjermen
-user-management.welcomeScreenPath.placeholder: Velg velkomstskjerm
+user-management.welcomeScreenPath.placeholder: Velg et dashbord
 user-management.memorizeTabs: Husk åpne faner
 user-management.allowDirtyClose: Deaktiver advarsel om ulagret innhold
 user-management.closeWarning: Vis lukkeadvarsel

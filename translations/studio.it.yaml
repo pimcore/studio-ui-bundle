@@ -1641,9 +1641,9 @@ user-management.lastname: Cognome
 user-management.email: Email
 user-management.language: Lingua
 user-management.dateTime: Lingua data e ora
-user-management.welcomeScreen: Mostra schermata di benvenuto all'avvio
+user-management.welcomeScreen: Mostra una dashboard come schermata di benvenuto
 user-management.welcomeScreenPath: Dashboard della schermata di benvenuto
-user-management.welcomeScreenPath.placeholder: Seleziona schermata di benvenuto
+user-management.welcomeScreenPath.placeholder: Seleziona una dashboard
 user-management.memorizeTabs: Memorizza schede aperte
 user-management.allowDirtyClose: Disabilita avviso contenuto non salvato
 user-management.closeWarning: Mostra avviso di chiusura

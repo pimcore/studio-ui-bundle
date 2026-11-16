@@ -1641,9 +1641,9 @@ user-management.lastname: Nachname
 user-management.email: E-Mail
 user-management.language: Sprache
 user-management.dateTime: Datum/Uhrzeit-Gebietsschema
-user-management.welcomeScreen: Willkommensbildschirm beim Start anzeigen
+user-management.welcomeScreen: Ein Dashboard als Willkommensbildschirm anzeigen
 user-management.welcomeScreenPath: Dashboard für den Willkommensbildschirm
-user-management.welcomeScreenPath.placeholder: Willkommensbildschirm auswählen
+user-management.welcomeScreenPath.placeholder: Dashboard auswählen
 user-management.memorizeTabs: Offene Tabs merken
 user-management.allowDirtyClose: Warnung bei ungespeicherten Inhalten deaktivieren
 user-management.closeWarning: Schließen-Warnung anzeigen

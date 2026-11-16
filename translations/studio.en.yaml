@@ -1645,9 +1645,9 @@ user-management.lastname: Last name
 user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale
-user-management.welcomeScreen: Show welcome screen on startup
+user-management.welcomeScreen: Show a dashboard as a welcome screen
 user-management.welcomeScreenPath: Welcome screen dashboard
-user-management.welcomeScreenPath.placeholder: Select welcome screen
+user-management.welcomeScreenPath.placeholder: Select a dashboard
 user-management.memorizeTabs: Memorize open tabs
 user-management.allowDirtyClose: Disable unsaved content warning
 user-management.closeWarning: Show close warning
