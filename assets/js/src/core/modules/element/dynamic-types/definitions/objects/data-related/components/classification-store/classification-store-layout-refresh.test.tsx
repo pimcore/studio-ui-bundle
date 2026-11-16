@@ -94,13 +94,16 @@ const layout = (keyIds: number[]): object => ({
   keys: keyIds.map((id) => ({ id, name: `key${id}`, definition: {} }))
 })
 
+// a key whose definition carries a default value writes it when it mounts, as handleDefaultValue does
+const DEFAULT_VALUES: Record<number, string> = { 7: 'default 7' }
+
 const StoreKey = ({ keyId }: { keyId: number }): React.JSX.Element => {
   const name = ['store', group, 'default', String(keyId)]
   const { operations } = useKeyedListContext()
   const value = useKeyedListValue(name)
 
   useEffect(() => {
-    if (value === undefined) operations.update(name, null, true)
+    if (value === undefined) operations.update(name, DEFAULT_VALUES[keyId] ?? null, true)
   }, [value])
 
   return (
@@ -196,6 +199,30 @@ describe('ClassificationStore layout refresh', () => {
     expect(screen.getByTestId('value-4')).toHaveTextContent('"typed 4"')
     expect(screen.getByTestId('value-5')).toHaveTextContent('"typed 5"')
     expect(screen.getByTestId('value-6')).toHaveTextContent('null')
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('reports no change when an arriving key writes its default value on mount', async () => {
+    render(
+      <InheritanceStateProvider>
+        <ItemProvider item={ { name: ['store'] } }>
+          <Host />
+        </ItemProvider>
+      </InheritanceStateProvider>
+    )
+
+    act(() => { screen.getByRole('button', { name: 'type 4' }).click() })
+    await act(async () => { await jest.advanceTimersByTimeAsync(50) })
+    expect(onChange).toHaveBeenCalled()
+    onChange.mockClear()
+
+    mockFetch.mockImplementation(() => ({ unwrap: async () => layout([7, 5, 4]) }))
+    await act(async () => {
+      emitClassificationStoreConfigurationChange()
+      await jest.advanceTimersByTimeAsync(LAYOUT_REFRESH_DEBOUNCE_MS + 50)
+    })
+
+    expect(screen.getByTestId('value-7')).toHaveTextContent('"default 7"')
     expect(onChange).not.toHaveBeenCalled()
   })
 })
