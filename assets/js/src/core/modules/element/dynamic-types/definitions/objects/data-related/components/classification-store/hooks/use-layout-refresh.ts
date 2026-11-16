@@ -59,10 +59,10 @@ export const useLayoutRefresh = ({ objectId, fieldName }: UseLayoutRefreshProps)
         const refreshed = fresh.get(group.id)
         if (refreshed === undefined) return
 
-        const knownKeyIds = new Set(group.keys.map((key) => key.id))
+        const knownKeyIds = new Set((group.keys ?? []).map((key) => key.id))
         markKeysAsNew(
           String(group.id),
-          refreshed.keys.filter((key) => !knownKeyIds.has(key.id)).map((key) => String(key.id))
+          (refreshed.keys ?? []).filter((key) => !knownKeyIds.has(key.id)).map((key) => String(key.id))
         )
       })
 
@@ -72,7 +72,7 @@ export const useLayoutRefresh = ({ objectId, fieldName }: UseLayoutRefreshProps)
     let timer: ReturnType<typeof setTimeout> | undefined
     const unsubscribe = subscribeToClassificationStoreConfigurationChange(() => {
       clearTimeout(timer)
-      timer = setTimeout(() => { void refresh() }, LAYOUT_REFRESH_DEBOUNCE_MS)
+      timer = setTimeout(() => { refresh().catch(() => undefined) }, LAYOUT_REFRESH_DEBOUNCE_MS)
     })
 
     return () => {

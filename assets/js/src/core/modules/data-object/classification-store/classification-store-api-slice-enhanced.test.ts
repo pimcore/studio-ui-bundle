@@ -167,5 +167,44 @@ describe('classification store configuration change signal', () => {
 
     expect(select(store, 'classificationStoreConfigurationKeyGroupRelationCollection', page1).items).toHaveLength(2)
     expect(select(store, 'classificationStoreConfigurationKeyGroupRelationCollection', page2).items.map((r: any) => r.keyId)).toEqual([3, 4])
+    // both pages count the new row, so the pagination can reach it
+    expect(select(store, 'classificationStoreConfigurationKeyGroupRelationCollection', page1).totalItems).toBe(4)
+    expect(select(store, 'classificationStoreConfigurationKeyGroupRelationCollection', page2).totalItems).toBe(4)
+  })
+
+  it('counts a created relation on a full single page without showing it there', async () => {
+    const relation = (keyId: number): object => ({ keyId, groupId: 1, sorter: 0, mandatory: false, keyName: `k${keyId}`, keyDescription: null, groupName: 'G' })
+    fetchMock.mockImplementation(async () => json({ items: [relation(1), relation(2)], totalItems: 2 }))
+    const store = createStore()
+    const page1 = { groupId: 1, body: { filters: { page: 1, pageSize: 2 } } }
+    await dispatchLoose(store)(api.endpoints.classificationStoreConfigurationKeyGroupRelationCollection.initiate(page1 as any))
+
+    fetchMock.mockImplementation(async () => json(relation(3)))
+    await dispatchLoose(store)(api.endpoints.classificationStoreConfigurationKeyGroupRelationCreate.initiate({
+      classificationStoreConfigurationKeyGroupRelationCreate: { keyId: 3, groupId: 1, sorter: 0, mandatory: false }
+    } as any))
+    await waitFor(() => { expect(select(store, 'classificationStoreConfigurationKeyGroupRelationCollection', page1).totalItems).toBe(3) })
+
+    expect(select(store, 'classificationStoreConfigurationKeyGroupRelationCollection', page1).items).toHaveLength(2)
+  })
+
+  it('leaves the total of a cached search alone when the deleted key is not in it', async () => {
+    fetchMock.mockImplementation(async (input: Request) => {
+      const filtered = (await input.clone().text()).includes('abc')
+      return json(filtered
+        ? { items: [{ ...keyRow, id: 1 }, { ...keyRow, id: 2 }, { ...keyRow, id: 3 }], totalItems: 3 }
+        : { items: [{ ...keyRow, id: 5 }], totalItems: 1 })
+    })
+    const store = createStore()
+    const search = { storeId: 1, body: { filters: { page: 1, pageSize: 10, columnFilters: { name: 'abc' } } } }
+    const all = { storeId: 1, body: { filters: { page: 1, pageSize: 10 } } }
+    await dispatchLoose(store)(api.endpoints.classificationStoreConfigurationKeyCollection.initiate(search as any))
+    await dispatchLoose(store)(api.endpoints.classificationStoreConfigurationKeyCollection.initiate(all as any))
+
+    fetchMock.mockImplementation(async () => json({}))
+    await dispatchLoose(store)(api.endpoints.classificationStoreConfigurationKeyDelete.initiate({ id: 5 } as any))
+    await waitFor(() => { expect(select(store, 'classificationStoreConfigurationKeyCollection', all).totalItems).toBe(0) })
+
+    expect(select(store, 'classificationStoreConfigurationKeyCollection', search).totalItems).toBe(3)
   })
 })
