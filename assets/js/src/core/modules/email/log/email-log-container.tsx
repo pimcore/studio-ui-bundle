@@ -38,7 +38,7 @@ export const EmailLogContainer = ({ documentId }: EmailLogContainerProps): React
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const isDocumentScoped = documentId !== undefined
+  const isDocumentScoped = !isUndefined(documentId)
   const normalizedSearchTerm = searchTerm.trim()
   const { data, isLoading: isEmailLogLoading, isFetching: isEmailLogFetching } = useEmailLogGetCollectionQuery({
     page: currentPage,
