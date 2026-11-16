@@ -9,10 +9,6 @@
  */
 
 import React, { useEffect } from 'react'
-import { TagList } from '@Pimcore/components/tag-list/tag-list'
-import { Badge } from '@Pimcore/components/badge/badge'
-import type { TagProps } from '@Pimcore/components/tag/tag'
-
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { WorkflowTransitionGroup } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-transition-group'
@@ -21,6 +17,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu.styles'
+import { useSyncTreeWorkflowStates } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-sync-tree-workflow-states'
+import { WorkflowStatusList } from '@Pimcore/modules/element/editor/shared-components/workflow/status/workflow-status-list'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -41,7 +39,18 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         return {
           key: workflow.workflowName,
           type: 'group',
-          label: t(workflow.workflowLabel),
+          label: (
+            <Flex
+              align="center"
+              gap="small"
+              justify="space-between"
+            >
+              <span>{t(workflow.workflowLabel)}</span>
+              <Flex gap="mini">
+                <WorkflowStatusList statuses={ workflow.workflowStatus ?? [] } />
+              </Flex>
+            </Flex>
+          ),
           children: result
         }
       })
@@ -49,35 +58,19 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     }
   }, [workflowDetailsData])
 
-  const getVisibleWorkflowStatus = (): TagProps[][] => {
-    if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
-      const formattedStatuses = workflowDetailsData.items.reduce((result: TagProps[], workflow) => {
-        workflow.workflowStatus.forEach((status) => {
-          if (status.visibleInDetail !== undefined && status.visibleInDetail) {
-            result.push({
-              children: t(`${status.label}`),
-              colorInverted: status.colorInverted ? status.color : undefined,
-              icon: !status.colorInverted ? <Badge color={ status.color } /> : undefined
-            })
-          }
-        })
-        return result
-      }, [])
-      return [formattedStatuses]
-    }
-    return [[]]
-  }
+  const visibleStatuses = (workflowDetailsData?.items ?? []).flatMap(
+    (workflow) => (workflow.workflowStatus ?? []).filter((status) => status.visibleInDetail)
+  )
+
+  useSyncTreeWorkflowStates(workflowDetailsData === undefined ? undefined : visibleStatuses)
 
   return (
     <Flex
       align={ 'center' }
+      gap={ 'extra-small' }
       justify={ 'flex-end' }
     >
-      <TagList
-        itemGap={ 'extra-small' }
-        list={ getVisibleWorkflowStatus() }
-        wrap={ false }
-      />
+      <WorkflowStatusList statuses={ visibleStatuses } />
       {workflowDetailsData !== undefined && (
       <Dropdown
         disabled={ isFetchingWorkflowDetails }

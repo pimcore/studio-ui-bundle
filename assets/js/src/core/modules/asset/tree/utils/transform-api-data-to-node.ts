@@ -27,6 +27,7 @@ export const transformApiDataToNode = (assetNode: Image | AssetDocument | Audio 
     hasChildren: assetNode.hasChildren,
     locked: assetNode.locked,
     isLocked: assetNode.isLocked,
+    workflowStates: assetNode.workflowStates,
     metaData: {
       asset: assetNode
     },

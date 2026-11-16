@@ -19,6 +19,12 @@ import { injectSliceWithState, type RootState } from '@sdk/app'
 import { camelCase, isEqual, isUndefined, merge } from 'lodash'
 import { createSelector } from 'reselect'
 
+export interface TreeNodeWorkflowState {
+  title: string
+  label: string
+  color: string
+}
+
 export interface TreeNode {
   id: string
   elementType?: string
@@ -37,6 +43,7 @@ export interface TreeNode {
   isPublished?: boolean
   isSite?: boolean
   hasChildren?: boolean
+  workflowStates?: TreeNodeWorkflowState[]
   metaData?: any
 
   internalKey: string
@@ -822,6 +829,24 @@ const slice = createSlice({
         }
       })
     },
+    setNodeWorkflowStates: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, workflowStates: TreeNodeWorkflowState[] }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  workflowStates: payload.workflowStates
+                }
+              : undefined
+          }))
+        }
+      })
+    },
     setNodeAdditionalAttributes: (
       state,
       { payload }: PayloadAction<{
@@ -1043,7 +1068,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { markNodesDeleting, deselectNodes, setNodeLoading, setNodeLoadingInAllTree, setNodeOpeningInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setActiveNodeId, toggleNodeSelection, selectNodeRange, clearSelection, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, setDocumentNodeStaticGeneratorEnabled } = slice.actions
+export const { markNodesDeleting, deselectNodes, setNodeLoading, setNodeLoadingInAllTree, setNodeOpeningInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setActiveNodeId, toggleNodeSelection, selectNodeRange, clearSelection, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeWorkflowStates, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, setDocumentNodeStaticGeneratorEnabled } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

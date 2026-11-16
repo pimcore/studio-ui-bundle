@@ -28,6 +28,7 @@ import {
   renameNode,
   setFetchTriggered,
   setNodePage,
+  setNodeWorkflowStates,
   type TreeNode,
   updateNodesByParentId
 } from './element-tree-slice'
@@ -187,5 +188,28 @@ describe('element-tree-slice: renameNode', () => {
     const nodeProps = state[treeId].nodes['10'].treeNodeProps
     expect(nodeProps?.label).toBe('new-car')
     expect(nodeProps?.realKey).toBe('new-car')
+  })
+})
+
+describe('element-tree-slice: setNodeWorkflowStates', () => {
+  const workflowStates = [{ title: 'todo', label: 'ToDo', color: '#3572b0' }]
+
+  it('replaces the workflow states of the matching node', () => {
+    const state = dispatchAll([
+      ...loadedTreeActions(),
+      setNodeWorkflowStates({ nodeId: '20', elementType: 'data-object', workflowStates })
+    ])
+
+    expect(state[treeId].nodes['20'].treeNodeProps?.workflowStates).toEqual(workflowStates)
+    expect(state[treeId].nodes['21'].treeNodeProps?.workflowStates).toBeUndefined()
+  })
+
+  it('leaves a node of another element type with the same id untouched', () => {
+    const state = dispatchAll([
+      ...loadedTreeActions(),
+      setNodeWorkflowStates({ nodeId: '20', elementType: 'asset', workflowStates })
+    ])
+
+    expect(state[treeId].nodes['20'].treeNodeProps?.workflowStates).toBeUndefined()
   })
 })

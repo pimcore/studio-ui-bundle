@@ -27,6 +27,7 @@ export const transformApiDataToNode = (dataObjectNode: DataObject | DataObjectFo
     hasChildren: dataObjectNode.hasChildren,
     locked: dataObjectNode.locked,
     isLocked: dataObjectNode.isLocked,
+    workflowStates: dataObjectNode.workflowStates,
     isPublished: dataObjectNode.published,
     metaData: {
       dataObject: dataObjectNode

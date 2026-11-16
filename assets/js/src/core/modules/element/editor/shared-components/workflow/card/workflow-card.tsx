@@ -9,12 +9,11 @@
  */
 
 import React from 'react'
-import { Badge } from '@Pimcore/components/badge/badge'
-import { Tag } from '@Pimcore/components/tag/tag'
 import { Card } from '@Pimcore/components/card/card'
 import { useStyles } from './workflow-card.styles'
 import { DropdownButton } from './components/dropdown-button/dropdown-button'
 import { type IWorkflowCardProps } from './types'
+import { WorkflowStatusList } from '../status/workflow-status-list'
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -27,18 +26,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         <>
           <p>{workflow.workflowName}</p>
 
-          {workflow.workflowStatus !== undefined && workflow.workflowStatus?.length > 0 && (
-            workflow.workflowStatus.map((status, index) => (
-              <Tag
-                colorInverted={ status.colorInverted ? status.color : undefined }
-                icon={ !status.colorInverted ? <Badge color={ status.color } /> : undefined }
-                key={ `${index}-${status.title}` }
-                title={ status.title }
-              >
-                {status.label}
-              </Tag>
-            ))
-          )}
+          <WorkflowStatusList statuses={ workflow.workflowStatus ?? [] } />
         </>
             ) }
     >

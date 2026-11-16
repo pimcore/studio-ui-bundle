@@ -27,6 +27,7 @@ export const transformApiDataToNode = (documentNode: Document, node: DataTransfo
     hasChildren: documentNode.hasChildren,
     locked: documentNode.locked,
     isLocked: documentNode.isLocked,
+    workflowStates: documentNode.workflowStates,
     isPublished: documentNode.published,
     isSite: documentNode.isSite,
     metaData: {

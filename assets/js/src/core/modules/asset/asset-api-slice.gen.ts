@@ -1154,6 +1154,20 @@ export type CustomAttributes = {
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
+export type WorkflowStatus = {
+    /** color */
+    color: string;
+    /** colorInverted */
+    colorInverted: boolean;
+    /** borderColor */
+    title: string;
+    /** label */
+    label: string;
+    /** layoutId */
+    layoutId: string | null;
+    /** visibleInDetail */
+    visibleInDetail: boolean;
+};
 export type Permissions = {
     /** List */
     list: boolean;
@@ -1186,6 +1200,8 @@ export type Asset = Element & {
     score?: number | null;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
+    /** Workflow states visible in the header, only set in tree listings */
+    workflowStates?: WorkflowStatus[];
     /** Has children */
     hasChildren: boolean;
     /** Type */

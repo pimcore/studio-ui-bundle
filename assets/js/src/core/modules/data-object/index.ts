@@ -21,6 +21,7 @@ import { ElementTreeTooltip } from '@Pimcore/components/element-tree/tooltip/ele
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
+import { TreeNodeWorkflowStates } from '@Pimcore/components/element-tree/node/content/tree-node-workflow-states'
 import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { DataObjectBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/data-object-batch-delete-job'
 
@@ -37,6 +38,12 @@ moduleSystem.registerModule({
     componentRegistry.register({
       name: componentConfig.dataObject.tree.tooltip.name,
       component: ElementTreeTooltip
+    })
+
+    componentRegistry.registerToSlot(componentConfig.dataObject.tree.node.meta.name, {
+      name: 'workflowStates',
+      component: TreeNodeWorkflowStates,
+      priority: 200
     })
 
     componentRegistry.registerToSlot(componentConfig.dataObject.tree.node.meta.name, {

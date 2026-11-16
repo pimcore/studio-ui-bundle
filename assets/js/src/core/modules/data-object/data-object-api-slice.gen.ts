@@ -654,6 +654,20 @@ export type CustomAttributes = {
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
+export type WorkflowStatus = {
+    /** color */
+    color: string;
+    /** colorInverted */
+    colorInverted: boolean;
+    /** borderColor */
+    title: string;
+    /** label */
+    label: string;
+    /** layoutId */
+    layoutId: string | null;
+    /** visibleInDetail */
+    visibleInDetail: boolean;
+};
 export type Permissions = {
     /** List */
     list: boolean;
@@ -693,6 +707,8 @@ export type DataObject = Element & {
     customAttributes: CustomAttributes;
     /** Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search */
     score?: number | null;
+    /** Workflow states visible in the header, only set in tree listings */
+    workflowStates?: WorkflowStatus[];
     /** Key */
     key: string;
     /** Class name */

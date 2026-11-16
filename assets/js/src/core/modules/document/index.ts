@@ -21,6 +21,7 @@ import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { TreeNodeNavigationExcludeIcon } from '@Pimcore/modules/document/tree/node/content/tree-node-navigation-exclude-icon'
 import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
+import { TreeNodeWorkflowStates } from '@Pimcore/components/element-tree/node/content/tree-node-workflow-states'
 import { TreeNodeStaticGeneratorIcon } from '@Pimcore/modules/document/tree/node/content/tree-node-static-generator-icon'
 import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { DocumentBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/document-batch-delete-job'
@@ -50,6 +51,12 @@ moduleSystem.registerModule({
       name: 'navigationExcludeIcon',
       component: TreeNodeNavigationExcludeIcon,
       priority: 200
+    })
+
+    componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {
+      name: 'workflowStates',
+      component: TreeNodeWorkflowStates,
+      priority: 400
     })
 
     componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {

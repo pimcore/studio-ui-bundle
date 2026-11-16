@@ -22,28 +22,6 @@ export const useStyles = createStyles(({ token, css }) => {
           p {
               margin: 0;
           }
-
-        .ant-tag {
-          background: ${token.colorFillSecondary};
-          border: 1px solid ${token.colorBorder};
-          cursor: pointer;
-          height: 22px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-            
-          &.color-inverted {
-            border: transparent;
-          }
-            
-          .ant-badge {              
-            .ant-badge-status-dot {
-              width: 6px;
-              height: 6px;
-              top: unset;
-            }
-          }
-        }
       }
 
       .ant-card-body {
