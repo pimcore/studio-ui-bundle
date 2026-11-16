@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Full sti
 asset.asset-editor-tabs.list.columns.creationDate: Opprettelsesdato
 asset.asset-editor-tabs.list.columns.modificationDate: Endringsdato
 asset.tree.context-menu.upload-new-version: Last opp ny versjon
+asset.upload-new-version.rename-confirmation.title: Asseten får nytt navn
+asset.upload-new-version.rename-confirmation.message: 'Den nye filen er av typen .{{extension}} — asseten får nytt navn fra "{{oldFilename}}" til "{{newFilename}}", og den offentlige URL-en endres. Vil du fortsette?'
+asset.upload-new-version.renamed: 'Asseten har fått nytt navn fra "{{oldFilename}}" til "{{newFilename}}". Den offentlige URL-en er endret.'
 asset.copy-info: Kopier og info
 asset.upload: Last opp
 asset.upload.label: Velg fil

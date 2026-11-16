@@ -95,6 +95,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
+asset.upload-new-version.rename-confirmation.title: Asset will be renamed
+asset.upload-new-version.rename-confirmation.message: 'The new file is a .{{extension}} — the asset will be renamed from "{{oldFilename}}" to "{{newFilename}}" and its public URL will change. Continue?'
+asset.upload-new-version.renamed: 'The asset was renamed from "{{oldFilename}}" to "{{newFilename}}". Its public URL has changed.'
 asset.copy-info: Copy & Info
 asset.upload: Upload
 asset.upload.label: Select file

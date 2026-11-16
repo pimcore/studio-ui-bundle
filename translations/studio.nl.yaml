@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Volledig pad
 asset.asset-editor-tabs.list.columns.creationDate: Aanmaakdatum
 asset.asset-editor-tabs.list.columns.modificationDate: Wijzigingsdatum
 asset.tree.context-menu.upload-new-version: Nieuwe versie uploaden
+asset.upload-new-version.rename-confirmation.title: Asset wordt hernoemd
+asset.upload-new-version.rename-confirmation.message: 'Het nieuwe bestand is van het type .{{extension}} — de asset wordt hernoemd van "{{oldFilename}}" naar "{{newFilename}}" en de openbare URL verandert. Doorgaan?'
+asset.upload-new-version.renamed: 'De asset is hernoemd van "{{oldFilename}}" naar "{{newFilename}}". De openbare URL is gewijzigd.'
 asset.copy-info: Kopiëren & info
 asset.upload: Uploaden
 asset.upload.label: Bestand selecteren
