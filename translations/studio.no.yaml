@@ -2253,6 +2253,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parametere
 widget.email-log.grid.name: Navn
 widget.email-log.grid.value: Verdi
+email-log.label: E-postlogg
 email-log.subject: Emne
 email-log.tooltip.resend: Send e-post på nytt
 email-log.tooltip.forward: Videresend e-post
