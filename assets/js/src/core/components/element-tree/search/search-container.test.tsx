@@ -63,7 +63,7 @@ describe('element tree SearchContainer', () => {
 
     expect(screen.getByTestId('icon-close').closest('.ant-input-clear-icon')).toHaveClass('ant-input-clear-icon-hidden')
 
-    await userEvent.type(screen.getByRole('textbox', { name: 'Search' }), 'foo')
+    await userEvent.type(screen.getByRole('searchbox', { name: 'Search' }), 'foo')
 
     expect(screen.getByTestId('icon-close').closest('.ant-input-clear-icon')).not.toHaveClass('ant-input-clear-icon-hidden')
   })
@@ -71,7 +71,7 @@ describe('element tree SearchContainer', () => {
   it('clears the field and resets the search like an empty submit', async () => {
     renderSearch('foo')
 
-    const input = screen.getByRole('textbox', { name: 'Search' })
+    const input = screen.getByRole('searchbox', { name: 'Search' })
     expect(input).toHaveValue('foo')
 
     await userEvent.click(screen.getByTestId('icon-close'))
