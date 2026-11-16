@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Percorso completo
 asset.asset-editor-tabs.list.columns.creationDate: Data di creazione
 asset.asset-editor-tabs.list.columns.modificationDate: Data di modifica
 asset.tree.context-menu.upload-new-version: Carica nuova versione
+asset.upload-new-version.rename-confirmation.title: L'asset verrà rinominato
+asset.upload-new-version.rename-confirmation.message: 'Il nuovo file è di tipo .{{extension}} — l''asset verrà rinominato da "{{oldFilename}}" a "{{newFilename}}" e il suo URL pubblico cambierà. Continuare?'
+asset.upload-new-version.renamed: 'L''asset è stato rinominato da "{{oldFilename}}" a "{{newFilename}}". Il suo URL pubblico è cambiato.'
 asset.copy-info: Copia e informazioni
 asset.upload: Carica
 asset.upload.label: Seleziona file
@@ -3135,6 +3138,8 @@ service-users.field.name: Nome
 service-users.field.name.fixed: Il nome non può essere modificato, perché l'accesso al server MCP viene concesso in base al nome.
 service-users.field.name.invalid: Utilizzare fino a 64 lettere, cifre, punti, trattini o trattini bassi, iniziando con una lettera o una cifra, ad esempio svc-erp-sync.
 service-users.field.email: Email di contatto
+service-users.field.responsible-users: Utenti responsabili
+service-users.field.responsible-users.help: 'Rispondono di questo utente di servizio ovunque serva una persona, ad esempio per le comunicazioni che lo riguardano.'
 service-users.field.source-user: Utente da cui copiare
 service-users.filter.unused-days: Non utilizzato da più di N giorni
 service-users.status.inactive: Inattivo
@@ -3184,3 +3189,19 @@ service-users.secret.client-secret: Client secret
 service-users.secret.warning: Copiare il secret ora. Viene mostrato una sola volta e non può essere visualizzato di nuovo.
 service-users.secret.copy: Copia secret
 service-users.secret.close: Chiudi
+navigation.maintenance-mode: Modalità manutenzione
+maintenance-mode.activate.title: Attivare la modalità manutenzione?
+maintenance-mode.activate.text: "Tutti i servizi, incluso il sito web, entrano in manutenzione. Solo questa sessione del browser mantiene l'accesso."
+maintenance-mode.activate.lock-out: "Disconnettendosi, chiudendo il browser o alla scadenza della sessione, anche Lei perderà l'accesso."
+maintenance-mode.activate.background-jobs: 'I job in background e i consumer di messaggi non vengono avviati finché la modalità manutenzione è attiva.'
+maintenance-mode.activate.ok: Attiva
+maintenance-mode.indicator.tooltip: 'La modalità manutenzione è attiva. Fare clic per disattivarla.'
+maintenance-mode.deactivate.title: Disattivare la modalità manutenzione?
+maintenance-mode.deactivate.text: "Tutte le sessioni recuperano l'accesso."
+maintenance-mode.deactivate.ok: Disattiva
+maintenance-mode.logout.title: Disattivare prima la modalità manutenzione?
+maintenance-mode.logout.text: 'La modalità manutenzione è attiva e solo questa sessione ha accesso. Dopo la disconnessione potrà essere disattivata solo dalla riga di comando.'
+maintenance-mode.logout.deactivate-and-log-out: Disattiva ed esci
+maintenance-mode.locked-out.title: Manutenzione
+maintenance-mode.locked-out.text: "Il sistema è in modalità manutenzione o temporaneamente non disponibile. L'ultima azione potrebbe non essere stata salvata. Questo avviso si chiuderà automaticamente non appena il sistema sarà di nuovo disponibile."
+maintenance-mode.locked-out.reload: Ricarica
