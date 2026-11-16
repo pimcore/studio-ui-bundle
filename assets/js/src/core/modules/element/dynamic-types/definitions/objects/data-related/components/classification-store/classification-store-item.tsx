@@ -78,7 +78,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { name } = useItem()
   const { operations } = useKeyedListContext()
   const { id } = useElementContext()
-  const { isNewGroup } = useClassificationStore()
+  const { isNewGroup, isNewKey } = useClassificationStore()
   const canEditLanguage = useLanguageEditPermission()
 
   const modal = useFormModal()
@@ -115,7 +115,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   // The group values are read through the keyed-list operations instead of a
   // subscription on purpose: subscribing would re-render the whole group on every
   // keystroke, and a field must not disappear while its value is being cleared.
-  // Re-evaluated only when the group, its localization or the hide revision changes.
+  // Re-evaluated only when the group layout (also after a configuration refresh), its localization or the hide revision changes.
   const visibleKeys = useMemo(() => {
     const keys = groupLayout?.keys ?? []
     const groupId = groupLayout?.id
@@ -133,8 +133,8 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
       })])
     )
 
-    return keys.filter((key) => !hiddenKeyIds.has(key.id))
-  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, fieldLocalized, operations, isNewGroup])
+    return keys.filter((key) => !hiddenKeyIds.has(key.id) || isNewKey(String(groupId), String(key.id)))
+  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, fieldLocalized, operations, isNewGroup, isNewKey])
 
   // The layout lists its sub groups in the order the backend put them in, which is the order
   // their first key appears in; it is never re-sorted here. A group layout that carries none

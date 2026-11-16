@@ -113,6 +113,12 @@ jest.mock('./hooks/use-language-independent-value-permission', () => ({
   useLanguageIndependentValuePermission: () => mockLanguageIndependentValuePermitted
 }))
 
+// the refresh is covered by its own test; the content only mounts it
+jest.mock('./hooks/use-layout-refresh', () => ({ useLayoutRefresh: jest.fn() }))
+jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
+  useElementContext: () => ({ id: 42, elementType: 'data-object' })
+}))
+
 jest.mock('./classification-store-item', () => ({
   ClassificationStoreItem: (props: { disallowDelete?: boolean, groupLayout?: { id: number } }) => {
     mockItem(props)

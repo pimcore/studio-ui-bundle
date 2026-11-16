@@ -21,6 +21,8 @@ import { ClassificationStoreContentEmpty } from './classification-store-content-
 import { getClassificationStoreName } from './utils/combined-field-name'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { useLanguageIndependentValuePermission } from './hooks/use-language-independent-value-permission'
+import { useLayoutRefresh } from './hooks/use-layout-refresh'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
@@ -94,6 +96,11 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const localizationMode = allowLanguageIndependentValue ? selectedLocalizationMode : CURRENT_LANGUAGE_MODE
   const localizationGroup = localizationMode === CURRENT_LANGUAGE_MODE ? currentLanguage : LANGUAGE_INDEPENDENT_MODE
 
+  const { id: objectId } = useElementContext()
+  const fieldName = isArray(props.name) ? props.name[props.name.length - 1] : props.name
+  useLayoutRefresh({ objectId, fieldName })
+
+  // Seeds the layout once; a configuration change replaces it afterwards through useLayoutRefresh.
   useEffect(() => {
     const initialLayout = props.activeGroupDefinitions ?? []
     const activeGroupLayout = !isEmpty(currentLayoutData) ? currentLayoutData : initialLayout
