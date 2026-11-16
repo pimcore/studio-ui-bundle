@@ -80,6 +80,14 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/emails/${queryArg.id}/resend`, method: "POST" }),
                 invalidatesTags: ["E-Mails"],
             }),
+            emailLogSearch: build.query<EmailLogSearchApiResponse, EmailLogSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/emails/search`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["E-Mails"],
+            }),
             emailSendTest: build.mutation<EmailSendTestApiResponse, EmailSendTestApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/emails/test`,
@@ -169,6 +177,21 @@ export type EmailLogResendByIdApiResponse = unknown;
 export type EmailLogResendByIdApiArg = {
     /** Id of the E-Mail */
     id: number;
+};
+export type EmailLogSearchApiResponse = /** status 200 Paginated matching email log entries. */ {
+    totalItems: number;
+    items: EmailLog[];
+};
+export type EmailLogSearchApiArg = {
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+            additionalSortFilters?: object;
+        };
+    };
 };
 export type EmailSendTestApiResponse = unknown;
 export type EmailSendTestApiArg = {
@@ -290,5 +313,6 @@ export const {
     useEmailLogGetTextQuery,
     useEmailLogForwardByIdMutation,
     useEmailLogResendByIdMutation,
+    useEmailLogSearchQuery,
     useEmailSendTestMutation,
 } = injectedRtkApi;

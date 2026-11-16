@@ -14,6 +14,10 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/logout`, method: "POST" }),
                 invalidatesTags: ["Authorization"],
             }),
+            sessionGetStatus: build.query<SessionGetStatusApiResponse, SessionGetStatusApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/session` }),
+                providesTags: ["Authorization"],
+            }),
             loginToken: build.mutation<LoginTokenApiResponse, LoginTokenApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/login/token`,
@@ -30,17 +34,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Authorization"],
             }),
-            sessionGetStatus: build.query<SessionGetStatusApiResponse, SessionGetStatusApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/session` }),
-                providesTags: ["Authorization"],
-            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
 export type LoginApiResponse = /** status 200 Login successful, with an empty body.
 When the user needs a two-factor code, the password was correct but the login is not finished:
-the body says so and names the next step: `verify` (send the code to `/login/2fa`), or `setup` when the user
+the body says so, names the next step and the number of digits in a code: `verify` (send the code to `/login/2fa`), or `setup` when the user
 must use two-factor authentication but has not set it up (create a secret with `/user/two-factor/setup`,
 then send the first code from it to `/login/2fa`).
 Until then, other endpoints answer 401. To go back, log out.
@@ -50,6 +50,8 @@ export type LoginApiArg = {
 };
 export type LogoutApiResponse = unknown;
 export type LogoutApiArg = void;
+export type SessionGetStatusApiResponse = /** status 200 Session status. */ SessionStatus;
+export type SessionGetStatusApiArg = void;
 export type LoginTokenApiResponse = unknown;
 export type LoginTokenApiArg = {
     authenticationToken: AuthenticationToken;
@@ -58,8 +60,6 @@ export type LoginTwoFactorApiResponse = unknown;
 export type LoginTwoFactorApiArg = {
     twoFactorCode: TwoFactorCode;
 };
-export type SessionGetStatusApiResponse = /** status 200 Session status. */ SessionStatus;
-export type SessionGetStatusApiArg = void;
 export type TwoFactorLoginStep = {
     /** A code is needed */
     twoFactorRequired: boolean;
@@ -88,14 +88,6 @@ export type Credentials = {
     /** Password */
     password: string;
 };
-export type AuthenticationToken = {
-    /** Token */
-    token: string;
-};
-export type TwoFactorCode = {
-    /** Code */
-    code: string;
-};
 export type SessionStatus = {
     /** True if a Studio user is logged in */
     authenticated: boolean;
@@ -106,10 +98,18 @@ export type SessionStatus = {
     /** Number of digits in a code */
     digits?: number | null;
 };
+export type AuthenticationToken = {
+    /** Token */
+    token: string;
+};
+export type TwoFactorCode = {
+    /** Code */
+    code: string;
+};
 export const {
     useLoginMutation,
     useLogoutMutation,
+    useSessionGetStatusQuery,
     useLoginTokenMutation,
     useLoginTwoFactorMutation,
-    useSessionGetStatusQuery,
 } = injectedRtkApi;

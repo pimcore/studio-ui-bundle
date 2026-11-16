@@ -61,8 +61,7 @@ export type NoteGetCollectionApiArg = {
         sortBy?: "id" | "type" | "cId" | "cType" | "cPath" | "date" | "title" | "description" | "locked";
         /** Filter for notes */
         filter?: string;
-        /** Filter for specific fields, will be json decoded to an array. e.g.
-                                [{"operator":"like","value":"John","field":"name","type":"string"}] */
+        /** JSON array of field filters. "userName" also accepts a list of names, matched exactly. */
         fieldFilters?: object;
     };
 };
@@ -90,8 +89,7 @@ export type NoteElementGetCollectionApiArg = {
     sortOrder?: "ASC" | "DESC";
     /** Filter for notes */
     filter?: string;
-    /** Filter for specific fields, will be json decoded to an array. e.g.
-                [{"operator":"like","value":"John","field":"name","type":"string"}] */
+    /** JSON array of field filters. "userName" also accepts a list of names, matched exactly. */
     fieldFilters?: string;
 };
 export type NoteElementCreateApiResponse = /** status 200 Created note for element */ Note;

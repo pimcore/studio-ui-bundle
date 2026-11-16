@@ -57,7 +57,7 @@ export const useEditFormContext = (): EditFormContextProps => {
 
 /**
  * For components that are also rendered outside the object editor, e.g. field labels
- * in grid cells or in the version comparison.
+ * in grid cells or in the version comparison, or the workflow of an asset or document editor.
  */
 export const useEditFormContextOptional = (): EditFormContextProps | undefined => {
   return useContext(EditFormContext)
