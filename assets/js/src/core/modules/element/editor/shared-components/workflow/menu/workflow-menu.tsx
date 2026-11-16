@@ -28,31 +28,19 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
 
   useEffect(() => {
     if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
-      const workFlowItems: ItemType[] = workflowDetailsData.items.flatMap((workflow) => {
-        const result: ItemType[] = []
-        result.push({
-          key: ((workflowDetailsData?.items?.length ?? 0) + 1).toString(),
-          type: 'custom',
-          component: <WorkflowTransitionGroup workflow={ workflow } />
-        })
-
-        return {
+      const workFlowItems: ItemType[] = workflowDetailsData.items.flatMap((workflow, index) => {
+        const group: ItemType = {
           key: workflow.workflowName,
           type: 'group',
-          label: (
-            <Flex
-              align="center"
-              gap="small"
-              justify="space-between"
-            >
-              <span>{t(workflow.workflowLabel)}</span>
-              <Flex gap="mini">
-                <WorkflowStatusList statuses={ workflow.workflowStatus } />
-              </Flex>
-            </Flex>
-          ),
-          children: result
+          label: t(workflow.workflowLabel),
+          children: [{
+            key: `${workflow.workflowName}-actions`,
+            type: 'custom',
+            component: <WorkflowTransitionGroup workflow={ workflow } />
+          }]
         }
+
+        return index === 0 ? [group] : [{ key: `${workflow.workflowName}-divider`, type: 'divider' }, group]
       })
       setItems(workFlowItems)
     }

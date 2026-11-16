@@ -15,9 +15,14 @@ import { EditorToolbarWorkflowMenu } from './workflow-menu'
 
 // Factories, so the real components — and the antd ESM they pull in — are never loaded.
 jest.mock('@Pimcore/components/dropdown/dropdown', () => ({
-  Dropdown: ({ menu }: { menu: { items: Array<{ key: string, label: React.ReactNode }> } }) => (
+  Dropdown: ({ menu }: { menu: { items: Array<{ key: string, type: string, label?: React.ReactNode }> } }) => (
     <div data-testid="dropdown">
-      {menu.items.map((item) => <div key={ item.key }>{item.label}</div>)}
+      {menu.items.map((item) => (
+        <div
+          data-type={ item.type }
+          key={ item.key }
+        >{item.label}</div>
+      ))}
     </div>
   )
 }))
@@ -56,20 +61,28 @@ describe('EditorToolbarWorkflowMenu', () => {
     })
   })
 
-  it('shows the current state of every workflow in the dropdown', () => {
+  it('shows only the workflow names in the dropdown, without states', () => {
     render(<EditorToolbarWorkflowMenu />)
 
     const dropdown = within(screen.getByTestId('dropdown'))
 
     expect(dropdown.getByText('Workflow 1')).toBeInTheDocument()
-    expect(dropdown.getByText('visible')).toHaveAttribute('data-inverted', 'true')
-    expect(dropdown.getByText('hidden')).toBeInTheDocument()
+    expect(dropdown.getByText('Workflow 2')).toBeInTheDocument()
+    expect(dropdown.queryByTestId('workflow-state')).not.toBeInTheDocument()
   })
 
   it('shows only the states marked as visible next to the dropdown button', () => {
     render(<EditorToolbarWorkflowMenu />)
 
-    expect(screen.getAllByText('visible')).toHaveLength(2)
-    expect(screen.getAllByText('hidden')).toHaveLength(1)
+    expect(screen.getByText('visible')).toHaveAttribute('data-inverted', 'true')
+    expect(screen.queryByText('hidden')).not.toBeInTheDocument()
+  })
+
+  it('separates the workflows in the dropdown with a divider', () => {
+    render(<EditorToolbarWorkflowMenu />)
+
+    const types = Array.from(screen.getByTestId('dropdown').children).map((item) => item.getAttribute('data-type'))
+
+    expect(types).toEqual(['group', 'divider', 'group'])
   })
 })
