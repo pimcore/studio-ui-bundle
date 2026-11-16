@@ -533,4 +533,80 @@ describe('NumberedList', () => {
         .toEqual(['attributes.0'])
     })
   })
+
+  // The app renders under StrictMode (app-view.tsx): effects mount, unmount and mount
+  // again, so every field registers twice — against a value that has not re-rendered in
+  // between — and every store subscription is dropped and renewed.
+  describe('under StrictMode', () => {
+    const strictUi = (props: Omit<NumberedListProps, 'children'>, children?: React.ReactNode): React.JSX.Element => (
+      <React.StrictMode>{numberedListUi(props, children)}</React.StrictMode>
+    )
+
+    const fields = (
+      <>
+        <RegisteringField name={ ['attributes', '0', 'cargoCapacity'] } />
+        <RegisteringField
+          initialValue={ { value: null, unitId: 'l' } }
+          name={ ['attributes', '0', 'length'] }
+        />
+      </>
+    )
+
+    it('does not report registrations of fields mounting after the list as a change', () => {
+      const onChange = jest.fn()
+      const props = { value: [{ name: 'test' }], onChange }
+
+      const { rerender } = render(strictUi(props))
+      flushDebounce()
+      rerender(strictUi(props, fields))
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+      expect(operations.getValue(['attributes', '0', 'cargoCapacity'])).toBeNull()
+      expect(operations.getValue(['attributes', '0', 'length'])).toEqual({ value: null, unitId: 'l' })
+    })
+
+    it('reports a user change once, with the registrations merged in', () => {
+      const onChange = jest.fn()
+      const props = { value: [{ name: 'test' }], onChange }
+
+      const { rerender } = render(strictUi(props))
+      flushDebounce()
+      rerender(strictUi(props, fields))
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', '0', 'name'], 'changed', false)
+      })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenCalledWith([
+        { name: 'changed', cargoCapacity: null, length: { value: null, unitId: 'l' } }
+      ])
+    })
+
+    it('adopts a value with new content without reporting it as a change', () => {
+      const onChange = jest.fn()
+
+      // the fields mount after the list, as in the editor (and as in the test of the same
+      // name above): RegisteringField reads without subscribing to the store, so it only
+      // registers when a render reaches it
+      const { rerender } = render(strictUi({ value: [{ name: 'test' }], onChange }))
+      flushDebounce()
+      rerender(strictUi({ value: [{ name: 'test' }], onChange }, fields))
+      flushDebounce()
+      rerender(strictUi({ value: [{ name: 'updated' }], onChange }, fields))
+      flushDebounce()
+
+      // a residual mount-time fire may report the unmodified incoming value — this happens
+      // with or without the synchronous notification, as for the keyed list (#4362); a report
+      // of anything else would be a registration leaking into a change
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual([{ name: 'test' }])
+      })
+      expect(operations.getValue(['attributes', '0', 'name'])).toBe('updated')
+      expect(operations.getValue(['attributes', '0', 'cargoCapacity'])).toBeNull()
+    })
+  })
 })
