@@ -66,10 +66,16 @@ export type RecycleBinDeleteItemsApiArg = {
 export type RecycleBinFlushApiResponse = unknown;
 export type RecycleBinFlushApiArg = void;
 export type RecycleBinRestoreItemsApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> to restore recycle bin items */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+    /** status 200 Successfully restored recycle bin item. <strong>items</strong> lists the elements that were restored into the
+<strong>/__restored</strong> folder because their parent no longer exists.
+ */
+        | {
+              items: RecycleBinRelocatedItem[];
+          }
+        | /** status 201 Successfully created <strong>jobRun</strong> to restore recycle bin items */ {
+              /** ID of created jobRun */
+              jobRunId: number;
+          };
 export type RecycleBinRestoreItemsApiArg = {
     body: {
         items?: number[];
@@ -104,6 +110,18 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
+};
+export type RecycleBinRelocatedItem = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the restored element */
+    id: number;
+    /** Element type */
+    elementType: string;
+    /** New full path of the element */
+    path: string;
 };
 export const {
     useRecycleBinGetCollectionQuery,
