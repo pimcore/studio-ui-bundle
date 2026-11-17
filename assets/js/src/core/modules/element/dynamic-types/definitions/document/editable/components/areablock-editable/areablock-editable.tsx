@@ -108,6 +108,7 @@ export const AreablockEditable = ({
 
   const {
     dynamicEditables,
+    getCurrentElements,
     addArea,
     removeArea,
     moveAreaUp,
@@ -129,6 +130,7 @@ export const AreablockEditable = ({
     areablockManager,
     areaTypes,
     config,
+    getCurrentElements,
     onAddArea: addArea,
     onRemoveArea: removeArea,
     onMoveAreaUp: moveAreaUp,

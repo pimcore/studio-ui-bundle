@@ -24,6 +24,7 @@ export interface UseAreablockDropzonesProps {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
+  getCurrentElements?: () => HTMLElement[]
   onMoveArea: (fromIndex: number, toIndex: number) => void
   onDropAreablock?: (areaType: string, index: number) => Promise<void>
 }
@@ -36,6 +37,7 @@ export const useAreablockDropzones = ({
   areablockManager,
   areaTypes,
   config,
+  getCurrentElements,
   onMoveArea,
   onDropAreablock
 }: UseAreablockDropzonesProps): UseAreablockDropzonesReturn => {
@@ -51,7 +53,8 @@ export const useAreablockDropzones = ({
       return false
     }
 
-    const typeUsageCounts = configUtils.getTypeUsageCounts(areablockManager.queryElements().map(el => areablockManager.getElementType(el)))
+    const countedElements = getCurrentElements?.() ?? areablockManager.queryElements()
+    const typeUsageCounts = configUtils.getTypeUsageCounts(countedElements.map(el => areablockManager.getElementType(el)))
     return !configUtils.isTypeLimitReached(config, areablockType, typeUsageCounts[areablockType] ?? 0)
   }
 

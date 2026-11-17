@@ -23,6 +23,7 @@ export interface UseAreablockControlsParams {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
+  getCurrentElements: () => HTMLElement[]
   onAddArea: (element: HTMLElement | null, areaType?: string) => Promise<void>
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
@@ -45,6 +46,7 @@ export const useAreablockControls = ({
   areablockManager,
   areaTypes,
   config,
+  getCurrentElements,
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
@@ -75,6 +77,7 @@ export const useAreablockControls = ({
     areablockManager,
     areaTypes,
     config,
+    getCurrentElements,
     onMoveArea,
     onDropAreablock: async (areaType: string, index: number) => {
       if (isInherited) return
@@ -129,8 +132,11 @@ export const useAreablockControls = ({
     const portals: React.ReactPortal[] = []
 
     const currentAreaEntries = areablockManager.queryElements()
-    const limitReached = configUtils.isLimitReached(currentAreaEntries.length, config?.limit)
-    const currentTypeUsageCounts = configUtils.getTypeUsageCounts(currentAreaEntries.map(entry => areablockManager.getElementType(entry)))
+    // Counts come from the reload-aware source: in reload mode pending additions
+    // exist only as placeholders outside the DOM until the save-and-reload lands.
+    const countedElements = getCurrentElements()
+    const limitReached = configUtils.isLimitReached(countedElements.length, config?.limit)
+    const currentTypeUsageCounts = configUtils.getTypeUsageCounts(countedElements.map(entry => areablockManager.getElementType(entry)))
     const typeUsageCountsKey = JSON.stringify(currentTypeUsageCounts)
     if (typeUsageCountsCacheRef.current.key !== typeUsageCountsKey) {
       typeUsageCountsCacheRef.current = { key: typeUsageCountsKey, value: currentTypeUsageCounts }
@@ -209,7 +215,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onCopyArea, onCutArea, onPasteArea, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
+  }, [areablockManager, areaTypes, config, getCurrentElements, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onCopyArea, onCutArea, onPasteArea, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
 
   return {
     renderAreablockToolbar
