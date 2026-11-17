@@ -112,7 +112,7 @@ export const useAreablockControls = ({
     }
   }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
-  const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
+  const createEmptyStatePortal = useCallback((container: HTMLElement, typeUsageCounts: Record<string, number>): React.ReactPortal => {
     const emptyStateToolbar = (
       <EmptyStateAreablockToolbar
         areaTypes={ areaTypes }
@@ -123,6 +123,7 @@ export const useAreablockControls = ({
         } }
         onOverwrite={ onOverwrite }
         onPasteArea={ onPasteArea }
+        typeUsageCounts={ typeUsageCounts }
       />
     )
     return ReactDOM.createPortal(emptyStateToolbar, container)
@@ -146,7 +147,7 @@ export const useAreablockControls = ({
     if (currentAreaEntries.length === 0) {
       const container = areablockManager.getContainer()
       if (container !== null) {
-        const portal = createEmptyStatePortal(container)
+        const portal = createEmptyStatePortal(container, typeUsageCounts)
         portals.push(portal)
       }
     } else if (!isInherited) {

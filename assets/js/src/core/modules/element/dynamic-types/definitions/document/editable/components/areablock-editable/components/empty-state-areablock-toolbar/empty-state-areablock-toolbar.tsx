@@ -37,6 +37,9 @@ export interface EmptyStateAreablockToolbarProps {
   onPasteArea: (element: HTMLElement | null) => void
   isInherited?: boolean
   onOverwrite?: () => void
+  // In reload mode pending additions exist before any DOM entry does, so the
+  // empty state must not assume a usage count of zero.
+  typeUsageCounts?: Record<string, number>
 }
 
 export const EmptyStateAreablockToolbar = ({
@@ -45,7 +48,8 @@ export const EmptyStateAreablockToolbar = ({
   onClick,
   onPasteArea,
   isInherited = false,
-  onOverwrite
+  onOverwrite,
+  typeUsageCounts = {}
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
@@ -54,11 +58,12 @@ export const EmptyStateAreablockToolbar = ({
   const canPaste = !isNil(clipboardItem) &&
     !configUtils.isLimitReached(0, config?.limit) &&
     configUtils.isTypePasteable(config, clipboardItem.type) &&
-    !configUtils.isTypeLimitReached(config, clipboardItem.type, 0)
+    !configUtils.isTypeLimitReached(config, clipboardItem.type, typeUsageCounts[clipboardItem.type] ?? 0)
 
   const { menuItems } = useAreablockMenu({
     config,
-    onAddArea: (areaType: string) => { void onClick(areaType) }
+    onAddArea: (areaType: string) => { void onClick(areaType) },
+    typeUsageCounts
   })
 
   const handleDropzoneItem = async (info: DropInfo, index: number): Promise<void> => {
@@ -76,12 +81,12 @@ export const EmptyStateAreablockToolbar = ({
 
     const areablockType = info.data.areablockType
     return configUtils.isTypeAllowed(config, areablockType) &&
-      !configUtils.isTypeLimitReached(config, areablockType, 0)
+      !configUtils.isTypeLimitReached(config, areablockType, typeUsageCounts[areablockType] ?? 0)
   }
 
   const renderAddButton = (): React.ReactNode => {
     if (areaTypes.length === 1) {
-      const singleTypeLimitReached = configUtils.isTypeLimitReached(config, areaTypes[0].type, 0)
+      const singleTypeLimitReached = configUtils.isTypeLimitReached(config, areaTypes[0].type, typeUsageCounts[areaTypes[0].type] ?? 0)
 
       return (
         <IconButton
