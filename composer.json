@@ -18,8 +18,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": "~8.4.0 || ~8.5.0",
-        "pimcore/pimcore": "^2026.1.6",
-        "pimcore/studio-backend-bundle": "^2026.4"
+        "pimcore/pimcore": "dev-cs-store-improvements as 2026.99.9",
+        "pimcore/studio-backend-bundle": "dev-cs-store-improvements as 2026.99.9"
     },
     "require-dev": {
         "codeception/codeception": "^5.3.7",

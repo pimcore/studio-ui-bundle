@@ -16,12 +16,15 @@ import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { kebabCase } from 'lodash'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Input } from '@Pimcore/components/input/input'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -31,20 +34,42 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import { serviceIds, useInjection } from '@sdk/app'
+import { useAppDispatch } from '@Pimcore/app/store'
 import {
+  asKeyDetail,
   type ClassificationStoreConfigurationKeyDetail,
+  refetchKeyCollection,
   useClassificationStoreConfigurationKeyCollectionQuery,
   useClassificationStoreConfigurationKeyCreateMutation,
   useClassificationStoreConfigurationKeyDeleteMutation,
+  useClassificationStoreConfigurationKeyRestoreMutation,
   useClassificationStoreConfigurationKeyUpdateMutation
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+import {
+  CLASSIFICATION_STORE_KEY_TYPE_TAG,
+  isKeyTypeHeldByEngine,
+  isOfferedAsKeyType
+} from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
+import { useStoreEngine } from '@Pimcore/modules/classification-store-config/hooks/use-store-engine'
 import { KeyDefinitionModal } from './keys/key-definition-modal'
+import { MetadataModal } from './shared/metadata-modal'
+import { TitlesModal } from './shared/titles-modal'
+import { PairActions } from './shared/pair-actions'
+import { type PairMap } from './shared/pairs'
 
 interface IKeysTabProps {
   storeId: number
 }
 
+type KeysView = 'active' | 'deleted'
+
 type KeyRow = ClassificationStoreConfigurationKeyDetail & { title: string | undefined }
+
+/** The pair editor being open, and the key it was opened on. */
+interface PairEditorState {
+  kind: 'metadata' | 'titles'
+  row: ClassificationStoreConfigurationKeyDetail
+}
 
 export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -54,23 +79,54 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
 
+  const { engineCapabilities } = useStoreEngine(storeId)
+  const dispatch = useAppDispatch()
+
   const typeSelectOptions = useMemo(() => (
     fieldDefinitionRegistry
-      .getTypesByTags(['classificationStore'], { area: ['classification-store'], path: [], fieldDefinitions: {} })
-      .map((type) => ({
-        label: t('field-definition.' + kebabCase(type.id)),
-        value: type.id
-      }))
+      .getTypesByTags([CLASSIFICATION_STORE_KEY_TYPE_TAG], { area: ['classification-store'], path: [], fieldDefinitions: {} })
+      .filter((type) => isOfferedAsKeyType(type.id))
+      .map((type) => ({ id: type.id, label: t('field-definition.' + kebabCase(type.id)) }))
       .sort((a, b) => a.label.localeCompare(b.label))
-  ), [fieldDefinitionRegistry, t])
+      .map(({ id, label }) => {
+        if (isKeyTypeHeldByEngine(id, engineCapabilities)) {
+          return { label, value: id }
+        }
+
+        return {
+          label: (
+            <Tooltip title={ t('classification-store.key-type-needs-document-engine') }>
+              <span>{label}</span>
+            </Tooltip>
+          ),
+          displayValue: label,
+          disabled: true,
+          value: id
+        }
+      })
+  ), [fieldDefinitionRegistry, t, engineCapabilities])
 
   const [definitionKeyId, setDefinitionKeyId] = useState<number | undefined>(undefined)
   const [openedDefinitionKey, setOpenedDefinitionKey] = useState<ClassificationStoreConfigurationKeyDetail | undefined>(undefined)
   const [definitionModalOpen, setDefinitionModalOpen] = useState(false)
+  const [pairEditor, setPairEditor] = useState<PairEditorState | undefined>(undefined)
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
+  const [view, setView] = useState<KeysView>('active')
+  const isDeletedView = view === 'deleted'
+
+  const viewOptions = useMemo(() => [
+    { label: t('classification-store.keys-view.active'), value: 'active' },
+    { label: t('classification-store.keys-view.deleted'), value: 'deleted' }
+  ], [t])
+
+  const onViewChange = useCallback((newView: string) => {
+    setView(newView as KeysView)
+    setSearchTerm('')
+    setPage(1)
+  }, [])
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)
@@ -94,14 +150,38 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
               }
             }
           : {})
-      }
+      },
+      ...(isDeletedView ? { disabledOnly: true } : {})
     }
-  }), [storeId, page, pageSize, searchTerm, sorting])
+  }), [storeId, page, pageSize, searchTerm, sorting, isDeletedView])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyCollectionQuery(queryArgs)
+  // currentData, so a view switch never shows the other view's rows under its own actions; the
+  // Deleted view is re-read when opened, as a key deleted meanwhile is not in a cached page.
+  const {
+    currentData: data,
+    data: lastData,
+    error,
+    isError,
+    isLoading,
+    isFetching,
+    refetch
+  } = useClassificationStoreConfigurationKeyCollectionQuery(
+    queryArgs,
+    { refetchOnMountOrArgChange: isDeletedView }
+  )
 
   const keys = data?.items ?? []
-  const total = data?.totalItems ?? 0
+  // Rows come from currentData; the total holds its last known value while a request is in flight
+  // so the pagination does not collapse to one page on every page change, search or view switch.
+  const total = (data ?? (isFetching && !isError ? lastData : undefined))?.totalItems ?? 0
+
+  // A refused list request must not read as an empty store: a 403 or a 500 leaves `data`
+  // undefined, so the failure is reported rather than left to look like "nothing here".
+  useEffect(() => {
+    if (isError && error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   useEffect(() => {
     if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
@@ -112,21 +192,21 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   // Derive the current key object from the live cache by ID so the definition
   // modal always receives the latest values (e.g. after an optimistic type change). The key the
   // modal was opened with is the fallback while the live page does not hold it (other page, search).
-  const definitionKey = definitionKeyId !== undefined
-    ? keys.find((k) => k.id === definitionKeyId) ?? openedDefinitionKey
+  const cachedDefinitionKey = definitionKeyId !== undefined
+    ? keys.find((k) => k.id === definitionKeyId)
     : undefined
+  const definitionKey = cachedDefinitionKey === undefined ? openedDefinitionKey : asKeyDetail(cachedDefinitionKey)
 
   const [createKey] = useClassificationStoreConfigurationKeyCreateMutation()
   const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()
   const [deleteKey] = useClassificationStoreConfigurationKeyDeleteMutation()
+  const [restoreKey] = useClassificationStoreConfigurationKeyRestoreMutation()
 
-  const getKeyTitle = (key: ClassificationStoreConfigurationKeyDetail): string | null => {
-    const keyDefinition = key.definition as { title?: unknown } | null
-    return typeof keyDefinition?.title === 'string' ? keyDefinition.title : null
-  }
-
+  // The configured title is a column of its own on the key, and the one the object editor
+  // labels the key with. Deriving it from the definition blob instead would write the blob's
+  // title back over the configured one on every save that does not mean to touch the title.
   const gridData = useMemo(
-    () => keys.map((key) => ({ ...key, title: getKeyTitle(key) ?? undefined })),
+    () => keys.map((key) => ({ ...key, title: key.title ?? undefined })),
     [keys]
   )
 
@@ -178,10 +258,11 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             id: createdKey.id,
             classificationStoreConfigurationKeyUpdate: {
               name: createdKey.name,
-              title: getKeyTitle(createdKey),
               description,
-              type: createdKey.type,
-              definition: createdKey.definition
+              // This call writes the description of the key just created and nothing else, so
+              // the type and the definition are left to the stored ones (see handleTitleChange).
+              type: null,
+              definition: null
             }
           })
 
@@ -192,6 +273,22 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       }
     })
   }
+
+  // The cached page the dialog's row comes from is only as fresh as the last read of it: a key
+  // update invalidates no tag, and a write made outside this tab never reaches the cache at all. So
+  // the dialog asks for the page it is listed on to be re-read before it seeds its form from it.
+  const handleReloadDefinitionKey = useCallback(async (): Promise<boolean> => {
+    const result = await refetchKeyCollection(dispatch, queryArgs)
+
+    // Reported here rather than in the dialog, which never sees the raw error; it closes instead.
+    if (result.isError) {
+      trackError(new ApiError(result.error!))
+
+      return false
+    }
+
+    return true
+  }, [dispatch, queryArgs])
 
   const handleOpenDefinition = (key: ClassificationStoreConfigurationKeyDetail): void => {
     setDefinitionKeyId(key.id)
@@ -214,7 +311,12 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const handleDelete = (key: ClassificationStoreConfigurationKeyDetail): void => {
     void modal.confirm({
       title: t('delete'),
-      content: t('classification-store.delete-key', { keyName: key.name }),
+      content: (
+        <>
+          <p>{ t('classification-store.delete-key', { keyName: key.name }) }</p>
+          <p>{ t('classification-store.delete-key-consequence') }</p>
+        </>
+      ),
       onOk: async () => {
         const response = await deleteKey({ id: key.id })
 
@@ -225,6 +327,36 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     })
   }
 
+  const handleRestore = (key: ClassificationStoreConfigurationKeyDetail): void => {
+    void modal.confirm({
+      title: t('classification-store.restore-key'),
+      content: (
+        <>
+          <p>{ t('classification-store.restore-key-question', { keyName: key.name }) }</p>
+          <p>{ t('classification-store.restore-key-consequence') }</p>
+        </>
+      ),
+      onOk: async () => {
+        const response = await restoreKey({ id: key.id })
+
+        if ('error' in response) {
+          trackError(new ApiError(response.error!))
+        }
+      }
+    })
+  }
+
+  // Every writer below sends the one field its cell changed and nothing else. An absent title or
+  // description leaves the stored one alone, and a null type or definition does the same for the
+  // two the payload cannot omit; echoing a value back from the row the edit was read on reverts
+  // whatever another writer saved into that field meanwhile. `name` is the one field the payload
+  // requires, and the cache carries this request's own name from the moment it is sent.
+  //
+  // `definition` is the clearest case: a definition read out of the cache is sent back as the grid
+  // last saw it, and the response then carries it through the preservation mask of the cache patch,
+  // over a definition — the index flag, the localization — the key definition dialog saved while
+  // the cell edit was in flight. A cell edit never writes the definition, so it must not send the
+  // one it happens to hold.
   const handleTitleChange = useCallback(async (
     key: KeyRow,
     newTitle: string
@@ -234,9 +366,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       classificationStoreConfigurationKeyUpdate: {
         name: key.name,
         title: newTitle.trim() === '' ? null : newTitle,
-        description: key.description ?? null,
-        type: key.type,
-        definition: key.definition
+        type: null,
+        definition: null
       }
     })
 
@@ -244,6 +375,32 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       trackError(new ApiError(response.error!))
     }
   }, [updateKey])
+
+  // Sends the pairs and the name the payload requires, and nothing else: an absent title or
+  // description leaves the stored one alone, and a null type or definition does the same.
+  const keysRef = useRef(keys)
+  keysRef.current = keys
+
+  const handleSavePairs = async (next: PairMap | null): Promise<void> => {
+    if (pairEditor === undefined) return
+
+    const key = keysRef.current.find((k) => k.id === pairEditor.row.id) ?? pairEditor.row
+    const response = await updateKey({
+      id: key.id,
+      classificationStoreConfigurationKeyUpdate: {
+        name: key.name,
+        type: null,
+        definition: null,
+        customMetadata: next
+      }
+    })
+
+    if ('error' in response) {
+      throw new ApiError(response.error!)
+    }
+  }
+
+  const handleClosePairEditor = (): void => { setPairEditor(undefined) }
 
   const handleTypeChange = useCallback(async (
     key: ClassificationStoreConfigurationKeyDetail,
@@ -253,8 +410,6 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
       id: key.id,
       classificationStoreConfigurationKeyUpdate: {
         name: key.name,
-        title: getKeyTitle(key),
-        description: key.description ?? null,
         type: newType,
         definition: null
       }
@@ -272,6 +427,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   handleOpenDefinitionRef.current = handleOpenDefinition
   const handleDeleteRef = useRef(handleDelete)
   handleDeleteRef.current = handleDelete
+  const handleRestoreRef = useRef(handleRestore)
+  handleRestoreRef.current = handleRestore
+  const setPairEditorRef = useRef(setPairEditor)
+  setPairEditorRef.current = setPairEditor
   const handleTitleChangeRef = useRef(handleTitleChange)
   handleTitleChangeRef.current = handleTitleChange
   const handleTypeChangeRef = useRef(handleTypeChange)
@@ -281,6 +440,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     columnHelper.accessor('id', {
       header: t('classification-store.columns.id'),
       size: 60
+    }),
+    columnHelper.accessor('identifier', {
+      header: t('classification-store.columns.matching-id'),
+      size: 180
     }),
     columnHelper.accessor('name', {
       header: t('classification-store.columns.name'),
@@ -310,7 +473,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     columnHelper.display({
       id: 'actions',
       header: t('classification-store.columns.actions'),
-      size: 90,
+      size: 156,
       cell: (info) => (
         <Flex
           align="center"
@@ -321,12 +484,56 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             onClick={ () => { handleOpenDefinitionRef.current(info.row.original) } }
             tooltip={ { title: t('classification-store.edit-definition') } }
           />
+          <PairActions
+            customMetadata={ info.row.original.customMetadata }
+            name={ info.row.original.name }
+            onEditMetadata={ () => { setPairEditorRef.current({ kind: 'metadata', row: info.row.original }) } }
+            onEditTitles={ () => { setPairEditorRef.current({ kind: 'titles', row: info.row.original }) } }
+          />
           <IconButton
             icon={ { value: 'trash' } }
             onClick={ () => { handleDeleteRef.current(info.row.original) } }
             tooltip={ { title: t('delete') } }
           />
         </Flex>
+      )
+    })
+  ], [t, columnHelper, typeSelectOptions])
+
+  // A deleted key is a recycle bin row: read-only cells, and Restore as its one action.
+  const deletedColumns = useMemo(() => [
+    columnHelper.accessor('id', {
+      header: t('classification-store.columns.id'),
+      size: 60
+    }),
+    columnHelper.accessor('name', {
+      header: t('classification-store.columns.name'),
+      size: 160
+    }),
+    columnHelper.accessor('title', {
+      header: t('classification-store.columns.title'),
+      size: 160
+    }),
+    columnHelper.accessor('type', {
+      header: t('classification-store.columns.type'),
+      size: 180,
+      meta: { type: 'select', config: { options: typeSelectOptions } }
+    }),
+    columnHelper.accessor('description', {
+      header: t('classification-store.columns.description'),
+      size: 200
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: t('classification-store.columns.actions'),
+      size: 90,
+      cell: (info) => (
+        <IconButton
+          aria-label={ t('classification-store.restore-key') }
+          icon={ { value: 'restore' } }
+          onClick={ () => { handleRestoreRef.current(info.row.original) } }
+          tooltip={ { title: t('classification-store.restore-key') } }
+        />
       )
     })
   ], [t, columnHelper, typeSelectOptions])
@@ -363,8 +570,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
         renderTopBar={
           <Flex
             align="center"
+            gap="extra-small"
             justify="space-between"
             style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
+            wrap="wrap"
           >
             <Flex
               align="center"
@@ -378,14 +587,25 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                 {t('classification-store.add-key')}
               </IconTextButton>
             </Flex>
-            <SearchInput
-              loading={ isFetching }
-              onSearch={ (value) => {
-                setSearchTerm(value)
-                setPage(1)
-              } }
-              placeholder={ t('search') }
-            />
+            <Flex
+              align="center"
+              gap="small"
+            >
+              <Segmented
+                onChange={ onViewChange }
+                options={ viewOptions }
+                value={ view }
+              />
+              <SearchInput
+                key={ view }
+                loading={ isFetching }
+                onSearch={ (value) => {
+                  setSearchTerm(value)
+                  setPage(1)
+                } }
+                placeholder={ t('search') }
+              />
+            </Flex>
           </Flex>
         }
       >
@@ -394,13 +614,14 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
           vertical
         >
           <Grid
-            columns={ columns }
+            columns={ isDeletedView ? deletedColumns : columns }
             data={ gridData }
             enableSorting
             isLoading={ isLoading || isFetching }
             manualSorting
             onSortingChange={ onSortingChange }
             onUpdateCellData={ ({ columnId, value, rowData }) => {
+              // Each branch sends its own field only (see handleTitleChange).
               const typedRow = rowData as KeyRow
               if (columnId === 'name') {
                 const newName = (value as string).trim()
@@ -409,10 +630,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: newName,
-                    title: getKeyTitle(typedRow),
-                    description: typedRow.description ?? null,
-                    type: typedRow.type,
-                    definition: typedRow.definition
+                    type: null,
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               } else if (columnId === 'title') {
@@ -424,24 +643,49 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                   id: typedRow.id,
                   classificationStoreConfigurationKeyUpdate: {
                     name: typedRow.name,
-                    title: getKeyTitle(typedRow),
                     description: (value as string).trim() === '' ? null : (value as string),
-                    type: typedRow.type,
-                    definition: typedRow.definition
+                    type: null,
+                    definition: null
                   }
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               }
             } }
             sorting={ sorting }
           />
+          {isDeletedView && !isFetching && !isError && data !== undefined && keys.length === 0 && (
+            <Text type="secondary">
+              { searchTerm.length > 0
+                ? t('classification-store.keys-deleted-no-results')
+                : t('classification-store.keys-deleted-empty') }
+            </Text>
+          )}
         </Flex>
       </ContentLayout>
 
       <KeyDefinitionModal
+        engineCapabilities={ engineCapabilities }
         keyDetail={ definitionKey }
         onClose={ handleCloseDefinition }
         onSaved={ handleDefinitionSaved }
         open={ definitionModalOpen }
+        reloadKey={ handleReloadDefinitionKey }
+      />
+
+      <MetadataModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'metadata' }
+        value={ pairEditor?.row.customMetadata }
+      />
+      <TitlesModal
+        confirmLoading={ false }
+        entityName={ pairEditor?.row.name ?? '' }
+        onCancel={ handleClosePairEditor }
+        onSave={ handleSavePairs }
+        open={ pairEditor?.kind === 'titles' }
+        value={ pairEditor?.row.customMetadata }
       />
     </>
   )

@@ -23,6 +23,15 @@ export class DynamicTypeObjectDataNumeric extends DynamicTypeObjectDataAbstractN
   gridCellEditMode: EditMode = 'edit-modal'
   dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Number'])
 
+  /** A value that is not empty and does not parse as a finite number cannot be shown in the number input. */
+  canReadValue (value: unknown): boolean {
+    if (value === null || value === undefined || value === '') {
+      return true
+    }
+
+    return (typeof value === 'number' || typeof value === 'string') && Number.isFinite(Number(value))
+  }
+
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value = props.cellProps.getValue()
 

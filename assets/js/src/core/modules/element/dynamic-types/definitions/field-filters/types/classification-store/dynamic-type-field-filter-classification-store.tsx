@@ -17,8 +17,10 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-object-adapter'
 import { MultiValueFilterSupportProvider } from '../../utils/multi-value-filter-support'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { keyFilterTypeOf } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/key-filter-type'
 import { container, serviceIds } from '@sdk/app'
 import { type DynamicTypeObjectDataRegistry } from '@sdk/modules/element'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 @injectable()
 export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldFilterAbstract {
@@ -39,8 +41,14 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
 
   shouldApply (filter: FieldFilter): boolean {
     const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const typeId = keyFilterTypeOf(filter.meta.fieldDefinition)
 
-    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+    // A delegate the registry no longer holds drops this one filter instead of failing the listing.
+    if (!objectRegistry.hasDynamicType(typeId)) {
+      return false
+    }
+
+    const objectType = objectRegistry.getDynamicType(typeId)
 
     return objectType.dynamicTypeFieldFilterType.shouldApply(filter)
   }
@@ -48,12 +56,20 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
   transformFilterToApiRequest (filter: FieldFilter): any {
     const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
-    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+    const typeId = keyFilterTypeOf(filter.meta.fieldDefinition)
+
+    if (!objectRegistry.hasDynamicType(typeId)) {
+      return null
+    }
+
+    const objectType = objectRegistry.getDynamicType(typeId)
     const subTypeFilter = objectType.dynamicTypeFieldFilterType.transformFilterToApiRequest(filter)
     const filterType = objectType.dynamicTypeFieldFilterType.getFieldFilterType()
 
     const splittedType = filterType.split('.')
     splittedType[0] = 'classificationstore'
+
+    const variant = filter.meta.variant
 
     return {
       ...filter,
@@ -61,7 +77,9 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
       filterValue: {
         value: subTypeFilter.filterValue,
         keyId: filter.meta.keyId,
-        groupId: filter.meta.groupId
+        groupId: filter.meta.groupId,
+        // the default slot carries no variant, and the backend refuses an empty one
+        ...(isNonEmptyString(variant) ? { variant } : {})
       }
     }
   }

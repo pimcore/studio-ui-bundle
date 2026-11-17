@@ -29,6 +29,7 @@ describe('DynamicTypeFieldFilterClassificationStore', () => {
     }
 
     ;(container.get as jest.Mock).mockReturnValue({
+      hasDynamicType: () => true,
       getDynamicType: () => ({ dynamicTypeFieldFilterType })
     })
 
@@ -45,5 +46,75 @@ describe('DynamicTypeFieldFilterClassificationStore', () => {
     expect(filter.type).toBe('dataobject.classificationstore')
     expect(result.type).toBe('classificationstore.select')
     expect(result.filterValue).toEqual({ value: 'foo', keyId: 7, groupId: 4 })
+  })
+
+  it('transforms the request of a multiValue key as its delegate does, re-typed to classificationstore', () => {
+    const transformFilterToApiRequest = jest.fn().mockReturnValue({ filterValue: 'foo' })
+    const getDynamicType = jest.fn(() => ({
+      dynamicTypeFieldFilterType: { transformFilterToApiRequest, getFieldFilterType: () => 'dataobject.input' }
+    }))
+
+    ;(container.get as jest.Mock).mockReturnValue({ hasDynamicType: () => true, getDynamicType })
+
+    const filter: FieldFilter = {
+      key: 'TestClassificationStoreFilter',
+      type: 'dataobject.classificationstore',
+      filterValue: 'foo',
+      locale: null,
+      meta: { fieldDefinition: { fieldtype: 'multiValue', delegateDatatype: 'input' }, keyId: 7, groupId: 4, translationKey: 'Type' }
+    }
+
+    const result = new DynamicTypeFieldFilterClassificationStore().transformFilterToApiRequest(filter)
+
+    expect(getDynamicType).toHaveBeenCalledWith('input')
+    expect(result.type).toBe('classificationstore.input')
+    expect(result.filterValue).toEqual({ value: 'foo', keyId: 7, groupId: 4 })
+  })
+
+  // The index holds a declared variant under its own entry, so the request has to name the one it reads.
+  it('sends the variant a filter row addresses, and nothing for the default slot', () => {
+    const dynamicTypeFieldFilterType = {
+      transformFilterToApiRequest: jest.fn().mockReturnValue({ filterValue: 'foo' }),
+      getFieldFilterType: jest.fn().mockReturnValue('dataobject.input')
+    }
+
+    ;(container.get as jest.Mock).mockReturnValue({
+      hasDynamicType: () => true,
+      getDynamicType: () => ({ dynamicTypeFieldFilterType })
+    })
+
+    const meta = { fieldDefinition: { fieldtype: 'multiValue', delegateDatatype: 'input' }, keyId: 7, groupId: 4, translationKey: 'Type' }
+    const filter: FieldFilter = {
+      key: 'TestClassificationStoreFilter',
+      type: 'dataobject.classificationstore',
+      filterValue: 'foo',
+      locale: null,
+      meta: { ...meta, variant: 'Metric' }
+    }
+    const subject = new DynamicTypeFieldFilterClassificationStore()
+
+    expect(subject.transformFilterToApiRequest(filter).filterValue)
+      .toEqual({ value: 'foo', keyId: 7, groupId: 4, variant: 'Metric' })
+    expect(subject.transformFilterToApiRequest({ ...filter, meta: { ...meta, variant: null } }).filterValue)
+      .toEqual({ value: 'foo', keyId: 7, groupId: 4 })
+  })
+
+  it('drops a filter whose delegate type the registry no longer holds instead of throwing', () => {
+    ;(container.get as jest.Mock).mockReturnValue({
+      hasDynamicType: () => false,
+      getDynamicType: jest.fn()
+    })
+
+    const filter: FieldFilter = {
+      key: 'Gone',
+      type: 'dataobject.classificationstore',
+      filterValue: 'foo',
+      locale: null,
+      meta: { fieldDefinition: { fieldtype: 'multiValue', delegateDatatype: 'gone' }, keyId: 7, groupId: 4, translationKey: 'Type' }
+    }
+    const subject = new DynamicTypeFieldFilterClassificationStore()
+
+    expect(subject.shouldApply(filter)).toBe(false)
+    expect(() => subject.transformFilterToApiRequest(filter)).not.toThrow()
   })
 })

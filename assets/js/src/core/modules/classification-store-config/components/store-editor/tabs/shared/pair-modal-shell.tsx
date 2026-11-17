@@ -1,0 +1,152 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Modal } from '@Pimcore/components/modal/modal'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import trackError, { type ApiError } from '@Pimcore/modules/app/error-handler'
+import { PairList, type PairListHandle } from './pair-list'
+import { type PairMap, type PairView } from './pairs'
+
+const DISCARD_KEY = 'classification-store-pairs-discard'
+
+export interface IPairModalProps {
+  open: boolean
+  entityName: string
+  /** The row's `customMetadata`, verbatim. */
+  value: object | null | undefined
+  confirmLoading: boolean
+  /** Rejects with an ApiError when the save fails. */
+  onSave: (next: PairMap | null) => Promise<void>
+  onCancel: () => void
+}
+
+interface IPairModalShellProps extends IPairModalProps {
+  view: PairView
+  titleKey: string
+  successKey: string
+  hint?: string
+}
+
+/** The modal around the shared pair list; the two shells differ only in what they hand it. */
+export const PairModalShell = ({
+  open,
+  entityName,
+  value,
+  confirmLoading,
+  onSave,
+  onCancel,
+  view,
+  titleKey,
+  successKey,
+  hint
+}: IPairModalShellProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const messageApi = useMessage()
+  const formModal = useFormModal()
+  const listRef = useRef<PairListHandle>(null)
+  const [dirty, setDirty] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const session = useRef(0)
+
+  // The list seeds itself once, so its identity has to change whenever the editor is opened or
+  // pointed at another entity. `destroyOnClose` only unmounts after the leave animation, and a
+  // reopen inside that window would otherwise keep the previous list alive. The key must not
+  // involve entityName or value: both go empty in the render that closes the editor, and a new key
+  // then would remount the list as "No pairs yet" for the length of the fade.
+  const [openCount, setOpenCount] = useState(0)
+  const [wasOpen, setWasOpen] = useState(open)
+  if (open !== wasOpen) {
+    setWasOpen(open)
+    if (open) setOpenCount((count) => count + 1)
+  }
+
+  useEffect(() => {
+    if (!open) {
+      setDirty(false)
+      setSaving(false)
+      // Whatever save is still in flight belongs to the editor that has just gone.
+      session.current += 1
+    }
+  }, [open])
+
+  const handleOk = async (): Promise<void> => {
+    if (saving) return
+
+    const collected = listRef.current?.collect()
+    if (collected === undefined) return
+
+    const startedIn = session.current
+    setSaving(true)
+
+    try {
+      await onSave(collected.next)
+    } catch (error) {
+      trackError(error as ApiError)
+      if (session.current === startedIn) setSaving(false)
+      return
+    }
+
+    // The editor this save was made in was closed meanwhile; what is open now is not its own.
+    if (session.current !== startedIn) return
+
+    setSaving(false)
+    messageApi.success(t(successKey))
+    onCancel()
+  }
+
+  const handleCancel = (): void => {
+    // A save already dispatched cannot be taken back, so the editor stays until it has answered.
+    if (saving) return
+
+    if (!dirty) {
+      onCancel()
+      return
+    }
+
+    formModal.confirm({
+      title: t('unsaved-changes.title'),
+      content: t('unsaved-changes.close-message'),
+      okText: t('discard-changes'),
+      dontAskAgainKey: DISCARD_KEY,
+      onOk: onCancel
+    })
+  }
+
+  const handleDirtyChange = useCallback((next: boolean): void => { setDirty(next) }, [])
+
+  return (
+    <Modal
+      cancelButtonProps={ { disabled: saving } }
+      confirmLoading={ confirmLoading || saving }
+      destroyOnClose
+      keyboard={ !saving }
+      limitContentHeight
+      maskClosable={ !saving }
+      okText={ t('save') }
+      onCancel={ handleCancel }
+      onOk={ () => { void handleOk() } }
+      open={ open }
+      size="L"
+      title={ t(titleKey, { name: entityName }) }
+    >
+      <PairList
+        hint={ hint }
+        key={ openCount }
+        onDirtyChange={ handleDirtyChange }
+        ref={ listRef }
+        value={ value }
+        view={ view }
+      />
+    </Modal>
+  )
+}

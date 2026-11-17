@@ -18,6 +18,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { createColumnHelper, type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import {
+  asKeyDetail,
   type ClassificationStoreConfigurationKeyDetail,
   useClassificationStoreConfigurationKeyCollectionQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
@@ -91,7 +92,7 @@ export const KeySelectionDialog = ({
 
   const availableKeys = useMemo(() => {
     const excludedSet = new Set(excludedKeyIds)
-    return (data?.items ?? []).filter((k) => !excludedSet.has(k.id))
+    return (data?.items ?? []).filter((k) => !excludedSet.has(k.id)).map(asKeyDetail)
   }, [data?.items, excludedKeyIds])
 
   const columnHelper = createColumnHelper<ClassificationStoreConfigurationKeyDetail>()

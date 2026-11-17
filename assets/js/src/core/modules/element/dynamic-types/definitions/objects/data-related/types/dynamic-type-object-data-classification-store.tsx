@@ -13,6 +13,7 @@ import { get, isEmpty, isUndefined } from 'lodash'
 import { type FormItemProps } from 'antd'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ClassificationStore, type ClassificationStoreProps } from '../components/classification-store/classification-store'
+import { getKeyLabel, type KeyLabelKey } from '../components/classification-store/utils/key-label'
 import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
   type IFormattedDataStructureData,
@@ -53,9 +54,9 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
     const { item, fieldBreadcrumbTitle, formPath } = props
 
-    if (item?.localized === false) {
-      return []
-    }
+    // The key's own flag decides, a null or absent one inherits the field's, so a mixed store
+    // lists exactly the keys that hold a value per language.
+    const isFieldLocalized = item?.localized === true
 
     const activeGroupDefinitions = normalizeGroups(item.activeGroupDefinitions)
 
@@ -91,9 +92,13 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           return []
         }
 
+        if ((dataItem.localized ?? isFieldLocalized) !== true) {
+          return []
+        }
+
         return [{
           fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
-          fieldData: { ...dataItem.definition, name: dataItem.id },
+          fieldData: { ...dataItem.definition, name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey) },
           formPath: [...formPath, item.name, String(groupId), CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE, dataItem.id],
           localeInFormPath: true
         }]
@@ -138,13 +143,13 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           if (isEmpty(fieldValue)) {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey) }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           }
 
           return Object.entries(fieldValue).map(([key, value]) => {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${key}` : `${fieldPathValue}.${key}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id, locale: key }, fieldValue: value?.[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey), locale: key }, fieldValue: value?.[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           })
         }
 
