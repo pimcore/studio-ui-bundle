@@ -14,18 +14,23 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Input } from '@Pimcore/components/input/input'
 import { Content } from '@Pimcore/components/content/content'
+import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
+import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
 import { type ServiceUser } from '../../service-users-api-slice-enhanced'
 import { CredentialsSection } from '../../credentials/credentials-section'
-import { type ServiceUserDraft } from '../service-user-draft'
+import { sortIds, type ServiceUserDraft } from '../service-user-draft'
 
 interface SettingsTabProps {
   serviceUser: ServiceUser
-  draft: Pick<ServiceUserDraft, 'email'>
+  draft: Pick<ServiceUserDraft, 'email' | 'responsibleUsers' | 'responsibleRoles'>
   onChange: (change: Partial<ServiceUserDraft>) => void
 }
 
 export const SettingsTab = ({ serviceUser, draft, onChange }: SettingsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { data: userList } = useUserGetCollectionQuery()
+  const { data: roleList } = useRoleGetCollectionQuery()
 
   return (
     <Content padded>
@@ -57,6 +62,31 @@ export const SettingsTab = ({ serviceUser, draft, onChange }: SettingsTabProps):
             type="email"
             value={ draft.email ?? '' }
           />
+        </Flex>
+        <Flex
+          gap="mini"
+          vertical
+        >
+          <Text strong>{t('service-users.field.responsible-users')}</Text>
+          {/*
+            The plain lists need only the user management permission this screen already requires. The
+            dropdown sorts values into users and roles by the role list and reads its initial value once,
+            so it is mounted only when both lists are there and remounted when the saved value changes.
+          */}
+          {userList !== undefined && roleList !== undefined && (
+            <UsersRolesDropdown
+              includeCurrentUser
+              initialSharedRoles={ draft.responsibleRoles }
+              initialSharedUsers={ draft.responsibleUsers }
+              key={ `${serviceUser.responsibleUsers?.join(',') ?? ''}|${serviceUser.responsibleRoles?.join(',') ?? ''}` }
+              onChange={ ({ sharedUsers, sharedRoles }) => {
+                onChange({ responsibleUsers: sortIds(sharedUsers), responsibleRoles: sortIds(sharedRoles) })
+              } }
+              roleList={ roleList }
+              userList={ userList }
+            />
+          )}
+          <Text type="secondary">{t('service-users.field.responsible-users.help')}</Text>
         </Flex>
         <CredentialsSection serviceUser={ serviceUser } />
       </Flex>

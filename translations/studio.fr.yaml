@@ -2517,6 +2517,8 @@ recycle-bin.actions.delete: Supprimer
 recycle-bin.actions.delete.title: Suppression des éléments de la corbeille
 recycle-bin.actions.restore: Restaurer
 recycle-bin.actions.restore.title: Restauration des éléments de la corbeille
+recycle-bin.actions.restore.relocated_one: Élément placé dans __restored. Les permissions de ce dossier s'appliquent désormais.
+recycle-bin.actions.restore.relocated_other: "{{count}} éléments placés dans __restored. Les permissions de ce dossier s'appliquent désormais."
 ownership-management.title: Gestion de la propriété
 ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
 ownership-management.deleted-user: Utilisateur supprimé
@@ -3136,6 +3138,8 @@ service-users.field.name: Nom
 service-users.field.name.fixed: Le nom ne peut pas être modifié, car l'accès au serveur MCP est accordé par nom.
 service-users.field.name.invalid: Utilisez jusqu'à 64 lettres, chiffres, points, tirets ou traits de soulignement, en commençant par une lettre ou un chiffre, par exemple svc-erp-sync.
 service-users.field.email: E-mail de contact
+service-users.field.responsible-users: Utilisateurs responsables
+service-users.field.responsible-users.help: 'Ils répondent de cet utilisateur de service partout où une personne est nécessaire, par exemple pour les avis le concernant.'
 service-users.field.source-user: Utilisateur à copier
 service-users.filter.unused-days: Inutilisé depuis plus de N jours
 service-users.status.inactive: Inactif

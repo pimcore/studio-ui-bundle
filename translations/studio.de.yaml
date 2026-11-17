@@ -2517,6 +2517,8 @@ recycle-bin.actions.delete: Löschen
 recycle-bin.actions.delete.title: Papierkorb-Einträge löschen
 recycle-bin.actions.restore: Wiederherstellen
 recycle-bin.actions.restore.title: Papierkorb-Einträge wiederherstellen
+recycle-bin.actions.restore.relocated_one: Element in __restored abgelegt. Es gelten jetzt die Berechtigungen dieses Ordners.
+recycle-bin.actions.restore.relocated_other: "{{count}} Elemente in __restored abgelegt. Es gelten jetzt die Berechtigungen dieses Ordners."
 ownership-management.title: Eigentümerverwaltung
 ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
 ownership-management.deleted-user: Gelöschter Benutzer
@@ -3136,6 +3138,8 @@ service-users.field.name: Name
 service-users.field.name.fixed: Der Name kann nicht geändert werden, da der MCP-Serverzugriff über den Namen gewährt wird.
 service-users.field.name.invalid: Verwenden Sie bis zu 64 Buchstaben, Ziffern, Punkte, Bindestriche oder Unterstriche, beginnend mit einem Buchstaben oder einer Ziffer, zum Beispiel svc-erp-sync.
 service-users.field.email: Kontakt-E-Mail
+service-users.field.responsible-users: Verantwortliche Benutzer
+service-users.field.responsible-users.help: 'Sie verantworten diesen Service-Benutzer überall dort, wo ein Mensch gebraucht wird, zum Beispiel bei Hinweisen dazu.'
 service-users.field.source-user: Zu kopierender Benutzer
 service-users.filter.unused-days: Seit mehr als N Tagen ungenutzt
 service-users.status.inactive: Inaktiv

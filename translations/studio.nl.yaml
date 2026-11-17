@@ -2517,6 +2517,8 @@ recycle-bin.actions.delete: Verwijderen
 recycle-bin.actions.delete.title: Prullenbakitems verwijderen
 recycle-bin.actions.restore: Herstellen
 recycle-bin.actions.restore.title: Prullenbakitems herstellen
+recycle-bin.actions.restore.relocated_one: Element geplaatst in __restored. Nu gelden de rechten van die map.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementen geplaatst in __restored. Nu gelden de rechten van die map."
 ownership-management.title: Eigendomsbeheer
 ownership-management.show-deleted-owners: Items van verwijderde gebruikers weergeven
 ownership-management.deleted-user: Verwijderde gebruiker
@@ -3136,6 +3138,8 @@ service-users.field.name: Naam
 service-users.field.name.fixed: De naam kan niet worden gewijzigd, omdat MCP-servertoegang op naam wordt verleend.
 service-users.field.name.invalid: Gebruik maximaal 64 letters, cijfers, punten, koppeltekens of underscores, beginnend met een letter of cijfer, bijvoorbeeld svc-erp-sync.
 service-users.field.email: Contact-e-mailadres
+service-users.field.responsible-users: Verantwoordelijke gebruikers
+service-users.field.responsible-users.help: 'Zij staan in voor deze servicegebruiker waar een mens nodig is, bijvoorbeeld voor meldingen erover.'
 service-users.field.source-user: Gebruiker om van te kopiëren
 service-users.filter.unused-days: Langer dan N dagen ongebruikt
 service-users.status.inactive: Inactief

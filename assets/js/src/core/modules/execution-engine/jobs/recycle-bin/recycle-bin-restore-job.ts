@@ -15,7 +15,7 @@ import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { api } from '@Pimcore/modules/recycle-bin/recycle-bin-api-slice-enhanced'
+import { api, type RecycleBinRestoreItemsApiResponse } from '@Pimcore/modules/recycle-bin/recycle-bin-api-slice-enhanced'
 import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
 import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
@@ -24,34 +24,42 @@ export interface RecycleBinRestoreJobOptions {
   itemIds: number[]
   elementTypes: ElementType[]
   onFinish?: () => void
+  onRelocated?: (count: number) => void
 }
 
 export class RecycleBinRestoreJob implements JobInterface {
   private readonly itemIds: number[]
   private readonly elementTypes: ElementType[]
   private readonly onFinish?: () => void
+  private readonly onRelocated?: (count: number) => void
 
   constructor (options: RecycleBinRestoreJobOptions) {
     this.itemIds = options.itemIds
     this.elementTypes = options.elementTypes
     this.onFinish = options.onFinish
+    this.onRelocated = options.onRelocated
   }
 
   async run (options: JobRunOptions): Promise<void> {
     const { messageBus } = options
 
     try {
-      const jobRunId = await this.executeRestoreRequest()
+      const response = await this.executeRestoreRequest()
 
-      if (isNil(jobRunId)) {
+      if (isNil(response) || !('jobRunId' in response)) {
+        this.reportRelocated(response?.items.length ?? 0)
         await this.handleCompletion()
         return
       }
 
       const handler = RecycleBinRestoreJob.buildHandler({
-        jobRunId,
-        onJobCompletion: async () => {
+        jobRunId: response.jobRunId,
+        onJobCompletion: async (data) => {
           try {
+            if (data.isSuccessful) {
+              const messages: unknown = data.payload?.messages
+              this.reportRelocated(Array.isArray(messages) ? messages.length : 0)
+            }
             await this.handleCompletion()
           } catch (error) {
             await this.handleJobFailure(error)
@@ -66,7 +74,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     }
   }
 
-  private async executeRestoreRequest (): Promise<number | null> {
+  private async executeRestoreRequest (): Promise<RecycleBinRestoreItemsApiResponse | null> {
     const response = await store.dispatch(
       api.endpoints.recycleBinRestoreItems.initiate({
         body: {
@@ -80,7 +88,13 @@ export class RecycleBinRestoreJob implements JobInterface {
       return null
     }
 
-    return response.data?.jobRunId ?? null
+    return response.data ?? null
+  }
+
+  private reportRelocated (count: number): void {
+    if (count > 0) {
+      this.onRelocated?.(count)
+    }
   }
 
   private static completeRestore (elementTypes: ElementType[]): void {
