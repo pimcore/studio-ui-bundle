@@ -71,18 +71,14 @@ export const getMultiValueRefusals = (definition: Record<string, unknown> | null
   ]
 }
 
-/** Whether a save narrows what the key declared: a declared variant removed, the maximum lowered, or the default variant declined. */
+/** Whether a save narrows what the key declared: a declared variant removed or the default variant declined. */
 export const narrowsDeclaration = (
   before: Record<string, unknown> | null | undefined,
   after: Record<string, unknown> | null | undefined
 ): boolean => {
   const names = new Set(((after?.variants ?? []) as ClassificationStoreVariantLayout[]).map((variant) => variant.name))
   const removed = ((before?.variants ?? []) as ClassificationStoreVariantLayout[]).some((variant) => !names.has(variant.name))
-  const oldMaximum = before?.maximum
-  const newMaximum = after?.maximum
-  const lowered = typeof newMaximum === 'number' && (typeof oldMaximum !== 'number' || newMaximum < oldMaximum)
-
   const declined = before?.unqualifiedValue !== false && after?.unqualifiedValue === false
 
-  return removed || lowered || declined
+  return removed || declined
 }

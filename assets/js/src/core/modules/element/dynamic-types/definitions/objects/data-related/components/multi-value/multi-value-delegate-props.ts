@@ -10,7 +10,7 @@
 
 import { omit } from 'lodash'
 
-const WRAPPER_OWN_MEMBERS = ['delegateDatatype', 'delegate', 'variants', 'multiValue', 'maximum']
+const WRAPPER_OWN_MEMBERS = ['delegateDatatype', 'delegate', 'variants']
 
 /**
  * The definition a `multiValue` key's delegate type is built from: the wrapper's own members are

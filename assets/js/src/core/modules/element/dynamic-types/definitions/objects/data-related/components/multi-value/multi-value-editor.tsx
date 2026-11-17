@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
-
 import React, { useMemo, useState } from 'react'
 import { Alert } from 'antd'
 import { isEqual, isNil, omit } from 'lodash'
@@ -17,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Text } from '@Pimcore/components/text/text'
 import { Title } from '@Pimcore/components/title/title'
@@ -36,18 +33,16 @@ import { MULTI_VALUE_OWN_KEYS } from '@Pimcore/modules/field-definitions/dynamic
 import { CLASSIFICATION_STORE_WRAPPER_TYPES } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
 import {
   buildSlots,
-  canAdd,
   declaredVariantsOf,
   indexesOf,
   isReadableValue,
   orderEntries,
   seedEmptySlots,
   slotKeyOf,
-  withPositions,
   type MultiValueSlot
 } from './multi-value-slots'
 
-export interface MultiValueEditorProps extends ClassificationStoreMultiValueDefinition, Pick<ClassificationStoreCollection2, 'variants' | 'multiValue' | 'maximum' | 'defaultVariant' | 'defaultVariantLabel'> {
+export interface MultiValueEditorProps extends ClassificationStoreMultiValueDefinition, Pick<ClassificationStoreCollection2, 'variants' | 'defaultVariant' | 'defaultVariantLabel'> {
   noteditable?: boolean | null
   value?: unknown
   onChange?: (value: ClassificationStoreMultiValueEntry[]) => void
@@ -87,13 +82,9 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
   const { values, operations } = useNumberedList()
   const entries = values as ClassificationStoreMultiValueEntry[]
   const indexes = indexesOf(entries, slot)
-  const isRepeating = props.multiValue === true
   const isEditable = props.noteditable !== true
   const hasVariants = declaredVariantsOf(props.variants).length > 0
   const heading = slot.label ?? (hasVariants || !slot.declared ? t('classification-store.multi-value.default-variant') : null)
-  const addAllowed = canAdd(props.maximum, indexes.length)
-  // A variant no longer declared, or a default the key now declines, keeps the values it holds and takes no new ones.
-  const canAddHere = slot.declared
 
   const canReadEntry = (index: number): boolean => objectDataRegistry.getDynamicType(props.delegateDatatype).canReadValue(entries[index].v)
 
@@ -105,14 +96,6 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
     }
 
     operations.remove(index)
-  }
-
-  const move = (position: number, delta: -1 | 1): void => {
-    const neighbour = indexes[position + delta]
-
-    if (neighbour !== undefined) {
-      operations.move(indexes[position], neighbour)
-    }
   }
 
   return (
@@ -137,14 +120,12 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
         </Flex>
       )}
 
-      {isRepeating && indexes.length === 0 && <Text type='secondary'>{t('classification-store.multi-value.empty')}</Text>}
-
       {indexes.map((index, position) => (
         <Flex
           align='start'
           gap='extra-small'
-          // Keyed by slot where the key does not repeat, so seeding an empty entry keeps the input mounted; by position too, so a slot holding two stored values keys them apart.
-          key={ isRepeating ? `entry-${index}` : `${slotKeyOf(slot)}-${position}` }
+          // Keyed by slot, so seeding an empty entry keeps the input mounted; by position too, so a slot holding two stored values keys them apart.
+          key={ `${slotKeyOf(slot)}-${position}` }
         >
           <div className='w-full'>
             {canReadEntry(index)
@@ -164,54 +145,15 @@ const SlotView = ({ slot, ...props }: SlotsProps & { slot: MultiValueSlot }): Re
                 </Flex>
                 )}
           </div>
-          {!isRepeating && isEditable && (
+          {isEditable && (
             <IconButton
               icon={ { value: 'trash' } }
               onClick={ () => { clear(index) } }
               tooltip={ { title: t('delete') } }
             />
           )}
-          {isRepeating && isEditable && (
-            <>
-              <IconButton
-                disabled={ position === 0 }
-                icon={ { value: 'chevron-up' } }
-                onClick={ () => { move(position, -1) } }
-                tooltip={ { title: t('classification-store.multi-value.move-up') } }
-              />
-              <IconButton
-                disabled={ position === indexes.length - 1 }
-                icon={ { value: 'chevron-down' } }
-                onClick={ () => { move(position, 1) } }
-                tooltip={ { title: t('classification-store.multi-value.move-down') } }
-              />
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ () => { operations.remove(index) } }
-                tooltip={ { title: t('delete') } }
-              />
-            </>
-          )}
         </Flex>
       ))}
-
-      {isRepeating && isEditable && canAddHere && (
-        <Flex
-          align='center'
-          gap='extra-small'
-        >
-          <IconTextButton
-            disabled={ !addAllowed }
-            icon={ { value: 'new' } }
-            onClick={ () => { operations.add(slot.variant === null ? {} : { var: slot.variant }) } }
-          >
-            {t('add')}
-          </IconTextButton>
-          {!addAllowed && (
-            <Text type='secondary'>{t('classification-store.multi-value.maximum-reached', { count: props.maximum ?? 0 })}</Text>
-          )}
-        </Flex>
-      )}
     </Flex>
   )
 }
@@ -251,10 +193,10 @@ export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Elemen
   const { t } = useTranslation()
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const entries = useMemo(() => orderEntries(props.value), [props.value])
-  // A slot that holds one value and has none stored is seeded as an empty entry, so the list's initial value already is what the inputs register.
+  // A slot that has no value stored is seeded as an empty entry, so the list's initial value already is what the inputs register.
   const base = useMemo(
-    () => props.multiValue === true ? entries : seedEmptySlots(props.variants, entries, props),
-    [entries, props.variants, props.multiValue, props.defaultVariant, props.defaultVariantLabel]
+    () => seedEmptySlots(props.variants, entries, props),
+    [entries, props.variants, props.defaultVariant, props.defaultVariantLabel]
   )
   // What the control holds, empty rows included: only the payload leaves them out, so a row still being worked on survives the value coming back.
   const [draft, setDraft] = useState<MultiValueDraft | null>(null)
@@ -300,7 +242,7 @@ export const MultiValueEditor = (props: MultiValueEditorProps): React.JSX.Elemen
     const kept = withoutEmpty(list)
 
     if (!isEqual(kept, withoutEmpty(entries))) {
-      props.onChange?.(withPositions(kept))
+      props.onChange?.(kept)
     }
   }
 

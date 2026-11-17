@@ -120,12 +120,10 @@ describe('getMultiValueRefusals without a writable slot', () => {
 })
 
 describe('narrowsDeclaration', () => {
-  const declared = { variants: [{ name: 'metric' }, { name: 'imperial' }], maximum: 3 }
+  const declared = { variants: [{ name: 'metric' }, { name: 'imperial' }] }
 
-  it('is true when a variant is removed or the maximum is lowered or introduced', () => {
+  it('is true when a variant is removed', () => {
     expect(narrowsDeclaration(declared, { ...declared, variants: [{ name: 'metric' }] })).toBe(true)
-    expect(narrowsDeclaration(declared, { ...declared, maximum: 2 })).toBe(true)
-    expect(narrowsDeclaration({ ...declared, maximum: null }, declared)).toBe(true)
   })
 
   it('is true when the default variant is declined, whether it was declared true, null or absent', () => {
@@ -139,9 +137,13 @@ describe('narrowsDeclaration', () => {
     expect(narrowsDeclaration({ ...declared, unqualifiedValue: false }, { ...declared, unqualifiedValue: true })).toBe(false)
   })
 
-  it('is false when nothing is narrowed, including a cap removed or raised', () => {
+  it('is false when nothing is narrowed, including a variant added', () => {
     expect(narrowsDeclaration(declared, declared)).toBe(false)
-    expect(narrowsDeclaration(declared, { ...declared, maximum: null })).toBe(false)
-    expect(narrowsDeclaration(declared, { ...declared, maximum: 5, variants: [...declared.variants, { name: 'x' }] })).toBe(false)
+    expect(narrowsDeclaration(declared, { ...declared, variants: [...declared.variants, { name: 'x' }] })).toBe(false)
+  })
+
+  // A stale member left on a stored definition is no declaration any more.
+  it('ignores a maximum still carried by a stored definition', () => {
+    expect(narrowsDeclaration({ ...declared, maximum: 3 }, { ...declared, maximum: 2 })).toBe(false)
   })
 })

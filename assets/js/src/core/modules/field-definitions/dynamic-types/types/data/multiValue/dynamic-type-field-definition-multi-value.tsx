@@ -41,8 +41,6 @@ export class DynamicTypeFieldDefinitionMultiValue extends DynamicTypeFieldDefini
       ...super.getDefaultData(),
       delegateDatatype: null,
       variants: [],
-      multiValue: false,
-      maximum: null,
       unqualifiedValue: true
     }
   }

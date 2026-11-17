@@ -34,16 +34,18 @@ const renderCell = (fieldDefinition: object, value: unknown): ReturnType<typeof 
 }
 
 describe('DefaultModeCell for a multiValue key', () => {
-  const definition = { fieldtype: 'multiValue', delegateDatatype: 'input', multiValue: true }
+  const definition = { fieldtype: 'multiValue', delegateDatatype: 'input' }
 
-  it('shows the stored values in order as text, not the entry list', () => {
-    const { getByTestId } = renderCell(definition, [{ v: 'b', p: 1 }, { v: 'a', p: 0 }, { v: 3, p: 2 }])
-
-    expect(getByTestId('cell')).toHaveTextContent('a, b, 3')
+  // A slot column holds one value, which the cell shows as the delegate type would.
+  it('passes the slot value on untouched', () => {
+    expect(renderCell(definition, 'a').getByTestId('cell')).toHaveTextContent('a')
   })
 
-  it('shows an empty list as nothing', () => {
-    expect(renderCell(definition, []).getByTestId('cell')).toHaveTextContent('')
+  it('hands the cell the delegate definition in place of the wrapper', () => {
+    renderCell(definition, 'a')
+
+    expect(getGridCellComponent.mock.calls[getGridCellComponent.mock.calls.length - 1][0].column.columnDef.meta.config)
+      .toMatchObject({ fieldtype: 'input' })
   })
 
   it('passes the value of any other field type on untouched', () => {

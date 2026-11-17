@@ -13,7 +13,6 @@ import {
   type ClassificationStoreMultiValueEntry,
   type ClassificationStoreVariantLayout
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import { toDisplayString } from '@Pimcore/utils/type-utils'
 import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
 
 /** One place values of the key are edited: a declared variant, the default variant, or an undeclared one. */
@@ -22,7 +21,7 @@ export interface MultiValueSlot {
   variant: string | null
   /** What the slot is headed with; null where it needs no heading. */
   label: string | null
-  /** Whether a new value can be added: false for an undeclared variant, and for a default slot the key declines but still holds values in. */
+  /** Whether the key declares the slot: false for an undeclared variant, and for a default slot the key declines but still holds values in. */
   declared: boolean
 }
 
@@ -77,11 +76,6 @@ export const orderEntries = (value: unknown): ClassificationStoreMultiValueEntry
   return ordered.map(({ entry: { p, ...rest } }) => rest)
 }
 
-/** A stored list of entries as the text a cell shows: the values in order, not the storage shape; anything else as it stands. */
-export const displayValueOf = (value: unknown): unknown => Array.isArray(value)
-  ? orderEntries(value).map((entry) => toDisplayString(entry.v)).filter((text) => text !== '').join(', ')
-  : value
-
 export const variantOf = (entry: ClassificationStoreMultiValueEntry): string | null => entry.var ?? null
 
 /** The variants the key declares that a value can address: a row carrying no name addresses nothing. */
@@ -135,10 +129,7 @@ export const buildSlots = (
 export const indexesOf = (entries: readonly ClassificationStoreMultiValueEntry[], slot: MultiValueSlot): number[] =>
   entries.flatMap((entry, index) => variantOf(entry) === slot.variant ? [index] : [])
 
-/** Whether a slot may take one more entry; no maximum is no cap, and 0 is a cap. */
-export const canAdd = (maximum: number | null | undefined, count: number): boolean => isNil(maximum) || count < maximum
-
-/** The entries with an empty one appended for every slot that holds none, for a key whose slots hold one value each. */
+/** The entries with an empty one appended for every slot that holds none. */
 export const seedEmptySlots = (
   variants: readonly ClassificationStoreVariantLayout[] | null | undefined,
   entries: readonly ClassificationStoreMultiValueEntry[],
@@ -149,17 +140,3 @@ export const seedEmptySlots = (
     .filter((slot) => indexesOf(entries, slot).length === 0)
     .map((slot): ClassificationStoreMultiValueEntry => slot.variant === null ? { v: null } : { var: slot.variant, v: null })
 ]
-
-/** The entries as they are written: each carries `p`, its index within its variant's slot, because an absent `p` reads as 0 and two entries at one position are refused. */
-export const withPositions = (entries: readonly ClassificationStoreMultiValueEntry[]): ClassificationStoreMultiValueEntry[] => {
-  const counts = new Map<string | null, number>()
-
-  return entries.map((entry) => {
-    const variant = variantOf(entry)
-    const position = counts.get(variant) ?? 0
-
-    counts.set(variant, position + 1)
-
-    return { ...entry, p: position }
-  })
-}

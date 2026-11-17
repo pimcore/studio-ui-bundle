@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isRepeatingColumn } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import React, { useEffect, useRef } from 'react'
@@ -56,8 +55,7 @@ const buildSelectedColumn = (column: any, availableColumn: AvailableColumn): Sel
     type: availableColumn.type,
     config: columnConfig,
     sortable: availableColumn.sortable,
-    // A repeating Classification Store key stays display-only after a reload as well.
-    editable: availableColumn.editable && !isRepeatingColumn({ config: columnConfig as { variant?: string | null, fieldDefinition?: unknown } }),
+    editable: availableColumn.editable,
     localizable: availableColumn.localizable,
     exportable: availableColumn.exportable,
     frontendType: availableColumn.frontendType,
