@@ -21,8 +21,15 @@ export interface ReorderedTags {
 
 const getRawValue = (item: unknown): unknown => isObject(item) && 'value' in item ? item.value : item
 
-/** Supports plain values and `labelInValue` entries (`{ value, label }`). */
-export const getSortableTagId = (item: unknown): string => String(getRawValue(item))
+/**
+ * Supports plain values and `labelInValue` entries (`{ value, label }`).
+ * The type is part of the id, so `1` and `'1'` stay distinct options.
+ */
+export const getSortableTagId = (item: unknown): string => {
+  const rawValue = getRawValue(item)
+
+  return `${typeof rawValue}:${String(rawValue)}`
+}
 
 export const getSortableTagIds = (value: unknown): string[] => isArray(value) ? value.map(getSortableTagId) : []
 

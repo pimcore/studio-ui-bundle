@@ -45,37 +45,39 @@ export const SortableTag = ({ label, value, disabled, selectDisabled = false, on
     transition
   }
 
-  const handleRemoveMouseDown = (event: React.MouseEvent): void => {
-    // Keep the remove click from being interpreted as the start of a drag.
-    event.preventDefault()
+  // rc-select toggles the dropdown on every mousedown inside the selector, so a drag would open it.
+  // dnd-kit starts the drag on pointerdown, which is not affected.
+  const stopMouseDown = (event: React.MouseEvent): void => {
     event.stopPropagation()
   }
 
-  const handleRemoveKeyDown = (event: React.KeyboardEvent): void => {
-    // Enter / Space trigger the remove button and must not start a keyboard drag on the tag.
+  const handleRemoveMouseDown = (event: React.MouseEvent): void => {
+    event.preventDefault()
     event.stopPropagation()
   }
 
   return (
     <span
       className={ cn('ant-select-selection-item', {
-        [styles.sortableTag]: isSortable,
         'ant-select-selection-item-disabled': disabled,
         [styles.sortableTagDragging]: isDragging
       }) }
       ref={ setNodeRef }
       style={ style }
       title={ typeof label === 'string' ? label : undefined }
-      { ...(isSortable ? attributes : {}) }
-      { ...(isSortable ? listeners : {}) }
     >
-      <span className="ant-select-selection-item-content">{label}</span>
+      {/* The label is the drag handle, so the remove button is not nested inside an interactive element. */}
+      <span
+        className={ cn('ant-select-selection-item-content', { [styles.sortableTagHandle]: isSortable }) }
+        { ...(isSortable ? { ...attributes, ...listeners, onMouseDown: stopMouseDown } : {}) }
+      >
+        {label}
+      </span>
       {closable && (
         <button
           aria-label={ t('remove') }
           className={ cn('ant-select-selection-item-remove', styles.tagRemoveButton) }
           onClick={ onClose }
-          onKeyDown={ handleRemoveKeyDown }
           onMouseDown={ handleRemoveMouseDown }
           type="button"
         >

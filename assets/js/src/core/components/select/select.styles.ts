@@ -337,7 +337,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       }
     `,
 
-    sortableTag: css`
+    sortableTagHandle: css`
       cursor: grab;
     `,
 
