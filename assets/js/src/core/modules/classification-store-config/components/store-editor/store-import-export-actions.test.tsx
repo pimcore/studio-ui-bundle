@@ -42,8 +42,11 @@ jest.mock('@Pimcore/modules/auth/permission-helper', () => ({
   isAllowed: (permission: string) => isAllowed(permission)
 }))
 
+// `injectSliceWithState` is reached through the error handler the export refusal is reported
+// with: it registers the maintenance mode slice as its module is loaded.
 jest.mock('@Pimcore/app/store', () => ({
-  useAppDispatch: () => dispatch
+  useAppDispatch: () => dispatch,
+  injectSliceWithState: jest.fn()
 }))
 
 // The three Editor contexts the adapter reads: stubbed away because their providers drag the

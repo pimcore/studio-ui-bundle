@@ -455,6 +455,76 @@ describe('KeyedList', () => {
     })
   })
 
+  // The app renders under StrictMode (app-view.tsx): effects mount, unmount and mount
+  // again, so every field registers twice — against a value that has not re-rendered in
+  // between — and every store subscription is dropped and renewed.
+  describe('under StrictMode', () => {
+    const strictUi = (props: Omit<KeyedListProps, 'children'>, children?: React.ReactNode): React.JSX.Element => (
+      <React.StrictMode>{keyedListUi(props, children)}</React.StrictMode>
+    )
+
+    const fields = (
+      <>
+        <RegisteringField name={ ['attributes', 'myBrick', 'cargoCapacity'] } />
+        <DefaultUnitField
+          name={ ['attributes', 'myBrick', 'length'] }
+          unitId="cm"
+        />
+      </>
+    )
+
+    it('does not report registrations of fields mounting after the list as a change', () => {
+      const onChange = jest.fn()
+      const props = { value: { myBrick: { name: 'test' } }, onChange }
+
+      const { rerender } = render(strictUi(props))
+      flushDebounce()
+      rerender(strictUi(props, fields))
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+      expect(operations.getValue(['attributes', 'myBrick', 'cargoCapacity'])).toBeNull()
+      expect(operations.getValue(['attributes', 'myBrick', 'length'])).toEqual({ value: null, unitId: 'cm' })
+    })
+
+    it('reports a user change once, with the registrations merged in', () => {
+      const onChange = jest.fn()
+      const props = { value: { myBrick: { name: 'test' } }, onChange }
+
+      const { rerender } = render(strictUi(props))
+      flushDebounce()
+      rerender(strictUi(props, fields))
+      flushDebounce()
+
+      act(() => {
+        operations.update(['attributes', 'myBrick', 'name'], 'changed', false)
+      })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenCalledWith({
+        myBrick: { name: 'changed', cargoCapacity: null, length: { value: null, unitId: 'cm' } }
+      })
+    })
+
+    it('adopts a value with new content without reporting it as a change', () => {
+      const onChange = jest.fn()
+
+      const { rerender } = render(strictUi({ value: { myBrick: { name: 'test' } }, onChange }, fields))
+      flushDebounce()
+      rerender(strictUi({ value: { myBrick: { name: 'updated' } }, onChange }, fields))
+      flushDebounce()
+
+      // a residual mount-time fire may report the unmodified incoming value (see the first
+      // test above); a report of anything else would be a registration leaking into a change
+      onChange.mock.calls.forEach(([reportedValue]) => {
+        expect(reportedValue).toEqual({ myBrick: { name: 'test' } })
+      })
+      expect(operations.getValue(['attributes', 'myBrick', 'name'])).toBe('updated')
+      expect(operations.getValue(['attributes', 'myBrick', 'cargoCapacity'])).toBeNull()
+    })
+  })
+
   describe('operations', () => {
     it('add() adds a new entry and reports it as a change', () => {
       const onChange = jest.fn()

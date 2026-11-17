@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Ruta completa
 asset.asset-editor-tabs.list.columns.creationDate: Fecha de creación
 asset.asset-editor-tabs.list.columns.modificationDate: Fecha de modificación
 asset.tree.context-menu.upload-new-version: Subir nueva versión
+asset.upload-new-version.rename-confirmation.title: El asset se renombrará
+asset.upload-new-version.rename-confirmation.message: 'El nuevo archivo es de tipo .{{extension}} — el asset se renombrará de "{{oldFilename}}" a "{{newFilename}}" y su URL pública cambiará. ¿Desea continuar?'
+asset.upload-new-version.renamed: 'El asset se ha renombrado de "{{oldFilename}}" a "{{newFilename}}". Su URL pública ha cambiado.'
 asset.copy-info: Copiar e información
 asset.upload: Subir
 asset.upload.label: Seleccionar archivo
@@ -3253,6 +3256,8 @@ service-users.field.name: Nombre
 service-users.field.name.fixed: El nombre no se puede cambiar, porque el acceso al servidor MCP se concede por nombre.
 service-users.field.name.invalid: Use hasta 64 letras, dígitos, puntos, guiones o guiones bajos, empezando por una letra o un dígito, por ejemplo svc-erp-sync.
 service-users.field.email: Correo electrónico de contacto
+service-users.field.responsible-users: Usuarios responsables
+service-users.field.responsible-users.help: 'Responden de este usuario de servicio allí donde se necesita a una persona, por ejemplo para los avisos sobre él.'
 service-users.field.source-user: Usuario desde el que copiar
 service-users.filter.unused-days: Sin usar durante más de N días
 service-users.status.inactive: Inactivo
@@ -3302,6 +3307,22 @@ service-users.secret.client-secret: Secreto de cliente
 service-users.secret.warning: Copie el secreto ahora. Solo se muestra una vez y no se podrá volver a mostrar.
 service-users.secret.copy: Copiar secreto
 service-users.secret.close: Cerrar
+navigation.maintenance-mode: Modo de mantenimiento
+maintenance-mode.activate.title: ¿Activar el modo de mantenimiento?
+maintenance-mode.activate.text: 'Todos los servicios, incluido el sitio web, entran en mantenimiento. Solo esta sesión del navegador conserva el acceso.'
+maintenance-mode.activate.lock-out: 'Si cierra sesión, cierra el navegador o su sesión caduca, usted también perderá el acceso.'
+maintenance-mode.activate.background-jobs: 'Los trabajos en segundo plano y los consumidores de mensajes no se inician mientras el modo de mantenimiento esté activo.'
+maintenance-mode.activate.ok: Activar
+maintenance-mode.indicator.tooltip: 'El modo de mantenimiento está activo. Haga clic para desactivarlo.'
+maintenance-mode.deactivate.title: ¿Desactivar el modo de mantenimiento?
+maintenance-mode.deactivate.text: 'Todas las sesiones recuperan el acceso.'
+maintenance-mode.deactivate.ok: Desactivar
+maintenance-mode.logout.title: ¿Desactivar primero el modo de mantenimiento?
+maintenance-mode.logout.text: 'El modo de mantenimiento está activo y solo esta sesión tiene acceso. Después de cerrar sesión, solo se podrá desactivar desde la línea de comandos.'
+maintenance-mode.logout.deactivate-and-log-out: Desactivar y cerrar sesión
+maintenance-mode.locked-out.title: Mantenimiento
+maintenance-mode.locked-out.text: 'El sistema está en modo de mantenimiento o no está disponible temporalmente. Es posible que su última acción no se haya guardado. Este aviso se cerrará automáticamente en cuanto el sistema vuelva a estar disponible.'
+maintenance-mode.locked-out.reload: Recargar
 field-definition.multi-value: "Valor múltiple"
 classification-store.multi-value.delegate: "un multiValue de"
 classification-store.multi-value.delegate-required: "Elija el tipo que contiene este multiValue antes de guardar."

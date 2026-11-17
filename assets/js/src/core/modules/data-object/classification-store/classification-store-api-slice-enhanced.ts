@@ -31,6 +31,7 @@ import {
   type ClassificationStoreConfigurationSubGroupDetail as GeneratedSubGroupDetail,
   type ClassificationStoreConfigurationKeyGroupRelationDetail as GeneratedKeyGroupRelationDetail
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { emitClassificationStoreConfigurationChange } from './classification-store-configuration-change'
 
 const CONFIGURATION_PREFIX = '/pimcore-studio/api/classification-store/configuration'
 
@@ -400,17 +401,18 @@ export interface ClassificationStoreConfigurationKeyUpdateApiArg {
 }
 
 // Helper: scan all active query cache entries for a given endpoint name and patch each one.
-// The patch is handed the entry's own cache key alongside the draft, because what it has to do
-// can differ per entry: a relation that already sits on the cached page 1 is simply missing from
-// the cached page 2, and only the entry that pushed it in has created anything.
-type PatchFn<T> = (draft: T, cacheKey: string) => void
+// The patch is handed the entry's own cache key and its own arguments alongside the draft, because
+// what it has to do can differ per entry: a relation that already sits on the cached page 1 is
+// simply missing from the cached page 2, only the entry that pushed it in has created anything,
+// and which page a new row belongs on is read off the arguments of the entry.
+type PatchFn<T, A = unknown> = (draft: T, cacheKey: string, args: A) => void
 interface PatchResult { undo: () => void }
 
 function patchAllCacheEntries<T, A = unknown> (
   dispatch: (thunk: any) => void,
   endpointName: string,
-  patch: PatchFn<T>,
-  argFilter?: (args: A) => boolean
+  patch: PatchFn<T, A>,
+  argFilter?: (args: A, data: any) => boolean
 ): void {
   // Accessing internal RTK Query store state to fan-out cache patches across all pages
   dispatch((innerDispatch: unknown, getState: () => unknown) => {
@@ -419,12 +421,12 @@ function patchAllCacheEntries<T, A = unknown> (
 
     for (const [queryKey, queryState] of Object.entries(queries)) {
       if (!queryKey.startsWith(`${endpointName}(`)) continue
-      const qs = queryState as { originalArgs: unknown }
+      const qs = queryState as { originalArgs: unknown, data?: unknown }
       try {
-        if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
+        if (argFilter !== undefined && !argFilter(qs.originalArgs as A, qs.data)) continue
         // @ts-expect-error — dynamic endpoint name not in the union
         innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
-          patch(draft, queryKey)
+          patch(draft, queryKey, qs.originalArgs as A)
         }))
       } catch {
         // Cache entry may have been garbage-collected — safe to ignore
@@ -437,8 +439,8 @@ function patchAllCacheEntries<T, A = unknown> (
 function optimisticPatchAllCacheEntries<T, A = unknown> (
   dispatch: (thunk: any) => any,
   endpointName: string,
-  patch: PatchFn<T>,
-  argFilter?: (args: A) => boolean
+  patch: PatchFn<T, A>,
+  argFilter?: (args: A, data: any) => boolean
 ): PatchResult[] {
   const results: PatchResult[] = []
 
@@ -448,12 +450,12 @@ function optimisticPatchAllCacheEntries<T, A = unknown> (
 
     for (const [queryKey, queryState] of Object.entries(queries)) {
       if (!queryKey.startsWith(`${endpointName}(`)) continue
-      const qs = queryState as { originalArgs: unknown }
-      if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
+      const qs = queryState as { originalArgs: unknown, data?: unknown }
+      if (argFilter !== undefined && !argFilter(qs.originalArgs as A, qs.data)) continue
       try {
         // @ts-expect-error — dynamic endpoint name not in the union
         const result = innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, (draft: T) => {
-          patch(draft, queryKey)
+          patch(draft, queryKey, qs.originalArgs as A)
         }))
         results.push(result)
       } catch {
@@ -841,6 +843,34 @@ const confirmedRow = <T extends { name: string, description?: string | null, cus
   return merged
 }
 
+interface CachedPage { items: Array<Record<string, unknown>>, totalItems: number }
+interface PagedArgs { body?: { filters?: { page?: number, pageSize?: number, columnFilters?: object } } }
+
+// Delete handlers: the delete call only carries the row id, so only the cached pages that hold the row
+// are patched at once; every cached page is then re-read, which corrects the total of a page that did not hold it.
+const holdsRow = (rowId: number) => (_args: unknown, data: CachedPage | undefined): boolean => data?.items?.some((row) => row.id === rowId) === true
+
+// A created relation is appended. Every unfiltered page of the group counts it (its total grows, so the
+// pagination can reach it); only the last page, while it has room left, also receives the row itself.
+// A filtered page cannot tell whether the row matches and is left for a refetch.
+const isUnfilteredPage = (args: PagedArgs, data: CachedPage | undefined): boolean => {
+  if (data?.items === undefined) return false
+
+  return Object.keys(args.body?.filters?.columnFilters ?? {}).length === 0
+}
+
+// Counted, not read: the draft is the response of one endpoint, so only its length and its total
+// are named rather than the row shape `CachedPage` describes.
+const isLastPageWithRoom = (args: PagedArgs, draft: { items: unknown[], totalItems: number }): boolean => {
+  const pageSize = args.body?.filters?.pageSize
+  if (pageSize === undefined) return true
+  const offset = ((args.body?.filters?.page ?? 1) - 1) * pageSize
+
+  return draft.items.length < pageSize && draft.totalItems <= offset + pageSize
+}
+
+// An open object editor is told through emitClassificationStoreConfigurationChange once a
+// configuration mutation is confirmed, so it can re-read the layout it is showing.
 const api = baseApi.enhanceEndpoints({
   endpoints: {
 
@@ -875,6 +905,7 @@ const api = baseApi.enhanceEndpoints({
               if (idx !== -1) draft.items[idx] = confirmedRow(updated, draft.items[idx], write.takesResponseFor)
             }
           )
+          emitClassificationStoreConfigurationChange()
         } catch {
           // Undoing restores the pre-request value of each member this request wrote, which would
           // also discard a newer overlapping write's value for it. Roll back only when nothing
@@ -892,14 +923,20 @@ const api = baseApi.enhanceEndpoints({
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationGroupCollectionApiResponse>(
+          patchAllCacheEntries<ClassificationStoreConfigurationGroupCollectionApiResponse, ClassificationStoreConfigurationGroupCollectionApiArg>(
             dispatch,
             'classificationStoreConfigurationGroupCollection',
             (draft) => {
+              const before = draft.items.length
               draft.items = draft.items.filter((g) => g.id !== args.id)
-              draft.totalItems = Math.max(0, draft.totalItems - 1)
-            }
+              draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
+            },
+            holdsRow(args.id)
           )
+          // The delete names no store, so a page that never held the row (an unfiltered page 1 of the same
+          // store while the row sat on page 2) cannot be told from another store's: re-read them all.
+          refetchCachedPages(dispatch, 'classificationStoreConfigurationGroupCollection')
+          emitClassificationStoreConfigurationChange()
         } catch {
           // Mutation failed — cache stays stale until next refetch
         }
@@ -937,6 +974,7 @@ const api = baseApi.enhanceEndpoints({
               if (idx !== -1) draft.items[idx] = confirmedRow(updated, draft.items[idx], write.takesResponseFor)
             }
           )
+          emitClassificationStoreConfigurationChange()
         } catch {
           if (write.ownsItsPatch()) patchResults.forEach((r) => { r.undo() })
           else write.skippedRollback()
@@ -951,14 +989,18 @@ const api = baseApi.enhanceEndpoints({
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationCollectionCollectionApiResponse>(
+          patchAllCacheEntries<ClassificationStoreConfigurationCollectionCollectionApiResponse, ClassificationStoreConfigurationCollectionCollectionApiArg>(
             dispatch,
             'classificationStoreConfigurationCollectionCollection',
             (draft) => {
+              const before = draft.items.length
               draft.items = draft.items.filter((c) => c.id !== args.id)
-              draft.totalItems = Math.max(0, draft.totalItems - 1)
-            }
+              draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
+            },
+            holdsRow(args.id)
           )
+          refetchCachedPages(dispatch, 'classificationStoreConfigurationCollectionCollection')
+          emitClassificationStoreConfigurationChange()
         } catch {
           // Mutation failed — cache stays stale until next refetch
         }
@@ -1091,6 +1133,7 @@ const api = baseApi.enhanceEndpoints({
                 }
               }
             )
+            emitClassificationStoreConfigurationChange()
           } catch {
             // Server rejected — roll back all optimistic patches.
             patchResults.forEach((r) => { r.undo() })
@@ -1148,8 +1191,9 @@ const api = baseApi.enhanceEndpoints({
             dispatch,
             'classificationStoreConfigurationKeyCollection',
             (draft) => {
+              const before = draft.items.length
               draft.items = draft.items.filter((k) => k.id !== args.id)
-              draft.totalItems = Math.max(0, draft.totalItems - 1)
+              draft.totalItems = Math.max(0, draft.totalItems - (before - draft.items.length))
             },
             (a) => isActiveView(a) && deletedStoreId !== undefined && a.storeId === deletedStoreId && !isSearch(a)
           )
@@ -1191,6 +1235,7 @@ const api = baseApi.enhanceEndpoints({
             }
           })
           refetchRelationCollections(dispatch)
+          emitClassificationStoreConfigurationChange()
         } catch {
           // Mutation failed — cache stays stale until next refetch
         }
@@ -1264,6 +1309,9 @@ const api = baseApi.enhanceEndpoints({
         }
         // Cache entries are keyed by groupId — only patch entries for the affected group,
         // otherwise the new relation gets pushed into every other group's cache too.
+        // The new row additionally goes only into the page that would show it; an entry that already holds
+        // the relation (upsert) is patched wherever it is.
+        const holdsRelation = (data: CachedPage | undefined): boolean => data?.items?.some((r) => r.keyId === keyId && r.groupId === groupId) === true
         const matchesGroup = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg): boolean => a.groupId === groupId
         // The cache entries this request inserted the row into, which decides how the response is
         // confirmed below: a row this request brought into being has nothing older to preserve.
@@ -1277,13 +1325,14 @@ const api = baseApi.enhanceEndpoints({
         const overrideOnly = create.definitionOverride !== undefined && create.subGroup === undefined &&
           (sorter === undefined || sorter === null) && (mandatory === undefined || mandatory === null)
         const createdIn = new Set<string>()
+        const matchesPatchTarget = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg, data: CachedPage | undefined): boolean => matchesGroup(a) && (holdsRelation(data) || isUnfilteredPage(a, data))
         const patchResults = optimisticPatchAllCacheEntries<
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
           ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
         >(
           dispatch,
           'classificationStoreConfigurationKeyGroupRelationCollection',
-          (draft, cacheKey) => {
+          (draft, cacheKey, entryArgs) => {
             const idx = draft.items.findIndex((r) => r.keyId === keyId && r.groupId === groupId)
             if (idx !== -1) {
               // Upsert — update in-place whatever the payload named. Assigned onto the existing
@@ -1301,21 +1350,26 @@ const api = baseApi.enhanceEndpoints({
               // New relation — keyName/keyDescription/groupName filled in by server overwrite
               // below, and an absent sorter or mandatory takes the value the server gives a new
               // relation rather than leaving the cached row without one.
-              createdIn.add(cacheKey)
-              draft.items.push({
-                keyId,
-                groupId,
-                sorter: sorter ?? 0,
-                mandatory: mandatory ?? false,
-                keyName: null,
-                keyDescription: null,
-                groupName: null,
-                subGroup: create.subGroup ?? null
-              })
+              //
+              // Every unfiltered page of the group counts the row, so the pagination can reach it,
+              // but only the last page with room left also receives it.
+              if (isLastPageWithRoom(entryArgs, draft)) {
+                createdIn.add(cacheKey)
+                draft.items.push({
+                  keyId,
+                  groupId,
+                  sorter: sorter ?? 0,
+                  mandatory: mandatory ?? false,
+                  keyName: null,
+                  keyDescription: null,
+                  groupName: null,
+                  subGroup: create.subGroup ?? null
+                })
+              }
               draft.totalItems += 1
             }
           },
-          matchesGroup
+          matchesPatchTarget
         )
         try {
           const { data } = await queryFulfilled
@@ -1364,6 +1418,7 @@ const api = baseApi.enhanceEndpoints({
             },
             matchesGroup
           )
+          emitClassificationStoreConfigurationChange()
         } catch {
           patchResults.forEach((r) => { r.undo() })
         }
@@ -1387,6 +1442,7 @@ const api = baseApi.enhanceEndpoints({
         )
         try {
           await queryFulfilled
+          emitClassificationStoreConfigurationChange()
         } catch {
           patchResults.forEach((r) => { r.undo() })
         }
@@ -1406,25 +1462,29 @@ const api = baseApi.enhanceEndpoints({
         const { colId, groupId, sorter } = args.classificationStoreConfigurationCollectionRelationCreate
         // Cache entries are keyed by colId — only patch entries for the affected collection,
         // otherwise the new relation gets pushed into every other collection's cache too.
+        const holdsRelation = (data: CachedPage | undefined): boolean => data?.items?.some((r) => r.colId === colId && r.groupId === groupId) === true
         const matchesCollection = (a: ClassificationStoreConfigurationCollectionRelationCollectionApiArg): boolean => a.colId === colId
+        const matchesPatchTarget = (a: ClassificationStoreConfigurationCollectionRelationCollectionApiArg, data: CachedPage | undefined): boolean => matchesCollection(a) && (holdsRelation(data) || isUnfilteredPage(a, data))
         const patchResults = optimisticPatchAllCacheEntries<
           ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
           ClassificationStoreConfigurationCollectionRelationCollectionApiArg
         >(
           dispatch,
           'classificationStoreConfigurationCollectionRelationCollection',
-          (draft) => {
+          (draft, _cacheKey, entryArgs) => {
             const idx = draft.items.findIndex((r) => r.colId === colId && r.groupId === groupId)
             if (idx !== -1) {
               // Upsert — update sorter in-place
               draft.items[idx] = { ...draft.items[idx], sorter }
             } else {
               // New relation — groupName/groupDescription filled in by server overwrite below
-              draft.items.push({ id: '', colId, groupId, sorter, groupName: null, groupDescription: null })
+              if (isLastPageWithRoom(entryArgs, draft)) {
+                draft.items.push({ id: '', colId, groupId, sorter, groupName: null, groupDescription: null })
+              }
               draft.totalItems += 1
             }
           },
-          matchesCollection
+          matchesPatchTarget
         )
         try {
           const { data: updated } = await queryFulfilled
@@ -1442,6 +1502,7 @@ const api = baseApi.enhanceEndpoints({
             },
             matchesCollection
           )
+          emitClassificationStoreConfigurationChange()
         } catch {
           patchResults.forEach((r) => { r.undo() })
         }
@@ -1465,6 +1526,7 @@ const api = baseApi.enhanceEndpoints({
         )
         try {
           await queryFulfilled
+          emitClassificationStoreConfigurationChange()
         } catch {
           patchResults.forEach((r) => { r.undo() })
         }

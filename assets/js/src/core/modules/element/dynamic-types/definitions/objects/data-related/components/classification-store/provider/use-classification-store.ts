@@ -22,6 +22,8 @@ export interface UseClassificationStoreReturn {
   updateCurrentLayoutData: (layoutData: ClassificationStoreGroupLayout2[]) => void
   markGroupsAsNew: (groupIds: string[]) => void
   isNewGroup: (groupId: string) => boolean
+  markKeysAsNew: (groupId: string, keyIds: string[]) => void
+  isNewKey: (groupId: string, keyId: string) => boolean
 }
 
 const useClassificationStore = (): UseClassificationStoreReturn => {
@@ -40,7 +42,9 @@ const useClassificationStore = (): UseClassificationStoreReturn => {
     currentLayoutData: context.currentLayoutData,
     updateCurrentLayoutData: context.setCurrentLayoutData,
     markGroupsAsNew: context.markGroupsAsNew,
-    isNewGroup: context.isNewGroup
+    isNewGroup: context.isNewGroup,
+    markKeysAsNew: context.markKeysAsNew,
+    isNewKey: context.isNewKey
   }
 }
 

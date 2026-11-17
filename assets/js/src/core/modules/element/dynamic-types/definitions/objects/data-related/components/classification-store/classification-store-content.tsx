@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isObject, find, isEmpty, isArray } from 'lodash'
+import { isObject, find, isEmpty } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
 import { useKeyedListSelector } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { Form } from '@Pimcore/components/form/form'
@@ -21,6 +21,8 @@ import { ClassificationStoreContentEmpty } from './classification-store-content-
 import { getClassificationStoreName } from './utils/combined-field-name'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { useLanguageIndependentValuePermission } from './hooks/use-language-independent-value-permission'
+import { useLayoutRefresh } from './hooks/use-layout-refresh'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
@@ -94,11 +96,16 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const localizationMode = allowLanguageIndependentValue ? selectedLocalizationMode : CURRENT_LANGUAGE_MODE
   const localizationGroup = localizationMode === CURRENT_LANGUAGE_MODE ? currentLanguage : LANGUAGE_INDEPENDENT_MODE
 
+  const { id: objectId } = useElementContext()
+  const fieldName = Array.isArray(props.name) ? props.name.at(-1) : props.name
+  useLayoutRefresh({ objectId, fieldName })
+
+  // Seeds the layout once; a configuration change replaces it afterwards through useLayoutRefresh.
   useEffect(() => {
     const initialLayout = props.activeGroupDefinitions ?? []
     const activeGroupLayout = !isEmpty(currentLayoutData) ? currentLayoutData : initialLayout
 
-    const isGroupType = isObject(activeGroupLayout) && !isArray(activeGroupLayout)
+    const isGroupType = isObject(activeGroupLayout) && !Array.isArray(activeGroupLayout)
     const activeGroupLayoutData: ClassificationStoreGroupLayout2[] = isGroupType ? Object.values(activeGroupLayout) : activeGroupLayout
 
     updateCurrentLayoutData(activeGroupLayoutData)

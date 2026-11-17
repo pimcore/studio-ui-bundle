@@ -69,6 +69,9 @@ const mockTranslators: Record<string, (key: string) => string> = {
   de: (key: string) => mockGermanTranslations[key] ?? mockTranslations[key] ?? key
 }
 
+/** Whether a key arrived through a configuration refresh, which keeps it visible while empty. */
+const mockIsNewKey = jest.fn()
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: mockTranslators[mockLanguage] })
 }))
@@ -97,11 +100,13 @@ jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
 jest.mock('@Pimcore/modules/data-object/hooks/use-data-object-draft', () => ({
   useDataObjectDraft: () => ({ dataObject: { id: 42, permissions: { localizedEdit: mockLocalizedEdit } } })
 }))
-// Stable for the same reason as the keyed-list context above: `isNewGroup` is a memo dependency.
+// Stable for the same reason as the keyed-list context above: `isNewGroup` and `isNewKey` are
+// memo dependencies.
 jest.mock('./provider', () => {
   const isNewGroup = (): boolean => false
+  const isNewKey = (groupId: string, keyId: string): boolean => mockIsNewKey(groupId, keyId) === true
 
-  return { useClassificationStore: () => ({ isNewGroup }) }
+  return { useClassificationStore: () => ({ isNewGroup, isNewKey }) }
 })
 jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: mockConfirm })
@@ -259,6 +264,39 @@ describe('ClassificationStoreItem', () => {
     mockGetValue.mockReset()
     mockLocalizedEdit = null
     mockLanguage = 'en'
+    mockIsNewKey.mockReset()
+    mockIsNewKey.mockReturnValue(false)
+  })
+
+  describe('hide empty data', () => {
+    const keyLayout = (id: number, name: string, mandatory = false): object => ({ id, name, definition: { mandatory } })
+    const layoutWithKeys = { id: 1, name: 'Dimensions', keys: [keyLayout(1, 'old'), keyLayout(2, 'arrived'), keyLayout(3, 'required', true)] } as any
+
+    const renderHidden = (): void => {
+      render(
+        <ClassificationStoreItem
+          classificationStoreName='technicalAttributes'
+          currentLayoutData={ [layoutWithKeys] }
+          groupLayout={ layoutWithKeys }
+          hideEmptyData
+          updateCurrentLayoutData={ jest.fn() }
+        />
+      )
+    }
+
+    it('hides empty keys except mandatory ones', () => {
+      renderHidden()
+
+      expect(renderedKeyIds()).toEqual([3])
+    })
+
+    it('shows a key that arrived through a configuration refresh although it is empty', () => {
+      mockIsNewKey.mockImplementation((groupId: string, keyId: string) => groupId === '1' && keyId === '2')
+
+      renderHidden()
+
+      expect(renderedKeyIds()).toEqual([2, 3])
+    })
   })
 
   it('asks for confirmation when the group is deleted', async () => {
