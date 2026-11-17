@@ -168,7 +168,8 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
           </Flex>
         )
       },
-      size: 40
+      // Fits the translated header label, which does not truncate and would spill past the grid.
+      size: 80
     })
   ]
 
