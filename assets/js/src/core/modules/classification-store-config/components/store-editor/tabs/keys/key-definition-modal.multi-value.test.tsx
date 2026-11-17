@@ -303,6 +303,19 @@ describe('KeyDefinitionModal for a multiValue key', () => {
     expect(definition.delegate).not.toHaveProperty('unqualifiedValueLabel')
   })
 
+  it('does not pack a key definition from before the repeating mode was withdrawn into the delegate', async () => {
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], multiValue: true, maximum: 5 }))
+
+    save()
+
+    const { definition } = await savedPayload()
+
+    // the wrapper's old members are not delegate settings: packing them in would write them into
+    // the blob core builds the delegate from, on the first save of any key defined back then
+    expect(definition.delegate).not.toHaveProperty('multiValue')
+    expect(definition.delegate).not.toHaveProperty('maximum')
+  })
+
   it('states the consequence of declining the default variant, and saves only once confirmed', async () => {
     renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], unqualifiedValue: true }))
 
