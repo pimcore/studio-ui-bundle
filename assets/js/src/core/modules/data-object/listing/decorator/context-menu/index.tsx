@@ -29,7 +29,7 @@ moduleSystem.registerModule({
       priority: config.priority.open,
       useMenuItem: (context: DataObjectListGridContextMenuProps) => {
         const { openGridContextMenuItem } = useOpen('data-object')
-        return openGridContextMenuItem(context.target) ?? null
+        return openGridContextMenuItem(context.target, context.selection) ?? null
       }
     })
 

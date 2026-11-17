@@ -31,7 +31,7 @@ moduleSystem.registerModule({
       priority: config.priority.open,
       useMenuItem: (context: AssetListGridContextMenuProps) => {
         const { openGridContextMenuItem } = useOpen('asset')
-        return openGridContextMenuItem(context.row) ?? null
+        return openGridContextMenuItem(context.row, context.selection) ?? null
       }
     })
 

@@ -17,11 +17,13 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { resolveActionTargets } from '@Pimcore/components/element-tree/utils/selection-targets'
+import { isEmpty } from 'lodash'
 import { ContextMenuActionName } from '..'
 
 export interface UseOpenHookReturn {
   openContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
-  openGridContextMenuItem: (row: any) => ItemType | undefined
+  openGridContextMenuItem: (row: any, selection?: GridContextMenuProps[]) => ItemType | undefined
 }
 
 export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
@@ -43,22 +45,30 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
     }
   }
 
-  const openGridContextMenuItem = (row: any): ItemType | undefined => {
+  const openGridContextMenuItem = (row: any, selection?: GridContextMenuProps[]): ItemType | undefined => {
     const data: GridContextMenuProps = row.original ?? {}
     if (data.id === undefined || data.isLocked === undefined || data.permissions === undefined) {
       return
     }
 
+    const targets = resolveActionTargets(data, selection ?? [])
+    const viewableTargets = targets.filter(target => checkElementPermission(target.permissions, 'view'))
+
     return {
-      label: t('element.open'),
+      label: targets.length > 1
+        ? t('element.open-selected', { count: viewableTargets.length })
+        : t('element.open'),
       key: ContextMenuActionName.open,
       icon: <Icon value={ 'open-folder' } />,
-      hidden: !checkElementPermission(data.permissions, 'view'),
+      hidden: isEmpty(viewableTargets),
       onClick: async () => {
-        await openElement({
-          id: data.id,
-          type: elementType
-        })
+        // One after the other, so the tabs open in selection order
+        for (const target of viewableTargets) {
+          await openElement({
+            id: target.id,
+            type: elementType
+          })
+        }
       }
     }
   }
