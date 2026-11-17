@@ -18,6 +18,7 @@ import {
 } from '../dynamic-type-object-data-abstract'
 import { ClassificationStore, type ClassificationStoreProps } from '../components/classification-store/classification-store'
 import { getKeyLabel, type KeyLabelKey } from '../components/classification-store/utils/key-label'
+import { multiValueMembersOf } from '../components/classification-store/utils/multi-value-members'
 import { filterInheritedFields } from '../components/classification-store/utils/group-value'
 import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
@@ -26,6 +27,7 @@ import {
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { type ClassificationStoreCollection2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE = 'language-comparison-locale'
@@ -135,7 +137,13 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
         // value into an array instead of into the key bucket.
         return [{
           fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
-          fieldData: { ...dataItem.definition, name: String(dataItem.id), title: getKeyLabel(dataItem as KeyLabelKey) },
+          // the layout members resolved, because the blob names the default variant `unqualifiedValue`
+          fieldData: {
+            ...dataItem.definition,
+            ...multiValueMembersOf(dataItem as ClassificationStoreCollection2),
+            name: String(dataItem.id),
+            title: getKeyLabel(dataItem as KeyLabelKey)
+          },
           formPath: [...formPath, item.name, String(groupId), CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE, String(dataItem.id)],
           localeInFormPath: true
         }]
