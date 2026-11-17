@@ -712,7 +712,7 @@ export type Document = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
-    /** Workflow states visible in the header; null outside tree listings and for elements the user may not view */
+    /** Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders */
     workflowStates?: WorkflowStatus[] | null;
     /** Full path */
     fullPath: string;

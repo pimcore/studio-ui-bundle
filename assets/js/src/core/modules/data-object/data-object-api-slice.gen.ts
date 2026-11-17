@@ -707,7 +707,7 @@ export type DataObject = Element & {
     customAttributes: CustomAttributes;
     /** Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search */
     score?: number | null;
-    /** Workflow states visible in the header; null outside tree listings and for elements the user may not view */
+    /** Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders */
     workflowStates?: WorkflowStatus[] | null;
     /** Key */
     key: string;
