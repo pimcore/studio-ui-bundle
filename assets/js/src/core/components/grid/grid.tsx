@@ -601,6 +601,11 @@ export const Grid = ({
   }
 
   function selectRowRange (targetRowId: string): boolean {
+    // An emptied selection (toggle-all, reset by the parent) leaves no usable anchor
+    if (isEmpty(table.getState().rowSelection)) {
+      return false
+    }
+
     const rows = table.getRowModel().rows
     const anchorIndex = rows.findIndex(row => row.id === selectionAnchorRowIdRef.current)
     const targetIndex = rows.findIndex(row => row.id === targetRowId)

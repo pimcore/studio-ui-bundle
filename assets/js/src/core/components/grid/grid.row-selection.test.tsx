@@ -65,18 +65,21 @@ const SelectableGrid = ({ multiple = true, sorting }: SelectableGridProps): Reac
 
   // Without the header row only the row checkboxes are left, and no sort button that needs the icon library
   return (
-    <Grid
-      columns={ columns }
-      data={ data }
-      enableMultipleRowSelection={ multiple }
-      enableRowSelection={ !multiple }
-      enableSorting={ sorting !== undefined }
-      hideColumnHeaders
-      onSelectedRowsChange={ setSelectedRows }
-      selectedRows={ selectedRows }
-      setRowId={ (originalRow) => String(originalRow.id) }
-      sorting={ sorting }
-    />
+    <>
+      <button onClick={ () => { setSelectedRows({}) } }>Reset selection</button>
+      <Grid
+        columns={ columns }
+        data={ data }
+        enableMultipleRowSelection={ multiple }
+        enableRowSelection={ !multiple }
+        enableSorting={ sorting !== undefined }
+        hideColumnHeaders
+        onSelectedRowsChange={ setSelectedRows }
+        selectedRows={ selectedRows }
+        setRowId={ (originalRow) => String(originalRow.id) }
+        sorting={ sorting }
+      />
+    </>
   )
 }
 
@@ -138,6 +141,21 @@ describe('Grid Shift-click range selection on the row checkboxes', () => {
     clickRow(5, { shiftKey: true })
 
     expect(getCheckedRows()).toEqual([2, 3, 4, 5])
+  })
+
+  it('starts a new range at the clicked row after the parent reset the selection', () => {
+    render(<SelectableGrid />)
+
+    clickRow(1)
+    clickRow(3, { shiftKey: true })
+    fireEvent.click(screen.getByRole('button', { name: 'Reset selection' }))
+    clickRow(5, { shiftKey: true })
+
+    expect(getCheckedRows()).toEqual([5])
+
+    clickRow(3, { shiftKey: true })
+
+    expect(getCheckedRows()).toEqual([3, 4, 5])
   })
 
   it('keeps a plain click toggling the single row', () => {
