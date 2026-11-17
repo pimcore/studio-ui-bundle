@@ -32,6 +32,8 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
+import { applyComparisonValues, prepareComparisonValues } from './helpers/prepare-comparison-values'
+import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { LanguageComparisonContent } from './language-comparison-content'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
@@ -49,6 +51,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const { currentLayout } = useLayoutSelection()
   const { currentLanguage } = useLanguageSelection()
   const { form: editForm, updateModifiedDataObjectAttributes, updateDraft } = useEditFormContext()
+  const inheritanceState = useInheritanceState()
   const user = useUser()
   const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const [form] = Form.useForm()
@@ -79,6 +82,25 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   useEffect(() => {
     form.setFieldsValue(initialValues)
   }, [initialValues])
+
+  /**
+   * A column writes through a plain form item, so the bucket it writes into has to be an
+   * object before the first keystroke - on open and whenever a column switches language.
+   */
+  useEffect(() => {
+    if (!open || localizedFields.length === 0) {
+      return
+    }
+
+    const values: Record<string, any> = form.getFieldsValue(true)
+
+    applyComparisonValues(form, values, prepareComparisonValues({
+      values,
+      descriptors: localizedFields,
+      locales: selectedLocales,
+      objectDataRegistry
+    }))
+  }, [open, localizedFields, selectedLocales])
 
   useEffect(() => {
     if (!isNil(layoutError)) {
@@ -130,9 +152,15 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     }))
   }
 
+  // The comparison applies the whole field, inherited values included, so the types that
+  // build their payload themselves need to know which of them still inherit.
+  const isInherited = (fieldName: string): boolean => {
+    return inheritanceState?.getInheritanceState(fieldName.split('.'))?.inherited === true
+  }
+
   const handleApplyChanges = (): void => {
     editForm.setFieldsValue(changedValues)
-    updateModifiedDataObjectAttributes(changedValues)
+    updateModifiedDataObjectAttributes(changedValues, { isInherited })
     void updateDraft().then(() => { setChangedValues({}) })
 
     onClose()
