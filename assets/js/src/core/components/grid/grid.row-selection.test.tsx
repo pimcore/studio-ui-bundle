@@ -8,6 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React, { useState } from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
+import { Grid } from './grid'
+
 // antd-style is untranspiled ESM — every `.styles.ts` in the render tree goes through this
 // factory, so stubbing it here avoids mocking each `.styles.ts` file individually
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -38,22 +43,13 @@ jest.mock('./grid-cell/grid-cell', () => {
   const { flexRender } = jest.requireActual('@tanstack/react-table')
 
   return {
-    GridCell: ({ cell }) => flexRender(cell.column.columnDef.cell, cell.getContext())
+    GridCell: jest.fn(({ cell }) => flexRender(cell.column.columnDef.cell, cell.getContext()))
   }
 })
 
 jest.mock('./columns/default-cell', () => ({
-  DefaultCell: () => null
+  DefaultCell: jest.fn(() => null)
 }))
-
-// eslint-disable-next-line import/first
-import React, { useState } from 'react'
-// eslint-disable-next-line import/first
-import { fireEvent, render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
-// eslint-disable-next-line import/first
-import { Grid } from './grid'
 
 // Names out of id order, so that sorting by name gives a displayed order that differs from the data order
 const data = ['delta', 'alpha', 'foxtrot', 'bravo', 'echo', 'charlie'].map((name, index) => ({ id: index + 1, name }))
