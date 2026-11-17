@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isNil, merge } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -33,6 +33,7 @@ import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dyn
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
 import { applyChangedValuesToEditForm, applyComparisonValues, prepareComparisonValues } from './helpers/prepare-comparison-values'
+import { collectChangedFieldPaths, createIsInherited } from './helpers/comparison-inheritance'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { LanguageComparisonContent } from './language-comparison-content'
@@ -70,6 +71,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
   const [selectedLocales, setSelectedLocales] = useState<string[]>([])
   const [changedValues, setChangedValues] = useState<Record<string, any>>({})
+  /** What the dialog typed into, see createIsInherited. The set is kept, so a closure of an earlier render reads the current paths. */
+  const changedFieldPathsRef = useRef<Set<string>>(new Set())
 
   const isAllowedToEdit = checkElementPermission(dataObject?.permissions, 'save')
   const viewableLanguages: string[] = useMemo(() => dataObject?.permissions?.localizedView?.split(',') ?? [], [dataObject?.permissions])
@@ -80,6 +83,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   }, [open])
 
   useEffect(() => {
+    changedFieldPathsRef.current.clear()
     form.setFieldsValue(initialValues)
   }, [initialValues])
 
@@ -147,6 +151,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
     const fullValue = form.getFieldValue(changedKey)
 
+    collectChangedFieldPaths(changedValues).forEach(path => changedFieldPathsRef.current.add(path))
+
     setChangedValues(prev => merge({}, prev, {
       [changedKey]: fullValue
     }))
@@ -154,9 +160,10 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
   // The comparison applies the whole field, inherited values included, so the types that
   // build their payload themselves need to know which of them still inherit.
-  const isInherited = (fieldName: string): boolean => {
-    return inheritanceState?.getInheritanceState(fieldName.split('.'))?.inherited === true
-  }
+  const isInherited = createIsInherited({
+    changedFieldPaths: changedFieldPathsRef.current,
+    getInheritanceState: (name: string[]) => inheritanceState?.getInheritanceState(name)
+  })
 
   const handleApplyChanges = (): void => {
     applyChangedValuesToEditForm({
