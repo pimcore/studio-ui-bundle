@@ -32,7 +32,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
-import { applyComparisonValues, prepareComparisonValues } from './helpers/prepare-comparison-values'
+import { applyChangedValuesToEditForm, applyComparisonValues, prepareComparisonValues } from './helpers/prepare-comparison-values'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { LanguageComparisonContent } from './language-comparison-content'
@@ -159,7 +159,13 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   }
 
   const handleApplyChanges = (): void => {
-    editForm.setFieldsValue(changedValues)
+    applyChangedValuesToEditForm({
+      editForm,
+      changedValues,
+      descriptors: localizedFields,
+      locales: selectedLocales,
+      objectDataRegistry
+    })
     updateModifiedDataObjectAttributes(changedValues, { isInherited })
     void updateDraft().then(() => { setChangedValues({}) })
 

@@ -70,3 +70,36 @@ export const applyComparisonValues = (
 
   form.setFields(fields)
 }
+
+interface IApplyToEditFormProps {
+  editForm: Pick<FormInstance, 'getFieldsValue' | 'setFields' | 'setFieldsValue'>
+  changedValues: Record<string, any>
+  descriptors: ILocalizedFieldDescriptor[]
+  locales: Array<string | null>
+  objectDataRegistry: DynamicTypeObjectDataRegistry
+}
+
+/**
+ * Hands the comparison's changes to the editor form. The buckets it writes into are coerced
+ * there as well, because the merge of setFieldsValue cannot replace an empty list with an
+ * object: the editor would keep a bucket its own control reads as empty, and the value the
+ * comparison just saved would be missing from the editor until the object is loaded again.
+ */
+export const applyChangedValuesToEditForm = ({
+  editForm,
+  changedValues,
+  descriptors,
+  locales,
+  objectDataRegistry
+}: IApplyToEditFormProps): void => {
+  const values: Record<string, any> = editForm.getFieldsValue(true)
+
+  applyComparisonValues(editForm, values, prepareComparisonValues({
+    values,
+    descriptors,
+    locales,
+    objectDataRegistry
+  }))
+
+  editForm.setFieldsValue(changedValues)
+}

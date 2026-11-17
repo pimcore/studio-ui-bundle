@@ -18,7 +18,9 @@ import {
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { mergeFormChanges } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/utils/merge-form-changes'
 import { type ILocalizedFieldDescriptor } from './helpers/process-layout-data'
-import { applyComparisonValues, prepareComparisonValues } from './helpers/prepare-comparison-values'
+import { applyChangedValuesToEditForm, applyComparisonValues, prepareComparisonValues } from './helpers/prepare-comparison-values'
+import { filterInheritedFields, getMergedValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/group-value'
+import { cloneDeep, isNil, setWith } from 'lodash'
 
 jest.mock('@Pimcore/app/depency-injection', () => ({ container: { get: jest.fn() } }))
 jest.mock('@Pimcore/app/config/services/service-ids', () => ({ serviceIds: {} }))
@@ -87,21 +89,17 @@ const extractDescriptors = async (): Promise<ILocalizedFieldDescriptor[]> => {
 }
 
 /** The name path language-comparison-content renders the key at: resolved group + key name. */
-const getFieldPath = (descriptor: ILocalizedFieldDescriptor, locale: string): Array<string | number> => [
-  ...descriptor.formPath
-    .slice(0, -1)
-    .map(part => part === CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE ? locale : part),
-  descriptor.fieldData.name as string | number
-]
-
-const findDescriptor = (descriptors: ILocalizedFieldDescriptor[], keyId: number): ILocalizedFieldDescriptor => {
+const getFieldPath = (descriptors: ILocalizedFieldDescriptor[], keyId: number, locale: string): Array<string | number> => {
   const descriptor = descriptors.find(item => String(item.fieldData.name) === String(keyId))
 
   if (descriptor === undefined) {
     throw new Error(`no comparison column for key ${keyId}`)
   }
 
-  return descriptor
+  return [
+    ...descriptor.formPath.slice(0, -1).map(part => part === CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE ? locale : part),
+    descriptor.fieldData.name as string | number
+  ]
 }
 
 const renderComparisonForm = (): FormInstance => {
@@ -124,11 +122,6 @@ const renderComparisonForm = (): FormInstance => {
   return formInstance
 }
 
-interface IEditResult {
-  payload: Record<string, any>
-  serializedPayload: Record<string, any>
-}
-
 /**
  * Drives the comparison dialog's write path for one edit: seed the form from the editor,
  * let the types prepare the buckets, write the key the way the rendered item does, and
@@ -144,7 +137,7 @@ const editInComparison = async ({
   keyId?: number
   locales?: string[]
   isInherited?: (fieldName: string) => boolean
-}): Promise<IEditResult> => {
+}): Promise<{ payload: Record<string, any>, serializedPayload: Record<string, any> }> => {
   const descriptors = await extractDescriptors()
   const form = renderComparisonForm()
 
@@ -162,7 +155,7 @@ const editInComparison = async ({
   })
 
   act(() => {
-    form.setFieldValue(getFieldPath(findDescriptor(descriptors, keyId), EDITED_LOCALE), TYPED_VALUE)
+    form.setFieldValue(getFieldPath(descriptors, keyId, EDITED_LOCALE), TYPED_VALUE)
   })
 
   const payload = mergeFormChanges(
@@ -231,5 +224,74 @@ describe('a change of the classification store control itself', () => {
     )
 
     expect(payload[FIELD_NAME]).toEqual(controlPayload)
+  })
+})
+
+/**
+ * The editor keeps its own form value, and its control rebuilds the payload from it. A bucket
+ * the Apply left as an empty list reads as an empty group there, so the value the comparison
+ * just saved would be gone from the editor until the object is loaded again - and the next
+ * ordinary edit would no longer carry it.
+ */
+describe('an ordinary edit after Apply', () => {
+  /** keyed-list.tsx: setWith(cloneDeep(currentValue), nameDifference, newSubValue, setAsObject) */
+  const keyedListWrite = (currentValue: any, path: string[], value: unknown): any => {
+    const newValue = cloneDeep(currentValue)
+
+    setWith(newValue, path, value, (node: any) => isNil(node) ? {} : node)
+
+    return newValue
+  }
+
+  const applyThenEditInTheEditor = async (loadedValue: Record<string, any>): Promise<Record<string, any>> => {
+    const descriptors = await extractDescriptors()
+    const editForm = renderComparisonForm()
+
+    act(() => { editForm.setFieldsValue({ [FIELD_NAME]: loadedValue }) })
+
+    const appliedValue = {
+      ...loadedValue,
+      [GROUP_ID]: { [EDITED_LOCALE]: { [EDITED_KEY_ID]: TYPED_VALUE } }
+    }
+
+    act(() => {
+      applyChangedValuesToEditForm({
+        editForm,
+        changedValues: { [FIELD_NAME]: appliedValue },
+        descriptors,
+        locales: [EDITED_LOCALE, 'en'],
+        objectDataRegistry
+      })
+    })
+
+    // the control reads the editor form value and rebuilds its keyed-list baseline from it
+    const valueAfterApply = editForm.getFieldValue(FIELD_NAME)
+    const baseline = getMergedValue(valueAfterApply, loadedValue, valueAfterApply, () => false)
+
+    // the user types into another key of the same group and language, and the payload is built
+    // (filterInheritedFields is what buildPayload rests on; its remaining steps only add group
+    // markers and restored keys, neither of which applies here)
+    const secondEdit = keyedListWrite(baseline, [String(GROUP_ID), EDITED_LOCALE, String(OTHER_KEY_ID)], 'second edit')
+
+    return JSON.parse(JSON.stringify(filterInheritedFields(secondEdit, () => false)))
+  }
+
+  it('still carries the applied value when the group was loaded as an empty list', async () => {
+    const payload = await applyThenEditInTheEditor({ activeGroups: { [GROUP_ID]: true }, [GROUP_ID]: [] })
+
+    expect(payload[GROUP_ID]).toEqual({
+      [EDITED_LOCALE]: { [EDITED_KEY_ID]: TYPED_VALUE, [OTHER_KEY_ID]: 'second edit' }
+    })
+  })
+
+  it('still carries the applied value when the group was loaded as an object', async () => {
+    const payload = await applyThenEditInTheEditor({
+      activeGroups: { [GROUP_ID]: true },
+      [GROUP_ID]: { en: { [EDITED_KEY_ID]: 'english' } }
+    })
+
+    expect(payload[GROUP_ID][EDITED_LOCALE]).toEqual({
+      [EDITED_KEY_ID]: TYPED_VALUE, [OTHER_KEY_ID]: 'second edit'
+    })
   })
 })
