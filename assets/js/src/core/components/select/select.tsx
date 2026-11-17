@@ -22,6 +22,9 @@ import { useTrackedSearch } from './use-tracked-search'
 import { useSelectAllValue } from './use-select-all-value'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
+import { SortableTag } from './components/sortable-tag/sortable-tag'
+import { SortableTags } from './components/sortable-tags/sortable-tags'
 
 export const sizeOptions = {
   normal: 150
@@ -40,6 +43,7 @@ export interface SelectProps extends AntdSelectProps {
   loadingSkeleton?: boolean
   /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount` or `labelInValue`, hidden while `loading`). */
   allowSelectAll?: boolean
+  sortableTags?: boolean
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({
@@ -56,6 +60,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   theme = 'default',
   loadingSkeleton = false,
   allowSelectAll = false,
+  sortableTags = false,
   dataTestId,
   loading = false,
   onDropdownVisibleChange,
@@ -105,6 +110,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   }
 
   const computedWidth = getComputedWidth()
+
+  const isTagSortingEnabled = mode === 'multiple' && sortableTags
+  const renderSortableTag = (tagProps: CustomTagProps): React.JSX.Element => <SortableTag { ...tagProps } />
 
   let computedMinWidth: undefined | number
 
@@ -261,35 +269,42 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       value={ customIcon! }
     />
     )}
-      <AntdSelect
-        allowClear={ false }
-        className={ selectClassNames }
-        dropdownRender={ dropdownRender }
-        menuItemSelectedIcon={ getItemSelectedIcon() }
-        mode={ mode }
-        notFoundContent={ <Flex
-          align={ 'center' }
-          justify={ 'center' }
-                          >
-          <Icon
-            className={ 'm-r-mini' }
-            value={ 'alert-outline' }
-          /> {t('no-data-available')}</Flex> }
-        onBlur={ handleBlur }
+      <SortableTags
+        enabled={ isTagSortingEnabled }
         onChange={ handleChange }
-        onDeselect={ handleDeselect }
-        onDropdownVisibleChange={ handleDropdownVisibleChange }
-        onFocus={ handleFocus }
-        onSearch={ handleSearch }
-        onSelect={ handleSelect }
-        ref={ selectRef }
-        searchValue={ controlledSearchValue }
-        status={ status }
-        style={ computedStyle }
-        suffixIcon={ getSuffixIcon() }
         value={ currentValue }
-        { ...antdSelectProps }
-      />
+      >
+        <AntdSelect
+          allowClear={ false }
+          className={ selectClassNames }
+          dropdownRender={ dropdownRender }
+          menuItemSelectedIcon={ getItemSelectedIcon() }
+          mode={ mode }
+          notFoundContent={ <Flex
+            align={ 'center' }
+            justify={ 'center' }
+                            >
+            <Icon
+              className={ 'm-r-mini' }
+              value={ 'alert-outline' }
+            /> {t('no-data-available')}</Flex> }
+          onBlur={ handleBlur }
+          onChange={ handleChange }
+          onDeselect={ handleDeselect }
+          onDropdownVisibleChange={ handleDropdownVisibleChange }
+          onFocus={ handleFocus }
+          onSearch={ handleSearch }
+          onSelect={ handleSelect }
+          ref={ selectRef }
+          searchValue={ controlledSearchValue }
+          status={ status }
+          style={ computedStyle }
+          suffixIcon={ getSuffixIcon() }
+          value={ currentValue }
+          { ...antdSelectProps }
+          tagRender={ isTagSortingEnabled ? renderSortableTag : antdSelectProps.tagRender }
+        />
+      </SortableTags>
     </div>
   )
 })
