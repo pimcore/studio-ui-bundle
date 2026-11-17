@@ -112,6 +112,34 @@ export const useAreablockEditable = ({
     onChange?.(newValue)
   }, [onChange, areablockManager])
 
+  const insertRenderedAreaElement = useCallback((container: HTMLElement, htmlCode: string, index: number): void => {
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = htmlCode
+    const newElement = tempDiv.firstElementChild
+
+    if (isNil(newElement)) return
+
+    const newAreaElement = newElement as HTMLElement
+
+    hideElementUntilRendered(newAreaElement)
+
+    const existingElements = areablockManager.queryElements()
+
+    if (existingElements.length === 0) {
+      container.appendChild(newAreaElement)
+      const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
+      newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
+    } else if (!isNil(existingElements[index - 1])) {
+      existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
+    } else if (!isNil(existingElements[index])) {
+      existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
+    }
+
+    const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
+    newAreaElement.appendChild(dropzoneContainer)
+    applyStylesToAreaEntries()
+  }, [areablockManager, hideElementUntilRendered, applyStylesToAreaEntries])
+
   const addArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
     if (disabled) return
 
@@ -172,31 +200,7 @@ export const useAreablockEditable = ({
       }
 
       if (!isNil(data?.htmlCode)) {
-        const tempDiv = document.createElement('div')
-        tempDiv.innerHTML = data.htmlCode
-        const newElement = tempDiv.firstElementChild
-
-        if (!isNil(newElement)) {
-          const newAreaElement = newElement as HTMLElement
-
-          hideElementUntilRendered(newAreaElement)
-
-          const existingElements = areablockManager.queryElements()
-
-          if (existingElements.length === 0) {
-            container.appendChild(newAreaElement)
-            const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
-            newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
-          } else if (!isNil(existingElements[index - 1])) {
-            existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
-          } else if (!isNil(existingElements[index])) {
-            existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
-          }
-
-          const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
-          newAreaElement.appendChild(dropzoneContainer)
-          applyStylesToAreaEntries()
-        }
+        insertRenderedAreaElement(container, data.htmlCode, index)
       }
 
       if (!isNil(data?.editableDefinitions) && isArray(data?.editableDefinitions)) {
@@ -215,7 +219,7 @@ export const useAreablockEditable = ({
       console.error('Failed to add area:', error)
       handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId])
+  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, insertRenderedAreaElement])
   const removeArea = useCallback((element: HTMLElement) => {
     if (disabled) return
 
