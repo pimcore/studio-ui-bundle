@@ -15,6 +15,7 @@ import {
   CLASSIFICATION_STORE_EXCLUDED_TYPES,
   CLASSIFICATION_STORE_KEY_TYPE_TAG,
   CLASSIFICATION_STORE_WITHDRAWN_TYPES,
+  ENGINE_CAPABILITY_MULTI_VALUE,
   ENGINE_CAPABILITY_STRUCTURED_VALUES,
   isKeyTypeHeldByEngine,
   isOfferedAsKeyType,
@@ -171,6 +172,28 @@ describe('agreement with core on the withdrawn key types', () => {
     expect(isOfferedAsKeyType('manyToOneRelation')).toBe(true)
     expect(isOfferedAsKeyType('manyToManyRelation')).toBe(true)
   })
+
+  /**
+   * The second rule the same two files hold between them: `multiValue` is the one key type that
+   * needs an engine capability because of what its DECLARATION is rather than what its value is.
+   * Core answers it in `KeyTypeSupport::requiredEngineFeatures()`, pinned on its side by the same
+   * `WithdrawnKeyTypePickerAgreementTest`; this map is what the picker reads.
+   */
+  it('requires MultiValue for the multiValue type, as KeyTypeSupport::requiredEngineFeatures() does', () => {
+    expect(KEY_TYPE_REQUIRED_CAPABILITIES.multiValue).toEqual([ENGINE_CAPABILITY_MULTI_VALUE])
+  })
+
+  // the control: core answers nothing for a type whose declaration needs no addressing, so the
+  // picker must not require anything for it either - including the other wrapper
+  it('requires nothing of the declaration of any other type', () => {
+    expect(KEY_TYPE_REQUIRED_CAPABILITIES.encryptedField).toBeUndefined()
+    expect(KEY_TYPE_REQUIRED_CAPABILITIES.input).toBeUndefined()
+    expect(
+      Object.entries(KEY_TYPE_REQUIRED_CAPABILITIES)
+        .filter(([, capabilities]) => capabilities.includes(ENGINE_CAPABILITY_MULTI_VALUE))
+        .map(([id]) => id)
+    ).toEqual(['multiValue'])
+  })
 })
 
 describe('isKeyTypeHeldByEngine', () => {
@@ -190,6 +213,17 @@ describe('isKeyTypeHeldByEngine', () => {
   it('holds a relation on StructuredValues alone, without the relations capability', () => {
     expect(isKeyTypeHeldByEngine('manyToOneRelation', [ENGINE_CAPABILITY_STRUCTURED_VALUES])).toBe(true)
     expect(isKeyTypeHeldByEngine('manyToOneRelation', [])).toBe(false)
+  })
+
+  // The declaration half: multiValue is refused where the engine cannot address qualifiers and
+  // held where it can, and the capability it needs is its own rather than StructuredValues.
+  it('holds multiValue only on an engine reporting MultiValue', () => {
+    expect(isKeyTypeHeldByEngine('multiValue', [])).toBe(false)
+    expect(isKeyTypeHeldByEngine('multiValue', [ENGINE_CAPABILITY_STRUCTURED_VALUES])).toBe(false)
+    expect(isKeyTypeHeldByEngine('multiValue', [ENGINE_CAPABILITY_MULTI_VALUE])).toBe(true)
+
+    // the other wrapper is about how the value is stored, not how it is addressed
+    expect(isKeyTypeHeldByEngine('encryptedField', [])).toBe(true)
   })
 
   // Everything reached through SimpleNormalizerTrait normalizes to `mixed`, so KeyTypeSupport

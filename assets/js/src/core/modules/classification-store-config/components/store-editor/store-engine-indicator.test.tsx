@@ -41,7 +41,13 @@ describe('StoreEngineIndicator', () => {
     expect(screen.queryByText('classification-store.engine.eav-hint')).not.toBeInTheDocument()
   })
 
-  it('shows nothing when the store reports no engine', () => {
+  /**
+   * Null is no longer "the store stores no engine" - the response carries the resolved engine, so
+   * such a store arrives as 'eav' and is named by the first case above. What is left is a core
+   * that cannot be asked at all, which reports no capability set either, and nothing is claimed
+   * about it here.
+   */
+  it('shows nothing when the engine could not be asked for at all', () => {
     storeEngine = { engine: null, engineCapabilities: null }
     const { container } = render(<StoreEngineIndicator storeId={ 1 } />)
 

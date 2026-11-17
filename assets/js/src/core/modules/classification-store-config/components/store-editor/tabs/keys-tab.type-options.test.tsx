@@ -19,6 +19,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { KeysTab } from './keys-tab'
+import { ENGINE_CAPABILITY_STRUCTURED_VALUES } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
 
 interface CapturedOption {
   value: string
@@ -35,7 +36,10 @@ const TYPE_IDS = ['input', 'email', 'geopoint', 'manyToOneRelation', 'multiValue
 // A withdrawn type still carries the key-type tag, so the registry still answers with it and the
 // tab is what has to drop it. The second one is a type this bundle does not even ship.
 const WITHDRAWN_TYPE_IDS = ['consent', 'permissionManyToOneRelation']
-const DOCUMENT_CAPABILITIES = ['StructuredValues', 'Relations']
+// What the document engine reports: every capability there is. The EAV engine reports only
+// PerKeyLocalization, which is why an EAV store is given the empty set below.
+const DOCUMENT_CAPABILITIES = ['MultiValue', 'Variants', 'PerKeyLocalization', 'Relations', 'StructuredValues']
+const MULTI_VALUE = 'multiValue'
 
 // a declaration, so it is initialised when the hoisted mock factories run
 function stub (): null {
@@ -127,11 +131,19 @@ describe('KeysTab type select', () => {
     WITHDRAWN_TYPE_IDS.forEach((id) => { expect(values).not.toContain(id) })
   })
 
-  it('offers multiValue as a key type, held by every engine', () => {
+  // multiValue is offered on an engine that can address its qualifiers and disabled where it
+  // cannot. Its value is its inner type's, so the value columns hold it - what they have no room
+  // for is the qualifier saying which slot, which is the capability core refuses the save on.
+  it('offers multiValue undisabled only where the engine reports MultiValue', () => {
+    storeEngine = { engine: 'document', engineCapabilities: DOCUMENT_CAPABILITIES }
+    render(<KeysTab storeId={ STORE_ID } />)
+
+    expect(typeOptions().find((option) => option.value === MULTI_VALUE)).toEqual({ label: 'field-definition.multi-value', value: MULTI_VALUE })
+
     storeEngine = { engine: 'eav', engineCapabilities: [] }
     render(<KeysTab storeId={ STORE_ID } />)
 
-    expect(typeOptions().find((option) => option.value === 'multiValue')).toEqual({ label: 'field-definition.multi-value', value: 'multiValue' })
+    expect(disabledTypes()).toContain(MULTI_VALUE)
   })
 
   it('lists the structured types but disables them on an EAV store', () => {
@@ -139,16 +151,17 @@ describe('KeysTab type select', () => {
     render(<KeysTab storeId={ STORE_ID } />)
 
     expect(typeOptions().map((option) => option.value).sort()).toEqual([...TYPE_IDS].sort())
-    expect(disabledTypes().sort()).toEqual(['geopoint', 'manyToOneRelation'])
+    expect(disabledTypes().sort()).toEqual(['geopoint', 'manyToOneRelation', MULTI_VALUE])
   })
 
-  // The definition gate core applies is StructuredValues alone, so an engine reporting only that
-  // disables nothing - including the relation types, whose Relations check is a write-time one.
-  it('disables nothing on an engine that reports StructuredValues without Relations', () => {
-    storeEngine = { engine: 'document', engineCapabilities: ['StructuredValues'] }
+  // The value half of the definition gate reads StructuredValues alone, so an engine reporting only
+  // that disables no type for its value - including the relation types, whose Relations check is a
+  // write-time one. multiValue is disabled there for the other half: its declaration, not its value.
+  it('disables no type for its value on an engine that reports StructuredValues without Relations', () => {
+    storeEngine = { engine: 'document', engineCapabilities: [ENGINE_CAPABILITY_STRUCTURED_VALUES] }
     render(<KeysTab storeId={ STORE_ID } />)
 
-    expect(disabledTypes()).toEqual([])
+    expect(disabledTypes()).toEqual([MULTI_VALUE])
   })
 
   it('disables nothing when the response carries no capability set', () => {

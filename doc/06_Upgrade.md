@@ -8,6 +8,8 @@ The following steps are necessary when updating to newer versions.
 
 ## Upgrade to 2026.4.0
 
+- [Classification Store] Changed: the `multiValue` key type is offered but disabled in the key-type picker of a store whose engine does not report the `MultiValue` capability, with the existing "needs the document engine" tooltip, because core refuses such a key at definition time. Keys already defined that way keep working and stay editable. The engine indicator beside Export/Import also names the EAV engine now where it previously showed nothing: the store response reports the resolved engine, and a store that stores none is on EAV.
+
 - [Classification Store] Added: sub groups, the per-store vocabulary a key's assignment to a group can be tagged with.
 
 - [Classification Store] Added: a key assignment in a group can narrow the key's options and units for that group, from a new action on each row of the group's key grid.

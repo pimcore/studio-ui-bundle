@@ -25,6 +25,9 @@ export const StoreEngineIndicator = ({ storeId }: IStoreEngineIndicatorProps): R
   const { t } = useTranslation()
   const { engine } = useStoreEngine(storeId)
 
+  // The store response carries the RESOLVED engine, so a store that stores none reports 'eav'
+  // rather than nothing. Null is the one case left - a core that cannot be asked at all, which
+  // reports no capability set either - and there is nothing to name then.
   if (isNil(engine)) {
     return <></>
   }
