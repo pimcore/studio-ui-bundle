@@ -29,11 +29,12 @@ import { withContextMenu } from './node/with-context-menu'
 export interface TreeContainerProps {
   id: number
   showRoot?: boolean
+  onSelect?: (node: TreeNode) => Promise<void> | void
 }
 
 export const DataObjectTreeNode = withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))
 
-const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ id = 1, showRoot = true, onSelect }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
@@ -48,7 +49,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     )
   }
 
-  async function onSelect (node: TreeNode): Promise<void> {
+  async function onOpenDataObject (node: TreeNode): Promise<void> {
     dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'data-object', opening: true }))
 
     try {
@@ -66,7 +67,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     <ElementTree
       contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
-      onSelect={ onSelect }
+      onSelect={ onSelect ?? onOpenDataObject }
       renderFilter={ SearchContainer }
       renderNode={ DataObjectTreeNode }
       renderNodeContent={ defaultTreeProps.renderNodeContent }

@@ -31,6 +31,8 @@ sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter
 sidebar.search_filter: Suchen & Filtern
 sidebar.clear-all-filters: Alle Filter zurücksetzen
+sidebar.folder_navigation: Ordner
+element_selector.current_folder: "Eingeschränkt auf: {{path}}"
 add-areas: Bereiche hinzufügen
 content-settings: Inhaltseinstellungen
 site-domain.main_site: Hauptseite

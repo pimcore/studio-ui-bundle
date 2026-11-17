@@ -24,6 +24,7 @@ import { useNodeApiHook as useNodeApiHookDocument } from '@Pimcore/modules/docum
 import { NodeApiHookProvider } from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './tree-widget.styles'
+import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface TreeWidgetProps {
   id: string
@@ -34,8 +35,9 @@ export interface TreeWidgetProps {
   pageSize?: number | null
   contextPermissions: Record<string, boolean>
   showRoot?: boolean
+  onSelect?: (node: TreeNode) => Promise<void> | void
 }
-export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
+export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize, contextPermissions, showRoot = false, onSelect }: TreeWidgetProps): React.JSX.Element => {
   const { asset_tree_paging_limit: pageSizeAsset, object_tree_paging_limit: pageSizeObject } = useSettings()
   const { styles } = useStyles()
 
@@ -54,6 +56,7 @@ export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize
             <NodeApiHookProvider nodeApiHook={ useNodeApiHookAsset }>
               <AssetTreeContainer
                 id={ rootFolder?.id ?? 1 }
+                onSelect={ onSelect }
                 showRoot={ showRoot }
               />
             </NodeApiHookProvider>
@@ -62,6 +65,7 @@ export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize
             <NodeApiHookProvider nodeApiHook={ useNodeApiHookDataObject }>
               <DataObjectTreeContainer
                 id={ rootFolder?.id ?? 1 }
+                onSelect={ onSelect }
                 showRoot={ showRoot }
               />
             </NodeApiHookProvider>
@@ -70,6 +74,7 @@ export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize
             <NodeApiHookProvider nodeApiHook={ useNodeApiHookDocument }>
               <DocumentTreeContainer
                 id={ rootFolder?.id ?? 1 }
+                onSelect={ onSelect }
                 showRoot={ showRoot }
               />
             </NodeApiHookProvider>

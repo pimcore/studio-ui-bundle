@@ -31,11 +31,12 @@ import { withContextMenu } from './node/with-context-menu'
 export interface TreeContainerProps {
   id: number
   showRoot?: boolean
+  onSelect?: (node: TreeNode) => Promise<void> | void
 }
 
 export const AssetTreeNode = withDroppableStyling(withDroppable((withDndUpload(withActionStates(withDraggable(withContextMenu(TreeNodeComponent)))))))
 
-const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ id = 1, showRoot = true, onSelect }: TreeContainerProps): React.JSX.Element => {
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
   const dispatch = useAppDispatch()
@@ -49,7 +50,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     )
   }
 
-  async function onSelect (node: TreeNode): Promise<void> {
+  async function onOpenAsset (node: TreeNode): Promise<void> {
     dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'asset', opening: true }))
 
     try {
@@ -65,7 +66,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     <ElementTree
       contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
-      onSelect={ onSelect }
+      onSelect={ onSelect ?? onOpenAsset }
       renderFilter={ SearchContainer }
       renderNode={ AssetTreeNode }
       renderNodeContent={ defaultTreeProps.renderNodeContent }
