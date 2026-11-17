@@ -20,10 +20,9 @@ import { useContextMenuRowSelection } from '@Pimcore/modules/element/listing/dec
 export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.Element => {
   const { row } = props
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
-  const { selection, selectRowIfUnselected } = useContextMenuRowSelection(row)
+  const { selectRowIfUnselected } = useContextMenuRowSelection(row)
 
   const context = {
-    selection,
     target: row,
     onComplete: () => { setIsOpen(undefined) }
   }

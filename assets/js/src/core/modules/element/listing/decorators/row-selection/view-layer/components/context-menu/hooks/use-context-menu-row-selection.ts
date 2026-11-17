@@ -11,34 +11,44 @@
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { type ListGridContextMenuProps } from '@Pimcore/types/components/types'
 import { isUndefined } from 'lodash'
+import { type RowSelectionContextProps } from '../../../../context-layer/provider/row-selection-provider'
 import { useRowSelectionOptional } from '../../../../context-layer/provider/use-row-selection-optional'
 
 export interface UseContextMenuRowSelectionReturn {
-  selection: GridContextMenuProps[] | undefined
   selectRowIfUnselected: () => void
+}
+
+/** The selected rows of a listing, empty when the grid has no row selection */
+export const getSelectedGridRows = (
+  rowSelection: RowSelectionContextProps,
+  clickedRow: GridContextMenuProps
+): GridContextMenuProps[] => {
+  if (isUndefined(rowSelection)) {
+    return []
+  }
+
+  const { selectedRows, selectedRowsData } = rowSelection
+  const clickedId = String(clickedRow.id)
+
+  return Object.keys(selectedRows ?? {}).map((id): GridContextMenuProps => (
+    id === clickedId ? clickedRow : { ...selectedRowsData[Number(id)], id: Number(id) }
+  ))
 }
 
 export const useContextMenuRowSelection = (row: ListGridContextMenuProps['row']): UseContextMenuRowSelectionReturn => {
   const rowSelection = useRowSelectionOptional()
 
-  if (isUndefined(rowSelection)) {
-    return { selection: undefined, selectRowIfUnselected: () => {} }
-  }
-
-  const { selectedRows, setSelectedRows, selectedRowsData } = rowSelection
-  const rowId = String(row.id)
-  const selectedIds = Object.keys(selectedRows ?? {})
-
-  const selection = selectedIds.map((id): GridContextMenuProps => (
-    id === rowId ? row.original : { ...selectedRowsData[Number(id)], id: Number(id) }
-  ))
-
   // Like the element tree: right clicking outside the selection makes that row the selection
   const selectRowIfUnselected = (): void => {
-    if (!selectedIds.includes(rowId)) {
-      setSelectedRows({ [rowId]: true })
+    if (isUndefined(rowSelection)) {
+      return
+    }
+
+    const rowId = String(row.id)
+    if (!Object.keys(rowSelection.selectedRows ?? {}).includes(rowId)) {
+      rowSelection.setSelectedRows({ [rowId]: true })
     }
   }
 
-  return { selection, selectRowIfUnselected }
+  return { selectRowIfUnselected }
 }

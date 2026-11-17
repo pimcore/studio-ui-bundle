@@ -9,7 +9,6 @@
  */
 
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -51,8 +50,6 @@ export interface AssetListGridContextMenuProps {
     id: string
     [x: string]: any
   }
-  /** Selected rows of the listing, undefined when the grid has no row selection */
-  selection?: GridContextMenuProps[]
   onComplete?: () => void
 }
 
@@ -63,7 +60,5 @@ export interface AssetPreviewCardContextMenuProps {
 
 export interface DataObjectListGridContextMenuProps {
   target: DataObject
-  /** Selected rows of the listing, undefined when the grid has no row selection */
-  selection?: GridContextMenuProps[]
   onComplete?: () => void
 }
