@@ -847,7 +847,7 @@ interface CachedPage { items: Array<Record<string, unknown>>, totalItems: number
 interface PagedArgs { body?: { filters?: { page?: number, pageSize?: number, columnFilters?: object } } }
 
 // Delete handlers: the delete call only carries the row id, so only the cached pages that hold the row
-// are patched; an entry that never held it (another store, a filtered search) keeps its items and its total.
+// are patched at once; every cached page is then re-read, which corrects the total of a page that did not hold it.
 const holdsRow = (rowId: number) => (_args: unknown, data: CachedPage | undefined): boolean => data?.items?.some((row) => row.id === rowId) === true
 
 // A created relation is appended. Every unfiltered page of the group counts it (its total grows, so the
@@ -933,6 +933,9 @@ const api = baseApi.enhanceEndpoints({
             },
             holdsRow(args.id)
           )
+          // The delete names no store, so a page that never held the row (an unfiltered page 1 of the same
+          // store while the row sat on page 2) cannot be told from another store's: re-read them all.
+          refetchCachedPages(dispatch, 'classificationStoreConfigurationGroupCollection')
           emitClassificationStoreConfigurationChange()
         } catch {
           // Mutation failed — cache stays stale until next refetch
@@ -996,6 +999,7 @@ const api = baseApi.enhanceEndpoints({
             },
             holdsRow(args.id)
           )
+          refetchCachedPages(dispatch, 'classificationStoreConfigurationCollectionCollection')
           emitClassificationStoreConfigurationChange()
         } catch {
           // Mutation failed — cache stays stale until next refetch
