@@ -392,6 +392,10 @@ grid.filter.less: Minore di
 grid.filter.more: Maggiore di
 grid.filter.string.placeholder: Cerca o incolla un elenco con un valore per riga per trovare esattamente una di queste opzioni
 grid.filter.column: 'Filtra {{column}}'
+grid.filter.operator.label: Condizione
+grid.filter.operator.value: Corrisponde al valore
+grid.filter.operator.empty: È vuoto
+grid.filter.operator.not-empty: Non è vuoto
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -2637,6 +2641,8 @@ recycle-bin.actions.delete: Elimina
 recycle-bin.actions.delete.title: Eliminazione elementi cestino
 recycle-bin.actions.restore: Ripristina
 recycle-bin.actions.restore.title: Ripristino elementi cestino
+recycle-bin.actions.restore.relocated_one: Elemento collocato in __restored. Ora si applicano i permessi di questa cartella.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementi collocati in __restored. Ora si applicano i permessi di questa cartella."
 ownership-management.title: Gestione della proprietà
 ownership-management.show-deleted-owners: Mostra elementi di utenti eliminati
 ownership-management.deleted-user: Utente eliminato

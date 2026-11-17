@@ -392,6 +392,10 @@ grid.filter.less: Mindre enn
 grid.filter.more: Mer enn
 grid.filter.string.placeholder: Søk eller lim inn en liste med en verdi per linje for å få nøyaktig match med en av dem
 grid.filter.column: 'Filtrer {{column}}'
+grid.filter.operator.label: Betingelse
+grid.filter.operator.value: Samsvarer med verdi
+grid.filter.operator.empty: Er tom
+grid.filter.operator.not-empty: Er ikke tom
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -2637,6 +2641,8 @@ recycle-bin.actions.delete: Slett
 recycle-bin.actions.delete.title: Sletter papirkurvelementer
 recycle-bin.actions.restore: Gjenopprett
 recycle-bin.actions.restore.title: Gjenoppretter papirkurvelementer
+recycle-bin.actions.restore.relocated_one: Element plassert i __restored. Nå gjelder tillatelsene for denne mappen.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementer plassert i __restored. Nå gjelder tillatelsene for denne mappen."
 ownership-management.title: Eierskapsadministrasjon
 ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
 ownership-management.deleted-user: Slettet bruker

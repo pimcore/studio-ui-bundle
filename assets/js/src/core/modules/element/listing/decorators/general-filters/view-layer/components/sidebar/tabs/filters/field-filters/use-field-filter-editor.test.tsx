@@ -12,6 +12,9 @@ import { act, renderHook } from '@testing-library/react'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+// the class toFieldFilterType() tests against: the SDK barrel's is mocked below, and an instance of
+// that mock is not an instance of this one, so a filter type built for the resolver must use this
+import { DynamicTypeFieldFilterAbstract as ResolvedFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { type FieldFilter } from '../../../../../../context-layer/provider/field-filters/field-filters-provider'
 import { useFieldFilterEditor } from './use-field-filter-editor'
 
@@ -22,6 +25,8 @@ let onUpdateClassificationStoreColumn: (data: unknown) => void = () => {}
 const messageInfo = jest.fn()
 // every id list the hook asks the resolver to resolve, so the resolution path itself can be asserted
 const resolvedIdLists: string[][] = []
+const mockSetFieldFilters = jest.fn()
+let mockFilterType: { isFilterAvailable: () => boolean, isEmptyFilterAvailable: () => boolean } = { isFilterAvailable: () => true, isEmptyFilterAvailable: () => true }
 
 // The key types that report no grid filter: the six offered before the picker was widened, and the new ones.
 const NO_FILTER_TYPES = ['image', 'encryptedField', 'table', 'calculatedValue', 'quantityValueRange', 'password']
@@ -49,8 +54,10 @@ jest.mock('@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-typ
     getType: ({ dynamicTypeIds }: { dynamicTypeIds: string[] }) => {
       resolvedIdLists.push(dynamicTypeIds)
 
+      // A classification store key is offered on its own value filter alone, never through the empty
+      // operator, which is what the key picker's cases below assert.
       const fieldFilter = (isFilterAvailable: (subtype: string | null) => boolean): object =>
-        Object.assign(Object.create(DynamicTypeFieldFilterAbstract.prototype), { isFilterAvailable })
+        Object.assign(Object.create(ResolvedFieldFilterAbstract.prototype), { isFilterAvailable, isEmptyFilterAvailable: () => false })
 
       for (const id of dynamicTypeIds) {
         if (id === OBJECT_ADAPTER_ID) {
@@ -61,8 +68,9 @@ jest.mock('@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-typ
           return { dynamicTypeFieldFilterType: fieldFilter(() => !NO_FILTER_TYPES.includes(id)) }
         }
 
+        // a plain column drives both answers through mockFilterType, which the operator cases set
         if (id.startsWith('test.')) {
-          return fieldFilter(() => true)
+          return { dynamicTypeFieldFilterType: mockFilterType }
         }
       }
 
@@ -80,7 +88,7 @@ jest.mock('@Pimcore/modules/data-object/listing/decorator/class-definition-selec
   useClassDefinitionSelectionOptional: () => undefined
 }))
 jest.mock('../../../../../../element-filters', () => ({
-  useDraftFilterValues: () => ({ fieldFilters: draftFieldFilters, setFieldFilters: jest.fn() })
+  useDraftFilterValues: () => ({ fieldFilters: draftFieldFilters, setFieldFilters: mockSetFieldFilters })
 }))
 jest.mock('../../../../../../search-modes/use-filterable-columns', () => ({
   useFilterableColumns: (source: string) => {
@@ -110,6 +118,8 @@ const pickerKeys = (result: ReturnType<typeof useFieldFilterEditor>): string[] =
 
 describe('useFieldFilterEditor', () => {
   beforeEach(() => {
+    mockSetFieldFilters.mockReset()
+    mockFilterType = { isFilterAvailable: () => true, isEmptyFilterAvailable: () => true }
     filterableSources.length = 0
     resolvedIdLists.length = 0
     messageInfo.mockClear()
@@ -285,6 +295,85 @@ describe('useFieldFilterEditor', () => {
       act(() => { result.current.onFilterCommit(result.current.filters) })
 
       expect(onCommit).toHaveBeenCalledWith([savedFilter])
+    })
+  })
+
+  describe('operator', () => {
+    it('keeps the operator of a filter and hands it back', () => {
+      draftFieldFilters = [{ key: 'score', type: 'test.score', filterValue: undefined, operator: 'empty', locale: undefined, meta: { translationKey: 'score' } }]
+      filterableColumns = [column('score')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      expect(result.current.filters[0].operator).toBe('empty')
+    })
+
+    it('offers a field that has no value filter but can be searched for no value', () => {
+      mockFilterType = { isFilterAvailable: () => false, isEmptyFilterAvailable: () => true }
+      draftFieldFilters = []
+      filterableColumns = [column('gallery')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      expect(pickerKeys(result.current)).toEqual(['gallery'])
+    })
+
+    it('keeps offering a field with a value filter that cannot be searched for no value (e.g. an id)', () => {
+      mockFilterType = { isFilterAvailable: () => true, isEmptyFilterAvailable: () => false }
+      draftFieldFilters = []
+      filterableColumns = [column('id')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      expect(pickerKeys(result.current)).toEqual(['id'])
+    })
+
+    it('does not offer a field that cannot be searched for no value either', () => {
+      mockFilterType = { isFilterAvailable: () => false, isEmptyFilterAvailable: () => false }
+      draftFieldFilters = []
+      filterableColumns = [column('gallery')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      expect(pickerKeys(result.current)).toEqual([])
+    })
+
+    it('adds a field without a value filter with the empty operator already picked', () => {
+      mockFilterType = { isFilterAvailable: () => false, isEmptyFilterAvailable: () => true }
+      draftFieldFilters = []
+      filterableColumns = [column('gallery')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      act(() => { result.current.handleColumnClick(filterableColumns[0]) })
+
+      expect(result.current.filters).toEqual([expect.objectContaining({ id: 'gallery', operator: 'empty' })])
+    })
+
+    it('hands a field added with its operator to the draft filters right away, as there is no value to wait for', () => {
+      mockFilterType = { isFilterAvailable: () => false, isEmptyFilterAvailable: () => true }
+      draftFieldFilters = []
+      filterableColumns = [column('gallery')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      act(() => { result.current.handleColumnClick(filterableColumns[0]) })
+
+      expect(mockSetFieldFilters).toHaveBeenCalledWith([expect.objectContaining({ key: 'gallery', operator: 'empty' })])
+    })
+
+    it('keeps a field with a value filter out of the draft filters until it has a value', () => {
+      draftFieldFilters = []
+      filterableColumns = [column('id')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      act(() => { result.current.handleColumnClick(filterableColumns[0]) })
+
+      expect(mockSetFieldFilters).not.toHaveBeenCalled()
+    })
+
+    it('adds a field with a value filter without an operator', () => {
+      draftFieldFilters = []
+      filterableColumns = [column('id')]
+      const { result } = renderHook(() => useFieldFilterEditor({ onCommit: jest.fn() }))
+
+      act(() => { result.current.handleColumnClick(filterableColumns[0]) })
+
+      expect(result.current.filters[0].operator).toBeUndefined()
     })
   })
 })

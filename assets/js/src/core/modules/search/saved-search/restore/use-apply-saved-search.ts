@@ -13,6 +13,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useAppliedFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
@@ -38,13 +39,15 @@ const SYSTEM_FILTER_TYPES = new Set([SEARCH_TERM_FILTER_TYPE, 'system.pql', 'sys
 // use-data-query-helper.ts), so class-attribute field filters silently stop matching too.
 const TYPE_FILTER_KEY = 'type'
 const TYPE_FILTER_VALUE_TYPE = 'system.string'
+// A filter on the `type` column that carries an operator is a field filter like any other, not the type selection.
 const isTypeSelectEntry = (entry: ColumnFilterEntry): boolean =>
-  entry.key === TYPE_FILTER_KEY && entry.type === TYPE_FILTER_VALUE_TYPE
+  entry.key === TYPE_FILTER_KEY && entry.type === TYPE_FILTER_VALUE_TYPE && entry.operator === undefined
 
 interface ColumnFilterEntry {
   key?: string
   type?: string
   filterValue?: unknown
+  operator?: FilterOperator
   locale?: string | null
   meta?: { translationKey?: string, [key: string]: unknown }
 }
@@ -95,6 +98,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
         key: entry.key ?? '',
         type: entry.type ?? '',
         filterValue: entry.filterValue,
+        operator: entry.operator,
         locale: entry.locale,
         meta: { translationKey: entry.meta?.translationKey ?? '', ...entry.meta }
       }))
