@@ -199,7 +199,7 @@ export const create = (): LayoutProviderFactoryReturn => {
 
       // First time we have a defined layout — initialize
       isInitializedRef.current = true
-      const { structure: rootStructure, fieldDefinitions: initialFieldDefinitions } = reduce({ layout: props.layout })!
+      const { structure: rootStructure, fieldDefinitions: initialFieldDefinitions } = reduce({ layout: props.layout, registry: fieldDefinitionRegistry })!
       baselineRef.current = cloneDeep({ structure: rootStructure, fieldDefinitions: initialFieldDefinitions })
 
       setCurrentFieldDefinitionId(null)
@@ -715,7 +715,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [fieldDefinitionRegistry])
 
     const addExternalFieldDefinition: ILayoutContext['addExternalFieldDefinition'] = useCallback((structureNodeId, layout, insertIndex) => {
-      const { structure: externalStructure, fieldDefinitions: externalFieldDefinitions } = reduce({ layout })!
+      const { structure: externalStructure, fieldDefinitions: externalFieldDefinitions } = reduce({ layout, registry: fieldDefinitionRegistry })!
 
       const addNodeRecursively = (node: StructureNode): StructureNode => {
         if (node.id === structureNodeId) {

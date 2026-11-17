@@ -43,6 +43,7 @@ export interface DataComponentProps extends ObjectComponentProps {
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { name, fieldType, fieldtype } = props
+  const { technicalName, ...fieldProps } = props
   const formList = useFormList()
   const hasFormList = formList !== undefined
   let formFieldName: Array<number | string> = [name]
@@ -86,7 +87,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const keyedList = useKeyedListOptional()
 
   const _props = {
-    ...props,
+    ...fieldProps,
     title,
     defaultFieldWidth: fieldWidth,
     name: formFieldName,
@@ -124,6 +125,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
         _props={ _props }
         formFieldName={ formFieldName }
         objectDataType={ objectDataType }
+        technicalName={ technicalName ?? name }
       />
     )
   }

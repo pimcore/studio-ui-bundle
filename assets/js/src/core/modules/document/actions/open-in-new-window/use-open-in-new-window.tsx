@@ -42,7 +42,10 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
   ): Promise<void> => {
     setIsLoading(true)
 
-    const { data, error } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }, { subscribe: false }))
+    // The cached document can hold a stale settingsData.url (e.g. after a site main domain change)
+    const { data, error } = await dispatch(
+      api.endpoints.documentGetById.initiate({ id: documentId }, { forceRefetch: true, subscribe: false })
+    )
 
     if (!isUndefined(error)) {
       trackError(new ApiError(error))

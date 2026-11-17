@@ -14,7 +14,7 @@ import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import { type FileUploadStatus } from '../../hooks/use-file-upload'
 import { useStyle } from './selected-file-view.styles'
 
-interface SelectedFileViewProps {
+export interface SelectedFileViewProps {
   file: File
   loading: boolean
   isUploading: boolean

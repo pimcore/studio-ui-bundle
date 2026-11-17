@@ -10,75 +10,184 @@
 
 import React from 'react'
 import { render } from '@testing-library/react'
-import { ColumnConfigLoader } from './column-config-loader'
 
+// The loader effect depends on both the grid configuration and the available columns, and
+// it restores the configuration's saved filters. Until the available columns were tagged
+// they never changed after the first load, so the effect ran once and the restore was
+// always a configuration load. Now a class definition save invalidates them, the effect
+// runs again, and restoring the saved filters at that point would silently replace the
+// filters the user has applied and show a different set of rows.
+
+let classId = 'Product'
+
+const columnsV1 = { columns: [{ key: 'name', type: 'input', config: {} }] }
+const columnsV2 = { columns: [{ key: 'name', type: 'input', config: {} }, { key: 'added', type: 'input', config: {} }] }
+
+const configuration = {
+  columns: [{ key: 'name' }],
+  saveFilter: true,
+  filter: { columnFilters: [{ key: 'name', filterValue: 'saved' }] }
+}
+
+let availableColumnsData: unknown = columnsV1
+let configurationData: unknown = configuration
+// What RTK Query keeps in data while a request for new arguments is in flight: the result
+// for the previous arguments. currentData is undefined until the current arguments resolve.
+let staleAvailableColumnsData: unknown
+
+const setValue = jest.fn()
 const setSelectedColumns = jest.fn()
 const setAvailableColumns = jest.fn()
 const setGridConfig = jest.fn()
-const setDataLoadingState = jest.fn()
-
-let columnsResponse: { columns: Array<{ key: string }> } | undefined
-let configurationResponse: { columns: Array<{ key: string }>, saveFilter: boolean } | undefined
 
 jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
   useSettings: () => ({
     useElementId: () => ({ getId: () => 1 }),
-    ViewComponent: () => null,
-    useDataQueryHelper: () => ({ setDataLoadingState })
+    ViewComponent: () => <div data-testid="view" />,
+    useDataQueryHelper: () => ({ setDataLoadingState: jest.fn() })
   })
 }))
+
 jest.mock('../../../../class-definition-selection/context-layer/provider/use-class-definition-selection', () => ({
-  useClassDefinitionSelection: () => ({ selectedClassDefinition: { id: 'CAR' } })
+  useClassDefinitionSelection: () => ({ selectedClassDefinition: { id: classId } })
 }))
+
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
-  useDataObjectGetAvailableGridColumnsQuery: () => ({ isLoading: false, currentData: columnsResponse }),
-  useDataObjectGetGridConfigurationQuery: () => ({ isLoading: false, currentData: configurationResponse })
+  useDataObjectGetAvailableGridColumnsQuery: () => ({ isLoading: false, data: availableColumnsData ?? staleAvailableColumnsData, currentData: availableColumnsData }),
+  useDataObjectGetGridConfigurationQuery: () => ({ isLoading: false, data: configurationData, currentData: configurationData })
 }))
+
 jest.mock('@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns', () => ({
-  useSelectedColumns: () => ({ selectedColumns: [], setSelectedColumns })
+  useSelectedColumns: () => ({ selectedColumns: [{ key: 'name' }], setSelectedColumns })
 }))
+
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns', () => ({
   useAvailableColumns: () => ({ setAvailableColumns })
 }))
+
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id', () => ({
-  useSelectedGridConfigId: () => ({ id: undefined })
+  useSelectedGridConfigId: () => ({ id: 1 })
 }))
+
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config', () => ({
   useGridConfig: () => ({ setGridConfig })
 }))
+
 jest.mock('@Pimcore/modules/element/listing/decorators/general-filters/element-filters', () => ({
-  useAppliedFiltersOptional: () => undefined
+  useAppliedFiltersOptional: () => ({ setValue })
 }))
 
-const Configuration = (): React.JSX.Element => <div />
+const restoreFieldFilters = jest.fn((_filter: unknown, _availableColumns: unknown) => [{ key: 'name', value: 'saved' }])
 
-describe('ColumnConfigLoader', () => {
+jest.mock('./restore-field-filters', () => ({
+  restoreFieldFilters: (filter: unknown, availableColumns: unknown) => restoreFieldFilters(filter, availableColumns)
+}))
+
+const { ColumnConfigLoader } = jest.requireActual('./column-config-loader')
+
+const Component = (): React.JSX.Element => <div data-testid="grid" />
+
+const renderLoader = (): ReturnType<typeof render> =>
+  render(<ColumnConfigLoader Component={ Component } />)
+
+describe('column config loader', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    columnsResponse = { columns: [{ key: 'id' }, { key: 'color' }] }
-    configurationResponse = { columns: [{ key: 'id' }], saveFilter: false }
+    classId = 'Product'
+    availableColumnsData = columnsV1
+    configurationData = configuration
+    staleAvailableColumnsData = undefined
+  })
+
+  it('restores the saved filters when the grid configuration loads', () => {
+    renderLoader()
+
+    expect(setValue).toHaveBeenCalledWith('fieldFilters', [{ key: 'name', value: 'saved' }])
+  })
+
+  it('leaves the applied filters alone when only the available columns change', () => {
+    const view = renderLoader()
+    expect(setValue).toHaveBeenCalledTimes(1)
+
+    // What a class definition save now does: same configuration, new column metadata.
+    availableColumnsData = columnsV2
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
+
+    expect(setValue).toHaveBeenCalledTimes(1)
+  })
+
+  it('restores them again when a different grid configuration is loaded', () => {
+    const view = renderLoader()
+
+    configurationData = { ...configuration, columns: [{ key: 'name' }] }
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
+
+    expect(setValue).toHaveBeenCalledTimes(2)
+  })
+
+  it('waits for the new class columns before restoring the filters on a class switch', () => {
+    const view = renderLoader()
+    expect(setValue).toHaveBeenCalledTimes(1)
+
+    const otherColumns = { columns: [{ key: 'sku', type: 'input', config: {} }] }
+    const otherConfiguration = { ...configuration, columns: [{ key: 'sku' }], filter: { columnFilters: [{ key: 'sku', filterValue: 'saved' }] } }
+
+    // The other class's configuration is already cached, its columns are still loading.
+    classId = 'Accessory'
+    configurationData = otherConfiguration
+    staleAvailableColumnsData = columnsV1
+    availableColumnsData = undefined
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
+
+    expect(setValue).toHaveBeenCalledTimes(1)
+
+    availableColumnsData = otherColumns
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
+
+    expect(setValue).toHaveBeenCalledTimes(2)
+    expect(restoreFieldFilters).toHaveBeenLastCalledWith(otherConfiguration.filter, otherColumns.columns)
+  })
+
+  it('never touches the filters for a configuration that does not manage them', () => {
+    configurationData = { ...configuration, saveFilter: false }
+
+    renderLoader()
+
+    expect(setValue).not.toHaveBeenCalled()
+  })
+})
+
+describe('column config loader response pairs', () => {
+  const columns = { columns: [{ key: 'id', type: 'input', config: {} }, { key: 'color', type: 'input', config: {} }] }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    classId = 'Product'
+    availableColumnsData = columns
+    configurationData = { columns: [{ key: 'id' }], saveFilter: false }
+    staleAvailableColumnsData = undefined
   })
 
   it('applies a response pair once, however often it re-renders with it', () => {
-    const { rerender } = render(<ColumnConfigLoader Component={ Configuration } />)
-    rerender(<ColumnConfigLoader Component={ Configuration } />)
+    const view = renderLoader()
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
 
     expect(setSelectedColumns).toHaveBeenCalledTimes(1)
   })
 
   it('applies a changed response for the same arguments, such as the favourite after a delete', () => {
-    const { rerender } = render(<ColumnConfigLoader Component={ Configuration } />)
-    configurationResponse = { columns: [{ key: 'color' }], saveFilter: false }
-    rerender(<ColumnConfigLoader Component={ Configuration } />)
+    const view = renderLoader()
+    configurationData = { columns: [{ key: 'color' }], saveFilter: false }
+    view.rerender(<ColumnConfigLoader Component={ Component } />)
 
     expect(setSelectedColumns).toHaveBeenCalledTimes(2)
     expect(setSelectedColumns.mock.calls[1][0].map((column: { key: string }) => column.key)).toEqual(['color'])
-    expect(setGridConfig).toHaveBeenLastCalledWith(configurationResponse)
+    expect(setGridConfig).toHaveBeenLastCalledWith(configurationData)
   })
 
   it('applies nothing while one answer for the current arguments is still missing', () => {
-    configurationResponse = undefined
-    render(<ColumnConfigLoader Component={ Configuration } />)
+    configurationData = undefined
+    renderLoader()
 
     expect(setSelectedColumns).not.toHaveBeenCalled()
     expect(setAvailableColumns).not.toHaveBeenCalled()

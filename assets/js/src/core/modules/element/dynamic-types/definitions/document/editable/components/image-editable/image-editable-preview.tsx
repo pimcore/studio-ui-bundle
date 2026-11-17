@@ -97,6 +97,7 @@ export const ImageEditablePreview = ({
       assetId={ assetId }
       minHeight={ minHeight }
       minWidth={ minWidth }
+      onImageLoadedChange={ onImageLoadedChange }
       thumbnailUrl={ thumbnailUrl }
     />
   )

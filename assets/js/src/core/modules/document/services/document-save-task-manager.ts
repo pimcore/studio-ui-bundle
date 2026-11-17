@@ -56,6 +56,8 @@ export interface DocumentSaveResult {
 interface QueuedTask {
   task?: SaveTaskType
   onFinish?: () => void
+  /** Callers waiting for the queued save; they settle with it, so nobody proceeds before their edits are persisted. */
+  settlers: Array<{ resolve: () => void, reject: (error: unknown) => void }>
 }
 
 /**
@@ -118,7 +120,9 @@ export class DocumentSaveTaskManager {
     // Handle task queuing logic
     if (this.runningTask != null) {
       if (task === SaveTaskType.AutoSave) {
-        // Don't queue auto-saves if something is already running - they're frequent and can be skipped
+        // The running save already read its values, so edits made in the meantime would stay unsaved
+        // until the next edit. One trailing auto-save picks them all up; a queued regular save does too.
+        await this.waitForQueuedSave(task, undefined, false)
         return
       }
 
@@ -129,11 +133,29 @@ export class DocumentSaveTaskManager {
 
       // Queue the regular save task if auto-save is running
       // Important case: auto-save running, user wants to save manually
-      this.queuedTask = { task, onFinish }
+      await this.waitForQueuedSave(task, onFinish, true)
       return
     }
 
     await this.performSave(task, onFinish, useDraftData)
+  }
+
+  /**
+   * Joins the queued save (creating it if necessary) and resolves once that save has finished, so a
+   * caller that e.g. reloads the editor afterwards cannot run before its edits reached the server.
+   * A regular save replaces a queued auto-save but keeps its waiting callers: it covers their edits.
+   */
+  private async waitForQueuedSave (task: SaveTaskType | undefined, onFinish: (() => void) | undefined, replace: boolean): Promise<void> {
+    await new Promise<void>((resolve, reject) => {
+      if (isUndefined(this.queuedTask)) {
+        this.queuedTask = { task, onFinish, settlers: [] }
+      } else if (replace) {
+        this.queuedTask.task = task
+        this.queuedTask.onFinish = onFinish
+      }
+
+      this.queuedTask.settlers.push({ resolve, reject })
+    })
   }
 
   private async performSave (
@@ -213,10 +235,22 @@ export class DocumentSaveTaskManager {
   }
 
   private async executeQueuedTask (): Promise<void> {
-    if (!isUndefined(this.queuedTask)) {
-      const { task, onFinish } = this.queuedTask
-      this.queuedTask = undefined
+    if (isUndefined(this.queuedTask)) {
+      return
+    }
+
+    const { task, onFinish, settlers } = this.queuedTask
+    this.queuedTask = undefined
+
+    try {
       await this.performSave(task, onFinish)
+      settlers.forEach(({ resolve }) => { resolve() })
+    } catch (error) {
+      // The callers waiting for this save get the error, and so does the caller of the save that ran
+      // before it: its own save went through, but the document is not fully persisted, and reporting
+      // success would clear dirty state for edits that never reached the server.
+      settlers.forEach(({ reject }) => { reject(error) })
+      throw error
     }
   }
 

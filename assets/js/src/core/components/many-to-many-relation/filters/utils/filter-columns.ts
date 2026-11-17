@@ -138,6 +138,11 @@ export const getFilterColumnCandidates = (
   return candidates
 }
 
+/**
+ * The visible field values per row, keyed by the id of the element they were
+ * loaded for. That id is the identity of the entry, not one of the visible field
+ * values - the visible fields need not contain the `id` column at all.
+ */
 export const buildVisibleFieldsMap = (visibleFieldsValue?: Array<Record<string, any> | undefined>): VisibleFieldsMap | undefined => {
   if (isNil(visibleFieldsValue)) {
     return undefined

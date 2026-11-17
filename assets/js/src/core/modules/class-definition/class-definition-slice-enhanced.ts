@@ -33,7 +33,7 @@ const normalizeCustomLayouts = (raw: CustomLayouts): CustomLayouts => ({
 
 /* eslint-disable max-lines */
 const apiWithTags = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, tagNames.SELECT_OPTION_DETAIL, tagNames.SELECT_OPTION_COLLECTION],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.DATA_OBJECT_GRID_COLUMNS, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, tagNames.SELECT_OPTION_DETAIL, tagNames.SELECT_OPTION_COLLECTION],
   endpoints: {
     classDefinitionCollection: {
       providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
@@ -52,7 +52,12 @@ const apiWithTags = baseApi.enhanceEndpoints({
       providesTags: () => providingTags.CUSTOM_LAYOUT_COLLECTION()
     },
     classDefinitionUpdate: {
-      invalidatesTags: () => invalidatingTags.CLASS_DEFINITION_COLLECTION(),
+      // The fields of the class are the available columns of its grids; without this an open grid
+      // keeps rendering from the field definitions it was opened with.
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.CLASS_DEFINITION_COLLECTION(),
+        ...invalidatingTags.DATA_OBJECT_GRID_COLUMNS_ID(args.id)
+      ],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
@@ -81,7 +86,8 @@ const apiWithTags = baseApi.enhanceEndpoints({
     classDefinitionImport: {
       invalidatesTags: (result, error, args) => [
         ...invalidatingTags.CLASS_DEFINITION_DETAIL(args.id),
-        ...invalidatingTags.CLASS_DEFINITION_COLLECTION()
+        ...invalidatingTags.CLASS_DEFINITION_COLLECTION(),
+        ...invalidatingTags.DATA_OBJECT_GRID_COLUMNS_ID(args.id)
       ]
     },
     classCustomLayoutGet: {
@@ -141,9 +147,11 @@ const apiWithTags = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.FIELD_COLLECTION_DETAIL(args.key)
     },
     classFieldCollectionUpdate: {
+      // Field collection fields become grid columns of every class using them, which is not known here.
       invalidatesTags: (result, error, args) => [
         ...invalidatingTags.FIELD_COLLECTION_COLLECTION(),
-        ...invalidatingTags.FIELD_COLLECTION_DETAIL(args.key)
+        ...invalidatingTags.FIELD_COLLECTION_DETAIL(args.key),
+        ...invalidatingTags.DATA_OBJECT_GRID_COLUMNS()
       ],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
@@ -192,9 +200,11 @@ const apiWithTags = baseApi.enhanceEndpoints({
       providesTags: () => providingTags.OBJECT_BRICK_COLLECTION()
     },
     classObjectBrickUpdate: {
+      // Object brick fields become grid columns of every class using them, which is not known here.
       invalidatesTags: (result, error, args) => [
         ...invalidatingTags.OBJECT_BRICK_COLLECTION(),
-        ...invalidatingTags.OBJECT_BRICK_DETAIL(args.key)
+        ...invalidatingTags.OBJECT_BRICK_DETAIL(args.key),
+        ...invalidatingTags.DATA_OBJECT_GRID_COLUMNS()
       ],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {

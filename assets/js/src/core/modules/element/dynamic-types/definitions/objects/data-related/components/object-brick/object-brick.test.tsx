@@ -17,7 +17,8 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { act, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
+import { Input } from 'antd'
 import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
 import {
   useRestoreInheritance
@@ -35,6 +36,7 @@ import {
 import { ObjectBrick, type ObjectBrickProps } from './object-brick'
 import { ObjectBlock, type ObjectBlockProps } from '../block/object-block'
 import { RestoreInheritanceLabelExtra } from '@Pimcore/modules/data-object/components/restore-inheritance-label-extra'
+import { KeyedFormItemControl } from '@Pimcore/components/form/controls/keyed-list/form-item/keyed-form-item-control'
 
 const objectId = 42
 const parentId = 7
@@ -198,6 +200,14 @@ const BrickBlock = ({ name }: { name: string[] }): React.JSX.Element => {
   )
 }
 
+let brickOperations: ReturnType<typeof useKeyedListContext>['operations']
+
+/** Hands out the keyed list operations, as the brick's add and remove actions use them. */
+const CaptureOperations = (): null => {
+  brickOperations = useKeyedListContext().operations
+  return null
+}
+
 const brickName = ['bricks']
 const nameField = ['bricks', 'MyBrick', 'name']
 const colorField = ['bricks', 'MyBrick', 'color']
@@ -226,14 +236,59 @@ const Host = ({ children }: { children?: React.ReactNode }): React.JSX.Element =
   )
 }
 
-const renderBrick = (children?: React.ReactNode): void => {
-  render(
+// `strict` renders under StrictMode, as the app does (app-view.tsx): effects mount, unmount
+// and mount again, so every field registers twice and every store subscription is renewed
+const renderBrick = (children?: React.ReactNode, strict = false): void => {
+  const ui = (
     <InheritanceStateProvider>
       <ItemProvider item={ { name: brickName } }>
         <Host>{ children }</Host>
       </ItemProvider>
     </InheritanceStateProvider>
   )
+
+  render(strict ? <React.StrictMode>{ui}</React.StrictMode> : ui)
+}
+
+// The real control, not a stand-in. A plain `<input>` here passes whether or not the
+// defect is present: React finds the DOM value already equal to what it renders and
+// writes nothing, so the caret is never moved and the test cannot fail. antd's
+// TextArea re-renders to re-measure for `autoSize` — the same props
+// `DynamicTypeObjectDataTextarea` gives it — and that render is the one that writes
+// the stale value back. Substituting it away is what hid #1664.
+const BrickTextArea = ({ value, onChange }: {
+  value?: string | null
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>
+}): React.JSX.Element => (
+  <Input.TextArea
+    autoSize={ { minRows: 3 } }
+    data-testid="brick-input"
+    onChange={ onChange }
+    value={ value ?? '' }
+  />
+)
+
+// wired to the keyed list exactly the way KeyedFormItem wires a field of a brick: the value
+// is read from the list store and the keystroke goes back through operations.update
+const BrickTextAreaField = ({ name }: { name: string[] }): React.JSX.Element => (
+  <ItemProvider item={ { name } }>
+    <KeyedFormItemControl>
+      <BrickTextArea />
+    </KeyedFormItemControl>
+  </ItemProvider>
+)
+
+// types a character the way a browser does: by the time React sees the event the DOM
+// already carries the new value and the caret sits right behind what was typed. The value
+// is written through the prototype setter so React's value tracker still reports a change.
+const typeCharacter = (input: HTMLTextAreaElement, nextValue: string, caret: number): void => {
+  const setDomValue = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set
+
+  act(() => {
+    setDomValue?.call(input, nextValue)
+    input.setSelectionRange(caret, caret)
+    fireEvent.input(input)
+  })
 }
 
 const blockField = ['bricks', 'MyBrick', 'block']
@@ -393,5 +448,66 @@ describe('ObjectBrick', () => {
     expect(valueOf(colorField)).toBe('blue')
     expect(stateOf(colorField)).toBe('false')
     expect(lastPayload()).toEqual({ MyBrick: { name: null, color: 'blue' } })
+  })
+
+  describe('removing bricks', () => {
+    beforeEach(() => { mockDataObject.inheritanceData.metaData = {} })
+
+    it('reports a deletion marker when the only remaining brick is removed', () => {
+      mockDataObject.objectData = { bricks: { BrickA: { input: 'a' } } }
+      renderBrick(<CaptureOperations />)
+      flushChanges()
+      expect(onChange).not.toHaveBeenCalled()
+
+      act(() => { brickOperations.remove('BrickA') })
+      flushChanges()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(lastPayload()).toEqual({ BrickA: { action: 'deleted' } })
+    })
+
+    it('reports the deletion marker next to the remaining brick when one of two is removed', () => {
+      mockDataObject.objectData = { bricks: { BrickA: { input: 'a' }, BrickB: { input: 'b' } } }
+      renderBrick(<CaptureOperations />)
+      flushChanges()
+
+      act(() => { brickOperations.remove('BrickA') })
+      flushChanges()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(lastPayload()).toEqual({ BrickA: { action: 'deleted' }, BrickB: { input: 'b' } })
+    })
+  })
+
+  describe('typing in a brick field', () => {
+    beforeEach(() => {
+      mockDataObject.objectData = { bricks: { MyBrick: { text: 'ab' } } }
+      mockDataObject.inheritanceData.metaData = {}
+    })
+
+    it.each([
+      ['', false],
+      [' under StrictMode, as the app renders', true]
+    ])('keeps the caret where the character was typed%s (regression #1664)', (_, strict) => {
+      renderBrick(<BrickTextAreaField name={ ['bricks', 'MyBrick', 'text'] } />, strict)
+      flushChanges()
+      // mounting the field registers nothing new: its value is the loaded one
+      expect(onChange).not.toHaveBeenCalled()
+
+      const input: HTMLTextAreaElement = screen.getByTestId('brick-input')
+      expect(input.value).toBe('ab')
+
+      // 'X' typed between 'a' and 'b'
+      typeCharacter(input, 'aXb', 2)
+      flushChanges()
+
+      expect(input.value).toBe('aXb')
+      // The field has to carry the typed value already in the commit of the keystroke itself.
+      // Reaching it one commit later leaves the input rendered with the previous value, so
+      // React restores that stale value into the DOM and writes the typed one on top of it —
+      // and every assignment to input.value puts the caret at the end of the text.
+      expect(input.selectionStart).toBe(2)
+      expect(lastPayload()).toEqual({ MyBrick: { text: 'aXb' } })
+    })
   })
 })

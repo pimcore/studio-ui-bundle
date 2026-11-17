@@ -32,6 +32,9 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
   const { setDataLoadingState } = useDataQueryHelper()
   const { getId } = useElementId()
   const { selectedClassDefinition } = useClassDefinitionSelection()
+  // currentData, not data: on a class switch data still holds the previous class's result
+  // until the new one arrives, and pairing it with the new configuration would restore its
+  // filters against the wrong columns (and mark that configuration as restored).
   const { isLoading, currentData: data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
   const { id: configId } = useSelectedGridConfigId()
   const { isLoading: isInitialConfigLoading, currentData: initialConfigurationData } = useDataObjectGetGridConfigurationQuery({ classId: selectedClassDefinition!.id, folderId: getId(), configurationId: configId })
@@ -40,6 +43,9 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
   const { setGridConfig } = useGridConfig()
   const applied = useRef<{ columns?: unknown, configuration?: unknown }>({})
   const appliedFiltersStore = useAppliedFiltersOptional()
+  // Which grid configuration the filters below were last restored from. The effect
+  // runs for two reasons and only one of them is a configuration load.
+  const restoredFiltersFor = useRef<typeof initialConfigurationData>(undefined)
 
   useEffect(() => {
     if (data === undefined || initialConfigurationData === undefined) {
@@ -103,7 +109,16 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
 
     // saveFilter: false means this configuration never managed filter state - leave the
     // user's currently-applied filters alone rather than clearing them to [].
-    if (initialConfigurationData.saveFilter) {
+    //
+    // Only on a configuration load. This effect also re-runs when the available columns
+    // change, which a class definition save now invalidates, and restoring the saved
+    // template's filters then would replace the filters the user has applied and show a
+    // different set of rows with nothing on screen to say why. Refreshing the field
+    // definitions is not the same event as opening a grid configuration.
+    const isConfigurationLoad = restoredFiltersFor.current !== initialConfigurationData
+    restoredFiltersFor.current = initialConfigurationData
+
+    if (isConfigurationLoad && initialConfigurationData.saveFilter) {
       appliedFiltersStore?.setValue('fieldFilters', restoreFieldFilters(initialConfigurationData.filter, availableColumns))
     }
 

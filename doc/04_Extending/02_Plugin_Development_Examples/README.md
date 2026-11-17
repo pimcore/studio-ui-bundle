@@ -27,6 +27,7 @@ Each example covers a specific feature or integration pattern:
 - [Add a Custom Grid Column](./18_Custom_Grid_Column.md)
 - [Extend the Workflow Transition Modal](./19_Extend_Workflow_Transition_Modal.md)
 - [Run a Background Job](./20_Run_a_Background_Job.md)
+- [Add Preview Mode to a Modal](./21_Add_Preview_Mode_to_a_Modal.md)
 
 Unless a page links elsewhere, the examples are part of the
 [Pimcore Studio Example Bundle](https://github.com/pimcore/studio-example-bundle/) on GitHub.

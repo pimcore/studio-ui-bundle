@@ -20,12 +20,14 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-top: 0;
       }
 
-      /* Finish icon: always white, including on hover.
-         Ant Design's hover rule (wrapped in :where() — zero specificity) sets
-         .ant-steps-icon color to colorPrimary for non-active/non-process items,
-         making the white checkmark invisible. !important is required because the
-         rule is injected after ours in source order, so specificity alone loses. */
-      &.ant-steps-navigation .ant-steps-item-finish .ant-steps-item-icon .ant-steps-icon {
+      /* Finish icon: always white, in every steps type and including on hover.
+         The icon is filled with colorPrimary below, while Ant Design colours a finished
+         step's checkmark in colorPrimary too, and its hover rule (wrapped in :where() —
+         zero specificity) sets .ant-steps-icon to colorPrimary for non-process items:
+         either way the checkmark or number would vanish on the purple fill. !important is
+         required because that rule is injected after ours in source order, so specificity
+         alone loses. */
+      .ant-steps-item-finish .ant-steps-item-icon .ant-steps-icon {
         color: ${token.colorTextLightSolid} !important;
       }
 

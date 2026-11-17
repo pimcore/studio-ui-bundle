@@ -11,6 +11,7 @@
 import React, { useMemo } from 'react'
 import { Editor } from '@Pimcore/modules/field-definitions/components/editor'
 import {
+  api,
   useClassObjectBrickDeleteMutation,
   useClassObjectBrickGetByKeyQuery,
   useClassObjectBrickGetLayoutByKeyQuery,
@@ -21,6 +22,7 @@ import { ObjectBrickGeneralSettingsFormFields } from '@Pimcore/modules/object-br
 import { useObjectBrickUpdate } from '@Pimcore/modules/object-brick/components/object-brick-editor/use-object-brick-update'
 import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { ObjectBrickCustomLayoutEditor } from '@Pimcore/modules/object-brick/components/object-brick-editor/custom-layouts/custom-layout-editor'
 import { ObjectBrickLayoutProvider } from '@Pimcore/modules/object-brick/object-brick-layout-provider'
@@ -108,7 +110,10 @@ const useObjectBrickDeleteMutation: AnyMutationHook = (...args) => {
 
 const objectBrickImportExportConfig: ImportExportConfig = {
   getExportUrl: (id) => `${getPrefix()}/class/object-brick/${String(id)}/export`,
-  getImportUrl: (id) => `${getPrefix()}/class/object-brick/${String(id)}/import`
+  getImportUrl: (id) => `${getPrefix()}/class/object-brick/${String(id)}/import`,
+  // Which classes embed this brick is not known here, so every class's columns go -
+  // the same reasoning, and the same tag, as classObjectBrickUpdate.
+  getImportInvalidation: () => api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_COLUMNS())
 }
 
 /**

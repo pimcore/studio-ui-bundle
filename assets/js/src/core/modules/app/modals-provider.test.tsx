@@ -51,6 +51,7 @@ jest.mock('@Pimcore/modules/about/components/about-dialog/about-dialog-wrapper',
 jest.mock('@Pimcore/modules/bulk-export/components/bulk-export-modal/bulk-export-wrapper', () => passThroughComponent('BulkExportWrapper'))
 jest.mock('@Pimcore/modules/bulk-import/components/bulk-import-modal/bulk-import-wrapper', () => passThroughComponent('BulkImportWrapper'))
 jest.mock('@Pimcore/modules/open-element/open-element-wrapper', () => passThroughComponent('OpenElementWrapper'))
+jest.mock('@Pimcore/modules/maintenance-mode/context/maintenance-mode-context', () => passThroughComponent('MaintenanceModeProvider'))
 jest.mock('@Pimcore/modules/app/component-registry/slot-renderer', () => ({
   __esModule: true,
   SlotRenderer: () => null

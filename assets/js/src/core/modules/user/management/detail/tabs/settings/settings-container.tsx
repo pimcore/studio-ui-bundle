@@ -9,7 +9,7 @@
  */
 
 import { debounce } from 'lodash'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Input, Col, Row, Flex, Typography } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
@@ -85,12 +85,22 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     [changeUserInState]
   )
 
+  const isTwoFactorRequired = openedUser?.twoFactorAuthentication?.required ?? false
+  const isFormShown = !isLoading && !permissionsLoading && !perspectivesLoading
+
+  // A setup in the profile sets `required` outside this form; a stale switch would undo it on the next save
+  useEffect(() => {
+    if (isFormShown) {
+      form.setFieldValue('twoFactorAuthenticationRequired', isTwoFactorRequired)
+    }
+  }, [isTwoFactorRequired, isFormShown])
+
   const formatLastLogin = (timestamp: number): string => {
     const date = new Date(timestamp * 1000)
     return date.toLocaleString()
   }
 
-  if (isLoading || permissionsLoading || perspectivesLoading) {
+  if (!isFormShown) {
     return <Content loading></Content>
   }
 

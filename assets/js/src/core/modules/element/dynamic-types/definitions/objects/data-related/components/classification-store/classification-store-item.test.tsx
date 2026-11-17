@@ -73,6 +73,7 @@ describe('ClassificationStoreItem', () => {
   it('asks for confirmation when the group is deleted', async () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='technicalAttributes'
         currentLayoutData={ [groupLayout] }
         groupLayout={ groupLayout }
         updateCurrentLayoutData={ jest.fn() }
@@ -87,6 +88,7 @@ describe('ClassificationStoreItem', () => {
   it('hides the delete action when deleting is disallowed', () => {
     render(
       <ClassificationStoreItem
+        classificationStoreName='technicalAttributes'
         currentLayoutData={ [groupLayout] }
         disallowDelete
         groupLayout={ groupLayout }

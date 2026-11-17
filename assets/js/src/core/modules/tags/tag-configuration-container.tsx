@@ -148,7 +148,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
-            aria-label={ t('refresh') }
+            aria-label={ t('toolbar.reload') }
             icon={ { value: 'refresh' } }
             onClick={ () => {
               showRootLoading()
@@ -159,7 +159,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
               )
             }
           }
-            tooltip={ { title: t('refresh') } }
+            tooltip={ { title: t('toolbar.reload') } }
           />
         </Toolbar> }
       renderTopBar={

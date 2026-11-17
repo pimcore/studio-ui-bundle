@@ -63,6 +63,11 @@ export class DynamicTypeDocumentEditableScheduledblock extends DynamicTypeDocume
     }
   }
 
+  // Add and delete operations run in reload-only mode and rely on the reloaded markup.
+  canDeferReloadOnChange (props: ScheduledblockEditableDefinition): boolean {
+    return false
+  }
+
   reloadOnChange (props: ScheduledblockEditableDefinition): boolean {
     // Check if there's an active operation type for this specific editable
     const operationType = operationTracker.get(props.name)

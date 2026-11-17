@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Nie można przywrócić elementu
 error.error_login_token_as_admin_non_admin_user: Tylko administratorzy mogą wygenerować link logowania dla użytkownika administracyjnego
 error.error_login_token_no_user_password: Nie można wygenerować linku logowania dla tego użytkownika, ponieważ nie ustawiono hasła
 error.syntax_error: Błąd składni
+validation.mandatory: "{{field}} jest wymagane"
+validation.regex_mismatch: "{{field}} nie pasuje do wymaganego wzorca {{regex}}"
+validation.max_length: "{{field}} nie może być dłuższe niż {{max}} znaków"
+validation.min_length: "{{field}} musi mieć co najmniej {{min}} znaków"
+validation.not_numeric: "{{field}} musi być liczbą, otrzymano: {{value}}"
+validation.not_integer: "{{field}} musi być liczbą całkowitą, otrzymano: {{value}}"
+validation.not_unsigned: "{{field}} nie może być ujemne, otrzymano: {{value}}"
+validation.min_value: "{{field}} musi wynosić co najmniej {{min}}, otrzymano: {{value}}"
+validation.max_value: "{{field}} może wynosić co najwyżej {{max}}, otrzymano: {{value}}"
+validation.range_start_after_end: "{{field}}: początek nie może być po końcu"
+validation.invalid_email: "{{field}} nie jest prawidłowym adresem e-mail: {{value}}"
+validation.invalid_option: "{{field}} ma nieprawidłową opcję: {{value}}"
+validation.invalid_time: "{{field}} nie jest prawidłową godziną: {{value}}"
+validation.invalid_relation: "{{field}} zawiera nieprawidłową relację"
+validation.max_relations: "{{field}} dopuszcza co najwyżej {{max}} relacji"
+validation.max_items: "{{field}} dopuszcza co najwyżej {{max}} elementów"
+validation.slug_not_unique: "Slug URL {{value}} w polu {{field}} jest już używany"
+validation.slug_invalid: "{{field}} nie jest prawidłowym slugiem URL"
+validation.slug_reserved_characters: "{{field}} zawiera zarezerwowane znaki: {{characters}}"
+validation.unique_constraint: "Naruszono ograniczenie unikalności"
+validation.missing_required_editables: "Brakuje wartości dla wymaganych elementów edytowalnych"
+validation.image_too_large: "Obraz {{filename}} jest za duży (maks. {{max_megapixels}} megapikseli). Zmień jego rozmiar na {{suggested_width}}×{{suggested_height}} pikseli lub mniej"
+validation.and_more: "i {{n}} więcej"
 sidebar.selected_elements: Wybrane elementy
 sidebar.grid_config: Ustawienia siatki
 sidebar.tag_filters: Filtry tagów
@@ -70,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Pełna ścieżka
 asset.asset-editor-tabs.list.columns.creationDate: Data utworzenia
 asset.asset-editor-tabs.list.columns.modificationDate: Data modyfikacji
 asset.tree.context-menu.upload-new-version: Prześlij nową wersję
+asset.upload-new-version.rename-confirmation.title: Nazwa assetu zostanie zmieniona
+asset.upload-new-version.rename-confirmation.message: 'Nowy plik ma rozszerzenie .{{extension}} — nazwa assetu zostanie zmieniona z "{{oldFilename}}" na "{{newFilename}}", a jego publiczny URL ulegnie zmianie. Czy chcesz kontynuować?'
+asset.upload-new-version.renamed: 'Nazwa assetu została zmieniona z "{{oldFilename}}" na "{{newFilename}}". Jego publiczny URL uległ zmianie.'
 asset.copy-info: Kopiuj i informacje
 asset.upload: Prześlij
 asset.upload.label: Wybierz plik
@@ -111,6 +137,8 @@ areablock.move-below: Przenieś niżej
 areablock.show: Pokaż
 areablock.hide: Ukryj
 areablock.new: Nowy
+areablock.insert-above: Wstaw powyżej
+areablock.insert-below: Wstaw poniżej
 areablock.copy: Kopiuj
 areablock.paste: Wklej
 areablock.cut: Wytnij
@@ -470,6 +498,10 @@ action-could-not-be-applied: Nie udało się zastosować akcji
 failed-to-assign-tag-to-element: Nie udało się przypisać tagu do elementu
 failed-to-un-assign-tag-to-element: Nie udało się usunąć tagu z elementu
 workflow-modal.perform-action: Wykonaj akcję
+workflow.unsaved-changes.title: Niezapisane zmiany
+workflow.unsaved-changes.warn: Istnieją niezapisane zmiany. Zostaną utracone po zastosowaniu tej akcji. Zastosować mimo to?
+workflow.unsaved-changes.apply-anyway: Zastosuj mimo to
+workflow.unsaved-changes.save-failed: Nie udało się zapisać niezapisanych zmian, dlatego akcja nie została zastosowana.
 workflow-modal.cancel: Anuluj
 workflow-modal.notes: Notatki
 workflow-modal.notes-required: Wprowadź swoje notatki
@@ -662,6 +694,7 @@ mcp-servers.read-only-notice: Definicje serwerów są zarządzane poprzez pliki 
 mcp-servers.save-success: Zapisano serwer MCP
 mcp-servers.access.users-count: "Użytkownicy: {{number}}"
 mcp-servers.access.roles-count: "Role: {{number}}"
+mcp-servers.access.service-users-count: 'Użytkownicy serwisowi: {{number}}'
 mcp-servers.access.global-extra: dowolny uwierzytelniony użytkownik
 mcp-servers.access.nobody: "Jeszcze nikt"
 mcp-servers.badge.read: Odczyt
@@ -687,11 +720,16 @@ mcp-servers.editor.copy-url: "Kopiuj adres URL serwera"
 mcp-servers.editor.connect-hint: Skieruj swojego klienta MCP na ten adres URL i uwierzytelnij się swoim kontem Pimcore.
 mcp-servers.sharing.title: Udostępnianie
 mcp-servers.sharing.share-globally: Udostępnij globalnie
-mcp-servers.sharing.share-globally-tooltip: Każdy uwierzytelniony użytkownik otrzymuje Odczyt konfiguracji i Dostęp do serwera MCP (nie Edycję konfiguracji)
+mcp-servers.sharing.share-globally-tooltip: Każdy uwierzytelniony użytkownik, w tym użytkownicy serwisowi, otrzymuje Odczyt konfiguracji i Dostęp do serwera MCP (nie Edycję konfiguracji)
 mcp-servers.sharing.users: Użytkownicy
 mcp-servers.sharing.roles: Role
 mcp-servers.sharing.add-user: Dodaj użytkownika…
 mcp-servers.sharing.add-role: Dodaj rolę…
+mcp-servers.sharing.service-users: Użytkownicy serwisowi
+mcp-servers.sharing.add-service-user: Dodaj użytkownika serwisowego…
+mcp-servers.sharing.service-users-hint: Użytkownicy serwisowi mogą się tylko łączyć; nie mogą odczytywać ani edytować konfiguracji.
+mcp-servers.sharing.service-users-unavailable: Użytkownicy serwisowi nie są wyświetlani, ponieważ nie masz uprawnienia do zarządzania użytkownikami. Ich dotychczasowy dostęp zostaje zachowany.
+mcp-servers.sharing.inactive: nieaktywny
 mcp-servers.sharing.name: Nazwa
 mcp-servers.sharing.config-read: Odczyt konfiguracji
 mcp-servers.sharing.config-edit: Edycja konfiguracji
@@ -1293,6 +1331,7 @@ close-tab: Zamknij kartę
 close-others: Zamknij pozostałe
 close-unmodified: Zamknij niezmienione
 close-all: Zamknij wszystko
+use-full-space: Użyj całej przestrzeni
 asset.tree.context-menu.download: Pobierz
 asset.tree.context-menu.download-as-zip: Pobierz jako ZIP
 element-selector.title.single: Wybierz element
@@ -1398,6 +1437,7 @@ system-information.type: Typ
 system-information.class-id: ID klasy
 system-information.class: Klasa
 system-information.file-size: Rozmiar pliku
+system-information.checksum: Suma kontrolna
 system-information.modification-date: Data modyfikacji
 system-information.creation-date: Data utworzenia
 system-information.user-modification: Użytkownik modyfikacji
@@ -1448,6 +1488,7 @@ relations.create-object.name: Nazwa
 relations.create-object.parent: Nadrzędny
 relations.create-object.parent.placeholder: Wybierz element nadrzędny
 relations.create-object.class: Klasa
+relations.visible-fields.loading-progress: 'Ładowanie widocznych pól… ({{loaded}} z {{total}})'
 relation: relacja
 items-limit-reached: "Osiągnięto maksymalną liczbę elementów ({{maxItems}})."
 asset-upload-type-not-allowed: Typ przesłanego assetu nie jest dozwolony dla tego pola.
@@ -2258,6 +2299,7 @@ user-menu.notification.modal.form.validation.provide-title: Podaj tytuł
 user-menu.notification.modal.form.validation.provide-message: Podaj wiadomość
 reports.reports-title: Raporty
 reports.select-report-name: Wybierz nazwę raportu
+reports.report-load-failed: Nie udało się załadować raportu.
 reports.select-report: Wybierz raport
 reports.export: Eksportuj
 reports.csv-export: Eksportuj CSV
@@ -2271,6 +2313,9 @@ reports.field-filters: Filtry pól
 reports.editor.delete.content: 'Czy na pewno chcesz usunąć niestandardowy raport "{{reportName}}"?'
 reports.editor.clone.content: Wprowadź nazwę nowego elementu (a-zA-Z-_)
 reports.editor.add.content: Wprowadź nazwę nowego elementu. Nazwa musi być alfanumeryczna i mieć co najmniej 3 znaki (a-zA-Z0-9_-)
+reports.editor.import.title: Importuj raport niestandardowy
+reports.editor.import.success: Raport niestandardowy został zaimportowany
+reports.editor.import.invalid-file: Wybierz plik eksportu JSON
 reports.editor.content.validation.message: Nazwa niestandardowego raportu jest nieprawidłowa
 reports.editor.general-settings.title: Ustawienia ogólne
 reports.editor.general-settings.name-label: Nazwa
@@ -2282,6 +2327,7 @@ reports.editor.general-settings.report-class-label: Klasa raportu
 reports.editor.general-settings.group-icon-class-label: Klasa ikony grupy
 reports.editor.general-settings.shortcut-menu-label: Utwórz skrót w menu
 reports.editor.source-definition.title: Definicja źródła
+reports.editor.source-definition.not-available: Definicja źródła tego raportu nie jest dostępna. Pakiet, który ją dostarcza, może nie być zainstalowany.
 reports.editor.source-definition.no-content: Brak dostępnych pól. Zacznij od dodania pola.
 reports.editor.source-definition.select-source-definition: Wybierz definicję źródła
 reports.editor.source-definition.sql-select-field: SELECT (np. a,b,c)*
@@ -2475,6 +2521,8 @@ recycle-bin.actions.delete: Usuń
 recycle-bin.actions.delete.title: Usuń elementy z kosza
 recycle-bin.actions.restore: Przywróć
 recycle-bin.actions.restore.title: Przywróć elementy z kosza
+recycle-bin.actions.restore.relocated_one: Element umieszczono w __restored. Obowiązują teraz uprawnienia tego folderu.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementów umieszczono w __restored. Obowiązują teraz uprawnienia tego folderu."
 ownership-management.title: Zarządzanie własnością
 ownership-management.show-deleted-owners: Pokaż elementy usuniętych użytkowników
 ownership-management.deleted-user: Usunięty użytkownik
@@ -3049,6 +3097,7 @@ translations.merger.title: "Scalanie tłumaczeń (domena: {{domain}})"
 translations.merger.column.language: Język
 translations.merger.items: elementy
 select.clear-selection: Wyczyść wybór
+select.select-all: Zaznacz wszystko
 asset.folder.preview.image-display: Wyświetlanie obrazów
 asset.folder.preview.image-display.small: Małe
 asset.folder.preview.image-display.large: Duże
@@ -3071,9 +3120,92 @@ saved-search.delete.success: Zapisane wyszukiwanie usunięte
 saved-search.shared-modified.info: Wprowadzono zmiany w oryginalnej konfiguracji. Ponieważ jej właścicielem jest ktoś inny, możesz zapisać ją jako nowe wyszukiwanie.
 saved-search.menu-shortcut-group: Grupa menu
 skip-to-content: Przejdź do treści
+preview-mode.switch: Tryb podglądu
+preview-mode.preview-item: Element podglądu
+preview-mode.no-item: Brak dostępnego elementu podglądu
+preview-mode.preview: Podgląd
 tag-configuration.move-under: 'Przenieś pod'
 tag-configuration.move-search-placeholder: 'Wyszukaj tag'
 tree.actions.edit-tag: Edytuj
 tag-configuration.edit-tag: 'Edytuj "{{name}}"'
 tag-configuration.name-required: 'Wprowadź nazwę tagu'
 tag-configuration.move-targets-failed: 'Nie udało się wczytać listy tagów, dlatego można zmienić tylko nazwę'
+navigation.service-users: Użytkownicy serwisowi
+widget.service-user-management: Użytkownicy serwisowi
+service-users.create: Nowy
+service-users.create.title: Nowy użytkownik serwisowy
+service-users.create.ok: Utwórz
+service-users.create-from-user: Z użytkownika
+service-users.create-from-user.title: Nowy użytkownik serwisowy na podstawie użytkownika
+service-users.create-from-user.description: Kopiuje uprawnienia, role i workspaces użytkownika. Użytkownik nie zostaje zmieniony, a uprawnienia administratora nigdy nie są kopiowane.
+service-users.field.name: Nazwa
+service-users.field.name.fixed: Nazwy nie można zmienić, ponieważ dostęp do serwera MCP jest przyznawany na podstawie nazwy.
+service-users.field.name.invalid: Użyj maksymalnie 64 liter, cyfr, kropek, myślników lub podkreśleń, zaczynając od litery lub cyfry, na przykład svc-erp-sync.
+service-users.field.email: E-mail kontaktowy
+service-users.field.responsible-users: Użytkownicy odpowiedzialni
+service-users.field.responsible-users.help: 'Odpowiadają za tego użytkownika usługi wszędzie tam, gdzie potrzebny jest człowiek, na przykład w przypadku powiadomień o nim.'
+service-users.field.source-user: Użytkownik, z którego kopiować
+service-users.filter.unused-days: Nieużywany dłużej niż N dni
+service-users.status.inactive: Nieaktywny
+service-users.dormancy.never-used: Nigdy nieużywany
+service-users.dormancy.warning: Nieużywany od 90 dni
+service-users.dormancy.dormant: Uśpiony
+service-users.tab.settings: Ustawienia
+service-users.tab.permissions: Uprawnienia
+service-users.tab.roles: Role
+service-users.tab.workspaces: Workspaces
+service-users.roles: Role
+service-users.save.success: Zapisano użytkownika serwisowego
+service-users.deactivate: Dezaktywuj
+service-users.deactivate.confirm: Dezaktywować użytkownika serwisowego "{{name}}"? Jego dane uwierzytelniające przestaną działać przy następnym żądaniu.
+service-users.delete: Usuń
+service-users.delete.confirm: Trwale usunąć użytkownika serwisowego "{{name}}"? Jego klient OAuth, tokeny i dostęp do serwerów MCP zostaną usunięte. Tej operacji nie można cofnąć.
+service-users.credentials.title: Dane uwierzytelniające
+service-users.credentials.client-id: ID klienta
+service-users.credentials.last-used: Ostatnie użycie
+service-users.credentials.never-used: Nigdy
+service-users.credentials.no-client: Brak klienta OAuth
+service-users.credentials.rotate: Wygeneruj nowy sekret
+service-users.credentials.rotate.confirm: Utworzyć nowy sekret klienta dla "{{name}}"? Obecny sekret natychmiast przestanie działać.
+service-users.credentials.mcp-tokens: Tokeny dostępu MCP
+service-users.credentials.mcp-tokens.active: Aktywne tokeny
+service-users.credentials.mcp-tokens.latest-expiry: Najpóźniejsze wygaśnięcie
+service-users.credentials.mcp-tokens.none: Brak aktywnych tokenów
+service-users.credentials.issue: Wystaw token
+service-users.credentials.issue.title: Wystaw token dostępu MCP
+service-users.credentials.issue.ttl: Okres ważności w dniach (od 1 do 90)
+service-users.credentials.issue.ttl.invalid: Podaj pełną liczbę dni od 1 do 90.
+service-users.credentials.issue.hint: Token jest wyświetlany tylko raz. Klienci wysyłają go jako token Bearer w nagłówku Authorization.
+service-users.credentials.revoke: Unieważnij wszystkie tokeny
+service-users.credentials.revoke.confirm: Unieważnić wszystkie tokeny dostępu MCP tego użytkownika serwisowego? Połączeni klienci natychmiast przestaną działać.
+service-users.credentials.revoke.success: Wszystkie tokeny dostępu MCP użytkownika serwisowego zostały unieważnione.
+service-users.credentials.oauth: Klient OAuth
+service-users.credentials.oauth.disabled: Dane uwierzytelniające klienta OAuth są wyłączone w tej instancji; użyj tokenu dostępu MCP.
+service-users.credentials.oauth.rotate-hint: Tokeny dostępu wystawione już przy użyciu starego sekretu pozostają ważne do momentu wygaśnięcia.
+service-users.credentials.token: Token dostępu
+service-users.credentials.token.expires: Wygasa
+service-users.create.credentials.title: Dane uwierzytelniające
+service-users.create.credentials.skip: Pomiń, wystaw później
+service-users.create.credentials.which: Użyj klienta OAuth dla pipeline'ów, które obsługują grant client_credentials; we wszystkich pozostałych przypadkach użyj tokenu dostępu MCP.
+service-users.create.credentials.token-description: Klienci łączą się za pomocą tokenu dostępu MCP. Wystaw go teraz lub później w danych uwierzytelniających użytkownika serwisowego.
+service-users.secret.title: Sekret klienta
+service-users.secret.client-secret: Sekret klienta
+service-users.secret.warning: Skopiuj sekret teraz. Jest wyświetlany tylko raz i nie można go ponownie wyświetlić.
+service-users.secret.copy: Kopiuj sekret
+service-users.secret.close: Zamknij
+navigation.maintenance-mode: Tryb konserwacji
+maintenance-mode.activate.title: Aktywować tryb konserwacji?
+maintenance-mode.activate.text: 'Wszystkie usługi, w tym strona internetowa, przechodzą w tryb konserwacji. Dostęp zachowuje tylko ta sesja przeglądarki.'
+maintenance-mode.activate.lock-out: 'Po wylogowaniu, zamknięciu przeglądarki lub wygaśnięciu sesji również stracisz dostęp.'
+maintenance-mode.activate.background-jobs: 'Gdy tryb konserwacji jest aktywny, zadania w tle i konsumenty wiadomości nie są uruchamiane.'
+maintenance-mode.activate.ok: Aktywuj
+maintenance-mode.indicator.tooltip: 'Tryb konserwacji jest aktywny. Kliknij, aby go dezaktywować.'
+maintenance-mode.deactivate.title: Dezaktywować tryb konserwacji?
+maintenance-mode.deactivate.text: 'Wszystkie sesje odzyskują dostęp.'
+maintenance-mode.deactivate.ok: Dezaktywuj
+maintenance-mode.logout.title: Najpierw dezaktywować tryb konserwacji?
+maintenance-mode.logout.text: 'Tryb konserwacji jest aktywny i dostęp ma tylko ta sesja. Po wylogowaniu można go wyłączyć wyłącznie z wiersza poleceń.'
+maintenance-mode.logout.deactivate-and-log-out: Dezaktywuj i wyloguj się
+maintenance-mode.locked-out.title: Konserwacja
+maintenance-mode.locked-out.text: 'System jest w trybie konserwacji lub tymczasowo niedostępny. Ostatnia czynność mogła nie zostać zapisana. Ten komunikat zamknie się automatycznie, gdy system znów będzie dostępny.'
+maintenance-mode.locked-out.reload: Przeładuj

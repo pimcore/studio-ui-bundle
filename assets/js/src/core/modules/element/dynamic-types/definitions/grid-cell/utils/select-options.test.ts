@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { convertSelectOptions, normalizeSelectValue, stringifyOptionValue } from './select-options'
+import { convertSelectedOptions, convertSelectOptions, normalizeSelectValue, stringifyOptionValue } from './select-options'
 
 // Real i18next instance with the app's separator config (keySeparator: false, default nsSeparator ':')
 // so namespace parsing of option keys is exercised.
@@ -84,5 +84,34 @@ describe('stringifyOptionValue', () => {
     expect(stringifyOptionValue(null)).toBeUndefined()
     expect(stringifyOptionValue(1)).toBe('1')
     expect(stringifyOptionValue('a')).toBe('a')
+  })
+})
+
+describe('convertSelectedOptions', () => {
+  const options = [
+    { key: 'One', value: 1 },
+    { key: 'Two', value: 'two' },
+    { key: 'Three', value: 'three' }
+  ]
+
+  it('returns undefined for nil options', () => {
+    expect(convertSelectedOptions(null, 'two')).toBeUndefined()
+  })
+
+  it('converts only the option of a single value, matching numeric provider values', () => {
+    expect(convertSelectedOptions(options, '1')).toEqual([{ label: 'One', value: '1' }])
+  })
+
+  it('converts the options of all values of a multiselect', () => {
+    expect(convertSelectedOptions(options, ['two', 'three'])).toEqual([
+      { label: 'Two', value: 'two' },
+      { label: 'Three', value: 'three' }
+    ])
+  })
+
+  it('returns no option for an empty or unknown value', () => {
+    expect(convertSelectedOptions(options, undefined)).toEqual([])
+    expect(convertSelectedOptions(options, null)).toEqual([])
+    expect(convertSelectedOptions(options, 'missing')).toEqual([])
   })
 })

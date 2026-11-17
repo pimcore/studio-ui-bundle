@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { EditableEmptyPlaceholder } from '@Pimcore/components/editable-empty-placeholder'
 import { Spin } from '@Pimcore/components/spin/spin'
@@ -24,6 +24,8 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { useAssetVideoThumbnailStatusQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { skipToken } from '@reduxjs/toolkit/query'
+import { RenderEditableOptionsContext } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/render-editable-options-context'
+import { hasThumbnailConversionEnded } from './utils/thumbnail-reload'
 
 const VIDEO_THUMBNAIL_POLL_INTERVAL_MS = 5000
 
@@ -61,6 +63,7 @@ export const VideoEditable = ({
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { reloadIframe } = useDocumentEditor()
+  const { deferReloadOnChange, onReloadDeferred } = useContext(RenderEditableOptionsContext)
   const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(null)
   const [emptyElement, setEmptyElement] = useState<HTMLDivElement | null>(null)
   const [progressElement, setProgressElement] = useState<HTMLDivElement | null>(null)
@@ -166,14 +169,20 @@ export const VideoEditable = ({
   )
 
   useEffect(() => {
-    if (isNil(thumbnailStatus) || reloadTriggeredRef.current) {
+    if (!hasThumbnailConversionEnded(thumbnailStatus, reloadTriggeredRef.current)) {
       return
     }
-    if (thumbnailStatus.status === 'finished' || thumbnailStatus.status === 'error') {
-      reloadTriggeredRef.current = true
-      reloadIframe()
+
+    reloadTriggeredRef.current = true
+
+    // Inside the editable dialog a reload would save and destroy the dialog; the dialog reloads on Save instead.
+    if (deferReloadOnChange) {
+      onReloadDeferred?.()
+      return
     }
-  }, [thumbnailStatus, reloadIframe])
+
+    reloadIframe()
+  }, [thumbnailStatus, reloadIframe, deferReloadOnChange, onReloadDeferred])
 
   const showModal = (): void => {
     openModal(videoValue)
