@@ -6,6 +6,17 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            bundleSeoRedirectsGetCollection: build.query<
+                BundleSeoRedirectsGetCollectionApiResponse,
+                BundleSeoRedirectsGetCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/seo/redirects`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Bundle Seo"],
+            }),
             bundleSeoRedirectAdd: build.mutation<BundleSeoRedirectAddApiResponse, BundleSeoRedirectAddApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/bundle/seo/redirects/add`,
@@ -19,35 +30,6 @@ const injectedRtkApi = api
                 BundleSeoRedirectCleanupApiArg
             >({
                 query: () => ({ url: `/pimcore-studio/api/bundle/seo/redirects/cleanup`, method: "DELETE" }),
-                invalidatesTags: ["Bundle Seo"],
-            }),
-            bundleSeoRedirectsGetCollection: build.query<
-                BundleSeoRedirectsGetCollectionApiResponse,
-                BundleSeoRedirectsGetCollectionApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/seo/redirects`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Bundle Seo"],
-            }),
-            bundleSeoRedirectUpdateById: build.mutation<
-                BundleSeoRedirectUpdateByIdApiResponse,
-                BundleSeoRedirectUpdateByIdApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/seo/redirects/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.bundleSeoRedirectUpdate,
-                }),
-                invalidatesTags: ["Bundle Seo"],
-            }),
-            bundleSeoRedirectDelete: build.mutation<BundleSeoRedirectDeleteApiResponse, BundleSeoRedirectDeleteApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/seo/redirects/${queryArg.id}`,
-                    method: "DELETE",
-                }),
                 invalidatesTags: ["Bundle Seo"],
             }),
             bundleSeoRedirectsExport: build.query<BundleSeoRedirectsExportApiResponse, BundleSeoRedirectsExportApiArg>({
@@ -86,6 +68,24 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/bundle/seo/redirects/types` }),
                 providesTags: ["Bundle Seo"],
             }),
+            bundleSeoRedirectUpdateById: build.mutation<
+                BundleSeoRedirectUpdateByIdApiResponse,
+                BundleSeoRedirectUpdateByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/seo/redirects/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.bundleSeoRedirectUpdate,
+                }),
+                invalidatesTags: ["Bundle Seo"],
+            }),
+            bundleSeoRedirectDelete: build.mutation<BundleSeoRedirectDeleteApiResponse, BundleSeoRedirectDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/seo/redirects/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Bundle Seo"],
+            }),
             bundleSeoRobotsTxtGet: build.query<BundleSeoRobotsTxtGetApiResponse, BundleSeoRobotsTxtGetApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/bundle/seo/robots-txt` }),
                 providesTags: ["Bundle Seo"],
@@ -105,12 +105,6 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type BundleSeoRedirectAddApiResponse = /** status 200 New redirect data as JSON */ BundleSeoRedirect;
-export type BundleSeoRedirectAddApiArg = {
-    bundleSeoRedirectAdd: BundleSeoRedirectAdd;
-};
-export type BundleSeoRedirectCleanupApiResponse = unknown;
-export type BundleSeoRedirectCleanupApiArg = void;
 export type BundleSeoRedirectsGetCollectionApiResponse =
     /** status 200 Paginated redirects with total count as header param as JSON */ {
         totalItems: number;
@@ -127,17 +121,12 @@ export type BundleSeoRedirectsGetCollectionApiArg = {
         };
     };
 };
-export type BundleSeoRedirectUpdateByIdApiResponse = /** status 200 Successfully updated redirect */ BundleSeoRedirect;
-export type BundleSeoRedirectUpdateByIdApiArg = {
-    /** Id of the redirect */
-    id: number;
-    bundleSeoRedirectUpdate: BundleSeoRedirectUpdate;
+export type BundleSeoRedirectAddApiResponse = /** status 200 New redirect data as JSON */ BundleSeoRedirect;
+export type BundleSeoRedirectAddApiArg = {
+    bundleSeoRedirectAdd: BundleSeoRedirectAdd;
 };
-export type BundleSeoRedirectDeleteApiResponse = unknown;
-export type BundleSeoRedirectDeleteApiArg = {
-    /** Id of the redirect */
-    id: number;
-};
+export type BundleSeoRedirectCleanupApiResponse = unknown;
+export type BundleSeoRedirectCleanupApiArg = void;
 export type BundleSeoRedirectsExportApiResponse = /** status 200 CSV file with redirects as attachment */ Blob;
 export type BundleSeoRedirectsExportApiArg = void;
 export type BundleSeoRedirectsImportApiResponse =
@@ -163,6 +152,17 @@ export type BundleSeoRedirectListTypesApiResponse = /** status 200 List of avail
     types: string[];
 };
 export type BundleSeoRedirectListTypesApiArg = void;
+export type BundleSeoRedirectUpdateByIdApiResponse = /** status 200 Successfully updated redirect */ BundleSeoRedirect;
+export type BundleSeoRedirectUpdateByIdApiArg = {
+    /** Id of the redirect */
+    id: number;
+    bundleSeoRedirectUpdate: BundleSeoRedirectUpdate;
+};
+export type BundleSeoRedirectDeleteApiResponse = unknown;
+export type BundleSeoRedirectDeleteApiArg = {
+    /** Id of the redirect */
+    id: number;
+};
 export type BundleSeoRobotsTxtGetApiResponse = /** status 200 Robots.txt configuration data */ BundleSeoRobotsTxtConfig;
 export type BundleSeoRobotsTxtGetApiArg = void;
 export type BundleSeoRobotsTxtUpdateApiResponse =
@@ -226,30 +226,6 @@ export type BundleSeoRedirectAdd = {
     /** Target URL */
     target: string | null;
 };
-export type BundleSeoRedirectUpdate = {
-    /** Type of redirect */
-    type: string;
-    /** ID of the source site */
-    sourceSite: number | null;
-    /** Source URL */
-    source: string | null;
-    /** ID of the target site */
-    targetSite: number | null;
-    /** Target URL */
-    target: string | null;
-    /** Status code */
-    statusCode: number;
-    /** Priority */
-    priority: number;
-    /** Whether the redirect uses regex */
-    regex: boolean;
-    /** Whether the redirect is active */
-    active: boolean;
-    /** Whether to pass through parameters */
-    passThroughParameters: boolean;
-    /** Expiry date in timestamp format */
-    expiry: number | null;
-};
 export type BundleSeoRedirectsImportStatistics = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -278,6 +254,30 @@ export type BundleSeoRedirectStatus = {
     /** Status label */
     label: string;
 };
+export type BundleSeoRedirectUpdate = {
+    /** Type of redirect */
+    type: string;
+    /** ID of the source site */
+    sourceSite: number | null;
+    /** Source URL */
+    source: string | null;
+    /** ID of the target site */
+    targetSite: number | null;
+    /** Target URL */
+    target: string | null;
+    /** Status code */
+    statusCode: number;
+    /** Priority */
+    priority: number;
+    /** Whether the redirect uses regex */
+    regex: boolean;
+    /** Whether the redirect is active */
+    active: boolean;
+    /** Whether to pass through parameters */
+    passThroughParameters: boolean;
+    /** Expiry date in timestamp format */
+    expiry: number | null;
+};
 export type BundleSeoRobotsTxtSiteConfig = {
     /** Site ID (0 for default site) */
     siteId: number;
@@ -299,16 +299,16 @@ export type BundleSeoRobotsTxtUpdate = {
     data: BundleSeoRobotsTxtSiteConfig[];
 };
 export const {
+    useBundleSeoRedirectsGetCollectionQuery,
     useBundleSeoRedirectAddMutation,
     useBundleSeoRedirectCleanupMutation,
-    useBundleSeoRedirectsGetCollectionQuery,
-    useBundleSeoRedirectUpdateByIdMutation,
-    useBundleSeoRedirectDeleteMutation,
     useBundleSeoRedirectsExportQuery,
     useBundleSeoRedirectsImportMutation,
     useBundleSeoRedirectListPrioritiesQuery,
     useBundleSeoRedirectListStatusesQuery,
     useBundleSeoRedirectListTypesQuery,
+    useBundleSeoRedirectUpdateByIdMutation,
+    useBundleSeoRedirectDeleteMutation,
     useBundleSeoRobotsTxtGetQuery,
     useBundleSeoRobotsTxtUpdateMutation,
 } = injectedRtkApi;

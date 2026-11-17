@@ -6,14 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            recycleBinGetCollection: build.query<RecycleBinGetCollectionApiResponse, RecycleBinGetCollectionApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/recycle-bin/items`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Recycle Bin"],
-            }),
             recycleBinDeleteItems: build.mutation<RecycleBinDeleteItemsApiResponse, RecycleBinDeleteItemsApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/recycle-bin/delete`,
@@ -25,6 +17,14 @@ const injectedRtkApi = api
             recycleBinFlush: build.mutation<RecycleBinFlushApiResponse, RecycleBinFlushApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/recycle-bin/flush`, method: "DELETE" }),
                 invalidatesTags: ["Recycle Bin"],
+            }),
+            recycleBinGetCollection: build.query<RecycleBinGetCollectionApiResponse, RecycleBinGetCollectionApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/recycle-bin/items`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Recycle Bin"],
             }),
             recycleBinRestoreItems: build.mutation<RecycleBinRestoreItemsApiResponse, RecycleBinRestoreItemsApiArg>({
                 query: (queryArg) => ({
@@ -38,6 +38,18 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type RecycleBinDeleteItemsApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> to delete recycle bin items */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type RecycleBinDeleteItemsApiArg = {
+    body: {
+        items?: number[];
+    };
+};
+export type RecycleBinFlushApiResponse = unknown;
+export type RecycleBinFlushApiArg = void;
 export type RecycleBinGetCollectionApiResponse = /** status 200 Paginated recycle bin items with total count */ {
     totalItems: number;
     items: RecycleBin[];
@@ -53,33 +65,25 @@ export type RecycleBinGetCollectionApiArg = {
         };
     };
 };
-export type RecycleBinDeleteItemsApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> to delete recycle bin items */ {
+export type RecycleBinRestoreItemsApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> to restore recycle bin items */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
-export type RecycleBinDeleteItemsApiArg = {
-    body: {
-        items?: number[];
-    };
-};
-export type RecycleBinFlushApiResponse = unknown;
-export type RecycleBinFlushApiArg = void;
-export type RecycleBinRestoreItemsApiResponse =
-    /** status 200 Successfully restored recycle bin item. <strong>items</strong> lists the elements that were restored into the
-<strong>/__restored</strong> folder because their parent no longer exists.
- */
-        | {
-              items: RecycleBinRelocatedItem[];
-          }
-        | /** status 201 Successfully created <strong>jobRun</strong> to restore recycle bin items */ {
-              /** ID of created jobRun */
-              jobRunId: number;
-          };
 export type RecycleBinRestoreItemsApiArg = {
     body: {
         items?: number[];
     };
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export type RecycleBin = {
     /** AdditionalAttributes */
@@ -101,31 +105,9 @@ export type RecycleBin = {
     /** Type */
     type: string;
 };
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
-export type RecycleBinRelocatedItem = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the restored element */
-    id: number;
-    /** Element type */
-    elementType: string;
-    /** New full path of the element */
-    path: string;
-};
 export const {
-    useRecycleBinGetCollectionQuery,
     useRecycleBinDeleteItemsMutation,
     useRecycleBinFlushMutation,
+    useRecycleBinGetCollectionQuery,
     useRecycleBinRestoreItemsMutation,
 } = injectedRtkApi;

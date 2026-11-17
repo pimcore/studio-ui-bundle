@@ -6,16 +6,51 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            classificationStoreConfigurationCollectionCollection: build.query<
-                ClassificationStoreConfigurationCollectionCollectionApiResponse,
-                ClassificationStoreConfigurationCollectionCollectionApiArg
+            classificationStoreGetCollections: build.query<
+                ClassificationStoreGetCollectionsApiResponse,
+                ClassificationStoreGetCollectionsApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/collections`,
-                    method: "POST",
-                    body: queryArg.body,
+                    url: `/pimcore-studio/api/classification-store/collections`,
+                    params: {
+                        storeId: queryArg.storeId,
+                        classId: queryArg.classId,
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                        fieldName: queryArg.fieldName,
+                        searchTerm: queryArg.searchTerm,
+                    },
                 }),
                 providesTags: ["Classification Store"],
+            }),
+            classificationStoreGetConfigCollection: build.query<
+                ClassificationStoreGetConfigCollectionApiResponse,
+                ClassificationStoreGetConfigCollectionApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/classification-store/config/collection` }),
+                providesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationCollectionRelationDelete: build.mutation<
+                ClassificationStoreConfigurationCollectionRelationDeleteApiResponse,
+                ClassificationStoreConfigurationCollectionRelationDeleteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/collection-relations`,
+                    method: "DELETE",
+                    body: queryArg.classificationStoreConfigurationCollectionRelationDelete,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationCollectionRelationCreate: build.mutation<
+                ClassificationStoreConfigurationCollectionRelationCreateApiResponse,
+                ClassificationStoreConfigurationCollectionRelationCreateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/collection-relations/add`,
+                    method: "POST",
+                    body: queryArg.classificationStoreConfigurationCollectionRelationCreate,
+                }),
+                invalidatesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationCollectionCreate: build.mutation<
                 ClassificationStoreConfigurationCollectionCreateApiResponse,
@@ -27,6 +62,17 @@ const injectedRtkApi = api
                     body: queryArg.classificationStoreConfigurationCollectionCreate,
                 }),
                 invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationCollectionRelationCollection: build.query<
+                ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
+                ClassificationStoreConfigurationCollectionRelationCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/collections/${queryArg.colId}/relations`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationCollectionUpdate: build.mutation<
                 ClassificationStoreConfigurationCollectionUpdateApiResponse,
@@ -49,47 +95,21 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationCollectionRelationCollection: build.query<
-                ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
-                ClassificationStoreConfigurationCollectionRelationCollectionApiArg
+            classificationStoreConfigurationGetPage: build.query<
+                ClassificationStoreConfigurationGetPageApiResponse,
+                ClassificationStoreConfigurationGetPageApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/collections/${queryArg.colId}/relations`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationCollectionRelationCreate: build.mutation<
-                ClassificationStoreConfigurationCollectionRelationCreateApiResponse,
-                ClassificationStoreConfigurationCollectionRelationCreateApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/collection-relations/add`,
-                    method: "POST",
-                    body: queryArg.classificationStoreConfigurationCollectionRelationCreate,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationCollectionRelationDelete: build.mutation<
-                ClassificationStoreConfigurationCollectionRelationDeleteApiResponse,
-                ClassificationStoreConfigurationCollectionRelationDeleteApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/collection-relations`,
-                    method: "DELETE",
-                    body: queryArg.classificationStoreConfigurationCollectionRelationDelete,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationGroupCollection: build.query<
-                ClassificationStoreConfigurationGroupCollectionApiResponse,
-                ClassificationStoreConfigurationGroupCollectionApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/groups`,
-                    method: "POST",
-                    body: queryArg.body,
+                    url: `/pimcore-studio/api/classification-store/configuration/get-page`,
+                    params: {
+                        table: queryArg.table,
+                        id: queryArg.id,
+                        storeId: queryArg.storeId,
+                        pageSize: queryArg.pageSize,
+                        sortKey: queryArg.sortKey,
+                        sortDir: queryArg.sortDir,
+                        disabledOnly: queryArg.disabledOnly,
+                    },
                 }),
                 providesTags: ["Classification Store"],
             }),
@@ -103,6 +123,17 @@ const injectedRtkApi = api
                     body: queryArg.classificationStoreConfigurationGroupCreate,
                 }),
                 invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationKeyGroupRelationCollection: build.query<
+                ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
+                ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/groups/${queryArg.groupId}/key-relations`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationGroupUpdate: build.mutation<
                 ClassificationStoreConfigurationGroupUpdateApiResponse,
@@ -125,16 +156,27 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationKeyCollection: build.query<
-                ClassificationStoreConfigurationKeyCollectionApiResponse,
-                ClassificationStoreConfigurationKeyCollectionApiArg
+            classificationStoreConfigurationKeyGroupRelationDelete: build.mutation<
+                ClassificationStoreConfigurationKeyGroupRelationDeleteApiResponse,
+                ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/keys`,
-                    method: "POST",
-                    body: queryArg.body,
+                    url: `/pimcore-studio/api/classification-store/configuration/key-group-relations`,
+                    method: "DELETE",
+                    body: queryArg.classificationStoreConfigurationKeyGroupRelationDelete,
                 }),
-                providesTags: ["Classification Store"],
+                invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationKeyGroupRelationCreate: build.mutation<
+                ClassificationStoreConfigurationKeyGroupRelationCreateApiResponse,
+                ClassificationStoreConfigurationKeyGroupRelationCreateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/key-group-relations/add`,
+                    method: "POST",
+                    body: queryArg.classificationStoreConfigurationKeyGroupRelationCreate,
+                }),
+                invalidatesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationKeyCreate: build.mutation<
                 ClassificationStoreConfigurationKeyCreateApiResponse,
@@ -178,39 +220,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationKeyGroupRelationCollection: build.query<
-                ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
-                ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/groups/${queryArg.groupId}/key-relations`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationKeyGroupRelationCreate: build.mutation<
-                ClassificationStoreConfigurationKeyGroupRelationCreateApiResponse,
-                ClassificationStoreConfigurationKeyGroupRelationCreateApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/key-group-relations/add`,
-                    method: "POST",
-                    body: queryArg.classificationStoreConfigurationKeyGroupRelationCreate,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationKeyGroupRelationDelete: build.mutation<
-                ClassificationStoreConfigurationKeyGroupRelationDeleteApiResponse,
-                ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/key-group-relations`,
-                    method: "DELETE",
-                    body: queryArg.classificationStoreConfigurationKeyGroupRelationDelete,
-                }),
-                invalidatesTags: ["Classification Store"],
-            }),
             classificationStoreConfigurationStoreCreate: build.mutation<
                 ClassificationStoreConfigurationStoreCreateApiResponse,
                 ClassificationStoreConfigurationStoreCreateApiArg
@@ -219,6 +228,24 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/classification-store/configuration/stores`,
                     method: "POST",
                     body: queryArg.classificationStoreConfigurationStoreCreate,
+                }),
+                invalidatesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationStoreTree: build.query<
+                ClassificationStoreConfigurationStoreTreeApiResponse,
+                ClassificationStoreConfigurationStoreTreeApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/classification-store/configuration/stores/tree` }),
+                providesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationStoreUpdate: build.mutation<
+                ClassificationStoreConfigurationStoreUpdateApiResponse,
+                ClassificationStoreConfigurationStoreUpdateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.classificationStoreConfigurationStoreUpdate,
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
@@ -242,23 +269,38 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Classification Store"],
             }),
-            classificationStoreConfigurationStoreTree: build.query<
-                ClassificationStoreConfigurationStoreTreeApiResponse,
-                ClassificationStoreConfigurationStoreTreeApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/classification-store/configuration/stores/tree` }),
-                providesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationStoreUpdate: build.mutation<
-                ClassificationStoreConfigurationStoreUpdateApiResponse,
-                ClassificationStoreConfigurationStoreUpdateApiArg
+            classificationStoreConfigurationCollectionCollection: build.query<
+                ClassificationStoreConfigurationCollectionCollectionApiResponse,
+                ClassificationStoreConfigurationCollectionCollectionApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.classificationStoreConfigurationStoreUpdate,
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/collections`,
+                    method: "POST",
+                    body: queryArg.body,
                 }),
-                invalidatesTags: ["Classification Store"],
+                providesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationGroupCollection: build.query<
+                ClassificationStoreConfigurationGroupCollectionApiResponse,
+                ClassificationStoreConfigurationGroupCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/groups`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Classification Store"],
+            }),
+            classificationStoreConfigurationKeyCollection: build.query<
+                ClassificationStoreConfigurationKeyCollectionApiResponse,
+                ClassificationStoreConfigurationKeyCollectionApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/classification-store/configuration/stores/${queryArg.storeId}/keys`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Classification Store"],
             }),
             classificationStoreConfigurationSubGroupCollection: build.query<
                 ClassificationStoreConfigurationSubGroupCollectionApiResponse,
@@ -302,41 +344,6 @@ const injectedRtkApi = api
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Classification Store"],
-            }),
-            classificationStoreConfigurationGetPage: build.query<
-                ClassificationStoreConfigurationGetPageApiResponse,
-                ClassificationStoreConfigurationGetPageApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/configuration/get-page`,
-                    params: {
-                        table: queryArg.table,
-                        id: queryArg.id,
-                        storeId: queryArg.storeId,
-                        pageSize: queryArg.pageSize,
-                        sortKey: queryArg.sortKey,
-                        sortDir: queryArg.sortDir,
-                        disabledOnly: queryArg.disabledOnly,
-                    },
-                }),
-                providesTags: ["Classification Store"],
-            }),
-            classificationStoreGetCollections: build.query<
-                ClassificationStoreGetCollectionsApiResponse,
-                ClassificationStoreGetCollectionsApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/classification-store/collections`,
-                    params: {
-                        storeId: queryArg.storeId,
-                        classId: queryArg.classId,
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                        fieldName: queryArg.fieldName,
-                        searchTerm: queryArg.searchTerm,
-                    },
-                }),
-                providesTags: ["Classification Store"],
             }),
             classificationStoreGetGroups: build.query<
                 ClassificationStoreGetGroupsApiResponse,
@@ -411,51 +418,47 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Classification Store"],
             }),
-            classificationStoreGetConfigCollection: build.query<
-                ClassificationStoreGetConfigCollectionApiResponse,
-                ClassificationStoreGetConfigCollectionApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/classification-store/config/collection` }),
-                providesTags: ["Classification Store"],
-            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ClassificationStoreConfigurationCollectionCollectionApiResponse =
-    /** status 200 Paginated list of collection configurations */ {
-        totalItems: number;
-        items: ClassificationStoreConfigurationCollectionDetail[];
-    };
-export type ClassificationStoreConfigurationCollectionCollectionApiArg = {
-    /** ID of the store to list collections for */
+export type ClassificationStoreGetCollectionsApiResponse = /** status 200 List of classification store collections */ {
+    totalItems: number;
+    items: ClassificationStoreCollection[];
+};
+export type ClassificationStoreGetCollectionsApiArg = {
+    /** Classification Store ID */
     storeId: number;
-    body: {
-        filters?: {
-            page?: number;
-            pageSize?: number;
-            columnFilters?: object;
-            sortFilter?: object;
-            additionalSortFilters?: object;
-        };
+    /** Class ID */
+    classId?: string;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+    /** Field Name */
+    fieldName: string;
+    /** Search Term */
+    searchTerm?: string;
+};
+export type ClassificationStoreGetConfigCollectionApiResponse =
+    /** status 200 List of classification store configurations */ {
+        totalItems: number;
+        items: ClassificationStoreConfiguration[];
     };
+export type ClassificationStoreGetConfigCollectionApiArg = void;
+export type ClassificationStoreConfigurationCollectionRelationDeleteApiResponse = unknown;
+export type ClassificationStoreConfigurationCollectionRelationDeleteApiArg = {
+    classificationStoreConfigurationCollectionRelationDelete: ClassificationStoreConfigurationCollectionRelationDelete;
+};
+export type ClassificationStoreConfigurationCollectionRelationCreateApiResponse =
+    /** status 200 Created or updated collection-group relation */ ClassificationStoreConfigurationCollectionRelationDetail;
+export type ClassificationStoreConfigurationCollectionRelationCreateApiArg = {
+    classificationStoreConfigurationCollectionRelationCreate: ClassificationStoreConfigurationCollectionRelationCreate;
 };
 export type ClassificationStoreConfigurationCollectionCreateApiResponse =
     /** status 200 Created collection configuration */ ClassificationStoreConfigurationCollectionDetail;
 export type ClassificationStoreConfigurationCollectionCreateApiArg = {
     classificationStoreConfigurationCollectionCreate: ClassificationStoreConfigurationCollectionCreate;
-};
-export type ClassificationStoreConfigurationCollectionUpdateApiResponse =
-    /** status 200 Updated collection configuration */ ClassificationStoreConfigurationCollectionDetail;
-export type ClassificationStoreConfigurationCollectionUpdateApiArg = {
-    /** Id of the collection configuration */
-    id: number;
-    classificationStoreConfigurationCollectionUpdate: ClassificationStoreConfigurationCollectionUpdate;
-};
-export type ClassificationStoreConfigurationCollectionDeleteApiResponse = unknown;
-export type ClassificationStoreConfigurationCollectionDeleteApiArg = {
-    /** Id of the collection configuration */
-    id: number;
 };
 export type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse =
     /** status 200 Paginated list of collection-group relations */ {
@@ -475,23 +478,49 @@ export type ClassificationStoreConfigurationCollectionRelationCollectionApiArg =
         };
     };
 };
-export type ClassificationStoreConfigurationCollectionRelationCreateApiResponse =
-    /** status 200 Created or updated collection-group relation */ ClassificationStoreConfigurationCollectionRelationDetail;
-export type ClassificationStoreConfigurationCollectionRelationCreateApiArg = {
-    classificationStoreConfigurationCollectionRelationCreate: ClassificationStoreConfigurationCollectionRelationCreate;
+export type ClassificationStoreConfigurationCollectionUpdateApiResponse =
+    /** status 200 Updated collection configuration */ ClassificationStoreConfigurationCollectionDetail;
+export type ClassificationStoreConfigurationCollectionUpdateApiArg = {
+    /** Id of the collection configuration */
+    id: number;
+    classificationStoreConfigurationCollectionUpdate: ClassificationStoreConfigurationCollectionUpdate;
 };
-export type ClassificationStoreConfigurationCollectionRelationDeleteApiResponse = unknown;
-export type ClassificationStoreConfigurationCollectionRelationDeleteApiArg = {
-    classificationStoreConfigurationCollectionRelationDelete: ClassificationStoreConfigurationCollectionRelationDelete;
+export type ClassificationStoreConfigurationCollectionDeleteApiResponse = unknown;
+export type ClassificationStoreConfigurationCollectionDeleteApiArg = {
+    /** Id of the collection configuration */
+    id: number;
 };
-export type ClassificationStoreConfigurationGroupCollectionApiResponse =
-    /** status 200 Paginated list of group configurations */ {
-        totalItems: number;
-        items: ClassificationStoreConfigurationGroupDetail[];
-    };
-export type ClassificationStoreConfigurationGroupCollectionApiArg = {
-    /** ID of the store to list groups for */
+export type ClassificationStoreConfigurationGetPageApiResponse =
+    /** status 200 Page number where the item is located */ ClassificationStoreConfigurationGetPageResponse;
+export type ClassificationStoreConfigurationGetPageApiArg = {
+    /** Table to search in (keys or groups) */
+    table: string;
+    /** ID of the item to find */
+    id: number;
+    /** ID of the store */
     storeId: number;
+    /** Number of items per page */
+    pageSize: number;
+    /** Column to sort by */
+    sortKey?: string;
+    /** Sort direction (ASC or DESC) */
+    sortDir?: string;
+    /** Locate a key in the list of disabled keys instead of the enabled ones (keys only) */
+    disabledOnly?: boolean;
+};
+export type ClassificationStoreConfigurationGroupCreateApiResponse =
+    /** status 200 Created group configuration */ ClassificationStoreConfigurationGroupDetail;
+export type ClassificationStoreConfigurationGroupCreateApiArg = {
+    classificationStoreConfigurationGroupCreate: ClassificationStoreConfigurationGroupCreate;
+};
+export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse =
+    /** status 200 Paginated list of key-group relations */ {
+        totalItems: number;
+        items: ClassificationStoreConfigurationKeyGroupRelationDetail[];
+    };
+export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg = {
+    /** ID of the group to list key relations for */
+    groupId: number;
     body: {
         filters?: {
             page?: number;
@@ -501,11 +530,6 @@ export type ClassificationStoreConfigurationGroupCollectionApiArg = {
             additionalSortFilters?: object;
         };
     };
-};
-export type ClassificationStoreConfigurationGroupCreateApiResponse =
-    /** status 200 Created group configuration */ ClassificationStoreConfigurationGroupDetail;
-export type ClassificationStoreConfigurationGroupCreateApiArg = {
-    classificationStoreConfigurationGroupCreate: ClassificationStoreConfigurationGroupCreate;
 };
 export type ClassificationStoreConfigurationGroupUpdateApiResponse =
     /** status 200 Updated group configuration */ ClassificationStoreConfigurationGroupDetail;
@@ -519,25 +543,14 @@ export type ClassificationStoreConfigurationGroupDeleteApiArg = {
     /** Id of the group configuration */
     id: number;
 };
-export type ClassificationStoreConfigurationKeyCollectionApiResponse =
-    /** status 200 Paginated list of key configurations */ {
-        totalItems: number;
-        items: ClassificationStoreConfigurationKeyDetail[];
-    };
-export type ClassificationStoreConfigurationKeyCollectionApiArg = {
-    /** ID of the store to list keys for */
-    storeId: number;
-    body: {
-        filters?: {
-            page?: number;
-            pageSize?: number;
-            columnFilters?: object;
-            sortFilter?: object;
-            additionalSortFilters?: object;
-        };
-        /** Return the disabled keys instead of the enabled ones */
-        disabledOnly?: boolean;
-    };
+export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiResponse = unknown;
+export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg = {
+    classificationStoreConfigurationKeyGroupRelationDelete: ClassificationStoreConfigurationKeyGroupRelationDelete;
+};
+export type ClassificationStoreConfigurationKeyGroupRelationCreateApiResponse =
+    /** status 200 Created or updated key-group relation */ ClassificationStoreConfigurationKeyGroupRelationDetail;
+export type ClassificationStoreConfigurationKeyGroupRelationCreateApiArg = {
+    classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate;
 };
 export type ClassificationStoreConfigurationKeyCreateApiResponse =
     /** status 200 Created key configuration */ ClassificationStoreConfigurationKeyDetail;
@@ -562,37 +575,20 @@ export type ClassificationStoreConfigurationKeyRestoreApiArg = {
     /** Id of the key configuration */
     id: number;
 };
-export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse =
-    /** status 200 Paginated list of key-group relations */ {
-        totalItems: number;
-        items: ClassificationStoreConfigurationKeyGroupRelationDetail[];
-    };
-export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg = {
-    /** ID of the group to list key relations for */
-    groupId: number;
-    body: {
-        filters?: {
-            page?: number;
-            pageSize?: number;
-            columnFilters?: object;
-            sortFilter?: object;
-            additionalSortFilters?: object;
-        };
-    };
-};
-export type ClassificationStoreConfigurationKeyGroupRelationCreateApiResponse =
-    /** status 200 Created or updated key-group relation */ ClassificationStoreConfigurationKeyGroupRelationDetail;
-export type ClassificationStoreConfigurationKeyGroupRelationCreateApiArg = {
-    classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate;
-};
-export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiResponse = unknown;
-export type ClassificationStoreConfigurationKeyGroupRelationDeleteApiArg = {
-    classificationStoreConfigurationKeyGroupRelationDelete: ClassificationStoreConfigurationKeyGroupRelationDelete;
-};
 export type ClassificationStoreConfigurationStoreCreateApiResponse =
     /** status 200 Created store configuration */ ClassificationStoreConfigurationStoreDetail;
 export type ClassificationStoreConfigurationStoreCreateApiArg = {
     classificationStoreConfigurationStoreCreate: ClassificationStoreConfigurationStoreCreate;
+};
+export type ClassificationStoreConfigurationStoreTreeApiResponse =
+    /** status 200 List of store tree nodes */ ClassificationStoreConfigurationStoreTreeNode[];
+export type ClassificationStoreConfigurationStoreTreeApiArg = void;
+export type ClassificationStoreConfigurationStoreUpdateApiResponse =
+    /** status 200 Updated store configuration */ ClassificationStoreConfigurationStoreDetail;
+export type ClassificationStoreConfigurationStoreUpdateApiArg = {
+    /** Id of the store configuration */
+    id: number;
+    classificationStoreConfigurationStoreUpdate: ClassificationStoreConfigurationStoreUpdate;
 };
 export type ClassificationStoreConfigurationStoreExportApiResponse =
     /** status 200 The store configuration as a JSON download */ Blob;
@@ -612,15 +608,61 @@ export type ClassificationStoreConfigurationStoreImportApiArg = {
         dryRun?: boolean;
     };
 };
-export type ClassificationStoreConfigurationStoreTreeApiResponse =
-    /** status 200 List of store tree nodes */ ClassificationStoreConfigurationStoreTreeNode[];
-export type ClassificationStoreConfigurationStoreTreeApiArg = void;
-export type ClassificationStoreConfigurationStoreUpdateApiResponse =
-    /** status 200 Updated store configuration */ ClassificationStoreConfigurationStoreDetail;
-export type ClassificationStoreConfigurationStoreUpdateApiArg = {
-    /** Id of the store configuration */
-    id: number;
-    classificationStoreConfigurationStoreUpdate: ClassificationStoreConfigurationStoreUpdate;
+export type ClassificationStoreConfigurationCollectionCollectionApiResponse =
+    /** status 200 Paginated list of collection configurations */ {
+        totalItems: number;
+        items: ClassificationStoreConfigurationCollectionDetail[];
+    };
+export type ClassificationStoreConfigurationCollectionCollectionApiArg = {
+    /** ID of the store to list collections for */
+    storeId: number;
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+            additionalSortFilters?: object;
+        };
+    };
+};
+export type ClassificationStoreConfigurationGroupCollectionApiResponse =
+    /** status 200 Paginated list of group configurations */ {
+        totalItems: number;
+        items: ClassificationStoreConfigurationGroupDetail[];
+    };
+export type ClassificationStoreConfigurationGroupCollectionApiArg = {
+    /** ID of the store to list groups for */
+    storeId: number;
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+            additionalSortFilters?: object;
+        };
+    };
+};
+export type ClassificationStoreConfigurationKeyCollectionApiResponse =
+    /** status 200 Paginated list of key configurations */ {
+        totalItems: number;
+        items: ClassificationStoreConfigurationKeyDetail[];
+    };
+export type ClassificationStoreConfigurationKeyCollectionApiArg = {
+    /** ID of the store to list keys for */
+    storeId: number;
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+            additionalSortFilters?: object;
+        };
+        /** Return the disabled keys instead of the enabled ones */
+        disabledOnly?: boolean;
+    };
 };
 export type ClassificationStoreConfigurationSubGroupCollectionApiResponse =
     /** status 200 Paginated list of sub group configurations */ {
@@ -656,42 +698,6 @@ export type ClassificationStoreConfigurationSubGroupDeleteApiResponse = unknown;
 export type ClassificationStoreConfigurationSubGroupDeleteApiArg = {
     /** Id of the sub group configuration */
     id: number;
-};
-export type ClassificationStoreConfigurationGetPageApiResponse =
-    /** status 200 Page number where the item is located */ ClassificationStoreConfigurationGetPageResponse;
-export type ClassificationStoreConfigurationGetPageApiArg = {
-    /** Table to search in (keys or groups) */
-    table: string;
-    /** ID of the item to find */
-    id: number;
-    /** ID of the store */
-    storeId: number;
-    /** Number of items per page */
-    pageSize: number;
-    /** Column to sort by */
-    sortKey?: string;
-    /** Sort direction (ASC or DESC) */
-    sortDir?: string;
-    /** Locate a key in the list of disabled keys instead of the enabled ones (keys only) */
-    disabledOnly?: boolean;
-};
-export type ClassificationStoreGetCollectionsApiResponse = /** status 200 List of classification store collections */ {
-    totalItems: number;
-    items: ClassificationStoreCollection[];
-};
-export type ClassificationStoreGetCollectionsApiArg = {
-    /** Classification Store ID */
-    storeId: number;
-    /** Class ID */
-    classId?: string;
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
-    /** Field Name */
-    fieldName: string;
-    /** Search Term */
-    searchTerm?: string;
 };
 export type ClassificationStoreGetGroupsApiResponse = /** status 200 List of classification store groups */ {
     totalItems: number;
@@ -762,33 +768,19 @@ export type ClassificationStoreGetLayoutByKeyApiArg = {
     /** Field Name */
     fieldName: string;
 };
-export type ClassificationStoreGetConfigCollectionApiResponse =
-    /** status 200 List of classification store configurations */ {
-        totalItems: number;
-        items: ClassificationStoreConfiguration[];
-    };
-export type ClassificationStoreGetConfigCollectionApiArg = void;
-export type ClassificationStoreConfigurationCollectionDetail = {
+export type ClassificationStoreCollection = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** ID of the collection */
+    /** ID */
     id: number;
-    /** Name of the collection */
+    /** Name */
     name: string;
-    /** ID of the store this collection belongs to */
-    storeId: number;
-    /** Description of the collection */
-    description: string | null;
-    /** Creation date as Unix timestamp */
-    creationDate: number | null;
-    /** Modification date as Unix timestamp */
-    modificationDate: number | null;
-    /** Opaque identifier of the collection, assigned by the system and never writable */
-    identifier?: string | null;
-    /** Free-form pairs the collection carries, reported as stored. Pimcore reads no member of it, and null where the collection holds none. */
-    customMetadata?: object | null;
+    /** Description */
+    description: string;
+    /** List of Group IDs in collection */
+    groups: object;
 };
 export type Error = {
     /** Message */
@@ -800,19 +792,21 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type ClassificationStoreConfigurationCollectionCreate = {
-    /** Name of the collection */
+export type ClassificationStoreConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Name */
     name: string;
-    /** ID of the store this collection belongs to */
-    storeId: number;
 };
-export type ClassificationStoreConfigurationCollectionUpdate = {
-    /** Name of the collection */
-    name: string;
-    /** Description of the collection */
-    description: string | null;
-    /** Free-form pairs of the collection. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
-    customMetadata?: object | null;
+export type ClassificationStoreConfigurationCollectionRelationDelete = {
+    /** ID of the collection */
+    colId: number;
+    /** ID of the group */
+    groupId: number;
 };
 export type ClassificationStoreConfigurationCollectionRelationDetail = {
     /** AdditionalAttributes */
@@ -840,11 +834,49 @@ export type ClassificationStoreConfigurationCollectionRelationCreate = {
     /** Sort order of the relation */
     sorter: number;
 };
-export type ClassificationStoreConfigurationCollectionRelationDelete = {
+export type ClassificationStoreConfigurationCollectionDetail = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** ID of the collection */
-    colId: number;
-    /** ID of the group */
-    groupId: number;
+    id: number;
+    /** Name of the collection */
+    name: string;
+    /** ID of the store this collection belongs to */
+    storeId: number;
+    /** Description of the collection */
+    description: string | null;
+    /** Creation date as Unix timestamp */
+    creationDate: number | null;
+    /** Modification date as Unix timestamp */
+    modificationDate: number | null;
+    /** Opaque identifier of the collection, assigned by the system and never writable */
+    identifier?: string | null;
+    /** Free-form pairs the collection carries, reported as stored. Pimcore reads no member of it, and null where the collection holds none. */
+    customMetadata?: object | null;
+};
+export type ClassificationStoreConfigurationCollectionCreate = {
+    /** Name of the collection */
+    name: string;
+    /** ID of the store this collection belongs to */
+    storeId: number;
+};
+export type ClassificationStoreConfigurationCollectionUpdate = {
+    /** Name of the collection */
+    name: string;
+    /** Description of the collection */
+    description: string | null;
+    /** Free-form pairs of the collection. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    customMetadata?: object | null;
+};
+export type ClassificationStoreConfigurationGetPageResponse = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Page number where the item is located */
+    page: number;
 };
 export type ClassificationStoreConfigurationGroupDetail = {
     /** AdditionalAttributes */
@@ -874,14 +906,6 @@ export type ClassificationStoreConfigurationGroupCreate = {
     /** ID of the store this group belongs to */
     storeId: number;
 };
-export type ClassificationStoreConfigurationGroupUpdate = {
-    /** Name of the group */
-    name: string;
-    /** Description of the group */
-    description: string | null;
-    /** Free-form pairs of the group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
-    customMetadata?: object | null;
-};
 export type SelectOption = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -901,6 +925,72 @@ export type ClassificationStoreConfigurationKeyUnits = {
     defaultUnit: string | null;
     /** IDs of the units the key permits, as stored and in the order the key declares them, or null where the key restricts nothing and every unit is permitted */
     validUnits: string[] | null;
+};
+export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the key */
+    keyId: number;
+    /** ID of the group */
+    groupId: number;
+    /** Sort order of the relation */
+    sorter: number;
+    /** Whether the key is mandatory in this group */
+    mandatory: boolean;
+    /** Name of the key */
+    keyName: string | null;
+    /** Description of the key */
+    keyDescription: string | null;
+    /** Name of the group */
+    groupName: string | null;
+    /** Identifier of the sub group this assignment carries */
+    subGroup?: string | null;
+    /** Partial field definition overriding the one of the key for this assignment */
+    definitionOverride?: object | null;
+    /** Free-form metadata carried by this assignment, reported as it is stored. No member is reserved. */
+    metadata?: object | null;
+    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It belongs to the key, not to this assignment, and is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
+    localized?: boolean | null;
+    /** Data type of the key, as the key configuration stores it, or null where the key configuration is gone */
+    keyType?: string | null;
+    /** The resolved view of this assignment's option vocabulary for this request, whatever its source: the stored options, or the options of an options provider that reports static options, in the order they are resolved, narrowed to the option subset of the assignment's definitionOverride. Null where the key is not a select or multiselect, and where optionsUnavailableReason says why not. The stored definition remains authoritative for storage. */
+    options?: SelectOption[] | null;
+    /** Why options is null for a select or multiselect key: "providerNotStatic" where its options provider reports options that depend on a data object, "resolutionFailed" where the provider could not be resolved or raised, for instance for a deleted select options configuration. Null means nothing failed. */
+    optionsUnavailableReason?: string | null;
+    /** The unit vocabulary of this assignment: the key's own definition with the assignment's definitionOverride applied, and null where its type holds no units. Where validUnits is null the definition restricts nothing; the type tells that apart from a type with no units at all. */
+    units?: ClassificationStoreConfigurationKeyUnits | null;
+};
+export type ClassificationStoreConfigurationGroupUpdate = {
+    /** Name of the group */
+    name: string;
+    /** Description of the group */
+    description: string | null;
+    /** Free-form pairs of the group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    customMetadata?: object | null;
+};
+export type ClassificationStoreConfigurationKeyGroupRelationDelete = {
+    /** ID of the key */
+    keyId: number;
+    /** ID of the group */
+    groupId: number;
+};
+export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
+    /** ID of the key */
+    keyId: number;
+    /** ID of the group */
+    groupId: number;
+    /** Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation */
+    sorter?: number | null;
+    /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
+    mandatory?: boolean | null;
+    /** Partial field definition overriding the one of the key for this assignment. Omitting it leaves a stored one alone, a supplied object replaces it whole rather than merging into it, and an explicit null clears it. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    definitionOverride?: object | null;
+    /** Sub group of the store this assignment belongs to. Omitting it leaves a stored one alone, a supplied value replaces it, and an explicit null clears it. */
+    subGroup?: string | null;
+    /** Free-form metadata carried by this assignment. No member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
+    metadata?: object | null;
 };
 export type ClassificationStoreConfigurationKeyDetail = {
     /** AdditionalAttributes */
@@ -964,64 +1054,6 @@ export type ClassificationStoreConfigurationKeyUpdate = {
     /** Free-form pairs of the key. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
     customMetadata?: object | null;
 };
-export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the key */
-    keyId: number;
-    /** ID of the group */
-    groupId: number;
-    /** Sort order of the relation */
-    sorter: number;
-    /** Whether the key is mandatory in this group */
-    mandatory: boolean;
-    /** Name of the key */
-    keyName: string | null;
-    /** Description of the key */
-    keyDescription: string | null;
-    /** Name of the group */
-    groupName: string | null;
-    /** Identifier of the sub group this assignment carries */
-    subGroup?: string | null;
-    /** Partial field definition overriding the one of the key for this assignment */
-    definitionOverride?: object | null;
-    /** Free-form metadata carried by this assignment, reported as it is stored. No member is reserved. */
-    metadata?: object | null;
-    /** Whether the key holds a value per language, as the key stores it: true, false, or null where the key states nothing and the `localized` flag of the class definition field the key is rendered in decides. It belongs to the key, not to this assignment, and is not resolved against that field here. The flag is not yet honoured by the object data endpoints, which still read and write a classification store field under the language set of the class definition field alone. */
-    localized?: boolean | null;
-    /** Data type of the key, as the key configuration stores it, or null where the key configuration is gone */
-    keyType?: string | null;
-    /** The resolved view of this assignment's option vocabulary for this request, whatever its source: the stored options, or the options of an options provider that reports static options, in the order they are resolved, narrowed to the option subset of the assignment's definitionOverride. Null where the key is not a select or multiselect, and where optionsUnavailableReason says why not. The stored definition remains authoritative for storage. */
-    options?: SelectOption[] | null;
-    /** Why options is null for a select or multiselect key: "providerNotStatic" where its options provider reports options that depend on a data object, "resolutionFailed" where the provider could not be resolved or raised, for instance for a deleted select options configuration. Null means nothing failed. */
-    optionsUnavailableReason?: string | null;
-    /** The unit vocabulary of this assignment: the key's own definition with the assignment's definitionOverride applied, and null where its type holds no units. Where validUnits is null the definition restricts nothing; the type tells that apart from a type with no units at all. */
-    units?: ClassificationStoreConfigurationKeyUnits | null;
-};
-export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
-    /** ID of the key */
-    keyId: number;
-    /** ID of the group */
-    groupId: number;
-    /** Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation */
-    sorter?: number | null;
-    /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
-    mandatory?: boolean | null;
-    /** Partial field definition overriding the one of the key for this assignment. Omitting it leaves a stored one alone, a supplied object replaces it whole rather than merging into it, and an explicit null clears it. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
-    definitionOverride?: object | null;
-    /** Sub group of the store this assignment belongs to. Omitting it leaves a stored one alone, a supplied value replaces it, and an explicit null clears it. */
-    subGroup?: string | null;
-    /** Free-form metadata carried by this assignment. No member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
-    metadata?: object | null;
-};
-export type ClassificationStoreConfigurationKeyGroupRelationDelete = {
-    /** ID of the key */
-    keyId: number;
-    /** ID of the group */
-    groupId: number;
-};
 export type ClassificationStoreConfigurationStoreDetail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1043,6 +1075,30 @@ export type ClassificationStoreConfigurationStoreDetail = {
 export type ClassificationStoreConfigurationStoreCreate = {
     /** Name of the store */
     name: string;
+};
+export type ClassificationStoreConfigurationStoreTreeNode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the store */
+    id: number;
+    /** Name of the store */
+    name: string;
+    /** Description of the store */
+    description: string | null;
+    /** Opaque identifier of the store, assigned by the system and never writable */
+    identifier?: string | null;
+    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
+    engine?: string | null;
+    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
+    engineCapabilities?: string[] | null;
+};
+export type ClassificationStoreConfigurationStoreUpdate = {
+    /** Name of the store */
+    name: string;
+    /** Description of the store */
+    description: string | null;
 };
 export type ClassificationStoreConfigurationImportReport = {
     /** AdditionalAttributes */
@@ -1080,30 +1136,6 @@ export type ClassificationStoreConfigurationImportReport = {
     /** The removed entries by name, the entities before the relations, the last element naming how many more there are */
     removedEntries?: string[] | null;
 };
-export type ClassificationStoreConfigurationStoreTreeNode = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the store */
-    id: number;
-    /** Name of the store */
-    name: string;
-    /** Description of the store */
-    description: string | null;
-    /** Opaque identifier of the store, assigned by the system and never writable */
-    identifier?: string | null;
-    /** The engine the store stores its values with, as the store stores it; null where it stores none, which is the default engine, and null as well on a core that does not report an engine at all. */
-    engine?: string | null;
-    /** The capabilities the store's engine reports, naming exactly those it supports. An empty array is an engine that reports none, which is a different answer. Null is every case where the question could not be put: a core that does not report an engine, no engine resolver on this installation, or an engine that failed to resolve. A client cannot tell those apart and must not infer core support from it. */
-    engineCapabilities?: string[] | null;
-};
-export type ClassificationStoreConfigurationStoreUpdate = {
-    /** Name of the store */
-    name: string;
-    /** Description of the store */
-    description: string | null;
-};
 export type ClassificationStoreConfigurationSubGroupDetail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1139,28 +1171,6 @@ export type ClassificationStoreConfigurationSubGroupUpdate = {
     description: string | null;
     /** Free-form pairs of the sub group. Pimcore reads no member of it and no member is reserved. Omitting it keeps a stored object alone, a supplied object replaces it whole rather than merging into it - so one rebuilt from a form without a member drops that member - and an explicit null clears it altogether. A JSON array is refused, the member being an object, and so is the one object an array cannot be told apart from once decoded - whose member names are the consecutive integers from zero, such as {"0": "a"} - because the stored form cannot carry that distinction either. */
     customMetadata?: object | null;
-};
-export type ClassificationStoreConfigurationGetPageResponse = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Page number where the item is located */
-    page: number;
-};
-export type ClassificationStoreCollection = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID */
-    id: number;
-    /** Name */
-    name: string;
-    /** Description */
-    description: string;
-    /** List of Group IDs in collection */
-    groups: object;
 };
 export type ClassificationStoreGroup = {
     /** AdditionalAttributes */
@@ -1258,51 +1268,41 @@ export type ClassificationStoreGroupLayout = {
     /** Groups */
     groups: ClassificationStoreGroupLayout2[];
 };
-export type ClassificationStoreConfiguration = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID */
-    id: number;
-    /** Name */
-    name: string;
-};
 export const {
-    useClassificationStoreConfigurationCollectionCollectionQuery,
+    useClassificationStoreGetCollectionsQuery,
+    useClassificationStoreGetConfigCollectionQuery,
+    useClassificationStoreConfigurationCollectionRelationDeleteMutation,
+    useClassificationStoreConfigurationCollectionRelationCreateMutation,
     useClassificationStoreConfigurationCollectionCreateMutation,
+    useClassificationStoreConfigurationCollectionRelationCollectionQuery,
     useClassificationStoreConfigurationCollectionUpdateMutation,
     useClassificationStoreConfigurationCollectionDeleteMutation,
-    useClassificationStoreConfigurationCollectionRelationCollectionQuery,
-    useClassificationStoreConfigurationCollectionRelationCreateMutation,
-    useClassificationStoreConfigurationCollectionRelationDeleteMutation,
-    useClassificationStoreConfigurationGroupCollectionQuery,
+    useClassificationStoreConfigurationGetPageQuery,
     useClassificationStoreConfigurationGroupCreateMutation,
+    useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
     useClassificationStoreConfigurationGroupUpdateMutation,
     useClassificationStoreConfigurationGroupDeleteMutation,
-    useClassificationStoreConfigurationKeyCollectionQuery,
+    useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
+    useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
     useClassificationStoreConfigurationKeyCreateMutation,
     useClassificationStoreConfigurationKeyUpdateMutation,
     useClassificationStoreConfigurationKeyDeleteMutation,
     useClassificationStoreConfigurationKeyRestoreMutation,
-    useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
-    useClassificationStoreConfigurationKeyGroupRelationCreateMutation,
-    useClassificationStoreConfigurationKeyGroupRelationDeleteMutation,
     useClassificationStoreConfigurationStoreCreateMutation,
-    useClassificationStoreConfigurationStoreExportQuery,
-    useClassificationStoreConfigurationStoreImportMutation,
     useClassificationStoreConfigurationStoreTreeQuery,
     useClassificationStoreConfigurationStoreUpdateMutation,
+    useClassificationStoreConfigurationStoreExportQuery,
+    useClassificationStoreConfigurationStoreImportMutation,
+    useClassificationStoreConfigurationCollectionCollectionQuery,
+    useClassificationStoreConfigurationGroupCollectionQuery,
+    useClassificationStoreConfigurationKeyCollectionQuery,
     useClassificationStoreConfigurationSubGroupCollectionQuery,
     useClassificationStoreConfigurationSubGroupCreateMutation,
     useClassificationStoreConfigurationSubGroupUpdateMutation,
     useClassificationStoreConfigurationSubGroupDeleteMutation,
-    useClassificationStoreConfigurationGetPageQuery,
-    useClassificationStoreGetCollectionsQuery,
     useClassificationStoreGetGroupsQuery,
     useClassificationStoreGetKeyGroupRelationsQuery,
     useClassificationStoreGetLayoutByCollectionQuery,
     useClassificationStoreGetLayoutByGroupQuery,
     useClassificationStoreGetLayoutByKeyQuery,
-    useClassificationStoreGetConfigCollectionQuery,
 } = injectedRtkApi;

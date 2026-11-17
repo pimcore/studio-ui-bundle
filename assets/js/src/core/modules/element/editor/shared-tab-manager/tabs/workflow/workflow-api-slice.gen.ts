@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            workflowActionSubmit: build.mutation<WorkflowActionSubmitApiResponse, WorkflowActionSubmitApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/workflows/action`,
+                    method: "POST",
+                    body: queryArg.submitAction,
+                }),
+                invalidatesTags: ["Workflows"],
+            }),
             workflowGetDetails: build.query<WorkflowGetDetailsApiResponse, WorkflowGetDetailsApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/workflows/details`,
@@ -41,18 +49,19 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Workflows"],
             }),
-            workflowActionSubmit: build.mutation<WorkflowActionSubmitApiResponse, WorkflowActionSubmitApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/workflows/action`,
-                    method: "POST",
-                    body: queryArg.submitAction,
-                }),
-                invalidatesTags: ["Workflows"],
-            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type WorkflowActionSubmitApiResponse =
+    /** status 200 Json encoded name of workflow, name and type of submitted action. */ {
+        workflowName?: string;
+        actionName?: string;
+        actionType?: string;
+    };
+export type WorkflowActionSubmitApiArg = {
+    submitAction: SubmitAction;
+};
 export type WorkflowGetDetailsApiResponse = /** status 200 Detail data of element workflows */ {
     items: WorkflowDetails[];
     layoutId: string;
@@ -90,14 +99,29 @@ export type WorkflowGetPlacesApiArg = {
     /** Name of the workflow */
     workflowName: string;
 };
-export type WorkflowActionSubmitApiResponse =
-    /** status 200 Json encoded name of workflow, name and type of submitted action. */ {
-        workflowName?: string;
-        actionName?: string;
-        actionType?: string;
-    };
-export type WorkflowActionSubmitApiArg = {
-    submitAction: SubmitAction;
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export type SubmitAction = {
+    /** type of the action */
+    actionType: string;
+    /** Id of the element */
+    elementId: number;
+    /** Type of the element */
+    elementType: string;
+    /** Id of the workflow */
+    workflowId: string;
+    /** Id of the transition */
+    transitionId: string;
+    /** workflowOptions */
+    workflowOptions: object | null;
 };
 export type WorkflowStatus = {
     /** color */
@@ -159,16 +183,6 @@ export type WorkflowDetails = {
     /** globalActions */
     globalActions: GlobalAction[];
 };
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
 export type WorkflowElement = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -193,24 +207,10 @@ export type WorkflowElement = {
     /** Modification timestamp */
     modificationDate: number;
 };
-export type SubmitAction = {
-    /** type of the action */
-    actionType: string;
-    /** Id of the element */
-    elementId: number;
-    /** Type of the element */
-    elementType: string;
-    /** Id of the workflow */
-    workflowId: string;
-    /** Id of the transition */
-    transitionId: string;
-    /** workflowOptions */
-    workflowOptions: object | null;
-};
 export const {
+    useWorkflowActionSubmitMutation,
     useWorkflowGetDetailsQuery,
     useWorkflowGetElementsQuery,
     useWorkflowGetNamesQuery,
     useWorkflowGetPlacesQuery,
-    useWorkflowActionSubmitMutation,
 } = injectedRtkApi;

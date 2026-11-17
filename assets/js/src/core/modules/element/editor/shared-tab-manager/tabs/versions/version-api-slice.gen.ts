@@ -6,38 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
-                providesTags: ["Versions"],
-            }),
-            versionImageStreamById: build.query<VersionImageStreamByIdApiResponse, VersionImageStreamByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/image/stream` }),
-                providesTags: ["Versions"],
-            }),
-            versionPdfStreamById: build.query<VersionPdfStreamByIdApiResponse, VersionPdfStreamByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/pdf/stream` }),
-                providesTags: ["Versions"],
-            }),
-            versionGetById: build.query<VersionGetByIdApiResponse, VersionGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}` }),
-                providesTags: ["Versions"],
-            }),
-            versionUpdateById: build.mutation<VersionUpdateByIdApiResponse, VersionUpdateByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/versions/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.updateVersion,
-                }),
-                invalidatesTags: ["Versions"],
-            }),
-            versionPublishById: build.mutation<VersionPublishByIdApiResponse, VersionPublishByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}`, method: "POST" }),
-                invalidatesTags: ["Versions"],
-            }),
-            versionDeleteById: build.mutation<VersionDeleteByIdApiResponse, VersionDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["Versions"],
-            }),
             versionGetCollectionForElementByTypeAndId: build.query<
                 VersionGetCollectionForElementByTypeAndIdApiResponse,
                 VersionGetCollectionForElementByTypeAndIdApiArg
@@ -61,23 +29,65 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Versions"],
             }),
+            versionGetById: build.query<VersionGetByIdApiResponse, VersionGetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}` }),
+                providesTags: ["Versions"],
+            }),
+            versionUpdateById: build.mutation<VersionUpdateByIdApiResponse, VersionUpdateByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/versions/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.updateVersion,
+                }),
+                invalidatesTags: ["Versions"],
+            }),
+            versionPublishById: build.mutation<VersionPublishByIdApiResponse, VersionPublishByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}`, method: "POST" }),
+                invalidatesTags: ["Versions"],
+            }),
+            versionDeleteById: build.mutation<VersionDeleteByIdApiResponse, VersionDeleteByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["Versions"],
+            }),
+            versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
+                providesTags: ["Versions"],
+            }),
+            versionImageStreamById: build.query<VersionImageStreamByIdApiResponse, VersionImageStreamByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/image/stream` }),
+                providesTags: ["Versions"],
+            }),
+            versionPdfStreamById: build.query<VersionPdfStreamByIdApiResponse, VersionPdfStreamByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/pdf/stream` }),
+                providesTags: ["Versions"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
-export type VersionAssetDownloadByIdApiArg = {
-    /** Id of the version */
+export type VersionGetCollectionForElementByTypeAndIdApiResponse =
+    /** status 200 Paginated element Versions data as JSON with total count as header param */ {
+        totalItems: number;
+        items: Version[];
+    };
+export type VersionGetCollectionForElementByTypeAndIdApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Id of the element */
     id: number;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
 };
-export type VersionImageStreamByIdApiResponse = /** status 200 Image thumbnail version stream */ Blob;
-export type VersionImageStreamByIdApiArg = {
-    /** Id of the version */
-    id: number;
+export type VersionCleanupForElementByTypeAndIdApiResponse = /** status 200 IDs of the removed versions */ {
+    /** IDs of deleted versions */
+    ids: number[];
 };
-export type VersionPdfStreamByIdApiResponse = /** status 200 PDF version stream */ Blob;
-export type VersionPdfStreamByIdApiArg = {
-    /** Id of the version */
+export type VersionCleanupForElementByTypeAndIdApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Id of the ID of the element */
     id: number;
 };
 export type VersionGetByIdApiResponse = /** status 200 Successfully retrieved version data as JSON */
@@ -107,30 +117,58 @@ export type VersionDeleteByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionGetCollectionForElementByTypeAndIdApiResponse =
-    /** status 200 Paginated element Versions data as JSON with total count as header param */ {
-        totalItems: number;
-        items: Version[];
+export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
+export type VersionAssetDownloadByIdApiArg = {
+    /** Id of the version */
+    id: number;
+};
+export type VersionImageStreamByIdApiResponse = /** status 200 Image thumbnail version stream */ Blob;
+export type VersionImageStreamByIdApiArg = {
+    /** Id of the version */
+    id: number;
+};
+export type VersionPdfStreamByIdApiResponse = /** status 200 PDF version stream */ Blob;
+export type VersionPdfStreamByIdApiArg = {
+    /** Id of the version */
+    id: number;
+};
+export type VersionUser = {
+    /** ID */
+    id?: number | null;
+    /** name */
+    name?: string | null;
+};
+export type Version = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
     };
-export type VersionGetCollectionForElementByTypeAndIdApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-    /** Id of the element */
+    /** version ID */
     id: number;
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
-};
-export type VersionCleanupForElementByTypeAndIdApiResponse = /** status 200 IDs of the removed versions */ {
-    /** IDs of deleted versions */
-    ids: number[];
-};
-export type VersionCleanupForElementByTypeAndIdApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-    /** Id of the ID of the element */
-    id: number;
+    /** element ID */
+    cid: number;
+    /** element type */
+    ctype: string;
+    /** note */
+    note: string;
+    /** date */
+    date: number;
+    /** public */
+    public: boolean;
+    /** published */
+    published: boolean;
+    /** version count */
+    versionCount: number;
+    /** autosave */
+    autosave: boolean;
+    /** user */
+    user: VersionUser;
+    /** scheduled */
+    scheduled?: number | null;
+    /** coauthor type */
+    coauthorType?: string | null;
+    /** coauthor */
+    coauthor?: string | null;
 };
 export type Error = {
     /** Message */
@@ -290,52 +328,14 @@ export type UpdateVersion = {
     /** Coauthor, empty string clears it */
     coauthor?: string | null;
 };
-export type VersionUser = {
-    /** ID */
-    id?: number | null;
-    /** name */
-    name?: string | null;
-};
-export type Version = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** version ID */
-    id: number;
-    /** element ID */
-    cid: number;
-    /** element type */
-    ctype: string;
-    /** note */
-    note: string;
-    /** date */
-    date: number;
-    /** public */
-    public: boolean;
-    /** published */
-    published: boolean;
-    /** version count */
-    versionCount: number;
-    /** autosave */
-    autosave: boolean;
-    /** user */
-    user: VersionUser;
-    /** scheduled */
-    scheduled?: number | null;
-    /** coauthor type */
-    coauthorType?: string | null;
-    /** coauthor */
-    coauthor?: string | null;
-};
 export const {
-    useVersionAssetDownloadByIdQuery,
-    useVersionImageStreamByIdQuery,
-    useVersionPdfStreamByIdQuery,
+    useVersionGetCollectionForElementByTypeAndIdQuery,
+    useVersionCleanupForElementByTypeAndIdMutation,
     useVersionGetByIdQuery,
     useVersionUpdateByIdMutation,
     useVersionPublishByIdMutation,
     useVersionDeleteByIdMutation,
-    useVersionGetCollectionForElementByTypeAndIdQuery,
-    useVersionCleanupForElementByTypeAndIdMutation,
+    useVersionAssetDownloadByIdQuery,
+    useVersionImageStreamByIdQuery,
+    useVersionPdfStreamByIdQuery,
 } = injectedRtkApi;

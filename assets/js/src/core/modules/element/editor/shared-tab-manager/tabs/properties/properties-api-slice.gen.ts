@@ -16,9 +16,12 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Properties"],
             }),
-            propertyCreate: build.mutation<PropertyCreateApiResponse, PropertyCreateApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/property`, method: "POST" }),
-                invalidatesTags: ["Properties"],
+            propertyGetCollectionForElementByTypeAndId: build.query<
+                PropertyGetCollectionForElementByTypeAndIdApiResponse,
+                PropertyGetCollectionForElementByTypeAndIdApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
+                providesTags: ["Properties"],
             }),
             propertyUpdate: build.mutation<PropertyUpdateApiResponse, PropertyUpdateApiArg>({
                 query: (queryArg) => ({
@@ -32,12 +35,9 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/properties/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Properties"],
             }),
-            propertyGetCollectionForElementByTypeAndId: build.query<
-                PropertyGetCollectionForElementByTypeAndIdApiResponse,
-                PropertyGetCollectionForElementByTypeAndIdApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
-                providesTags: ["Properties"],
+            propertyCreate: build.mutation<PropertyCreateApiResponse, PropertyCreateApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/property`, method: "POST" }),
+                invalidatesTags: ["Properties"],
             }),
         }),
         overrideExisting: false,
@@ -53,9 +53,15 @@ export type PropertyGetCollectionApiArg = {
     /** Filter for properties */
     filter?: string;
 };
-export type PropertyCreateApiResponse =
-    /** status 200 Created predefined property with default values */ PredefinedProperty;
-export type PropertyCreateApiArg = void;
+export type PropertyGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Element Properties data as json */ {
+    items?: DataProperty[];
+};
+export type PropertyGetCollectionForElementByTypeAndIdApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Id of the element */
+    id: number;
+};
 export type PropertyUpdateApiResponse = /** status 200 Updated predefined property */ PredefinedProperty;
 export type PropertyUpdateApiArg = {
     /** Id of the property */
@@ -67,15 +73,9 @@ export type PropertyDeleteApiArg = {
     /** Id of the property */
     id: string;
 };
-export type PropertyGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Element Properties data as json */ {
-    items?: DataProperty[];
-};
-export type PropertyGetCollectionForElementByTypeAndIdApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-    /** Id of the element */
-    id: number;
-};
+export type PropertyCreateApiResponse =
+    /** status 200 Created predefined property with default values */ PredefinedProperty;
+export type PropertyCreateApiArg = void;
 export type PredefinedProperty = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -114,24 +114,6 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type UpdatePredefinedProperty = {
-    /** name */
-    name: string;
-    /** description */
-    description?: string | null;
-    /** key */
-    key: string;
-    /** type */
-    type: string;
-    /** data */
-    data?: string | null;
-    /** config */
-    config?: string | null;
-    /** ctype */
-    ctype: string;
-    /** inheritable */
-    inheritable: boolean;
-};
 export type DataProperty = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -154,10 +136,28 @@ export type DataProperty = {
     /** description */
     description?: string | null;
 };
+export type UpdatePredefinedProperty = {
+    /** name */
+    name: string;
+    /** description */
+    description?: string | null;
+    /** key */
+    key: string;
+    /** type */
+    type: string;
+    /** data */
+    data?: string | null;
+    /** config */
+    config?: string | null;
+    /** ctype */
+    ctype: string;
+    /** inheritable */
+    inheritable: boolean;
+};
 export const {
     usePropertyGetCollectionQuery,
-    usePropertyCreateMutation,
+    usePropertyGetCollectionForElementByTypeAndIdQuery,
     usePropertyUpdateMutation,
     usePropertyDeleteMutation,
-    usePropertyGetCollectionForElementByTypeAndIdQuery,
+    usePropertyCreateMutation,
 } = injectedRtkApi;

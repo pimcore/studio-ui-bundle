@@ -6,14 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            websiteSettingsAdd: build.mutation<WebsiteSettingsAddApiResponse, WebsiteSettingsAddApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/website-settings/add`,
-                    method: "POST",
-                    body: queryArg.websiteSettingsAdd,
-                }),
-                invalidatesTags: ["Website Settings"],
-            }),
             websiteSettingsGetCollection: build.query<
                 WebsiteSettingsGetCollectionApiResponse,
                 WebsiteSettingsGetCollectionApiArg
@@ -23,6 +15,18 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
+                providesTags: ["Website Settings"],
+            }),
+            websiteSettingsAdd: build.mutation<WebsiteSettingsAddApiResponse, WebsiteSettingsAddApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/website-settings/add`,
+                    method: "POST",
+                    body: queryArg.websiteSettingsAdd,
+                }),
+                invalidatesTags: ["Website Settings"],
+            }),
+            websiteSettingsListTypes: build.query<WebsiteSettingsListTypesApiResponse, WebsiteSettingsListTypesApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/website-settings/types` }),
                 providesTags: ["Website Settings"],
             }),
             websiteSettingsUpdate: build.mutation<WebsiteSettingsUpdateApiResponse, WebsiteSettingsUpdateApiArg>({
@@ -37,18 +41,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/website-settings/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Website Settings"],
             }),
-            websiteSettingsListTypes: build.query<WebsiteSettingsListTypesApiResponse, WebsiteSettingsListTypesApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/website-settings/types` }),
-                providesTags: ["Website Settings"],
-            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type WebsiteSettingsAddApiResponse = /** status 200 Successfully added website setting */ WebsiteSetting;
-export type WebsiteSettingsAddApiArg = {
-    websiteSettingsAdd: WebsiteSettingsAdd;
-};
 export type WebsiteSettingsGetCollectionApiResponse = /** status 200 Paginated website settings with total count */ {
     totalItems: number;
     items: WebsiteSetting[];
@@ -64,6 +60,14 @@ export type WebsiteSettingsGetCollectionApiArg = {
         };
     };
 };
+export type WebsiteSettingsAddApiResponse = /** status 200 Successfully added website setting */ WebsiteSetting;
+export type WebsiteSettingsAddApiArg = {
+    websiteSettingsAdd: WebsiteSettingsAdd;
+};
+export type WebsiteSettingsListTypesApiResponse = /** status 200 List of all available website setting types */ {
+    items: WebsiteSettingsType[];
+};
+export type WebsiteSettingsListTypesApiArg = void;
 export type WebsiteSettingsUpdateApiResponse = /** status 200 Successfully updated website setting */ WebsiteSetting;
 export type WebsiteSettingsUpdateApiArg = {
     /** Id of the website setting */
@@ -75,10 +79,6 @@ export type WebsiteSettingsDeleteApiArg = {
     /** Id of the website setting */
     id: number;
 };
-export type WebsiteSettingsListTypesApiResponse = /** status 200 List of all available website setting types */ {
-    items: WebsiteSettingsType[];
-};
-export type WebsiteSettingsListTypesApiArg = void;
 export type WebsiteSettingsObjectData = {
     /** element id */
     id: number;
@@ -123,16 +123,6 @@ export type WebsiteSettingsAdd = {
     /** Type */
     type: string;
 };
-export type WebsiteSettingsUpdate = {
-    /** Name */
-    name: string;
-    /** Language */
-    language: string;
-    /** Data */
-    data: string | boolean | WebsiteSettingsObjectData | null;
-    /** Site ID */
-    siteId: number | null;
-};
 export type WebsiteSettingsType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -143,10 +133,20 @@ export type WebsiteSettingsType = {
     /** Title */
     title: string;
 };
+export type WebsiteSettingsUpdate = {
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Data */
+    data: string | boolean | WebsiteSettingsObjectData | null;
+    /** Site ID */
+    siteId: number | null;
+};
 export const {
-    useWebsiteSettingsAddMutation,
     useWebsiteSettingsGetCollectionQuery,
+    useWebsiteSettingsAddMutation,
+    useWebsiteSettingsListTypesQuery,
     useWebsiteSettingsUpdateMutation,
     useWebsiteSettingsDeleteMutation,
-    useWebsiteSettingsListTypesQuery,
 } = injectedRtkApi;

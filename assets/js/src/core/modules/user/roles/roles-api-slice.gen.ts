@@ -6,6 +6,10 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            roleCreate: build.mutation<RoleCreateApiResponse, RoleCreateApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/role`, method: "POST", body: queryArg.body }),
+                invalidatesTags: ["Role Management"],
+            }),
             roleCloneById: build.mutation<RoleCloneByIdApiResponse, RoleCloneByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/role/clone/${queryArg.id}`,
@@ -18,13 +22,18 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/role/folder`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Role Management"],
             }),
-            roleCreate: build.mutation<RoleCreateApiResponse, RoleCreateApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/role`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Role Management"],
-            }),
             roleFolderDeleteById: build.mutation<RoleFolderDeleteByIdApiResponse, RoleFolderDeleteByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/role/folder/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Role Management"],
+            }),
+            roleSearch: build.query<RoleSearchApiResponse, RoleSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/role/search`,
+                    params: {
+                        searchQuery: queryArg.searchQuery,
+                    },
+                }),
+                providesTags: ["Role Management"],
             }),
             roleGetById: build.query<RoleGetByIdApiResponse, RoleGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/role/${queryArg.id}` }),
@@ -46,13 +55,8 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/roles` }),
                 providesTags: ["Role Management"],
             }),
-            roleListWithPermission: build.query<RoleListWithPermissionApiResponse, RoleListWithPermissionApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/roles/with-permission`,
-                    params: {
-                        permission: queryArg.permission,
-                    },
-                }),
+            roleGetShareCollection: build.query<RoleGetShareCollectionApiResponse, RoleGetShareCollectionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/roles-share-list` }),
                 providesTags: ["Role Management"],
             }),
             roleGetTree: build.query<RoleGetTreeApiResponse, RoleGetTreeApiArg>({
@@ -64,15 +68,11 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Role Management"],
             }),
-            roleGetShareCollection: build.query<RoleGetShareCollectionApiResponse, RoleGetShareCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/roles-share-list` }),
-                providesTags: ["Role Management"],
-            }),
-            roleSearch: build.query<RoleSearchApiResponse, RoleSearchApiArg>({
+            roleListWithPermission: build.query<RoleListWithPermissionApiResponse, RoleListWithPermissionApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/role/search`,
+                    url: `/pimcore-studio/api/roles/with-permission`,
                     params: {
-                        searchQuery: queryArg.searchQuery,
+                        permission: queryArg.permission,
                     },
                 }),
                 providesTags: ["Role Management"],
@@ -81,6 +81,13 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type RoleCreateApiResponse = /** status 200 Node of the new created Role. */ TreeNode;
+export type RoleCreateApiArg = {
+    body: {
+        parentId: number | null;
+        name: string;
+    };
+};
 export type RoleCloneByIdApiResponse = /** status 200 Node of the cloned Role. */ TreeNode;
 export type RoleCloneByIdApiArg = {
     /** Id of the role */
@@ -96,17 +103,18 @@ export type RoleFolderCreateApiArg = {
         name: string;
     };
 };
-export type RoleCreateApiResponse = /** status 200 Node of the new created Role. */ TreeNode;
-export type RoleCreateApiArg = {
-    body: {
-        parentId: number | null;
-        name: string;
-    };
-};
 export type RoleFolderDeleteByIdApiResponse = unknown;
 export type RoleFolderDeleteByIdApiArg = {
     /** Id of the folder */
     id: number;
+};
+export type RoleSearchApiResponse = /** status 200 List of roles */ {
+    totalItems: number;
+    items: SimpleUserRole[];
+};
+export type RoleSearchApiArg = {
+    /** Query to search for a role. This can be a part of role name or ID. */
+    searchQuery?: string;
 };
 export type RoleGetByIdApiResponse = /** status 200 List of available user roles. */ DetailedUserRole;
 export type RoleGetByIdApiArg = {
@@ -129,14 +137,11 @@ export type RoleGetCollectionApiResponse = /** status 200 List of available role
     items: SimpleUserRole[];
 };
 export type RoleGetCollectionApiArg = void;
-export type RoleListWithPermissionApiResponse = /** status 200 List of roles with the given permission */ {
+export type RoleGetShareCollectionApiResponse = /** status 200 List of roles for sharing */ {
     totalItems: number;
     items: SimpleUserRole[];
 };
-export type RoleListWithPermissionApiArg = {
-    /** List roles with this permission */
-    permission: string;
-};
+export type RoleGetShareCollectionApiArg = void;
 export type RoleGetTreeApiResponse = /** status 200 Collection of roles including folders for the given parent id. */ {
     totalItems: number;
     items: TreeNode[];
@@ -145,18 +150,13 @@ export type RoleGetTreeApiArg = {
     /** Filter roles by parent id. */
     parentId: number;
 };
-export type RoleGetShareCollectionApiResponse = /** status 200 List of roles for sharing */ {
+export type RoleListWithPermissionApiResponse = /** status 200 List of roles with the given permission */ {
     totalItems: number;
     items: SimpleUserRole[];
 };
-export type RoleGetShareCollectionApiArg = void;
-export type RoleSearchApiResponse = /** status 200 List of roles */ {
-    totalItems: number;
-    items: SimpleUserRole[];
-};
-export type RoleSearchApiArg = {
-    /** Query to search for a role. This can be a part of role name or ID. */
-    searchQuery?: string;
+export type RoleListWithPermissionApiArg = {
+    /** List roles with this permission */
+    permission: string;
 };
 export type TreeNode = {
     /** AdditionalAttributes */
@@ -181,6 +181,16 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
+};
+export type SimpleUserRole = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the Role */
+    id: number;
+    /** Name of the Role */
+    name: string;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -276,27 +286,17 @@ export type UpdateUserRole = {
     /** Allowed studio perspectives */
     perspectives: string[];
 };
-export type SimpleUserRole = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the Role */
-    id: number;
-    /** Name of the Role */
-    name: string;
-};
 export const {
+    useRoleCreateMutation,
     useRoleCloneByIdMutation,
     useRoleFolderCreateMutation,
-    useRoleCreateMutation,
     useRoleFolderDeleteByIdMutation,
+    useRoleSearchQuery,
     useRoleGetByIdQuery,
     useRoleUpdateByIdMutation,
     useRoleDeleteByIdMutation,
     useRoleGetCollectionQuery,
-    useRoleListWithPermissionQuery,
-    useRoleGetTreeQuery,
     useRoleGetShareCollectionQuery,
-    useRoleSearchQuery,
+    useRoleGetTreeQuery,
+    useRoleListWithPermissionQuery,
 } = injectedRtkApi;

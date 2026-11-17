@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            tagCreate: build.mutation<TagCreateApiResponse, TagCreateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/tag`,
+                    method: "POST",
+                    body: queryArg.createTagParameters,
+                }),
+                invalidatesTags: ["Tags"],
+            }),
             tagGetCollection: build.query<TagGetCollectionApiResponse, TagGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/tags`,
@@ -18,30 +26,6 @@ const injectedRtkApi = api
                     },
                 }),
                 providesTags: ["Tags"],
-            }),
-            tagCreate: build.mutation<TagCreateApiResponse, TagCreateApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/tag`,
-                    method: "POST",
-                    body: queryArg.createTagParameters,
-                }),
-                invalidatesTags: ["Tags"],
-            }),
-            tagGetById: build.query<TagGetByIdApiResponse, TagGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}` }),
-                providesTags: ["Tags"],
-            }),
-            tagUpdateById: build.mutation<TagUpdateByIdApiResponse, TagUpdateByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/tags/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.updateTagParameters,
-                }),
-                invalidatesTags: ["Tags"],
-            }),
-            tagDeleteById: build.mutation<TagDeleteByIdApiResponse, TagDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["Tags"],
             }),
             tagAssignToElement: build.mutation<TagAssignToElementApiResponse, TagAssignToElementApiArg>({
                 query: (queryArg) => ({
@@ -74,10 +58,30 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
+            tagGetById: build.query<TagGetByIdApiResponse, TagGetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}` }),
+                providesTags: ["Tags"],
+            }),
+            tagUpdateById: build.mutation<TagUpdateByIdApiResponse, TagUpdateByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/tags/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.updateTagParameters,
+                }),
+                invalidatesTags: ["Tags"],
+            }),
+            tagDeleteById: build.mutation<TagDeleteByIdApiResponse, TagDeleteByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["Tags"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type TagCreateApiResponse = /** status 200 tag_create_success_description */ Tag;
+export type TagCreateApiArg = {
+    createTagParameters: CreateTagParameters;
+};
 export type TagGetCollectionApiResponse =
     /** status 200 All tags for a parent filtered based on type and query parameters */ {
         items?: Tag[];
@@ -93,29 +97,6 @@ export type TagGetCollectionApiArg = {
     filter?: string;
     /** Filter tags by parent id. */
     parentId?: number;
-};
-export type TagCreateApiResponse = /** status 200 tag_create_success_description */ Tag;
-export type TagCreateApiArg = {
-    createTagParameters: CreateTagParameters;
-};
-export type TagGetByIdApiResponse = /** status 200 Successfully retrieved tag data as JSON */ Tag;
-export type TagGetByIdApiArg = {
-    /** Id of the tag */
-    id: number;
-};
-export type TagUpdateByIdApiResponse = /** status 200 Successfully updated tag data as JSON */ Tag;
-export type TagUpdateByIdApiArg = {
-    /** Id of the tag */
-    id: number;
-    updateTagParameters: ChangeTagParameters;
-};
-export type TagDeleteByIdApiResponse = /** status 200 ID of successfully deleted tag */ {
-    /** ID of deleted tag */
-    id: number;
-};
-export type TagDeleteByIdApiArg = {
-    /** Id of the tag */
-    id: number;
 };
 export type TagAssignToElementApiResponse = unknown;
 export type TagAssignToElementApiArg = {
@@ -157,6 +138,25 @@ export type TagUnassignFromElementApiArg = {
     id: number;
     /** TagId of the tag */
     tagId: number;
+};
+export type TagGetByIdApiResponse = /** status 200 Successfully retrieved tag data as JSON */ Tag;
+export type TagGetByIdApiArg = {
+    /** Id of the tag */
+    id: number;
+};
+export type TagUpdateByIdApiResponse = /** status 200 Successfully updated tag data as JSON */ Tag;
+export type TagUpdateByIdApiArg = {
+    /** Id of the tag */
+    id: number;
+    updateTagParameters: ChangeTagParameters;
+};
+export type TagDeleteByIdApiResponse = /** status 200 ID of successfully deleted tag */ {
+    /** ID of deleted tag */
+    id: number;
+};
+export type TagDeleteByIdApiArg = {
+    /** Id of the tag */
+    id: number;
 };
 export type Tag = {
     /** AdditionalAttributes */
@@ -201,13 +201,13 @@ export type ChangeTagParameters = {
     name?: string | null;
 };
 export const {
-    useTagGetCollectionQuery,
     useTagCreateMutation,
-    useTagGetByIdQuery,
-    useTagUpdateByIdMutation,
-    useTagDeleteByIdMutation,
+    useTagGetCollectionQuery,
     useTagAssignToElementMutation,
     useTagBatchOperationToElementsByTypeAndIdMutation,
     useTagGetCollectionForElementByTypeAndIdQuery,
     useTagUnassignFromElementMutation,
+    useTagGetByIdQuery,
+    useTagUpdateByIdMutation,
+    useTagDeleteByIdMutation,
 } = injectedRtkApi;

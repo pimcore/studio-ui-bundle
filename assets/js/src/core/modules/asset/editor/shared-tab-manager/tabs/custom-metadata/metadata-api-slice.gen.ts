@@ -6,6 +6,17 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            assetCustomMetadataGetById: build.query<
+                AssetCustomMetadataGetByIdApiResponse,
+                AssetCustomMetadataGetByIdApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
+                providesTags: ["Metadata"],
+            }),
+            metadataGetCollection: build.query<MetadataGetCollectionApiResponse, MetadataGetCollectionApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/metadata`, method: "POST", body: queryArg.body }),
+                providesTags: ["Metadata"],
+            }),
             metadataAssetGetCollection: build.query<
                 MetadataAssetGetCollectionApiResponse,
                 MetadataAssetGetCollectionApiArg
@@ -17,17 +28,6 @@ const injectedRtkApi = api
                         group: queryArg.group,
                     },
                 }),
-                providesTags: ["Metadata"],
-            }),
-            assetCustomMetadataGetById: build.query<
-                AssetCustomMetadataGetByIdApiResponse,
-                AssetCustomMetadataGetByIdApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
-                providesTags: ["Metadata"],
-            }),
-            metadataGetCollection: build.query<MetadataGetCollectionApiResponse, MetadataGetCollectionApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/metadata`, method: "POST", body: queryArg.body }),
                 providesTags: ["Metadata"],
             }),
             metadataPredefinedCreate: build.mutation<
@@ -66,16 +66,6 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type MetadataAssetGetCollectionApiResponse =
-    /** status 200 Filtered predefined metadata entries for the specified asset type */ {
-        items?: PredefinedMetadata[];
-    };
-export type MetadataAssetGetCollectionApiArg = {
-    /** Filter by asset sub-type (e.g. image, video). */
-    subType?: string;
-    /** Filter by metadata group. Use 'default' to match entries with no group assigned. */
-    group?: string;
-};
 export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
     items?: CustomMetadata[];
 };
@@ -106,6 +96,16 @@ export type MetadataGetCollectionApiArg = {
         } | null;
     };
 };
+export type MetadataAssetGetCollectionApiResponse =
+    /** status 200 Filtered predefined metadata entries for the specified asset type */ {
+        items?: PredefinedMetadata[];
+    };
+export type MetadataAssetGetCollectionApiArg = {
+    /** Filter by asset sub-type (e.g. image, video). */
+    subType?: string;
+    /** Filter by metadata group. Use 'default' to match entries with no group assigned. */
+    group?: string;
+};
 export type MetadataPredefinedCreateApiResponse =
     /** status 200 Newly created predefined metadata entry */ PredefinedMetadata;
 export type MetadataPredefinedCreateApiArg = {
@@ -122,6 +122,30 @@ export type MetadataPredefinedDeleteApiResponse = unknown;
 export type MetadataPredefinedDeleteApiArg = {
     /** Id of the metadata */
     id: string;
+};
+export type CustomMetadata = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Type */
+    type: string;
+    /** Data */
+    data: any | null;
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export type PredefinedMetadata = {
     /** AdditionalAttributes */
@@ -152,30 +176,6 @@ export type PredefinedMetadata = {
     modificationDate: number;
     /** Writable */
     isWriteable: boolean;
-};
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
-export type CustomMetadata = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Name */
-    name: string;
-    /** Language */
-    language: string;
-    /** Type */
-    type: string;
-    /** Data */
-    data: any | null;
 };
 export type CreatePredefinedMetadata = {
     /** Name */
@@ -214,9 +214,9 @@ export type UpdatePredefinedMetadata = {
     group: string | null;
 };
 export const {
-    useMetadataAssetGetCollectionQuery,
     useAssetCustomMetadataGetByIdQuery,
     useMetadataGetCollectionQuery,
+    useMetadataAssetGetCollectionQuery,
     useMetadataPredefinedCreateMutation,
     useMetadataPredefinedUpdateMutation,
     useMetadataPredefinedDeleteMutation,

@@ -10,13 +10,13 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/login`, method: "POST", body: queryArg.credentials }),
                 invalidatesTags: ["Authorization"],
             }),
-            logout: build.mutation<LogoutApiResponse, LogoutApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/logout`, method: "POST" }),
+            loginTwoFactor: build.mutation<LoginTwoFactorApiResponse, LoginTwoFactorApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/login/2fa`,
+                    method: "POST",
+                    body: queryArg.twoFactorCode,
+                }),
                 invalidatesTags: ["Authorization"],
-            }),
-            sessionGetStatus: build.query<SessionGetStatusApiResponse, SessionGetStatusApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/session` }),
-                providesTags: ["Authorization"],
             }),
             loginToken: build.mutation<LoginTokenApiResponse, LoginTokenApiArg>({
                 query: (queryArg) => ({
@@ -26,13 +26,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Authorization"],
             }),
-            loginTwoFactor: build.mutation<LoginTwoFactorApiResponse, LoginTwoFactorApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/login/2fa`,
-                    method: "POST",
-                    body: queryArg.twoFactorCode,
-                }),
+            logout: build.mutation<LogoutApiResponse, LogoutApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/logout`, method: "POST" }),
                 invalidatesTags: ["Authorization"],
+            }),
+            sessionGetStatus: build.query<SessionGetStatusApiResponse, SessionGetStatusApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/session` }),
+                providesTags: ["Authorization"],
             }),
         }),
         overrideExisting: false,
@@ -48,18 +48,18 @@ Until then, other endpoints answer 401. To go back, log out.
 export type LoginApiArg = {
     credentials: Credentials;
 };
-export type LogoutApiResponse = unknown;
-export type LogoutApiArg = void;
-export type SessionGetStatusApiResponse = /** status 200 Session status. */ SessionStatus;
-export type SessionGetStatusApiArg = void;
-export type LoginTokenApiResponse = unknown;
-export type LoginTokenApiArg = {
-    authenticationToken: AuthenticationToken;
-};
 export type LoginTwoFactorApiResponse = unknown;
 export type LoginTwoFactorApiArg = {
     twoFactorCode: TwoFactorCode;
 };
+export type LoginTokenApiResponse = unknown;
+export type LoginTokenApiArg = {
+    authenticationToken: AuthenticationToken;
+};
+export type LogoutApiResponse = unknown;
+export type LogoutApiArg = void;
+export type SessionGetStatusApiResponse = /** status 200 Session status. */ SessionStatus;
+export type SessionGetStatusApiArg = void;
 export type TwoFactorLoginStep = {
     /** A code is needed */
     twoFactorRequired: boolean;
@@ -88,6 +88,14 @@ export type Credentials = {
     /** Password */
     password: string;
 };
+export type TwoFactorCode = {
+    /** Code */
+    code: string;
+};
+export type AuthenticationToken = {
+    /** Token */
+    token: string;
+};
 export type SessionStatus = {
     /** True if a Studio user is logged in */
     authenticated: boolean;
@@ -98,18 +106,10 @@ export type SessionStatus = {
     /** Number of digits in a code */
     digits?: number | null;
 };
-export type AuthenticationToken = {
-    /** Token */
-    token: string;
-};
-export type TwoFactorCode = {
-    /** Code */
-    code: string;
-};
 export const {
     useLoginMutation,
+    useLoginTwoFactorMutation,
+    useLoginTokenMutation,
     useLogoutMutation,
     useSessionGetStatusQuery,
-    useLoginTokenMutation,
-    useLoginTwoFactorMutation,
 } = injectedRtkApi;

@@ -6,22 +6,22 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            customReportsListDrillDownOptions: build.query<
-                CustomReportsListDrillDownOptionsApiResponse,
-                CustomReportsListDrillDownOptionsApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/custom-reports/drill-down-options`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Bundle Custom Reports"],
-            }),
             customReportsChart: build.query<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/bundle/custom-reports/chart`,
                     method: "POST",
                     body: queryArg.body,
+                }),
+                providesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsColumnConfigList: build.query<
+                CustomReportsColumnConfigListApiResponse,
+                CustomReportsColumnConfigListApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/column-config/${queryArg.name}`,
+                    method: "POST",
+                    body: queryArg.bundleCustomReportsDataSourceConfig,
                 }),
                 providesTags: ["Bundle Custom Reports"],
             }),
@@ -44,16 +44,16 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Bundle Custom Reports"],
             }),
-            customReportsColumnConfigList: build.query<
-                CustomReportsColumnConfigListApiResponse,
-                CustomReportsColumnConfigListApiArg
+            customReportsConfigImport: build.mutation<
+                CustomReportsConfigImportApiResponse,
+                CustomReportsConfigImportApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/custom-reports/column-config/${queryArg.name}`,
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/import`,
                     method: "POST",
-                    body: queryArg.bundleCustomReportsDataSourceConfig,
+                    body: queryArg.body,
                 }),
-                providesTags: ["Bundle Custom Reports"],
+                invalidatesTags: ["Bundle Custom Reports"],
             }),
             customReportsConfigUpdate: build.mutation<
                 CustomReportsConfigUpdateApiResponse,
@@ -85,20 +85,32 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Bundle Custom Reports"],
             }),
-            customReportsReport: build.query<CustomReportsReportApiResponse, CustomReportsReportApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/bundle/custom-reports/report/${queryArg.name}` }),
-                providesTags: ["Bundle Custom Reports"],
-            }),
-            customReportsConfigImport: build.mutation<
-                CustomReportsConfigImportApiResponse,
-                CustomReportsConfigImportApiArg
+            customReportsListDrillDownOptions: build.query<
+                CustomReportsListDrillDownOptionsApiResponse,
+                CustomReportsListDrillDownOptionsApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/custom-reports/config/import`,
+                    url: `/pimcore-studio/api/bundle/custom-reports/drill-down-options`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Bundle Custom Reports"],
+            }),
+            customReportExportCsv: build.mutation<CustomReportExportCsvApiResponse, CustomReportExportCsvApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/export/csv`,
                     method: "POST",
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsReport: build.query<CustomReportsReportApiResponse, CustomReportsReportApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/bundle/custom-reports/report/${queryArg.name}` }),
+                providesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsGetTree: build.query<CustomReportsGetTreeApiResponse, CustomReportsGetTreeApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/bundle/custom-reports/tree` }),
+                providesTags: ["Bundle Custom Reports"],
             }),
             customReportsConfigGetTree: build.query<
                 CustomReportsConfigGetTreeApiResponse,
@@ -112,35 +124,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Bundle Custom Reports"],
             }),
-            customReportExportCsv: build.mutation<CustomReportExportCsvApiResponse, CustomReportExportCsvApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/custom-reports/export/csv`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Bundle Custom Reports"],
-            }),
-            customReportsGetTree: build.query<CustomReportsGetTreeApiResponse, CustomReportsGetTreeApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/bundle/custom-reports/tree` }),
-                providesTags: ["Bundle Custom Reports"],
-            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type CustomReportsListDrillDownOptionsApiResponse = /** status 200 List of drill down options for the report */ {
-    items: BundleCustomReportsDrillDownOption[];
-};
-export type CustomReportsListDrillDownOptionsApiArg = {
-    body: {
-        name: string | null;
-        field: string | null;
-        filters?: {
-            columnFilters?: object;
-            drillDownFilters?: object;
-        };
-    };
-};
 export type CustomReportsChartApiResponse =
     /** status 200 Chart data as JSON. The actual data depends on the selected adapter in the report configuration. */ {
         totalItems: number;
@@ -165,6 +152,15 @@ export type CustomReportsChartApiArg = {
         fields?: string[];
     };
 };
+export type CustomReportsColumnConfigListApiResponse =
+    /** status 200 List of column configurations for the custom report */ {
+        items: BundleCustomReportsColumnInformation[];
+    };
+export type CustomReportsColumnConfigListApiArg = {
+    /** Name of the report */
+    name: string;
+    bundleCustomReportsDataSourceConfig: BundleCustomReportsDataSourceConfig;
+};
 export type CustomReportsConfigAddApiResponse =
     /** status 200 Successfully added custom report configuration */ BundleCustomReportsDetails;
 export type CustomReportsConfigAddApiArg = {
@@ -177,14 +173,13 @@ export type CustomReportsConfigCloneApiArg = {
     name: string;
     bundleCustomReportClone: BundleCustomReportClone;
 };
-export type CustomReportsColumnConfigListApiResponse =
-    /** status 200 List of column configurations for the custom report */ {
-        items: BundleCustomReportsColumnInformation[];
+export type CustomReportsConfigImportApiResponse =
+    /** status 201 Successfully imported custom report configuration */ BundleCustomReportsDetails;
+export type CustomReportsConfigImportApiArg = {
+    body: {
+        /** Custom report JSON export file to upload */
+        file: Blob;
     };
-export type CustomReportsColumnConfigListApiArg = {
-    /** Name of the report */
-    name: string;
-    bundleCustomReportsDataSourceConfig: BundleCustomReportsDataSourceConfig;
 };
 export type CustomReportsConfigUpdateApiResponse =
     /** status 200 Successfully updated custom report configuration */ BundleCustomReportsDetails;
@@ -204,27 +199,18 @@ export type CustomReportsConfigExportApiArg = {
     /** Name of the report to export */
     name: string;
 };
-export type CustomReportsReportApiResponse = /** status 200 Report data as JSON */ BundleCustomReportsDetails;
-export type CustomReportsReportApiArg = {
-    /** Name of the report */
-    name: string;
+export type CustomReportsListDrillDownOptionsApiResponse = /** status 200 List of drill down options for the report */ {
+    items: BundleCustomReportsDrillDownOption[];
 };
-export type CustomReportsConfigImportApiResponse =
-    /** status 201 Successfully imported custom report configuration */ BundleCustomReportsDetails;
-export type CustomReportsConfigImportApiArg = {
+export type CustomReportsListDrillDownOptionsApiArg = {
     body: {
-        /** Custom report JSON export file to upload */
-        file: Blob;
+        name: string | null;
+        field: string | null;
+        filters?: {
+            columnFilters?: object;
+            drillDownFilters?: object;
+        };
     };
-};
-export type CustomReportsConfigGetTreeApiResponse =
-    /** status 200 Configuration tree with nodes and optional group folders. */ {
-        totalItems: number;
-        items: (BundleCustomReportsConfigurationTreeNode | BundleCustomReportsTreeNodeFolder)[];
-    };
-export type CustomReportsConfigGetTreeApiArg = {
-    /** Whether to group the results by report group. */
-    withGroup?: boolean;
 };
 export type CustomReportExportCsvApiResponse =
     /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
@@ -250,20 +236,32 @@ export type CustomReportExportCsvApiArg = {
         delimiter?: string;
     };
 };
+export type CustomReportsReportApiResponse = /** status 200 Report data as JSON */ BundleCustomReportsDetails;
+export type CustomReportsReportApiArg = {
+    /** Name of the report */
+    name: string;
+};
 export type CustomReportsGetTreeApiResponse =
     /** status 200 Get all reports for the current user to display in tree. */ {
         items?: BundleCustomReportsTreeNode[];
     };
 export type CustomReportsGetTreeApiArg = void;
-export type BundleCustomReportsDrillDownOption = {
+export type CustomReportsConfigGetTreeApiResponse =
+    /** status 200 Configuration tree with nodes and optional group folders. */ {
+        totalItems: number;
+        items: (BundleCustomReportsConfigurationTreeNode | BundleCustomReportsTreeNodeFolder)[];
+    };
+export type CustomReportsConfigGetTreeApiArg = {
+    /** Whether to group the results by report group. */
+    withGroup?: boolean;
+};
+export type BundleCustomReportsChartData = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** name */
-    name: string | number | any;
-    /** value */
-    value: string | number | any | null;
+    /** Chart data depending on the adapter in the report configuration. */
+    data: object;
 };
 export type Error = {
     /** Message */
@@ -275,13 +273,25 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type BundleCustomReportsChartData = {
+export type BundleCustomReportsColumnInformation = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** Chart data depending on the adapter in the report configuration. */
-    data: object;
+    /** Name */
+    name: string;
+    /** Disable order by */
+    disableOrderBy: boolean;
+    /** Disable filterable */
+    disableFilterable: boolean;
+    /** Disable dropdown filterable */
+    disableDropdownFilterable: boolean;
+    /** Disable label */
+    disableLabel: boolean;
+};
+export type BundleCustomReportsDataSourceConfig = {
+    /** Configuration for data source. Content of array depends on selected adapter/data source */
+    configuration: object;
 };
 export type BundleCustomReportsColumnConfigurationUpdateData = {
     /** Name */
@@ -395,26 +405,6 @@ export type BundleCustomReportClone = {
     /** New name the cloned custom report */
     newName: string;
 };
-export type BundleCustomReportsColumnInformation = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Name */
-    name: string;
-    /** Disable order by */
-    disableOrderBy: boolean;
-    /** Disable filterable */
-    disableFilterable: boolean;
-    /** Disable dropdown filterable */
-    disableDropdownFilterable: boolean;
-    /** Disable label */
-    disableLabel: boolean;
-};
-export type BundleCustomReportsDataSourceConfig = {
-    /** Configuration for data source. Content of array depends on selected adapter/data source */
-    configuration: object;
-};
 export type BundleCustomReportUpdate = {
     /** Sql */
     sql: string;
@@ -451,6 +441,38 @@ export type BundleCustomReportUpdate = {
     /** Y axis column information */
     yAxis: string[] | null;
 };
+export type BundleCustomReportsDrillDownOption = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** name */
+    name: string | number | any;
+    /** value */
+    value: string | number | any | null;
+};
+export type BundleCustomReportsTreeNode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** report name */
+    name: string;
+    /** nice name */
+    niceName: string;
+    /** icon class */
+    iconClass: string;
+    /** group */
+    group: string;
+    /** group icon class */
+    groupIconClass: string;
+    /** menu shortcut */
+    menuShortcut: boolean;
+    /** report class */
+    reportClass: string;
+    /** Whether the report has a data source configuration. */
+    hasDataSourceConfig: boolean;
+};
 export type BundleCustomReportsConfigurationTreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -479,40 +501,18 @@ export type BundleCustomReportsTreeNodeFolder = {
     /** Child nodes */
     children: BundleCustomReportsConfigurationTreeNode[];
 };
-export type BundleCustomReportsTreeNode = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** report name */
-    name: string;
-    /** nice name */
-    niceName: string;
-    /** icon class */
-    iconClass: string;
-    /** group */
-    group: string;
-    /** group icon class */
-    groupIconClass: string;
-    /** menu shortcut */
-    menuShortcut: boolean;
-    /** report class */
-    reportClass: string;
-    /** Whether the report has a data source configuration. */
-    hasDataSourceConfig: boolean;
-};
 export const {
-    useCustomReportsListDrillDownOptionsQuery,
     useCustomReportsChartQuery,
+    useCustomReportsColumnConfigListQuery,
     useCustomReportsConfigAddMutation,
     useCustomReportsConfigCloneMutation,
-    useCustomReportsColumnConfigListQuery,
+    useCustomReportsConfigImportMutation,
     useCustomReportsConfigUpdateMutation,
     useCustomReportsConfigDeleteMutation,
     useCustomReportsConfigExportQuery,
-    useCustomReportsReportQuery,
-    useCustomReportsConfigImportMutation,
-    useCustomReportsConfigGetTreeQuery,
+    useCustomReportsListDrillDownOptionsQuery,
     useCustomReportExportCsvMutation,
+    useCustomReportsReportQuery,
     useCustomReportsGetTreeQuery,
+    useCustomReportsConfigGetTreeQuery,
 } = injectedRtkApi;

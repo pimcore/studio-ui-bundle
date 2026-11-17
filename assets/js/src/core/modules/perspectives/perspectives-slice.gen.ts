@@ -14,13 +14,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Perspectives"],
             }),
-            perspectiveGetConfigCollection: build.query<
-                PerspectiveGetConfigCollectionApiResponse,
-                PerspectiveGetConfigCollectionApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/perspectives/configurations` }),
-                providesTags: ["Perspectives"],
-            }),
             perspectiveGetConfigById: build.query<PerspectiveGetConfigByIdApiResponse, PerspectiveGetConfigByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/perspectives/configuration/${queryArg.perspectiveId}`,
@@ -45,13 +38,12 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Perspectives"],
             }),
-            perspectiveWidgetCreate: build.mutation<PerspectiveWidgetCreateApiResponse, PerspectiveWidgetCreateApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/perspectives/widgets/${queryArg.widgetType}/configuration`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Perspectives"],
+            perspectiveGetConfigCollection: build.query<
+                PerspectiveGetConfigCollectionApiResponse,
+                PerspectiveGetConfigCollectionApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/perspectives/configurations` }),
+                providesTags: ["Perspectives"],
             }),
             perspectiveWidgetGetConfigCollection: build.query<
                 PerspectiveWidgetGetConfigCollectionApiResponse,
@@ -64,6 +56,21 @@ const injectedRtkApi = api
                     },
                 }),
                 providesTags: ["Perspectives"],
+            }),
+            perspectiveWidgetGetTypeCollection: build.query<
+                PerspectiveWidgetGetTypeCollectionApiResponse,
+                PerspectiveWidgetGetTypeCollectionApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/perspectives/widgets/types` }),
+                providesTags: ["Perspectives"],
+            }),
+            perspectiveWidgetCreate: build.mutation<PerspectiveWidgetCreateApiResponse, PerspectiveWidgetCreateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/perspectives/widgets/${queryArg.widgetType}/configuration`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Perspectives"],
             }),
             perspectiveWidgetGetConfigById: build.query<
                 PerspectiveWidgetGetConfigByIdApiResponse,
@@ -92,13 +99,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Perspectives"],
             }),
-            perspectiveWidgetGetTypeCollection: build.query<
-                PerspectiveWidgetGetTypeCollectionApiResponse,
-                PerspectiveWidgetGetTypeCollectionApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/perspectives/widgets/types` }),
-                providesTags: ["Perspectives"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -107,11 +107,6 @@ export type PerspectiveCreateApiResponse = unknown;
 export type PerspectiveCreateApiArg = {
     addPerspectiveConfig: AddPerspectiveConfig;
 };
-export type PerspectiveGetConfigCollectionApiResponse = /** status 200 List of perspective configurations */ {
-    totalItems: number;
-    items: PerspectiveConfig[];
-};
-export type PerspectiveGetConfigCollectionApiArg = void;
 export type PerspectiveGetConfigByIdApiResponse =
     /** status 200 Perspective configuration data as JSON */ PerspectiveConfigDetail;
 export type PerspectiveGetConfigByIdApiArg = {
@@ -129,6 +124,23 @@ export type PerspectiveDeleteApiArg = {
     /** Get perspective by matching Id */
     perspectiveId: string;
 };
+export type PerspectiveGetConfigCollectionApiResponse = /** status 200 List of perspective configurations */ {
+    totalItems: number;
+    items: PerspectiveConfig[];
+};
+export type PerspectiveGetConfigCollectionApiArg = void;
+export type PerspectiveWidgetGetConfigCollectionApiResponse = /** status 200 List of widget configurations */ {
+    totalItems: number;
+    items: WidgetConfig[];
+};
+export type PerspectiveWidgetGetConfigCollectionApiArg = {
+    /** Skip wrapper widget configurations */
+    skipWrapperWidgets?: boolean;
+};
+export type PerspectiveWidgetGetTypeCollectionApiResponse = /** status 200 List of widget types */ {
+    items: WidgetType[];
+};
+export type PerspectiveWidgetGetTypeCollectionApiArg = void;
 export type PerspectiveWidgetCreateApiResponse = unknown;
 export type PerspectiveWidgetCreateApiArg = {
     /** Create widget by matching widget type */
@@ -138,14 +150,6 @@ export type PerspectiveWidgetCreateApiArg = {
             name?: string | null;
         };
     };
-};
-export type PerspectiveWidgetGetConfigCollectionApiResponse = /** status 200 List of widget configurations */ {
-    totalItems: number;
-    items: WidgetConfig[];
-};
-export type PerspectiveWidgetGetConfigCollectionApiArg = {
-    /** Skip wrapper widget configurations */
-    skipWrapperWidgets?: boolean;
 };
 export type PerspectiveWidgetGetConfigByIdApiResponse = /** status 200 Widget configuration data as JSON */ {
     /** Data of the widget configuration */
@@ -176,10 +180,6 @@ export type PerspectiveWidgetDeleteApiArg = {
     /** Filter widgets by matching widget type */
     widgetType: string;
 };
-export type PerspectiveWidgetGetTypeCollectionApiResponse = /** status 200 List of widget types */ {
-    items: WidgetType[];
-};
-export type PerspectiveWidgetGetTypeCollectionApiArg = void;
 export type Error = {
     /** Message */
     message: string;
@@ -302,14 +302,14 @@ export type WidgetType = {
 };
 export const {
     usePerspectiveCreateMutation,
-    usePerspectiveGetConfigCollectionQuery,
     usePerspectiveGetConfigByIdQuery,
     usePerspectiveUpdateConfigByIdMutation,
     usePerspectiveDeleteMutation,
-    usePerspectiveWidgetCreateMutation,
+    usePerspectiveGetConfigCollectionQuery,
     usePerspectiveWidgetGetConfigCollectionQuery,
+    usePerspectiveWidgetGetTypeCollectionQuery,
+    usePerspectiveWidgetCreateMutation,
     usePerspectiveWidgetGetConfigByIdQuery,
     usePerspectiveWidgetUpdateConfigByIdMutation,
     usePerspectiveWidgetDeleteMutation,
-    usePerspectiveWidgetGetTypeCollectionQuery,
 } = injectedRtkApi;

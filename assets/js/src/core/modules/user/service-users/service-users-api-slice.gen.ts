@@ -25,16 +25,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Service User Management"],
             }),
-            serviceUserDeactivateById: build.mutation<
-                ServiceUserDeactivateByIdApiResponse,
-                ServiceUserDeactivateByIdApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/service-user/${queryArg.id}/deactivate`,
-                    method: "POST",
-                }),
-                invalidatesTags: ["Service User Management"],
-            }),
             serviceUserGetById: build.query<ServiceUserGetByIdApiResponse, ServiceUserGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/service-user/${queryArg.id}` }),
                 providesTags: ["Service User Management"],
@@ -51,9 +41,15 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/service-user/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Service User Management"],
             }),
-            serviceUserGetCollection: build.query<ServiceUserGetCollectionApiResponse, ServiceUserGetCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/service-users` }),
-                providesTags: ["Service User Management"],
+            serviceUserDeactivateById: build.mutation<
+                ServiceUserDeactivateByIdApiResponse,
+                ServiceUserDeactivateByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/service-user/${queryArg.id}/deactivate`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Service User Management"],
             }),
             serviceUserMcpTokenIssue: build.mutation<
                 ServiceUserMcpTokenIssueApiResponse,
@@ -83,6 +79,10 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Service User Management"],
             }),
+            serviceUserGetCollection: build.query<ServiceUserGetCollectionApiResponse, ServiceUserGetCollectionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/service-users` }),
+                providesTags: ["Service User Management"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -98,11 +98,6 @@ export type ServiceUserCreateFromUserApiArg = {
     /** Id of the user */
     id: number;
     serviceUserCreateFromUser: CreateServiceUserFromUser;
-};
-export type ServiceUserDeactivateByIdApiResponse = /** status 200 The deactivated service user */ ServiceUser;
-export type ServiceUserDeactivateByIdApiArg = {
-    /** Id of the service user */
-    id: number;
 };
 export type ServiceUserGetByIdApiResponse = /** status 200 The service user */ ServiceUser;
 export type ServiceUserGetByIdApiArg = {
@@ -120,11 +115,11 @@ export type ServiceUserDeleteByIdApiArg = {
     /** Id of the service user */
     id: number;
 };
-export type ServiceUserGetCollectionApiResponse = /** status 200 List of service users */ {
-    totalItems: number;
-    items: ServiceUser[];
+export type ServiceUserDeactivateByIdApiResponse = /** status 200 The deactivated service user */ ServiceUser;
+export type ServiceUserDeactivateByIdApiArg = {
+    /** Id of the service user */
+    id: number;
 };
-export type ServiceUserGetCollectionApiArg = void;
 export type ServiceUserMcpTokenIssueApiResponse =
     /** status 200 The MCP access token. It is shown only once. */ ServiceUserMcpAccessToken;
 export type ServiceUserMcpTokenIssueApiArg = {
@@ -143,6 +138,11 @@ export type ServiceUserRotateSecretApiArg = {
     /** Id of the service user */
     id: number;
 };
+export type ServiceUserGetCollectionApiResponse = /** status 200 List of service users */ {
+    totalItems: number;
+    items: ServiceUser[];
+};
+export type ServiceUserGetCollectionApiArg = void;
 export type ServiceUserCredentials = {
     /** ID of the service user */
     serviceUserId: number;
@@ -318,12 +318,12 @@ export type IssueMcpAccessToken = {
 export const {
     useServiceUserCreateMutation,
     useServiceUserCreateFromUserMutation,
-    useServiceUserDeactivateByIdMutation,
     useServiceUserGetByIdQuery,
     useServiceUserUpdateByIdMutation,
     useServiceUserDeleteByIdMutation,
-    useServiceUserGetCollectionQuery,
+    useServiceUserDeactivateByIdMutation,
     useServiceUserMcpTokenIssueMutation,
     useServiceUserMcpTokenRevokeMutation,
     useServiceUserRotateSecretMutation,
+    useServiceUserGetCollectionQuery,
 } = injectedRtkApi;
