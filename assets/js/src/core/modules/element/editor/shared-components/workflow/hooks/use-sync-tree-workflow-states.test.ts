@@ -13,13 +13,14 @@ import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/shar
 import { useSyncTreeWorkflowStates } from './use-sync-tree-workflow-states'
 
 const mockDispatch = jest.fn()
+let mockElement: { hasWorkflowAvailable?: boolean, type: string } | undefined
 
 jest.mock('@sdk/app', () => ({ useAppDispatch: () => mockDispatch }))
 jest.mock('@Pimcore/components/element-tree/element-tree-slice', () => ({
   updateNodeData: (payload: unknown) => ({ type: 'trees/updateNodeData', payload })
 }))
 jest.mock('@Pimcore/modules/element/hooks/use-element-draft', () => ({
-  useElementDraft: () => ({ element: { hasWorkflowAvailable: true, type: 'object' } })
+  useElementDraft: () => ({ element: mockElement })
 }))
 jest.mock('@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced', () => ({
   useWorkflowGetDetailsQuery: jest.fn()
@@ -39,6 +40,7 @@ const details = (states: Array<{ title: string, visibleInDetail: boolean }>): ob
 describe('useSyncTreeWorkflowStates', () => {
   beforeEach(() => {
     mockDispatch.mockClear()
+    mockElement = { hasWorkflowAvailable: true, type: 'object' }
     mockQuery.mockReset()
   })
 
@@ -79,6 +81,30 @@ describe('useSyncTreeWorkflowStates', () => {
     expect(mockDispatch).toHaveBeenLastCalledWith(expect.objectContaining({
       payload: expect.objectContaining({ data: { workflowStates: [{ title: 'done', label: 'DONE', color: '#3572b0' }] } })
     }))
+  })
+
+  it('clears the tree node when the element loses its workflow', () => {
+    mockQuery.mockReturnValue({ data: details([{ title: 'todo', visibleInDetail: true }]) })
+    const { rerender } = renderHook(() => { useSyncTreeWorkflowStates(7, 'data-object', true) })
+
+    mockElement = { hasWorkflowAvailable: false, type: 'object' }
+    rerender()
+    rerender()
+
+    expect(mockQuery).toHaveBeenLastCalledWith({ elementType: 'data-object', elementId: 7 }, { skip: true })
+    expect(mockDispatch).toHaveBeenCalledTimes(2)
+    expect(mockDispatch).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload: { nodeId: '7', elementType: 'data-object', data: { workflowStates: [] } }
+    }))
+  })
+
+  it('does not touch the tree while the element is not loaded', () => {
+    mockElement = undefined
+    mockQuery.mockReturnValue({ data: undefined })
+
+    renderHook(() => { useSyncTreeWorkflowStates(7, 'data-object', true) })
+
+    expect(mockDispatch).not.toHaveBeenCalled()
   })
 
   it('skips the details query outside an element editor', () => {

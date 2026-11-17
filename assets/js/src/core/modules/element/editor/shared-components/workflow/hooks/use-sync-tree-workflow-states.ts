@@ -11,7 +11,7 @@
 import { useEffect, useMemo } from 'react'
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
-import { updateNodeData } from '@Pimcore/components/element-tree/element-tree-slice'
+import { type TreeNodeWorkflowState, updateNodeData } from '@Pimcore/components/element-tree/element-tree-slice'
 import { toTreeNodeWorkflowStates } from '@Pimcore/components/element-tree/utils/tree-node-workflow-states'
 import {
   useWorkflowGetDetailsQuery
@@ -21,18 +21,26 @@ import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-ava
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { getVisibleWorkflowStatuses } from '../types/workflow-types'
 
+const NO_WORKFLOW_STATES: TreeNodeWorkflowState[] = []
+
 export const useSyncTreeWorkflowStates = (id: number, elementType: ElementType, enabled: boolean): void => {
   const dispatch = useAppDispatch()
   const { element } = useElementDraft(id, elementType)
+  const hasWorkflow = isWorkflowAvailable(element, elementType)
+  // a loaded element that lost its workflow keeps no dots; an element that is not loaded yet is left alone
+  const hasLostWorkflow = enabled && element?.hasWorkflowAvailable === false
   const { data } = useWorkflowGetDetailsQuery(
     { elementType, elementId: id },
-    { skip: !enabled || !isWorkflowAvailable(element, elementType) }
+    { skip: !enabled || !hasWorkflow }
   )
 
-  const workflowStates = useMemo(
-    () => isUndefined(data) ? undefined : toTreeNodeWorkflowStates(getVisibleWorkflowStatuses(data.items)),
-    [data]
-  )
+  const workflowStates = useMemo(() => {
+    if (hasLostWorkflow) {
+      return NO_WORKFLOW_STATES
+    }
+
+    return isUndefined(data) ? undefined : toTreeNodeWorkflowStates(getVisibleWorkflowStatuses(data.items))
+  }, [data, hasLostWorkflow])
 
   useEffect(() => {
     if (isUndefined(workflowStates)) {
