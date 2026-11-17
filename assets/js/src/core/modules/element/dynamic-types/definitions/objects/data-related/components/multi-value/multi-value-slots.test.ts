@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { buildSlots, orderEntries, seedEmptySlots, withPositions } from './multi-value-slots'
+import { buildSlots, orderEntries, seedEmptySlots } from './multi-value-slots'
 
 const METRIC = [{ name: 'metric' }]
 const DEFAULT_SLOT = { variant: null, label: null, declared: true }
@@ -30,12 +30,6 @@ describe('orderEntries reads a position as a place within its own slot', () => {
       { var: IMPERIAL, v: 'b' },
       { var: METRIC_NAME, v: 'c' }
     ])
-  })
-
-  it('reads back what the writer wrote as the same list, whatever order the slots are held in', () => {
-    const held = [{ var: METRIC_NAME, v: 'c' }, { var: METRIC_NAME, v: 'a' }, { var: IMPERIAL, v: 'b' }]
-
-    expect(orderEntries(withPositions(held))).toEqual(held)
   })
 
   it('orders the entries of one slot as before', () => {

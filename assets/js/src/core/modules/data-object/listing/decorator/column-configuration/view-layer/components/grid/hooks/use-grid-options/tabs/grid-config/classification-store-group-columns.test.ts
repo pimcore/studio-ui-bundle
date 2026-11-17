@@ -179,18 +179,9 @@ describe('classificationStoreColumnsToAdd', () => {
       expect(variantsOf(classificationStoreColumnsToAdd({ type: TabId.Group, data: [{ ...groupLayout, keys: [key] }] }, baseColumn, held))).toEqual(['Imperial', null])
     })
 
-    it('shows a repeating key display-only and leaves a non-repeating key editable, in every slot', () => {
-      const repeating = { ...keyWith([{ name: 'Metric' }]), definition: { ...multiValueDefinition, multiValue: true } }
-
-      expect(pick(repeating).map((column) => column.editable)).toEqual([false, false])
+    // A slot holds one value, so every slot column is edited like any scalar column.
+    it('leaves a multiValue key editable in every slot', () => {
       expect(pick(keyWith([{ name: 'Metric' }])).map((column) => column.editable)).toEqual([true, true])
-    })
-
-    it('reads a repeating key from the layout member when its definition omits the flag', () => {
-      const result = pick({ ...keyWith([{ name: 'Metric' }]), multiValue: true })
-
-      expect(result.map((column) => column.editable)).toEqual([false, false])
-      expect(result.map((column) => (column.config as any).fieldDefinition.multiValue)).toEqual([true, true])
     })
   })
 })

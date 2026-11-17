@@ -19,7 +19,7 @@ import {
   multiValueMembersOf
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/multi-value-members'
 import { variantNameOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-name'
-import { isRepeatingColumn, variantSlotsOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
+import { variantSlotsOf } from '@Pimcore/modules/data-object/classification-store/utils/variant-column'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
@@ -74,8 +74,6 @@ const toColumn = (
 
   return {
     ...baseColumn,
-    // A repeating key is displayed only: its cell value is a list that neither inline edit nor batch edit writes.
-    editable: baseColumn.editable && !isRepeatingColumn({ config }),
     frontendType: (key.definition as ClassificationStoreKeyDefinition).fieldtype,
     locale: baseColumn.localizable ? 'default' : undefined,
     config

@@ -18,7 +18,7 @@ import {
   isKeyTypeHeldByEngine,
   isOfferedAsKeyType
 } from '@Pimcore/modules/field-definitions/dynamic-types/utils/classification-store-key-types'
-import { Form, Input, InputNumber, Select, Switch } from '@sdk/components'
+import { Form, Input, Select, Switch } from '@sdk/components'
 import React, { useContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { container, serviceIds } from '@sdk/app'
@@ -33,7 +33,6 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
   const form = Form.useFormInstance()
 
   const selectedType = Form.useWatch('delegateDatatype') as string | null | undefined
-  const isRepeating = Form.useWatch('multiValue') as boolean | undefined
   const unqualifiedValue = Form.useWatch('unqualifiedValue') as boolean | null | undefined
 
   // Every type a key may be defined with, except the wrappers, which cannot nest. A withdrawn type
@@ -130,29 +129,6 @@ export const FieldDefinitionMultiValueFormFields = (props: FieldDefinitionAbstra
           preserve={ false }
         >
           <Input />
-        </Form.Item>
-      )}
-
-      <Form.Item
-        name='multiValue'
-        valuePropName='checked'
-      >
-        <Switch
-          labelRight={ t('classification-store.multi-value.repeating') }
-          onChange={ (checked: boolean) => { if (!checked) form.setFieldValue('maximum', null) } }
-        />
-      </Form.Item>
-
-      {isRepeating === true && (
-        <Form.Item
-          label={ t('classification-store.multi-value.maximum') }
-          name='maximum'
-          tooltip={ t('classification-store.multi-value.maximum-tooltip') }
-        >
-          <InputNumber
-            min={ 0 }
-            precision={ 0 }
-          />
         </Form.Item>
       )}
     </>

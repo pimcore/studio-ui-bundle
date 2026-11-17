@@ -26,15 +26,12 @@ const keyWith = (overrides: Partial<ClassificationStoreCollection2> = {}): Class
 describe('multiValueMembersOf', () => {
   it('reads each member off the layout, falling back to the definition blob', () => {
     const key = keyWith({
-      definition: { fieldtype: MULTI_VALUE, multiValue: false, maximum: 2, unqualifiedValue: false, unqualifiedValueLabel: 'Blob' },
-      multiValue: true,
+      definition: { fieldtype: MULTI_VALUE, unqualifiedValue: false, unqualifiedValueLabel: 'Blob' },
       defaultVariant: true
     })
 
     expect(multiValueMembersOf(key)).toEqual({
       variants: [{ name: METRIC }],
-      multiValue: true,
-      maximum: 2,
       defaultVariant: true,
       defaultVariantLabel: 'Blob'
     })

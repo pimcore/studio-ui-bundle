@@ -17,7 +17,7 @@ export type MultiValueMembers = Record<string, unknown> & DefaultVariantDeclarat
 /** The declaration of a `multiValue` key: the layout members where published, else the ones its definition carries. */
 export const multiValueMembersOf = (key: ClassificationStoreCollection2): MultiValueMembers => {
   const definition = key.definition as
-    (Pick<ClassificationStoreCollection2, 'variants' | 'multiValue' | 'maximum'> & { fieldtype?: string, unqualifiedValue?: boolean | null, unqualifiedValueLabel?: string | null }) | undefined
+    (Pick<ClassificationStoreCollection2, 'variants'> & { fieldtype?: string, unqualifiedValue?: boolean | null, unqualifiedValueLabel?: string | null }) | undefined
 
   if (definition?.fieldtype !== 'multiValue') {
     return {}
@@ -25,8 +25,6 @@ export const multiValueMembersOf = (key: ClassificationStoreCollection2): MultiV
 
   return {
     variants: key.variants ?? definition.variants,
-    multiValue: key.multiValue ?? definition.multiValue,
-    maximum: key.maximum ?? definition.maximum,
     defaultVariant: key.defaultVariant ?? definition.unqualifiedValue,
     defaultVariantLabel: key.defaultVariantLabel ?? definition.unqualifiedValueLabel
   }

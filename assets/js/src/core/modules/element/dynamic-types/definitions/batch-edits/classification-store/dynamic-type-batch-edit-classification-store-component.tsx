@@ -50,7 +50,7 @@ export const DynamicTypeBatchEditClassificationStoreComponent = ({ batchEdit }: 
 
   const dynType = objectDataRegistry.getDynamicType(widgetType)
   const widgetProps = {
-    ...(isMultiValue ? { ...omit(fieldDefinition, ['delegateDatatype', 'delegate', 'variants', 'multiValue', 'maximum']), fieldtype: widgetType, ...fieldDefinition.delegate } : fieldDefinition),
+    ...(isMultiValue ? { ...omit(fieldDefinition, ['delegateDatatype', 'delegate', 'variants']), fieldtype: widgetType, ...fieldDefinition.delegate } : fieldDefinition),
     defaultFieldWidth: fieldWidth
   }
   const component = dynType.getObjectDataComponent(widgetProps as AbstractDateObjectDataDefinition)

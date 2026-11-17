@@ -576,7 +576,7 @@ describe('ClassificationStoreItem', () => {
     const layout = {
       id: 9,
       name: 'Multi',
-      keys: [{ id: 91, name: 'ef000091', title: 'Height', multiValue: true, maximum: 3, variants, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue' } }]
+      keys: [{ id: 91, name: 'ef000091', title: 'Height', variants, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue' } }]
     } as any
 
     render(
@@ -588,7 +588,7 @@ describe('ClassificationStoreItem', () => {
       />
     )
 
-    expect(propsOfKey(91)).toMatchObject({ delegateDatatype: 'quantityValue', multiValue: true, maximum: 3, variants })
+    expect(propsOfKey(91)).toMatchObject({ delegateDatatype: 'quantityValue', variants })
   })
 
   it('hands a multiValue key the declaration its definition carries where the layout publishes none', () => {
@@ -596,7 +596,7 @@ describe('ClassificationStoreItem', () => {
     const layout = {
       id: 9,
       name: 'Multi',
-      keys: [{ id: 92, name: 'ef000092', title: 'Height', multiValue: null, maximum: null, variants: null, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', multiValue: false, variants } }]
+      keys: [{ id: 92, name: 'ef000092', title: 'Height', variants: null, definition: { datatype: 'data', fieldtype: 'multiValue', delegateDatatype: 'quantityValue', variants } }]
     } as any
 
     render(
@@ -608,7 +608,7 @@ describe('ClassificationStoreItem', () => {
       />
     )
 
-    expect(propsOfKey(92)).toMatchObject({ delegateDatatype: 'quantityValue', multiValue: false, variants })
+    expect(propsOfKey(92)).toMatchObject({ delegateDatatype: 'quantityValue', variants })
   })
 
   it('hands a multiValue key the default variant declaration, preferring the layout member over the definition', () => {

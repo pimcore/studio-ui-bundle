@@ -25,10 +25,6 @@ interface VariantColumnLike {
   config?: { variant?: string | null, fieldDefinition?: unknown } | null
 }
 
-/** Whether a column's key repeats: it holds a list of entries in one slot, which no grid cell or batch edit row writes. */
-export const isRepeatingColumn = (column: VariantColumnLike | undefined): boolean =>
-  (column?.config?.fieldDefinition as { multiValue?: unknown } | undefined | null)?.multiValue === true
-
 /** The variant a column addresses; null is the default slot. */
 export const variantOfColumn = (column: VariantColumnLike | undefined): string | null => column?.config?.variant ?? null
 

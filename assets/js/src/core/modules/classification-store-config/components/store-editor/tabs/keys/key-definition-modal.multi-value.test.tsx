@@ -119,10 +119,10 @@ const KEY_TYPE = 'multiValue'
 // The dialog's form fields of the type, reduced to the controls that carry the declaration.
 const multiValueType = {
   id: KEY_TYPE,
-  getDefaultData: () => ({ delegateDatatype: null, variants: [], multiValue: false, maximum: null }),
+  getDefaultData: () => ({ delegateDatatype: null, variants: [] }),
   normalizeFieldDefinition: (fieldDefinition: Record<string, unknown>) => fieldDefinition,
   getFormFields: function MultiValueFormFields () {
-    const { Form, Input, InputNumber } = jest.requireActual('antd')
+    const { Form, Input } = jest.requireActual('antd')
     const { Switch } = jest.requireMock('@sdk/components')
 
     return (
@@ -132,9 +132,6 @@ const multiValueType = {
         </Form.Item>
         <Form.Item name='variants'>
           <FieldDefinitionMultiValueVariants />
-        </Form.Item>
-        <Form.Item name='maximum'>
-          <InputNumber aria-label='maximum' />
         </Form.Item>
         <Form.Item
           name='unqualifiedValue'
@@ -247,26 +244,6 @@ describe('KeyDefinitionModal for a multiValue key', () => {
     expect((await savedPayload()).definition.variants).toEqual([{ name: 'imperial' }, { name: 'metric' }])
   })
 
-  it('sends multiValue true and the cap together in one definition', async () => {
-    renderModal(keyOf({ delegateDatatype: 'input', multiValue: true, maximum: 3 }))
-
-    save()
-
-    expect((await savedPayload()).definition).toMatchObject({ multiValue: true, maximum: 3 })
-  })
-
-  it('keeps the key repeating and unbounded when the cap is cleared', async () => {
-    renderModal(keyOf({ delegateDatatype: 'input', multiValue: true, maximum: 3 }))
-
-    fireEvent.change(screen.getByLabelText('maximum'), { target: { value: '' } })
-    save()
-
-    const { definition } = await savedPayload()
-
-    expect(definition.multiValue).toBe(true)
-    expect(definition.maximum ?? null).toBeNull()
-  })
-
   it('states the consequence of removing a variant before saving, and sends no instruction to drop values', async () => {
     renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }, { name: 'imperial' }] }))
 
@@ -326,6 +303,19 @@ describe('KeyDefinitionModal for a multiValue key', () => {
     expect(definition.delegate).not.toHaveProperty('unqualifiedValueLabel')
   })
 
+  it('does not pack a key definition from before the repeating mode was withdrawn into the delegate', async () => {
+    renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], multiValue: true, maximum: 5 }))
+
+    save()
+
+    const { definition } = await savedPayload()
+
+    // the wrapper's old members are not delegate settings: packing them in would write them into
+    // the blob core builds the delegate from, on the first save of any key defined back then
+    expect(definition.delegate).not.toHaveProperty('multiValue')
+    expect(definition.delegate).not.toHaveProperty('maximum')
+  })
+
   it('states the consequence of declining the default variant, and saves only once confirmed', async () => {
     renderModal(keyOf({ delegateDatatype: 'input', variants: [{ name: 'metric' }], unqualifiedValue: true }))
 
@@ -355,21 +345,5 @@ describe('KeyDefinitionModal for a multiValue key', () => {
     expect(updateKey).not.toHaveBeenCalled()
     expect(confirmWarning).not.toHaveBeenCalled()
     expect(screen.getByText(NO_WRITABLE_SLOT)).toBeInTheDocument()
-  })
-
-  it('states the consequence of lowering the cap, and not of leaving it as it was', async () => {
-    renderModal(keyOf({ delegateDatatype: 'input', multiValue: true, maximum: 3 }))
-
-    save()
-    await savedPayload()
-    expect(confirmWarning).not.toHaveBeenCalled()
-
-    updateKey.mockClear()
-    fireEvent.change(screen.getByLabelText('maximum'), { target: { value: '2' } })
-    save()
-    await flush()
-
-    expect(confirmWarning).toHaveBeenCalledTimes(1)
-    expect(updateKey).not.toHaveBeenCalled()
   })
 })

@@ -10,6 +10,8 @@
 
 import { omit } from 'lodash'
 
+// `multiValue` and `maximum` are the wrapper's own members from before the repeating mode was
+// withdrawn: a key defined back then still carries them, and they are not delegate settings.
 const WRAPPER_OWN_MEMBERS = ['delegateDatatype', 'delegate', 'variants', 'multiValue', 'maximum']
 
 /**

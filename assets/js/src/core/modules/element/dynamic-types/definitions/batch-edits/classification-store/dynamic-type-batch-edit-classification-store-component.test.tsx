@@ -34,7 +34,7 @@ const batchEdit = (config: Record<string, unknown>): any => ({
   config: { keyId: 12, groupId: 3, ...config }
 })
 
-const multiValueDefinition = { fieldtype: 'multiValue', name: 'color', title: 'color_title', delegateDatatype: 'input', delegate: { maxLength: 5 }, variants: [{ name: 'Metric' }], multiValue: true, maximum: 2 }
+const multiValueDefinition = { fieldtype: 'multiValue', name: 'color', title: 'color_title', delegateDatatype: 'input', delegate: { maxLength: 5 }, variants: [{ name: 'Metric' }] }
 
 describe('DynamicTypeBatchEditClassificationStoreComponent for a multiValue key', () => {
   const multiValueWidget = jest.fn(() => <span>multi-value-editor</span>)

@@ -34,7 +34,7 @@ describe('inline edit on a column the picker marked display-only', () => {
     return column.meta.editable({ permissions: {} })
   }
 
-  it('lets no row be edited when the column is display-only, as a repeating key is', () => {
+  it('lets no row be edited when the column is display-only', () => {
     expect(editableOf(false)).toBe(false)
   })
 
