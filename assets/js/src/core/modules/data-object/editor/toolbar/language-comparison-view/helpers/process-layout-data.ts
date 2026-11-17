@@ -118,9 +118,12 @@ export const processNestedLayoutData = async ({
       setLayoutsList
     })
 
+    // A wrapper field - an object brick, a block, a field collection - resolves its members
+    // through this function, so what it returns already names the type that contributed the
+    // column. Only a descriptor the type built itself is stamped here.
     return extractedDescriptors === false
       ? []
-      : extractedDescriptors.map(descriptor => ({ ...descriptor, typeId: currentFieldType }))
+      : extractedDescriptors.map(descriptor => ({ ...descriptor, typeId: descriptor.typeId ?? currentFieldType }))
   }))
 
   return descriptors.flatMap(item => item)
