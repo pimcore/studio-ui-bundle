@@ -116,6 +116,7 @@ areablock.paste: Pegar
 areablock.cut: Cortar
 areablock.settings: Configuración
 areablock.delete: Eliminar
+areablock.type-limit-reached: Se ha alcanzado el número máximo de bloques de este tipo.
 document.highlight-editables: Resaltar editables
 document.link.target: Destino del enlace
 document.hardlink.source: Documento de origen

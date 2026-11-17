@@ -95,6 +95,27 @@ export const configUtils = {
     return currentCount >= limit
   },
 
+  getTypeLimit (config: AreablockEditableConfig | undefined, type: string): number | undefined {
+    return config?.limits?.[type]
+  },
+
+  isTypeLimitReached (config: AreablockEditableConfig | undefined, type: string, currentTypeCount: number): boolean {
+    const limit = this.getTypeLimit(config, type)
+    if (isNil(limit)) return false
+    return currentTypeCount >= limit
+  },
+
+  getTypeUsageCounts (types: Array<string | null>): Record<string, number> {
+    const counts: Record<string, number> = {}
+
+    types.forEach(type => {
+      if (isNil(type)) return
+      counts[type] = (counts[type] ?? 0) + 1
+    })
+
+    return counts
+  },
+
   canMoveUp (index: number): boolean {
     return index > 0
   },

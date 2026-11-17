@@ -123,6 +123,10 @@ export const useAreablockEditable = ({
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
     if (!configUtils.isTypeAllowed(config, typeToUse)) return
+
+    const typeUsageCounts = configUtils.getTypeUsageCounts(currentElements.map(el => areablockManager.getElementType(el)))
+    if (configUtils.isTypeLimitReached(config, typeToUse, typeUsageCounts[typeToUse] ?? 0)) return
+
     const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
     const nextKey = areablockManager.calculateNextKey()
 
@@ -357,6 +361,9 @@ export const useAreablockEditable = ({
     const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
 
     if (configUtils.isLimitReached(currentElements.length, limit)) return
+
+    const typeUsageCounts = configUtils.getTypeUsageCounts(currentElements.map(el => areablockManager.getElementType(el)))
+    if (configUtils.isTypeLimitReached(config, clipboardItem.type, typeUsageCounts[clipboardItem.type] ?? 0)) return
 
     const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
     const nextKey = areablockManager.calculateNextKey()

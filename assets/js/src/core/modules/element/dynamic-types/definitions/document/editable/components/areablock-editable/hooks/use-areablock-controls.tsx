@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
@@ -59,6 +59,9 @@ export const useAreablockControls = ({
   onOverwrite
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
   const { t } = useTranslation()
+  // SortableAreablockToolbar is memoized on shallow prop equality, so the
+  // usage-counts object must keep its identity while its contents are unchanged.
+  const typeUsageCountsCacheRef = useRef<{ key: string, value: Record<string, number> }>({ key: '{}', value: {} })
   const {
     activeId,
     handleDragStart,
@@ -71,6 +74,7 @@ export const useAreablockControls = ({
   } = useAreablockDropzones({
     areablockManager,
     areaTypes,
+    config,
     onMoveArea,
     onDropAreablock: async (areaType: string, index: number) => {
       if (isInherited) return
@@ -126,6 +130,12 @@ export const useAreablockControls = ({
 
     const currentAreaEntries = areablockManager.queryElements()
     const limitReached = configUtils.isLimitReached(currentAreaEntries.length, config?.limit)
+    const currentTypeUsageCounts = configUtils.getTypeUsageCounts(currentAreaEntries.map(entry => areablockManager.getElementType(entry)))
+    const typeUsageCountsKey = JSON.stringify(currentTypeUsageCounts)
+    if (typeUsageCountsCacheRef.current.key !== typeUsageCountsKey) {
+      typeUsageCountsCacheRef.current = { key: typeUsageCountsKey, value: currentTypeUsageCounts }
+    }
+    const typeUsageCounts = typeUsageCountsCacheRef.current.value
 
     if (currentAreaEntries.length === 0) {
       const container = areablockManager.getContainer()
@@ -180,6 +190,7 @@ export const useAreablockControls = ({
           onRemoveArea={ handleRemoveArea }
           onToggleHidden={ onToggleHidden }
           toolbarTitle={ toolbarTitle }
+          typeUsageCounts={ typeUsageCounts }
         />
       )
       const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)

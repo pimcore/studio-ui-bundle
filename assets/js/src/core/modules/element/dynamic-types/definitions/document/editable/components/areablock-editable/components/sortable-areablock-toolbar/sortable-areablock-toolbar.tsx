@@ -29,6 +29,7 @@ export interface SortableAreablockToolbarProps {
   limitReached: boolean
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
+  typeUsageCounts: Record<string, number>
   // Pre-computed in the parent (use-areablock-controls) so this component can be memoized.
   isFirst: boolean
   isLast: boolean
@@ -62,6 +63,7 @@ const SortableAreablockToolbarInnerComponent = ({
   limitReached,
   areaTypes,
   config,
+  typeUsageCounts,
   isFirst,
   isLast,
   isHidden,
@@ -84,11 +86,15 @@ const SortableAreablockToolbarInnerComponent = ({
   const { t } = useTranslation()
 
   const clipboardItem = useAreablockClipboard()
-  const canPaste = !isNil(clipboardItem) && !limitReached && configUtils.isTypePasteable(config, clipboardItem.type)
+  const canPaste = !isNil(clipboardItem) &&
+    !limitReached &&
+    configUtils.isTypePasteable(config, clipboardItem.type) &&
+    !configUtils.isTypeLimitReached(config, clipboardItem.type, typeUsageCounts[clipboardItem.type] ?? 0)
 
   const { menuItems } = useAreablockMenu({
     config,
-    onAddArea: (areaType: string) => { onAddArea(element, areaType) }
+    onAddArea: (areaType: string) => { onAddArea(element, areaType) },
+    typeUsageCounts
   })
 
   const buttons: React.ReactNode[] = []
@@ -96,16 +102,19 @@ const SortableAreablockToolbarInnerComponent = ({
 
   if (!limitReached) {
     if (areaTypes.length === 1) {
+      const singleTypeLimitReached = configUtils.isTypeLimitReached(config, areaTypes[0].type, typeUsageCounts[areaTypes[0].type] ?? 0)
+
       buttons.push(
         <IconButton
           aria-label={ t('areablock.new') }
+          disabled={ singleTypeLimitReached }
           icon={ { value: 'new' } }
           key="plus"
           onClick={ () => {
             onAddArea(element, areaTypes[0].type)
           } }
           size="small"
-          tooltip={ { title: t('areablock.new') } }
+          tooltip={ { title: t(singleTypeLimitReached ? 'areablock.type-limit-reached' : 'areablock.new') } }
         />
       )
     } else {

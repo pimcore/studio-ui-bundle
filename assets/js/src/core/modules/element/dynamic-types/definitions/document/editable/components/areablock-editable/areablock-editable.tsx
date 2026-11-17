@@ -32,6 +32,7 @@ export interface AreaType {
 
 export interface AreablockEditableConfig {
   limit?: number
+  limits?: Record<string, number>
   class?: string
   reload?: boolean
   allowed?: string[]

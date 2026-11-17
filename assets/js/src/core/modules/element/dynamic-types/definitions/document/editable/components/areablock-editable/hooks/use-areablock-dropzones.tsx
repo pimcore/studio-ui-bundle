@@ -10,9 +10,10 @@
 
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isString, isUndefined } from 'lodash'
 import { type AreablockManager } from '../utils/areablock-manager'
-import { type AreaType } from '../areablock-editable'
+import { type AreablockEditableConfig, type AreaType } from '../areablock-editable'
+import { configUtils } from '../utils/areablock-utils'
 import {
   useBlockManagerDropzones,
   type UseBlockManagerDropzonesReturn
@@ -22,6 +23,7 @@ import { type DragAndDropInfo } from '@sdk/components'
 export interface UseAreablockDropzonesProps {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
+  config?: AreablockEditableConfig
   onMoveArea: (fromIndex: number, toIndex: number) => void
   onDropAreablock?: (areaType: string, index: number) => Promise<void>
 }
@@ -33,18 +35,24 @@ export interface UseAreablockDropzonesReturn extends UseBlockManagerDropzonesRet
 export const useAreablockDropzones = ({
   areablockManager,
   areaTypes,
+  config,
   onMoveArea,
   onDropAreablock
 }: UseAreablockDropzonesProps): UseAreablockDropzonesReturn => {
   const { t } = useTranslation()
 
   const isValidAreablockDrop = (info: DragAndDropInfo): boolean => {
-    if (info.type !== 'areablock-type' || info.data?.areablockType == null) {
+    const areablockType = info.data?.areablockType
+    if (info.type !== 'areablock-type' || !isString(areablockType)) {
       return false
     }
 
-    const areablockType = info.data.areablockType
-    return areaTypes.some(areaType => areaType.type === areablockType)
+    if (!areaTypes.some(areaType => areaType.type === areablockType)) {
+      return false
+    }
+
+    const typeUsageCounts = configUtils.getTypeUsageCounts(areablockManager.queryElements().map(el => areablockManager.getElementType(el)))
+    return !configUtils.isTypeLimitReached(config, areablockType, typeUsageCounts[areablockType] ?? 0)
   }
 
   const handleAreablockDrop = async (info: DragAndDropInfo, index: number): Promise<void> => {

@@ -53,7 +53,8 @@ export const EmptyStateAreablockToolbar = ({
   const clipboardItem = useAreablockClipboard()
   const canPaste = !isNil(clipboardItem) &&
     !configUtils.isLimitReached(0, config?.limit) &&
-    configUtils.isTypePasteable(config, clipboardItem.type)
+    configUtils.isTypePasteable(config, clipboardItem.type) &&
+    !configUtils.isTypeLimitReached(config, clipboardItem.type, 0)
 
   const { menuItems } = useAreablockMenu({
     config,
@@ -74,18 +75,22 @@ export const EmptyStateAreablockToolbar = ({
     }
 
     const areablockType = info.data.areablockType
-    return configUtils.isTypeAllowed(config, areablockType)
+    return configUtils.isTypeAllowed(config, areablockType) &&
+      !configUtils.isTypeLimitReached(config, areablockType, 0)
   }
 
   const renderAddButton = (): React.ReactNode => {
     if (areaTypes.length === 1) {
+      const singleTypeLimitReached = configUtils.isTypeLimitReached(config, areaTypes[0].type, 0)
+
       return (
         <IconButton
           aria-label={ t('areablock.new') }
+          disabled={ singleTypeLimitReached }
           icon={ { value: 'new' } }
           onClick={ isInherited ? undefined : () => { void onClick(areaTypes[0].type) } }
           size="small"
-          tooltip={ { title: t('areablock.new') } }
+          tooltip={ { title: t(singleTypeLimitReached ? 'areablock.type-limit-reached' : 'areablock.new') } }
         />
       )
     }
