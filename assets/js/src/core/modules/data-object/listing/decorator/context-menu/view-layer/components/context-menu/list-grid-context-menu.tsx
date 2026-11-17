@@ -23,8 +23,8 @@ export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.
   const { selection, selectRowIfUnselected } = useContextMenuRowSelection(row)
 
   const context = {
-    target: row,
     selection,
+    target: row,
     onComplete: () => { setIsOpen(undefined) }
   }
 

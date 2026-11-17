@@ -8,7 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-const openElement = jest.fn()
+import { renderHook } from '@testing-library/react'
+import { useOpen } from './open'
+import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -17,23 +19,18 @@ jest.mock('react-i18next', () => ({
 }))
 
 jest.mock('@Pimcore/modules/element/hooks/use-element-helper', () => ({
-  useElementHelper: () => ({ openElement })
+  useElementHelper: () => ({ openElement: mockOpenElement })
 }))
 
 jest.mock('@Pimcore/components/icon/icon', () => ({
-  Icon: () => null
+  Icon: jest.fn()
 }))
 
 jest.mock('..', () => ({
   ContextMenuActionName: { open: 'open' }
 }))
 
-// eslint-disable-next-line import/first
-import { renderHook } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { useOpen } from './open'
-// eslint-disable-next-line import/first
-import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
+const mockOpenElement = jest.fn()
 
 const gridElement = (id: number, canView: boolean = true): GridContextMenuProps => ({
   id,
@@ -49,11 +46,11 @@ const clickItem = async (item: unknown): Promise<void> => {
   await (item as { onClick: () => unknown }).onClick()
 }
 
-const openedIds = (): number[] => openElement.mock.calls.map(([props]) => props.id)
+const openedIds = (): number[] => mockOpenElement.mock.calls.map(([props]) => props.id)
 
 describe('useOpen openGridContextMenuItem', () => {
   beforeEach(() => {
-    openElement.mockReset().mockResolvedValue(undefined)
+    mockOpenElement.mockReset().mockResolvedValue(undefined)
   })
 
   it('opens the right clicked row when no selection is passed', async () => {
@@ -63,7 +60,7 @@ describe('useOpen openGridContextMenuItem', () => {
     await clickItem(item)
 
     expect(item).toMatchObject({ label: 'element.open', hidden: false })
-    expect(openElement.mock.calls).toEqual([[{ id: 1, type: 'asset' }]])
+    expect(mockOpenElement.mock.calls).toEqual([[{ id: 1, type: 'asset' }]])
   })
 
   it('opens every selected element when the right clicked row is part of the selection', async () => {
@@ -75,7 +72,7 @@ describe('useOpen openGridContextMenuItem', () => {
 
     expect(item).toMatchObject({ label: 'element.open-selected:3', hidden: false })
     expect(openedIds()).toEqual([4, 2, 9])
-    expect(openElement.mock.calls.every(([props]) => props.type === 'data-object')).toBe(true)
+    expect(mockOpenElement.mock.calls.every(([props]) => props.type === 'data-object')).toBe(true)
   })
 
   it('counts and opens only the selected elements the user may view', async () => {
