@@ -225,6 +225,7 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           return processClassificationStoreData({ data: keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id, fieldPathValue: getFieldPathValue })
         }
 
+        // the field data carries the layout members resolved, because the blob names the default variant `unqualifiedValue`
         if (!isEmpty(dataItem.definition)) {
           if (isUndefined(groupId)) return []
 
@@ -233,13 +234,13 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           if (isEmpty(fieldValue)) {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey) }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, ...multiValueMembersOf(dataItem as ClassificationStoreCollection2), name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey) }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           }
 
           return Object.entries(fieldValue).map(([key, value]) => {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${key}` : `${fieldPathValue}.${key}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey), locale: key }, fieldValue: value?.[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, ...multiValueMembersOf(dataItem as ClassificationStoreCollection2), name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey), locale: key }, fieldValue: value?.[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           })
         }
 

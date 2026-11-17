@@ -20,6 +20,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { MultiValueEditor, type MultiValueEditorProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-editor'
 import { EditFormProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
 import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import {
   SuppressEmptyFieldLabelProvider
@@ -46,14 +47,20 @@ export class DynamicTypeObjectDataMultiValue extends DynamicTypeObjectDataAbstra
     )
   }
 
-  /** The editor mounts the edit tab's data components, which need the edit form outside of the edit tab too. */
+  /**
+   * The editor mounts the edit tab's data components, which need the edit form outside of the edit
+   * tab too. The item context is one of them: in the edit tab the key's own Form.Item provides it,
+   * and the version view renders no form item, so the entry list below has no name to bind to.
+   */
   getVersionObjectDataComponent (props: MultiValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <SaveProvider>
         <EditFormProvider>
-          <SuppressEmptyFieldLabelProvider>
-            {this.getObjectDataComponent({ ...props, noteditable: true, title: '', tooltip: '' })}
-          </SuppressEmptyFieldLabelProvider>
+          <ItemProvider item={ { name: props.name } }>
+            <SuppressEmptyFieldLabelProvider>
+              {this.getObjectDataComponent({ ...props, noteditable: true, title: '', tooltip: '' })}
+            </SuppressEmptyFieldLabelProvider>
+          </ItemProvider>
         </EditFormProvider>
       </SaveProvider>
     )
