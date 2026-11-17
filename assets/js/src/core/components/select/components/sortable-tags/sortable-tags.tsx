@@ -9,37 +9,37 @@
  */
 
 import React from 'react'
+import { isNull } from 'lodash'
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, type DragEndEvent, useSensor, useSensors } from '@dnd-kit/core'
-import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import type { SelectProps } from 'antd'
+import { getSortableTagIds, reorderTags } from './reorder-tags'
 
 export interface SortableTagsProps {
   enabled: boolean
+  disabled?: boolean
   value: unknown
-  onChange?: (value: any, option: any) => void
+  options?: SelectProps['options']
+  onChange?: SelectProps['onChange']
   children: React.ReactNode
 }
 
-export const SortableTags = ({ enabled, value, onChange, children }: SortableTagsProps): React.JSX.Element => {
+export const SortableTags = ({ enabled, disabled = false, value, options, onChange, children }: SortableTagsProps): React.JSX.Element => {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
-  const handleDragEnd = (event: DragEndEvent): void => {
-    const { active, over } = event
-
-    if (over === null || active.id === over.id || !Array.isArray(value)) {
+  const handleDragEnd = ({ active, over }: DragEndEvent): void => {
+    if (disabled || isNull(over)) {
       return
     }
 
-    const oldIndex = value.findIndex((item) => String(item) === String(active.id))
-    const newIndex = value.findIndex((item) => String(item) === String(over.id))
+    const reordered = reorderTags(value, active.id, over.id, options)
 
-    if (oldIndex === -1 || newIndex === -1) {
-      return
+    if (!isNull(reordered)) {
+      onChange?.(reordered.value, reordered.options)
     }
-
-    onChange?.(arrayMove(value, oldIndex, newIndex), [])
   }
 
   if (!enabled) {
@@ -53,7 +53,8 @@ export const SortableTags = ({ enabled, value, onChange, children }: SortableTag
       sensors={ sensors }
     >
       <SortableContext
-        items={ Array.isArray(value) ? value.map((item) => String(item)) : [] }
+        disabled={ disabled }
+        items={ getSortableTagIds(value) }
         strategy={ rectSortingStrategy }
       >
         {children}

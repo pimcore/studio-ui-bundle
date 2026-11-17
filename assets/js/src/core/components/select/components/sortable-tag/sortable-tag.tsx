@@ -9,19 +9,30 @@
  */
 
 import React from 'react'
+import { isNull } from 'lodash'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import cn from 'classnames'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
+import type { SelectProps } from 'antd'
+import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from '../../select.styles'
+import { getSortableTagId } from '../sortable-tags/reorder-tags'
 
 const MAX_TAG_SORTABLE_ID = '__sortable-tag-max__'
 
-export const SortableTag = ({ label, value, disabled, onClose, closable, isMaxTag }: CustomTagProps): React.JSX.Element => {
+export interface SortableTagProps extends CustomTagProps {
+  /** rc-select's `disabled` belongs to the option, so the disabled state of the Select itself is passed separately. */
+  selectDisabled?: boolean
+}
+
+export const SortableTag = ({ label, value, disabled, selectDisabled = false, onClose, closable, isMaxTag }: SortableTagProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const isSortable = !isMaxTag && !disabled && !selectDisabled
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: isMaxTag ? MAX_TAG_SORTABLE_ID : String(value),
-    disabled: isMaxTag || disabled
+    id: isMaxTag ? MAX_TAG_SORTABLE_ID : getSortableTagId(value),
+    disabled: !isSortable
   })
 
   const { styles } = useStyles({})
@@ -30,7 +41,7 @@ export const SortableTag = ({ label, value, disabled, onClose, closable, isMaxTa
   // scaleX/scaleY to bridge the size gap between old and new slots. Scaling the
   // element distorts its text, so we keep only the translate component.
   const style = {
-    transform: CSS.Transform.toString(transform === null ? transform : { ...transform, scaleX: 1, scaleY: 1 }),
+    transform: CSS.Transform.toString(isNull(transform) ? transform : { ...transform, scaleX: 1, scaleY: 1 }),
     transition
   }
 
@@ -40,24 +51,31 @@ export const SortableTag = ({ label, value, disabled, onClose, closable, isMaxTa
     event.stopPropagation()
   }
 
+  const handleRemoveKeyDown = (event: React.KeyboardEvent): void => {
+    // Enter / Space trigger the remove button and must not start a keyboard drag on the tag.
+    event.stopPropagation()
+  }
+
   return (
     <span
-      className={ cn('ant-select-selection-item', styles.sortableTag, {
+      className={ cn('ant-select-selection-item', {
+        [styles.sortableTag]: isSortable,
         'ant-select-selection-item-disabled': disabled,
         [styles.sortableTagDragging]: isDragging
       }) }
       ref={ setNodeRef }
       style={ style }
       title={ typeof label === 'string' ? label : undefined }
-      { ...(isMaxTag ? {} : attributes) }
-      { ...(isMaxTag ? {} : listeners) }
+      { ...(isSortable ? attributes : {}) }
+      { ...(isSortable ? listeners : {}) }
     >
       <span className="ant-select-selection-item-content">{label}</span>
       {closable && (
         <button
-          aria-label="remove"
+          aria-label={ t('remove') }
           className={ cn('ant-select-selection-item-remove', styles.tagRemoveButton) }
           onClick={ onClose }
+          onKeyDown={ handleRemoveKeyDown }
           onMouseDown={ handleRemoveMouseDown }
           type="button"
         >
@@ -66,4 +84,15 @@ export const SortableTag = ({ label, value, disabled, onClose, closable, isMaxTa
       )}
     </span>
   )
+}
+
+export const createSortableTagRender = (selectDisabled: boolean): NonNullable<SelectProps['tagRender']> => {
+  const renderSortableTag = (tagProps: CustomTagProps): React.JSX.Element => (
+    <SortableTag
+      { ...tagProps }
+      selectDisabled={ selectDisabled }
+    />
+  )
+
+  return renderSortableTag
 }

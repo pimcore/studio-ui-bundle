@@ -339,10 +339,6 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
     sortableTag: css`
       cursor: grab;
-
-      &.ant-select-selection-item-disabled {
-        cursor: default;
-      }
     `,
 
     sortableTagDragging: css`
