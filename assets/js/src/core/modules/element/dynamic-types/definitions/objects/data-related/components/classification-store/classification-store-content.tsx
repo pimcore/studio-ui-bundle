@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isObject, find, isEmpty } from 'lodash'
+import { isObject, isArray, find, isEmpty } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
 import { useKeyedListSelector } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { Form } from '@Pimcore/components/form/form'
@@ -97,7 +97,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const localizationGroup = localizationMode === CURRENT_LANGUAGE_MODE ? currentLanguage : LANGUAGE_INDEPENDENT_MODE
 
   const { id: objectId } = useElementContext()
-  const fieldName = Array.isArray(props.name) ? props.name[props.name.length - 1] : props.name
+  const fieldName = isArray(props.name) ? props.name.at(-1) : props.name
   useLayoutRefresh({ objectId, fieldName })
 
   // Seeds the layout once; a configuration change replaces it afterwards through useLayoutRefresh.
@@ -105,7 +105,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
     const initialLayout = props.activeGroupDefinitions ?? []
     const activeGroupLayout = !isEmpty(currentLayoutData) ? currentLayoutData : initialLayout
 
-    const isGroupType = isObject(activeGroupLayout) && !Array.isArray(activeGroupLayout)
+    const isGroupType = isObject(activeGroupLayout) && !isArray(activeGroupLayout)
     const activeGroupLayoutData: ClassificationStoreGroupLayout2[] = isGroupType ? Object.values(activeGroupLayout) : activeGroupLayout
 
     updateCurrentLayoutData(activeGroupLayoutData)
