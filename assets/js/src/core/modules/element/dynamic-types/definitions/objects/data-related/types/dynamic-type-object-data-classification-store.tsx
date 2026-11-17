@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { cloneDeep, get, isArray, isEmpty, isNil, isPlainObject, isUndefined, mergeWith } from 'lodash'
+import { cloneDeep, get, isEmpty, isNil, isPlainObject, isUndefined, mergeWith } from 'lodash'
 import { type FormItemProps } from 'antd'
 import {
   DynamicTypeObjectDataAbstract,
@@ -20,6 +20,7 @@ import { ClassificationStore, type ClassificationStoreProps } from '../component
 import { getKeyLabel, type KeyLabelKey } from '../components/classification-store/utils/key-label'
 import { multiValueMembersOf } from '../components/classification-store/utils/multi-value-members'
 import { filterInheritedFields } from '../components/classification-store/utils/group-value'
+import { coerceObjectPath, normalizeGroups, preferKeys, resolveBucketPath } from '../components/classification-store/utils/store-value-shape'
 import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
   type IFormattedDataStructureData,
@@ -31,48 +32,6 @@ import { type ClassificationStoreCollection2 } from '@Pimcore/modules/data-objec
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE = 'language-comparison-locale'
-
-const normalizeGroups = (value: unknown): any[] => {
-  if (Array.isArray(value)) {
-    return value
-  }
-
-  if (value != null && typeof value === 'object') {
-    return Object.values(value)
-  }
-
-  return []
-}
-
-/**
- * Turns every level of a store path into a plain object: rc-field-form creates an array for
- * a numeric path segment and keeps an empty group an array, and an array that carries a key
- * id is lost on JSON.stringify.
- */
-const coerceObjectPath = (target: Record<string, any>, path: string[]): void => {
-  let node = target
-
-  path.forEach(segment => {
-    if (!isPlainObject(node[segment])) {
-      node[segment] = {}
-    }
-
-    node = node[segment]
-  })
-}
-
-/** A group without own values is encoded as an empty list, which must not win over keys. */
-const preferKeys = (currentValue: unknown, incomingValue: unknown): unknown => {
-  if (isArray(currentValue) && isPlainObject(incomingValue)) {
-    return incomingValue
-  }
-
-  if (isPlainObject(currentValue) && isArray(incomingValue) && isEmpty(incomingValue)) {
-    return currentValue
-  }
-
-  return undefined
-}
 
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
@@ -162,11 +121,11 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   prepareLanguageComparisonValue ({ value, descriptors, locales }: IPrepareLanguageComparisonValueProps): Record<string, any> {
     const renderedLocales = locales.filter((locale): locale is string => !isNil(locale) && !isEmpty(locale))
 
-    const bucketPaths = descriptors.flatMap(descriptor => renderedLocales.map(
-      locale => descriptor.formPath
-        .slice(0, -1)
-        .map(part => String(part === CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE ? locale : part))
-    ))
+    const bucketPaths = descriptors.flatMap(
+      descriptor => renderedLocales.map(
+        locale => resolveBucketPath(descriptor.formPath, locale, CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE)
+      )
+    )
 
     if (bucketPaths.length === 0) {
       return value
@@ -174,7 +133,17 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
 
     const prepared = cloneDeep(value)
 
-    bucketPaths.forEach(bucketPath => { coerceObjectPath(prepared, bucketPath) })
+    bucketPaths.forEach(({ wrapperPath, storePath }) => {
+      const container: unknown = wrapperPath.length === 0 ? prepared : get(prepared, wrapperPath)
+
+      // the item of the block or the collection the store sits in is never created here: only
+      // that field knows whether its own level is a list
+      if (!isPlainObject(container)) {
+        return
+      }
+
+      coerceObjectPath(container as Record<string, any>, storePath)
+    })
 
     return prepared
   }
