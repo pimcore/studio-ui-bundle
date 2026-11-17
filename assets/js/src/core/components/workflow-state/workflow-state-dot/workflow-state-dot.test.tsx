@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { WorkflowStateDot } from './workflow-state-dot'
 
 jest.mock('./workflow-state-dot.styles', () => ({
@@ -26,8 +26,10 @@ describe('WorkflowStateDot', () => {
       label="ToDo"
            />)
 
-    const dot = screen.getByRole('img', { name: 'ToDo' })
+    const dot = screen.getByTestId('workflow-state-dot')
 
+    expect(within(dot).getByText('ToDo')).toHaveClass('visuallyHidden')
+    expect(dot).not.toHaveAttribute('role')
     expect(dot.style.getPropertyValue('--workflow-state-color')).toBe('#3572b0')
     expect(dot.parentElement).toHaveAttribute('data-tooltip', 'ToDo')
   })

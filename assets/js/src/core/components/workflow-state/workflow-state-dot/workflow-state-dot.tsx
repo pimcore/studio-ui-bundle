@@ -40,12 +40,12 @@ export const WorkflowStateDot = ({ label, color, className }: WorkflowStateDotPr
   return (
     <Tooltip title={ label }>
       <span
-        aria-label={ label }
         className={ dotClassName }
         data-testid="workflow-state-dot"
-        role="img"
         style={ colorStyle }
-      />
+      >
+        <span className={ styles.visuallyHidden }>{label}</span>
+      </span>
     </Tooltip>
   )
 }
