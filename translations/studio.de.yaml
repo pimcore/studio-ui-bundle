@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Vollständiger Pfad
 asset.asset-editor-tabs.list.columns.creationDate: Erstellungsdatum
 asset.asset-editor-tabs.list.columns.modificationDate: Änderungsdatum
 asset.tree.context-menu.upload-new-version: Neue Version hochladen
+asset.upload-new-version.rename-confirmation.title: Asset wird umbenannt
+asset.upload-new-version.rename-confirmation.message: 'Die neue Datei ist vom Typ .{{extension}} — das Asset wird von "{{oldFilename}}" in "{{newFilename}}" umbenannt und seine öffentliche URL ändert sich. Fortfahren?'
+asset.upload-new-version.renamed: 'Das Asset wurde von "{{oldFilename}}" in "{{newFilename}}" umbenannt. Seine öffentliche URL hat sich geändert.'
 asset.copy-info: Kopieren & Info
 asset.upload: Hochladen
 asset.upload.label: Datei auswählen
@@ -3135,6 +3138,8 @@ service-users.field.name: Name
 service-users.field.name.fixed: Der Name kann nicht geändert werden, da der MCP-Serverzugriff über den Namen gewährt wird.
 service-users.field.name.invalid: Verwenden Sie bis zu 64 Buchstaben, Ziffern, Punkte, Bindestriche oder Unterstriche, beginnend mit einem Buchstaben oder einer Ziffer, zum Beispiel svc-erp-sync.
 service-users.field.email: Kontakt-E-Mail
+service-users.field.responsible-users: Verantwortliche Benutzer
+service-users.field.responsible-users.help: 'Sie verantworten diesen Service-Benutzer überall dort, wo ein Mensch gebraucht wird, zum Beispiel bei Hinweisen dazu.'
 service-users.field.source-user: Zu kopierender Benutzer
 service-users.filter.unused-days: Seit mehr als N Tagen ungenutzt
 service-users.status.inactive: Inaktiv
@@ -3184,3 +3189,19 @@ service-users.secret.client-secret: Client-Secret
 service-users.secret.warning: Kopieren Sie das Secret jetzt. Es wird nur einmal angezeigt und kann nicht erneut angezeigt werden.
 service-users.secret.copy: Secret kopieren
 service-users.secret.close: Schließen
+navigation.maintenance-mode: Wartungsmodus
+maintenance-mode.activate.title: Wartungsmodus aktivieren?
+maintenance-mode.activate.text: 'Alle Dienste, einschließlich der Website, werden in den Wartungsmodus versetzt. Nur diese Browser-Sitzung behält den Zugriff.'
+maintenance-mode.activate.lock-out: 'Wenn Sie sich abmelden, den Browser schließen oder Ihre Sitzung abläuft, werden auch Sie ausgesperrt.'
+maintenance-mode.activate.background-jobs: 'Hintergrund-Jobs und Message-Consumer starten nicht, solange der Wartungsmodus aktiv ist.'
+maintenance-mode.activate.ok: Aktivieren
+maintenance-mode.indicator.tooltip: 'Der Wartungsmodus ist aktiv. Klicken Sie, um ihn zu deaktivieren.'
+maintenance-mode.deactivate.title: Wartungsmodus deaktivieren?
+maintenance-mode.deactivate.text: 'Alle Sitzungen erhalten wieder Zugriff.'
+maintenance-mode.deactivate.ok: Deaktivieren
+maintenance-mode.logout.title: Wartungsmodus zuerst deaktivieren?
+maintenance-mode.logout.text: 'Der Wartungsmodus ist aktiv und nur diese Sitzung hat Zugriff. Nach dem Abmelden kann er nur noch über die Kommandozeile ausgeschaltet werden.'
+maintenance-mode.logout.deactivate-and-log-out: Deaktivieren und abmelden
+maintenance-mode.locked-out.title: Wartung
+maintenance-mode.locked-out.text: 'Das System befindet sich im Wartungsmodus oder ist vorübergehend nicht verfügbar. Ihre letzte Aktion wurde möglicherweise nicht gespeichert. Dieser Hinweis schließt sich automatisch, sobald das System wieder verfügbar ist.'
+maintenance-mode.locked-out.reload: Neu laden

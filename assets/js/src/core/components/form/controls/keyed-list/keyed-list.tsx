@@ -10,13 +10,14 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../../form'
-import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useMemo, useCallback, useRef } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
 import { cloneDeep, isArray, isEqual, isNil, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 import { pathsOverlap } from './utils/paths-overlap'
+import { useKeyedListState } from './hooks/use-keyed-list-state'
 
 export interface KeyedListProps {
   children: React.ReactNode
@@ -30,13 +31,13 @@ export interface KeyedListProps {
 
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps, onFieldRestore }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
-  const [value, setValue] = useState(cloneDeep(initialValue))
-  // Mirror of the current value, kept in sync during render so the (referentially
-  // stable) operations and the store can read the latest value without depending
-  // on it — that is what keeps the provider context from changing on every keystroke.
-  const valueRef = useRef(value)
-  valueRef.current = value
-  const listenersRef = useRef<Set<() => void>>(new Set())
+  const { value, valueRef, setValue, store } = useKeyedListState(initialValue)
+  // The value as of the last render, which is the schedule the registration bookkeeping
+  // below is written against: a registration is queued against the value it was made in
+  // and absorbed into the baseline once that value has been replaced by a committed one.
+  // Distinct from `valueRef`, which runs ahead of the commit (see useKeyedListState).
+  const committedValueRef = useRef(value)
+  committedValueRef.current = value
   // Parents (e.g. ClassificationStore) recreate these callbacks on every render.
   // Routing them through refs keeps `operations` and the provider context
   // referentially stable, so a re-render of the parent no longer re-renders every
@@ -158,7 +159,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
         ({ path }) => pathsOverlap(path, nameDifference)
       )
 
-      const committed = nameDifference.length === 0 ? valueRef.current : get(valueRef.current, nameDifference)
+      const committed = nameDifference.length === 0 ? committedValueRef.current : get(committedValueRef.current, nameDifference)
 
       if (!overlapsPending && isEqual(committed, newSubValue)) {
         // the value already carries this registration, so taking it into the baseline
@@ -169,7 +170,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
         setWith(newBaseline, nameDifference, cloneDeep(newSubValue), setAsObject)
         baselineValue.current = newBaseline
       } else {
-        pendingRegistrations.current.push({ path: nameDifference, value: newSubValue, queuedAgainst: valueRef.current })
+        pendingRegistrations.current.push({ path: nameDifference, value: newSubValue, queuedAgainst: committedValueRef.current })
       }
     }
 
@@ -252,24 +253,6 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     (field: NamePath): void => { onFieldRestoreRef.current?.(field) },
     []
   )
-
-  // Stable external store: subscribers (per-field via useKeyedListValue) read the
-  // current value through getSnapshot and are notified whenever it changes.
-  const store = useMemo(() => ({
-    subscribe: (listener: () => void): (() => void) => {
-      listenersRef.current.add(listener)
-      return () => {
-        listenersRef.current.delete(listener)
-      }
-    },
-    // must return a stable reference when nothing changed (useSyncExternalStore
-    // invariant); `value` is always an object, so valueRef.current is stable.
-    getSnapshot: () => valueRef.current
-  }), [])
-
-  useEffect(() => {
-    listenersRef.current.forEach((listener) => { listener() })
-  }, [value])
 
   return (
     <KeyedListProvider
