@@ -14,6 +14,7 @@ import type { TFunction } from 'i18next'
 import type { SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import type { DisplayManyToManyRelationValueItem } from '../../hooks/use-value'
 import type { RelationFilterColumn, VisibleFieldsMap } from '../types'
+import { buildVisibleFieldsLookup, findVisibleFieldsEntry } from '../../utils/visible-fields-key'
 
 /** Columns that carry actions or grid controls instead of data. */
 const NON_FILTERABLE_COLUMN_IDS = ['actions', 'selection', 'drag-handle']
@@ -148,11 +149,7 @@ export const buildVisibleFieldsMap = (visibleFieldsValue?: Array<Record<string, 
     return undefined
   }
 
-  return new Map(
-    visibleFieldsValue
-      .filter((field): field is Record<string, any> => !isUndefined(field) && !isNil(field?.id))
-      .map((field) => [field.id as number, field])
-  )
+  return buildVisibleFieldsLookup(visibleFieldsValue)
 }
 
 export const resolveRowValue = (
@@ -166,5 +163,5 @@ export const resolveRowValue = (
     return item[relationItemKey]
   }
 
-  return visibleFieldsMap?.get(item.id)?.[column.valueKey]
+  return findVisibleFieldsEntry(visibleFieldsMap, item)?.[column.valueKey]
 }

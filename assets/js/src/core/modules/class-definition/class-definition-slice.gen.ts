@@ -511,6 +511,17 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/class/object-brick/${queryArg.key}/usages` }),
                 providesTags: ["Class Definition"],
             }),
+            classGetAvailableVisibleFieldsForRelation: build.query<
+                ClassGetAvailableVisibleFieldsForRelationApiResponse,
+                ClassGetAvailableVisibleFieldsForRelationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/definition/available-visible-fields/relation`,
+                    method: "POST",
+                    body: queryArg.relationVisibleFieldsConfiguration,
+                }),
+                providesTags: ["Class Definition"],
+            }),
             classSelectOptionCreate: build.mutation<ClassSelectOptionCreateApiResponse, ClassSelectOptionCreateApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/class/select-option`,
@@ -981,6 +992,14 @@ export type ClassObjectBrickGetUsagesApiResponse = /** status 200 List of classe
 export type ClassObjectBrickGetUsagesApiArg = {
     /** Object brick unique key */
     key: string;
+};
+export type ClassGetAvailableVisibleFieldsForRelationApiResponse =
+    /** status 200 Successfully retrieved available visible fields for the relation */ {
+        totalItems: number;
+        items: RelationVisibleField[];
+    };
+export type ClassGetAvailableVisibleFieldsForRelationApiArg = {
+    relationVisibleFieldsConfiguration: RelationVisibleFieldsConfiguration;
 };
 export type ClassSelectOptionCreateApiResponse =
     /** status 200 Newly created select option configuration detail */ SelectOptionDetail;
@@ -1660,6 +1679,46 @@ export type ObjectBrickUsageData = {
     /** Name of the field in the class */
     field: string;
 };
+export type RelationVisibleField = {
+    /** Field name */
+    name: string;
+    /** Field title */
+    title: string;
+    /** Field type */
+    fieldtype: string;
+    /** Where the field comes from: "object" for every object, "object:<ClassName>" for the fields of a class, "asset" or "document" */
+    sources: string[];
+    /** Whether the field is a localized field of a class */
+    localized: boolean;
+    /** Type of the predefined asset metadata the field comes from */
+    metadataType?: string | null;
+    /** Language of the predefined asset metadata the field comes from */
+    language?: string | null;
+    /** Options of select fields */
+    options?: object[] | null;
+    /** Options provider class of select fields */
+    optionsProviderClass?: string | null;
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+};
+export type RelationVisibleFieldsConfiguration = {
+    /** Field type of the relation */
+    fieldtype?: "manyToManyRelation" | "advancedManyToManyRelation";
+    /** Whether objects are allowed */
+    objectsAllowed?: boolean;
+    /** Names of the allowed classes */
+    classes?: string[];
+    /** Whether assets are allowed */
+    assetsAllowed?: boolean;
+    /** Allowed asset types */
+    assetTypes?: string[];
+    /** Whether documents are allowed */
+    documentsAllowed?: boolean;
+    /** Allowed document types */
+    documentTypes?: string[];
+};
 export type SelectOptionData = {
     /** Value of the select option */
     value: string;
@@ -1811,6 +1870,7 @@ export const {
     useClassObjectBrickGetLayoutByKeyQuery,
     useClassObjectBrickGetTreeQuery,
     useClassObjectBrickGetUsagesQuery,
+    useClassGetAvailableVisibleFieldsForRelationQuery,
     useClassSelectOptionCreateMutation,
     useClassSelectOptionGetQuery,
     useClassSelectOptionUpdateMutation,

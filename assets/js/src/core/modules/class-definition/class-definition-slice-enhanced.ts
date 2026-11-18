@@ -409,6 +409,7 @@ export const {
   useClassCustomLayoutGetIdentifierDataQuery,
   useClassSelectOptionGetTreeQuery,
   useClassGetAvailableVisibleFieldsQuery,
+  useClassGetAvailableVisibleFieldsForRelationQuery,
   useClassGetSelectedVisibleFieldsQuery,
   useClassDefinitionGetBrickFieldsQuery,
   useClassDefinitionGetBricksUsagesQuery,

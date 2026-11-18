@@ -10,6 +10,7 @@
 
 import type { UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import type { DisplayManyToManyRelationValueItem } from '../hooks/use-value'
+import type { VisibleFieldsKey } from '../utils/visible-fields-key'
 
 /**
  * A single filterable column of the relation grid.
@@ -32,7 +33,7 @@ export interface RelationFilterColumn {
 
 export type RelationRowMatcher = (item: DisplayManyToManyRelationValueItem) => boolean
 
-export type VisibleFieldsMap = Map<number, Record<string, any>>
+export type VisibleFieldsMap = Map<VisibleFieldsKey, Record<string, any>>
 
 export interface RelationFilterContribution {
   kind: 'rowMatchers'

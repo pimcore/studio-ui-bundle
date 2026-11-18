@@ -16,8 +16,14 @@ import {
   type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
-  ManyToManyRelation, type ManyToManyRelationClassDefinitionProps
+  type ManyToManyRelationClassDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
+import {
+  ManyToManyRelationWithVisibleFields
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/relation-visible-fields/many-to-many-relation-with-visible-fields'
+import {
+  type RelationVisibleFieldsClassDefinitionProps
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/relation-visible-fields/hooks/use-relation-visible-fields'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
   convertAllowedTypes, type IRelationAllowedTypesClassDefinition
@@ -31,7 +37,7 @@ import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dyna
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
-export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
+export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps & RelationVisibleFieldsClassDefinitionProps
 
 export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'manyToManyRelation'
@@ -45,7 +51,7 @@ export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDa
 
   getObjectDataComponent (props: ManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <ManyToManyRelation
+      <ManyToManyRelationWithVisibleFields
         { ...props }
         { ...convertAllowedTypes(props) }
         className={ props.className }
