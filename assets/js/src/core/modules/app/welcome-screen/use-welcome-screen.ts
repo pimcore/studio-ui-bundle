@@ -15,14 +15,16 @@ import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { openMainWidget, selectWidgetManagerRestored } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
-import { findWelcomeScreenNavItem } from './welcome-screen-nav-items'
+import { findWelcomeScreenNavItem, getWelcomeScreenNavItems } from './welcome-screen-nav-items'
 import { isWelcomeScreenHandled, markWelcomeScreenHandled } from './welcome-screen-session'
+import { useWelcomeScreenHint } from './welcome-screen-hint'
 
 export const useWelcomeScreen = (): void => {
   const dispatch = useAppDispatch()
   const location = useLocation()
   const user = useUser()
   const { navItems } = useMainNav()
+  const showHint = useWelcomeScreenHint()
   // opened after the restore, so it becomes the active tab in front of the tabs of the previous session
   const isWidgetManagerRestored = useAppSelector(selectWidgetManagerRestored)
 
@@ -44,6 +46,12 @@ export const useWelcomeScreen = (): void => {
 
     if (!isNil(item?.widgetConfig)) {
       dispatch(openMainWidget(item.widgetConfig))
+      return
+    }
+
+    // a backend without the field cannot store a choice, so there is nothing to ask for
+    if (user.welcomeScreenDashboardId !== undefined) {
+      showHint({ hasDashboards: getWelcomeScreenNavItems(navItems).length > 0 })
     }
   }, [isWidgetManagerRestored])
 }

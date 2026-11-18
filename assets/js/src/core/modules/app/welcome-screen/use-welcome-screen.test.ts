@@ -37,6 +37,8 @@ jest.mock('@Pimcore/modules/widget-manager/widget-manager-slice', () => ({
 }))
 jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => mockUser }))
 jest.mock('@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav', () => ({ useMainNav: () => ({ navItems: mockNavItems }) }))
+const showHint = jest.fn()
+jest.mock('./welcome-screen-hint', () => ({ useWelcomeScreenHint: () => showHint }))
 
 const DASHBOARD_PATH = 'Reporting/Dashboards/Sales/Overview'
 const DASHBOARD_ID = '7'
@@ -71,6 +73,24 @@ const navTree = (): IMainNavItem[] => [{
   ]
 }]
 
+// the dashboards bundle is installed, but no dashboard of the user has a menu shortcut
+const navTreeWithoutDashboards = (): IMainNavItem[] => [{
+  path: 'Reporting',
+  children: [
+    {
+      path: 'Reporting/Dashboards',
+      children: [{
+        path: 'Reporting/Dashboards/Dashboards',
+        widgetConfig: { component: 'dashboard-container', id: 'dashboard-container', config: {} }
+      }]
+    },
+    {
+      path: 'Reporting/Reports',
+      widgetConfig: { component: 'reports', id: 'reports', config: {} }
+    }
+  ]
+}]
+
 const layoutWithTab = (): IJsonModel => {
   const model = Model.fromJson(getInitialModelJson())
   model.doAction(Actions.addNode({ type: 'tab', id: 'restored', component: 'element' }, 'main_tabset', DockLocation.CENTER, -1, true))
@@ -80,6 +100,7 @@ const layoutWithTab = (): IJsonModel => {
 describe('useWelcomeScreen', () => {
   beforeEach(() => {
     dispatch.mockClear()
+    showHint.mockClear()
     state.restored = true
     state.innerModel = getInitialModelJson()
     mockUser = { welcomeScreen: true, welcomeScreenDashboardId: DASHBOARD_ID }
@@ -93,6 +114,7 @@ describe('useWelcomeScreen', () => {
 
     expect(dispatch).toHaveBeenCalledTimes(1)
     expect(dispatch).toHaveBeenCalledWith({ type: 'openMainWidget', payload: dashboardWidget })
+    expect(showHint).not.toHaveBeenCalled()
   })
 
   it('waits until the previous layout is restored', () => {
@@ -128,11 +150,15 @@ describe('useWelcomeScreen', () => {
     expect(dispatch).toHaveBeenCalledTimes(2)
   })
 
-  it('opens nothing when the switch is off', () => {
-    mockUser = { welcomeScreen: false, welcomeScreenDashboardId: DASHBOARD_ID }
+  it.each([
+    ['a dashboard is chosen', DASHBOARD_ID],
+    ['nothing is chosen', null]
+  ])('opens nothing and shows no hint when the switch is off and %s', (_, welcomeScreenDashboardId) => {
+    mockUser = { welcomeScreen: false, welcomeScreenDashboardId }
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
+    expect(showHint).not.toHaveBeenCalled()
   })
 
   it('waits for the next login when the switch is turned on during the session', () => {
@@ -143,21 +169,52 @@ describe('useWelcomeScreen', () => {
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
+    expect(showHint).not.toHaveBeenCalled()
+  })
+
+  it('opens nothing and shows no hint when the backend does not return the field', () => {
+    mockUser = { welcomeScreen: true }
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(dispatch).not.toHaveBeenCalled()
+    expect(showHint).not.toHaveBeenCalled()
   })
 
   it.each([
     ['nothing is chosen', null],
     ['nothing is chosen in the form', ''],
-    ['the backend does not return the field', undefined],
     ['the dashboard is not in the navigation of the user', '99'],
     ['the entry is not a dashboard', 'reports'],
     ['the entry is the dashboards overview', 'dashboard-container'],
     ['a navigation path is stored instead of an ID', DASHBOARD_PATH]
-  ])('opens nothing when %s', (_, welcomeScreenDashboardId) => {
+  ])('opens nothing and asks the user to select a dashboard when %s', (_, welcomeScreenDashboardId) => {
     mockUser = { welcomeScreen: true, welcomeScreenDashboardId }
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
+    expect(showHint).toHaveBeenCalledTimes(1)
+    expect(showHint).toHaveBeenCalledWith({ hasDashboards: true })
+  })
+
+  it.each([
+    ['nothing is chosen', null],
+    ['a dashboard is chosen', DASHBOARD_ID]
+  ])('tells the user that no dashboard is available when the navigation has none and %s', (_, welcomeScreenDashboardId) => {
+    mockUser = { welcomeScreen: true, welcomeScreenDashboardId }
+    mockNavItems = navTreeWithoutDashboards()
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(dispatch).not.toHaveBeenCalled()
+    expect(showHint).toHaveBeenCalledTimes(1)
+    expect(showHint).toHaveBeenCalledWith({ hasDashboards: false })
+  })
+
+  it('shows the hint once per browser tab, not again after a reload', () => {
+    mockUser = { welcomeScreen: true, welcomeScreenDashboardId: null }
+    renderHook(() => { useWelcomeScreen() }).unmount()
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(showHint).toHaveBeenCalledTimes(1)
   })
 
   // the route state DeepLink and PasswordReset navigate to the root route with
@@ -169,6 +226,17 @@ describe('useWelcomeScreen', () => {
     renderHook(() => { useWelcomeScreen() })
 
     expect(dispatch).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ['an element link', { isDeeplink: true, id: '12', elementType: 'asset' }],
+    ['the reset-password link', { resetPassword: true }]
+  ])('shows no hint after a login through %s', (_, locationState) => {
+    mockLocationState = locationState
+    mockUser = { welcomeScreen: true, welcomeScreenDashboardId: null }
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(showHint).not.toHaveBeenCalled()
   })
 
   it('opens the chosen dashboard when the route state names no link', () => {
