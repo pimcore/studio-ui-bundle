@@ -11,42 +11,15 @@
 import React from 'react'
 import { Form } from 'antd'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { type IMainNavItem } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { WelcomeScreenDashboardSelect } from './welcome-screen-dashboard-select'
 
 const DASHBOARD_PATH = 'Reporting/Dashboards/Sales/Overview'
 const DASHBOARD_ID = '0196a7c2_1b2d_7c3e_9f40_5a6b7c8d9e0f'
 
-const mockNavItems: IMainNavItem[] = [{
-  path: 'Reporting',
-  children: [
-    {
-      path: 'Reporting/Dashboards',
-      children: [
-        {
-          path: 'Reporting/Dashboards/Dashboards',
-          label: 'navigation.dashboards-all',
-          widgetConfig: { component: 'dashboard-container', id: 'dashboard-container', config: {} }
-        },
-        {
-          path: 'Reporting/Dashboards/Sales',
-          children: [{
-            path: DASHBOARD_PATH,
-            label: 'Overview',
-            widgetConfig: { component: 'dashboard-single-container', id: DASHBOARD_ID, config: {} }
-          }]
-        }
-      ]
-    },
-    {
-      path: 'Reporting/Reports',
-      label: 'navigation.reports',
-      widgetConfig: { component: 'reports', id: 'reports', config: {} }
-    }
-  ]
-}]
-
-jest.mock('@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav', () => ({ useMainNav: () => ({ navItems: mockNavItems }) }))
+jest.mock('@Pimcore/app/depency-injection', () => ({
+  container: { get: () => ({ getOptions: () => [{ id: '0196a7c2_1b2d_7c3e_9f40_5a6b7c8d9e0f', label: 'Overview' }] }) }
+}))
+jest.mock('@Pimcore/app/config/services/service-ids', () => ({ serviceIds: { 'WelcomeScreen/Registry': 'WelcomeScreen/Registry' } }))
 jest.mock('@Pimcore/components/form/form', () => {
   const { Form } = jest.requireActual('antd')
   // the real Conditional imports this mocked module, so it can only be loaded once the mock exists
@@ -108,7 +81,7 @@ const renderSelect = (welcomeScreenDashboardId: string | null, onValuesChange = 
 }
 
 describe('WelcomeScreenDashboardSelect', () => {
-  it('offers only the dashboard entries of the main navigation, without a None option', () => {
+  it('offers the options of the welcome screen registry, without a None option', () => {
     const select = renderSelect(null)
 
     expect(Array.from(select.options).map((option) => [option.value, option.text])).toEqual([
@@ -127,7 +100,7 @@ describe('WelcomeScreenDashboardSelect', () => {
     expect(renderSelect(welcomeScreenDashboardId).dataset.hasValue).toBe('false')
   })
 
-  it('shows the placeholder for a stored dashboard that is not in the user\'s menu, not its path', () => {
+  it('shows the placeholder for a stored dashboard the user can no longer open, not its ID', () => {
     expect(renderSelect('0196a7c2_0000_7000_8000_000000000000').dataset.hasValue).toBe('false')
   })
 

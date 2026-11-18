@@ -9,22 +9,18 @@
  */
 
 import React from 'react'
-import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
-import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
-import { getWelcomeScreenDashboardId, getWelcomeScreenNavItems } from '@Pimcore/modules/app/welcome-screen/welcome-screen-nav-items'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type WelcomeScreenRegistry } from '@Pimcore/modules/app/welcome-screen/services/welcome-screen-registry'
 
 export const WelcomeScreenDashboardSelect = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { navItems } = useMainNav()
+  const registry = container.get<WelcomeScreenRegistry>(serviceIds['WelcomeScreen/Registry'])
 
-  const options = getWelcomeScreenNavItems(navItems).flatMap((item) => {
-    const dashboardId = getWelcomeScreenDashboardId(item)
-
-    return isNil(dashboardId) ? [] : [{ value: dashboardId, label: t(`${item.label ?? item.path}`) }]
-  })
+  const options = registry.getOptions().map((option) => ({ value: option.id, label: t(option.label) }))
 
   // Hidden while the switch is off; the form keeps the value, so switching on again shows the same choice
   // No visible label: the switch above names the setting
@@ -34,7 +30,7 @@ export const WelcomeScreenDashboardSelect = (): React.JSX.Element => {
       watchFields={ ['welcomeScreen'] }
     >
       <Form.Item
-        // antd shows the placeholder only for undefined: no choice ('' or null) or a dashboard no longer in the user's menu
+        // antd shows the placeholder only for undefined: no choice ('' or null) or a dashboard the user can no longer open
         getValueProps={ (value?: string | null) => ({ value: options.some((option) => option.value === value) ? value : undefined }) }
         name="welcomeScreenDashboardId"
       >

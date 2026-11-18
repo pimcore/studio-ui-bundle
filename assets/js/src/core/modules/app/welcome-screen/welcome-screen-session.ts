@@ -8,20 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-// Per browser tab, so a reload does not open the welcome screen again; a logout resets it for the next login
+// Per browser tab and user, so a reload does not open the welcome screen again, while a login as another user
+// in the same tab does; a logout resets it for the next login
 const HANDLED_KEY = 'pimcore-studio-welcome-screen-handled'
 
-export const isWelcomeScreenHandled = (): boolean => {
+export const isWelcomeScreenHandled = (userId: number): boolean => {
   try {
-    return sessionStorage.getItem(HANDLED_KEY) !== null
+    return sessionStorage.getItem(HANDLED_KEY) === String(userId)
   } catch {
     return false
   }
 }
 
-export const markWelcomeScreenHandled = (): void => {
+export const markWelcomeScreenHandled = (userId: number): void => {
   try {
-    sessionStorage.setItem(HANDLED_KEY, '1')
+    sessionStorage.setItem(HANDLED_KEY, String(userId))
   } catch {
     // without session storage the welcome screen opens again on a reload
   }

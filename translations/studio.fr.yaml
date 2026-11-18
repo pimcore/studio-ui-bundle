@@ -1649,12 +1649,12 @@ user-management.email: E-mail
 user-management.language: Langue
 user-management.dateTime: Locale de date et heure
 user-management.welcomeScreen: Afficher un tableau de bord comme écran d'accueil
-user-management.welcomeScreen.help: L'utilisateur sélectionne le tableau de bord dans son profil, parmi les tableaux de bord de son menu.
+user-management.welcomeScreen.help: L'utilisateur sélectionne le tableau de bord dans son profil.
 user-management.welcomeScreenDashboard: Tableau de bord de l'écran d'accueil
 user-management.welcomeScreenDashboard.placeholder: Sélectionner un tableau de bord
 welcome-screen.hint.title: Écran d'accueil
 welcome-screen.hint.select-dashboard: Sélectionnez un tableau de bord pour votre écran d'accueil dans votre profil.
-welcome-screen.hint.no-dashboard: Aucun tableau de bord de votre menu ne peut être affiché comme écran d'accueil.
+welcome-screen.hint.no-dashboard: Aucun tableau de bord n'est disponible pour être affiché comme écran d'accueil.
 welcome-screen.hint.open-profile: Ouvrir le profil
 user-management.memorizeTabs: Mémoriser les onglets ouverts
 user-management.allowDirtyClose: Désactiver l'avertissement de contenu non enregistré

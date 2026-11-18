@@ -416,6 +416,9 @@ export const serviceIds = {
   // AppLoader Registry
   'AppLoader/Registry': 'AppLoader/Registry',
 
+  // Welcome Screen Registry
+  'WelcomeScreen/Registry': 'WelcomeScreen/Registry',
+
   // Field Definitions
   'DynamicTypes/FieldDefinition/Block': 'DynamicTypes/FieldDefinition/Block',
   'DynamicTypes/FieldDefinition/Input': 'DynamicTypes/FieldDefinition/Input',

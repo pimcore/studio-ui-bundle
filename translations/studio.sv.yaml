@@ -1649,12 +1649,12 @@ user-management.email: E-post
 user-management.language: Språk
 user-management.dateTime: Datum- och tidslokal
 user-management.welcomeScreen: Visa en instrumentpanel som välkomstskärm
-user-management.welcomeScreen.help: Användaren väljer instrumentpanelen i sin profil, bland instrumentpanelerna i sin meny.
+user-management.welcomeScreen.help: Användaren väljer instrumentpanelen i sin profil.
 user-management.welcomeScreenDashboard: Instrumentpanel för välkomstskärmen
 user-management.welcomeScreenDashboard.placeholder: Välj en instrumentpanel
 welcome-screen.hint.title: Välkomstskärm
 welcome-screen.hint.select-dashboard: Välj en instrumentpanel för din välkomstskärm i din profil.
-welcome-screen.hint.no-dashboard: Det finns ingen instrumentpanel i din meny som kan visas som välkomstskärm.
+welcome-screen.hint.no-dashboard: Det finns ingen instrumentpanel som kan visas som välkomstskärm.
 welcome-screen.hint.open-profile: Öppna profil
 user-management.memorizeTabs: Kom ihåg öppna flikar
 user-management.allowDirtyClose: Inaktivera varning för osparat innehåll

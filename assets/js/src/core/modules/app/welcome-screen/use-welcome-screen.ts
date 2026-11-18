@@ -11,29 +11,28 @@
 import { useEffect } from 'react'
 import { isNil } from 'lodash'
 import { useLocation } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '@sdk/app'
-import { openMainWidget, selectWidgetManagerRestored } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { useAppSelector } from '@sdk/app'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { selectWidgetManagerRestored } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { useMainNav } from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
-import { findWelcomeScreenNavItem, getWelcomeScreenNavItems } from './welcome-screen-nav-items'
+import { type WelcomeScreenRegistry } from './services/welcome-screen-registry'
 import { isWelcomeScreenHandled, markWelcomeScreenHandled } from './welcome-screen-session'
 import { useWelcomeScreenHint } from './welcome-screen-hint'
 
 export const useWelcomeScreen = (): void => {
-  const dispatch = useAppDispatch()
   const location = useLocation()
   const user = useUser()
-  const { navItems } = useMainNav()
   const showHint = useWelcomeScreenHint()
   // opened after the restore, so it becomes the active tab in front of the tabs of the previous session
   const isWidgetManagerRestored = useAppSelector(selectWidgetManagerRestored)
 
   useEffect(() => {
-    if (!isWidgetManagerRestored || isWelcomeScreenHandled()) {
+    if (!isWidgetManagerRestored || isWelcomeScreenHandled(user.id)) {
       return
     }
 
-    markWelcomeScreenHandled()
+    markWelcomeScreenHandled(user.id)
 
     // useHandleDeepLink opens the target of an element or reset-password link instead
     const isLinkLogin = location?.state?.isDeeplink === true || location?.state?.resetPassword === true
@@ -42,16 +41,16 @@ export const useWelcomeScreen = (): void => {
       return
     }
 
-    const item = findWelcomeScreenNavItem(navItems, user.welcomeScreenDashboardId)
+    const registry = container.get<WelcomeScreenRegistry>(serviceIds['WelcomeScreen/Registry'])
+    const dashboardId = user.welcomeScreenDashboardId
 
-    if (!isNil(item?.widgetConfig)) {
-      dispatch(openMainWidget(item.widgetConfig))
+    if (!isNil(dashboardId) && dashboardId !== '' && registry.open(dashboardId)) {
       return
     }
 
     // a backend without the field cannot store a choice, so there is nothing to ask for
-    if (user.welcomeScreenDashboardId !== undefined) {
-      showHint({ hasDashboards: getWelcomeScreenNavItems(navItems).length > 0 })
+    if (dashboardId !== undefined) {
+      showHint({ hasDashboards: registry.getOptions().length > 0 })
     }
   }, [isWidgetManagerRestored])
 }

@@ -35,22 +35,22 @@ describe('logoutUserMenuItemProvider', () => {
 
   it('lets the welcome screen open again on the next login', async () => {
     mockLogout.mockResolvedValue({})
-    markWelcomeScreenHandled()
+    markWelcomeScreenHandled(7)
 
     clickLogout()
 
     await waitFor(() => { expect(reload).toHaveBeenCalled() })
-    expect(isWelcomeScreenHandled()).toBe(false)
+    expect(isWelcomeScreenHandled(7)).toBe(false)
   })
 
   it('keeps the welcome screen handled when the logout fails', async () => {
     mockLogout.mockRejectedValue(new Error('offline'))
-    markWelcomeScreenHandled()
+    markWelcomeScreenHandled(7)
 
     clickLogout()
 
     await waitFor(() => { expect(mockLogout).toHaveBeenCalled() })
     expect(reload).not.toHaveBeenCalled()
-    expect(isWelcomeScreenHandled()).toBe(true)
+    expect(isWelcomeScreenHandled(7)).toBe(true)
   })
 })

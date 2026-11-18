@@ -1649,12 +1649,12 @@ user-management.email: Correo electrónico
 user-management.language: Idioma
 user-management.dateTime: Configuración regional de fecha y hora
 user-management.welcomeScreen: Mostrar un panel como pantalla de bienvenida
-user-management.welcomeScreen.help: El usuario selecciona el panel en su perfil, entre los paneles de su menú.
+user-management.welcomeScreen.help: El usuario selecciona el panel en su perfil.
 user-management.welcomeScreenDashboard: Panel de la pantalla de bienvenida
 user-management.welcomeScreenDashboard.placeholder: Seleccionar un panel
 welcome-screen.hint.title: Pantalla de bienvenida
 welcome-screen.hint.select-dashboard: Seleccione un panel para su pantalla de bienvenida en su perfil.
-welcome-screen.hint.no-dashboard: No hay ningún panel en su menú que se pueda mostrar como pantalla de bienvenida.
+welcome-screen.hint.no-dashboard: No hay ningún panel disponible para mostrar como pantalla de bienvenida.
 welcome-screen.hint.open-profile: Abrir perfil
 user-management.memorizeTabs: Recordar pestañas abiertas
 user-management.allowDirtyClose: Desactivar advertencia de contenido sin guardar

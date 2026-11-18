@@ -1649,12 +1649,12 @@ user-management.email: E-mail
 user-management.language: Język
 user-management.dateTime: Ustawienia regionalne daty i godziny
 user-management.welcomeScreen: Pokaż dashboard jako ekran powitalny
-user-management.welcomeScreen.help: Użytkownik wybiera dashboard we własnym profilu spośród dashboardów w swoim menu.
+user-management.welcomeScreen.help: Użytkownik wybiera dashboard we własnym profilu.
 user-management.welcomeScreenDashboard: Dashboard ekranu powitalnego
 user-management.welcomeScreenDashboard.placeholder: Wybierz dashboard
 welcome-screen.hint.title: Ekran powitalny
 welcome-screen.hint.select-dashboard: Wybierz dashboard dla ekranu powitalnego w swoim profilu.
-welcome-screen.hint.no-dashboard: W menu nie ma dashboardu, który można wyświetlić jako ekran powitalny.
+welcome-screen.hint.no-dashboard: Brak dashboardu, który można wyświetlić jako ekran powitalny.
 welcome-screen.hint.open-profile: Otwórz profil
 user-management.memorizeTabs: Zapamiętaj otwarte karty
 user-management.allowDirtyClose: Wyłącz ostrzeżenie o niezapisanej treści
