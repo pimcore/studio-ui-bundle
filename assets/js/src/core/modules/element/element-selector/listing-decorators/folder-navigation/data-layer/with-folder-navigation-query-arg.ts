@@ -13,6 +13,7 @@ import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/de
 import { pqlFilterType } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
 import { useFolderNavigation } from '../context-layer/provider/folder-navigation/use-folder-navigation'
 import { elementRootId } from '../context-layer/provider/folder-navigation/folder-navigation-provider'
+import { escapePqlLikeValue } from './escape-pql-like-value'
 
 /**
  * The search endpoints behind the element selector (asset/document/data-object pickers)
@@ -37,10 +38,14 @@ export const withFolderNavigationQueryArg = (useBaseHook: AbstractDecoratorProps
       const existingPqlFilter = currentColumnFilters.find((filter: { type: string }) => filter.type === pqlFilterType)
       const otherColumnFilters = currentColumnFilters.filter((filter: { type: string }) => filter.type !== pqlFilterType)
 
-      // PQL has no documented escape sequence for quotes or its own "*"/"?" wildcards, so a
-      // folder name containing them is a known limitation here, same as typing it into the
-      // PQL box directly would be.
-      const folderCondition = `fullPath LIKE "${folderPath}/*"`
+      // A folder name can contain a quote or a wildcard metacharacter, so it has to be escaped
+      // before it's interpolated into the PQL string - otherwise it could break out of the
+      // literal or widen the match to assets outside the selected folder.
+      const escapedPath = escapePqlLikeValue(folderPath)
+      const includeDescendants = baseArgs.body.filters?.includeDescendants ?? true
+      const folderCondition = includeDescendants
+        ? `fullPath LIKE "${escapedPath}/*"`
+        : `(fullPath LIKE "${escapedPath}/*") AND (fullPath NOT LIKE "${escapedPath}/*/*")`
       const pqlQuery = existingPqlFilter?.filterValue
         ? `(${existingPqlFilter.filterValue}) AND (${folderCondition})`
         : folderCondition

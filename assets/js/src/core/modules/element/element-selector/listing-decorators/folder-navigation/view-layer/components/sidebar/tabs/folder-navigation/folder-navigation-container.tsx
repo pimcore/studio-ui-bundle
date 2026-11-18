@@ -55,7 +55,7 @@ export const FolderNavigationContainer = ({ elementType }: FolderNavigationConta
       <TreeWidget
         contextPermissions={ {} }
         elementType={ elementType }
-        id="element-selector-folder-navigation"
+        id={ `element-selector-folder-navigation-${elementType}` }
         onSelect={ onSelect }
         showRoot
       />

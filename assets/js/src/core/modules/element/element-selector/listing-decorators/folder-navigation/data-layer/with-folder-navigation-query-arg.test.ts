@@ -112,4 +112,49 @@ describe('withFolderNavigationQueryArg', () => {
       { type: 'system.pql', filterValue: 'fullPath LIKE "/Brand Logos/*"' }
     ])
   })
+
+  it('escapes a quote in the folder path so it cannot break out of the PQL literal', () => {
+    folderId = 287
+    folderPath = '/Cars"'
+
+    const args = renderGetArgs()
+
+    expect(args.body.filters.columnFilters).toEqual([
+      { type: 'system.pql', filterValue: 'fullPath LIKE "/Cars""/*"' }
+    ])
+  })
+
+  it('escapes a wildcard character in the folder path so it is not treated as a wildcard', () => {
+    folderId = 287
+    folderPath = '/A*B'
+
+    const args = renderGetArgs()
+
+    expect(args.body.filters.columnFilters).toEqual([
+      { type: 'system.pql', filterValue: 'fullPath LIKE "/A\\*B/*"' }
+    ])
+  })
+
+  it('restricts to direct children only when "include descendants" is off', () => {
+    folderId = 287
+    folderPath = '/Brand Logos'
+
+    const useBaseHook = (): any => ({
+      getArgs: () => ({
+        body: {
+          columns: [],
+          filters: { page: 1, pageSize: 50, includeDescendants: false }
+        }
+      }),
+      hasRequiredArgs: () => true,
+      dataLoadingState: 'initial',
+      setDataLoadingState: jest.fn()
+    })
+    const { result } = renderHook(() => withFolderNavigationQueryArg(useBaseHook)())
+    const args = result.current.getArgs()
+
+    expect(args.body.filters.columnFilters).toEqual([
+      { type: 'system.pql', filterValue: '(fullPath LIKE "/Brand Logos/*") AND (fullPath NOT LIKE "/Brand Logos/*/*")' }
+    ])
+  })
 })
