@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 /**
  * The add-key picker offers the enabled keys of the store only: it never asks for the disabled
  * ones, so a deleted key cannot be assigned to a group from the Deleted view's existence.
@@ -85,6 +87,7 @@ const PAGE_SIZE = 20
 const KEY_COUNT = 25
 const COLLECTION_URL = `/pimcore-studio/api/classification-store/configuration/stores/${STORE_ID}/keys`
 const CREATE_URL = '/pimcore-studio/api/classification-store/configuration/key-group-relations/add'
+const DELETE_URL = '/pimcore-studio/api/classification-store/configuration/key-group-relations'
 
 interface CollectionBody {
   filters?: { page?: number, pageSize?: number }
@@ -154,6 +157,14 @@ describe('KeySelectionDialog', () => {
         })
       }
 
+      if (input.method === 'DELETE' && input.url.endsWith(DELETE_URL)) {
+        const relation = JSON.parse(await input.clone().text()) as { keyId: number, groupId: number }
+        // The server's state loses the relation, so the next read offers that key again.
+        assigned.delete(relation.keyId)
+
+        return json({})
+      }
+
       throw new Error(`unexpected request to ${input.url}`)
     }) as unknown as typeof fetch
   })
@@ -197,6 +208,18 @@ describe('KeySelectionDialog', () => {
         classificationStoreConfigurationKeyGroupRelationCreate: { keyId, groupId: GROUP_ID }
       }) as any
     )))
+  }
+
+  const removeKeyFromGroup = async (
+    store: ReturnType<typeof configureStore>,
+    keyId: number
+  ): Promise<void> => {
+    // What the relations grid runs when a row is unassigned from the group.
+    await store.dispatch(
+      api.endpoints.classificationStoreConfigurationKeyGroupRelationDelete.initiate({
+        classificationStoreConfigurationKeyGroupRelationDelete: { keyId, groupId: GROUP_ID }
+      }) as any
+    )
   }
 
   it('sends no disabled-keys parameter', async () => {
@@ -255,6 +278,26 @@ describe('KeySelectionDialog', () => {
     await waitFor(() => { expect(screen.getByText('key-21')).toBeInTheDocument() })
     expect(screen.queryByText('key-1')).not.toBeInTheDocument()
     expect(pager()).toBe('1/1')
+  })
+
+  it('offers a key again, and counts it again, once it is unassigned from the group', async () => {
+    assigned = new Set([1, 2, 3, 4, 5])
+    const store = createStore()
+    renderDialog(store)
+
+    // 20 of the 25 keys are available, which is one full page: key-1 is the group's and absent.
+    await waitFor(() => { expect(screen.getByText('key-6')).toBeInTheDocument() })
+    expect(screen.getByText('key-25')).toBeInTheDocument()
+    expect(screen.queryByText('key-1')).not.toBeInTheDocument()
+    expect(pager()).toBe('1/1')
+
+    await removeKeyFromGroup(store, 1)
+
+    // The picker re-reads, so key-1 heads the page again and the 21st key spills onto a second one.
+    await waitFor(() => { expect(screen.getByText('key-1')).toBeInTheDocument() })
+    expect(pager()).toBe('1/2')
+    expect(screen.queryByText('key-25')).not.toBeInTheDocument()
+    expect(lastBody().excludeKeysOfGroupId).toBe(GROUP_ID)
   })
 
   it('does not stay on a page past the end when that page is the one consumed', async () => {
