@@ -59,6 +59,44 @@ In this example, `customToolbarButton` is added to the `asset.editor.toolbar.slo
 with a priority of 50. This slot holds toolbar buttons on the **left side** of the asset editor toolbar.
 Components with lower priority values are rendered first.
 
+## Replacing data object save buttons
+
+Replace the `saveButtons` entry in `componentConfig.dataObject.editor.toolbar.slots.right.name`
+with `overrideSlotComponent`. Custom save buttons can reuse the native editor save pipeline:
+
+```tsx
+import React from 'react'
+import { useTranslation } from '@pimcore/studio-ui-bundle/app'
+import { Button } from '@pimcore/studio-ui-bundle/components'
+import { SaveTaskType, useDataObjectEditorSave } from '@pimcore/studio-ui-bundle/modules/data-object'
+
+const CustomSaveButton = (): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { save, isLoading } = useDataObjectEditorSave()
+
+  return (
+    <Button disabled={isLoading} onClick={() => { void save(SaveTaskType.Save) }}>
+      {t('toolbar.save')}
+    </Button>
+  )
+}
+```
+
+The hook reads current modified form fields from the editor, delegates object data and properties
+to `useSave`, saves schedules, and retains the native success/error handling. It must run inside
+the data object editor's existing providers. Callers choose the action and check the element's
+permissions before offering it; backend permission checks still apply.
+
+`SaveTaskType.Save` saves the current object without explicitly changing its publication flag.
+`SaveTaskType.Publish` publishes it, and `SaveTaskType.Version` stores a draft version.
+The optional `onFinish` callback runs after successful object persistence, including when the
+operation was queued behind an auto-save; it does not signal successful schedule persistence.
+The hook also exposes `runningTask`, `isAutoSaveLoading` and `savedTask` for toolbar indicators.
+`savedTask` briefly identifies a successful action once both data and schedules have been saved,
+then resets to `null`. The editor's workflow coordinator uses the same save flow for transitions
+configured to save unsaved changes.
+The existing `UnpublishedLabel` is exported from `modules/element` for custom toolbars.
+
 ## Configuration
 
 The Component Registry uses a configuration object to define the structure and types of components.
