@@ -27,7 +27,7 @@ export interface UseWorkflowSaveProps {
    * The task the save buttons would use, or undefined when the user cannot save the changes into
    * the object right now (no permission, another save of theirs still running).
    */
-  getTask: () => SaveTaskType.Publish | SaveTaskType.Save | undefined
+  getTask: () => SaveTaskType.Version | SaveTaskType.Save | undefined
   /**
    * Starts the save buttons' own save (data + properties + schedules). `onDataSaved` follows the data
    * save; the returned promise resolves with the outcome of the schedules save.
@@ -36,13 +36,20 @@ export interface UseWorkflowSaveProps {
 }
 
 /**
- * The task of the primary save button for a workflow save, or undefined when the user cannot save the
- * changes into the object right now (no changes, no publish permission, another save of theirs running).
+ * The task for saving unsaved changes before a workflow transition, or undefined when the user cannot
+ * save the changes into the object right now (no changes, no save permission, another save of theirs
+ * running).
+ *
+ * Saving before a transition never publishes, as in the classic admin UI: a published object is saved
+ * as a draft (the save buttons' "Save draft"), so the transition decides what happens to the changes —
+ * e.g. a `save_version` transition sends the draft for review instead of the changes going live first.
+ * An unpublished object and a folder are saved as they are. Both tasks need the save permission (the
+ * backend checks it for every task but publish and unpublish).
  */
 export const getWorkflowSaveTask = (
-  dataObject: { changes?: unknown, published?: boolean, permissions?: ElementPermissions } | undefined,
+  dataObject: { type?: string, changes?: unknown, published?: boolean, permissions?: ElementPermissions } | undefined,
   runningTask: SaveTaskType | undefined
-): SaveTaskType.Publish | SaveTaskType.Save | undefined => {
+): SaveTaskType.Version | SaveTaskType.Save | undefined => {
   if (dataObject?.changes === undefined) {
     return undefined
   }
@@ -51,11 +58,15 @@ export const getWorkflowSaveTask = (
     return undefined
   }
 
-  if (dataObject.published !== true) {
+  if (!checkElementPermission(dataObject.permissions, 'save')) {
+    return undefined
+  }
+
+  if (dataObject.type === 'folder' || dataObject.published !== true) {
     return SaveTaskType.Save
   }
 
-  return checkElementPermission(dataObject.permissions, 'publish') ? SaveTaskType.Publish : undefined
+  return SaveTaskType.Version
 }
 
 interface PendingSave {

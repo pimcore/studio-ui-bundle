@@ -9,7 +9,8 @@
  */
 
 import { act, renderHook } from '@testing-library/react'
-import { useWorkflowSave, type UseWorkflowSaveProps } from './use-workflow-save'
+import { getWorkflowSaveTask, useWorkflowSave, type UseWorkflowSaveProps } from './use-workflow-save'
+import { type ElementPermissions } from '@Pimcore/modules/element/permissions/permission-helper'
 import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import {
   type UnsavedChangesSaver,
@@ -39,7 +40,7 @@ let resolveSchedules: Array<(saved: boolean) => void> = []
 
 const render = (props: Partial<UseWorkflowSaveProps> = {}): { rerender: () => void } => {
   const base: UseWorkflowSaveProps = {
-    getTask: () => SaveTaskType.Publish,
+    getTask: () => SaveTaskType.Version,
     startSave,
     ...props
   }
@@ -84,7 +85,7 @@ describe('useWorkflowSave', () => {
     let result: Promise<boolean> | undefined
     act(() => { result = registeredSaver!() })
 
-    expect(startSave).toHaveBeenCalledWith(SaveTaskType.Publish, expect.any(Function))
+    expect(startSave).toHaveBeenCalledWith(SaveTaskType.Version, expect.any(Function))
 
     // Schedules saved, data still running: not done yet.
     await reportSchedules(true)
@@ -113,7 +114,7 @@ describe('useWorkflowSave', () => {
     act(() => { result = registeredSaver!() })
     await reportSchedules(true)
 
-    saveContext.runningTask = SaveTaskType.Publish
+    saveContext.runningTask = SaveTaskType.Version
     rerender()
     saveContext.runningTask = undefined
     rerender()
@@ -132,10 +133,10 @@ describe('useWorkflowSave', () => {
     let result: Promise<boolean> | undefined
     act(() => { result = registeredSaver!() })
 
-    saveContext.queuedTask = { task: SaveTaskType.Publish, editableData: {} }
+    saveContext.queuedTask = { task: SaveTaskType.Version, editableData: {} }
     rerender()
     saveContext.queuedTask = undefined
-    saveContext.runningTask = SaveTaskType.Publish
+    saveContext.runningTask = SaveTaskType.Version
     rerender()
     saveContext.runningTask = undefined
     rerender()
@@ -149,7 +150,7 @@ describe('useWorkflowSave', () => {
     let result: Promise<boolean> | undefined
     act(() => { result = registeredSaver!() })
 
-    saveContext.runningTask = SaveTaskType.Publish
+    saveContext.runningTask = SaveTaskType.Version
     rerender()
     reportDataSaved()
     saveContext.runningTask = undefined
@@ -207,5 +208,63 @@ describe('useWorkflowSave', () => {
 
     await expect(registeredSaver!()).resolves.toBe(false)
     expect(startSave).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('getWorkflowSaveTask', () => {
+  const permissions = (granted: { save?: boolean, publish?: boolean }): ElementPermissions =>
+    ({ save: granted.save === true, publish: granted.publish === true }) as unknown as ElementPermissions
+
+  const dataObject = (
+    published: boolean,
+    granted: { save?: boolean, publish?: boolean },
+    type = 'object'
+  ): { type: string, changes: Record<string, boolean>, published: boolean, permissions: ElementPermissions } => ({
+    type,
+    changes: { name: true },
+    published,
+    permissions: permissions(granted)
+  })
+
+  // The classic admin UI saves a published object as a version before a transition; it never publishes.
+  it.each([
+    ['save and publish', { save: true, publish: true }],
+    ['save only', { save: true }]
+  ])('saves a draft of a published object (%s permission)', (_label, granted) => {
+    expect(getWorkflowSaveTask(dataObject(true, granted), undefined)).toBe(SaveTaskType.Version)
+  })
+
+  it.each([
+    ['save and publish', { save: true, publish: true }],
+    ['save only', { save: true }]
+  ])('saves an unpublished object as it is (%s permission)', (_label, granted) => {
+    expect(getWorkflowSaveTask(dataObject(false, granted), undefined)).toBe(SaveTaskType.Save)
+  })
+
+  it('saves a folder as it is', () => {
+    expect(getWorkflowSaveTask(dataObject(true, { save: true }, 'folder'), undefined)).toBe(SaveTaskType.Save)
+  })
+
+  // The backend checks the save permission for both the version and the save task.
+  it.each([
+    ['published, publish only', true, { publish: true }],
+    ['unpublished, publish only', false, { publish: true }],
+    ['published, no permission', true, {}],
+    ['unpublished, no permission', false, {}]
+  ])('cannot save without the save permission (%s)', (_label, published, granted) => {
+    expect(getWorkflowSaveTask(dataObject(published, granted), undefined)).toBeUndefined()
+  })
+
+  it('cannot save without changes', () => {
+    expect(getWorkflowSaveTask({ published: true, permissions: permissions({ save: true }) }, undefined)).toBeUndefined()
+    expect(getWorkflowSaveTask(undefined, undefined)).toBeUndefined()
+  })
+
+  it('does not queue behind a running save of the user, only behind an auto save', () => {
+    const object = dataObject(true, { save: true })
+
+    expect(getWorkflowSaveTask(object, SaveTaskType.Version)).toBeUndefined()
+    expect(getWorkflowSaveTask(object, SaveTaskType.Publish)).toBeUndefined()
+    expect(getWorkflowSaveTask(object, SaveTaskType.AutoSave)).toBe(SaveTaskType.Version)
   })
 })

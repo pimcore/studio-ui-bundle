@@ -109,8 +109,8 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     void saveDataAndSchedules(task, onFinish)
   }
 
-  // A transition with unsavedChangesBehaviour "save" saves through this same flow, using the
-  // task of the primary button. A user's own save that is still running is not queued behind.
+  // A transition with unsavedChangesBehaviour "save" saves through this same flow, as a draft for a
+  // published object (never publishing). A user's own save that is still running is not queued behind.
   useWorkflowSave({
     getTask: () => getWorkflowSaveTask(dataObject, runningTaskRef?.current),
     startSave: saveDataAndSchedules
