@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Fullständig sökväg
 asset.asset-editor-tabs.list.columns.creationDate: Skapandedatum
 asset.asset-editor-tabs.list.columns.modificationDate: Ändringsdatum
 asset.tree.context-menu.upload-new-version: Ladda upp ny version
+asset.upload-new-version.rename-confirmation.title: Asseten byter namn
+asset.upload-new-version.rename-confirmation.message: 'Den nya filen är av typen .{{extension}} — asseten byter namn från "{{oldFilename}}" till "{{newFilename}}" och dess offentliga URL ändras. Vill du fortsätta?'
+asset.upload-new-version.renamed: 'Asseten har bytt namn från "{{oldFilename}}" till "{{newFilename}}". Dess offentliga URL har ändrats.'
 asset.copy-info: Kopiera & Info
 asset.upload: Ladda upp
 asset.upload.label: Välj fil
@@ -389,6 +392,10 @@ grid.filter.less: Mindre än
 grid.filter.more: Mer än
 grid.filter.string.placeholder: Sök eller klistra in en lista med ett värde per rad för att matcha någon av dem exakt
 grid.filter.column: 'Filtrera {{column}}'
+grid.filter.operator.label: Villkor
+grid.filter.operator.value: Motsvarar värde
+grid.filter.operator.empty: Är tom
+grid.filter.operator.not-empty: Är inte tom
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -2515,6 +2522,8 @@ recycle-bin.actions.delete: Ta bort
 recycle-bin.actions.delete.title: Tar bort papperskorgens objekt
 recycle-bin.actions.restore: Återställ
 recycle-bin.actions.restore.title: Återställer papperskorgens objekt
+recycle-bin.actions.restore.relocated_one: Element placerat i __restored. Nu gäller rättigheterna för den mappen.
+recycle-bin.actions.restore.relocated_other: "{{count}} element placerade i __restored. Nu gäller rättigheterna för den mappen."
 ownership-management.title: Ägarskapshantering
 ownership-management.show-deleted-owners: Visa objekt från borttagna användare
 ownership-management.deleted-user: Borttagen användare
@@ -3134,6 +3143,8 @@ service-users.field.name: Namn
 service-users.field.name.fixed: Namnet kan inte ändras eftersom MCP-serveråtkomst beviljas utifrån namnet.
 service-users.field.name.invalid: Använd upp till 64 bokstäver, siffror, punkter, bindestreck eller understreck, med en bokstav eller siffra först, till exempel svc-erp-sync.
 service-users.field.email: Kontakt-e-post
+service-users.field.responsible-users: Ansvariga användare
+service-users.field.responsible-users.help: 'De ansvarar för den här tjänsteanvändaren överallt där en människa behövs, till exempel för meddelanden om den.'
 service-users.field.source-user: Användare att kopiera från
 service-users.filter.unused-days: Oanvänd i mer än N dagar
 service-users.status.inactive: Inaktiv
@@ -3183,3 +3194,19 @@ service-users.secret.client-secret: Klienthemlighet
 service-users.secret.warning: Kopiera hemligheten nu. Den visas bara en gång och kan inte visas igen.
 service-users.secret.copy: Kopiera hemlighet
 service-users.secret.close: Stäng
+navigation.maintenance-mode: Underhållsläge
+maintenance-mode.activate.title: Aktivera underhållsläge?
+maintenance-mode.activate.text: 'Alla tjänster, inklusive webbplatsen, går in i underhållsläge. Endast den här webbläsarsessionen behåller åtkomst.'
+maintenance-mode.activate.lock-out: 'Om du loggar ut, stänger webbläsaren eller om sessionen går ut blir även du utelåst.'
+maintenance-mode.activate.background-jobs: 'Bakgrundsjobb och meddelandekonsumenter startar inte medan underhållsläget är aktivt.'
+maintenance-mode.activate.ok: Aktivera
+maintenance-mode.indicator.tooltip: 'Underhållsläget är aktivt. Klicka för att stänga av det.'
+maintenance-mode.deactivate.title: Stäng av underhållsläge?
+maintenance-mode.deactivate.text: 'Alla sessioner får åtkomst igen.'
+maintenance-mode.deactivate.ok: Stäng av
+maintenance-mode.logout.title: Stäng av underhållsläge först?
+maintenance-mode.logout.text: 'Underhållsläget är aktivt och endast den här sessionen har åtkomst. Efter utloggning kan det bara stängas av från kommandoraden.'
+maintenance-mode.logout.deactivate-and-log-out: Stäng av och logga ut
+maintenance-mode.locked-out.title: Underhåll
+maintenance-mode.locked-out.text: 'Systemet är i underhållsläge eller tillfälligt otillgängligt. Din senaste åtgärd sparades kanske inte. Det här meddelandet stängs automatiskt så snart systemet är tillgängligt igen.'
+maintenance-mode.locked-out.reload: Ladda om

@@ -81,7 +81,9 @@ const serviceUser = (
   clientId: 'svc_7',
   lastLogin,
   clientCredentialsEnabled,
-  mcpTokens: { active, latestExpiresAt }
+  mcpTokens: { active, latestExpiresAt },
+  responsibleUsers: [],
+  responsibleRoles: []
 })
 
 describe('CredentialsSection', () => {

@@ -152,6 +152,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
   'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
+  'DynamicTypes/FieldFilter/EmptyOnly': 'DynamicTypes/FieldFilter/EmptyOnly',
   'DynamicTypes/FieldFilter/Id': 'DynamicTypes/FieldFilter/Id',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/FileSize': 'DynamicTypes/FieldFilter/FileSize',

@@ -41,11 +41,11 @@ jest.mock('@Pimcore/components/modal/hooks/use-studio-modal', () => ({
   useStudioModal: () => ({ modal: { confirm: mockConfirm } })
 }))
 jest.mock('./tabs/settings-tab', () => ({
-  SettingsTab: ({ draft, onChange }: { draft: { email: string | null }, onChange: (change: object) => void }) => (
+  SettingsTab: ({ draft, onChange }: { draft: { email: string | null, responsibleUsers: number[], responsibleRoles: number[] }, onChange: (change: object) => void }) => (
     <button
-      onClick={ () => { onChange({ email: 'new@example.com' }) } }
+      onClick={ () => { onChange({ email: 'new@example.com', responsibleUsers: [3, 4], responsibleRoles: [] }) } }
       type="button"
-    >{`email:${draft.email ?? ''}`}</button>
+    >{`email:${draft.email ?? ''}|responsibles:${draft.responsibleUsers.join(',')}|${draft.responsibleRoles.join(',')}`}</button>
   )
 }))
 jest.mock('./tabs/permissions-tab', () => ({
@@ -88,7 +88,9 @@ const serviceUser = (active = true): ServiceUser => ({
   clientId: 'svc_7',
   lastLogin: null,
   clientCredentialsEnabled: false,
-  mcpTokens: { active: 0, latestExpiresAt: null }
+  mcpTokens: { active: 0, latestExpiresAt: null },
+  responsibleUsers: [3],
+  responsibleRoles: [1]
 })
 
 const onDeleted = jest.fn()
@@ -128,7 +130,7 @@ describe('ServiceUserDetail', () => {
 
     expect(onDirtyChange).toHaveBeenLastCalledWith(7, false)
 
-    fireEvent.click(screen.getByText('email:erp@example.com'))
+    fireEvent.click(screen.getByText('email:erp@example.com|responsibles:3|1'))
 
     expect(onDirtyChange).toHaveBeenLastCalledWith(7, true)
   })
@@ -157,7 +159,7 @@ describe('ServiceUserDetail', () => {
     expect(save).toBeDisabled()
 
     fireEvent.click(screen.getByText('add-role'))
-    fireEvent.click(screen.getByText('email:erp@example.com'))
+    fireEvent.click(screen.getByText('email:erp@example.com|responsibles:3|1'))
     fireEvent.click(within(toolbar()).getByText('save'))
 
     await waitFor(() => { expect(mockSuccess).toHaveBeenCalledWith('service-users.save.success') })
@@ -171,7 +173,9 @@ describe('ServiceUserDetail', () => {
         docTypes: [],
         assetWorkspaces: [],
         dataObjectWorkspaces: [],
-        documentWorkspaces: []
+        documentWorkspaces: [],
+        responsibleUsers: [3, 4],
+        responsibleRoles: []
       }
     })
   })
@@ -184,8 +188,8 @@ describe('ServiceUserDetail', () => {
       />
     )
 
-    fireEvent.click(screen.getByText('email:erp@example.com'))
-    expect(screen.getByText('email:new@example.com')).toBeInTheDocument()
+    fireEvent.click(screen.getByText('email:erp@example.com|responsibles:3|1'))
+    expect(screen.getByText('email:new@example.com|responsibles:3,4|')).toBeInTheDocument()
 
     mockQueryState.data = { ...serviceUser(), mcpTokens: { active: 1, latestExpiresAt: 1_800_000_000 } }
     rerender(
@@ -195,7 +199,7 @@ describe('ServiceUserDetail', () => {
       />
     )
 
-    expect(screen.getByText('email:new@example.com')).toBeInTheDocument()
+    expect(screen.getByText('email:new@example.com|responsibles:3,4|')).toBeInTheDocument()
     expect(within(toolbar()).getByText('save')).not.toBeDisabled()
   })
 
@@ -212,7 +216,7 @@ describe('ServiceUserDetail', () => {
     await waitFor(() => { expect(mockSuccess).toHaveBeenCalledTimes(1) })
 
     // Edited after the save was submitted, before the detail query came back.
-    fireEvent.click(screen.getByText('email:erp@example.com'))
+    fireEvent.click(screen.getByText('email:erp@example.com|responsibles:3|1'))
 
     mockQueryState.data = { ...serviceUser(), roles: [1, 2] }
     rerender(
@@ -222,7 +226,7 @@ describe('ServiceUserDetail', () => {
       />
     )
 
-    expect(screen.getByText('email:new@example.com')).toBeInTheDocument()
+    expect(screen.getByText('email:new@example.com|responsibles:3,4|')).toBeInTheDocument()
     expect(within(toolbar()).getByText('save')).not.toBeDisabled()
   })
 
@@ -234,7 +238,7 @@ describe('ServiceUserDetail', () => {
       />
     )
 
-    fireEvent.click(screen.getByText('email:erp@example.com'))
+    fireEvent.click(screen.getByText('email:erp@example.com|responsibles:3|1'))
 
     mockQueryState.data = { ...serviceUser(), email: 'other@example.com' }
     rerender(
@@ -244,7 +248,7 @@ describe('ServiceUserDetail', () => {
       />
     )
 
-    expect(screen.getByText('email:other@example.com')).toBeInTheDocument()
+    expect(screen.getByText('email:other@example.com|responsibles:3|1')).toBeInTheDocument()
   })
 
   it('deactivates after confirmation', async () => {

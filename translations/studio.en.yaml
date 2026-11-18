@@ -95,6 +95,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
+asset.upload-new-version.rename-confirmation.title: Asset will be renamed
+asset.upload-new-version.rename-confirmation.message: 'The new file is a .{{extension}} — the asset will be renamed from "{{oldFilename}}" to "{{newFilename}}" and its public URL will change. Continue?'
+asset.upload-new-version.renamed: 'The asset was renamed from "{{oldFilename}}" to "{{newFilename}}". Its public URL has changed.'
 asset.copy-info: Copy & Info
 asset.upload: Upload
 asset.upload.label: Select file
@@ -391,6 +394,10 @@ grid.filter.less: Less than
 grid.filter.more: More than
 grid.filter.string.placeholder: Search, or paste a list with one value per line to match any of them exactly
 grid.filter.column: 'Filter {{column}}'
+grid.filter.operator.label: Condition
+grid.filter.operator.value: Matches value
+grid.filter.operator.empty: Is empty
+grid.filter.operator.not-empty: Is not empty
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -2519,6 +2526,8 @@ recycle-bin.actions.delete: Delete
 recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Recycle Bin Items
+recycle-bin.actions.restore.relocated_one: Element located in __restored. The permissions of that folder now apply.
+recycle-bin.actions.restore.relocated_other: '{{count}} elements located in __restored. The permissions of that folder now apply.'
 ownership-management.title: Ownership Management
 ownership-management.show-deleted-owners: Show items from deleted users
 ownership-management.deleted-user: Deleted user
@@ -3138,6 +3147,8 @@ service-users.field.name: Name
 service-users.field.name.fixed: 'The name cannot be changed, because MCP server access is granted by name.'
 service-users.field.name.invalid: 'Use up to 64 letters, digits, dots, hyphens or underscores, starting with a letter or a digit, for example svc-erp-sync.'
 service-users.field.email: Contact email
+service-users.field.responsible-users: Responsible users
+service-users.field.responsible-users.help: 'They answer for this service user wherever a human is needed, for example for notices about it.'
 service-users.field.source-user: User to copy from
 service-users.filter.unused-days: Unused for more than N days
 service-users.status.inactive: Inactive
@@ -3187,3 +3198,19 @@ service-users.secret.client-secret: Client secret
 service-users.secret.warning: 'Copy the secret now. It is shown only once and cannot be displayed again.'
 service-users.secret.copy: Copy secret
 service-users.secret.close: Close
+navigation.maintenance-mode: Maintenance Mode
+maintenance-mode.activate.title: Activate maintenance mode?
+maintenance-mode.activate.text: 'All services, including the website, go into maintenance. Only this browser session keeps access.'
+maintenance-mode.activate.lock-out: 'Logging out, closing the browser or an expired session locks you out as well.'
+maintenance-mode.activate.background-jobs: 'Background jobs and message consumers do not start while maintenance mode is active.'
+maintenance-mode.activate.ok: Activate
+maintenance-mode.indicator.tooltip: 'Maintenance mode is active. Click to deactivate it.'
+maintenance-mode.deactivate.title: Deactivate maintenance mode?
+maintenance-mode.deactivate.text: 'All sessions regain access.'
+maintenance-mode.deactivate.ok: Deactivate
+maintenance-mode.logout.title: Deactivate maintenance mode first?
+maintenance-mode.logout.text: 'Maintenance mode is active and only this session has access. After logging out it can only be switched off from the command line.'
+maintenance-mode.logout.deactivate-and-log-out: Deactivate and log out
+maintenance-mode.locked-out.title: Maintenance
+maintenance-mode.locked-out.text: 'The system is in maintenance mode or temporarily unavailable. Your last action may not have been saved. This notice closes itself as soon as the system is available again.'
+maintenance-mode.locked-out.reload: Reload

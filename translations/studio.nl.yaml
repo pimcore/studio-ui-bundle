@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Volledig pad
 asset.asset-editor-tabs.list.columns.creationDate: Aanmaakdatum
 asset.asset-editor-tabs.list.columns.modificationDate: Wijzigingsdatum
 asset.tree.context-menu.upload-new-version: Nieuwe versie uploaden
+asset.upload-new-version.rename-confirmation.title: Asset wordt hernoemd
+asset.upload-new-version.rename-confirmation.message: 'Het nieuwe bestand is van het type .{{extension}} — de asset wordt hernoemd van "{{oldFilename}}" naar "{{newFilename}}" en de openbare URL verandert. Doorgaan?'
+asset.upload-new-version.renamed: 'De asset is hernoemd van "{{oldFilename}}" naar "{{newFilename}}". De openbare URL is gewijzigd.'
 asset.copy-info: Kopiëren & info
 asset.upload: Uploaden
 asset.upload.label: Bestand selecteren
@@ -389,6 +392,10 @@ grid.filter.less: Minder dan
 grid.filter.more: Meer dan
 grid.filter.string.placeholder: Zoeken of een lijst met één waarde per regel plakken om exact één van deze waarden te vinden
 grid.filter.column: "Filter {{column}}"
+grid.filter.operator.label: Voorwaarde
+grid.filter.operator.value: Komt overeen met waarde
+grid.filter.operator.empty: Is leeg
+grid.filter.operator.not-empty: Is niet leeg
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -2515,6 +2522,8 @@ recycle-bin.actions.delete: Verwijderen
 recycle-bin.actions.delete.title: Prullenbakitems verwijderen
 recycle-bin.actions.restore: Herstellen
 recycle-bin.actions.restore.title: Prullenbakitems herstellen
+recycle-bin.actions.restore.relocated_one: Element geplaatst in __restored. Nu gelden de rechten van die map.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementen geplaatst in __restored. Nu gelden de rechten van die map."
 ownership-management.title: Eigendomsbeheer
 ownership-management.show-deleted-owners: Items van verwijderde gebruikers weergeven
 ownership-management.deleted-user: Verwijderde gebruiker
@@ -3134,6 +3143,8 @@ service-users.field.name: Naam
 service-users.field.name.fixed: De naam kan niet worden gewijzigd, omdat MCP-servertoegang op naam wordt verleend.
 service-users.field.name.invalid: Gebruik maximaal 64 letters, cijfers, punten, koppeltekens of underscores, beginnend met een letter of cijfer, bijvoorbeeld svc-erp-sync.
 service-users.field.email: Contact-e-mailadres
+service-users.field.responsible-users: Verantwoordelijke gebruikers
+service-users.field.responsible-users.help: 'Zij staan in voor deze servicegebruiker waar een mens nodig is, bijvoorbeeld voor meldingen erover.'
 service-users.field.source-user: Gebruiker om van te kopiëren
 service-users.filter.unused-days: Langer dan N dagen ongebruikt
 service-users.status.inactive: Inactief
@@ -3183,3 +3194,19 @@ service-users.secret.client-secret: Client-secret
 service-users.secret.warning: Kopieer het secret nu. Het wordt maar één keer getoond en kan niet opnieuw worden weergegeven.
 service-users.secret.copy: Secret kopiëren
 service-users.secret.close: Sluiten
+navigation.maintenance-mode: Onderhoudsmodus
+maintenance-mode.activate.title: Onderhoudsmodus activeren?
+maintenance-mode.activate.text: 'Alle services, inclusief de website, gaan in onderhoud. Alleen deze browsersessie behoudt toegang.'
+maintenance-mode.activate.lock-out: 'Als je uitlogt, de browser sluit of je sessie verloopt, word je ook buitengesloten.'
+maintenance-mode.activate.background-jobs: 'Achtergrondtaken en message consumers starten niet zolang de onderhoudsmodus actief is.'
+maintenance-mode.activate.ok: Activeren
+maintenance-mode.indicator.tooltip: 'De onderhoudsmodus is actief. Klik om deze te deactiveren.'
+maintenance-mode.deactivate.title: Onderhoudsmodus deactiveren?
+maintenance-mode.deactivate.text: 'Alle sessies krijgen weer toegang.'
+maintenance-mode.deactivate.ok: Deactiveren
+maintenance-mode.logout.title: Onderhoudsmodus eerst deactiveren?
+maintenance-mode.logout.text: 'De onderhoudsmodus is actief en alleen deze sessie heeft toegang. Na het uitloggen kan deze alleen nog via de opdrachtregel worden uitgeschakeld.'
+maintenance-mode.logout.deactivate-and-log-out: Deactiveren en uitloggen
+maintenance-mode.locked-out.title: Onderhoud
+maintenance-mode.locked-out.text: 'Het systeem is in onderhoudsmodus of tijdelijk niet beschikbaar. Je laatste actie is mogelijk niet opgeslagen. Deze melding sluit automatisch zodra het systeem weer beschikbaar is.'
+maintenance-mode.locked-out.reload: Herladen

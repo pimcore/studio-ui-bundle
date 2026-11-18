@@ -93,6 +93,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Chemin complet
 asset.asset-editor-tabs.list.columns.creationDate: Date de création
 asset.asset-editor-tabs.list.columns.modificationDate: Date de modification
 asset.tree.context-menu.upload-new-version: Téléverser une nouvelle version
+asset.upload-new-version.rename-confirmation.title: L'asset va être renommé
+asset.upload-new-version.rename-confirmation.message: 'Le nouveau fichier est de type .{{extension}} — l''asset sera renommé de "{{oldFilename}}" en "{{newFilename}}" et son URL publique changera. Continuer?'
+asset.upload-new-version.renamed: 'L''asset a été renommé de "{{oldFilename}}" en "{{newFilename}}". Son URL publique a changé.'
 asset.copy-info: Copier et infos
 asset.upload: Téléverser
 asset.upload.label: Sélectionner un fichier
@@ -389,6 +392,10 @@ grid.filter.less: Inférieur à
 grid.filter.more: Supérieur à
 grid.filter.string.placeholder: Rechercher ou coller une liste avec une valeur par ligne pour correspondre exactement à l'une d'elles
 grid.filter.column: 'Filtrer {{column}}'
+grid.filter.operator.label: Condition
+grid.filter.operator.value: Correspond à la valeur
+grid.filter.operator.empty: Est vide
+grid.filter.operator.not-empty: N'est pas vide
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -2515,6 +2522,8 @@ recycle-bin.actions.delete: Supprimer
 recycle-bin.actions.delete.title: Suppression des éléments de la corbeille
 recycle-bin.actions.restore: Restaurer
 recycle-bin.actions.restore.title: Restauration des éléments de la corbeille
+recycle-bin.actions.restore.relocated_one: Élément placé dans __restored. Les permissions de ce dossier s'appliquent désormais.
+recycle-bin.actions.restore.relocated_other: "{{count}} éléments placés dans __restored. Les permissions de ce dossier s'appliquent désormais."
 ownership-management.title: Gestion de la propriété
 ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
 ownership-management.deleted-user: Utilisateur supprimé
@@ -3134,6 +3143,8 @@ service-users.field.name: Nom
 service-users.field.name.fixed: Le nom ne peut pas être modifié, car l'accès au serveur MCP est accordé par nom.
 service-users.field.name.invalid: Utilisez jusqu'à 64 lettres, chiffres, points, tirets ou traits de soulignement, en commençant par une lettre ou un chiffre, par exemple svc-erp-sync.
 service-users.field.email: E-mail de contact
+service-users.field.responsible-users: Utilisateurs responsables
+service-users.field.responsible-users.help: 'Ils répondent de cet utilisateur de service partout où une personne est nécessaire, par exemple pour les avis le concernant.'
 service-users.field.source-user: Utilisateur à copier
 service-users.filter.unused-days: Inutilisé depuis plus de N jours
 service-users.status.inactive: Inactif
@@ -3183,3 +3194,19 @@ service-users.secret.client-secret: Secret client
 service-users.secret.warning: Copiez le secret maintenant. Il n'est affiché qu'une seule fois et ne pourra plus être affiché.
 service-users.secret.copy: Copier le secret
 service-users.secret.close: Fermer
+navigation.maintenance-mode: Mode maintenance
+maintenance-mode.activate.title: Activer le mode maintenance?
+maintenance-mode.activate.text: "Tous les services, y compris le site web, passent en maintenance. Seule cette session de navigateur conserve l'accès."
+maintenance-mode.activate.lock-out: "Si vous vous déconnectez, fermez le navigateur ou si votre session expire, vous perdez également l'accès."
+maintenance-mode.activate.background-jobs: 'Les tâches en arrière-plan et les consommateurs de messages ne démarrent pas tant que le mode maintenance est actif.'
+maintenance-mode.activate.ok: Activer
+maintenance-mode.indicator.tooltip: 'Le mode maintenance est actif. Cliquez pour le désactiver.'
+maintenance-mode.deactivate.title: Désactiver le mode maintenance?
+maintenance-mode.deactivate.text: "Toutes les sessions retrouvent l'accès."
+maintenance-mode.deactivate.ok: Désactiver
+maintenance-mode.logout.title: Désactiver d'abord le mode maintenance?
+maintenance-mode.logout.text: "Le mode maintenance est actif et seule cette session y a accès. Après la déconnexion, il ne pourra être désactivé qu'en ligne de commande."
+maintenance-mode.logout.deactivate-and-log-out: Désactiver et se déconnecter
+maintenance-mode.locked-out.title: Maintenance
+maintenance-mode.locked-out.text: "Le système est en mode maintenance ou temporairement indisponible. Votre dernière action n'a peut-être pas été enregistrée. Ce message se fermera automatiquement dès que le système sera de nouveau disponible."
+maintenance-mode.locked-out.reload: Recharger
