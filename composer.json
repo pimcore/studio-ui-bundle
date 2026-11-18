@@ -19,13 +19,13 @@
     "require": {
         "php": "~8.4.0 || ~8.5.0",
         "pimcore/pimcore": "^2026.1.6",
-        "pimcore/studio-backend-bundle": "^2026.3"
+        "pimcore/studio-backend-bundle": "^2026.4"
     },
     "require-dev": {
         "codeception/codeception": "^5.3.7",
-        "codeception/module-asserts": "^2",
+        "codeception/module-asserts": "^3.0",
         "codeception/module-symfony": "^3.1.1",
-        "phpstan/phpstan": "2.1.26",
+        "phpstan/phpstan": "2.3.5",
         "phpstan/phpstan-symfony": "^2.0.2",
         "phpunit/phpunit": "^12.5.23 || ^13.1.7",
         "nyholm/psr7": "^1",

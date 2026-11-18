@@ -346,6 +346,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
 
 export type { AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+export { buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
 /**
  * Apply a stored saved-search configuration to the listing the caller is mounted in — the same
@@ -370,3 +371,7 @@ export * from '@Pimcore/modules/search/modal/tabs/object/listing/object-search-l
 export * from '@Pimcore/modules/search/modal/tabs/asset/listing/asset-search-listing'
 export * from '@Pimcore/modules/search/modal/tabs/document/listing/document-search-listing'
 export type { SavedSearchDetailedConfiguration, GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
+
+// A bundle building its own grid source field opens the same classification store picker Studio's advanced column uses
+export { ClassificationStoreFieldPickerProvider, useClassificationStoreFieldPicker } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
+export type { ClassificationStoreFieldValue } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'

@@ -26,6 +26,11 @@ jest.mock('@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use
   useLayoutSelection: () => ({ currentLayout: 'current', setCurrentLayout: mockSetCurrentLayout })
 }))
 
+// the guard pulls in the @sdk/components barrel (untranspiled antd ESM in jest); it is covered by its own test
+jest.mock('@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-unsaved-changes-guard', () => ({
+  useUnsavedChangesGuard: () => ({ guard: async () => await Promise.resolve(true) })
+}))
+
 jest.mock('@sdk/modules/element', () => ({
   useElementRefresh: () => ({ refreshElement: mockRefreshElement })
 }))
@@ -81,5 +86,31 @@ describe('EditorWorkflowSubjectBridge', () => {
 
     expect(setCurrentLayout).toHaveBeenCalledWith(null)
     expect(mockRefreshElement).toHaveBeenCalledWith(42)
+  })
+
+  it('resets the layout when the transition object layout is the string "false"', () => {
+    // e.g. `objectLayout: 'false'` in the workflow config, passed through unchanged by the backend
+    const setCurrentLayout = applyTransition('false')
+
+    expect(setCurrentLayout).toHaveBeenCalledWith(null)
+    expect(setCurrentLayout).not.toHaveBeenCalledWith('false')
+  })
+
+  it.each([
+    ['empty string', ''],
+    ['whitespace only', '   '],
+    ['upper-case "FALSE"', 'FALSE'],
+    ['padded " false "', ' false ']
+  ])('resets the layout when the transition object layout is %s', (_, objectLayout) => {
+    const setCurrentLayout = applyTransition(objectLayout)
+
+    expect(setCurrentLayout).toHaveBeenCalledWith(null)
+  })
+
+  it.each([
+    ['string "0"', '0'],
+    ['numeric 0', 0]
+  ])('keeps layout id 0 (the main layout) when the transition object layout is %s', (_, objectLayout) => {
+    expect(applyTransition(objectLayout)).toHaveBeenCalledWith('0')
   })
 })

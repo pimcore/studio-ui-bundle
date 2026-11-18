@@ -90,6 +90,21 @@ describe('RenderletContent', () => {
     expect(apiParams?.parentDocumentId).toBe(234)
   })
 
+  // The renderlet controller gets id, type and subtype in edit mode, the same as on the frontend
+  // (https://github.com/pimcore/studio-ui-bundle/issues/3460).
+  it('sends the subtype of the assigned element', () => {
+    render(
+      <RenderletContent
+        config={ { controller: 'App\\Controller\\MyController::renderAction' } }
+        onChange={ jest.fn() }
+        value={ { id: 5, type: 'object', subtype: 'News' } }
+      />
+    )
+
+    const [apiParams] = useDocumentRenderletRenderQuery.mock.calls[0]
+    expect(apiParams).toMatchObject({ id: 5, type: 'object', subtype: 'News' })
+  })
+
   // The "Search" context-menu action opens the element selector. The selector expects
   // class names under `objects.allowedClasses`; `objects.allowedTypes` means the object
   // *type* (object / variant / folder). Passing class names as types locks the type

@@ -11,6 +11,10 @@
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ManagementContainer } from '@Pimcore/modules/user/management/management-container'
 import { RoleContainer } from '@Pimcore/modules/user/roles/container'
+import { ServiceUsersContainer } from '@Pimcore/modules/user/service-users/service-users-container'
+import { ServiceUsersTitle } from '@Pimcore/modules/user/service-users/service-users-title'
+import { selectServiceUsersDirty } from '@Pimcore/modules/user/service-users/dirty/service-users-dirty-slice'
+import { store } from '@Pimcore/app/store'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -40,6 +44,18 @@ export const ROLES_WIDGET: WidgetManagerTabConfig = {
   component: 'role-management',
   config: {
     translationKey: 'widget.role-management',
+    icon: {
+      type: 'name',
+      value: 'user'
+    }
+  }
+}
+export const SERVICE_USERS_WIDGET: WidgetManagerTabConfig = {
+  name: 'Service Users',
+  id: 'service-user-management',
+  component: 'service-user-management',
+  config: {
+    translationKey: 'widget.service-user-management',
     icon: {
       type: 'name',
       value: 'user'
@@ -79,6 +95,15 @@ moduleSystem.registerModule({
       widgetConfig: ROLES_WIDGET
     })
 
+    mainNavRegistryService.registerMainNavItem({
+      path: 'System/User & Roles/Service Users',
+      label: 'navigation.service-users',
+      order: 300,
+      permission: UserPermission.Users,
+      perspectivePermission: NavPermission.Users,
+      widgetConfig: SERVICE_USERS_WIDGET
+    })
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget({
@@ -89,6 +114,13 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'role-management',
       component: RoleContainer
+    })
+
+    widgetRegistryService.registerWidget({
+      name: 'service-user-management',
+      component: ServiceUsersContainer,
+      titleComponent: ServiceUsersTitle,
+      isModified: () => selectServiceUsersDirty(store.getState())
     })
 
     widgetRegistryService.registerWidget(UserProfileWidget)

@@ -12,6 +12,7 @@ import { store } from '@Pimcore/app/store'
 import { markDocumentEditablesAsModified, selectDocumentById } from '@Pimcore/modules/document/document-draft-slice'
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
+import { isDocumentAutoSaveEnabled } from '@Pimcore/modules/document/utils/document-auto-save'
 import { debounce, isNil } from 'lodash'
 import { type AreablockGroupedTypes, setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible, setDocumentHighlightEditables, selectDocumentHighlightEditables } from '@Pimcore/modules/document/document-editor-slice'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
@@ -95,6 +96,10 @@ class DocumentApiImpl implements DocumentApi {
   triggerValueChange (documentId: number, key: string, value: any): void {
     this.editedDocuments.add(documentId)
     this.markDraftAsModified(documentId)
+
+    if (!isDocumentAutoSaveEnabled()) {
+      return
+    }
 
     void this.autoSaveCallbacks.get(documentId)?.()
   }

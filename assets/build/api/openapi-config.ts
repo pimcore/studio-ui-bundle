@@ -69,6 +69,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'emailLogSearch',
+      type: 'query'
+    },
+    {
       pattern: 'documentGetSearch',
       type: 'query',
     },
@@ -181,6 +185,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/role/i)
     },
+    '../../js/src/core/modules/user/service-users/service-users-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/service-users?(\/|$)/i)
+    },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/version/i)
     },
@@ -276,6 +283,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/mcp-servers/mcp-servers-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/mcp\//i)
+    },
+    '../../js/src/core/modules/maintenance-mode/maintenance-mode-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/maintenance-mode/i)
     }
   },
   exportName: 'api',

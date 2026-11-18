@@ -9,25 +9,35 @@
  */
 
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { type TabNode } from 'flexlayout-react'
 import { TitleContainer } from './title-container'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 
 jest.mock('@Pimcore/app/router/router', () => ({ baseUrl: '' }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
-jest.mock('@Pimcore/modules/widget-manager/title/tab-title-container', () => ({ TabTitleContainer: () => null }))
+// like the real TabTitleContainer: memoised, resolves the title from the node unless a title prop is given
+jest.mock('@Pimcore/modules/widget-manager/title/tab-title-container', () => {
+  const { memo } = jest.requireActual('react')
+  return {
+    TabTitleContainer: memo(({ node, title }: { node: { getName: () => string }, title?: string }) => (
+      <span data-testid="tab-title">{ title ?? node.getName() }</span>
+    ))
+  }
+})
 jest.mock('@Pimcore/modules/data-object/hooks/use-data-object-draft', () => ({ useDataObjectDraft: jest.fn() }))
 
 const mockDraft = (dataObject: Record<string, unknown> | undefined): void => {
   (useDataObjectDraft as jest.Mock).mockReturnValue({ dataObject })
 }
 
+const createNode = (nodeName: string): TabNode => ({
+  getConfig: () => ({ id: 1 }),
+  getName: () => nodeName
+} as unknown as TabNode)
+
 const renderTitle = (nodeName: string): TabNode => {
-  const node = {
-    getConfig: () => ({ id: 1 }),
-    getName: () => nodeName
-  } as unknown as TabNode
+  const node = createNode(nodeName)
 
   render(<TitleContainer node={ node } />)
 
@@ -55,9 +65,29 @@ describe('DataObject TitleContainer', () => {
     expect(renderTitle('node-name').getName()).toBe('real-key')
   })
 
+  it('uses the translated home title for the root data object', () => {
+    mockDraft({ key: 'real-key', parentId: 0, customAttributes: customAttributes(null) })
+
+    expect(renderTitle('node-name').getName()).toBe('home')
+    expect(screen.getByTestId('tab-title')).toHaveTextContent('home')
+  })
+
   it('falls back to the node name while the draft is not loaded', () => {
     mockDraft(undefined)
 
     expect(renderTitle('node-name').getName()).toBe('node-name')
+  })
+
+  it('shows the new key in the rendered tab title after a rename', () => {
+    const node = createNode('node-name')
+    mockDraft({ key: 'old-key', parentId: 1, customAttributes: customAttributes(null) })
+    const { rerender } = render(<TitleContainer node={ node } />)
+
+    expect(screen.getByTestId('tab-title')).toHaveTextContent('old-key')
+
+    mockDraft({ key: 'new-key', parentId: 1, customAttributes: customAttributes(null) })
+    rerender(<TitleContainer node={ node } />)
+
+    expect(screen.getByTestId('tab-title')).toHaveTextContent('new-key')
   })
 })

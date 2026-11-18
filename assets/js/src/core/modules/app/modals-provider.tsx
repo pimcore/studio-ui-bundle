@@ -21,6 +21,7 @@ import { AboutDialogWrapper } from '@Pimcore/modules/about/components/about-dial
 import { BulkExportWrapper } from '@Pimcore/modules/bulk-export/components/bulk-export-modal/bulk-export-wrapper'
 import { BulkImportWrapper } from '@Pimcore/modules/bulk-import/components/bulk-import-modal/bulk-import-wrapper'
 import { OpenElementWrapper } from '@Pimcore/modules/open-element/open-element-wrapper'
+import { MaintenanceModeProvider } from '@Pimcore/modules/maintenance-mode/context/maintenance-mode-context'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
@@ -49,11 +50,13 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
                     <BulkExportWrapper>
                       <BulkImportWrapper>
                         <OpenElementWrapper>
-                          <SiteModalProvider>
-                            <SlotRenderer slot={ componentConfig.global.modal.name } />
-                            {children}
-                            <ModalHolderOutlet />
-                          </SiteModalProvider>
+                          <MaintenanceModeProvider>
+                            <SiteModalProvider>
+                              <SlotRenderer slot={ componentConfig.global.modal.name } />
+                              {children}
+                              <ModalHolderOutlet />
+                            </SiteModalProvider>
+                          </MaintenanceModeProvider>
                         </OpenElementWrapper>
                       </BulkImportWrapper>
                     </BulkExportWrapper>

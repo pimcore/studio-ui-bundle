@@ -41,9 +41,13 @@ export const EmailLogContainer = (): React.JSX.Element => {
     skip: normalizedSearchTerm !== ''
   })
   const { data: searchData, isLoading: isSearchLoading, isFetching: isSearchFetching } = useEmailLogSearchQuery({
-    page: currentPage,
-    pageSize,
-    email: normalizedSearchTerm
+    body: {
+      filters: {
+        page: currentPage,
+        pageSize,
+        columnFilters: [{ type: 'email', filterValue: normalizedSearchTerm }]
+      }
+    }
   }, {
     skip: normalizedSearchTerm === ''
   })
@@ -71,6 +75,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
+            aria-label={ t('toolbar.reload') }
             data-testid="email-log-refresh-button"
             disabled={ isRTKLoading || isLoading }
             icon={ { value: 'refresh' } }
@@ -82,6 +87,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
                 )
               )
             } }
+            tooltip={ { title: t('toolbar.reload') } }
           />
           <Pagination
             current={ currentPage }

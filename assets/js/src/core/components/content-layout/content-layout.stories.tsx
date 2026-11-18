@@ -24,10 +24,13 @@ const config: Meta = {
     layout: 'fullscreen',
 
     docs: {
-      iframeHeight: 400
+      iframeHeight: 400,
+      description: {
+        component: '**Deprecated:** use `PageLayout` with `variant="content"` instead (Components/Layout/PageLayout).'
+      }
     }
   },
-  tags: ['autodocs']
+  tags: ['autodocs', 'deprecated']
 }
 
 export default config

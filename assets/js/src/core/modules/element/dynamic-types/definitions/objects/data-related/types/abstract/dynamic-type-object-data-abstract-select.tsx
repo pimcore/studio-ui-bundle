@@ -48,6 +48,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     return (
       <Select
         allowClear={ props.allowClear !== false }
+        allowSelectAll
         className={ props.className }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }

@@ -458,6 +458,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     const treeItems = buildTree({
       structure,
       fieldDefinitions,
+      registry: fieldDefinitionRegistry,
       itemCallback: ({ fieldDefinition, initialTreeItem }) => {
         const currentPath = initialTreeItem.meta!.currentPath!
 
@@ -513,7 +514,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
     })
 
     return [treeItems]
-  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition, globalCopiedLayout, isValidExternalChildFieldDefinition, readOnly, decorateTreeItem])
+  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition, globalCopiedLayout, isValidExternalChildFieldDefinition, readOnly, decorateTreeItem, fieldDefinitionRegistry])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     // a decorator has the last word on an item and may put actions back; none of them may write

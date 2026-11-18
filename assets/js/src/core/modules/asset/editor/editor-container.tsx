@@ -18,6 +18,9 @@ import { Content } from '@Pimcore/components/content/content'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
+import {
+  WorkflowEditorCoordinator
+} from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-editor-coordinator'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { getBaseAssetContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
@@ -78,18 +81,20 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   return (
     <AssetProvider id={ id }>
-      <TabsToolbarView
-        dataTestId={ `asset-editor-${createSafeTestIdString(id)}` }
-        renderTabbar={
-          <TabsContainer
-            elementEditorType={ editorType }
-          />
-          }
+      <WorkflowEditorCoordinator>
+        <TabsToolbarView
+          dataTestId={ `asset-editor-${createSafeTestIdString(id)}` }
+          renderTabbar={
+            <TabsContainer
+              elementEditorType={ editorType }
+            />
+            }
 
-        renderToolbar={
-          <Toolbar />
-          }
-      />
+          renderToolbar={
+            <Toolbar />
+            }
+        />
+      </WorkflowEditorCoordinator>
     </AssetProvider>
   )
 }

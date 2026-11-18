@@ -33,7 +33,8 @@ class ApiError extends Error {
       return {
         title: errorKey,
         errorKey: errorMessage!,
-        message: errorMessage
+        message: errorMessage,
+        ...(isEmpty(errorData.validationErrors) ? {} : { validationErrors: errorData.validationErrors })
       }
     }
 

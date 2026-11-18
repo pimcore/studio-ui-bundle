@@ -9,7 +9,7 @@
  */
 
 import i18next, { type TFunction } from 'i18next'
-import { describeAccess } from './utils'
+import { describeAccess, splitSharedUsers } from './utils'
 
 const grants = (count: number, canAccess = true): Array<{ name: string, canRead: boolean, canAccess: boolean, canEdit: boolean }> =>
   Array.from({ length: count }, (_, index) => ({ name: `u${index}`, canRead: true, canAccess, canEdit: false }))
@@ -28,6 +28,7 @@ const translator = async (lng: string): Promise<TFunction> => {
         translation: {
           'mcp-servers.access.users-count': 'Users: {{number}}',
           'mcp-servers.access.roles-count': 'Roles: {{number}}',
+          'mcp-servers.access.service-users-count': 'Service users: {{number}}',
           'mcp-servers.access.global-extra': 'any authenticated user',
           'mcp-servers.access.nobody': 'Nobody yet'
         }
@@ -82,5 +83,21 @@ describe('describeAccess', () => {
     for (const count of [1, 2, 5, 22]) {
       expect(describeAccess({ shareGlobal: false, sharedUsers: grants(count), sharedRoles: [] }, t)).toBe(`Użytkownicy: ${count}`)
     }
+  })
+})
+
+describe('service users in describeAccess', () => {
+  it('counts service users separately from users', async () => {
+    const t = await translator('en')
+    const sharedUsers = [{ name: 'a', canRead: true, canAccess: true, canEdit: false }, { name: 'svc', canRead: false, canAccess: true, canEdit: false }, { name: 'svc2', canRead: false, canAccess: true, canEdit: false }]
+
+    expect(describeAccess({ shareGlobal: false, sharedUsers, sharedRoles: grants(1) }, t, ['svc', 'svc2'])).toBe('Users: 1, Roles: 1, Service users: 2')
+  })
+})
+
+describe('splitSharedUsers', () => {
+  it('splits by name and keeps unknown names with the humans', () => {
+    const [a, b, c] = grants(3)
+    expect(splitSharedUsers([a, b, c], ['u1'])).toEqual({ humanGrants: [a, c], serviceUserGrants: [b] })
   })
 })

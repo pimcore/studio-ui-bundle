@@ -33,6 +33,29 @@ error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet 
 error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
 error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 error.syntax_error: Syntaxfel
+validation.mandatory: "{{field}} är obligatoriskt"
+validation.regex_mismatch: "{{field}} matchar inte det obligatoriska mönstret {{regex}}"
+validation.max_length: "{{field}} får inte vara längre än {{max}} tecken"
+validation.min_length: "{{field}} måste vara minst {{min}} tecken långt"
+validation.not_numeric: "{{field}} måste vara ett tal, fick: {{value}}"
+validation.not_integer: "{{field}} måste vara ett heltal, fick: {{value}}"
+validation.not_unsigned: "{{field}} får inte vara negativt, fick: {{value}}"
+validation.min_value: "{{field}} måste vara minst {{min}}, fick: {{value}}"
+validation.max_value: "{{field}} får vara högst {{max}}, fick: {{value}}"
+validation.range_start_after_end: "{{field}}: början får inte ligga efter slutet"
+validation.invalid_email: "{{field}} är inte en giltig e-postadress: {{value}}"
+validation.invalid_option: "{{field}} har ett ogiltigt alternativ: {{value}}"
+validation.invalid_time: "{{field}} är inte en giltig tid: {{value}}"
+validation.invalid_relation: "{{field}} innehåller en ogiltig relation"
+validation.max_relations: "{{field}} tillåter högst {{max}} relationer"
+validation.max_items: "{{field}} tillåter högst {{max}} objekt"
+validation.slug_not_unique: "URL-slugen {{value}} i {{field}} används redan"
+validation.slug_invalid: "{{field}} är inte en giltig URL-slug"
+validation.slug_reserved_characters: "{{field}} innehåller reserverade tecken: {{characters}}"
+validation.unique_constraint: "En unikhetsbegränsning bryts"
+validation.missing_required_editables: "Värden för obligatoriska redigerbara element saknas"
+validation.image_too_large: "Bilden {{filename}} är för stor (max. {{max_megapixels}} megapixlar). Ändra storlek till {{suggested_width}}×{{suggested_height}} pixlar eller mindre"
+validation.and_more: "och {{n}} till"
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -75,6 +98,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Fullständig sökväg
 asset.asset-editor-tabs.list.columns.creationDate: Skapandedatum
 asset.asset-editor-tabs.list.columns.modificationDate: Ändringsdatum
 asset.tree.context-menu.upload-new-version: Ladda upp ny version
+asset.upload-new-version.rename-confirmation.title: Asseten byter namn
+asset.upload-new-version.rename-confirmation.message: 'Den nya filen är av typen .{{extension}} — asseten byter namn från "{{oldFilename}}" till "{{newFilename}}" och dess offentliga URL ändras. Vill du fortsätta?'
+asset.upload-new-version.renamed: 'Asseten har bytt namn från "{{oldFilename}}" till "{{newFilename}}". Dess offentliga URL har ändrats.'
 asset.copy-info: Kopiera & Info
 asset.upload: Ladda upp
 asset.upload.label: Välj fil
@@ -371,6 +397,10 @@ grid.filter.less: Mindre än
 grid.filter.more: Mer än
 grid.filter.string.placeholder: Sök eller klistra in en lista med ett värde per rad för att matcha någon av dem exakt
 grid.filter.column: 'Filtrera {{column}}'
+grid.filter.operator.label: Villkor
+grid.filter.operator.value: Motsvarar värde
+grid.filter.operator.empty: Är tom
+grid.filter.operator.not-empty: Är inte tom
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -477,6 +507,10 @@ action-could-not-be-applied: Åtgärden kunde inte tillämpas
 failed-to-assign-tag-to-element: Kunde inte tilldela tagg till element
 failed-to-un-assign-tag-to-element: Kunde inte ta bort tagg från element
 workflow-modal.perform-action: Utför åtgärd
+workflow.unsaved-changes.title: Osparade ändringar
+workflow.unsaved-changes.warn: Det finns osparade ändringar. De går förlorade när åtgärden tillämpas. Vill du tillämpa den ändå?
+workflow.unsaved-changes.apply-anyway: Tillämpa ändå
+workflow.unsaved-changes.save-failed: De osparade ändringarna kunde inte sparas, så åtgärden tillämpades inte.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Anteckningar
 workflow-modal.notes-required: Ange dina anteckningar
@@ -669,6 +703,7 @@ mcp-servers.read-only-notice: Serverdefinitioner hanteras via filer i den här m
 mcp-servers.save-success: MCP-server sparad
 mcp-servers.access.users-count: "Användare: {{number}}"
 mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.service-users-count: 'Tjänsteanvändare: {{number}}'
 mcp-servers.access.global-extra: alla autentiserade användare
 mcp-servers.access.nobody: "Ingen ännu"
 mcp-servers.badge.read: Läs
@@ -694,11 +729,16 @@ mcp-servers.editor.copy-url: "Kopiera server-URL"
 mcp-servers.editor.connect-hint: Rikta din MCP-klient mot denna URL och autentisera dig med ditt Pimcore-konto.
 mcp-servers.sharing.title: Delning
 mcp-servers.sharing.share-globally: Dela globalt
-mcp-servers.sharing.share-globally-tooltip: Alla autentiserade användare får konfigurationsläsning och MCP-serveråtkomst (inte konfigurationsredigering)
+mcp-servers.sharing.share-globally-tooltip: Alla autentiserade användare, inklusive tjänsteanvändare, får konfigurationsläsning och MCP-serveråtkomst (inte konfigurationsredigering)
 mcp-servers.sharing.users: Användare
 mcp-servers.sharing.roles: Roller
 mcp-servers.sharing.add-user: Lägg till en användare…
 mcp-servers.sharing.add-role: Lägg till en roll…
+mcp-servers.sharing.service-users: Tjänsteanvändare
+mcp-servers.sharing.add-service-user: Lägg till en tjänsteanvändare…
+mcp-servers.sharing.service-users-hint: Tjänsteanvändare kan bara ansluta; de kan inte läsa eller redigera konfigurationen.
+mcp-servers.sharing.service-users-unavailable: Tjänsteanvändare visas inte eftersom du saknar behörighet för användarhantering. Deras befintliga åtkomst behålls.
+mcp-servers.sharing.inactive: inaktiv
 mcp-servers.sharing.name: Namn
 mcp-servers.sharing.config-read: Konfigurationsläsning
 mcp-servers.sharing.config-edit: Konfigurationsredigering
@@ -1300,6 +1340,7 @@ close-tab: Stäng flik
 close-others: Stäng andra
 close-unmodified: Stäng oförändrade
 close-all: Stäng alla
+use-full-space: Använd hela ytan
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
 element-selector.title.single: Välj ett element
@@ -1405,6 +1446,7 @@ system-information.type: Typ
 system-information.class-id: Klass-ID
 system-information.class: Klass
 system-information.file-size: Filstorlek
+system-information.checksum: Kontrollsumma
 system-information.modification-date: Ändringsdatum
 system-information.creation-date: Skapandedatum
 system-information.user-modification: Ändrad av
@@ -1767,6 +1809,10 @@ redirects.source-site: Källsajt
 redirects.source: Källa
 redirects.target-site: Målsajt
 redirects.target: Mål
+redirects.target-type: Måltyp
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Prioritet
 redirects.regex: RegEx
@@ -2277,6 +2323,9 @@ reports.field-filters: Fältfilter
 reports.editor.delete.content: Vill du verkligen ta bort den anpassade rapporten "{{reportName}}"?
 reports.editor.clone.content: Ange namnet på det nya objektet (a-zA-Z-_)
 reports.editor.add.content: Ange namnet på det nya objektet. Namnet måste vara alfanumeriskt och minst 3 tecken långt (a-zA-Z0-9_-)
+reports.editor.import.title: Importera anpassad rapport
+reports.editor.import.success: Anpassad rapport importerades
+reports.editor.import.invalid-file: Välj en JSON-exportfil
 reports.editor.content.validation.message: Rapportnamnet är ogiltigt
 reports.editor.general-settings.title: Allmänna inställningar
 reports.editor.general-settings.name-label: Namn
@@ -2482,6 +2531,8 @@ recycle-bin.actions.delete: Ta bort
 recycle-bin.actions.delete.title: Tar bort papperskorgens objekt
 recycle-bin.actions.restore: Återställ
 recycle-bin.actions.restore.title: Återställer papperskorgens objekt
+recycle-bin.actions.restore.relocated_one: Element placerat i __restored. Nu gäller rättigheterna för den mappen.
+recycle-bin.actions.restore.relocated_other: "{{count}} element placerade i __restored. Nu gäller rättigheterna för den mappen."
 ownership-management.title: Ägarskapshantering
 ownership-management.show-deleted-owners: Visa objekt från borttagna användare
 ownership-management.deleted-user: Borttagen användare
@@ -3056,6 +3107,7 @@ translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
 select.clear-selection: Rensa val
+select.select-all: Välj alla
 asset.folder.preview.image-display: Bildvisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
@@ -3078,9 +3130,92 @@ saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
 skip-to-content: Hoppa till innehållet
+preview-mode.switch: Förhandsvisningsläge
+preview-mode.preview-item: Förhandsvisningsobjekt
+preview-mode.no-item: Inget förhandsvisningsobjekt tillgängligt
+preview-mode.preview: Förhandsgranskning
 tag-configuration.move-under: 'Flytta under'
 tag-configuration.move-search-placeholder: 'Sök efter en tagg'
 tree.actions.edit-tag: Redigera
 tag-configuration.edit-tag: 'Redigera "{{name}}"'
 tag-configuration.name-required: 'Ange ett taggnamn'
 tag-configuration.move-targets-failed: 'Listan över taggar kunde inte läsas in, så endast namnet kan ändras'
+navigation.service-users: Tjänsteanvändare
+widget.service-user-management: Tjänsteanvändare
+service-users.create: Ny
+service-users.create.title: Ny tjänsteanvändare
+service-users.create.ok: Skapa
+service-users.create-from-user: Från användare
+service-users.create-from-user.title: Ny tjänsteanvändare från en användare
+service-users.create-from-user.description: Kopierar användarens behörigheter, roller och workspaces. Användaren ändras inte och adminrättigheter kopieras aldrig.
+service-users.field.name: Namn
+service-users.field.name.fixed: Namnet kan inte ändras eftersom MCP-serveråtkomst beviljas utifrån namnet.
+service-users.field.name.invalid: Använd upp till 64 bokstäver, siffror, punkter, bindestreck eller understreck, med en bokstav eller siffra först, till exempel svc-erp-sync.
+service-users.field.email: Kontakt-e-post
+service-users.field.responsible-users: Ansvariga användare
+service-users.field.responsible-users.help: 'De ansvarar för den här tjänsteanvändaren överallt där en människa behövs, till exempel för meddelanden om den.'
+service-users.field.source-user: Användare att kopiera från
+service-users.filter.unused-days: Oanvänd i mer än N dagar
+service-users.status.inactive: Inaktiv
+service-users.dormancy.never-used: Aldrig använd
+service-users.dormancy.warning: Oanvänd i 90 dagar
+service-users.dormancy.dormant: Vilande
+service-users.tab.settings: Inställningar
+service-users.tab.permissions: Behörigheter
+service-users.tab.roles: Roller
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roller
+service-users.save.success: Tjänsteanvändare sparad
+service-users.deactivate: Inaktivera
+service-users.deactivate.confirm: Inaktivera tjänsteanvändaren "{{name}}"? Dess inloggningsuppgifter slutar fungera vid nästa förfrågan.
+service-users.delete: Ta bort
+service-users.delete.confirm: Ta bort tjänsteanvändaren "{{name}}" permanent? Dess OAuth-klient, dess tokens och dess MCP-serveråtkomst tas bort. Detta kan inte ångras.
+service-users.credentials.title: Inloggningsuppgifter
+service-users.credentials.client-id: Klient-ID
+service-users.credentials.last-used: Senast använd
+service-users.credentials.never-used: Aldrig
+service-users.credentials.no-client: Ingen OAuth-klient
+service-users.credentials.rotate: Rotera hemlighet
+service-users.credentials.rotate.confirm: Skapa en ny klienthemlighet för "{{name}}"? Den nuvarande hemligheten slutar fungera omedelbart.
+service-users.credentials.mcp-tokens: MCP-åtkomsttokens
+service-users.credentials.mcp-tokens.active: Aktiva tokens
+service-users.credentials.mcp-tokens.latest-expiry: Senaste utgångsdatum
+service-users.credentials.mcp-tokens.none: Inga aktiva tokens
+service-users.credentials.issue: Utfärda token
+service-users.credentials.issue.title: Utfärda en MCP-åtkomsttoken
+service-users.credentials.issue.ttl: Giltighetstid i dagar (1 till 90)
+service-users.credentials.issue.ttl.invalid: Ange ett heltal mellan 1 och 90 dagar.
+service-users.credentials.issue.hint: Token visas bara en gång. Klienter skickar den som en Bearer-token i Authorization-headern.
+service-users.credentials.revoke: Återkalla alla tokens
+service-users.credentials.revoke.confirm: Återkalla alla MCP-åtkomsttokens för den här tjänsteanvändaren? Anslutna klienter slutar fungera omedelbart.
+service-users.credentials.revoke.success: Alla MCP-åtkomsttokens för tjänsteanvändaren har återkallats.
+service-users.credentials.oauth: OAuth-klient
+service-users.credentials.oauth.disabled: OAuth-klientuppgifter är inaktiverade på den här instansen; använd en MCP-åtkomsttoken.
+service-users.credentials.oauth.rotate-hint: Åtkomsttokens som redan utfärdats med den gamla hemligheten förblir giltiga tills de löper ut.
+service-users.credentials.token: Åtkomsttoken
+service-users.credentials.token.expires: Upphör
+service-users.create.credentials.title: Inloggningsuppgifter
+service-users.create.credentials.skip: Hoppa över, utfärda senare
+service-users.create.credentials.which: Använd OAuth-klienten för pipelines som kan köra client_credentials-flödet; använd en MCP-åtkomsttoken för allt annat.
+service-users.create.credentials.token-description: Klienter ansluter med en MCP-åtkomsttoken. Utfärda en nu, eller senare via tjänsteanvändarens inloggningsuppgifter.
+service-users.secret.title: Klienthemlighet
+service-users.secret.client-secret: Klienthemlighet
+service-users.secret.warning: Kopiera hemligheten nu. Den visas bara en gång och kan inte visas igen.
+service-users.secret.copy: Kopiera hemlighet
+service-users.secret.close: Stäng
+navigation.maintenance-mode: Underhållsläge
+maintenance-mode.activate.title: Aktivera underhållsläge?
+maintenance-mode.activate.text: 'Alla tjänster, inklusive webbplatsen, går in i underhållsläge. Endast den här webbläsarsessionen behåller åtkomst.'
+maintenance-mode.activate.lock-out: 'Om du loggar ut, stänger webbläsaren eller om sessionen går ut blir även du utelåst.'
+maintenance-mode.activate.background-jobs: 'Bakgrundsjobb och meddelandekonsumenter startar inte medan underhållsläget är aktivt.'
+maintenance-mode.activate.ok: Aktivera
+maintenance-mode.indicator.tooltip: 'Underhållsläget är aktivt. Klicka för att stänga av det.'
+maintenance-mode.deactivate.title: Stäng av underhållsläge?
+maintenance-mode.deactivate.text: 'Alla sessioner får åtkomst igen.'
+maintenance-mode.deactivate.ok: Stäng av
+maintenance-mode.logout.title: Stäng av underhållsläge först?
+maintenance-mode.logout.text: 'Underhållsläget är aktivt och endast den här sessionen har åtkomst. Efter utloggning kan det bara stängas av från kommandoraden.'
+maintenance-mode.logout.deactivate-and-log-out: Stäng av och logga ut
+maintenance-mode.locked-out.title: Underhåll
+maintenance-mode.locked-out.text: 'Systemet är i underhållsläge eller tillfälligt otillgängligt. Din senaste åtgärd sparades kanske inte. Det här meddelandet stängs automatiskt så snart systemet är tillgängligt igen.'
+maintenance-mode.locked-out.reload: Ladda om

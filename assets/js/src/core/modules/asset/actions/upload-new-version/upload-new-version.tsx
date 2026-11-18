@@ -21,14 +21,19 @@ import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permiss
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/use-upload-modal-context'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { isNil } from 'lodash'
+import { isNil, isString } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { updateNodeData, setNodeFetchingInAllTrees } from '@Pimcore/components/element-tree/element-tree-slice'
 import { transformApiDataToNode } from '@Pimcore/modules/asset/tree/utils/transform-api-data-to-node'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
+import { useFormModal, useMessage } from '@sdk/components'
+import { getFileExtension } from '@sdk/utils'
+import type { RcFile, UploadFile } from 'antd/es/upload/interface'
+import { getUpdatedFilename } from './get-updated-filename'
 
 export interface UseUploadNewVersionReturn {
-  uploadNewVersion: (id: number, onFinish?: () => void) => void
+  /** Pass the asset's current `filename` to confirm a rename before the upload and report it afterwards. */
+  uploadNewVersion: (id: number, onFinish?: () => void, filename?: string) => void
   uploadNewVersionContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
   uploadNewVersionTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
@@ -38,6 +43,8 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
   const dispatch = useAppDispatch()
   const { triggerUpload } = useUploadModalContext()
   const { isTreeActionAllowed } = useTreePermission()
+  const modal = useFormModal()
+  const messageApi = useMessage()
 
   const refreshTreeNode = async (id: number): Promise<void> => {
     dispatch(setNodeFetchingInAllTrees({ nodeId: String(id), elementType: 'asset', isFetching: true }))
@@ -71,6 +78,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
           data: {
             icon: cacheBustedIcon,
             label: freshNode.label,
+            realKey: freshNode.realKey,
             metaData: { asset: cacheBustedItem }
           }
         }))
@@ -81,13 +89,48 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
     }
   }
 
-  const uploadNewVersion = (id: number, onFinish?: () => void): void => {
+  const confirmRename = async (filename: string, file: RcFile): Promise<boolean> => {
+    const newFilename = getUpdatedFilename(filename, file.name)
+
+    if (newFilename === filename) {
+      return true
+    }
+
+    return await new Promise((resolve) => {
+      modal.confirm({
+        title: t('asset.upload-new-version.rename-confirmation.title'),
+        content: t('asset.upload-new-version.rename-confirmation.message', {
+          newFilename,
+          extension: getFileExtension(newFilename),
+          oldFilename: filename,
+          interpolation: { escapeValue: false }
+        }),
+        okText: t('yes'),
+        cancelText: t('no'),
+        onOk: () => { resolve(true) },
+        onCancel: () => { resolve(false) }
+      })
+    })
+  }
+
+  const uploadNewVersion = (id: number, onFinish?: () => void, filename?: string): void => {
     triggerUpload({
       action: `${getPrefix()}/assets/${id}/replace`,
       maxItems: 1,
       multiple: false,
       skipConflictCheck: true,
-      onSuccess: async (result: any) => {
+      shouldUploadFile: isNil(filename) ? undefined : async (file) => await confirmRename(filename, file),
+      onSuccess: async (files: UploadFile[]) => {
+        const newFilename: unknown = files[0]?.response?.data
+
+        if (!isNil(filename) && isString(newFilename) && newFilename !== filename) {
+          void messageApi.warning(t('asset.upload-new-version.renamed', {
+            newFilename,
+            oldFilename: filename,
+            interpolation: { escapeValue: false }
+          }))
+        }
+
         await refreshTreeNode(id)
         onFinish?.()
       }
@@ -107,7 +150,8 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       onClick: () => {
         uploadNewVersion(
           node.id,
-          onFinish
+          onFinish,
+          node.filename
         )
       }
     }
@@ -126,7 +170,9 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
         !checkElementPermission(node.permissions, 'versions'),
       onClick: () => {
         uploadNewVersion(
-          parseInt(node.id)
+          Number.parseInt(node.id),
+          undefined,
+          node.realKey ?? node.label
         )
       }
     }

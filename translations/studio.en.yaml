@@ -35,6 +35,29 @@ error.error_recycle_bin_restore_missing_parent: Cannot restore element from recy
 error.error_login_token_as_admin_non_admin_user: Only admin users can generate a login link for an admin user
 error.error_login_token_no_user_password: A login link cannot be generated for this user because no password is set
 error.syntax_error: Syntax error
+validation.mandatory: "{{field}} is mandatory"
+validation.regex_mismatch: "{{field}} does not match the required pattern {{regex}}"
+validation.max_length: "{{field}} must not be longer than {{max}} characters"
+validation.min_length: "{{field}} must be at least {{min}} characters long"
+validation.not_numeric: "{{field}} must be a number, got {{value}}"
+validation.not_integer: "{{field}} must be a whole number, got {{value}}"
+validation.not_unsigned: "{{field}} must not be negative, got {{value}}"
+validation.min_value: "{{field}} must be at least {{min}}, got {{value}}"
+validation.max_value: "{{field}} must be at most {{max}}, got {{value}}"
+validation.range_start_after_end: "{{field}}: the start must not be after the end"
+validation.invalid_email: "{{field}} is not a valid email address: {{value}}"
+validation.invalid_option: "{{field}} has an invalid option: {{value}}"
+validation.invalid_time: "{{field}} is not a valid time: {{value}}"
+validation.invalid_relation: "{{field}} contains an invalid relation"
+validation.max_relations: "{{field}} allows at most {{max}} relations"
+validation.max_items: "{{field}} allows at most {{max}} items"
+validation.slug_not_unique: "The URL slug {{value}} in {{field}} is already in use"
+validation.slug_invalid: "{{field}} is not a valid URL slug"
+validation.slug_reserved_characters: "{{field}} contains reserved characters: {{characters}}"
+validation.unique_constraint: "A unique constraint is violated"
+validation.missing_required_editables: "Values for required editables are missing"
+validation.image_too_large: "Image {{filename}} is too large (max. {{max_megapixels}} megapixels). Resize it to {{suggested_width}}×{{suggested_height}} pixels or smaller"
+validation.and_more: "and {{n}} more"
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid Config
 sidebar.tag_filters: Tag Filters
@@ -77,6 +100,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
+asset.upload-new-version.rename-confirmation.title: Asset will be renamed
+asset.upload-new-version.rename-confirmation.message: 'The new file is a .{{extension}} — the asset will be renamed from "{{oldFilename}}" to "{{newFilename}}" and its public URL will change. Continue?'
+asset.upload-new-version.renamed: 'The asset was renamed from "{{oldFilename}}" to "{{newFilename}}". Its public URL has changed.'
 asset.copy-info: Copy & Info
 asset.upload: Upload
 asset.upload.label: Select file
@@ -373,6 +399,10 @@ grid.filter.less: Less than
 grid.filter.more: More than
 grid.filter.string.placeholder: Search, or paste a list with one value per line to match any of them exactly
 grid.filter.column: 'Filter {{column}}'
+grid.filter.operator.label: Condition
+grid.filter.operator.value: Matches value
+grid.filter.operator.empty: Is empty
+grid.filter.operator.not-empty: Is not empty
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -479,6 +509,10 @@ action-could-not-be-applied: Action could not be applied
 failed-to-assign-tag-to-element: Failed to assign tag to element
 failed-to-un-assign-tag-to-element: Failed to un-assign tag to element
 workflow-modal.perform-action: Perform Action
+workflow.unsaved-changes.title: Unsaved changes
+workflow.unsaved-changes.warn: There are unsaved changes. They will be lost when this action is applied. Apply it anyway?
+workflow.unsaved-changes.apply-anyway: Apply anyway
+workflow.unsaved-changes.save-failed: The unsaved changes could not be saved, so the action was not applied.
 workflow-modal.cancel: Cancel
 workflow-modal.notes: Notes
 workflow-modal.notes-required: Please enter your notes
@@ -671,6 +705,7 @@ mcp-servers.read-only-notice: Server definitions are file-managed on this enviro
 mcp-servers.save-success: MCP server saved
 mcp-servers.access.users-count: "Users: {{number}}"
 mcp-servers.access.roles-count: "Roles: {{number}}"
+mcp-servers.access.service-users-count: "Service users: {{number}}"
 mcp-servers.access.global-extra: any authenticated user
 mcp-servers.access.nobody: Nobody yet
 mcp-servers.badge.read: Read
@@ -696,11 +731,16 @@ mcp-servers.editor.copy-url: Copy server URL
 mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
 mcp-servers.sharing.title: Sharing
 mcp-servers.sharing.share-globally: Share globally
-mcp-servers.sharing.share-globally-tooltip: Any authenticated user gets Config Read and MCP Server Access (not Config Edit)
+mcp-servers.sharing.share-globally-tooltip: Any authenticated user, including service users, gets Config Read and MCP Server Access (not Config Edit)
 mcp-servers.sharing.users: Users
 mcp-servers.sharing.roles: Roles
 mcp-servers.sharing.add-user: Add a user…
 mcp-servers.sharing.add-role: Add a role…
+mcp-servers.sharing.service-users: Service users
+mcp-servers.sharing.add-service-user: Add a service user…
+mcp-servers.sharing.service-users-hint: Service users can only connect; they cannot read or edit the configuration.
+mcp-servers.sharing.service-users-unavailable: Service users are not listed because you lack the user management permission. Their existing access is kept.
+mcp-servers.sharing.inactive: inactive
 mcp-servers.sharing.name: Name
 mcp-servers.sharing.config-read: Config Read
 mcp-servers.sharing.config-edit: Config Edit
@@ -1302,6 +1342,7 @@ close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+use-full-space: Use Full Space
 asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
 element-selector.title.single: Select Element
@@ -1407,6 +1448,7 @@ system-information.type: Type
 system-information.class-id: Class ID
 system-information.class: Class
 system-information.file-size: File Size
+system-information.checksum: Checksum
 system-information.modification-date: Modification Date
 system-information.creation-date: Creation Date
 system-information.user-modification: User Modification
@@ -1771,6 +1813,10 @@ redirects.source-site: Source Site
 redirects.source: Source
 redirects.target-site: Target Site
 redirects.target: Target
+redirects.target-type: Target Type
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Priority
 redirects.regex: RegEx
@@ -2281,6 +2327,9 @@ reports.field-filters: Field Filters
 reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
 reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
 reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
+reports.editor.import.title: Import Custom Report
+reports.editor.import.success: Custom report imported successfully
+reports.editor.import.invalid-file: Please select a JSON export file
 reports.editor.content.validation.message: The customer report name is invalid
 reports.editor.general-settings.title: General Settings
 reports.editor.general-settings.name-label: Name
@@ -2486,6 +2535,8 @@ recycle-bin.actions.delete: Delete
 recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Recycle Bin Items
+recycle-bin.actions.restore.relocated_one: Element located in __restored. The permissions of that folder now apply.
+recycle-bin.actions.restore.relocated_other: '{{count}} elements located in __restored. The permissions of that folder now apply.'
 ownership-management.title: Ownership Management
 ownership-management.show-deleted-owners: Show items from deleted users
 ownership-management.deleted-user: Deleted user
@@ -3060,6 +3111,7 @@ translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
 select.clear-selection: Clear selection
+select.select-all: Select all
 asset.folder.preview.image-display: Image display
 asset.folder.preview.image-display.small: Small
 asset.folder.preview.image-display.large: Large
@@ -3082,9 +3134,92 @@ saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
 skip-to-content: Skip to content
+preview-mode.switch: Preview mode
+preview-mode.preview-item: Preview item
+preview-mode.no-item: No preview item available
+preview-mode.preview: Preview
 tag-configuration.move-under: 'Move under'
 tag-configuration.move-search-placeholder: 'Search for a tag'
 tree.actions.edit-tag: Edit
 tag-configuration.edit-tag: 'Edit "{{name}}"'
 tag-configuration.name-required: 'Please enter a tag name'
 tag-configuration.move-targets-failed: 'The list of tags could not be loaded, so only the name can be changed'
+navigation.service-users: Service Users
+widget.service-user-management: Service Users
+service-users.create: New
+service-users.create.title: New service user
+service-users.create.ok: Create
+service-users.create-from-user: From user
+service-users.create-from-user.title: New service user from a user
+service-users.create-from-user.description: 'Copies the permissions, roles and workspaces of the user. The user is not changed and admin rights are never copied.'
+service-users.field.name: Name
+service-users.field.name.fixed: 'The name cannot be changed, because MCP server access is granted by name.'
+service-users.field.name.invalid: 'Use up to 64 letters, digits, dots, hyphens or underscores, starting with a letter or a digit, for example svc-erp-sync.'
+service-users.field.email: Contact email
+service-users.field.responsible-users: Responsible users
+service-users.field.responsible-users.help: 'They answer for this service user wherever a human is needed, for example for notices about it.'
+service-users.field.source-user: User to copy from
+service-users.filter.unused-days: Unused for more than N days
+service-users.status.inactive: Inactive
+service-users.dormancy.never-used: Never used
+service-users.dormancy.warning: Unused for 90 days
+service-users.dormancy.dormant: Dormant
+service-users.tab.settings: Settings
+service-users.tab.permissions: Permissions
+service-users.tab.roles: Roles
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roles
+service-users.save.success: Service user saved
+service-users.deactivate: Deactivate
+service-users.deactivate.confirm: 'Deactivate service user "{{name}}"? Its credentials stop working with the next request.'
+service-users.delete: Delete
+service-users.delete.confirm: 'Delete service user "{{name}}" permanently? Its OAuth client, its tokens and its MCP server access are removed. This cannot be undone.'
+service-users.credentials.title: Credentials
+service-users.credentials.client-id: Client ID
+service-users.credentials.last-used: Last used
+service-users.credentials.never-used: Never
+service-users.credentials.no-client: No OAuth client
+service-users.credentials.rotate: Rotate secret
+service-users.credentials.rotate.confirm: 'Create a new client secret for "{{name}}"? The current secret stops working at once.'
+service-users.credentials.mcp-tokens: MCP access tokens
+service-users.credentials.mcp-tokens.active: Active tokens
+service-users.credentials.mcp-tokens.latest-expiry: Latest expiry
+service-users.credentials.mcp-tokens.none: No active tokens
+service-users.credentials.issue: Issue token
+service-users.credentials.issue.title: Issue an MCP access token
+service-users.credentials.issue.ttl: Lifetime in days (1 to 90)
+service-users.credentials.issue.ttl.invalid: Enter a whole number of days from 1 to 90.
+service-users.credentials.issue.hint: The token is shown only once. Clients send it as a Bearer token in the Authorization header.
+service-users.credentials.revoke: Revoke all tokens
+service-users.credentials.revoke.confirm: Revoke every MCP access token of this service user? Connected clients stop working immediately.
+service-users.credentials.revoke.success: All MCP access tokens of the service user are revoked.
+service-users.credentials.oauth: OAuth client
+service-users.credentials.oauth.disabled: OAuth client credentials are disabled on this instance; use an MCP access token.
+service-users.credentials.oauth.rotate-hint: Access tokens already issued with the old secret stay valid until they expire.
+service-users.credentials.token: Access token
+service-users.credentials.token.expires: Expires
+service-users.create.credentials.title: Credentials
+service-users.create.credentials.skip: Skip, issue later
+service-users.create.credentials.which: 'Use the OAuth client for pipelines that can run the client_credentials grant; use an MCP access token for everything else.'
+service-users.create.credentials.token-description: 'Clients connect with an MCP access token. Issue one now, or later from the credentials of the service user.'
+service-users.secret.title: Client secret
+service-users.secret.client-secret: Client secret
+service-users.secret.warning: 'Copy the secret now. It is shown only once and cannot be displayed again.'
+service-users.secret.copy: Copy secret
+service-users.secret.close: Close
+navigation.maintenance-mode: Maintenance Mode
+maintenance-mode.activate.title: Activate maintenance mode?
+maintenance-mode.activate.text: 'All services, including the website, go into maintenance. Only this browser session keeps access.'
+maintenance-mode.activate.lock-out: 'Logging out, closing the browser or an expired session locks you out as well.'
+maintenance-mode.activate.background-jobs: 'Background jobs and message consumers do not start while maintenance mode is active.'
+maintenance-mode.activate.ok: Activate
+maintenance-mode.indicator.tooltip: 'Maintenance mode is active. Click to deactivate it.'
+maintenance-mode.deactivate.title: Deactivate maintenance mode?
+maintenance-mode.deactivate.text: 'All sessions regain access.'
+maintenance-mode.deactivate.ok: Deactivate
+maintenance-mode.logout.title: Deactivate maintenance mode first?
+maintenance-mode.logout.text: 'Maintenance mode is active and only this session has access. After logging out it can only be switched off from the command line.'
+maintenance-mode.logout.deactivate-and-log-out: Deactivate and log out
+maintenance-mode.locked-out.title: Maintenance
+maintenance-mode.locked-out.text: 'The system is in maintenance mode or temporarily unavailable. Your last action may not have been saved. This notice closes itself as soon as the system is available again.'
+maintenance-mode.locked-out.reload: Reload

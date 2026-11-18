@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import cn from 'classnames'
 import { isNull, isUndefined } from 'lodash'
 import { type Action, Layout, type ILayoutProps, type TabNode } from 'flexlayout-react'
 import { useStyles } from './widget-manager-view.styles'
-import { type CreateContextMenuItemsProps, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
+import { type CreateContextMenuItemsProps, TabContextMenuContext, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
@@ -26,7 +26,8 @@ export interface WidgetManagerProps extends ILayoutProps {
 
 const WidgetManagerViewInner = ({ className, createContextMenuItems, ...props }: WidgetManagerProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { showContextMenu, dropdown } = useContextMenu(props.model, createContextMenuItems)
+  const { showContextMenu, dropdown, openTabId = null, openFromKeyboard } = useContextMenu(props.model, createContextMenuItems)
+  const contextMenu = useMemo(() => ({ openTabId, openFromKeyboard }), [openTabId, openFromKeyboard])
   const { closeWidget } = useWidgetManager()
   const { motion, onAction: trackSideWidgetMotion } = useSideWidgetMotion(props.model)
 
@@ -48,11 +49,13 @@ const WidgetManagerViewInner = ({ className, createContextMenuItems, ...props }:
 
   return (
     <div className={ cn('widget-manager', className, styles.widgetManager, { [`widget-manager--side-widget-${motion}`]: !isNull(motion) }) }>
-      <Layout
-        { ...props }
-        onAction={ onAction }
-        onContextMenu={ showContextMenu }
-      />
+      <TabContextMenuContext.Provider value={ contextMenu }>
+        <Layout
+          { ...props }
+          onAction={ onAction }
+          onContextMenu={ showContextMenu }
+        />
+      </TabContextMenuContext.Provider>
       { dropdown }
     </div>
   )

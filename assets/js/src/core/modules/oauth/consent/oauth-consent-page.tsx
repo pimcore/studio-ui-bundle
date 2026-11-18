@@ -142,7 +142,7 @@ export const OAuthConsentPage = (): React.JSX.Element => {
 
     setDecisionError(undefined)
 
-    approve({ id: requestId, body: { approved } })
+    approve({ id: requestId, approveAuthorization: { approved } })
       .unwrap()
       .then((result) => {
         // Leave the SPA for the client's redirect_uri (Allow -> code, Deny -> error).

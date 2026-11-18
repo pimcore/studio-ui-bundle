@@ -73,61 +73,73 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
   const { updateFieldValue: updateDocumentFieldValue } = useCacheUpdate('document', ['DOCUMENT_TREE'])
 
+  const patchAsset = async (args: ElementPatchArgs): Promise<boolean> => {
+    const response = await assetPatch(args)
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return false
+    }
+
+    // Every patched element needs its cache entry updated, not just the first - but
+    // only for what the patch actually carries: a move sends no key, and writing it
+    // would blank the cached filename.
+    args.body.data.forEach(item => {
+      if (!isUndefined(item.key)) {
+        updateAssetFieldValue(item.id, 'filename', item.key)
+      }
+    })
+    return true
+  }
+
+  const patchDataObject = async (args: ElementPatchArgs): Promise<boolean> => {
+    const response = await dataObjectPatch(args)
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return false
+    }
+
+    // Every patched element needs its cache entry updated, not just the first.
+    args.body.data.forEach(item => {
+      if (!isUndefined(item.key)) {
+        updateDataObjectFieldValue(item.id, 'key', item.key)
+      }
+    })
+    return true
+  }
+
+  const patchDocument = async (args: ElementPatchArgs): Promise<boolean> => {
+    if (args.body.data.length !== 1) {
+      trackError(new GeneralError('Document patching only supports a single element'))
+    }
+
+    const response = await documentUpdate({
+      id: args.body.data[0].id,
+      body: {
+        data: {
+          parentId: args.body.data[0].parentId,
+          key: args.body.data[0].key,
+          locked: args.body.data[0].locked,
+          index: args.body.data[0].index
+        }
+      }
+    })
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      return false
+    }
+
+    updateDocumentFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+    return true
+  }
+
   const elementPatch = async (args: ElementPatchArgs): Promise<boolean> => {
     try {
       if (elementType === 'asset') {
-        const response = await assetPatch(args)
-        if (!isUndefined(response.error)) {
-          trackError(new ApiError(response.error))
-        }
-
-        // Every patched element needs its cache entry updated, not just the first - but
-        // only for what the patch actually carries: a move sends no key, and writing it
-        // would blank the cached filename.
-        args.body.data.forEach(item => {
-          if (!isUndefined(item.key)) {
-            updateAssetFieldValue(item.id, 'filename', item.key)
-          }
-        })
-
-        return isUndefined(response.error)
+        return await patchAsset(args)
       } else if (elementType === 'data-object') {
-        const response = await dataObjectPatch(args)
-        if (!isUndefined(response.error)) {
-          trackError(new ApiError(response.error))
-        }
-
-        // Every patched element needs its cache entry updated, not just the first.
-        args.body.data.forEach(item => {
-          if (!isUndefined(item.key)) {
-            updateDataObjectFieldValue(item.id, 'key', item.key)
-          }
-        })
-
-        return isUndefined(response.error)
+        return await patchDataObject(args)
       } else if (elementType === 'document') {
-        if (args.body.data.length !== 1) {
-          trackError(new GeneralError('Document patching only supports a single element'))
-        }
-
-        const response = await documentUpdate({
-          id: args.body.data[0].id,
-          body: {
-            data: {
-              parentId: args.body.data[0].parentId,
-              key: args.body.data[0].key,
-              locked: args.body.data[0].locked,
-              index: args.body.data[0].index
-            }
-          }
-        })
-        if (!isUndefined(response.error)) {
-          trackError(new ApiError(response.error))
-        }
-
-        updateDocumentFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
-
-        return isUndefined(response.error)
+        return await patchDocument(args)
       }
     } catch {
       trackError(new GeneralError('Error while patching element'))
