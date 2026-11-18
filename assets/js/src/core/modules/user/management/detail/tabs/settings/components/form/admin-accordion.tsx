@@ -15,11 +15,16 @@ import { Form, Typography } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { LoginTokenModalContainer } from '../login-token-modal/login-token-modal-container'
+import { SendInvitationButton } from '../send-invitation-button/send-invitation-button'
 
 interface IAdminAccordion {
   isDisabled?: boolean
+  userId?: number
+  email?: string | null
+  lastLogin?: number | null
+  hasUnsavedChanges?: boolean
 }
-const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.Element => {
+const AdminAccordion = ({ isDisabled, userId, email, lastLogin, hasUnsavedChanges, ...props }: IAdminAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { Text } = Typography
   const user = getCurrentUser()
@@ -49,6 +54,15 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
           <LoginTokenModalContainer
             disabled={ isDisabled }
           />
+
+          {userId !== undefined && (
+            <SendInvitationButton
+              email={ email }
+              hasUnsavedChanges={ hasUnsavedChanges }
+              lastLogin={ lastLogin }
+              userId={ userId }
+            />
+          )}
         </div>
       </>
     }
