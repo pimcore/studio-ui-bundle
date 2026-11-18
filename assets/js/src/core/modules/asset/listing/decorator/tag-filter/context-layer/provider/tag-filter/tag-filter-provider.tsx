@@ -14,8 +14,6 @@ export type SelectedTags = number[]
 
 export const tagFilterType = 'system.tag'
 
-export const untaggedPqlCondition = 'system_fields.tags = NULL'
-
 export interface TagFilter {
   type: typeof tagFilterType
   filterValue: {
@@ -24,13 +22,20 @@ export interface TagFilter {
   }
 }
 
+export interface UntaggedFilter {
+  key: 'system_fields.tags'
+  type: typeof tagFilterType
+  operator: 'empty'
+  filterValue: null
+}
+
 export interface TagFilterData {
   tags: SelectedTags
   setTags: (tags: SelectedTags) => void
   onlyUntagged: boolean
   setOnlyUntagged: (onlyUntagged: boolean) => void
   showOnlyUntaggedFilter: boolean
-  getDataQueryArg: () => TagFilter | undefined
+  getDataQueryArg: () => TagFilter | UntaggedFilter | undefined
 }
 
 export type TagFilterContextProps = TagFilterData | undefined
@@ -48,6 +53,10 @@ export const TagFilterProvider = (props: TagFilterProviderProps): React.JSX.Elem
   const showOnlyUntaggedFilter = props.showOnlyUntaggedFilter === true
 
   const getDataQueryArg: TagFilterData['getDataQueryArg'] = () => {
+    if (onlyUntagged) {
+      return { key: 'system_fields.tags', type: tagFilterType, operator: 'empty', filterValue: null }
+    }
+
     if (tags === undefined || tags.length === 0) {
       return undefined
     }

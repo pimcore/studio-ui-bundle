@@ -18,8 +18,7 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useTagFilter } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter'
-import { tagFilterType, untaggedPqlCondition, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
-import { removePqlCondition } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters/pql-condition'
+import { tagFilterType, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { buildSelectedColumns, type SavedColumn } from './restored-layout'
 import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/provider/use-type-select'
@@ -106,11 +105,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
 
     // System filters with their own sidebar controls.
     const pqlEntry = entries.find((entry) => entry.type === 'system.pql')
-    const savedPql = isString(pqlEntry?.filterValue) ? pqlEntry.filterValue : ''
-    // "Only untagged" is sent ANDed into the PQL filter; split it off again so the user's PQL stays apart.
-    const pqlWithoutUntagged = showOnlyUntaggedFilter ? removePqlCondition(savedPql, untaggedPqlCondition) : undefined
-    const onlyUntagged = pqlWithoutUntagged !== undefined
-    const pql = pqlWithoutUntagged ?? savedPql
+    const pql = isString(pqlEntry?.filterValue) ? pqlEntry.filterValue : ''
     const unreferenced = entries.find((entry) => entry.type === 'system.unreferenced')?.filterValue === true
     // The query sends `includeDescendants` (the inverse of the "only direct children" toggle).
     const directChildren = filter?.includeDescendants === false
@@ -127,7 +122,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     const tagEntry = entries.find((entry) => entry.type === tagFilterType)
     const restoredTags = (tagEntry?.filterValue as { tags?: SelectedTags } | undefined)?.tags
     setTags(isArray(restoredTags) ? restoredTags : [])
-    setOnlyUntagged(onlyUntagged)
+    setOnlyUntagged(showOnlyUntaggedFilter && tagEntry?.operator === 'empty')
 
     // Type select — restored from the `type` column filter rather than as a field filter (see
     // isTypeSelectEntry). Always set (including null) so opening a search replaces a type left over

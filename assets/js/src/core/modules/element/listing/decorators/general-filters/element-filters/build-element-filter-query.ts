@@ -12,7 +12,6 @@ import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { searchTermFilterType } from '../context-layer/provider/search-term-filter/search-term-filter-provider'
 import { pqlFilterType } from '../context-layer/provider/pql-filter/pql-filter-provider'
 import { unreferencedFilterType } from './definitions/unreferenced-filter'
-import { addPqlCondition } from './pql-condition'
 import {
   type ElementFilterQueryPart,
   type ElementFilterContext,
@@ -41,11 +40,9 @@ export const buildElementFilterQuery = (
 
   const retainedColumnFilters = (baseFilters.columnFilters ?? [])
     .filter((columnFilter) => !columnsToFilterOut.has(columnFilter.type))
-  // An inner decorator's PQL (e.g. the untagged tag filter) is ANDed with the user's PQL, not dropped
-  const basePqlFilter = (baseFilters.columnFilters ?? []).find((columnFilter) => columnFilter.type === pqlFilterType)
 
   let filters: ElementListingFilters = { ...baseFilters }
-  let columnFilters: ColumnFilter[] = [...retainedColumnFilters]
+  const columnFilters: ColumnFilter[] = [...retainedColumnFilters]
 
   for (const contribution of contributions) {
     if (contribution.kind === 'columnFilters') {
@@ -53,10 +50,6 @@ export const buildElementFilterQuery = (
     } else {
       filters = contribution.apply(filters)
     }
-  }
-
-  if (basePqlFilter !== undefined) {
-    columnFilters = addPqlCondition(columnFilters, String(basePqlFilter.filterValue))
   }
 
   const getColumnLocale = (columnKey: string | undefined, providedLocale: string | null | undefined): string | null => {

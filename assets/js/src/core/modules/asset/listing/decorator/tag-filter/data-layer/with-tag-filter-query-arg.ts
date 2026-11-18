@@ -10,30 +10,24 @@
 
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useTagFilter } from '../context-layer/provider/tag-filter/use-tag-filter'
-import { tagFilterType, untaggedPqlCondition } from '../context-layer/provider/tag-filter/tag-filter-provider'
-import { addPqlCondition } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters/pql-condition'
-import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
+import { tagFilterType } from '../context-layer/provider/tag-filter/tag-filter-provider'
 
 export const withTagFilterQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperTagFilterExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
     const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
-    const { getDataQueryArg, tags, onlyUntagged } = useTagFilter()
+    const { getDataQueryArg } = useTagFilter()
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()
       const tagFilter = getDataQueryArg()
 
       const currentColumnFilters = baseArgs.body.filters.columnFilters ?? []
-      let newColumnFilters = [
+      const newColumnFilters = [
         ...currentColumnFilters.filter((currentFilter) => currentFilter.type !== tagFilterType)
       ]
 
-      if (tags.length > 0 && !onlyUntagged) {
+      if (tagFilter !== undefined) {
         newColumnFilters.push(tagFilter)
-      }
-
-      if (onlyUntagged) {
-        newColumnFilters = addPqlCondition(newColumnFilters as ColumnFilter[], untaggedPqlCondition)
       }
 
       return {

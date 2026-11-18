@@ -13,16 +13,14 @@ import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { withTagFilterQueryArg } from './with-tag-filter-query-arg'
 
-let tagFilterState: { tags: number[], onlyUntagged: boolean } = { tags: [], onlyUntagged: false }
+let dataQueryArg: ColumnFilter | undefined
 
 jest.mock('../context-layer/provider/tag-filter/use-tag-filter', () => ({
-  useTagFilter: () => ({
-    ...tagFilterState,
-    getDataQueryArg: () => tagFilterState.tags.length > 0
-      ? { type: 'system.tag', filterValue: { considerChildTags: true, tags: tagFilterState.tags } }
-      : undefined
-  })
+  useTagFilter: () => ({ getDataQueryArg: () => dataQueryArg })
 }))
+
+const tagFilter = { type: 'system.tag', filterValue: { considerChildTags: true, tags: [3] } }
+const untaggedFilter: ColumnFilter = { type: 'system.tag', operator: 'empty', filterValue: null }
 
 const columnFiltersFor = (baseColumnFilters: ColumnFilter[]): ColumnFilter[] => {
   const useBaseHook = (() => ({
@@ -35,33 +33,22 @@ const columnFiltersFor = (baseColumnFilters: ColumnFilter[]): ColumnFilter[] => 
 }
 
 describe('withTagFilterQueryArg', () => {
-  it('sends the selected tags as the tag filter while "only untagged" is not ticked', () => {
-    tagFilterState = { tags: [3], onlyUntagged: false }
+  it('sends the tag filter of the provider', () => {
+    dataQueryArg = tagFilter
 
-    expect(columnFiltersFor([])).toEqual([
-      { type: 'system.tag', filterValue: { considerChildTags: true, tags: [3] } }
-    ])
+    expect(columnFiltersFor([])).toEqual([tagFilter])
   })
 
-  it('sends no tag filter while no tag is selected and "only untagged" is not ticked', () => {
-    tagFilterState = { tags: [], onlyUntagged: false }
+  it('sends no tag filter while the provider has none', () => {
+    dataQueryArg = undefined
 
-    expect(columnFiltersFor([])).toEqual([])
+    expect(columnFiltersFor([tagFilter])).toEqual([])
   })
 
-  it('sends the untagged PQL condition instead of the tag filter while "only untagged" is ticked', () => {
-    tagFilterState = { tags: [3], onlyUntagged: true }
+  it('replaces a tag filter already in the query with the untagged filter and leaves the PQL filter as it is', () => {
+    dataQueryArg = untaggedFilter
+    const pqlFilter = { type: 'system.pql', filterValue: 'color = "red"' }
 
-    expect(columnFiltersFor([{ type: 'system.tag', filterValue: { considerChildTags: true, tags: [3] } }])).toEqual([
-      { type: 'system.pql', filterValue: 'system_fields.tags = NULL' }
-    ])
-  })
-
-  it('ANDs the untagged condition with a PQL filter that is already in the query', () => {
-    tagFilterState = { tags: [], onlyUntagged: true }
-
-    expect(columnFiltersFor([{ type: 'system.pql', filterValue: 'color = "red"' }])).toEqual([
-      { type: 'system.pql', filterValue: '(color = "red") AND (system_fields.tags = NULL)' }
-    ])
+    expect(columnFiltersFor([pqlFilter, tagFilter])).toEqual([pqlFilter, untaggedFilter])
   })
 })
