@@ -11,7 +11,7 @@
 /* eslint-disable max-lines */
 
 import { type SerializedError } from '@reduxjs/toolkit'
-import { type FetchBaseQueryError, type TypedUseMutation } from '@reduxjs/toolkit/query/react'
+import { type FetchBaseQueryError, type TypedUseMutation, type TypedUseQuery } from '@reduxjs/toolkit/query/react'
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import {
   api as baseApi,
@@ -20,7 +20,7 @@ import {
   type ClassificationStoreConfigurationGroupCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
-  type ClassificationStoreConfigurationKeyCollectionApiArg,
+  type ClassificationStoreConfigurationKeyCollectionApiArg as GeneratedKeyCollectionApiArg,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
   type ClassificationStoreConfigurationCollectionRelationCollectionApiArg,
   type ClassificationStoreCollection2 as GeneratedKeyLayout,
@@ -34,6 +34,9 @@ import {
 import { emitClassificationStoreConfigurationChange } from './classification-store-configuration-change'
 
 const CONFIGURATION_PREFIX = '/pimcore-studio/api/classification-store/configuration'
+
+/** The cache tag of one group's still-available keys; see `addTagTypes` below. */
+const AVAILABLE_KEYS_TAG = 'Classification Store Available Keys'
 
 // ─── Hand-written sub-group contract ────────────────────────────────────────────
 // The sub-group endpoints and the `subGroup` field shipped after this client was last
@@ -392,6 +395,19 @@ const openKeyWrite = (
 export interface ClassificationStoreConfigurationKeyCollectionApiResponse {
   totalItems: number
   items: ClassificationStoreConfigurationKeyDetail[]
+}
+
+/**
+ * The key collection argument, with the `excludeKeysOfGroupId` the shipped endpoint takes: the keys
+ * that group holds are left out of the page and of the `totalItems` counted for it. Optional, so
+ * every other reader sends what it always sent. Shadowed because the generated body type predates
+ * the parameter, and gone with the next regeneration.
+ */
+export interface ClassificationStoreConfigurationKeyCollectionApiArg {
+  storeId: number
+  body: GeneratedKeyCollectionApiArg['body'] & {
+    excludeKeysOfGroupId?: number
+  }
 }
 
 export interface ClassificationStoreConfigurationKeyUpdateApiArg {
@@ -872,6 +888,8 @@ const isLastPageWithRoom = (args: PagedArgs, draft: { items: unknown[], totalIte
 // An open object editor is told through emitClassificationStoreConfigurationChange once a
 // configuration mutation is confirmed, so it can re-read the layout it is showing.
 const api = baseApi.enhanceEndpoints({
+  // Per group, so an assignment re-reads only that picker's pages and no other cached list
+  addTagTypes: [AVAILABLE_KEYS_TAG],
   endpoints: {
 
     // ─── Groups ──────────────────────────────────────────────────────────────
@@ -1010,7 +1028,14 @@ const api = baseApi.enhanceEndpoints({
     // ─── Keys ────────────────────────────────────────────────────────────────
 
     classificationStoreConfigurationKeyCollection: {
-      providesTags: ['Classification Store'],
+      // A page read for a group's picker carries that group's tag; an unnarrowed page cannot change
+      providesTags: (result, error, args) => {
+        const groupId = (args as ClassificationStoreConfigurationKeyCollectionApiArg).body?.excludeKeysOfGroupId
+
+        return groupId === undefined
+          ? ['Classification Store']
+          : ['Classification Store', { type: AVAILABLE_KEYS_TAG, id: groupId }]
+      },
       // Every read of the page is registered for as long as it is in flight, so a key update
       // confirmed while it ran can write its own fields back over the answer (see the read ledger
       // above). Without it the answer — a snapshot taken before that update was applied — is the
@@ -1288,7 +1313,11 @@ const api = baseApi.enhanceEndpoints({
 
     // create is also used as upsert (update mandatory/sorter) — patch cache in-place
     classificationStoreConfigurationKeyGroupRelationCreate: {
-      invalidatesTags: () => [],
+      // Which page a no-longer-available key leaves, and what the total becomes, are the server's
+      invalidatesTags: (result, error, args) => [{
+        type: AVAILABLE_KEYS_TAG,
+        id: args.classificationStoreConfigurationKeyGroupRelationCreate.groupId
+      }],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         const create: ClassificationStoreConfigurationKeyGroupRelationCreate =
           args.classificationStoreConfigurationKeyGroupRelationCreate
@@ -1426,7 +1455,11 @@ const api = baseApi.enhanceEndpoints({
     },
 
     classificationStoreConfigurationKeyGroupRelationDelete: {
-      invalidatesTags: () => [],
+      // Removing an assignment makes the key available again, so the picker's pages are re-read
+      invalidatesTags: (result, error, args) => [{
+        type: AVAILABLE_KEYS_TAG,
+        id: args.classificationStoreConfigurationKeyGroupRelationDelete.groupId
+      }],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         const { keyId, groupId } = args.classificationStoreConfigurationKeyGroupRelationDelete
         const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse>(
@@ -1541,7 +1574,6 @@ export const {
   // Listing queries (formerly mutations)
   useClassificationStoreConfigurationCollectionCollectionQuery,
   useClassificationStoreConfigurationGroupCollectionQuery,
-  useClassificationStoreConfigurationKeyCollectionQuery,
   useClassificationStoreConfigurationKeyGroupRelationCollectionQuery,
   useClassificationStoreConfigurationCollectionRelationCollectionQuery,
   // CRUD mutations — groups
@@ -1598,6 +1630,18 @@ export const useClassificationStoreConfigurationKeyGroupRelationCreateMutation =
   api.useClassificationStoreConfigurationKeyGroupRelationCreateMutation as unknown as TypedUseMutation<
     ClassificationStoreConfigurationKeyGroupRelationDetail,
     { classificationStoreConfigurationKeyGroupRelationCreate: ClassificationStoreConfigurationKeyGroupRelationCreate },
+    BaseQuery
+  >
+
+/**
+ * The key collection hook, re-typed to take the `excludeKeysOfGroupId` the shipped endpoint
+ * declares. Re-typed rather than wrapped, as the hooks around it are: a wrapper drops the hook's
+ * own options. Removed with the rest of the hand-written block on the next regeneration.
+ */
+export const useClassificationStoreConfigurationKeyCollectionQuery =
+  api.useClassificationStoreConfigurationKeyCollectionQuery as unknown as TypedUseQuery<
+    ClassificationStoreConfigurationKeyCollectionApiResponse,
+    ClassificationStoreConfigurationKeyCollectionApiArg,
     BaseQuery
   >
 

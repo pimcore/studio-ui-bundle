@@ -503,9 +503,6 @@ export const KeyGroupRelationsGrid = ({
     })
   ], [t, handleRemove, columnHelper, isAssigning, keyUnits])
 
-  // Stable array — only recomputed when relations change
-  const excludedKeyIds = useMemo(() => relations.map((r) => r.keyId), [relations])
-
   const headerTitle = groupId !== undefined
     ? t('classification-store.relations-title', { name: groupName ?? String(groupId) })
     : t('classification-store.select-group-hint')
@@ -640,7 +637,7 @@ export const KeyGroupRelationsGrid = ({
       </Flex>
 
       <KeySelectionDialog
-        excludedKeyIds={ excludedKeyIds }
+        groupId={ groupId }
         onCancel={ () => { setKeyDialogOpen(false) } }
         onConfirm={ (keys) => { void handleAddKey(keys) } }
         open={ keyDialogOpen }
