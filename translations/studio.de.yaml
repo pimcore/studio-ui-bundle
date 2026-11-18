@@ -1431,7 +1431,7 @@ element.publish: Veröffentlichen
 element.locate-in-tree: Im Baum anzeigen
 element.sidebar.filter.only-direct-children: Nur direkte Kinder
 element.sidebar.filter.only-unreferenced: Nur nicht referenzierte
-element.sidebar.filter.only-untagged: Nur Assets ohne Tags
+element.sidebar.filter.only-untagged: Nur ohne Tags
 element.sidebar.field-filters: Feldfilter
 element.full-information: Vollständige Informationen
 system-information.id: ID

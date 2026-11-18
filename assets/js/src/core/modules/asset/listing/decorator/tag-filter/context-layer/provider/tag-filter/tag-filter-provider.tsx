@@ -9,10 +9,14 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
+import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
 
 export type SelectedTags = number[]
 
 export const tagFilterType = 'system.tag'
+
+// Full index path: a bare "tags" would first match a standard field (e.g. asset metadata) of that name.
+export const tagsIndexField = 'system_fields.tags'
 
 export interface TagFilter {
   type: typeof tagFilterType
@@ -23,9 +27,9 @@ export interface TagFilter {
 }
 
 export interface UntaggedFilter {
-  key: 'system_fields.tags'
+  key: typeof tagsIndexField
   type: typeof tagFilterType
-  operator: 'empty'
+  operator: Extract<FilterOperator, 'empty'>
   filterValue: null
 }
 
@@ -54,7 +58,7 @@ export const TagFilterProvider = (props: TagFilterProviderProps): React.JSX.Elem
 
   const getDataQueryArg: TagFilterData['getDataQueryArg'] = () => {
     if (onlyUntagged) {
-      return { key: 'system_fields.tags', type: tagFilterType, operator: 'empty', filterValue: null }
+      return { key: tagsIndexField, type: tagFilterType, operator: 'empty', filterValue: null }
     }
 
     if (tags === undefined || tags.length === 0) {

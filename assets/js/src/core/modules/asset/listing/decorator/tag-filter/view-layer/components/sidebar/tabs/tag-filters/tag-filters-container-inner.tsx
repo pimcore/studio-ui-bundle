@@ -23,16 +23,18 @@ import { TagsTreeFiltersContainer } from './tags-tree-filters-container'
 import { useTagFilters } from './provider/tag-filters/use-tag-filters'
 import { useTagFilter as useListingTagFiler } from '../../../../../context-layer/provider/tag-filter/use-tag-filter'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
+import { useStyles as useCheckboxFilterStyles } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters/definitions/checkbox-filter.styles'
 
 export const TagFiltersContainerInner = (): React.JSX.Element => {
   const { tags, setTags, onlyUntagged, setOnlyUntagged } = useTagFilters()
   const { setTags: setListingTags, setOnlyUntagged: setListingOnlyUntagged, showOnlyUntaggedFilter } = useListingTagFiler()
   const { setPage } = usePaging()
+  const { styles: checkboxFilterStyles } = useCheckboxFilterStyles()
 
   const { t } = useTranslation()
 
   const handleApplyClick = (): void => {
-    setListingTags(onlyUntagged ? [] : tags)
+    setListingTags(tags)
     setListingOnlyUntagged(onlyUntagged)
     setPage(1)
   }
@@ -83,6 +85,7 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
           {showOnlyUntaggedFilter && (
             <Checkbox
               checked={ onlyUntagged }
+              className={ checkboxFilterStyles.checkbox }
               data-testid="listing-tag-filter-only-untagged-checkbox"
               onChange={ (e) => { setOnlyUntagged(e.target.checked) } }
             >

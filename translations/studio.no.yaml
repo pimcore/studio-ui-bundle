@@ -1431,7 +1431,7 @@ element.publish: Publiser
 element.locate-in-tree: Finn i treet
 element.sidebar.filter.only-direct-children: Kun direkte underelementer
 element.sidebar.filter.only-unreferenced: Kun elementer uten referanser
-element.sidebar.filter.only-untagged: Kun assets uten tagger
+element.sidebar.filter.only-untagged: Kun elementer uten tagger
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID

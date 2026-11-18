@@ -12,15 +12,16 @@ import { renderHook } from '@testing-library/react'
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { withTagFilterQueryArg } from './with-tag-filter-query-arg'
+import { type TagFilter, type UntaggedFilter } from '../context-layer/provider/tag-filter/tag-filter-provider'
 
-let dataQueryArg: ColumnFilter | undefined
+let dataQueryArg: TagFilter | UntaggedFilter | undefined
 
 jest.mock('../context-layer/provider/tag-filter/use-tag-filter', () => ({
   useTagFilter: () => ({ getDataQueryArg: () => dataQueryArg })
 }))
 
-const tagFilter = { type: 'system.tag', filterValue: { considerChildTags: true, tags: [3] } }
-const untaggedFilter: ColumnFilter = { type: 'system.tag', operator: 'empty', filterValue: null }
+const tagFilter: TagFilter = { type: 'system.tag', filterValue: { considerChildTags: true, tags: [3] } }
+const untaggedFilter: UntaggedFilter = { key: 'system_fields.tags', type: 'system.tag', operator: 'empty', filterValue: null }
 
 const columnFiltersFor = (baseColumnFilters: ColumnFilter[]): ColumnFilter[] => {
   const useBaseHook = (() => ({

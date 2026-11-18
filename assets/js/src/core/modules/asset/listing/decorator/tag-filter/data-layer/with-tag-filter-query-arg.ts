@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useTagFilter } from '../context-layer/provider/tag-filter/use-tag-filter'
 import { tagFilterType } from '../context-layer/provider/tag-filter/tag-filter-provider'
@@ -26,7 +27,7 @@ export const withTagFilterQueryArg = (useBaseHook: AbstractDecoratorProps['useDa
         ...currentColumnFilters.filter((currentFilter) => currentFilter.type !== tagFilterType)
       ]
 
-      if (tagFilter !== undefined) {
+      if (!isUndefined(tagFilter)) {
         newColumnFilters.push(tagFilter)
       }
 

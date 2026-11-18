@@ -19,7 +19,7 @@ import {
 import {
   useTagGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 interface TagsTreeFiltersContainerProps {
@@ -27,12 +27,6 @@ interface TagsTreeFiltersContainerProps {
   setCheckedKeys: (keys: Key[]) => void
   disabled?: boolean
 }
-
-const disableTreeNodes = (nodes: TreeDataItem[]): TreeDataItem[] => nodes.map((node) => ({
-  ...node,
-  disabled: true,
-  children: isNil(node.children) ? node.children : disableTreeNodes(node.children as TreeDataItem[])
-}))
 
 const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
   const result: string[] = []
@@ -62,11 +56,9 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys, disabled
         return []
       }
 
-      const structure = createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
-
-      return disabled ? disableTreeNodes(structure) : structure
+      return createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
     },
-    [tags?.items, disabled]
+    [tags?.items]
   )
 
   const activeExpandedKeys = useMemo(
@@ -103,6 +95,7 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys, disabled
         checkStrictly
         checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
         defaultExpandedKeys={ activeExpandedKeys }
+        disabled={ disabled }
         onCheck={ handleCheck }
         onExpand={ (keys) => { setExpandedKeys(keys) } }
         treeData={ treeData }
