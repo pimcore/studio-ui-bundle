@@ -19,8 +19,6 @@ interface IStoreEngineIndicatorProps {
   storeId: number
 }
 
-const EAV_ENGINE = 'eav'
-
 export const StoreEngineIndicator = ({ storeId }: IStoreEngineIndicatorProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { engine } = useStoreEngine(storeId)
@@ -40,9 +38,6 @@ export const StoreEngineIndicator = ({ storeId }: IStoreEngineIndicatorProps): R
       gap="small"
     >
       <Text strong>{t('classification-store.engine.label', { engine: engineName })}</Text>
-      {engine.toLowerCase() === EAV_ENGINE && (
-        <Text type="secondary">{t('classification-store.engine.eav-hint')}</Text>
-      )}
     </Flex>
   )
 }

@@ -25,20 +25,18 @@ jest.mock('@Pimcore/modules/classification-store-config/hooks/use-store-engine',
 }))
 
 describe('StoreEngineIndicator', () => {
-  it('names the engine and explains what the EAV engine cannot hold', () => {
+  it('names the EAV engine', () => {
     storeEngine = { engine: 'eav', engineCapabilities: [] }
     render(<StoreEngineIndicator storeId={ 1 } />)
 
     expect(screen.getByText('classification-store.engine.label')).toBeInTheDocument()
-    expect(screen.getByText('classification-store.engine.eav-hint')).toBeInTheDocument()
   })
 
-  it('names the document engine without the hint', () => {
+  it('names the document engine', () => {
     storeEngine = { engine: 'document', engineCapabilities: ['StructuredValues'] }
     render(<StoreEngineIndicator storeId={ 1 } />)
 
     expect(screen.getByText('classification-store.engine.label')).toBeInTheDocument()
-    expect(screen.queryByText('classification-store.engine.eav-hint')).not.toBeInTheDocument()
   })
 
   /**

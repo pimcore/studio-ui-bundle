@@ -2262,7 +2262,6 @@ classification-store.tabs.sub-groups: Undergrupper
 classification-store.engine.label: "Motor: {{engine}}"
 classification-store.engine.eav: "EAV"
 classification-store.engine.document: "Dokument"
-classification-store.engine.eav-hint: "Kvalifiserte verdier og de utvidede nøkkeltypene krever dokumentmotoren."
 classification-store.key-type-needs-document-engine: "Motoren til denne storen kan ikke lagre denne nøkkeltypen. Den krever dokumentmotoren."
 classification-store.keys-without-field-filter: "Ingen feltfilter er tilgjengelig for disse nøklene, så de ble ikke lagt til: {{keyNames}}"
 classification-store.add-sub-group: Legg til undergruppe
