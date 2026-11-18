@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -18,12 +18,20 @@ import { ActionsCell } from './actions-cell'
 import {
   useRedirectTypeOptions,
   useRedirectStatusOptions,
-  useRedirectPriorityOptions
+  useRedirectPriorityOptions,
+  useRedirectTargetTypeOptions
 } from '../hooks/use-redirect-options'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { isElementReference } from '@Pimcore/modules/element/element-helper'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { isNil, isUndefined } from 'lodash'
 
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
+
+const withRowReplaced = (rows: RedirectRow[], rowId: string, next: RedirectRow): RedirectRow[] =>
+  rows.map(row => (row.rowId === rowId ? next : row))
 
 interface TableProps {
   onSortingChange?: (sorting: SortingState) => void
@@ -39,6 +47,10 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
   const { getAllSites } = useSites()
 
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
+
+  // the newest submission per row, so that a response that lost a race cannot overwrite a
+  // row that has been edited again in the meantime
+  const latestSubmission = useRef<Record<string, number>>({})
 
   const availableSites: Site[] = getAllSites()
   const siteOptions = availableSites.map(site => ({
@@ -83,8 +95,32 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     }),
     columnHelper.accessor('target', {
       header: t('redirects.target'),
-      meta: { editable: true, type: 'element', config: { allowedTypes: ['asset', 'document'], showPublishedState: false, expectsStringValue: true, allowTextInput: true } },
+      meta: {
+        editable: true,
+        type: 'element',
+        config: {
+          allowedTypes: ['asset', 'data-object', 'document'],
+          showPublishedState: false,
+          allowTextInput: true,
+          // the row keeps the target as a path, so the tag icon comes from the target type
+          getElementInfo: (cellProps: DefaultCellProps) => ({
+            fullPath: String(cellProps.getValue() ?? ''),
+            elementType: mapToElementType(
+              (cellProps.row.original as RedirectRow).targetType ?? 'document'
+            ) ?? undefined
+          })
+        }
+      },
       size: 200
+    }),
+    columnHelper.accessor('targetType', {
+      header: t('redirects.target-type'),
+      meta: {
+        type: 'select',
+        editable: true,
+        config: { useOptionsHook: () => useRedirectTargetTypeOptions() }
+      },
+      size: 110
     }),
     columnHelper.accessor('statusCode', {
       header: t('redirects.status'),
@@ -137,6 +173,21 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     })
   ], [siteOptions, t])
 
+  const getUpdatedRow = (columnId: string, value: unknown, rowData: RedirectRow): RedirectRow => {
+    if (columnId !== 'target') {
+      return { ...rowData, [columnId]: value }
+    }
+
+    // dropping an element onto the target cell also tells us which element type it is
+    if (isElementReference(value)) {
+      return { ...rowData, target: value.fullPath, targetType: value.type }
+    }
+
+    // a manually entered target is resolved by the server, which detects the element type
+    // (or clears it when the target is not an element at all)
+    return { ...rowData, target: isNil(value) ? null : String(value), targetType: null }
+  }
+
   const onUpdateCellData = async ({
     columnId,
     value,
@@ -147,29 +198,40 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     rowData: RedirectRow
   }): Promise<void> => {
     const rowId = rowData.rowId
-    const updatedRow: RedirectRow = { ...rowData, [columnId]: value }
+    const updatedRow = getUpdatedRow(columnId, value, rowData)
+    const submission = (latestSubmission.current[rowId] ?? 0) + 1
+    latestSubmission.current[rowId] = submission
 
-    setRedirectRows(prev =>
-      prev.map(row =>
-        row.rowId === rowId ? updatedRow : row
-      )
-    )
+    const replaceRow = (next: RedirectRow): void => {
+      setRedirectRows(prev => withRowReplaced(prev, rowId, next))
+    }
 
+    replaceRow(updatedRow)
     setModifiedCells([{ columnId, rowIndex: rowId }])
 
-    if (updatedRow.id !== null) {
-      const { success } = await updateRedirectById(updatedRow.id, updatedRow)
-
-      if (success) {
-        setModifiedCells([])
-      } else {
-        setRedirectRows(prev =>
-          prev.map(row =>
-            row.rowId === rowId ? rowData : row
-          )
-        )
-      }
+    if (updatedRow.id === null) {
+      return
     }
+
+    const { success, data } = await updateRedirectById(updatedRow.id, updatedRow)
+
+    // the row has been edited again while this request was in flight, so the newer edit owns it
+    if (latestSubmission.current[rowId] !== submission) {
+      return
+    }
+
+    if (success) {
+      setModifiedCells([])
+
+      // the server resolves the target against the target type, so take over its result
+      if (!isUndefined(data)) {
+        replaceRow({ ...data, rowId })
+      }
+
+      return
+    }
+
+    replaceRow(rowData)
   }
 
   return (
