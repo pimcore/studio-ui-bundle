@@ -392,6 +392,10 @@ grid.filter.less: Minder dan
 grid.filter.more: Meer dan
 grid.filter.string.placeholder: Zoeken of een lijst met één waarde per regel plakken om exact één van deze waarden te vinden
 grid.filter.column: "Filter {{column}}"
+grid.filter.operator.label: Voorwaarde
+grid.filter.operator.value: Komt overeen met waarde
+grid.filter.operator.empty: Is leeg
+grid.filter.operator.not-empty: Is niet leeg
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -2519,6 +2523,8 @@ recycle-bin.actions.delete: Verwijderen
 recycle-bin.actions.delete.title: Prullenbakitems verwijderen
 recycle-bin.actions.restore: Herstellen
 recycle-bin.actions.restore.title: Prullenbakitems herstellen
+recycle-bin.actions.restore.relocated_one: Element geplaatst in __restored. Nu gelden de rechten van die map.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementen geplaatst in __restored. Nu gelden de rechten van die map."
 ownership-management.title: Eigendomsbeheer
 ownership-management.show-deleted-owners: Items van verwijderde gebruikers weergeven
 ownership-management.deleted-user: Verwijderde gebruiker
