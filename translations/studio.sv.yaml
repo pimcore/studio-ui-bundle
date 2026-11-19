@@ -1649,7 +1649,6 @@ user-management.email: E-post
 user-management.language: Språk
 user-management.dateTime: Datum- och tidslokal
 user-management.welcomeScreen: Visa välkomstskärm vid start
-user-management.welcomeScreen.help: Användaren väljer instrumentpanelen i sin profil.
 user-management.welcomeScreenDashboard: Instrumentpanel för välkomstskärmen
 user-management.welcomeScreenDashboard.placeholder: Välj en instrumentpanel
 user-management.memorizeTabs: Kom ihåg öppna flikar

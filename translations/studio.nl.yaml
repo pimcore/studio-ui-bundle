@@ -1649,7 +1649,6 @@ user-management.email: E-mail
 user-management.language: Taal
 user-management.dateTime: Datum-tijdlocale
 user-management.welcomeScreen: Welkomstscherm tonen bij opstarten
-user-management.welcomeScreen.help: De gebruiker selecteert het dashboard in het eigen profiel.
 user-management.welcomeScreenDashboard: Dashboard voor het welkomstscherm
 user-management.welcomeScreenDashboard.placeholder: Selecteer een dashboard
 user-management.memorizeTabs: Open tabbladen onthouden

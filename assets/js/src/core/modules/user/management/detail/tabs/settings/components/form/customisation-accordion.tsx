@@ -18,7 +18,6 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
-import { WelcomeScreenHelp } from './welcome-screen-help/welcome-screen-help'
 
 interface ICustomisationAccordion {
   isAdmin?: boolean
@@ -167,8 +166,6 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
             size={ 'small' }
           />
         </Form.Item>
-
-        <WelcomeScreenHelp />
 
         <Form.Item
           name="memorizeTabs"

@@ -1649,7 +1649,6 @@ user-management.email: E-post
 user-management.language: Språk
 user-management.dateTime: Dato og tid-locale
 user-management.welcomeScreen: Vis velkomstskjerm ved oppstart
-user-management.welcomeScreen.help: Brukeren velger dashbordet i profilen sin.
 user-management.welcomeScreenDashboard: Dashbord for velkomstskjermen
 user-management.welcomeScreenDashboard.placeholder: Velg et dashbord
 user-management.memorizeTabs: Husk åpne faner

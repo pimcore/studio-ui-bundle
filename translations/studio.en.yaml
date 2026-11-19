@@ -1653,7 +1653,6 @@ user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale
 user-management.welcomeScreen: Show welcome screen on startup
-user-management.welcomeScreen.help: The user selects the dashboard in their profile.
 user-management.welcomeScreenDashboard: Welcome screen dashboard
 user-management.welcomeScreenDashboard.placeholder: Select a dashboard
 user-management.memorizeTabs: Memorize open tabs

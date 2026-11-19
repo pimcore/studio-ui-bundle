@@ -1649,7 +1649,6 @@ user-management.email: E-Mail
 user-management.language: Sprache
 user-management.dateTime: Datum/Uhrzeit-Gebietsschema
 user-management.welcomeScreen: Willkommensbildschirm beim Start anzeigen
-user-management.welcomeScreen.help: Der Benutzer wählt das Dashboard im eigenen Profil aus.
 user-management.welcomeScreenDashboard: Dashboard für den Willkommensbildschirm
 user-management.welcomeScreenDashboard.placeholder: Dashboard auswählen
 user-management.memorizeTabs: Offene Tabs merken

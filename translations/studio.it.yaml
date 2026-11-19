@@ -1649,7 +1649,6 @@ user-management.email: Email
 user-management.language: Lingua
 user-management.dateTime: Lingua data e ora
 user-management.welcomeScreen: Mostra schermata di benvenuto all'avvio
-user-management.welcomeScreen.help: L'utente seleziona la dashboard nel proprio profilo.
 user-management.welcomeScreenDashboard: Dashboard della schermata di benvenuto
 user-management.welcomeScreenDashboard.placeholder: Seleziona una dashboard
 user-management.memorizeTabs: Memorizza schede aperte
