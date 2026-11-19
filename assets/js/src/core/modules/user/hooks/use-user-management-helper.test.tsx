@@ -28,6 +28,7 @@ jest.mock('react-i18next', () => ({
 jest.mock('@Pimcore/modules/user/user-api-slice-enhanced', () => ({
   api: {
     endpoints: {
+      userGetById: { initiate: (arg: unknown) => ({ endpoint: 'userGetById', arg }) },
       userUpdateById: { initiate: (arg: unknown) => ({ endpoint: 'userUpdateById', arg }) },
       userUpdatePasswordById: { initiate: (arg: unknown) => ({ endpoint: 'userUpdatePasswordById', arg }) }
     }
@@ -146,5 +147,25 @@ describe('useUserManagementHelper.updateUserById', () => {
 
     expect(dispatchedUserUpdated()).toHaveLength(1)
     expect(mockMessageError).toHaveBeenCalledWith('Password too short')
+  })
+})
+
+describe('useUserManagementHelper.moveUserById', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('does not send the welcome screen target of the fetched user, so a newer choice from the profile stays', async () => {
+    setupDispatch({
+      userGetById: { data: { ...user, welcomeScreenTarget: 'studio-dashboards:019c7555_49f6_712b_af5f_bd0c22b3d1f7' } },
+      userUpdateById: { data: user }
+    })
+
+    const { result } = renderHook(() => useUserManagementHelper())
+    await result.current.moveUserById({ id: 42, parentId: 7 })
+
+    const [[update]] = mockDispatch.mock.calls.filter(([action]) => action?.endpoint === 'userUpdateById')
+    expect(update.arg.updateUser.parentId).toBe(7)
+    expect(update.arg.updateUser.welcomeScreenTarget).toBeUndefined()
   })
 })
