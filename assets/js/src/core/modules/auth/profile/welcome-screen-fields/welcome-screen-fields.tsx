@@ -13,26 +13,27 @@ import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { container } from '@Pimcore/app/depency-injection'
+import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type WelcomeScreenRegistry } from '@Pimcore/modules/app/welcome-screen/services/welcome-screen-registry'
 
 export const WelcomeScreenFields = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const welcomeScreen = Form.useWatch('welcomeScreen', Form.useFormInstance())
-  const options = container.get<WelcomeScreenRegistry>(serviceIds['WelcomeScreen/Registry']).getOptions()
-    .map((option) => ({ value: option.target, label: option.label }))
+  const welcomeScreen = Form.useWatch('welcomeScreen')
+  const registry = useInjection<WelcomeScreenRegistry>(serviceIds['WelcomeScreen/Registry'])
+  const options = registry.getOptions().map((option) => ({ value: option.target, label: option.label }))
+  const showSelect = welcomeScreen === true && options.length > 0
 
   return (
     <>
       <Form.Item
         name="welcomeScreen"
-        style={ welcomeScreen === true ? { marginBottom: 0 } : undefined }
+        style={ showSelect ? { marginBottom: 0 } : undefined }
       >
         <Switch labelRight={ t('user-management.welcomeScreen') } />
       </Form.Item>
 
-      {welcomeScreen === true && (
+      {showSelect && (
         <Form.Item
           // antd shows the placeholder only for undefined: no choice or a target the user can no longer open
           getValueProps={ (value?: string | null) => ({ value: options.some((option) => option.value === value) ? value : undefined }) }

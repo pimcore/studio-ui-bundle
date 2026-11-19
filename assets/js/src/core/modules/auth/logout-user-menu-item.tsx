@@ -15,7 +15,6 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type ContextMenuItemProvider } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { useLogoutMutation } from './authorization-api-slice.gen'
-import { resetWelcomeScreen } from '@Pimcore/modules/app/welcome-screen/utils/welcome-screen-session'
 
 export const logoutUserMenuItemProvider: ContextMenuItemProvider = {
   name: 'logout',
@@ -30,7 +29,6 @@ export const logoutUserMenuItemProvider: ContextMenuItemProvider = {
       icon: <Icon value={ 'log-out' } />,
       onClick: () => {
         logout().then(() => {
-          resetWelcomeScreen()
           window.location.reload()
         }).catch((error: Error) => {
           trackError(new ApiError(error))

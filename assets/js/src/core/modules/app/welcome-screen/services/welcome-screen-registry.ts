@@ -59,9 +59,14 @@ export class WelcomeScreenRegistry {
 
   open (target: string): boolean {
     const separatorIndex = target.indexOf(TARGET_SEPARATOR)
+
+    if (separatorIndex === -1) {
+      return false
+    }
+
     const provider = this.providers.get(target.slice(0, separatorIndex))
 
-    if (separatorIndex === -1 || provider === undefined) {
+    if (provider === undefined) {
       return false
     }
 

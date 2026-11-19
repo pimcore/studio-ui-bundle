@@ -14,15 +14,16 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { WelcomeScreenFields } from './welcome-screen-fields'
 
 const TARGET = 'studio-dashboards:0196a7c2_1b2d_7c3e_9f40_5a6b7c8d9e0f'
+let mockOptions: Array<{ target: string, label: string }> = []
 
 jest.mock('@Pimcore/app/depency-injection', () => ({
-  container: { get: () => ({ getOptions: () => [{ target: 'studio-dashboards:0196a7c2_1b2d_7c3e_9f40_5a6b7c8d9e0f', label: 'Overview' }] }) }
+  useInjection: () => ({ getOptions: () => mockOptions })
 }))
 jest.mock('@Pimcore/app/config/services/service-ids', () => ({ serviceIds: { 'WelcomeScreen/Registry': 'WelcomeScreen/Registry' } }))
 jest.mock('@Pimcore/components/form/form', () => {
   const { Form } = jest.requireActual('antd')
 
-  return { Form: { Item: Form.Item, useFormInstance: Form.useFormInstance, useWatch: Form.useWatch } }
+  return { Form: { Item: Form.Item, useWatch: Form.useWatch } }
 })
 jest.mock('@Pimcore/components/switch/switch', () => ({
   Switch: ({ value, onChange, labelRight }: { value?: boolean, onChange?: (checked: boolean) => void, labelRight?: string }) => (
@@ -71,6 +72,10 @@ const renderFields = (welcomeScreenTarget: string | null, welcomeScreen = true, 
 const getSelect = (): HTMLSelectElement => screen.getByLabelText<HTMLSelectElement>(SELECT_NAME)
 
 describe('WelcomeScreenFields', () => {
+  beforeEach(() => {
+    mockOptions = [{ target: TARGET, label: 'Overview' }]
+  })
+
   it('offers the targets of the welcome screen registry with their labels as they are, without a None option', () => {
     renderFields(null)
 
@@ -102,6 +107,14 @@ describe('WelcomeScreenFields', () => {
 
     expect(getSelect().value).toBe(TARGET)
     expect(onValuesChange).toHaveBeenCalledWith({ welcomeScreenTarget: TARGET }, { welcomeScreen: true, welcomeScreenTarget: TARGET })
+  })
+
+  it('shows only the switch when no provider offers a target', () => {
+    mockOptions = []
+    renderFields(TARGET)
+
+    expect(screen.getByLabelText(SWITCH_NAME)).toBeInTheDocument()
+    expect(screen.queryByLabelText(SELECT_NAME)).toBeNull()
   })
 
   it('hides the select while the switch is off and shows the kept choice again when it is turned on', () => {

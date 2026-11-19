@@ -10,7 +10,7 @@
 
 import { LOCAL_STORAGE_PREFIX } from '@Pimcore/constants/global'
 
-// per browser tab and user: a reload does not open it again, a login as another user in the same tab does
+// per browser tab and user: a reload does not open it again, the login screen clears it for the next login
 const HANDLED_KEY = `${LOCAL_STORAGE_PREFIX}welcome_screen_handled`
 
 export const isWelcomeScreenHandled = (userId: number): boolean => {
@@ -29,10 +29,10 @@ export const markWelcomeScreenHandled = (userId: number): void => {
   }
 }
 
-export const resetWelcomeScreen = (): void => {
+export const clearWelcomeScreenHandled = (): void => {
   try {
     sessionStorage.removeItem(HANDLED_KEY)
   } catch {
-    // nothing stored, nothing to reset
+    // storage blocked: nothing could have been stored
   }
 }
