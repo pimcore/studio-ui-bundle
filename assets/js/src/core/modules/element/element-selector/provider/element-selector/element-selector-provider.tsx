@@ -71,7 +71,7 @@ export interface ElementSelectorConfig {
     objects?: {
       allowedTypes?: IRelationAllowedTypesDataComponent['allowedDataObjectTypes']
       allowedClasses?: IRelationAllowedTypesDataComponent['allowedClasses']
-      fieldName?: string | null
+      fieldName?: string
     }
   }
 }
