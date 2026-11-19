@@ -9,9 +9,12 @@
  */
 
 import { type EmailTabManager } from './tab-manager/email-tab-manager'
+import { EmailLogTab } from './tab-manager/tabs/email-log/email-log-tab'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import {
   TAB_DEPENDENCIES,
   TAB_NOTES_AND_EVENTS,
@@ -34,12 +37,22 @@ import {
 } from '../../sidebar/tabs/email-settings/email-settings-sidebar'
 import { checkSettingsVisibility } from '../../sidebar/visibility/content-settings-visibility'
 
+const TAB_EMAIL_LOG: IEditorTab = {
+  key: 'email-log',
+  label: 'email-log.label',
+  userPermission: UserPermission.Emails,
+  children: <EmailLogTab />,
+  icon: <Icon value={ 'mail-02' } />,
+  isDetachable: true
+}
+
 moduleSystem.registerModule({
   onInit: () => {
     const emailEditorTabManager = container.get<EmailTabManager>(serviceIds['Document/Editor/EmailTabManager'])
 
     emailEditorTabManager.register(TAB_EDIT)
     emailEditorTabManager.register(TAB_PREVIEW)
+    emailEditorTabManager.register(TAB_EMAIL_LOG)
     emailEditorTabManager.register(TAB_PROPERTIES)
     emailEditorTabManager.register(TAB_VERSIONS)
     emailEditorTabManager.register(TAB_DEPENDENCIES)

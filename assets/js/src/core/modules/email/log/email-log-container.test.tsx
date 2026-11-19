@@ -169,4 +169,39 @@ describe('EmailLogContainer', () => {
 
     expect(screen.getByRole('button', { name: 'toolbar.reload' })).toHaveAttribute('data-tooltip', 'toolbar.reload')
   })
+
+  it('scopes the collection to the given document and hides the global search', () => {
+    const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
+    const searchQuery = jest.mocked(useEmailLogSearchQuery)
+    const collectionData = { totalItems: 1, items: [regularEmail] }
+    collectionQuery.mockReturnValue({
+      data: collectionData,
+      currentData: collectionData,
+      status: QueryStatus.fulfilled,
+      isUninitialized: false,
+      isLoading: false,
+      isFetching: false,
+      isSuccess: true,
+      isError: false,
+      refetch: jest.fn()
+    })
+    searchQuery.mockReturnValue({
+      status: QueryStatus.uninitialized,
+      isUninitialized: true,
+      isLoading: false,
+      isFetching: false,
+      isSuccess: false,
+      isError: false,
+      refetch: jest.fn()
+    })
+
+    render(<EmailLogContainer documentId={ 42 } />)
+
+    expect(collectionQuery).toHaveBeenLastCalledWith(
+      { page: 1, pageSize: 20, documentId: 42 },
+      { skip: false }
+    )
+    expect(screen.queryByTestId('email-log-search-input')).toBeNull()
+    expect(screen.getByTestId('email-log-items').textContent).toBe('1')
+  })
 })
