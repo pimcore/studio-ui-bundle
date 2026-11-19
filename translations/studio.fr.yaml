@@ -1648,7 +1648,7 @@ user-management.lastname: Nom
 user-management.email: E-mail
 user-management.language: Langue
 user-management.dateTime: Locale de date et heure
-user-management.welcomeScreen: Afficher un tableau de bord comme écran d'accueil
+user-management.welcomeScreen: Afficher l'écran d'accueil au démarrage
 user-management.welcomeScreen.help: L'utilisateur sélectionne le tableau de bord dans son profil.
 user-management.welcomeScreenDashboard: Tableau de bord de l'écran d'accueil
 user-management.welcomeScreenDashboard.placeholder: Sélectionner un tableau de bord

@@ -1648,7 +1648,7 @@ user-management.lastname: Apellido
 user-management.email: Correo electrónico
 user-management.language: Idioma
 user-management.dateTime: Configuración regional de fecha y hora
-user-management.welcomeScreen: Mostrar un panel como pantalla de bienvenida
+user-management.welcomeScreen: Mostrar pantalla de bienvenida al iniciar
 user-management.welcomeScreen.help: El usuario selecciona el panel en su perfil.
 user-management.welcomeScreenDashboard: Panel de la pantalla de bienvenida
 user-management.welcomeScreenDashboard.placeholder: Seleccionar un panel
