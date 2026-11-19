@@ -1652,10 +1652,6 @@ user-management.welcomeScreen: Een dashboard als welkomstscherm tonen
 user-management.welcomeScreen.help: De gebruiker selecteert het dashboard in het eigen profiel.
 user-management.welcomeScreenDashboard: Dashboard voor het welkomstscherm
 user-management.welcomeScreenDashboard.placeholder: Selecteer een dashboard
-welcome-screen.hint.title: Welkomstscherm
-welcome-screen.hint.select-dashboard: Selecteer in je profiel een dashboard voor je welkomstscherm.
-welcome-screen.hint.no-dashboard: Er is geen dashboard beschikbaar dat als welkomstscherm kan worden getoond.
-welcome-screen.hint.open-profile: Profiel openen
 user-management.memorizeTabs: Open tabbladen onthouden
 user-management.allowDirtyClose: Waarschuwing voor niet-opgeslagen inhoud uitschakelen
 user-management.closeWarning: Sluitwaarschuwing weergeven

@@ -13,13 +13,14 @@ import React from 'react'
 import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-defintions/class-definitions-provider'
 import { ElementSelectorProvider } from '@sdk/modules/element'
 import { useHandleDeepLink } from './hook/use-handle-deeplink'
+import { useWelcomeScreen } from './welcome-screen/hooks/use-welcome-screen'
 import { SlotRenderer } from './component-registry/slot-renderer'
 import { SessionPinger } from './app-loader/loader/session/session-pinger'
 import { WidgetRestorer } from '../widget-manager/components/widget-restorer'
-import { WelcomeScreenOpener } from './welcome-screen/welcome-screen-opener'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
+  useWelcomeScreen()
 
   const preventDrop = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault()
@@ -40,7 +41,6 @@ export const DefaultPage = (): React.JSX.Element => {
         <SlotRenderer slot="global.feedback" />
         <div id="global-overlay-container" />
         <SessionPinger />
-        <WelcomeScreenOpener />
       </WidgetRestorer>
     </div>
   )

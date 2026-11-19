@@ -1656,10 +1656,6 @@ user-management.welcomeScreen: Show a dashboard as a welcome screen
 user-management.welcomeScreen.help: The user selects the dashboard in their profile.
 user-management.welcomeScreenDashboard: Welcome screen dashboard
 user-management.welcomeScreenDashboard.placeholder: Select a dashboard
-welcome-screen.hint.title: Welcome screen
-welcome-screen.hint.select-dashboard: Select a dashboard for your welcome screen in your profile.
-welcome-screen.hint.no-dashboard: No dashboard is available to show as your welcome screen.
-welcome-screen.hint.open-profile: Open profile
 user-management.memorizeTabs: Memorize open tabs
 user-management.allowDirtyClose: Disable unsaved content warning
 user-management.closeWarning: Show close warning

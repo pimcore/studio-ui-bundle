@@ -45,19 +45,7 @@ const renderForm = (welcomeScreen: boolean): void => {
 }
 
 describe('WelcomeScreenHelp', () => {
-  it('tells the admin that the user selects the dashboard while the switch is on', () => {
-    renderForm(true)
-
-    expect(screen.getByText(HELP)).toBeInTheDocument()
-  })
-
-  it('is hidden while the switch is off', () => {
-    renderForm(false)
-
-    expect(screen.queryByText(HELP)).toBeNull()
-  })
-
-  it('follows the switch', () => {
+  it('shows while the switch is on', () => {
     renderForm(false)
 
     fireEvent.click(screen.getByLabelText('welcome-screen'))

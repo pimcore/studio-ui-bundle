@@ -1652,10 +1652,6 @@ user-management.welcomeScreen: Mostra una dashboard come schermata di benvenuto
 user-management.welcomeScreen.help: L'utente seleziona la dashboard nel proprio profilo.
 user-management.welcomeScreenDashboard: Dashboard della schermata di benvenuto
 user-management.welcomeScreenDashboard.placeholder: Seleziona una dashboard
-welcome-screen.hint.title: Schermata di benvenuto
-welcome-screen.hint.select-dashboard: Selezionare una dashboard per la schermata di benvenuto nel profilo.
-welcome-screen.hint.no-dashboard: Nessuna dashboard disponibile da mostrare come schermata di benvenuto.
-welcome-screen.hint.open-profile: Apri profilo
 user-management.memorizeTabs: Memorizza schede aperte
 user-management.allowDirtyClose: Disabilita avviso contenuto non salvato
 user-management.closeWarning: Mostra avviso di chiusura

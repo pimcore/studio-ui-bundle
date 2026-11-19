@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
 
-// The admin only turns the welcome screen on: the dashboards an admin sees are not the ones the user can open
 export const WelcomeScreenHelp = (): React.JSX.Element => {
   const { t } = useTranslation()
 

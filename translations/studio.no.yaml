@@ -1652,10 +1652,6 @@ user-management.welcomeScreen: Vis et dashbord som velkomstskjerm
 user-management.welcomeScreen.help: Brukeren velger dashbordet i profilen sin.
 user-management.welcomeScreenDashboard: Dashbord for velkomstskjermen
 user-management.welcomeScreenDashboard.placeholder: Velg et dashbord
-welcome-screen.hint.title: Velkomstskjerm
-welcome-screen.hint.select-dashboard: Velg et dashbord for velkomstskjermen din i profilen din.
-welcome-screen.hint.no-dashboard: Det finnes ikke noe dashbord som kan vises som velkomstskjerm.
-welcome-screen.hint.open-profile: Åpne profil
 user-management.memorizeTabs: Husk åpne faner
 user-management.allowDirtyClose: Deaktiver advarsel om ulagret innhold
 user-management.closeWarning: Vis lukkeadvarsel

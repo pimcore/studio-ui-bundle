@@ -190,7 +190,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
       dateTimeLocale: user.dateTimeLocale ?? '',
       perspectives: toPerspectiveIds(user.perspectives),
       // each user picks it in the own profile; left out, the backend keeps the stored choice
-      welcomeScreenDashboardId: undefined
+      welcomeScreenTarget: undefined
     }
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({

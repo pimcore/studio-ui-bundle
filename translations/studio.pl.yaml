@@ -1652,10 +1652,6 @@ user-management.welcomeScreen: Pokaż dashboard jako ekran powitalny
 user-management.welcomeScreen.help: Użytkownik wybiera dashboard we własnym profilu.
 user-management.welcomeScreenDashboard: Dashboard ekranu powitalnego
 user-management.welcomeScreenDashboard.placeholder: Wybierz dashboard
-welcome-screen.hint.title: Ekran powitalny
-welcome-screen.hint.select-dashboard: Wybierz dashboard dla ekranu powitalnego w swoim profilu.
-welcome-screen.hint.no-dashboard: Brak dashboardu, który można wyświetlić jako ekran powitalny.
-welcome-screen.hint.open-profile: Otwórz profil
 user-management.memorizeTabs: Zapamiętaj otwarte karty
 user-management.allowDirtyClose: Wyłącz ostrzeżenie o niezapisanej treści
 user-management.closeWarning: Pokaż ostrzeżenie przy zamykaniu

@@ -9,7 +9,7 @@
  */
 
 import { renderHook, waitFor } from '@testing-library/react'
-import { isWelcomeScreenHandled, markWelcomeScreenHandled } from '@Pimcore/modules/app/welcome-screen/welcome-screen-session'
+import { isWelcomeScreenHandled, markWelcomeScreenHandled } from '@Pimcore/modules/app/welcome-screen/utils/welcome-screen-session'
 import { logoutUserMenuItemProvider } from './logout-user-menu-item'
 
 const mockLogout = jest.fn()
