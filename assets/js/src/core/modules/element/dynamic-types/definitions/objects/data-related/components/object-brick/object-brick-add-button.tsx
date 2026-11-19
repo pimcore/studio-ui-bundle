@@ -25,16 +25,24 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
   const { operations } = useKeyedListContext()
 
   const dropdownItems: DropdownMenuProps['items'] = useMemo(() => {
-    return allowedTypes.map((type) => {
-      return {
-        key: type,
-        label: objectBrick?.find(item => item.key === type)?.title === '' || objectBrick?.find(item => item.key === type)?.title === undefined ? type : t(objectBrick?.find(item => item.key === type).title as string),
-        onClick: (e: any) => {
-          e.domEvent.stopPropagation()
-          operations.add(type, {})
+    const getLabel = (type: string): string => {
+      const title = objectBrick?.find(item => item.key === type)?.title
+      return title === '' || title === undefined ? type : t(title as string)
+    }
+
+    return allowedTypes
+      .map((type) => ({ type, label: getLabel(type) }))
+      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
+      .map(({ type, label }) => {
+        return {
+          key: type,
+          label,
+          onClick: (e: any) => {
+            e.domEvent.stopPropagation()
+            operations.add(type, {})
+          }
         }
-      }
-    })
+      })
   }, [allowedTypes, objectBrick])
 
   return (
