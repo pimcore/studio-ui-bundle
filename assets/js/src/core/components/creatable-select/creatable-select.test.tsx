@@ -25,17 +25,15 @@ jest.mock('@Pimcore/components/input-number/input-number.styles', () => ({
   useStyles: () => ({ styles: { inputNumber: 'input-number', inherited: 'inherited' } })
 }))
 
+jest.mock('./creatable-select.styles', () => ({ useStyles: () => ({ styles: { footer: 'footer', field: 'field', message: 'message', visuallyHidden: 'visually-hidden' } }) }))
+
 // The barrel pulls in antd-style too. InputNumber stays real — its decimalSeparator is under test.
 jest.mock('@sdk/components', () => {
   const antd = jest.requireActual('antd')
   const react = jest.requireActual('react')
 
   return {
-    Box: ({ children }: { children?: React.ReactNode }) => react.createElement('div', null, children),
     Text: ({ children }: { children?: React.ReactNode }) => react.createElement('span', null, children),
-    Button: antd.Button,
-    Divider: antd.Divider,
-    Flex: antd.Flex,
     Input: antd.Input,
     InputNumber: jest.requireActual('@Pimcore/components/input-number/input-number').InputNumber,
     // The real Select injects CSS that jsdom cannot parse; only its dropdown content matters here.
@@ -56,10 +54,10 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { CreatableSelect, type CreatableSelectProps } from './creatable-select'
 
 const getInput = (): HTMLInputElement => screen.getByRole('spinbutton')
-const getAddButton = (): HTMLElement => screen.getByRole('button', { name: 'creatable-select.add' })
 const type = (value: string): void => { fireEvent.change(getInput(), { target: { value } }) }
 const pressEnter = (): void => { fireEvent.keyDown(getInput(), { key: 'Enter' }) }
-const isAddDisabled = (): boolean => getAddButton().hasAttribute('disabled')
+// Enter adds the value; a value that cannot be added marks the field invalid.
+const isInvalid = (input: HTMLElement = getInput()): boolean => input.getAttribute('aria-invalid') === 'true'
 const isErrorShown = (): boolean => !isNull(screen.queryByText('creatable-select.invalid-option'))
 const isDuplicateShown = (): boolean => !isNull(screen.queryByText('creatable-select.option-already-exists'))
 
@@ -87,12 +85,12 @@ describe('CreatableSelect number input (#1954)', () => {
     renderBounded()
 
     type('12')
-    expect(isAddDisabled()).toBe(false)
+    expect(isInvalid()).toBe(false)
 
     type('12aaa')
     expect(getInput().value).toBe('12aaa')
-    expect(isAddDisabled()).toBe(true)
-    expect(isErrorShown()).toBe(true)
+    expect(isInvalid()).toBe(true)
+    expect(getInput()).toHaveAccessibleDescription(expect.stringContaining('creatable-select.invalid-option'))
   })
 
   it('re-validates when the leading digits are deleted', () => {
@@ -102,7 +100,7 @@ describe('CreatableSelect number input (#1954)', () => {
     type('aaa')
 
     expect(getInput().value).toBe('aaa')
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(true)
     expect(isErrorShown()).toBe(true)
   })
 
@@ -112,7 +110,7 @@ describe('CreatableSelect number input (#1954)', () => {
     type('12')
     type('')
 
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(false)
     expect(isErrorShown()).toBe(false)
   })
 
@@ -124,7 +122,7 @@ describe('CreatableSelect number input (#1954)', () => {
     pressEnter()
 
     expect(getInput().value).toBe('0')
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(true)
     expect(isErrorShown()).toBe(true)
   })
 
@@ -133,7 +131,7 @@ describe('CreatableSelect number input (#1954)', () => {
 
     type('0')
 
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(true)
     expect(isErrorShown()).toBe(true)
   })
 
@@ -146,7 +144,7 @@ describe('CreatableSelect number input (#1954)', () => {
     type('0')
 
     expect(getInput().value).toBe('0')
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(true)
     expect(isErrorShown()).toBe(true)
 
     pressEnter()
@@ -168,26 +166,29 @@ describe('CreatableSelect number input (#1954)', () => {
   it('adds a valid value and resets the input', () => {
     const onChange = jest.fn()
     renderBounded({ onChange })
-
+    // No Add button: the field is named and says that Enter adds.
+    expect(screen.queryByRole('button', { name: 'creatable-select.add' })).toBeNull()
+    expect(screen.getByRole('spinbutton', { name: 'creatable-select.add-custom-option' })).toHaveAccessibleDescription('creatable-select.press-enter-to-add')
     type('30')
-    expect(isAddDisabled()).toBe(false)
+    expect(isInvalid()).toBe(false)
 
-    fireEvent.click(getAddButton())
+    pressEnter()
 
     expect(onChange).toHaveBeenCalledWith('30', expect.objectContaining({ value: '30' }))
     expect(getInput().value).toBe('')
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(false)
+    expect(screen.getByText('creatable-select.option-added')).toBeInTheDocument()
   })
 
   it('resets the tracked text when a duplicate is submitted', () => {
     renderBounded({ options: [{ value: '3', label: '3' }] })
 
     type('3')
-    // The Add button is already disabled for duplicates, so Enter is the way in.
+    expect(isInvalid()).toBe(true)
     pressEnter()
 
     expect(getInput().value).toBe('')
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(false)
     expect(isErrorShown()).toBe(false)
   })
 
@@ -219,7 +220,7 @@ describe('CreatableSelect number input (#1954)', () => {
 
     type('12 kg')
 
-    expect(isAddDisabled()).toBe(false)
+    expect(isInvalid()).toBe(false)
     expect(isErrorShown()).toBe(false)
   })
 
@@ -237,7 +238,7 @@ describe('CreatableSelect number input (#1954)', () => {
 
     type('1,000')
 
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(true)
     expect(isErrorShown()).toBe(true)
   })
 
@@ -247,7 +248,7 @@ describe('CreatableSelect number input (#1954)', () => {
 
     type('1.000')
 
-    expect(isAddDisabled()).toBe(true)
+    expect(isInvalid()).toBe(true)
     expect(isErrorShown()).toBe(true)
   })
 
@@ -259,7 +260,7 @@ describe('CreatableSelect number input (#1954)', () => {
     expect(isErrorShown()).toBe(false)
 
     type('12.4')
-    expect(isAddDisabled()).toBe(false)
+    expect(isInvalid()).toBe(false)
     expect(isErrorShown()).toBe(false)
   })
 
@@ -269,9 +270,9 @@ describe('CreatableSelect number input (#1954)', () => {
     renderSelect({ onChange })
 
     type('12,4')
-    expect(isAddDisabled()).toBe(false)
+    expect(isInvalid()).toBe(false)
 
-    fireEvent.click(getAddButton())
+    pressEnter()
 
     expect(onChange).toHaveBeenCalledWith('12.4', expect.objectContaining({ value: '12.4' }))
   })
@@ -283,7 +284,7 @@ describe('CreatableSelect number input (#1954)', () => {
     fireEvent.change(input, { target: { value: 'anything' } })
 
     expect((input as HTMLInputElement).value).toBe('anything')
-    expect(isAddDisabled()).toBe(false)
+    expect(isInvalid(input)).toBe(false)
   })
 
   it('keeps invalid string input that matches an existing option', () => {

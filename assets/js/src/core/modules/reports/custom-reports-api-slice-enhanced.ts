@@ -9,16 +9,26 @@
  */
 
 import { api as baseApi } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { exportResponseHandler } from '@Pimcore/modules/reports/utils/export-response-handler'
 
 const api = baseApi.enhanceEndpoints({
   endpoints: {
     customReportExportCsv: {
       invalidatesTags: () => []
+    },
+    customReportsConfigExport: {
+      query: (args) => ({
+        url: `/pimcore-studio/api/bundle/custom-reports/config/${encodeURIComponent(args.name)}/export`,
+        responseHandler: exportResponseHandler
+      }),
+      providesTags: () => []
     }
   }
 })
 
 export type * from './custom-reports-api-slice.gen'
+
+export { api }
 
 export const {
   useCustomReportsListDrillDownOptionsQuery,

@@ -13,8 +13,17 @@ import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/editable-data/editable-data'
 
+// Bumped every time the parent window is asked to persist the document. Lets a consumer tell whether
+// anything was saved while it held changes back (e.g. the editable dialog deciding whether a discard
+// needs to persist the restored state).
+let persistenceVersion = 0
+
 export interface DocumentEditorContextProps {
+  /** Writes a value into the editable store only: no modified flag and no autosave in the parent window. */
+  setValue: (key: string, value: ValueType) => void
   updateValue: (key: string, value: ValueType) => void
+  /** Counter of the persistence requests sent to the parent window from this editor. */
+  getPersistenceVersion: () => number
   updateValueWithReload: (key: string, value: ValueType) => void
   triggerSaveAndReload: () => void
   reloadIframe: () => void
@@ -41,8 +50,13 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     return documentEditableApi
   }, [])
 
+  const setValue = useCallback((key: string, value: ValueType): void => {
+    getDocumentEditableApi().updateValue(key, value)
+  }, [])
+
   const updateValue = useCallback((key: string, value: ValueType): void => {
     getDocumentEditableApi().updateValue(key, value)
+    persistenceVersion++
 
     try {
       const { document: documentApi } = getPimcoreStudioApi()
@@ -54,6 +68,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
 
   const updateValueWithReload = useCallback((key: string, value: ValueType): void => {
     getDocumentEditableApi().updateValue(key, value)
+    persistenceVersion++
 
     try {
       const { document: documentApi } = getPimcoreStudioApi()
@@ -102,6 +117,8 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   }
 
   const triggerSaveAndReload = useCallback((): void => {
+    persistenceVersion++
+
     try {
       const { document: documentApi } = getPimcoreStudioApi()
       documentApi.triggerSaveAndReload(id)
@@ -111,6 +128,9 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   }, [id])
 
   const reloadIframe = useCallback((): void => {
+    // Reloading an edited document saves it first, so this counts as a persistence request too.
+    persistenceVersion++
+
     try {
       const { document: documentApi } = getPimcoreStudioApi()
       documentApi.reloadIframe(id)
@@ -131,8 +151,12 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     }
   }, [id])
 
+  const getPersistenceVersion = (): number => persistenceVersion
+
   return {
+    setValue,
     updateValue,
+    getPersistenceVersion,
     updateValueWithReload,
     triggerSaveAndReload,
     reloadIframe,

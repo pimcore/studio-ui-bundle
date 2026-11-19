@@ -14,7 +14,6 @@ import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitio
 import { useLinkDataType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/hooks/use-link-data-type'
 import { DocumentLinkPreview } from '../link-preview/document-link-preview'
 import { useStyles } from './link-editable.styles'
-import cn from 'classnames'
 
 interface LinkEditableProps {
   value?: LinkValue | null
@@ -59,7 +58,6 @@ export const LinkEditable = ({
   })
 
   const actions = renderActions()
-  const positioningClass = actions.length === 1 ? styles.documentLinkActionsSingle : styles.documentLinkActions
 
   return (
     <EditableOverlay
@@ -72,7 +70,7 @@ export const LinkEditable = ({
           {renderPreview()}
         </div>
         {inherited !== true && (
-          <div className={ cn(styles.documentLinkActionsBase, positioningClass) }>
+          <div className={ styles.documentLinkActionsBase }>
             {actions}
           </div>
         )}

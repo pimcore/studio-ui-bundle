@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { isNull } from 'lodash'
 import { LabelExtraProvider } from './provider/label-extra/label-extra-provider'
 import { VirtualItem } from './virtual-item'
 
@@ -82,5 +83,86 @@ describe('VirtualItem', () => {
     )
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
+  })
+
+  it('hides a hidden item inline and leaves a shown item\'s display to its classes', () => {
+    const { rerender } = render(
+      <VirtualItem
+        className="field-layout"
+        hidden
+        label="Name"
+        name="field"
+      >
+        <input />
+      </VirtualItem>
+    )
+
+    const item = screen.getByText('Name').closest<HTMLElement>('.field-layout')!
+    expect(item.style.display).toBe('none')
+
+    rerender(
+      <VirtualItem
+        className="field-layout"
+        label="Name"
+        name="field"
+      >
+        <input />
+      </VirtualItem>
+    )
+
+    expect(item.style.display).toBe('')
+  })
+})
+
+const hasRequiredMarker = (container: HTMLElement): boolean =>
+  !isNull(container.querySelector('.required-indicator'))
+
+describe('VirtualItem required marker', () => {
+  it('shows the marker for an explicit required prop (mandatory field in a field collection / object brick)', () => {
+    const { container } = render(
+      <VirtualItem
+        label="Mytext"
+        name={ ['mytext'] }
+        required
+      />
+    )
+
+    expect(hasRequiredMarker(container)).toBe(true)
+  })
+
+  it('shows the marker for a required rule', () => {
+    const { container } = render(
+      <VirtualItem
+        label="Mytext"
+        name={ ['mytext'] }
+        rules={ [{ required: true }] }
+      />
+    )
+
+    expect(hasRequiredMarker(container)).toBe(true)
+  })
+
+  it('lets an explicit required={false} override a required rule, like antd Form.Item', () => {
+    const { container } = render(
+      <VirtualItem
+        label="Mytext"
+        name={ ['mytext'] }
+        required={ false }
+        rules={ [{ required: true }] }
+      />
+    )
+
+    expect(hasRequiredMarker(container)).toBe(false)
+  })
+
+  it('shows no marker when neither required nor a required rule is set', () => {
+    const { container } = render(
+      <VirtualItem
+        label="Mytext"
+        name={ ['mytext'] }
+      />
+    )
+
+    expect(hasRequiredMarker(container)).toBe(false)
   })
 })

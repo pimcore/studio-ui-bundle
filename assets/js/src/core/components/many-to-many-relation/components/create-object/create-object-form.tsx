@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, type FormProps } from '@Pimcore/components/form/form'
+import { Form, type FormProps } from 'antd'
 import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
 import { Content } from '@Pimcore/components/content/content'
@@ -29,6 +29,9 @@ export interface CreateObjectFormProps extends FormProps {
   isLoading: boolean
 }
 
+// Plain antd Form on purpose: the modal is portaled out of the relation but still inherits its React
+// contexts, and the shared Form.Item wrappers would pick up the surrounding group, locale and list
+// contexts (e.g. registering classId as `localizedfields.classId.<locale>`). This form is standalone.
 export const CreateObjectForm = ({ classes, isLoading, ...props }: CreateObjectFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()

@@ -62,7 +62,13 @@ jest.mock('@Pimcore/components/title/title', () => ({
 }))
 
 jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: () => null
+  IconButton: ({ 'aria-label': ariaLabel, tooltip }: { 'aria-label'?: string, tooltip?: { title?: string } }) => (
+    <button
+      aria-label={ ariaLabel }
+      data-tooltip={ tooltip?.title }
+      type="button"
+    />
+  )
 }))
 
 jest.mock('@Pimcore/components/pagination/pagination', () => ({
@@ -102,12 +108,73 @@ const failedEmail: EmailLog = {
   subject: 'Failed message'
 }
 
+const collectionData = { totalItems: 1, items: [regularEmail] }
+const collectionResult: ReturnType<typeof useEmailLogGetCollectionQuery> = {
+  data: collectionData,
+  currentData: collectionData,
+  status: QueryStatus.fulfilled,
+  isUninitialized: false,
+  isLoading: false,
+  isFetching: false,
+  isSuccess: true,
+  isError: false,
+  refetch: jest.fn()
+}
+
+const searchData = { totalItems: 1, items: [failedEmail] }
+const searchResult: ReturnType<typeof useEmailLogSearchQuery> = {
+  data: searchData,
+  currentData: searchData,
+  status: QueryStatus.fulfilled,
+  isUninitialized: false,
+  isLoading: false,
+  isFetching: false,
+  isSuccess: true,
+  isError: false,
+  refetch: jest.fn()
+}
+
 describe('EmailLogContainer', () => {
+  const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
+  const searchQuery = jest.mocked(useEmailLogSearchQuery)
+
+  beforeEach(() => {
+    collectionQuery.mockReturnValue(collectionResult)
+    searchQuery.mockReturnValue(searchResult)
+  })
+
   it('switches from the collection endpoint to email search results', () => {
+    render(<EmailLogContainer />)
+
+    expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: false })
+    expect(searchQuery).toHaveBeenLastCalledWith(
+      { body: { filters: { page: 1, pageSize: 20, columnFilters: [{ type: 'email', filterValue: '' }] } } },
+      { skip: true }
+    )
+    expect(screen.getByTestId('email-log-items').textContent).toBe('1')
+
+    fireEvent.click(screen.getByTestId('email-log-search-input'))
+
+    expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: true })
+    expect(searchQuery).toHaveBeenLastCalledWith(
+      { body: { filters: { page: 1, pageSize: 20, columnFilters: [{ type: 'email', filterValue: 'failed@example.com' }] } } },
+      { skip: false }
+    )
+    expect(screen.getByTestId('email-log-items').textContent).toBe('2')
+    expect(screen.getByTestId('email-log-total').textContent).toBe('1')
+  })
+
+  it('labels the refresh button and gives it the Reload tooltip', () => {
+    render(<EmailLogContainer />)
+
+    expect(screen.getByRole('button', { name: 'toolbar.reload' })).toHaveAttribute('data-tooltip', 'toolbar.reload')
+  })
+
+  it('scopes the collection to the given document and hides the global search', () => {
     const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
     const searchQuery = jest.mocked(useEmailLogSearchQuery)
     const collectionData = { totalItems: 1, items: [regularEmail] }
-    const collectionResult: ReturnType<typeof useEmailLogGetCollectionQuery> = {
+    collectionQuery.mockReturnValue({
       data: collectionData,
       currentData: collectionData,
       status: QueryStatus.fulfilled,
@@ -117,39 +184,24 @@ describe('EmailLogContainer', () => {
       isSuccess: true,
       isError: false,
       refetch: jest.fn()
-    }
-    const searchData = { totalItems: 1, items: [failedEmail] }
-    const searchResult: ReturnType<typeof useEmailLogSearchQuery> = {
-      data: searchData,
-      currentData: searchData,
-      status: QueryStatus.fulfilled,
-      isUninitialized: false,
+    })
+    searchQuery.mockReturnValue({
+      status: QueryStatus.uninitialized,
+      isUninitialized: true,
       isLoading: false,
       isFetching: false,
-      isSuccess: true,
+      isSuccess: false,
       isError: false,
       refetch: jest.fn()
-    }
-    collectionQuery.mockReturnValue(collectionResult)
-    searchQuery.mockReturnValue(searchResult)
+    })
 
-    render(<EmailLogContainer />)
+    render(<EmailLogContainer documentId={ 42 } />)
 
-    expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: false })
-    expect(searchQuery).toHaveBeenLastCalledWith(
-      { page: 1, pageSize: 20, email: '' },
-      { skip: true }
-    )
-    expect(screen.getByTestId('email-log-items').textContent).toBe('1')
-
-    fireEvent.click(screen.getByTestId('email-log-search-input'))
-
-    expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: true })
-    expect(searchQuery).toHaveBeenLastCalledWith(
-      { page: 1, pageSize: 20, email: 'failed@example.com' },
+    expect(collectionQuery).toHaveBeenLastCalledWith(
+      { page: 1, pageSize: 20, documentId: 42 },
       { skip: false }
     )
-    expect(screen.getByTestId('email-log-items').textContent).toBe('2')
-    expect(screen.getByTestId('email-log-total').textContent).toBe('1')
+    expect(screen.queryByTestId('email-log-search-input')).toBeNull()
+    expect(screen.getByTestId('email-log-items').textContent).toBe('1')
   })
 })

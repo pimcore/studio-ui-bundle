@@ -136,9 +136,9 @@ export const MainNav = (): React.JSX.Element => {
               <button
                 className={ 'main-nav__list-btn' }
                 data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
-                onClick={ () => {
+                onClick={ (event) => {
                   if (hasChildren) {
-                    handleOpenState(index)
+                    handleOpenState(event, index)
                   } else if (!isUndefined(item.widgetConfig)) {
                     openMainWidget(item.widgetConfig)
                     setIsOpen(false)

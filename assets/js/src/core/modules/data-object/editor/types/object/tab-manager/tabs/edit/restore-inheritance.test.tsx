@@ -100,6 +100,7 @@ jest.mock('@Pimcore/modules/data-object/actions/save/use-save', () => ({
 
 jest.mock('@Pimcore/components/message/useMessage', () => ({ useMessage: () => ({ error: jest.fn() }) }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: true }) }))
 jest.mock('@Pimcore/app/depency-injection', () => ({
   container: { get: () => ({ hasDynamicType: () => false, getDynamicType: () => undefined }) }
 }))
@@ -204,6 +205,9 @@ jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-button.st
 jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-label-extra.styles', () => ({
   useStyles: () => ({ styles: {} })
 }))
+jest.mock('./components/data-component/form-item.styles', () => ({
+  useStyles: () => ({ styles: {} })
+}))
 jest.mock('@Pimcore/components/divider/divider', () => ({ Divider: () => <span data-divider /> }))
 jest.mock('@Pimcore/components/flex/flex', () => ({
   Flex: ({ children }: { children: ReactNode }) => <span>{children}</span>
@@ -292,6 +296,7 @@ const Field = ({ name, title, noteditable = false, emptyValue = null, probe = fa
       _props={ { name, title, noteditable, probe, inherited: inheritedNow } as any }
       formFieldName={ name }
       objectDataType={ block ? blockType() : dataType(emptyValue) }
+      technicalName={ name[name.length - 1] }
     />
   )
 }

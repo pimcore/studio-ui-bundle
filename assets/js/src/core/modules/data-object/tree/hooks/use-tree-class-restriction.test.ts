@@ -11,17 +11,19 @@
 import { renderHook } from '@testing-library/react'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type ClipboardEntry } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 import { useTreeClassRestriction } from './use-tree-class-restriction'
 
 const mockClassIds = jest.fn<string[] | undefined, []>()
 const mockStoredNode = jest.fn<TreeNodeProps | DataObject | undefined, []>()
+const mockStoredNodes = jest.fn<ClipboardEntry[], []>(() => [])
 
 jest.mock('@Pimcore/components/element-tree/provider/tree-filter-provider/use-tree-filter', () => ({
   useTreeFilter: () => ({ classIds: mockClassIds(), pageSize: 30 })
 }))
 
 jest.mock('@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context', () => ({
-  useTreeCopyPasteContext: () => ({ getStoredNode: () => mockStoredNode() })
+  useTreeCopyPasteContext: () => ({ getStoredNode: () => mockStoredNode(), getStoredNodes: () => mockStoredNodes() })
 }))
 
 jest.mock('@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions', () => ({
@@ -113,5 +115,40 @@ describe('useTreeClassRestriction', () => {
     mockStoredNode.mockReturnValue(undefined)
 
     expect(render(['CAR']).isPasteHiddenForClass()).toBe(false)
+  })
+
+  describe('a cut selection', () => {
+    const entry = (id: number, className?: string): ClipboardEntry => ({ id, parentId: 1, className })
+
+    beforeEach(() => {
+      // a cut selection keeps no single node, only its entries
+      mockStoredNode.mockReturnValue(undefined)
+    })
+
+    it('checks the class carried by a clipboard entry', () => {
+      const { isClassAllowed } = render(['CAR'])
+
+      expect(isClassAllowed(entry(1, 'Car'))).toBe(true)
+      expect(isClassAllowed(entry(2, 'Category'))).toBe(false)
+      expect(isClassAllowed(entry(3))).toBe(true)
+    })
+
+    it('hides paste when no entry fits the tree', () => {
+      mockStoredNodes.mockReturnValue([entry(1, 'Category'), entry(2, 'Category')])
+
+      expect(render(['CAR']).isPasteHiddenForClass()).toBe(true)
+    })
+
+    it('shows paste while at least one entry fits, the rest gets skipped', () => {
+      mockStoredNodes.mockReturnValue([entry(1, 'Category'), entry(2, 'Car')])
+
+      expect(render(['CAR']).isPasteHiddenForClass()).toBe(false)
+    })
+
+    it('shows paste when the clipboard holds no entries', () => {
+      mockStoredNodes.mockReturnValue([])
+
+      expect(render(['CAR']).isPasteHiddenForClass()).toBe(false)
+    })
   })
 })

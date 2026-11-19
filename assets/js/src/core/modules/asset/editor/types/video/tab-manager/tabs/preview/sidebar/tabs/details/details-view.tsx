@@ -24,7 +24,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Content } from '@Pimcore/components/content/content'
-import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { Select } from '@Pimcore/components/select/select'
 
 interface VideoEditorSidebarDetailsViewProps {
@@ -122,9 +122,9 @@ export const VideoEditorSidebarDetailsTab = ({
     <Content
       className={ styles.sidebarContentEntry }
       padded
-      padding={ { top: 'none', x: 'small', bottom: 'mini' } }
+      padding={ { top: 'extra-small', x: 'small', bottom: 'extra-small' } }
     >
-      <Header title={ t('asset.sidebar.details') } />
+      <Title>{ t('asset.sidebar.details') }</Title>
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>

@@ -161,6 +161,26 @@ describe('useRename', () => {
     expect(lastModalConfig().initialValue).toBe('car')
   })
 
+  it('labels the action as a folder rename when the toolbar target is a folder', () => {
+    const { result } = renderHook(() => useRename('data-object'))
+
+    const folderItem = result.current.renameContextMenuItem({ ...buildDataObject(), type: 'folder' } as unknown as Element)
+    const objectItem = result.current.renameContextMenuItem(buildDataObject())
+
+    expect(folderItem).toHaveProperty('label', 'element.rename-folder')
+    expect(objectItem).toHaveProperty('label', 'element.rename')
+  })
+
+  it('labels the action as a folder rename when the tree node is a folder', () => {
+    const { result } = renderHook(() => useRename('data-object'))
+
+    const folderItem = result.current.renameTreeContextMenuItem(buildTreeNode({ type: 'folder' }))
+    const objectItem = result.current.renameTreeContextMenuItem(buildTreeNode({ type: 'object' }))
+
+    expect(folderItem).toHaveProperty('label', 'element.rename-folder')
+    expect(objectItem).toHaveProperty('label', 'element.rename')
+  })
+
   it('does not persist the custom attribute key when the pre-filled value is confirmed unchanged', async () => {
     const { result } = renderHook(() => useRename('data-object'))
 
@@ -170,5 +190,29 @@ describe('useRename', () => {
     await act(async () => { await onOk(initialValue) })
 
     expect(elementPatch).toHaveBeenCalledWith({ body: { data: [{ id: 5, key: 'car' }] } })
+  })
+
+  it.each([
+    ['data-object', 'updateDataObjectKey', { id: 5, key: 'truck' }],
+    ['document', 'updateDocumentKey', { id: 5, key: 'truck' }],
+    ['asset', 'updateAssetFilename', { id: 5, filename: 'truck' }]
+  ] as const)('updates the %s draft key after a successful rename', async (elementType, actionType, payload) => {
+    const { result } = renderHook(() => useRename(elementType))
+
+    await act(async () => { await result.current.renameMutation(5, 'truck') })
+
+    expect(dispatch).toHaveBeenCalledWith({ type: actionType, payload })
+  })
+
+  it('keeps the draft key and the tree name when the rename is rejected', async () => {
+    elementPatch.mockResolvedValue(false)
+    const { result } = renderHook(() => useRename('data-object'))
+
+    await act(async () => { await result.current.renameMutation(5, 'taken') })
+
+    const types = dispatch.mock.calls.map(([action]) => action.type)
+    expect(types).not.toContain('updateDataObjectKey')
+    expect(types).not.toContain('renameNode')
+    expect(types).toContain('setNodeLoadingInAllTree')
   })
 })

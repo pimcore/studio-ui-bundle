@@ -75,7 +75,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
     onFinish?: (newName: string) => void
   ): ItemType => {
     return {
-      label: t('element.rename'),
+      label: t(node.type === 'folder' ? 'element.rename-folder' : 'element.rename'),
       key: ContextMenuActionName.rename,
       isLoading,
       icon: <Icon value={ 'rename' } />,
@@ -118,7 +118,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
 
   const renameTreeContextMenuItem = (node: TreeNodeProps, onFinish?: (newName: string) => void): ItemType => {
     return {
-      label: t('element.rename'),
+      label: t(node.type === 'folder' ? 'element.rename-folder' : 'element.rename'),
       key: ContextMenuActionName.rename,
       icon: <Icon value={ 'rename' } />,
       hidden: !isTreeActionAllowed(TreePermission.Rename) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
@@ -146,10 +146,10 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
 
       if (success) {
         dispatch(renameNode({ elementType, nodeId: String(id), newLabel: value }))
+        updateFilenameOrKey(id, value)
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
-      updateFilenameOrKey(id, value)
 
       onFinish?.(value)
     } catch (error) {

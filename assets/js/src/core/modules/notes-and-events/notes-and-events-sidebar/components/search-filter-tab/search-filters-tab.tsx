@@ -95,7 +95,10 @@ export const SearchFiltersTab = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+      >
         <Title>{t('sidebar.search_filter')}</Title>
         <Flex
           gap='small'

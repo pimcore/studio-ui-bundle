@@ -31,6 +31,7 @@ import { type ModifiedCell } from '@Pimcore/modules/auth/hooks/use-trackable-cha
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
+import { TwoFactorAccordion } from '@Pimcore/modules/auth/profile/two-factor-accordion/two-factor-accordion'
 
 interface IProfileDetail {
   id: number
@@ -255,6 +256,9 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
             }
             size={ 'small' }
           />
+        </Col>
+        <Col span={ 14 }>
+          <TwoFactorAccordion />
         </Col>
         <Col span={ 14 }>
           <EditorSettingsAccordion

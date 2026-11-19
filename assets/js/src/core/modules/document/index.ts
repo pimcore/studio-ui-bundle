@@ -22,6 +22,8 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { TreeNodeNavigationExcludeIcon } from '@Pimcore/modules/document/tree/node/content/tree-node-navigation-exclude-icon'
 import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
 import { TreeNodeStaticGeneratorIcon } from '@Pimcore/modules/document/tree/node/content/tree-node-static-generator-icon'
+import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { DocumentBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/document-batch-delete-job'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -55,5 +57,8 @@ moduleSystem.registerModule({
       component: TreeNodeLockIcon,
       priority: 300
     })
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+    rehydrationRegistry.register(DocumentBatchDeleteJob)
   }
 })

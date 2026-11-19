@@ -52,6 +52,28 @@ const processHtmlTemplate = (
   return processedHtml
 }
 
+// The placeholder key (and the key + 1 that core yields as loop variable) is only replaced where it
+// stands between delimiters. Names built by concatenation, e.g. "details" ~ _block.getCurrentIndex(),
+// keep it, so the new item would save its content under a name that is not read after a reload.
+const PLACEHOLDER_KEY_PATTERN = /100000[01]/
+
+const warnAboutUnreplacedPlaceholders = (
+  blockName: string,
+  editableDefinitions: AbstractDocumentEditableDefinition[]
+): void => {
+  const affectedNames = editableDefinitions
+    .map(definition => definition.name)
+    .filter(name => PLACEHOLDER_KEY_PATTERN.test(name))
+
+  if (affectedNames.length > 0) {
+    console.warn(
+      `Block "${blockName}": editable names built from the block index still contain the placeholder ` +
+      `index (${affectedNames.join(', ')}). Content set in the new item will not be found after a reload. ` +
+      'Use reload(true) on the block or do not build editable names from the block index.'
+    )
+  }
+}
+
 export const processBlockTemplate = (
   { templateHtml, blockManager, nextKey }: ProcessTemplateParams,
   templateEditables: any[]
@@ -116,6 +138,8 @@ export const processBlockTemplate = (
 
     editableDefinitions.push(dynamicEditableDefinition)
   })
+
+  warnAboutUnreplacedPlaceholders(editableName, editableDefinitions)
 
   return {
     html: processedHtml,

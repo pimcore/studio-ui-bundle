@@ -44,6 +44,7 @@ const injectedRtkApi = api
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
+                        documentId: queryArg.documentId,
                     },
                 }),
                 providesTags: ["E-Mails"],
@@ -79,6 +80,14 @@ const injectedRtkApi = api
             emailLogResendById: build.mutation<EmailLogResendByIdApiResponse, EmailLogResendByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/emails/${queryArg.id}/resend`, method: "POST" }),
                 invalidatesTags: ["E-Mails"],
+            }),
+            emailLogSearch: build.query<EmailLogSearchApiResponse, EmailLogSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/emails/search`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["E-Mails"],
             }),
             emailSendTest: build.mutation<EmailSendTestApiResponse, EmailSendTestApiArg>({
                 query: (queryArg) => ({
@@ -124,6 +133,8 @@ export type EmailLogGetCollectionApiArg = {
     page: number;
     /** Number of items per page */
     pageSize: number;
+    /** Filter the email log by the ID of the email document that sent the emails */
+    documentId?: number;
 };
 export type EmailLogGetByIdApiResponse = /** status 200 E-Mail log entry data as JSON */ EmailLogDetail;
 export type EmailLogGetByIdApiArg = {
@@ -169,6 +180,21 @@ export type EmailLogResendByIdApiResponse = unknown;
 export type EmailLogResendByIdApiArg = {
     /** Id of the E-Mail */
     id: number;
+};
+export type EmailLogSearchApiResponse = /** status 200 Paginated matching email log entries. */ {
+    totalItems: number;
+    items: EmailLog[];
+};
+export type EmailLogSearchApiArg = {
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+            additionalSortFilters?: object;
+        };
+    };
 };
 export type EmailSendTestApiResponse = unknown;
 export type EmailSendTestApiArg = {
@@ -290,5 +316,6 @@ export const {
     useEmailLogGetTextQuery,
     useEmailLogForwardByIdMutation,
     useEmailLogResendByIdMutation,
+    useEmailLogSearchQuery,
     useEmailSendTestMutation,
 } = injectedRtkApi;

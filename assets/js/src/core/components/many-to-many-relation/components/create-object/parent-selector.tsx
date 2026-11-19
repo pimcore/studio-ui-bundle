@@ -45,6 +45,7 @@ export const ParentSelector = ({ value, onChange, disabled }: ParentSelectorProp
       />
 
       <ElementSelectorButton
+        aria-label={ t('relations.create-object.parent.placeholder') }
         disabled={ disabled }
         elementSelectorConfig={ {
           selectionType: SelectionType.Single,

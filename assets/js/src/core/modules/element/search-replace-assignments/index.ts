@@ -27,7 +27,7 @@ export const SEARCH_REPLACE_ASSIGNMENTS_WIDGET: WidgetManagerTabConfig = {
     translationKey: 'widget.search-replace-assignments',
     icon: {
       type: 'name',
-      value: 'search'
+      value: 'search-replace'
     }
   }
 }

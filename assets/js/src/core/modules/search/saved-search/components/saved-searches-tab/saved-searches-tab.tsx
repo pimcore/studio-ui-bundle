@@ -180,11 +180,12 @@ export const SavedSearchesTab = (): React.JSX.Element => {
               gap='extra-small'
             >
               <IconButton
+                aria-label={ t('toolbar.reload') }
                 data-testid='saved-search-refresh-button'
                 disabled={ isFetching }
                 icon={ { value: 'refresh' } }
                 onClick={ () => { void refetch() } }
-                tooltip={ { title: t('refresh') } }
+                tooltip={ { title: t('toolbar.reload') } }
                 type='link'
               />
               {total > 0 && (

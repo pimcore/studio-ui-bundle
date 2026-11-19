@@ -9,16 +9,19 @@
  */
 
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import React, { useRef, useState, useMemo } from 'react'
+import React, { createContext, useCallback, useEffect, useRef, useState, useMemo, type KeyboardEvent } from 'react'
 import { type Model, TabNode } from 'flexlayout-react'
 import type { MenuRef } from 'antd'
-import { isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useClickOutside } from '@Pimcore/utils/hooks/use-click-outside'
+import { ACTIVE_MAIN_TAB_LABEL } from '../title/tab-title-label-context'
 
 interface UseContextMenuReturn {
   showContextMenu?: (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>) => void
   dropdown?: React.ReactElement | null
+  openTabId?: string | null
+  openFromKeyboard?: (node: TabNode, anchor: HTMLElement) => void
 }
 
 export interface ContextMenuState {
@@ -32,41 +35,97 @@ export interface CreateContextMenuItemsProps {
   closeContextMenu: () => void
   model: Model
   closeWidget: (id: string) => void
+  expandMainWidget: (id: string) => void
+}
+
+export interface TabContextMenuContextValue {
+  openTabId: string | null
+  openFromKeyboard?: (node: TabNode, anchor: HTMLElement) => void
+}
+
+export const TabContextMenuContext = createContext<TabContextMenuContextValue>({ openTabId: null })
+
+interface OpenContextMenuState extends ContextMenuState {
+  openedByKeyboard: boolean
+}
+
+// a menu action can close or remount the opening tab, then the active main tab takes the focus
+const returnFocus = (opener: HTMLElement): void => {
+  const target = opener.isConnected ? opener : document.querySelector<HTMLElement>(ACTIVE_MAIN_TAB_LABEL)
+  target?.focus()
 }
 
 export const useContextMenu = (
   model: Model,
-  createContextMenuItems?: ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps) => DropdownProps['menu']['items']
+  createContextMenuItems?: (props: CreateContextMenuItemsProps) => DropdownProps['menu']['items']
 ): UseContextMenuReturn => {
-  const [contextMenuState, setContextMenuState] = useState<ContextMenuState | null>(null)
+  const [contextMenuState, setContextMenuState] = useState<OpenContextMenuState | null>(null)
   const dropdownRef = useRef<MenuRef>(null)
-  const { closeWidget } = useWidgetManager()
+  const keyboardOpenerRef = useRef<HTMLElement | null>(null)
+  const { closeWidget, expandMainWidget } = useWidgetManager()
 
-  const closeContextMenu = (): void => {
+  const dismissContextMenu = (): void => {
+    keyboardOpenerRef.current = null
     setContextMenuState(null)
   }
 
-  useClickOutside(dropdownRef, closeContextMenu)
+  const closeContextMenu = (): void => {
+    const opener = keyboardOpenerRef.current
+    dismissContextMenu()
+
+    if (!isNull(opener)) {
+      requestAnimationFrame(() => { returnFocus(opener) })
+    }
+  }
+
+  useClickOutside(dropdownRef, dismissContextMenu)
 
   const showContextMenu = (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     if (node instanceof TabNode) {
       event.preventDefault()
-      setContextMenuState({ x: event.clientX, y: event.clientY, tabNode: node })
+      keyboardOpenerRef.current = null
+      setContextMenuState({ x: event.clientX, y: event.clientY, tabNode: node, openedByKeyboard: false })
       node.getExtraData()
+    }
+  }
+
+  const openFromKeyboard = useCallback((node: TabNode, anchor: HTMLElement): void => {
+    const { left, bottom } = anchor.getBoundingClientRect()
+    keyboardOpenerRef.current = anchor
+    setContextMenuState({ x: left, y: bottom, tabNode: node, openedByKeyboard: true })
+  }, [])
+
+  // like the ContextMenuWrapper: focus the first entry so the arrow keys work
+  useEffect(() => {
+    if (contextMenuState?.openedByKeyboard !== true) {
+      return
+    }
+
+    const frame = requestAnimationFrame(() => {
+      dropdownRef.current?.menu?.list?.querySelector<HTMLElement>('.ant-dropdown-menu-item')?.focus()
+    })
+
+    return () => { cancelAnimationFrame(frame) }
+  }, [contextMenuState])
+
+  const onMenuKeyDown = (event: KeyboardEvent<HTMLUListElement>): void => {
+    if (event.key === 'Escape' || event.key === 'Tab') {
+      event.preventDefault()
+      closeContextMenu()
     }
   }
 
   const menuItems = useMemo(() => {
     if (contextMenuState !== null && !isUndefined(createContextMenuItems)) {
-      return createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget })
+      return createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget, expandMainWidget })
     }
     return []
-  }, [contextMenuState, createContextMenuItems, model, closeWidget])
+  }, [contextMenuState, createContextMenuItems, model, closeWidget, expandMainWidget])
 
   const dropdown = contextMenuState !== null && !isUndefined(createContextMenuItems)
     ? (
       <Dropdown
-        menu={ { items: menuItems } }
+        menu={ { items: menuItems, onKeyDown: onMenuKeyDown } }
         menuRef={ dropdownRef }
         open
         overlayStyle={ { position: 'absolute', left: contextMenuState.x, top: contextMenuState.y } }
@@ -82,6 +141,8 @@ export const useContextMenu = (
 
   return {
     showContextMenu,
-    dropdown
+    dropdown,
+    openTabId: contextMenuState?.tabNode.getId() ?? null,
+    openFromKeyboard
   }
 }

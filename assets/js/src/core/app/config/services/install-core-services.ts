@@ -39,6 +39,7 @@ import { DynamicTypeAssetUnknown } from '@Pimcore/modules/element/dynamic-types/
 import { DynamicTypeAssetVideo } from '@Pimcore/modules/element/dynamic-types/definitions/asset/types/dynamic-type-asset-video'
 import { DynamicTypeBatchEditRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-registry'
 import { DynamicTypeBatchEditCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/checkbox/dynamic-type-batch-edit-checkbox'
+import { DynamicTypeBatchEditSystemBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/system-boolean/dynamic-type-batch-edit-system-boolean'
 import { DynamicTypeBatchEditDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adapter'
 import { DynamicTypeBatchEditDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
 import { DynamicTypeBatchEditDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/datetime/dynamic-type-batch-edit-datetime'
@@ -74,6 +75,7 @@ import { DynamicTypeGridCellAssetLink } from '@Pimcore/modules/element/dynamic-t
 import { DynamicTypeGridCellAssetPreview } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/asset-preview/dynamic-type-grid-cell-asset-preview'
 import { DynamicTypeGridCellAsset } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
 import { DynamicTypeGridCellCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
+import { DynamicTypeGridCellRadio } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/radio/dynamic-type-grid-cell-radio'
 import { DynamicTypeGridCellDataObjectActions } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
 import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 import { DynamicTypeGridCellDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
@@ -243,6 +245,7 @@ import { DynamicTypeGridCellSystemDatetime } from '@Pimcore/modules/element/dyna
 import { DynamicTypeGridCellSystemInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
 import { DynamicTypeGridCellSystemUser } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-user/dynamic-type-grid-cell-system-user'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
+import { DynamicTypeFieldFilterEmptyOnly } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/empty-only/dynamic-type-field-filter-empty-only'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
 import { DynamicTypeDocumentEmail } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-email'
@@ -478,6 +481,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFieldFilterString).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/FieldFilter/EmptyOnly']).to(DynamicTypeFieldFilterEmptyOnly).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFilterId).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/FileSize']).to(DynamicTypeFieldFilterFileSize).inSingletonScope()
@@ -501,6 +505,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/BatchEdit/Datetime']).to(DynamicTypeBatchEditDatetime).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/BatchEdit/Select']).to(DynamicTypeBatchEditSelect).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/BatchEdit/Checkbox']).to(DynamicTypeBatchEditCheckbox).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/BatchEdit/SystemBoolean']).to(DynamicTypeBatchEditSystemBoolean).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/BatchEdit/ElementDropzone']).to(DynamicTypeBatchEditElementDropzone).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/BatchEdit/ClassificationStore']).to(DynamicTypeBatchEditClassificationStore).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']).to(DynamicTypeBatchEditDataObjectAdapter).inSingletonScope()
@@ -514,6 +519,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/GridCell/Select']).to(DynamicTypeGridCellSelect).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/MultiSelect']).to(DynamicTypeGridCellMultiSelect).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Checkbox']).to(DynamicTypeGridCellCheckbox).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/GridCell/Radio']).to(DynamicTypeGridCellRadio).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Boolean']).to(DynamicTypeGridCellBoolean).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Date']).to(DynamicTypeGridCellDate).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Time']).to(DynamicTypeGridCellTime).inSingletonScope()

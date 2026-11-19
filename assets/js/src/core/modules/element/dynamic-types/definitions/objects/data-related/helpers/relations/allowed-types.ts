@@ -12,6 +12,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { DragAndDropInfo } from '@sdk/components'
 import { isNil } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { getDraggedElements, toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 
 export interface IRelationAllowedTypesClassDefinition {
@@ -119,25 +120,54 @@ const isValidType = (allowedTypes: string[] | null | undefined, subType: string)
   return allowedTypes.includes(subType)
 }
 
-export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTypesDataComponent): boolean => {
-  if (info.data === null) {
+/**
+ * Whether one element may be assigned to a relation field.
+ *
+ * Separate from the drag info so a multi element drag can validate its elements
+ * one by one instead of judging the whole drag by its first element.
+ */
+export const isValidRelationElement = (
+  elementType: string,
+  element: any,
+  props: IRelationAllowedTypesDataComponent
+): boolean => {
+  if (isNil(element)) {
     return false
   }
-  const type: ElementType | null = mapToElementType(info.type)
+
+  const type: ElementType | null = mapToElementType(elementType)
   if (type === null) {
     return false
   }
 
-  const subType: string = info.data.type
+  const subType: string = element.type
 
   if (type === 'data-object' && subType !== 'folder') {
-    const className = String(info.data.className)
+    const className = String(element.className)
     if (!isAllowedClass(type, className, props)) {
       return false
     }
   }
 
   return isAllowedSubType(type, subType, props)
+}
+
+export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTypesDataComponent): boolean => {
+  return isValidRelationElement(info.type, info.data, props)
+}
+
+/**
+ * The dragged elements a relation field would actually accept. Works for a single
+ * element drag and for a list drag; targets that only handle single elements keep
+ * using dndIsValidData, which never matches a list drag type.
+ */
+export const dndValidRelationElements = (
+  info: DragAndDropInfo,
+  props: IRelationAllowedTypesDataComponent
+): any[] => {
+  const elementType = toElementType(info.type)
+
+  return getDraggedElements(info).filter(element => isValidRelationElement(elementType, element, props))
 }
 
 export const createElementSelectorAreas = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['areas'] => {

@@ -9,7 +9,7 @@
  */
 
 import { debounce } from 'lodash'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Input, Col, Row, Flex, Typography } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
@@ -20,6 +20,7 @@ import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-m
 import { Content } from '@Pimcore/components/content/content'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
+import { TwoFactorResetButton } from '@Pimcore/modules/user/management/detail/tabs/settings/components/two-factor-reset-button/two-factor-reset-button'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -84,12 +85,22 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     [changeUserInState]
   )
 
+  const isTwoFactorRequired = openedUser?.twoFactorAuthentication?.required ?? false
+  const isFormShown = !isLoading && !permissionsLoading && !perspectivesLoading
+
+  // A setup in the profile sets `required` outside this form; a stale switch would undo it on the next save
+  useEffect(() => {
+    if (isFormShown) {
+      form.setFieldValue('twoFactorAuthenticationRequired', isTwoFactorRequired)
+    }
+  }, [isTwoFactorRequired, isFormShown])
+
   const formatLastLogin = (timestamp: number): string => {
     const date = new Date(timestamp * 1000)
     return date.toLocaleString()
   }
 
-  if (isLoading || permissionsLoading || perspectivesLoading) {
+  if (!isFormShown) {
     return <Content loading></Content>
   }
 
@@ -172,6 +183,11 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       size={ 'small' }
                     />
                   </Form.Item>
+
+                  <TwoFactorResetButton
+                    isTwoFactorActive={ openedUser?.twoFactorAuthentication?.active ?? false }
+                    userId={ id }
+                  />
                 </>
               }
             ]

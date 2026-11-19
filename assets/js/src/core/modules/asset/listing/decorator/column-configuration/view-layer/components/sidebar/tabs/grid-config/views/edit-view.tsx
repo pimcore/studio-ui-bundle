@@ -94,7 +94,11 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        gap='small'
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'extra-small' } }
+      >
         <Header title={ t('listing.grid-config.title') }>
           {saveEnabled === true && (
             <Dropdown

@@ -16,6 +16,7 @@ import { serviceIds, useInjection } from '@sdk/app'
 import { type TreeDataItem } from '@sdk/components'
 import React, { type ComponentType, createContext, useContext, useMemo } from 'react'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
+import { type UnknownAction } from '@reduxjs/toolkit'
 
 export interface UseDetailLayoutAccessorReturn {
   accessor: (detailData: Record<string, unknown>) => Layout | undefined
@@ -28,6 +29,11 @@ export interface ImportExportConfig {
   acceptFileTypes?: string
   acceptMimeTypes?: string[]
   successMessageKey?: string
+  // The upload posts straight to getImportUrl and never passes through an RTK Query
+  // mutation, so nothing invalidates the cache for it. The whole action rather than a
+  // tag list: only the module that owns the endpoints knows which api has those tag
+  // types registered, and this editor is shared by modules that do not.
+  getImportInvalidation?: (id: number | string) => UnknownAction
 }
 
 /** the last word on a layout-tree item before it renders: add a status class, wrap the title */

@@ -17,6 +17,9 @@ import { DocumentProvider } from '../document-provider'
 import { Content } from '@Pimcore/components/content/content'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
+import {
+  WorkflowEditorCoordinator
+} from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-editor-coordinator'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { Toolbar } from './toolbar/toolbar'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
@@ -79,18 +82,20 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   return (
     <DocumentProvider id={ id }>
-      <TabsToolbarView
-        dataTestId={ `document-editor-${createSafeTestIdString(id)}` }
-        renderTabbar={
-          <TabsContainer
-            elementEditorType={ editorType }
-          />
-          }
+      <WorkflowEditorCoordinator>
+        <TabsToolbarView
+          dataTestId={ `document-editor-${createSafeTestIdString(id)}` }
+          renderTabbar={
+            <TabsContainer
+              elementEditorType={ editorType }
+            />
+            }
 
-        renderToolbar={
-          <Toolbar />
-          }
-      />
+          renderToolbar={
+            <Toolbar />
+            }
+        />
+      </WorkflowEditorCoordinator>
     </DocumentProvider>
   )
 }

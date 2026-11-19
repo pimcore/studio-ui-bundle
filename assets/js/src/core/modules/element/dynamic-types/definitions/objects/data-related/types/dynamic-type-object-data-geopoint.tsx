@@ -22,6 +22,9 @@ import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-ove
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { isNil } from 'lodash'
 import { GeoPointList } from '../../grid-cell-preview/geo-point-list/geo-point-list'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
@@ -33,6 +36,7 @@ export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract {
   id: string = 'geopoint'
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/EmptyOnly'])
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
   gridCellEditMode: EditMode = 'edit-modal'
 

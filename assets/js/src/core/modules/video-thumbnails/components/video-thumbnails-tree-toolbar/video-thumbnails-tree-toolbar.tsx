@@ -32,13 +32,13 @@ export const VideoThumbnailsTreeToolbar = ({
     <Toolbar justify='space-between'>
       <Tooltip
         mouseEnterDelay={ actionTooltipDelay }
-        title={ t('refresh') }
+        title={ t('toolbar.reload') }
       >
         <IconButton
+          aria-label={ t('toolbar.reload') }
           disabled={ isFetching }
           icon={ { value: 'refresh' } }
           onClick={ onRefresh }
-          title={ t('refresh') }
           type="link"
         />
       </Tooltip>

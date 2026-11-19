@@ -311,7 +311,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
     `,
 
     clearOptionWrapper: css`
-      &:has(> button:first-child:hover) .ant-select-item-option-active {
+      &:has(> button:hover) .ant-select-item-option-active {
         background-color: transparent !important;
       }
     `,

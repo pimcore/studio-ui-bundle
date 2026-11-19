@@ -10,9 +10,8 @@
 
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SidebarTitle } from '@Pimcore/components/sidebar/title'
+import { Title } from '@Pimcore/components/title/title'
 import { Content } from '@sdk/components'
-import { Box } from '@Pimcore/components/box/box'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentAvailableControllersListQuery, useDocumentAvailableTemplatesListQuery, useDocumentDocTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
@@ -66,25 +65,24 @@ export const DocumentConfigurationSidebar = (): React.JSX.Element => {
   }
 
   return (
-    <Content>
-      <SidebarTitle withBorder>
-        {t('document-configuration.sidebar-title')}
-      </SidebarTitle>
+    <Content
+      padded
+      padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+    >
+      <Title>{t('document-configuration.sidebar-title')}</Title>
 
-      <Box padding={ { x: 'extra-small', bottom: 'small' } }>
-        {!isUndefined(document) && (
-          <DocumentConfigurationForm
-            apiData={ apiData }
-            documentId={ id }
-            documentType={ document?.type }
-            hasSavePermission={ hasSavePermission }
-            initialValues={ initialValues }
-            isLoadingControllers={ isLoadingControllers }
-            isLoadingDocTypes={ isLoadingDocTypes }
-            isLoadingTemplates={ isLoadingTemplates }
-          />
-        )}
-      </Box>
+      {!isUndefined(document) && (
+        <DocumentConfigurationForm
+          apiData={ apiData }
+          documentId={ id }
+          documentType={ document?.type }
+          hasSavePermission={ hasSavePermission }
+          initialValues={ initialValues }
+          isLoadingControllers={ isLoadingControllers }
+          isLoadingDocTypes={ isLoadingDocTypes }
+          isLoadingTemplates={ isLoadingTemplates }
+        />
+      )}
     </Content>
   )
 }

@@ -9,7 +9,7 @@
  */
 
 import { useState } from 'react'
-import { act, renderHook } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import { type DisplayManyToManyRelationValue, type ManyToManyRelationValue, useValue } from './use-value'
 
 jest.mock('react-i18next', () => ({
@@ -36,11 +36,11 @@ const createItem = (id: number): ManyToManyRelationValue[number] => ({
   isPublished: null
 })
 
-const renderUseValue = (initialValue: ManyToManyRelationValue): ReturnType<typeof renderHook<{ value: ManyToManyRelationValue | null, hook: ReturnType<typeof useValue> }, unknown>> => {
+const renderUseValue = (initialValue: ManyToManyRelationValue, maxItems: number | null = null): ReturnType<typeof renderHook<{ value: ManyToManyRelationValue | null, hook: ReturnType<typeof useValue> }, unknown>> => {
   return renderHook(() => {
     const [value, setValue] = useState<ManyToManyRelationValue | null>(initialValue)
     const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(initialValue)
-    const hook = useValue(value, setValue, displayedValue, setDisplayedValue, null)
+    const hook = useValue(value, setValue, displayedValue, setDisplayedValue, maxItems)
     return { value, hook }
   })
 }
@@ -62,5 +62,93 @@ describe('useValue', () => {
       staleDeleteItem(0)
     })
     expect(result.current.value).toEqual([b, c])
+  })
+
+  describe('addDroppedElements', () => {
+    const dropped = (id: number): Record<string, unknown> => ({ id, type: 'image', fullPath: `/item-${id}` })
+
+    it('adds every dropped element when the field has no limit', async () => {
+      const { result } = renderUseValue([createItem(1)], null)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(2), dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2, 3])
+    })
+
+    it('treats an unset limit like no limit', async () => {
+      // field definitions without maxItems hand over undefined at runtime
+      const { result } = renderUseValue([createItem(1)], undefined as unknown as null)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(2), dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2, 3])
+    })
+
+    it('fills up to the limit and leaves the rest out', async () => {
+      const { result } = renderUseValue([createItem(1)], 2)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(2), dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2])
+    })
+
+    it('adds nothing to a full field', async () => {
+      const { result } = renderUseValue([createItem(1), createItem(2)], 2)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2])
+    })
+  })
+
+  // The search can be used while the visible field values are still loading; a term that only matches
+  // a visible field value must find its rows once the values arrive.
+  it('applies an active search again when the visible field values arrive', async () => {
+    const [a, b] = [1, 2].map(createItem)
+    const { result, rerender } = renderHook(({ visibleFieldsValue }: { visibleFieldsValue: Array<Record<string, any>> }) => {
+      const [value, setValue] = useState<ManyToManyRelationValue | null>([a, b])
+      const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>([a, b])
+      const hook = useValue(value, setValue, displayedValue, setDisplayedValue, null, false, undefined, visibleFieldsValue)
+      return { displayedValue, hook }
+    }, { initialProps: { visibleFieldsValue: [] as Array<Record<string, any>> } })
+
+    await act(async () => {
+      result.current.hook.onSearch('golf')
+    })
+    await waitFor(() => { expect(result.current.displayedValue).toEqual([]) })
+
+    rerender({ visibleFieldsValue: [{ id: 1, name: 'Polo' }, { id: 2, name: 'Golf' }] })
+
+    await waitFor(() => { expect(result.current.displayedValue?.map(item => item.id)).toEqual([2]) })
+  })
+
+  // The toolbar debounces the search, so a search can run with an onSearch of a render before the
+  // visible field values arrived; it must still match them.
+  it('matches the latest visible field values in a search started before they arrived', async () => {
+    const [a, b] = [1, 2].map(createItem)
+    const { result, rerender } = renderHook(({ visibleFieldsValue }: { visibleFieldsValue: Array<Record<string, any>> }) => {
+      const [value, setValue] = useState<ManyToManyRelationValue | null>([a, b])
+      const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>([a, b])
+      const hook = useValue(value, setValue, displayedValue, setDisplayedValue, null, false, undefined, visibleFieldsValue)
+      return { displayedValue, hook }
+    }, { initialProps: { visibleFieldsValue: [] as Array<Record<string, any>> } })
+
+    const searchOfEarlierRender = result.current.hook.onSearch
+
+    rerender({ visibleFieldsValue: [{ id: 1, name: 'Polo' }, { id: 2, name: 'Golf' }] })
+
+    await act(async () => {
+      searchOfEarlierRender('golf')
+    })
+
+    await waitFor(() => { expect(result.current.displayedValue?.map(item => item.id)).toEqual([2]) })
   })
 })

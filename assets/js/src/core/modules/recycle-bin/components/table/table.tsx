@@ -16,7 +16,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
 import { buildTestId } from '@Pimcore/utils/test-id-generator'
 import { formatDateTime } from '@sdk/utils'
-import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
+import { createColumnHelper, type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecycleBin } from '../../hooks/use-recycle-bin'
@@ -26,13 +26,15 @@ import { useSelectedRowsContext } from '../../context/selected-items-context'
 
 interface TableProps {
   items: RecycleBin[]
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
 interface RecycleBinWithActions extends RecycleBin {
   actions: React.ReactNode
 }
 
-export const Table = ({ items }: TableProps): React.JSX.Element => {
+export const Table = ({ items, sorting, onSortingChange }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { restoreItems, removeItems } = useRecycleBin()
@@ -53,6 +55,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const columns = [
     columnHelper.accessor('type', {
       header: t('recycle-bin.columns.type'),
+      enableSorting: true,
       cell: ({ row }) => {
         const type = row.original.type
 
@@ -83,6 +86,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('path', {
       header: t('recycle-bin.columns.path'),
+      enableSorting: true,
       meta: {
         editable: false,
         clearable: false,
@@ -100,18 +104,22 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('amount', {
       header: t('recycle-bin.columns.amount'),
-      size: 100
+      size: 100,
+      enableSorting: true
     }),
     columnHelper.accessor('deletedBy', {
       header: t('recycle-bin.columns.deleted-by'),
-      size: 100
+      size: 100,
+      enableSorting: true
     }),
     columnHelper.accessor('date', {
       header: t('recycle-bin.columns.date'),
-      size: 150
+      size: 150,
+      enableSorting: true
     }),
     columnHelper.accessor('actions', {
       header: t('recycle-bin.columns.actions'),
+      enableSorting: false,
       cell: ({ row }): React.JSX.Element => {
         return (
           <Flex
@@ -160,11 +168,15 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       columns={ columns }
       data={ tableItems }
       enableMultipleRowSelection
+      enableSorting
+      manualSorting
       modifiedCells={ [] }
       onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedRows(row, items) } }
+      onSortingChange={ onSortingChange }
       resizable
       selectedRows={ selectedRows }
       setRowId={ (row) => String(row.id) }
+      sorting={ sorting }
     />
   )
 }

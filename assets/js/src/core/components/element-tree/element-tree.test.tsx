@@ -21,6 +21,11 @@ jest.mock('./node/tree-node', () => ({
 }))
 jest.mock('./node/content/tree-node-content', () => ({ TreeNodeContent: (): null => null }))
 
+// The selection bar reads the tree selection through the store, which would pull the
+// whole app slice graph into this unit test. It is not what this test is about.
+jest.mock('./selection/tree-selection-bar', () => ({ TreeSelectionBar: (): null => null }))
+jest.mock('./hooks/use-element-tree', () => ({ useElementTree: () => ({ clearSelection: jest.fn() }) }))
+
 jest.mock('./hooks/use-element-tree-node', () => ({
   useElementTreeNode: jest.fn()
 }))
@@ -90,6 +95,15 @@ const nodeStateFixture = (childrenByNodeId: Record<string, string[]>) => (nodeId
   setSearchTerm: jest.fn(),
   setSelectedIds: jest.fn(),
   setScrollTo: jest.fn(),
+  // selection members of the hook
+  isActive: false,
+  toggleSelection: jest.fn(),
+  selectRange: jest.fn(),
+  clearSelection: jest.fn(),
+  setActive: jest.fn(),
+  getSelectedIds: () => [],
+  getAnchorId: () => undefined,
+  isSelectionImplicit: () => false,
   getChildren: () => childrenByNodeId[nodeId] ?? []
 })
 

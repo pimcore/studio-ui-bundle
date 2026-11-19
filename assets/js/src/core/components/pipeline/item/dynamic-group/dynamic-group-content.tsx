@@ -112,6 +112,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
             <React.Fragment key={ value.vId }>
               <DynamicGroupItem
                 dynamicTypeRegistryId={ dynamicTypeRegistryId }
+                groupId={ id }
                 id={ index }
               />
             </React.Fragment>
@@ -119,7 +120,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
         </Space>
       </SortableContext>
     </DndContext>
-  ), [memoizedValues, items, onDragEnd, sensors, dynamicTypeRegistryId])
+  ), [memoizedValues, items, onDragEnd, sensors, dynamicTypeRegistryId, id])
 
   return (
     <Box padding={ { x: 'mini', y: 'extra-small' } }>

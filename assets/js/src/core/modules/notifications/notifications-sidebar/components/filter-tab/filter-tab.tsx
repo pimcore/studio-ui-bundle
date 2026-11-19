@@ -89,7 +89,10 @@ export const FilterTab = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+      >
         <Title>{t('element.sidebar.field-filters')}</Title>
 
         { filters.length === 0

@@ -11,17 +11,36 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { useAreablockMenu, type UseAreablockMenuReturn } from './use-areablock-menu'
-import { type AreablockEditableConfig } from '../areablock-editable'
+import { type AreaInsertPosition, type AreablockEditableConfig } from '../areablock-editable'
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
 }))
 
-const getMenuItems = (config?: AreablockEditableConfig): NonNullable<UseAreablockMenuReturn['menuItems']> => {
+// The menu item labels pull in IconButton, and through it antd-style, which is
+// untranspiled ESM that jest cannot parse. Stub the style factory at the root of
+// that chain; these tests only read the label props, never render them.
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
+  createStyles: () => () => ({ styles: {}, cx: (...classNames: unknown[]) => classNames.filter(Boolean).join(' '), theme: {} })
+}))
+
+type MenuItems = NonNullable<UseAreablockMenuReturn['menuItems']>
+type OnAddArea = (areaType: string, position: AreaInsertPosition) => void
+
+interface MenuItemLabelProps {
+  tooltipTitle: React.ReactNode
+  onInsert?: (position: AreaInsertPosition) => void
+}
+
+const getMenuItems = (config?: AreablockEditableConfig, options?: { onAddArea?: OnAddArea, showInsertPosition?: boolean }): MenuItems => {
   let result: UseAreablockMenuReturn['menuItems']
 
   const Probe = (): null => {
-    result = useAreablockMenu({ config, onAddArea: jest.fn() }).menuItems
+    result = useAreablockMenu({
+      config,
+      onAddArea: options?.onAddArea ?? jest.fn(),
+      showInsertPosition: options?.showInsertPosition
+    }).menuItems
     return null
   }
 
@@ -30,10 +49,11 @@ const getMenuItems = (config?: AreablockEditableConfig): NonNullable<UseAreabloc
   return result ?? []
 }
 
-const getTooltipTitle = (item: NonNullable<UseAreablockMenuReturn['menuItems']>[number]): React.ReactNode => {
-  const label = (item as { label: React.ReactElement<{ title: React.ReactNode }> }).label
-  return label.props.title
+const getLabelProps = (item: MenuItems[number]): MenuItemLabelProps => {
+  return (item as { label: React.ReactElement<MenuItemLabelProps> }).label.props
 }
+
+const getTooltipTitle = (item: MenuItems[number]): React.ReactNode => getLabelProps(item).tooltipTitle
 
 const renderTooltipTitle = (title: React.ReactNode): HTMLElement => render(<div>{ title }</div>).container
 
@@ -113,10 +133,49 @@ describe('useAreablockMenu previewHtml tooltip', () => {
 
     expect(items).toHaveLength(1)
 
-    const children = (items[0] as { children: NonNullable<UseAreablockMenuReturn['menuItems']> }).children
+    const children = (items[0] as { children: MenuItems }).children
     expect(children).toHaveLength(1)
 
     const container = renderTooltipTitle(getTooltipTitle(children[0]))
     expect(container.textContent).toBe('grouped preview')
+  })
+})
+
+describe('useAreablockMenu insert position', () => {
+  const config: AreablockEditableConfig = {
+    types: [{ name: 'My Brick', type: 'my-brick' }]
+  }
+
+  it('leaves the position buttons out unless they are asked for', () => {
+    expect(getLabelProps(getMenuItems(config)[0]).onInsert).toBeUndefined()
+  })
+
+  it('adds below when the row itself is clicked', () => {
+    const onAddArea = jest.fn()
+    const item = getMenuItems(config, { onAddArea, showInsertPosition: true })[0]
+
+    ;(item as unknown as { onClick: () => void }).onClick()
+
+    expect(onAddArea).toHaveBeenCalledWith('my-brick', 'below')
+  })
+
+  it.each<AreaInsertPosition>(['above', 'below'])('passes %s on from the position buttons', (position) => {
+    const onAddArea = jest.fn()
+    const item = getMenuItems(config, { onAddArea, showInsertPosition: true })[0]
+
+    getLabelProps(item).onInsert?.(position)
+
+    expect(onAddArea).toHaveBeenCalledWith('my-brick', position)
+  })
+
+  it('offers the position buttons on grouped entries too', () => {
+    const items = getMenuItems(
+      { ...config, group: { 'My Group': ['my-brick'] } },
+      { showInsertPosition: true }
+    )
+
+    const children = (items[0] as { children: MenuItems }).children
+
+    expect(getLabelProps(children[0]).onInsert).toBeDefined()
   })
 })

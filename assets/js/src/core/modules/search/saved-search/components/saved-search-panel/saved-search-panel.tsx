@@ -227,7 +227,10 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = 
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'extra-small' } }
+      >
         <Flex
           gap='small'
           vertical

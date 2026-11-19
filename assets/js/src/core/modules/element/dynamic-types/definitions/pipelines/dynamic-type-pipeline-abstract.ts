@@ -18,6 +18,12 @@ export abstract class DynamicTypePipelineAbstract implements DynamicTypeAbstract
   abstract readonly id: string
   readonly group: string | string[] | null = null
 
+  /**
+   * Whether the item offers an expand button in compact pipeline views (e.g. the grid config sidebar),
+   * which opens the larger view focused on that item. Meant for types whose config needs room, like code editors.
+   */
+  readonly expandable: boolean = false
+
   abstract getComponent (): ReactElement
 
   isAvailableForSelection (config: Record<string, any>): boolean {
