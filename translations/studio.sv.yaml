@@ -2402,6 +2402,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parametrar
 widget.email-log.grid.name: Namn
 widget.email-log.grid.value: Värde
+email-log.label: E-postlogg
 email-log.subject: Ämne
 email-log.tooltip.resend: Skicka om e-post
 email-log.tooltip.forward: Vidarebefordra e-post

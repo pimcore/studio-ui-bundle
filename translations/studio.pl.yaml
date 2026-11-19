@@ -2402,6 +2402,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parametry
 widget.email-log.grid.name: Nazwa
 widget.email-log.grid.value: Wartość
+email-log.label: Dziennik e-maili
 email-log.subject: Temat
 email-log.tooltip.resend: Wyślij e-mail ponownie
 email-log.tooltip.forward: Przekaż e-mail
