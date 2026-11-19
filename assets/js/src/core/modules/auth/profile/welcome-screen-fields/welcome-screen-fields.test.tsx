@@ -109,12 +109,12 @@ describe('WelcomeScreenFields', () => {
     expect(onValuesChange).toHaveBeenCalledWith({ welcomeScreenTarget: TARGET }, { welcomeScreen: true, welcomeScreenTarget: TARGET })
   })
 
-  it('shows only the switch when no provider offers a target', () => {
+  it('shows the empty select when no provider offers a target, so the user sees why nothing opens', () => {
     mockOptions = []
     renderFields(TARGET)
 
-    expect(screen.getByLabelText(SWITCH_NAME)).toBeInTheDocument()
-    expect(screen.queryByLabelText(SELECT_NAME)).toBeNull()
+    expect(getSelect().options).toHaveLength(0)
+    expect(getSelect().dataset.hasValue).toBe('false')
   })
 
   it('hides the select while the switch is off and shows the kept choice again when it is turned on', () => {

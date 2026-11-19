@@ -22,7 +22,8 @@ export const WelcomeScreenFields = (): React.JSX.Element => {
   const welcomeScreen = Form.useWatch('welcomeScreen')
   const registry = useInjection<WelcomeScreenRegistry>(serviceIds['WelcomeScreen/Registry'])
   const options = registry.getOptions().map((option) => ({ value: option.target, label: option.label }))
-  const showSelect = welcomeScreen === true && options.length > 0
+  // shown also without options: the empty list tells the user why no welcome screen opens
+  const showSelect = welcomeScreen === true
 
   return (
     <>
