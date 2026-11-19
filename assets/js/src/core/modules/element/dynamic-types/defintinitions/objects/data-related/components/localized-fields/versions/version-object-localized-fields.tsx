@@ -19,6 +19,7 @@ import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definition
 import { Flex } from '@Pimcore/components/flex/flex'
 import { isEmpty } from 'lodash'
 import { Text } from '@Pimcore/components/text/text'
+import { getLocalizedDataFields } from './get-localized-data-fields'
 
 export interface ObjectLocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: Array<AbstractObjectDataDefinition | AbstractObjectLayoutDefinition>
@@ -34,12 +35,12 @@ export const VersionObjectLocalizedFields = ({ children, className, value }: Obj
       direction="vertical"
       size="small"
     >
-      {children?.map((child, index) => {
+      {getLocalizedDataFields(children).map(({ field: child }, index) => {
         const objectDataType = objectDataRegistry.getDynamicType(child.fieldtype!)
 
         const fieldName = child?.name
 
-        return Object.entries(value?.[fieldName] as Record<string, any>).map(([locale, localizedValue]) => {
+        return Object.entries((value?.[fieldName] ?? {}) as Record<string, any>).map(([locale, localizedValue]) => {
           const _props = {
             ...child,
             name: fieldName,
