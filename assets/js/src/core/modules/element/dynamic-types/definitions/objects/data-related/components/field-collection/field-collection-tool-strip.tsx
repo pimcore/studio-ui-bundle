@@ -51,15 +51,30 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         theme='secondary'
       >
         <Space size="mini">
-          <Dropdown
-            disabled={ disallowAdd }
-            menu={ { items: dropDownItems } }
-          >
-            <IconButton
-              icon={ { value: 'new' } }
-              size='small'
-            />
-          </Dropdown>
+          {allowedTypes.length === 1
+            ? (
+              // With a single allowed type there is nothing to choose, so add it right away
+              <IconButton
+                disabled={ disallowAdd }
+                icon={ { value: 'new' } }
+                onClick={ (e) => {
+                  e.stopPropagation()
+                  operations.add({ type: allowedTypes[0] })
+                } }
+                size='small'
+              />
+              )
+            : (
+              <Dropdown
+                disabled={ disallowAdd }
+                menu={ { items: dropDownItems } }
+              >
+                <IconButton
+                  icon={ { value: 'new' } }
+                  size='small'
+                />
+              </Dropdown>
+              )}
 
           <IconButton
             disabled={ disallowReorder }
