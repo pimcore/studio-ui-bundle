@@ -21,7 +21,7 @@ export interface ObjectBrickAddButtonProps {
 
 export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JSX.Element => {
   const { allowedTypes, objectBrick } = props
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { operations } = useKeyedListContext()
 
   const dropdownItems: DropdownMenuProps['items'] = useMemo(() => {
@@ -32,7 +32,7 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
 
     return allowedTypes
       .map((type) => ({ type, label: getLabel(type) }))
-      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
+      .sort((a, b) => a.label.localeCompare(b.label, i18n.language, { sensitivity: 'base' }))
       .map(({ type, label }) => {
         return {
           key: type,
@@ -43,7 +43,7 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
           }
         }
       })
-  }, [allowedTypes, objectBrick])
+  }, [allowedTypes, objectBrick, i18n.language])
 
   return (
     <Dropdown
