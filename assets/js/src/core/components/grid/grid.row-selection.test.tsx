@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
+import { type ColumnDef, type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import { Grid } from './grid'
 
 // antd-style is untranspiled ESM — every `.styles.ts` in the render tree goes through this
@@ -57,16 +57,21 @@ const data = ['delta', 'alpha', 'foxtrot', 'bravo', 'echo', 'charlie'].map((name
 interface SelectableGridProps {
   multiple?: boolean
   sorting?: SortingState
+  columns?: Array<ColumnDef<any>>
 }
 
-const SelectableGrid = ({ multiple = true, sorting }: SelectableGridProps): React.JSX.Element => {
-  const [columns] = useState(() => [{ id: 'name', accessorKey: 'name', header: 'Name', cell: () => null }])
+const createColumns = (): Array<ColumnDef<any>> => [{ id: 'name', accessorKey: 'name', header: 'Name', cell: () => null }]
+
+const SelectableGrid = ({ multiple = true, sorting, columns: givenColumns }: SelectableGridProps): React.JSX.Element => {
+  const [ownColumns] = useState(createColumns)
+  const columns = givenColumns ?? ownColumns
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
 
   // Without the header row only the row checkboxes are left, and no sort button that needs the icon library
   return (
     <>
       <button onClick={ () => { setSelectedRows({}) } }>Reset selection</button>
+      <button onClick={ () => { setSelectedRows(Object.fromEntries(data.map(row => [String(row.id), true]))) } }>Select all rows</button>
       <Grid
         columns={ columns }
         data={ data }
@@ -156,6 +161,30 @@ describe('Grid Shift-click range selection on the row checkboxes', () => {
     clickRow(3, { shiftKey: true })
 
     expect(getCheckedRows()).toEqual([3, 4, 5])
+  })
+
+  it('toggles only the clicked row when the selection was emptied and filled again since the anchor was set', () => {
+    render(<SelectableGrid />)
+
+    clickRow(1)
+    fireEvent.click(screen.getByRole('button', { name: 'Reset selection' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Select all rows' }))
+    clickRow(4, { shiftKey: true })
+
+    expect(getCheckedRows()).toEqual([0, 1, 2, 3, 5])
+  })
+
+  it('selects a range in a grid mounted again with the same columns array', () => {
+    // The grid adds its checkbox column to the given array, so the second grid finds the first one's column
+    const columns = createColumns()
+    const { unmount } = render(<SelectableGrid columns={ columns } />)
+    unmount()
+    render(<SelectableGrid columns={ columns } />)
+
+    clickRow(1)
+    clickRow(4, { shiftKey: true })
+
+    expect(getCheckedRows()).toEqual([1, 2, 3, 4])
   })
 
   it('keeps a plain click toggling the single row', () => {

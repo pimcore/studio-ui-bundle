@@ -75,6 +75,7 @@ declare module '@tanstack/react-table' {
    
   export interface TableMeta<TData extends RowData> {
     onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any, rowData: TData, meta?: Record<string, any> }) => void
+    onSelectionCheckboxChange?: (event: CheckboxChangeEvent, row: Row<TData>) => void
   }
 }
 
@@ -174,6 +175,13 @@ export const Grid = ({
     return selectedRows
   }, [selectedRows])
 
+  // However the selection was emptied (toggle-all, reset by the parent), the old anchor no longer counts
+  useEffect(() => {
+    if (isEmpty(rowSelection)) {
+      selectionAnchorRowIdRef.current = undefined
+    }
+  }, [rowSelection])
+
   const columns = useMemo(
     () =>
       props.isLoading === true
@@ -248,7 +256,8 @@ export const Grid = ({
       : undefined,
     enableMultiSorting: false,
     meta: {
-      onUpdateCellData: props.onUpdateCellData
+      onUpdateCellData: props.onUpdateCellData,
+      onSelectionCheckboxChange
     }
   }), [data, columns, rowSelection, props.initialState, props.setRowId, props.isLoading])
 
@@ -601,11 +610,6 @@ export const Grid = ({
   }
 
   function selectRowRange (targetRowId: string): boolean {
-    // An emptied selection (toggle-all, reset by the parent) leaves no usable anchor
-    if (isEmpty(table.getState().rowSelection)) {
-      return false
-    }
-
     const rows = table.getRowModel().rows
     const anchorIndex = rows.findIndex(row => row.id === selectionAnchorRowIdRef.current)
     const targetIndex = rows.findIndex(row => row.id === targetRowId)
@@ -649,11 +653,12 @@ export const Grid = ({
           )
         : '',
 
-      cell: ({ row }): React.JSX.Element => (
+      // Goes through the rendering table: the column stays in the caller's array and can outlive this grid
+      cell: ({ row, table }): React.JSX.Element => (
         <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center' } }>
           <Checkbox
             checked={ row.getIsSelected() }
-            onChange={ (event) => { onSelectionCheckboxChange(event, row) } }
+            onChange={ (event) => { table.options.meta?.onSelectionCheckboxChange?.(event, row) } }
           />
         </div>
       ),
