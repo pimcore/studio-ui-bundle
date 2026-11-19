@@ -6,6 +6,10 @@ title: Upgrade Information
 
 The following steps are necessary when updating to newer versions.
 
+## Upgrade to 2026.3.7
+
+- [User Management] The token login link endpoint (`POST /pimcore-studio/api/user/token-link/{id}`) no longer declares a request body: the link is built server-side and the body has been ignored since 2026.3.5. The regenerated API client follows the schema, so `tokenLink` is gone from `UserTokenLinkGetApiArg` and the `TokenLink` type is no longer exported from `@pimcore/studio-ui-bundle/api/user`. Code that calls `useUserTokenLinkGetQuery`/`useLazyUserTokenLinkGetQuery` has to pass the user id alone (`trigger({ id })`), and code that imports `TokenLink` has to drop that import. Nothing changes at runtime: the value was never read, and the returned link is unaffected.
+
 ## Upgrade to 2026.3.3
 
 - [Dependencies] `react-router-dom` moved from 6.30.4 to 7.18. React Router 6 is end of life and affected by [CVE-2026-53669](https://github.com/advisories/GHSA-wrjc-x8rr-h8h6) (open redirect through backslashes in `<Link to>` and `navigate()`); 7.18 is the first patched line. Studio UI itself only navigates to hard-coded routes and keeps importing from `react-router-dom`, so nothing changes for Studio users. Plugins are affected in two ways: Studio UI shares its runtime dependencies through module federation, so a plugin that declares `react-router-dom` has to require `^7.18` to keep using the host's copy (a `^6` requirement makes it bundle its own, still vulnerable, copy); and in React Router 7 `navigate()` returns `void | Promise<void>`, so code checked by `@typescript-eslint/no-floating-promises` needs `void navigate(...)` or `await`.
