@@ -26,17 +26,24 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { EmailCard } from './components/email-card/email-card'
 
-export const EmailLogContainer = (): React.JSX.Element => {
+export interface EmailLogContainerProps {
+  /** Limits the log to emails sent by this email document and hides the global search. */
+  documentId?: number
+}
+
+export const EmailLogContainer = ({ documentId }: EmailLogContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const isDocumentScoped = !isUndefined(documentId)
   const normalizedSearchTerm = searchTerm.trim()
   const { data, isLoading: isEmailLogLoading, isFetching: isEmailLogFetching } = useEmailLogGetCollectionQuery({
     page: currentPage,
-    pageSize
+    pageSize,
+    documentId
   }, {
     skip: normalizedSearchTerm !== ''
   })
@@ -98,24 +105,28 @@ export const EmailLogContainer = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Header
-          position='top'
-        >
-          <Flex gap='extra-small'>
-            <Title>
-              {t('widget.email-log')}
-            </Title>
-          </Flex>
-          <SearchInput
-            data-testid="email-log-search-input"
-            loading={ isRTKLoading || isFetching }
-            onSearch={ (value) => {
-              setSearchTerm(value)
-              setCurrentPage(1)
-            } }
-            placeholder={ t('search') }
-          />
-        </Header>
+        isDocumentScoped
+          ? undefined
+          : (
+            <Header
+              position='top'
+            >
+              <Flex gap='extra-small'>
+                <Title>
+                  {t('widget.email-log')}
+                </Title>
+              </Flex>
+              <SearchInput
+                data-testid="email-log-search-input"
+                loading={ isRTKLoading || isFetching }
+                onSearch={ (value) => {
+                  setSearchTerm(value)
+                  setCurrentPage(1)
+                } }
+                placeholder={ t('search') }
+              />
+            </Header>
+            )
       }
     >
       <Content

@@ -116,11 +116,7 @@ const injectedRtkApi = api
                 providesTags: ["User Management"],
             }),
             userTokenLinkGet: build.query<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.tokenLink,
-                }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/token-link/${queryArg.id}`, method: "POST" }),
                 providesTags: ["User Management"],
             }),
             userUpdateActivePerspective: build.mutation<
@@ -286,7 +282,6 @@ export type UserTokenLinkGetApiResponse = /** status 200 Token login link for th
 export type UserTokenLinkGetApiArg = {
     /** Id of the user */
     id: number;
-    tokenLink: TokenLink;
 };
 export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
@@ -652,10 +647,6 @@ export type ResetPassword = {
     username: string;
     /** Reset password URL */
     resetPasswordUrl: string;
-};
-export type TokenLink = {
-    /** Token login URL */
-    tokenLoginUrl: string;
 };
 export type UserProfile = {
     /** Firstname of the User */

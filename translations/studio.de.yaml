@@ -2253,6 +2253,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameter
 widget.email-log.grid.name: Name
 widget.email-log.grid.value: Wert
+email-log.label: E-Mail Log
 email-log.subject: Betreff
 email-log.tooltip.resend: E-Mail erneut senden
 email-log.tooltip.forward: E-Mail weiterleiten
