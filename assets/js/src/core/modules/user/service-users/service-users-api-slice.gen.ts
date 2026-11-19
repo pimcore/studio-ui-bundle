@@ -274,7 +274,7 @@ export type ServiceUser = {
     clientId: string | null;
     /** Timestamp of the last login */
     lastLogin: number | null;
-    /** Whether the OAuth client_credentials grant is enabled on this instance. While false, the client secret authenticates nothing; use an MCP access token. */
+    /** Whether the OAuth client_credentials grant is enabled; if false, use an MCP access token */
     clientCredentialsEnabled: boolean;
     /** Summary of the MCP access tokens of the service user (never the tokens themselves) */
     mcpTokens: ServiceUserMcpAccessTokenSummary;
