@@ -10,12 +10,13 @@
 
 import React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+import { type TagFilterDecoratorConfig } from '../tag-filter-decorator'
 import { TagFilterProvider } from './provider/tag-filter/tag-filter-provider'
 
-export const withTagFilterContext = (Component: AbstractDecoratorProps['ContextComponent']): AbstractDecoratorProps['ContextComponent'] => {
+export const withTagFilterContext = (Component: AbstractDecoratorProps['ContextComponent'], config?: TagFilterDecoratorConfig): AbstractDecoratorProps['ContextComponent'] => {
   const TagFilterContextComponent = (): React.JSX.Element => {
     return (
-      <TagFilterProvider>
+      <TagFilterProvider showOnlyUntaggedFilter={ config?.showOnlyUntaggedFilter }>
         <Component />
       </TagFilterProvider>
     )

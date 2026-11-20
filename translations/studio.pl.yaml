@@ -1431,6 +1431,7 @@ element.publish: Opublikuj
 element.locate-in-tree: Znajdź w drzewie
 element.sidebar.filter.only-direct-children: tylko bezpośrednie elementy podrzędne
 element.sidebar.filter.only-unreferenced: Tylko bez odwołań
+element.sidebar.filter.only-untagged: Tylko bez tagów
 element.sidebar.field-filters: Filtry pól
 element.full-information: Pełne informacje
 system-information.id: ID
