@@ -16,10 +16,10 @@ namespace Pimcore\Bundle\StudioUiBundle\Controller\Backend;
 use function basename;
 use function file_exists;
 use function is_string;
-use function preg_match;
 use Pimcore\Bundle\StudioUiBundle\Document\DocumentVersionComparisonService;
 use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionComparisonException;
 use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionNotFoundException;
+use function preg_match;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,11 +34,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class DocumentVersionsController extends AbstractController
 {
     /**
-     * Matches only the names {@see DocumentVersionComparisonService} generates for its own
-     * temporary diff artifacts, so the parameter can no longer address an arbitrary file in
-     * PIMCORE_SYSTEM_TEMP_DIRECTORY.
+     * Matches exactly the names {@see DocumentVersionComparisonService} generates for its own
+     * temporary diff artifacts: "version-diff-tmp-" + date('Y-m-d') + "-" + uniqid('', true)
+     * + "-{from,to}.{png,html}". uniqid() with more entropy is 13 hex digits, one digit, a dot
+     * and 8 digits. The parameter can therefore no longer address any other file in
+     * PIMCORE_SYSTEM_TEMP_DIRECTORY. "\z" (not "$") so a trailing line feed is rejected as well.
      */
-    private const DIFF_FILE_NAME_PATTERN = '/^version-diff-tmp-[\w.-]+\.(?:png|html)$/';
+    private const DIFF_FILE_NAME_PATTERN = '/^version-diff-tmp-\d{4}-\d{2}-\d{2}-[0-9a-f]{13}\d\.\d{8}'
+        . '-(?:from|to)\.(?:png|html)\z/';
 
     public function __construct(
         private readonly DocumentVersionComparisonService $versionComparisonService,
@@ -96,7 +99,9 @@ final class DocumentVersionsController extends AbstractController
 
     public function diffVersionsHtmlAction(Request $request): BinaryFileResponse
     {
-        $id = $request->get('id');
+        // The id is only ever sent as a query parameter; reading the parameter bags directly
+        // also avoids the deprecated Request::get() and tolerates array values (-> 404).
+        $id = $request->query->all()['id'] ?? null;
         if (!is_string($id) || preg_match(self::DIFF_FILE_NAME_PATTERN, $id) !== 1) {
             throw $this->createNotFoundException('Version diff file not found');
         }

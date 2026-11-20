@@ -39,28 +39,68 @@ class DocumentVersionsControllerTest extends Unit
         $this->createdFiles = [];
     }
 
-    public function testServesAFileGeneratedByTheComparisonService(): void
+    public function testServesTheFilesGeneratedByTheComparisonService(): void
     {
-        $name = 'version-diff-tmp-2026-01-01-' . uniqid('', true) . '-from.png';
-        $this->writeTempFile($name, 'image-bytes');
+        // Same naming scheme as DocumentVersionComparisonService::generateVersionComparison().
+        $comparisonId = uniqid(date('Y-m-d') . '-', true);
 
-        $response = $this->controller()->diffVersionsHtmlAction($this->requestWithId($name));
+        foreach (['from', 'to'] as $side) {
+            foreach (['png', 'html'] as $extension) {
+                $name = 'version-diff-tmp-' . $comparisonId . '-' . $side . '.' . $extension;
+                $this->writeTempFile($name, 'generated-content');
 
-        $this->assertInstanceOf(BinaryFileResponse::class, $response);
-        $this->assertSame(
-            realpath(PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . $name),
-            realpath($response->getFile()->getPathname())
-        );
+                $response = $this->controller()->diffVersionsHtmlAction($this->requestWithId($name));
+
+                $this->assertInstanceOf(BinaryFileResponse::class, $response, $name);
+                $this->assertSame(
+                    realpath(PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . $name),
+                    realpath($response->getFile()->getPathname()),
+                    $name
+                );
+            }
+        }
     }
 
-    public function testRejectsAFileOutsideTheComparisonNamingScheme(): void
+    public function testRejectsExistingFilesOutsideTheComparisonNamingScheme(): void
     {
-        $name = 'webdav-delete.dat';
-        $this->writeTempFile($name, 'serialized-assets');
+        $comparisonId = uniqid(date('Y-m-d') . '-', true);
 
-        $this->expectException(NotFoundHttpException::class);
+        $names = [
+            'unrelated-file.dat',
+            'version-diff-tmp-notes.png',
+            'version-diff-tmp-notes.html',
+            'version-diff-tmp-' . $comparisonId . '.png',
+            'version-diff-tmp-' . $comparisonId . '-from.txt',
+            'version-diff-tmp-' . $comparisonId . '-other.png',
+            'prefix-version-diff-tmp-' . $comparisonId . '-from.png',
+            // A trailing line feed must not slip past the end anchor.
+            'version-diff-tmp-' . $comparisonId . "-from.png\n",
+        ];
 
-        $this->controller()->diffVersionsHtmlAction($this->requestWithId($name));
+        foreach ($names as $name) {
+            $this->writeTempFile($name, 'must-not-be-served');
+
+            try {
+                $this->controller()->diffVersionsHtmlAction($this->requestWithId($name));
+                $this->fail('Expected a 404 for ' . json_encode($name));
+            } catch (NotFoundHttpException) {
+                $this->addToAssertionCount(1);
+            }
+        }
+    }
+
+    public function testRejectsPathComponentsInTheId(): void
+    {
+        $comparisonId = uniqid(date('Y-m-d') . '-', true);
+
+        foreach (['../composer.json', 'sub/version-diff-tmp-' . $comparisonId . '-from.png'] as $id) {
+            try {
+                $this->controller()->diffVersionsHtmlAction($this->requestWithId($id));
+                $this->fail('Expected a 404 for ' . $id);
+            } catch (NotFoundHttpException) {
+                $this->addToAssertionCount(1);
+            }
+        }
     }
 
     public function testRejectsAMissingId(): void
@@ -68,6 +108,22 @@ class DocumentVersionsControllerTest extends Unit
         $this->expectException(NotFoundHttpException::class);
 
         $this->controller()->diffVersionsHtmlAction(new Request());
+    }
+
+    public function testRejectsAnArrayId(): void
+    {
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->controller()->diffVersionsHtmlAction(new Request(['id' => ['version-diff-tmp']]));
+    }
+
+    public function testAnUnknownButWellFormedNameIsNotFound(): void
+    {
+        $this->expectException(NotFoundHttpException::class);
+
+        $name = 'version-diff-tmp-' . uniqid(date('Y-m-d') . '-', true) . '-from.png';
+
+        $this->controller()->diffVersionsHtmlAction($this->requestWithId($name));
     }
 
     private function controller(): DocumentVersionsController
