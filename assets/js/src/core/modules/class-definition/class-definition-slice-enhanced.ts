@@ -294,6 +294,15 @@ const apiWithTags = baseApi.enhanceEndpoints({
     classSelectOptionGetUsages: {
       providesTags: (result, error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
     },
+    classSelectOptionExport: {
+      providesTags: (_result, _error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
+    },
+    classSelectOptionImport: {
+      invalidatesTags: (_result, _error, args) => [
+        ...invalidatingTags.SELECT_OPTION_DETAIL(args.id),
+        ...invalidatingTags.SELECT_OPTION_COLLECTION()
+      ]
+    },
     classBulkImportPrepare: (endpoint): void => {
       const originalQuery = endpoint.query
 
@@ -446,6 +455,8 @@ export const {
   useClassSelectOptionUpdateMutation,
   useClassSelectOptionDeleteMutation,
   useClassSelectOptionGetUsagesQuery,
+  useClassSelectOptionExportQuery,
+  useClassSelectOptionImportMutation,
   useClassBulkExportAvailableQuery,
   useClassBulkExportMutation,
   useClassBulkImportPrepareMutation,
