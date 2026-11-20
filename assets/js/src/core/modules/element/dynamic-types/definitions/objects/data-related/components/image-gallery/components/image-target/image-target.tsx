@@ -33,6 +33,7 @@ interface ImageGalleryImageTargetProps {
   width: string
   height: string
   uploadPath?: string
+  searchPath?: string
 }
 
 /** The dragged image assets - a single image, or every image of a dragged set. */
@@ -44,7 +45,7 @@ const getDraggedImages = (info: DragAndDropInfo): Array<{ id: number }> => {
   return getDraggedElements<{ id: number, type?: string }>(info).filter(asset => asset.type === 'image')
 }
 
-export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, width, height, uploadPath }: ImageGalleryImageTargetProps): React.JSX.Element => {
+export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, width, height, uploadPath, searchPath }: ImageGalleryImageTargetProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const modal = useAlertModal()
@@ -59,7 +60,8 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
     },
     config: {
       assets: {
-        allowedTypes: ['image']
+        allowedTypes: ['image'],
+        searchPath
       }
     },
     onFinish: (event) => {
