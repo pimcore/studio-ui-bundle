@@ -11,7 +11,8 @@
 import { Modal } from '@Pimcore/components/modal/modal'
 import { Tabs, type ITabsProps } from '@Pimcore/components/tabs/tabs'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
-import React from 'react'
+import { type InputRef } from 'antd'
+import React, { useRef } from 'react'
 import { GeneralTab } from './tabs/general/general-tab'
 import { useSearch } from '../provider/use-search'
 import { AssetTab } from './tabs/asset/asset-tab'
@@ -23,12 +24,13 @@ import { useTranslation } from 'react-i18next'
 export const SearchModal = (): React.JSX.Element => {
   const { isOpen, setActiveKey, close, activeKey } = useSearch()
   const { t } = useTranslation()
+  const searchInputRef = useRef<InputRef>(null)
 
   const tabItems: ITabsProps['items'] = [
     {
       label: 'All',
       key: 'all',
-      children: <GeneralTab />
+      children: <GeneralTab searchInputRef={ searchInputRef } />
     },
     {
       label: 'Documents',
@@ -56,6 +58,11 @@ export const SearchModal = (): React.JSX.Element => {
     <>
       {isOpen && (
         <Modal
+          afterOpenChange={ (open) => {
+            if (open && activeKey === 'all') {
+              searchInputRef.current?.focus()
+            }
+          } }
           closable
           data-testid="search-modal"
           footer={ null }

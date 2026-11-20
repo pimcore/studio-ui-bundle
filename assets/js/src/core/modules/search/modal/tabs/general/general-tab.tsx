@@ -11,6 +11,7 @@
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { SearchInput, type ISearchInputProps } from '@Pimcore/components/search-input/search-input'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { type InputRef } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SearchResult } from './search-result/search-result'
@@ -21,7 +22,11 @@ import { useGlobalSearchMode } from '@Pimcore/modules/element/listing/decorators
 import { SearchModeDropdown } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-mode-dropdown'
 import { SearchBar } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-bar'
 
-export const GeneralTab = (): React.JSX.Element => {
+interface GeneralTabProps {
+  searchInputRef: React.RefObject<InputRef>
+}
+
+export const GeneralTab = ({ searchInputRef }: GeneralTabProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { searchTerm: sharedSearchTerm, setSearchTerm: setSharedSearchTerm } = useSearch()
   const globalMode = useGlobalSearchMode()
@@ -81,6 +86,7 @@ export const GeneralTab = (): React.JSX.Element => {
               onChange={ (event) => { setSearchQuery(event.target.value) } }
               onSearch={ onSearch }
               placeholder={ globalMode.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
+              ref={ searchInputRef }
               value={ searchQuery }
             />
           </SearchBar>
