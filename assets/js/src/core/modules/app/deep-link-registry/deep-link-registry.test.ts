@@ -14,7 +14,7 @@ import trackError from '@Pimcore/modules/app/error-handler'
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
   default: jest.fn(),
-  GeneralError: class {} // eslint-disable-line @typescript-eslint/no-extraneous-class
+  GeneralError: jest.fn()
 }))
 
 const trackErrorMock = trackError as jest.Mock
