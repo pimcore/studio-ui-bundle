@@ -13,6 +13,7 @@ import React, { useMemo } from 'react'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useTranslation } from 'react-i18next'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
+import { sortByLabel } from './utils/sort-by-label'
 
 export interface ObjectBrickAddButtonProps {
   allowedTypes: string[]
@@ -30,9 +31,7 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
       return title === '' || title === undefined ? type : t(title as string)
     }
 
-    return allowedTypes
-      .map((type) => ({ type, label: getLabel(type) }))
-      .sort((a, b) => a.label.localeCompare(b.label, i18n.language, { sensitivity: 'base' }))
+    return sortByLabel(allowedTypes.map((type) => ({ type, label: getLabel(type) })), i18n.language)
       .map(({ type, label }) => {
         return {
           key: type,
