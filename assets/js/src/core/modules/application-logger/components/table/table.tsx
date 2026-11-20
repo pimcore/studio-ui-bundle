@@ -60,7 +60,7 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
   const columns = [
     columnHelper.accessor('date', {
       header: t('application-logger.columns.timestamp'),
-      size: 80,
+      size: 83,
       enableSorting: true
     }),
     columnHelper.accessor('pid', {
@@ -105,7 +105,7 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
           </Button >
         )
       },
-      size: 60
+      size: 83
     }),
     columnHelper.accessor('relatedElementData', {
       header: t('application-logger.columns.related-object'),
@@ -136,7 +136,7 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
           </Button >
         )
       },
-      size: 60
+      size: 94
     }),
     columnHelper.accessor('component', {
       header: t('application-logger.columns.component'),
@@ -168,7 +168,8 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
           </Flex>
         )
       },
-      size: 40
+      // Fits the English header label, which does not truncate.
+      size: 55
     })
   ]
 
