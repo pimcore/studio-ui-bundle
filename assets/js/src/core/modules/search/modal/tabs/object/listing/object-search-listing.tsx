@@ -26,7 +26,7 @@ import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { useDataQueryHelper } from './data-layer/use-data-query-helper'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
-import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
+import { ColumnConfigurationDecorator, type ColumnConfigurationDecoratorConfig } from './decorator/column-configuration/column-configuration-decorator'
 import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
 import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
@@ -45,9 +45,9 @@ const defaultProps = {
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
-  ColumnConfigurationDecorator,
+  [ColumnConfigurationDecorator, { readOnly: savedSearchReadOnly } as ColumnConfigurationDecoratorConfig],
   TagFilterDecorator,
-  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, elementType: elementTypes.dataObject } as GeneralFiltersDecoratorConfig],
+  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, elementType: elementTypes.dataObject, readOnly: savedSearchReadOnly } as GeneralFiltersDecoratorConfig],
   SortingDecorator,
   [ClassDefinitionSelectionDecorator, { showConfigLayer: false } as ClassDefinitionSelectionDecoratorConfig],
   [OpenElementDecorator, { elementType: elementTypes.dataObject } as OpenElementDecoratorConfig],

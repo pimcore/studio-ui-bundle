@@ -270,6 +270,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = 
               setSharedUsers(changes.sharedUsers)
               setSharedRoles(changes.sharedRoles)
             } }
+            readOnly={ readOnly }
             sharedRoles={ sharedRoles }
             sharedUsers={ sharedUsers }
             showSharing={ isNil(loaded) || isOwner }

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useRef, type ReactNode } from 'react'
+import React, { useContext, useEffect, useRef, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -23,6 +23,7 @@ import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-li
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+import { SettingsContext } from './povider/settings/settings-provider'
 import { isSearchModeDraftColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
 import { SearchModeColumnBadge } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/search-mode-column-badge/search-mode-column-badge'
 
@@ -51,6 +52,8 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Element => {
   const { setColumns } = useGridConfig()
   const settings = useSettings()
+  // optional: the list also renders outside a column configuration's settings
+  const readOnly = useContext(SettingsContext)?.readOnly === true
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const prevColumnKeysRef = useRef<string[]>([])
@@ -96,27 +99,29 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
 
     return {
       id: uniqueId,
-      sortable: true,
+      sortable: !readOnly,
       meta: column,
 
       children: <Tag>{t(`${translationKey}`)}</Tag>,
 
       // search mode columns can only be moved: they come and go with the mode
-      renderRightToolbar: isSearchModeDraftColumn(column)
-        ? <SearchModeColumnBadge />
-        : (
-          <Space size='mini'>
-            { getLanguageSelection(uniqueId, column) }
-            <IconButton
-              aria-label={ t('remove') }
-              icon={ { value: 'trash' } }
-              onClick={ () => { onRemoveColumn(uniqueId) } }
-              size='small'
-              theme='secondary'
-              tooltip={ { title: t('remove') } }
-            />
-          </Space>
-          )
+      renderRightToolbar: readOnly
+        ? undefined
+        : isSearchModeDraftColumn(column)
+          ? <SearchModeColumnBadge />
+          : (
+            <Space size='mini'>
+              { getLanguageSelection(uniqueId, column) }
+              <IconButton
+                aria-label={ t('remove') }
+                icon={ { value: 'trash' } }
+                onClick={ () => { onRemoveColumn(uniqueId) } }
+                size='small'
+                theme='secondary'
+                tooltip={ { title: t('remove') } }
+              />
+            </Space>
+            )
     }
   })
 
@@ -128,7 +133,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
           <StackList
             items={ stackListItems }
             onItemsChange={ onItemsChange }
-            sortable
+            sortable={ !readOnly }
           />
         </div>
       ) }

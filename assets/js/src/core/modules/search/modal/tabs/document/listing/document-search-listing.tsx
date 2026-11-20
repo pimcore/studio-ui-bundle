@@ -21,7 +21,7 @@ import { useDocumentGetSearchQuery } from '@Pimcore/modules/search/search-api-sl
 import { compose } from '@Pimcore/utils/compose'
 import React, { useMemo } from 'react'
 import { type SearchListingProps, withExtraSidebarEntries } from '@Pimcore/modules/search/modal/tabs/search-listing-props'
-import { StaticColumnConfigurationDecorator } from './decorator/static-column-configuration/static-column-configuration-decorator'
+import { StaticColumnConfigurationDecorator, type StaticColumnConfigurationDecoratorConfig } from './decorator/static-column-configuration/static-column-configuration-decorator'
 import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { DefaultView } from './view/view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
@@ -41,9 +41,9 @@ const defaultProps = {
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
-  StaticColumnConfigurationDecorator,
+  [StaticColumnConfigurationDecorator, { readOnly: savedSearchReadOnly } as StaticColumnConfigurationDecoratorConfig],
   TagFilterDecorator,
-  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
+  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, readOnly: savedSearchReadOnly } as GeneralFiltersDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.document } as TypeFilterDecoratorConfig],
   SortingDecorator,
   [OpenElementDecorator, { elementType: elementTypes.document } as OpenElementDecoratorConfig],
