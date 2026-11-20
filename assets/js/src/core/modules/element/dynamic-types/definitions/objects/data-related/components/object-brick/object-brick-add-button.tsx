@@ -13,6 +13,7 @@ import React, { useMemo } from 'react'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useTranslation } from 'react-i18next'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
+import { sortByLabel } from './utils/sort-by-label'
 
 export interface ObjectBrickAddButtonProps {
   allowedTypes: string[]
@@ -21,21 +22,27 @@ export interface ObjectBrickAddButtonProps {
 
 export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JSX.Element => {
   const { allowedTypes, objectBrick } = props
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { operations } = useKeyedListContext()
 
   const dropdownItems: DropdownMenuProps['items'] = useMemo(() => {
-    return allowedTypes.map((type) => {
-      return {
-        key: type,
-        label: objectBrick?.find(item => item.key === type)?.title === '' || objectBrick?.find(item => item.key === type)?.title === undefined ? type : t(objectBrick?.find(item => item.key === type).title as string),
-        onClick: (e: any) => {
-          e.domEvent.stopPropagation()
-          operations.add(type, {})
+    const getLabel = (type: string): string => {
+      const title = objectBrick?.find(item => item.key === type)?.title
+      return title === '' || title === undefined ? type : t(title as string)
+    }
+
+    return sortByLabel(allowedTypes.map((type) => ({ type, label: getLabel(type) })), i18n.language)
+      .map(({ type, label }) => {
+        return {
+          key: type,
+          label,
+          onClick: (e: any) => {
+            e.domEvent.stopPropagation()
+            operations.add(type, {})
+          }
         }
-      }
-    })
-  }, [allowedTypes, objectBrick])
+      })
+  }, [allowedTypes, objectBrick, t, i18n.language])
 
   return (
     <Dropdown
