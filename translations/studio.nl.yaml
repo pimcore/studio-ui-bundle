@@ -144,6 +144,7 @@ areablock.paste: Plakken
 areablock.cut: Knippen
 areablock.settings: Instellingen
 areablock.delete: Verwijderen
+areablock.type-limit-reached: Het maximale aantal blokken van dit type is bereikt.
 document.highlight-editables: Bewerkbare velden markeren
 document.link.target: Linkdoel
 document.hardlink.source: Brondocument
