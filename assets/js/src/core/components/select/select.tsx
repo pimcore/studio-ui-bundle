@@ -21,11 +21,11 @@ import { SelectActionButton } from './select-action-button'
 import { useTrackedSearch } from './use-tracked-search'
 import { useSelectAllValue } from './use-select-all-value'
 import { useTranslation } from 'react-i18next'
-import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { createSortableTagRender } from './components/sortable-tag/sortable-tag'
+import { SortableTags } from './components/sortable-tags/sortable-tags'
+import { type SelectSize, useSelectWidth } from './use-select-width'
 
-export const sizeOptions = {
-  normal: 150
-}
+export { sizeOptions } from './use-select-width'
 
 export type SelectTheme = 'default' | 'primary'
 
@@ -34,12 +34,14 @@ export interface SelectProps extends AntdSelectProps {
   customIcon?: string
   dataTestId?: string
   inherited?: boolean
-  width?: number | keyof typeof sizeOptions
-  minWidth?: number | keyof typeof sizeOptions
+  width?: SelectSize
+  minWidth?: SelectSize
   theme?: SelectTheme
   loadingSkeleton?: boolean
   /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount` or `labelInValue`, hidden while `loading`). */
   allowSelectAll?: boolean
+  /** Reorder the selected tags by drag and drop (`mode="multiple"` only). Needs a controlled `value` or `allowSelectAll`; replaces `tagRender`. */
+  sortableTags?: boolean
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({
@@ -56,6 +58,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   theme = 'default',
   loadingSkeleton = false,
   allowSelectAll = false,
+  sortableTags = false,
   dataTestId,
   loading = false,
   onDropdownVisibleChange,
@@ -69,7 +72,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
 }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
-  const fieldWidths = useFieldWidthOptional()
+  const { computedWidth, computedMinWidth } = useSelectWidth(width, minWidth, mode)
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
@@ -88,33 +91,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     allowSelectAll, mode, value, onChange, loading, searchValue, antdSelectProps
   })
 
-  // Calculate width: explicit width prop takes precedence over fieldWidths
-  const getComputedWidth = (): number | undefined => {
-    if (width !== undefined) {
-      // Handle explicit width prop
-      if (typeof width === 'number') {
-        return width
-      }
-      if (typeof width === 'string' && width in sizeOptions) {
-        return sizeOptions[width as keyof typeof sizeOptions]
-      }
-    }
-
-    // Fall back to fieldWidths
-    return mode === 'multiple' ? fieldWidths?.large : fieldWidths?.medium
-  }
-
-  const computedWidth = getComputedWidth()
-
-  let computedMinWidth: undefined | number
-
-  if (typeof minWidth === 'number') {
-    computedMinWidth = minWidth
-  }
-
-  if (typeof minWidth === 'string') {
-    computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
-  }
+  const isSelectDisabled = antdSelectProps.disabled === true
+  const isTagSortingEnabled = mode === 'multiple' && sortableTags
 
   const selectStyle = antdSelectProps.style
   const skeletonWidth = computedWidth ?? selectStyle?.width ?? selectStyle?.maxWidth ?? '100%'
@@ -261,35 +239,44 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       value={ customIcon! }
     />
     )}
-      <AntdSelect
-        allowClear={ false }
-        className={ selectClassNames }
-        dropdownRender={ dropdownRender }
-        menuItemSelectedIcon={ getItemSelectedIcon() }
-        mode={ mode }
-        notFoundContent={ <Flex
-          align={ 'center' }
-          justify={ 'center' }
-                          >
-          <Icon
-            className={ 'm-r-mini' }
-            value={ 'alert-outline' }
-          /> {t('no-data-available')}</Flex> }
-        onBlur={ handleBlur }
+      <SortableTags
+        disabled={ isSelectDisabled }
+        enabled={ isTagSortingEnabled }
         onChange={ handleChange }
-        onDeselect={ handleDeselect }
-        onDropdownVisibleChange={ handleDropdownVisibleChange }
-        onFocus={ handleFocus }
-        onSearch={ handleSearch }
-        onSelect={ handleSelect }
-        ref={ selectRef }
-        searchValue={ controlledSearchValue }
-        status={ status }
-        style={ computedStyle }
-        suffixIcon={ getSuffixIcon() }
+        options={ antdSelectProps.options }
         value={ currentValue }
-        { ...antdSelectProps }
-      />
+      >
+        <AntdSelect
+          allowClear={ false }
+          className={ selectClassNames }
+          dropdownRender={ dropdownRender }
+          menuItemSelectedIcon={ getItemSelectedIcon() }
+          mode={ mode }
+          notFoundContent={ <Flex
+            align={ 'center' }
+            justify={ 'center' }
+                            >
+            <Icon
+              className={ 'm-r-mini' }
+              value={ 'alert-outline' }
+            /> {t('no-data-available')}</Flex> }
+          onBlur={ handleBlur }
+          onChange={ handleChange }
+          onDeselect={ handleDeselect }
+          onDropdownVisibleChange={ handleDropdownVisibleChange }
+          onFocus={ handleFocus }
+          onSearch={ handleSearch }
+          onSelect={ handleSelect }
+          ref={ selectRef }
+          searchValue={ controlledSearchValue }
+          status={ status }
+          style={ computedStyle }
+          suffixIcon={ getSuffixIcon() }
+          value={ currentValue }
+          { ...antdSelectProps }
+          tagRender={ isTagSortingEnabled ? createSortableTagRender(isSelectDisabled) : antdSelectProps.tagRender }
+        />
+      </SortableTags>
     </div>
   )
 })
