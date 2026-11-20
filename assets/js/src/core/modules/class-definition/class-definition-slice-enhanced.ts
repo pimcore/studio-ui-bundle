@@ -295,10 +295,10 @@ const apiWithTags = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
     },
     classSelectOptionExport: {
-      providesTags: (result, error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
+      providesTags: (_result, _error, args) => providingTags.SELECT_OPTION_DETAIL(args.id)
     },
     classSelectOptionImport: {
-      invalidatesTags: (result, error, args) => [
+      invalidatesTags: (_result, _error, args) => [
         ...invalidatingTags.SELECT_OPTION_DETAIL(args.id),
         ...invalidatingTags.SELECT_OPTION_COLLECTION()
       ]
