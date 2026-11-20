@@ -44,6 +44,7 @@ const injectedRtkApi = api
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
+                        documentId: queryArg.documentId,
                     },
                 }),
                 providesTags: ["E-Mails"],
@@ -132,6 +133,8 @@ export type EmailLogGetCollectionApiArg = {
     page: number;
     /** Number of items per page */
     pageSize: number;
+    /** Filter the email log by the ID of the email document that sent the emails */
+    documentId?: number;
 };
 export type EmailLogGetByIdApiResponse = /** status 200 E-Mail log entry data as JSON */ EmailLogDetail;
 export type EmailLogGetByIdApiArg = {

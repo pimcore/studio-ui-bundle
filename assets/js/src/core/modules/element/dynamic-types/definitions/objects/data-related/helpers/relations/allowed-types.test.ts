@@ -9,7 +9,7 @@
  */
 
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
-import { dndIsValidData, dndValidRelationElements, type IRelationAllowedTypesDataComponent } from './allowed-types'
+import { createElementSelectorConfig, dndIsValidData, dndValidRelationElements, type IRelationAllowedTypesDataComponent } from './allowed-types'
 
 const carsOnly: IRelationAllowedTypesDataComponent = {
   dataObjectsAllowed: true,
@@ -56,5 +56,21 @@ describe('dndIsValidData', () => {
   it('stays a single element check, so list drags never match it', () => {
     expect(dndIsValidData(drag('data-object', car), carsOnly)).toBe(true)
     expect(dndIsValidData(drag('data-object-list', [car]), carsOnly)).toBe(false)
+  })
+})
+
+describe('createElementSelectorConfig', () => {
+  it('passes the combined field name to the data object selector', () => {
+    const config = createElementSelectorConfig({ allowedClasses: ['Car'], combinedFieldName: 'content.NewsCars.relatedCars' })
+
+    expect(config?.objects).toEqual({
+      allowedTypes: undefined,
+      allowedClasses: ['Car'],
+      fieldName: 'content.NewsCars.relatedCars'
+    })
+  })
+
+  it('leaves the field name out when there is none', () => {
+    expect(createElementSelectorConfig({ allowedClasses: ['Car'] })?.objects).not.toHaveProperty('fieldName')
   })
 })

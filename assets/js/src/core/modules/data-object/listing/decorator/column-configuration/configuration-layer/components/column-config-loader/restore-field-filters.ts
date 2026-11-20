@@ -77,6 +77,7 @@ export const restoreFieldFilters = (filter: GridFilter[] | GridFilter | undefine
       key: availableColumn.key,
       type: availableColumn.type,
       filterValue: restoreFilterValue(availableColumn, columnFilter.filterValue),
+      operator: columnFilter.operator,
       locale: columnFilter.locale ?? null,
       meta: columnFilter.meta ?? { translationKey: availableColumn.key }
     })

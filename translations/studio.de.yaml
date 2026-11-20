@@ -392,6 +392,10 @@ grid.filter.less: Kleiner als
 grid.filter.more: Größer als
 grid.filter.string.placeholder: Suchen oder eine Liste mit einem Wert pro Zeile einfügen, um einen dieser Werte genau zu treffen
 grid.filter.column: '{{column}} filtern'
+grid.filter.operator.label: Bedingung
+grid.filter.operator.value: Passt auf Wert
+grid.filter.operator.empty: Ist leer
+grid.filter.operator.not-empty: Ist nicht leer
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -1799,6 +1803,10 @@ redirects.source-site: Quell-Site
 redirects.source: Quelle
 redirects.target-site: Ziel-Site
 redirects.target: Ziel
+redirects.target-type: Zieltyp
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Priorität
 redirects.regex: RegEx
@@ -2394,6 +2402,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameter
 widget.email-log.grid.name: Name
 widget.email-log.grid.value: Wert
+email-log.label: E-Mail Log
 email-log.subject: Betreff
 email-log.tooltip.resend: E-Mail erneut senden
 email-log.tooltip.forward: E-Mail weiterleiten

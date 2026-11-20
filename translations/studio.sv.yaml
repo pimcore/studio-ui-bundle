@@ -392,6 +392,10 @@ grid.filter.less: Mindre än
 grid.filter.more: Mer än
 grid.filter.string.placeholder: Sök eller klistra in en lista med ett värde per rad för att matcha någon av dem exakt
 grid.filter.column: 'Filtrera {{column}}'
+grid.filter.operator.label: Villkor
+grid.filter.operator.value: Motsvarar värde
+grid.filter.operator.empty: Är tom
+grid.filter.operator.not-empty: Är inte tom
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -1799,6 +1803,10 @@ redirects.source-site: Källsajt
 redirects.source: Källa
 redirects.target-site: Målsajt
 redirects.target: Mål
+redirects.target-type: Måltyp
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Prioritet
 redirects.regex: RegEx
@@ -2394,6 +2402,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parametrar
 widget.email-log.grid.name: Namn
 widget.email-log.grid.value: Värde
+email-log.label: E-postlogg
 email-log.subject: Ämne
 email-log.tooltip.resend: Skicka om e-post
 email-log.tooltip.forward: Vidarebefordra e-post

@@ -392,6 +392,10 @@ grid.filter.less: Minder dan
 grid.filter.more: Meer dan
 grid.filter.string.placeholder: Zoeken of een lijst met één waarde per regel plakken om exact één van deze waarden te vinden
 grid.filter.column: "Filter {{column}}"
+grid.filter.operator.label: Voorwaarde
+grid.filter.operator.value: Komt overeen met waarde
+grid.filter.operator.empty: Is leeg
+grid.filter.operator.not-empty: Is niet leeg
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -1799,6 +1803,10 @@ redirects.source-site: Bronsite
 redirects.source: Bron
 redirects.target-site: Doelsite
 redirects.target: Doel
+redirects.target-type: Doeltype
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Gegevensobject
 redirects.status: Status
 redirects.priority: Prioriteit
 redirects.regex: RegEx
@@ -2394,6 +2402,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Naam
 widget.email-log.grid.value: Waarde
+email-log.label: E-maillog
 email-log.subject: Onderwerp
 email-log.tooltip.resend: E-mail opnieuw versturen
 email-log.tooltip.forward: E-mail doorsturen
