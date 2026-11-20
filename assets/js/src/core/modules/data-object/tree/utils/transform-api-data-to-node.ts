@@ -12,6 +12,7 @@ import { getElementIcon, getElementKey, getElementRealKey } from '@Pimcore/modul
 import { type DataObjectGetTreeApiResponse, type DataObjectPermissions, type DataObject, type DataObjectFolder } from '../../data-object-api-slice.gen'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
+import { toTreeNodeWorkflowStates } from '@Pimcore/components/element-tree/utils/tree-node-workflow-states'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const transformApiDataToNode = (dataObjectNode: DataObject | DataObjectFolder, node: DataTransformerSourceNode): TreeNode => {
@@ -27,6 +28,7 @@ export const transformApiDataToNode = (dataObjectNode: DataObject | DataObjectFo
     hasChildren: dataObjectNode.hasChildren,
     locked: dataObjectNode.locked,
     isLocked: dataObjectNode.isLocked,
+    workflowStates: toTreeNodeWorkflowStates(dataObjectNode.workflowStates),
     isPublished: dataObjectNode.published,
     metaData: {
       dataObject: dataObjectNode
