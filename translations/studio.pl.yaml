@@ -1649,6 +1649,8 @@ user-management.email: E-mail
 user-management.language: Język
 user-management.dateTime: Ustawienia regionalne daty i godziny
 user-management.welcomeScreen: Pokaż ekran powitalny przy uruchomieniu
+user-management.welcomeScreenDashboard: Dashboard ekranu powitalnego
+user-management.welcomeScreenDashboard.placeholder: Wybierz dashboard
 user-management.memorizeTabs: Zapamiętaj otwarte karty
 user-management.allowDirtyClose: Wyłącz ostrzeżenie o niezapisanej treści
 user-management.closeWarning: Pokaż ostrzeżenie przy zamykaniu

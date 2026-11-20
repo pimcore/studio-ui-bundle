@@ -34,6 +34,7 @@ const initialState: IUserInformationExtended = {
   perspectives: [],
   dateTimeLocale: '',
   welcomeScreen: false,
+  welcomeScreenTarget: null,
   memorizeTabs: false,
   theme: 'default',
   hasImage: false,
