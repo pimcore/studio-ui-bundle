@@ -144,6 +144,7 @@ areablock.paste: Einfügen
 areablock.cut: Ausschneiden
 areablock.settings: Einstellungen
 areablock.delete: Löschen
+areablock.type-limit-reached: Die maximale Anzahl an Bausteinen dieses Typs wurde erreicht.
 document.highlight-editables: Bearbeitbare hervorheben
 document.link.target: Link-Ziel
 document.hardlink.source: Quelldokument
@@ -1419,6 +1420,7 @@ element.delete.batch.show-paths: Elemente anzeigen
 element.delete.batch.dependencies-warning.confirmed_one: 'Bitte beachten: Dieses Element hat Abhängigkeiten.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Bitte beachten: Diese Elemente haben Abhängigkeiten.'
 element.open: Öffnen
+element.open-multiple: '{{count}} Elemente öffnen'
 element.state: Status
 element.state.unpublished: Unveröffentlicht
 element.toolbar.copy-id: ID kopieren
@@ -1431,6 +1433,7 @@ element.publish: Veröffentlichen
 element.locate-in-tree: Im Baum anzeigen
 element.sidebar.filter.only-direct-children: Nur direkte Kinder
 element.sidebar.filter.only-unreferenced: Nur nicht referenzierte
+element.sidebar.filter.only-untagged: Nur ohne Tags
 element.sidebar.field-filters: Feldfilter
 element.full-information: Vollständige Informationen
 system-information.id: ID

@@ -146,6 +146,7 @@ areablock.paste: Paste
 areablock.cut: Cut
 areablock.settings: Settings
 areablock.delete: Delete
+areablock.type-limit-reached: The maximum number of blocks of this type has been reached.
 document.highlight-editables: Highlight editables
 document.link.target: Link Target
 document.hardlink.source: Source Document
@@ -1421,6 +1422,7 @@ element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning.confirmed_one: 'Please note: This item has dependencies.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Please note: These items have dependencies.'
 element.open: Open
+element.open-multiple: 'Open {{count}} elements'
 element.state: State
 element.state.unpublished: Unpublished
 element.toolbar.copy-id: Copy ID
@@ -1433,6 +1435,7 @@ element.publish: Publish
 element.locate-in-tree: Locate in Tree
 element.sidebar.filter.only-direct-children: Only direct children
 element.sidebar.filter.only-unreferenced: Only unreferenced
+element.sidebar.filter.only-untagged: Only untagged
 element.sidebar.field-filters: Field Filters
 element.full-information: Full information
 system-information.id: ID

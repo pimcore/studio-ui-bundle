@@ -41,6 +41,15 @@ describe('TreeElement', () => {
     expect(mockTree).toHaveBeenCalledWith(expect.objectContaining({ height: 200 }))
   })
 
+  it('forwards disabled to the antd tree', () => {
+    render(<TreeElement
+      disabled
+      treeData={ treeData }
+           />)
+
+    expect(mockTree).toHaveBeenCalledWith(expect.objectContaining({ disabled: true }))
+  })
+
   it('does not set a height by default', () => {
     render(<TreeElement treeData={ treeData } />)
 

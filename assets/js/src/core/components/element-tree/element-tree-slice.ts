@@ -19,6 +19,12 @@ import { injectSliceWithState, type RootState } from '@sdk/app'
 import { camelCase, isEqual, isUndefined, merge } from 'lodash'
 import { createSelector } from 'reselect'
 
+export interface TreeNodeWorkflowState {
+  title: string
+  label: string
+  color: string
+}
+
 export interface TreeNode {
   id: string
   elementType?: string
@@ -37,6 +43,7 @@ export interface TreeNode {
   isPublished?: boolean
   isSite?: boolean
   hasChildren?: boolean
+  workflowStates?: TreeNodeWorkflowState[]
   metaData?: any
 
   internalKey: string

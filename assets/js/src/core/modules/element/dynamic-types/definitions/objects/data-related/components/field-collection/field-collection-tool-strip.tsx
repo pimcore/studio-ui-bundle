@@ -51,17 +51,34 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         theme='secondary'
       >
         <Space size="mini">
-          <Dropdown
-            disabled={ disallowAdd }
-            menu={ { items: dropDownItems } }
-          >
-            <IconButton
-              aria-label={ t('add') }
-              icon={ { value: 'new' } }
-              size='small'
-              tooltip={ { title: t('add') } }
-            />
-          </Dropdown>
+          {allowedTypes.length === 1
+            ? (
+              // With a single allowed type there is nothing to choose, so add it right away
+              <IconButton
+                aria-label={ t('add') }
+                disabled={ disallowAdd }
+                icon={ { value: 'new' } }
+                onClick={ (e) => {
+                  e.stopPropagation()
+                  operations.add({ type: allowedTypes[0] })
+                } }
+                size='small'
+                tooltip={ { title: t('add') } }
+              />
+              )
+            : (
+              <Dropdown
+                disabled={ disallowAdd }
+                menu={ { items: dropDownItems } }
+              >
+                <IconButton
+                  aria-label={ t('add') }
+                  icon={ { value: 'new' } }
+                  size='small'
+                  tooltip={ { title: t('add') } }
+                />
+              </Dropdown>
+              )}
 
           <IconButton
             aria-label={ t('move-down') }

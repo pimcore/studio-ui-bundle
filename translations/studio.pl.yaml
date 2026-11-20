@@ -144,6 +144,7 @@ areablock.paste: Wklej
 areablock.cut: Wytnij
 areablock.settings: Ustawienia
 areablock.delete: Usuń
+areablock.type-limit-reached: Osiągnięto maksymalną liczbę bloków tego typu.
 document.highlight-editables: Wyróżnij pola edytowalne
 document.link.target: Cel linku
 document.hardlink.source: Dokument źródłowy
@@ -1419,6 +1420,7 @@ element.delete.batch.show-paths: Pokaż elementy
 element.delete.batch.dependencies-warning.confirmed_one: "Uwaga: ten element ma zależności."
 element.delete.batch.dependencies-warning.confirmed_other: "Uwaga: te elementy mają zależności."
 element.open: Otwórz
+element.open-multiple: 'Otwórz {{count}} elementów'
 element.state: Status
 element.state.unpublished: Nieopublikowany
 element.toolbar.copy-id: Kopiuj ID
@@ -1431,6 +1433,7 @@ element.publish: Opublikuj
 element.locate-in-tree: Znajdź w drzewie
 element.sidebar.filter.only-direct-children: tylko bezpośrednie elementy podrzędne
 element.sidebar.filter.only-unreferenced: Tylko bez odwołań
+element.sidebar.filter.only-untagged: Tylko bez tagów
 element.sidebar.field-filters: Filtry pól
 element.full-information: Pełne informacje
 system-information.id: ID

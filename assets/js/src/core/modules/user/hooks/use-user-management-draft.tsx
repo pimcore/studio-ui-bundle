@@ -65,7 +65,7 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
     } else {
       setIsLoading(false)
     }
-  }, [user])
+  }, [user, id])
 
   function getUser (): void {
     setIsLoading(true)

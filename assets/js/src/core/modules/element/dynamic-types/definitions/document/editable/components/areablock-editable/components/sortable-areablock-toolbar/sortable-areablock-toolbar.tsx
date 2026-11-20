@@ -28,6 +28,7 @@ export interface SortableAreablockToolbarProps {
   element: HTMLElement
   limitReached: boolean
   config?: AreablockEditableConfig
+  typeUsageCounts: Record<string, number>
   // Pre-computed in the parent (use-areablock-controls) so this component can be memoized.
   isFirst: boolean
   isLast: boolean
@@ -60,6 +61,7 @@ const SortableAreablockToolbarInnerComponent = ({
   element,
   limitReached,
   config,
+  typeUsageCounts,
   isFirst,
   isLast,
   isHidden,
@@ -83,7 +85,10 @@ const SortableAreablockToolbarInnerComponent = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const clipboardItem = useAreablockClipboard()
-  const canPaste = !isNil(clipboardItem) && !limitReached && configUtils.isTypePasteable(config, clipboardItem.type)
+  const canPaste = !isNil(clipboardItem) &&
+    !limitReached &&
+    configUtils.isTypePasteable(config, clipboardItem.type) &&
+    !configUtils.isTypeLimitReached(config, clipboardItem.type, typeUsageCounts[clipboardItem.type] ?? 0)
 
   const { menuItems } = useAreablockMenu({
     config,
@@ -91,7 +96,8 @@ const SortableAreablockToolbarInnerComponent = ({
       onAddArea(element, areaType, position)
       setIsMenuOpen(false)
     },
-    showInsertPosition: true
+    showInsertPosition: true,
+    typeUsageCounts
   })
 
   const buttons: React.ReactNode[] = []
