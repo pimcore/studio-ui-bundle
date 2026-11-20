@@ -37,6 +37,19 @@ export const FieldCollectionAddButton = (props: FieldCollectionAddButtonProps): 
     }
   })
 
+  // With a single allowed type there is nothing to choose, so add it right away
+  if (allowedTypes.length === 1) {
+    return (
+      <IconTextButton
+        icon={ { value: 'new' } }
+        onClick={ (e) => {
+          e.stopPropagation()
+          operations.add({ type: allowedTypes[0] })
+        } }
+      >{t('add')}</IconTextButton>
+    )
+  }
+
   return (
     <Dropdown
       menu={ { items: fieldCollectionDropdownItems } }
