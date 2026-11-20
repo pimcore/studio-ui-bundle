@@ -42,7 +42,7 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
           }
         }
       })
-  }, [allowedTypes, objectBrick, i18n.language])
+  }, [allowedTypes, objectBrick, t, i18n.language])
 
   return (
     <Dropdown

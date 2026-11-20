@@ -90,5 +90,5 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
         onClose={ !isNoteditable ? onClose : undefined }
       />
     </BaseView>
-  ), [values, objectBrick, i18n.language])
+  ), [values, objectBrick, t, i18n.language])
 }
