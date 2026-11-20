@@ -58,8 +58,8 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
     const viewableTargets = targets.filter(target => checkElementPermission(target.permissions, 'view'))
 
     return {
-      label: targets.length > 1
-        ? t('element.open-selected', { count: viewableTargets.length })
+      label: viewableTargets.length > 1
+        ? t('element.open-multiple', { count: viewableTargets.length })
         : t('element.open'),
       key: ContextMenuActionName.open,
       icon: <Icon value={ 'open-folder' } />,

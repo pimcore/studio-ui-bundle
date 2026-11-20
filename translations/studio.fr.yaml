@@ -1415,8 +1415,7 @@ element.delete.batch.show-paths: Afficher les éléments
 element.delete.batch.dependencies-warning.confirmed_one: 'Remarque : Cet élément a des dépendances.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Remarque : Ces éléments ont des dépendances.'
 element.open: Ouvrir
-element.open-selected_one: 'Ouvrir {{count}} élément sélectionné'
-element.open-selected_other: 'Ouvrir {{count}} éléments sélectionnés'
+element.open-multiple: 'Ouvrir {{count}} éléments'
 element.state: État
 element.state.unpublished: Non publié
 element.toolbar.copy-id: Copier l'ID

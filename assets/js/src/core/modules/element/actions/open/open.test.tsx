@@ -96,7 +96,7 @@ describe('useOpen openGridContextMenuItem', () => {
     const item = result.current.open.openGridContextMenuItem(gridRow(4))
     await clickItem(item)
 
-    expect(item).toMatchObject({ label: 'element.open-selected:3', hidden: false })
+    expect(item).toMatchObject({ label: 'element.open-multiple:3', hidden: false })
     expect(openedIds()).toEqual([2, 4, 9])
     expect(mockOpenElement.mock.calls.every(([props]) => props.type === 'data-object')).toBe(true)
   })
@@ -108,8 +108,19 @@ describe('useOpen openGridContextMenuItem', () => {
     const item = result.current.open.openGridContextMenuItem(gridRow(1))
     await clickItem(item)
 
-    expect(item).toMatchObject({ label: 'element.open-selected:2', hidden: false })
+    expect(item).toMatchObject({ label: 'element.open-multiple:2', hidden: false })
     expect(openedIds()).toEqual([1, 3])
+  })
+
+  it('shows the single open when the user may view only one of the selected elements', async () => {
+    const { result } = renderInListing('asset')
+    select(result, [gridElement(1), gridElement(2, false), gridElement(3, false)])
+
+    const item = result.current.open.openGridContextMenuItem(gridRow(1))
+    await clickItem(item)
+
+    expect(item).toMatchObject({ label: 'element.open', hidden: false })
+    expect(openedIds()).toEqual([1])
   })
 
   it('hides the item when the user may view none of the selected elements', () => {

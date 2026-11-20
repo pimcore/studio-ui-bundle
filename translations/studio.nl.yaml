@@ -1415,8 +1415,7 @@ element.delete.batch.show-paths: Items weergeven
 element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
 element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
 element.open: Openen
-element.open-selected_one: '{{count}} geselecteerd element openen'
-element.open-selected_other: '{{count}} geselecteerde elementen openen'
+element.open-multiple: '{{count}} elementen openen'
 element.state: Status
 element.state.unpublished: Niet gepubliceerd
 element.toolbar.copy-id: ID kopiëren
