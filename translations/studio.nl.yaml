@@ -334,6 +334,8 @@ select-option.general-settings.usages.field: Veld
 select-option.create.success: Selectieoptie succesvol aangemaakt
 select-option.update.success: Selectieoptie succesvol bijgewerkt
 select-option.delete.success: Selectieoptie succesvol verwijderd
+select-option.import.title: Selectieoptie importeren
+select-option.import.success: Selectieoptie succesvol geïmporteerd
 select-option.tree.all: Alle
 select-option.tree.search: Selectieopties zoeken
 select-option.tree.actions.select-option: Selectieoptie

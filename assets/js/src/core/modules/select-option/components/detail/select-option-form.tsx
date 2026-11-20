@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelectOptionEditorContext } from '../../context/hooks/use-select-option-editor-context'
 import { useSelectOptionEditor } from '../../hooks/use-select-option-editor'
 import { SelectOptionGeneralSettingsFormFields } from '../select-option-editor/general-settings-form-fields'
+import { SelectOptionImportExportActions } from './select-option-import-export-actions'
 
 export interface SelectOptionFormProps {
   selectOption: SelectOptionDetail
@@ -36,6 +37,16 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
     ...selectOption
   }
   const isWriteable = selectOption.isWriteable
+
+  const reload = async (): Promise<void> => {
+    const fresh = await getSelectOptionById(selectOption.id)
+    if (fresh !== undefined) {
+      setSelectOptions((prev) =>
+        prev.map((s) => s.id === fresh.id ? fresh : s)
+      )
+      form.setFieldsValue(fresh)
+    }
+  }
 
   return (
     <FormKit
@@ -84,16 +95,15 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
               aria-label={ t('toolbar.reload') }
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
-              onClick={ async () => {
-                const fresh = await getSelectOptionById(selectOption.id)
-                if (fresh !== undefined) {
-                  setSelectOptions((prev) =>
-                    prev.map((s) => s.id === fresh.id ? fresh : s)
-                  )
-                  form.setFieldsValue(fresh)
-                }
-              } }
+              onClick={ reload }
               tooltip={ { title: t('toolbar.reload') } }
+            />
+
+            <SelectOptionImportExportActions
+              disabled={ isLoading }
+              id={ selectOption.id }
+              isWriteable={ isWriteable }
+              onImportSuccess={ reload }
             />
 
             <Tooltip
