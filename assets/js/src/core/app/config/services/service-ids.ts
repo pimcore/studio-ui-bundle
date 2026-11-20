@@ -401,6 +401,9 @@ export const serviceIds = {
   // Context menu registry
   'App/ContextMenuRegistry/ContextMenuRegistry': 'App/ContextMenuRegistry/ContextMenuRegistry',
 
+  // Deep link registry
+  'App/DeepLinkRegistry/DeepLinkRegistry': 'App/DeepLinkRegistry/DeepLinkRegistry',
+
   // Document required fields validation service
   'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService',
 
