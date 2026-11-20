@@ -1421,6 +1421,7 @@ element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning.confirmed_one: 'Please note: This item has dependencies.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Please note: These items have dependencies.'
 element.open: Open
+element.open-multiple: 'Open {{count}} elements'
 element.state: State
 element.state.unpublished: Unpublished
 element.toolbar.copy-id: Copy ID

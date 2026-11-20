@@ -1419,6 +1419,7 @@ element.delete.batch.show-paths: Pokaż elementy
 element.delete.batch.dependencies-warning.confirmed_one: "Uwaga: ten element ma zależności."
 element.delete.batch.dependencies-warning.confirmed_other: "Uwaga: te elementy mają zależności."
 element.open: Otwórz
+element.open-multiple: 'Otwórz {{count}} elementów'
 element.state: Status
 element.state.unpublished: Nieopublikowany
 element.toolbar.copy-id: Kopiuj ID
