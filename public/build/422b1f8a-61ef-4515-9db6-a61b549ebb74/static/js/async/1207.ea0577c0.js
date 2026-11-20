@@ -1,0 +1,2 @@
+/*! For license information please see 1207.ea0577c0.js.LICENSE.txt */
+"use strict";(self["chunk_pimcore_studio_ui_bundle "]=self["chunk_pimcore_studio_ui_bundle "]||[]).push([["1207"],{5338(e,o,t){var u=t(25765);o.createRoot=u.createRoot,o.hydrateRoot=u.hydrateRoot}}]);

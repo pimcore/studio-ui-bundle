@@ -1,0 +1,2 @@
+/*! For license information please see __federation_expose_modules__notifications.212009d9.js.LICENSE.txt */
+"use strict";(self["chunk_pimcore_studio_ui_bundle "]=self["chunk_pimcore_studio_ui_bundle "]||[]).push([["5579"],{21064(i,t,o){o.r(t),o.d(t,{NotificationApiSlice:()=>u,NotificationList:()=>c.q});var c=o(36769),u=o(4793);void 0!==(i=o.hmd(i)).hot&&i.hot.accept()}}]);
