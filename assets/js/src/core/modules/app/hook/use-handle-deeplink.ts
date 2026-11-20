@@ -17,7 +17,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useEffect, useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import trackError, { GeneralError } from '../error-handler'
 import { type DeepLinkRegistryInterface } from '../deep-link-registry/deep-link-registry'
 
@@ -41,6 +41,7 @@ const runDeepLinkHandler = async (name: string, params: URLSearchParams): Promis
 export const useHandleDeepLink = (): void => {
   const location = useLocation()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { openElement } = useElementHelper()
   const dispatch = useAppDispatch()
   // restoring the widget layout from the previous session replaces the inner model,
@@ -79,13 +80,12 @@ export const useHandleDeepLink = (): void => {
       }))
     }
 
-    const params = new URLSearchParams(location.search)
-    const linkName = params.get(DEEP_LINK_HANDLER_PARAM)
+    const linkName = searchParams.get(DEEP_LINK_HANDLER_PARAM)
 
     if (!isNull(linkName) && !isLinkHandledRef.current) {
       isLinkHandledRef.current = true
 
-      runDeepLinkHandler(linkName, params).catch(() => {
+      runDeepLinkHandler(linkName, searchParams).catch(() => {
         // trackError re-throws GeneralError after showing it
       })
 
