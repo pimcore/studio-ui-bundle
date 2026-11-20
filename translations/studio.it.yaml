@@ -342,6 +342,8 @@ aria.notification.action-list.toggle-collapse: Mostra/nascondi elenco azioni
 aria.notification.action-list.cancel-all: Annulla tutte le azioni in corso
 aria.notification.action-list.cancel: Annulla azione
 aria.stack-list.drag-handle: Trascinare per riordinare
+aria.horizontal-scroll.scroll-left: Scorri a sinistra
+aria.horizontal-scroll.scroll-right: Scorri a destra
 asset.image.editor.zoom.reset: Ripristina
 aria.asset.image.editor.zoom.reset: Ripristina zoom
 aria.asset.image.editor.zoom.zoom-in: Ingrandisci
