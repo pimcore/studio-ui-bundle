@@ -52,10 +52,11 @@ jest.mock('./object/listing/decorator/open-element/open-element-decorator', () =
 jest.mock('./asset/listing/decorator/open-element/open-element-decorator', () => ({ OpenElementDecorator: mockSame }))
 jest.mock('./document/listing/decorator/open-element/open-element-decorator', () => ({ OpenElementDecorator: mockSame }))
 
-const readOnlyOf = (name: string): unknown => {
+const configOf = (name: string): { readOnly?: boolean, fieldsReadOnly?: boolean } | undefined => {
   const configs = mockConfigs.get(name) ?? []
-  return (configs[configs.length - 1] as { readOnly?: boolean } | undefined)?.readOnly
+  return configs[configs.length - 1] as { readOnly?: boolean, fieldsReadOnly?: boolean } | undefined
 }
+const readOnlyOf = (name: string): unknown => configOf(name)?.readOnly
 
 const listings = [
   ['object', ObjectSearchListing],
@@ -74,6 +75,16 @@ describe.each(listings)('the %s search listing', (_type, Listing) => {
     expect(readOnlyOf('filters')).toBe(true)
     expect(readOnlyOf('columns')).toBe(true)
     expect(readOnlyOf('saved-search')).toBe(true)
+    expect(configOf('saved-search')?.fieldsReadOnly).toBe(true)
+  })
+
+  it('hides only the saved-search write actions when asked to, everything else stays editable', () => {
+    render(<Listing hideSavedSearchActions />)
+
+    expect(readOnlyOf('filters')).toBe(false)
+    expect(readOnlyOf('columns')).toBe(false)
+    expect(readOnlyOf('saved-search')).toBe(true)
+    expect(configOf('saved-search')?.fieldsReadOnly).toBe(false)
   })
 
   it('keeps them editable otherwise', () => {
@@ -82,5 +93,6 @@ describe.each(listings)('the %s search listing', (_type, Listing) => {
     expect(readOnlyOf('filters')).toBe(false)
     expect(readOnlyOf('columns')).toBe(false)
     expect(readOnlyOf('saved-search')).toBe(false)
+    expect(configOf('saved-search')?.fieldsReadOnly).toBe(false)
   })
 })

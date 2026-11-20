@@ -47,12 +47,14 @@ interface SavedSearchPanelProps {
   supportsLoadedState: boolean
   /** hide the write actions: the panel shows what the search is, saving happens elsewhere */
   readOnly?: boolean
+  /** name, description and sharing shown, not changed */
+  fieldsReadOnly?: boolean
 }
 
 interface LiveArgs { classId?: string, body?: { filters?: unknown } }
 type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
 
-export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = false }: SavedSearchPanelProps): React.JSX.Element => {
+export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = false, fieldsReadOnly = false }: SavedSearchPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
   const user = useUser()
   const { modal } = useStudioModal()
@@ -270,7 +272,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = 
               setSharedUsers(changes.sharedUsers)
               setSharedRoles(changes.sharedRoles)
             } }
-            readOnly={ readOnly }
+            readOnly={ fieldsReadOnly }
             sharedRoles={ sharedRoles }
             sharedUsers={ sharedUsers }
             showSharing={ isNil(loaded) || isOwner }

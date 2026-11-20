@@ -39,7 +39,7 @@ const defaultProps = {
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
+const buildListingProps = (savedSearchReadOnly: boolean, hideSavedSearchActions: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
   [StaticColumnConfigurationDecorator, { readOnly: savedSearchReadOnly } as StaticColumnConfigurationDecoratorConfig],
   TagFilterDecorator,
@@ -48,16 +48,16 @@ const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps
   SortingDecorator,
   [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig],
   // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
-  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true, readOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
+  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true, readOnly: savedSearchReadOnly || hideSavedSearchActions, fieldsReadOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
-export const AssetSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
+export const AssetSearchListing = ({ savedSearchReadOnly = false, hideSavedSearchActions = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
   const { close } = useSearch()
   // buildListingProps composes NEW component types per call, and fresh types remount the whole
   // listing tree — so the composition is memoized apart from the entries, which an embedder may
   // well pass inline and which only wrap the sidebar hook
-  const baseProps = useMemo(() => buildListingProps(savedSearchReadOnly), [savedSearchReadOnly])
+  const baseProps = useMemo(() => buildListingProps(savedSearchReadOnly, hideSavedSearchActions), [savedSearchReadOnly, hideSavedSearchActions])
   const listingProps = useMemo(
     () => withExtraSidebarEntries(baseProps, extraSidebarEntries),
     [baseProps, extraSidebarEntries]

@@ -21,6 +21,8 @@ import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-man
 export interface SearchListingProps {
   /** a view of the search: filters, columns and the saved-search panel shown, not changed; paging, sorting and selection stay */
   savedSearchReadOnly?: boolean
+  /** hide only the saved-search panel's write actions; filters, columns and fields stay editable */
+  hideSavedSearchActions?: boolean
   /** the sidebar entry to open on mount; without it the sidebar starts collapsed */
   defaultSidebarTab?: string
   /**
