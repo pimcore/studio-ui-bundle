@@ -16,6 +16,7 @@ import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dy
 import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-asset-type-options'
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
+import { FieldDefinitionRelationVisibleFields } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-relation-visible-fields/field-definition-relation-visible-fields'
 import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
 import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
@@ -153,6 +154,8 @@ export const FieldDefinitionAdvancedManyToManyRelationFormFields = (props: Field
             </Form.Item>
           </Form.Conditional>
         </FormKit.Panel>
+
+        <FieldDefinitionRelationVisibleFields fieldtype="advancedManyToManyRelation" />
 
         <Form.Item
           label={ t('columns') }

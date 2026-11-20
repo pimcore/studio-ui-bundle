@@ -20,6 +20,7 @@ import { isValidPathFormatterConfig } from '../utils/path-formatter'
 import { flattenValues } from '@Pimcore/components/many-to-many-relation/utils/helpers'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import type { RelationRowMatcher } from '../filters/types'
+import { buildVisibleFieldsLookup, findVisibleFieldsEntry } from '../utils/visible-fields-key'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -164,14 +165,9 @@ export const useValue = (
     const visibleFieldsValue = visibleFieldsValueRef.current
     const hasVisibleFields = !isNil(visibleFieldsValue)
     // `field.id` is the id of the element the values were loaded for, carried on the entry by its
-    // producer - not the value of an `id` column, which the visible fields need not contain.
-    const visibleFieldsMap = hasVisibleFields
-      ? new Map(
-          (visibleFieldsValue ?? [])
-            .filter((field): field is Record<string, any> => !isUndefined(field) && !isNil(field?.id))
-            .map(field => [field.id, field])
-        )
-      : null
+    // producer - not the value of an `id` column, which the visible fields need not contain. Relations
+    // referencing several element types also tag the entry with the element type.
+    const visibleFieldsMap = hasVisibleFields ? buildVisibleFieldsLookup(visibleFieldsValue ?? []) : null
 
     const matchesSearchTerm = (item: DisplayManyToManyRelationValueItem): boolean => {
       if (searchTerm === '') return true
@@ -179,7 +175,7 @@ export const useValue = (
       let matched: boolean | undefined = false
 
       if (hasVisibleFields && visibleFieldsMap !== null) {
-        const visibleItem = visibleFieldsMap.get(item.id)
+        const visibleItem = findVisibleFieldsEntry(visibleFieldsMap, item)
 
         if (!isUndefined(visibleItem)) {
           matched = Object.values(visibleItem).some((val) =>

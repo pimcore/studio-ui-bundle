@@ -9,10 +9,15 @@
  */
 
 import {
-  AdvancedManyToManyRelation,
   type AdvancedManyToManyRelationClassDefinitionProps,
   type RelationColumnDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-relation/advanced-many-to-many-relation'
+import {
+  AdvancedManyToManyRelationWithVisibleFields
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/relation-visible-fields/advanced-many-to-many-relation-with-visible-fields'
+import {
+  type RelationVisibleFieldsClassDefinitionProps
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/relation-visible-fields/hooks/use-relation-visible-fields'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
   type EditModalSettings,
@@ -36,7 +41,7 @@ import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dyna
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
-export type AdvancedManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & AdvancedManyToManyRelationClassDefinitionProps
+export type AdvancedManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & AdvancedManyToManyRelationClassDefinitionProps & RelationVisibleFieldsClassDefinitionProps
 
 export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'advancedManyToManyRelation'
@@ -54,7 +59,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
       : []
 
     return (
-      <AdvancedManyToManyRelation
+      <AdvancedManyToManyRelationWithVisibleFields
         { ...props }
         { ...convertAllowedTypes(props) }
         className={ props.className }
