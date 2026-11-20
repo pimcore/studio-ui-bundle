@@ -538,6 +538,18 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Class Definition"],
             }),
+            classSelectOptionExport: build.query<ClassSelectOptionExportApiResponse, ClassSelectOptionExportApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/class/select-option/${queryArg.id}/export` }),
+                providesTags: ["Class Definition"],
+            }),
+            classSelectOptionImport: build.mutation<ClassSelectOptionImportApiResponse, ClassSelectOptionImportApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/select-option/${queryArg.id}/import`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Class Definition"],
+            }),
             classSelectOptionGetTree: build.query<ClassSelectOptionGetTreeApiResponse, ClassSelectOptionGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/class/select-option/tree`,
@@ -1003,6 +1015,21 @@ export type ClassSelectOptionDeleteApiResponse = unknown;
 export type ClassSelectOptionDeleteApiArg = {
     /** Select option configuration ID */
     id: string;
+};
+export type ClassSelectOptionExportApiResponse = /** status 200 Exported select option configuration as JSON */ Blob;
+export type ClassSelectOptionExportApiArg = {
+    /** Select option configuration ID */
+    id: string;
+};
+export type ClassSelectOptionImportApiResponse =
+    /** status 200 Successfully imported select option configuration */ SelectOptionDetail;
+export type ClassSelectOptionImportApiArg = {
+    /** Select option configuration ID */
+    id: string;
+    body: {
+        /** Select option configuration JSON export file to upload */
+        file: Blob;
+    };
 };
 export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options data for the tree view */ {
     totalItems: number;
@@ -1815,6 +1842,8 @@ export const {
     useClassSelectOptionGetQuery,
     useClassSelectOptionUpdateMutation,
     useClassSelectOptionDeleteMutation,
+    useClassSelectOptionExportQuery,
+    useClassSelectOptionImportMutation,
     useClassSelectOptionGetTreeQuery,
     useClassSelectOptionGetUsagesQuery,
 } = injectedRtkApi;
