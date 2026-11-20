@@ -28,6 +28,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class DocumentVersionsControllerTest extends Unit
 {
+    private const PREFIX = 'version-diff-tmp-';
+
+    private const FROM_PNG = '-from.png';
+
     /** @var string[] */
     private array $createdFiles = [];
 
@@ -46,7 +50,7 @@ class DocumentVersionsControllerTest extends Unit
 
         foreach (['from', 'to'] as $side) {
             foreach (['png', 'html'] as $extension) {
-                $name = 'version-diff-tmp-' . $comparisonId . '-' . $side . '.' . $extension;
+                $name = self::PREFIX . $comparisonId . '-' . $side . '.' . $extension;
                 $this->writeTempFile($name, 'generated-content');
 
                 $response = $this->controller()->diffVersionsHtmlAction($this->requestWithId($name));
@@ -67,14 +71,14 @@ class DocumentVersionsControllerTest extends Unit
 
         $names = [
             'unrelated-file.dat',
-            'version-diff-tmp-notes.png',
-            'version-diff-tmp-notes.html',
-            'version-diff-tmp-' . $comparisonId . '.png',
-            'version-diff-tmp-' . $comparisonId . '-from.txt',
-            'version-diff-tmp-' . $comparisonId . '-other.png',
-            'prefix-version-diff-tmp-' . $comparisonId . '-from.png',
+            self::PREFIX . 'notes.png',
+            self::PREFIX . 'notes.html',
+            self::PREFIX . $comparisonId . '.png',
+            self::PREFIX . $comparisonId . '-from.txt',
+            self::PREFIX . $comparisonId . '-other.png',
+            'prefix-' . self::PREFIX . $comparisonId . self::FROM_PNG,
             // A trailing line feed must not slip past the end anchor.
-            'version-diff-tmp-' . $comparisonId . "-from.png\n",
+            self::PREFIX . $comparisonId . self::FROM_PNG . "\n",
         ];
 
         foreach ($names as $name) {
@@ -93,7 +97,7 @@ class DocumentVersionsControllerTest extends Unit
     {
         $comparisonId = uniqid(date('Y-m-d') . '-', true);
 
-        foreach (['../composer.json', 'sub/version-diff-tmp-' . $comparisonId . '-from.png'] as $id) {
+        foreach (['../composer.json', 'sub/' . self::PREFIX . $comparisonId . self::FROM_PNG] as $id) {
             try {
                 $this->controller()->diffVersionsHtmlAction($this->requestWithId($id));
                 $this->fail('Expected a 404 for ' . $id);
@@ -121,7 +125,7 @@ class DocumentVersionsControllerTest extends Unit
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $name = 'version-diff-tmp-' . uniqid(date('Y-m-d') . '-', true) . '-from.png';
+        $name = self::PREFIX . uniqid(date('Y-m-d') . '-', true) . self::FROM_PNG;
 
         $this->controller()->diffVersionsHtmlAction($this->requestWithId($name));
     }
