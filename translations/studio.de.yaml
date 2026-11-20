@@ -116,6 +116,7 @@ areablock.paste: Einfügen
 areablock.cut: Ausschneiden
 areablock.settings: Einstellungen
 areablock.delete: Löschen
+areablock.type-limit-reached: Die maximale Anzahl an Bausteinen dieses Typs wurde erreicht.
 document.highlight-editables: Bearbeitbare hervorheben
 document.link.target: Link-Ziel
 document.hardlink.source: Quelldokument

@@ -32,6 +32,7 @@ export interface AreaType {
 
 export interface AreablockEditableConfig {
   limit?: number
+  limits?: Record<string, number>
   class?: string
   reload?: boolean
   allowed?: string[]
@@ -107,6 +108,7 @@ export const AreablockEditable = ({
 
   const {
     dynamicEditables,
+    getCurrentElements,
     addArea,
     removeArea,
     moveAreaUp,
@@ -128,6 +130,7 @@ export const AreablockEditable = ({
     areablockManager,
     areaTypes,
     config,
+    getCurrentElements,
     onAddArea: addArea,
     onRemoveArea: removeArea,
     onMoveAreaUp: moveAreaUp,

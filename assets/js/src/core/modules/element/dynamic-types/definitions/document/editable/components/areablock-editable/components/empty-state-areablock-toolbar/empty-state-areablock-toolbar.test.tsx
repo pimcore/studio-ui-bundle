@@ -141,6 +141,40 @@ describe('EmptyStateAreablockToolbar', () => {
     expect(getPasteButton().disabled).toBe(true)
   })
 
+  // Regression tests for the reload-mode staleness review finding on
+  // pimcore/platform-version#688: pending (not yet rendered) bricks are passed
+  // in as typeUsageCounts and must count toward per-type limits.
+  it('disables paste when pending additions consume the clipboard type limit', () => {
+    useAreablockClipboard.mockReturnValue(textClipboardItem)
+
+    renderToolbar({
+      config: { limits: { text: 1 }, types: [{ name: 'Text', type: 'text' }] },
+      typeUsageCounts: { text: 1 }
+    })
+
+    expect(getPasteButton().disabled).toBe(true)
+  })
+
+  it('keeps paste enabled while pending additions stay below the clipboard type limit', () => {
+    useAreablockClipboard.mockReturnValue(textClipboardItem)
+
+    renderToolbar({
+      config: { limits: { text: 2 }, types: [{ name: 'Text', type: 'text' }] },
+      typeUsageCounts: { text: 1 }
+    })
+
+    expect(getPasteButton().disabled).toBe(false)
+  })
+
+  it('disables the single-type add button when pending additions consume that type limit', () => {
+    renderToolbar({
+      config: { limits: { text: 1 }, types: [{ name: 'Text', type: 'text' }] },
+      typeUsageCounts: { text: 1 }
+    })
+
+    expect(screen.getByRole<HTMLButtonElement>('button', { name: 'areablock.new' }).disabled).toBe(true)
+  })
+
   it('does not paste into an inherited areablock', () => {
     useAreablockClipboard.mockReturnValue(textClipboardItem)
 

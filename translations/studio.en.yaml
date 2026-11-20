@@ -118,6 +118,7 @@ areablock.paste: Paste
 areablock.cut: Cut
 areablock.settings: Settings
 areablock.delete: Delete
+areablock.type-limit-reached: The maximum number of blocks of this type has been reached.
 document.highlight-editables: Highlight editables
 document.link.target: Link Target
 document.hardlink.source: Source Document

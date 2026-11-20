@@ -116,6 +116,7 @@ areablock.paste: Lim inn
 areablock.cut: Klipp ut
 areablock.settings: Innstillinger
 areablock.delete: Slett
+areablock.type-limit-reached: Maksimalt antall blokker av denne typen er nådd.
 document.highlight-editables: Marker redigerbare
 document.link.target: Lenke-mål
 document.hardlink.source: Kildedokument

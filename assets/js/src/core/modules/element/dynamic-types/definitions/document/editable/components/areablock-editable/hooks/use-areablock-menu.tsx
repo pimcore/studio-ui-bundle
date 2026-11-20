@@ -20,6 +20,7 @@ import { configUtils } from '../utils/areablock-utils'
 export interface UseAreablockMenuOptions {
   config?: AreablockEditableConfig
   onAddArea: (areaType: string) => void
+  typeUsageCounts?: Record<string, number>
 }
 
 // The areablock toolbar (ToolStrip) raises itself to z-index 10000 while activated
@@ -50,24 +51,29 @@ const getTooltipTitle = (areaType: AreaType, t: UseTranslationResponse<'translat
   )
 }
 
-export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions): UseAreablockMenuReturn => {
+export const useAreablockMenu = ({ config, onAddArea, typeUsageCounts }: UseAreablockMenuOptions): UseAreablockMenuReturn => {
   const { t } = useTranslation()
 
   const menuItems = useMemo(() => {
     const groupedTypes = configUtils.getGroupedAreaTypes(config)
 
-    const toMenuItem = (areaType: AreaType): NonNullable<MenuProps['items']>[number] => ({
-      key: areaType.type,
-      label: (
-        <Tooltip
-          title={ getTooltipTitle(areaType, t) }
-          zIndex={ areablockMenuTooltipZIndex }
-        >
-          <span>{t(areaType.name)}</span>
-        </Tooltip>
-      ),
-      onClick: () => { onAddArea(areaType.type) }
-    })
+    const toMenuItem = (areaType: AreaType): NonNullable<MenuProps['items']>[number] => {
+      const typeLimitReached = configUtils.isTypeLimitReached(config, areaType.type, typeUsageCounts?.[areaType.type] ?? 0)
+
+      return {
+        key: areaType.type,
+        disabled: typeLimitReached,
+        label: (
+          <Tooltip
+            title={ typeLimitReached ? t('areablock.type-limit-reached') : getTooltipTitle(areaType, t) }
+            zIndex={ areablockMenuTooltipZIndex }
+          >
+            <span>{t(areaType.name)}</span>
+          </Tooltip>
+        ),
+        onClick: () => { onAddArea(areaType.type) }
+      }
+    }
 
     if (Array.isArray(groupedTypes)) {
       return groupedTypes.map(toMenuItem)
@@ -84,7 +90,7 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
     })
 
     return items
-  }, [config, onAddArea, t])
+  }, [config, onAddArea, typeUsageCounts, t])
 
   return {
     menuItems
