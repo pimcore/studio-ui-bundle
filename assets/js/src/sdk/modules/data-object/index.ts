@@ -12,6 +12,9 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
+export { useDataObjectEditorSave } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/use-data-object-editor-save'
+export type { UseDataObjectEditorSaveReturn } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/use-data-object-editor-save'
+
 export * from '@Pimcore/modules/data-object/actions/add-object/use-add-object'
 export * from '@Pimcore/modules/data-object/actions/save/use-save'
 export * from '@Pimcore/modules/data-object/events/post-update-event'

@@ -13,123 +13,43 @@ import { Button } from '@sdk/components'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { UnpublishedLabel } from '@Pimcore/modules/element/editor/shared-components/unpublished-label/unpublished-label'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
-import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
-import {
-  useEditFormContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import {
-  useSaveContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import {
-  useSaveSchedules
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
-import React, { type ReactElement, useContext, useEffect } from 'react'
+import React, { type ReactElement, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
-import { useTemporaryValue } from '@Pimcore/utils/hooks/use-temporary-value'
-import { confirmWhenSchedulesSaved } from '@Pimcore/modules/element/editor/save-confirmation'
-import { getWorkflowSaveTask, useWorkflowSave } from './use-workflow-save'
+
+import { useDataObjectEditorSave } from './use-data-object-editor-save'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
-  const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
-  const { isAutoSaveLoading, runningTask, runningTaskRef } = useSaveContext()
-  const {
-    saveSchedules,
-    isLoading: isSchedulesLoading,
-    isSuccess: isSchedulesSuccess,
-    isError: isSchedulesError,
-    error: schedulesError
-  } = useSaveSchedules('data-object', id, false)
-  const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
+  const { dataObject, publishDraft } = useDataObjectDraft(id)
+  const { save: handleSaveClick, isLoading, isAutoSaveLoading, runningTask, savedTask } = useDataObjectEditorSave()
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('data-object')
-  const messageApi = useMessage()
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
-  // the button of the save that just succeeded briefly confirms it with a check mark
-  const [savedTask, showSavedTask] = useTemporaryValue<SaveTaskType>()
-
-  useEffect(() => {
-    const handleSuccessEvent = async (): Promise<void> => {
-      if (isSuccess && isSchedulesSuccess) {
-        removeTrackedChanges()
-        await messageApi.success(t('save-success'))
-      }
-    }
-
-    handleSuccessEvent().catch((error) => {
-      console.error(error)
-    })
-  }, [isSuccess, isSchedulesSuccess])
-
-  useEffect(() => {
-    if (isError && !isNil(error)) {
-      trackError(new ApiError(error))
-    } else if (isSchedulesError && !isNil(schedulesError)) {
-      trackError(new ApiError(schedulesError))
-    }
-  }, [isError, isSchedulesError, error, schedulesError])
-
-  // Saves the data and the schedules; resolves with the outcome of the schedules save (the data
-  // save reports its success through onFinish).
-  const saveDataAndSchedules = async (task: SaveTaskType, onFinish?: () => void): Promise<boolean> => {
-    if (dataObject?.changes === undefined) return false
-    // The reset compares against the data the save actually sent, not the data read
-    // here: the save may run much later (queued behind another one), take over the data
-    // of an auto save folded into it meanwhile, and the user can keep editing after that.
-    // filled right below; read once the object is saved
-    const action: { schedulesSaved?: Promise<boolean> } = {}
-    const objectSaved = saveDataObject(getModifiedDataObjectAttributes(), task, (savedEditableData) => {
-      resetModifiedDataObjectAttributes(savedEditableData)
-      // only called once this very save has succeeded, also when it was queued; the confirmation
-      // also waits for the schedules saved by the same action
-      void confirmWhenSchedulesSaved(action.schedulesSaved, () => { showSavedTask(task) })
-      onFinish?.()
-    })
-    action.schedulesSaved = saveSchedules()
-
-    return await Promise.all([objectSaved, action.schedulesSaved]).then(([, schedulesSaved]) => schedulesSaved).catch((error) => {
-      console.error(error)
-      return false
-    })
-  }
-
-  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
-    void saveDataAndSchedules(task, onFinish)
-  }
-
-  // A transition with unsavedChangesBehaviour "save" saves through this same flow, using the
-  // task of the primary button. A user's own save that is still running is not queued behind.
-  useWorkflowSave({
-    getTask: () => getWorkflowSaveTask(dataObject, runningTaskRef?.current),
-    startSave: saveDataAndSchedules
-  })
 
   const getSecondaryButtons = (): ReactElement[] => {
     if (dataObject?.type === 'folder') {
       return []
     }
     const secondaryButtons: ReactElement[] = []
-    const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
+    const isDraftLoading = (runningTask === SaveTaskType.Version && isLoading) || isDraftDeleteLoading
 
     if (checkElementPermission(dataObject?.permissions, 'save')) {
       if (dataObject?.published === true) {
         secondaryButtons.push(
           <Button
-            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+            disabled={ isLoading || isDraftLoading }
             key="save-draft"
-            loading={ runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading) }
+            loading={ runningTask === SaveTaskType.Version && isLoading }
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Version)
             } }
@@ -144,9 +64,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'save')) {
         secondaryButtons.push(
           <Button
-            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+            disabled={ isLoading || isDraftLoading }
             key="save-draft"
-            loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
+            loading={ (runningTask === SaveTaskType.Save) && isLoading }
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Save)
             } }
@@ -175,7 +95,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           >
             <IconButton
               aria-label={ t('more-actions') }
-              disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+              disabled={ isLoading || isDraftLoading }
               icon={ { value: 'chevron-down' } }
               loading={ isDraftDeleteLoading }
               tooltip={ { title: t('more-actions') } }
@@ -192,13 +112,13 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const getPrimaryButtons = (): ReactElement[] => {
     const primaryButtons: ReactElement[] = []
 
-    const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
+    const saveDisabled = isLoading || isDraftDeleteLoading
 
     if (dataObject?.type === 'folder') {
       primaryButtons.push(
         <Button
           disabled={ saveDisabled }
-          loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
+          loading={ (runningTask === SaveTaskType.Save) && isLoading }
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Save)
           } }
@@ -217,7 +137,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       primaryButtons.push(
         <Button
           disabled={ saveDisabled }
-          loading={ (runningTask === SaveTaskType.Publish) && (isLoading || isSchedulesLoading) }
+          loading={ (runningTask === SaveTaskType.Publish) && isLoading }
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Publish, () => {
               if (dataObject?.published === false) {
@@ -251,7 +171,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   }, 'publish')
 
   useHandleKeyBindings(async () => {
-    const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
+    const saveDisabled = isLoading || isDraftDeleteLoading
     if (!saveDisabled && dataObject != null && checkElementPermission(dataObject.permissions, 'save')) {
       if (dataObject?.type === 'folder') {
         await handleSaveClick(SaveTaskType.Save)
