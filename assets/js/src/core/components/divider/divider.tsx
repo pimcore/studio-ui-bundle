@@ -14,7 +14,7 @@ import { useStyles } from './divider.styles'
 import cn from 'classnames'
 import type { Sizings } from '@Pimcore/utils/sizing'
 
-export interface IDividerProps extends DividerProps {
+export interface IDividerProps extends Omit<DividerProps, 'size'> {
   size?: Sizings
   theme?: 'default' | 'primary' | 'secondary'
 }
