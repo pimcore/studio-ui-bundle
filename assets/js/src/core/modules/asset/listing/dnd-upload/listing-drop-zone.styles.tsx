@@ -20,21 +20,27 @@ export const useStyles = createStyles(({ token, css }) => {
       overflow: hidden;
       position: relative;
 
-      /* keep the grid's layout (full height, own scrolling) through antd's upload wrappers */
-      > div,
-      .ant-upload-wrapper,
-      .ant-upload,
-      .ant-upload-btn,
-      .ant-upload-drag-container {
-        display: block;
-        height: 100%;
+      /* keep the grid's layout (full height, own scrolling) through antd's upload wrappers: a flex column
+         chain, since percent heights fail under auto-height parents and antd sets display: table on the button */
+      display: flex;
+      flex-direction: column;
+
+      && > div,
+      && .ant-upload-wrapper,
+      && .ant-upload,
+      && .ant-upload-btn,
+      && .ant-upload-drag-container {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        height: auto;
         width: 100%;
         min-height: 0;
         min-width: 0;
         max-width: 100%;
       }
 
-      .ant-upload-btn {
+      && .ant-upload-btn {
         padding: 0 !important;
       }
 
