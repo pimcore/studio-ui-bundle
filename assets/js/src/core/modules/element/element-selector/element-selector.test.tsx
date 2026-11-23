@@ -56,27 +56,24 @@ jest.mock('@Pimcore/app/public-api/helpers/api-helper', () => ({
   getPimcoreStudioApi: () => ({ element: { openElementSelector: mockFrame.parentOpen } })
 }))
 
-// eslint-disable-next-line import/first
+/* eslint-disable import/first */
 import '@testing-library/jest-dom'
-// eslint-disable-next-line import/first
 import React from 'react'
-// eslint-disable-next-line import/first
 import { fireEvent, render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
 import {
   type ElementSelectorConfig,
   type ElementSelectorCustomTab,
   ElementSelectorProvider,
   SelectionType
 } from './provider/element-selector/element-selector-provider'
-// eslint-disable-next-line import/first
 import { useElementSelector } from './provider/element-selector/use-element-selector'
-// eslint-disable-next-line import/first
 import { elementApi } from '@Pimcore/app/public-api/element/element-api'
-// eslint-disable-next-line import/first
 import { ApiGatewayEvent } from '@Pimcore/app/public-api/api-gateway'
-// eslint-disable-next-line import/first
 import { runInNewContext } from 'vm'
+import { installJsdomSafeComputedStyle } from './jsdom-safe-computed-style'
+/* eslint-enable import/first */
+
+installJsdomSafeComputedStyle()
 
 interface NewElement {
   type: string

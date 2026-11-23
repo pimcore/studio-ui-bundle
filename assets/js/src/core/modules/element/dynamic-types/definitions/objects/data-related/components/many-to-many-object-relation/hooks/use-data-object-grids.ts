@@ -49,7 +49,9 @@ export interface IUseDataObjectGridsReturn {
 type GridItems = DataObjectGetGridApiResponse['items']
 type GridSubscription = ReturnType<ReturnType<typeof api.endpoints.dataObjectGetGrid.initiate>>
 // The app's RootState does not type the API slice it combines, the endpoint selectors expect it.
-type GridQueryState = Parameters<ReturnType<typeof api.endpoints.dataObjectGetGrid.select>>[0]
+type GridQuerySelector = ReturnType<typeof api.endpoints.dataObjectGetGrid.select>
+type GridQueryState = Parameters<GridQuerySelector>[0]
+type GridQueryResult = ReturnType<GridQuerySelector>
 
 interface ChunkRequest {
   key: string
@@ -96,7 +98,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
 
   // One selector per request, created once: a selector created on every render returns a new result every time.
   const selectors = useMemo(() => requests.map(request => api.endpoints.dataObjectGetGrid.select(request.args)), [requests])
-  const results = useAppSelector(state => selectors.map(select => select(state as GridQueryState)), shallowEqual)
+  const results = useAppSelector<GridQueryResult[]>(state => selectors.map(select => select(state as GridQueryState)), shallowEqual)
 
   const subscriptions = useRef(new Map<string, GridSubscription>())
   // Changes when refetchAll() released the subscriptions, so the queue requests the chunks again.
