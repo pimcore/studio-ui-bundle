@@ -14,7 +14,10 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     dropArea: css`
       height: 100%;
+      width: 100%;
       min-height: 0;
+      min-width: 0;
+      overflow: hidden;
       position: relative;
 
       /* keep the grid's layout (full height, own scrolling) through antd's upload wrappers */
@@ -25,7 +28,10 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-upload-drag-container {
         display: block;
         height: 100%;
+        width: 100%;
         min-height: 0;
+        min-width: 0;
+        max-width: 100%;
       }
 
       .ant-upload-btn {
