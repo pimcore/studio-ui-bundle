@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil, isUndefined } from 'lodash'
 import { type ClassificationStoreConfigurationKeyGroupRelationDetail } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
 type Relation = ClassificationStoreConfigurationKeyGroupRelationDetail
@@ -18,28 +19,27 @@ const UNIT_TYPES: ReadonlySet<string> = new Set(['quantityValue', 'inputQuantity
 export const carriesUnits = (relation: Relation): boolean => UNIT_TYPES.has(relation.keyType ?? '')
 
 /*
- * What the editor offers is the key's own vocabulary (`keyOptions`, `keyUnits`); `options` and `units`
- * are the assignment's narrowed set, and what is checked is read from `definitionOverride`. A server
- * that does not publish the key's vocabulary leaves those members absent, and the narrowed ones stand in.
+ * What the editor offers is the key's own vocabulary (`keyOptions`, `keyUnits`); `options` and `units` are
+ * the assignment's narrowed set, and what is checked is read from `definitionOverride`. A server that does
+ * not publish the key's vocabulary leaves those members absent, and the narrowed ones stand in.
  */
-
 /** The options the key offers, whatever this assignment narrowed them to. */
 export const offeredOptionsOf = (relation: Relation): Relation['options'] =>
-  relation.keyOptions !== undefined ? relation.keyOptions : relation.options
+  !isUndefined(relation.keyOptions) ? relation.keyOptions : relation.options
 
 /** Why the key publishes no options, or null where nothing failed. */
 export const offeredOptionsUnavailableReasonOf = (relation: Relation): string | null | undefined =>
-  relation.keyOptions !== undefined ? relation.keyOptionsUnavailableReason : relation.optionsUnavailableReason
+  !isUndefined(relation.keyOptions) ? relation.keyOptionsUnavailableReason : relation.optionsUnavailableReason
 
 /** The unit vocabulary the key offers, whatever this assignment narrowed it to. */
 export const offeredUnitsOf = (relation: Relation): Relation['units'] =>
-  relation.keyUnits !== undefined ? relation.keyUnits : relation.units
+  !isUndefined(relation.keyUnits) ? relation.keyUnits : relation.units
 
 /** True where the key publishes a unit vocabulary; null means its type holds no units. */
 export const publishesUnits = (relation: Relation): boolean => {
   const units = offeredUnitsOf(relation)
 
-  return units !== undefined && units !== null
+  return !isNil(units)
 }
 
 /** The unit IDs the key permits; every installation unit where it restricts nothing, none where it holds no units. */
@@ -237,7 +237,7 @@ const optionsTag = (relation: Relation, draft: IOverrideDraft): IOverrideTag | n
 
   const offeredOptions = offeredOptionsOf(relation)
 
-  if (offeredOptions === undefined || offeredOptions === null) {
+  if (isNil(offeredOptions)) {
     // The key's options are unknown, not absent: nothing about the stored subset can be judged.
     return messageTag('options', 'classification-store.override.tag-options-unavailable', false)
   }
