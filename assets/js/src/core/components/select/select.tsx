@@ -40,7 +40,7 @@ export interface SelectProps extends AntdSelectProps {
   loadingSkeleton?: boolean
   /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount` or `labelInValue`, hidden while `loading`). */
   allowSelectAll?: boolean
-  /** Reorder the selected tags by drag and drop (`mode="multiple"` only). Needs a controlled `value` or `allowSelectAll`; replaces `tagRender`. The options passed to `onChange` come from the `options` prop, so with JSX children they only carry the value. */
+  /** Reorder the selected tags by drag and drop (`mode="multiple"` only). Needs a controlled `value`, or `allowSelectAll` without `labelInValue`; replaces `tagRender`. The options passed to `onChange` come from the `options` prop, so with JSX children they only carry the value. */
   sortableTags?: boolean
 }
 
