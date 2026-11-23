@@ -21,6 +21,8 @@ import {
   clearOptions,
   draftOf,
   carriesUnits,
+  offeredOptionsOf,
+  offeredOptionsUnavailableReasonOf,
   publishesUnits,
   storesUnitMember,
   optionValuesOf,
@@ -125,7 +127,8 @@ const noOptionsDescriptionKey = (offeredCount: number, status: IResolvedSubset['
 
 export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { options, optionsUnavailableReason: reason } = relation
+  const options = offeredOptionsOf(relation)
+  const reason = offeredOptionsUnavailableReasonOf(relation)
   const clearLabel = t('classification-store.override.use-all-options')
   const clear = (): void => { onChange(clearOptions(draft)) }
   const heading = <Text strong>{ t('classification-store.override.options-heading') }</Text>
@@ -229,7 +232,8 @@ export const OptionsSection = ({ relation, draft, onChange }: ISectionProps): Re
 
 /** True when the key's own definition gives the modal nothing to narrow: no options, no units. */
 export const offersNothing = (relation: Relation): boolean => {
-  const { options, optionsUnavailableReason: reason } = relation
+  const options = offeredOptionsOf(relation)
+  const reason = offeredOptionsUnavailableReasonOf(relation)
 
   return !carriesUnits(relation) && !publishesUnits(relation) && !storesUnitMember(relation) && draftOf(relation).options === undefined && (options === undefined || options === null) && (reason === undefined || reason === null)
 }
