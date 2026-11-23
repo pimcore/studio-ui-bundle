@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ComponentType, useMemo } from 'react'
+import React, { type ComponentType, type ReactNode, useMemo } from 'react'
 import { useData } from '../../data-layer/provider/data/use-data'
 import { GridContainer } from '../components/grid/grid-container'
 import { Content } from '@Pimcore/components/content/content'
@@ -17,11 +17,13 @@ import { Sidebar } from '../components/sidebar/sidebar'
 
 export interface ListingBaseViewProps {
   renderToolbar?: ComponentType
+  wrapGrid?: (grid: ReactNode) => ReactNode
 }
 
 export const ListingBaseView = (props: ListingBaseViewProps): React.JSX.Element => {
   const { dataQueryResult } = useData()
   const ToolbarComponent = props.renderToolbar
+  const grid = <GridContainer />
 
   return useMemo(() => (
     <>
@@ -31,7 +33,7 @@ export const ListingBaseView = (props: ListingBaseViewProps): React.JSX.Element 
           renderSidebar={ <Sidebar /> }
           renderToolbar={ ToolbarComponent !== undefined ? <ToolbarComponent /> : undefined }
         >
-          <GridContainer />
+          {props.wrapGrid !== undefined ? props.wrapGrid(grid) : grid}
         </ContentLayout>
       )}
     </>
