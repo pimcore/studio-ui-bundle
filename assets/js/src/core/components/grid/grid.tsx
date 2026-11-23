@@ -444,6 +444,7 @@ export const Grid = ({
         onRowClick={ props.onRowClick }
         onRowDoubleClick={ props.onRowDoubleClick }
         row={ row }
+        rowClassName={ props.getRowClassName?.(row.original) }
         rowStyle={ rowStyle }
         size={ size }
         tableElement={ tableElement }

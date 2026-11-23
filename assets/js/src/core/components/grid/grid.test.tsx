@@ -147,3 +147,21 @@ describe('Grid column resizing without the row virtualizer', () => {
     expect(getWidth(getFirstBodyCell())).toBe(`${COLUMN_SIZE + 5}px`)
   })
 })
+
+describe('Grid row class names', () => {
+  it('adds the class name resolved for a row to its table row', () => {
+    render(
+      <Grid
+        columns={ columns }
+        data={ data.slice(0, 3) }
+        enableRowVirtualizer={ false }
+        getRowClassName={ (row) => row.id === 2 ? 'row-flagged' : undefined }
+        setRowId={ (originalRow) => String(originalRow.id) }
+      />
+    )
+
+    const rows = document.querySelectorAll('tbody tr.ant-table-row')
+
+    expect(Array.from(rows).map((row) => row.classList.contains('row-flagged'))).toEqual([false, true, false])
+  })
+})

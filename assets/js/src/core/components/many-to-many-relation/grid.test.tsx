@@ -34,7 +34,7 @@ jest.mock('./hooks/use-columns', () => ({
 }))
 
 jest.mock('./grid.styles', () => ({
-  useStyles: () => ({ styles: {} })
+  useStyles: () => ({ styles: { unpublishedRow: 'unpublished-row' } })
 }))
 
 // eslint-disable-next-line import/first
@@ -85,5 +85,20 @@ describe('ManyToManyRelationGrid', () => {
 
     expect(handleOrderChange.mock.calls[0][0].map((row: any) => [row.id, row.name])).toEqual([[2, 'Car 2'], [1, 'Car 1']])
     expect(lastGridProps().data.map((row: any) => row.id)).toEqual([2, 1])
+  })
+
+  // An unpublished related element has to be recognisable in the grid, as it is in the relation tags.
+  it('marks only the rows of unpublished elements', () => {
+    const mixedValue = [
+      { id: 1, type: 'object', subtype: 'Car', fullPath: '/cars/1', isPublished: false },
+      { id: 2, type: 'object', subtype: 'Car', fullPath: '/cars/2', isPublished: true },
+      { id: 3, type: 'asset', subtype: 'image', fullPath: '/cars/3.jpg', isPublished: null }
+    ]
+
+    render(<ManyToManyRelationGrid { ...gridProps({ value: mixedValue }) } />)
+
+    const { data, getRowClassName } = lastGridProps()
+
+    expect(data.map((row: any) => getRowClassName(row))).toEqual(['unpublished-row', undefined, undefined])
   })
 })
