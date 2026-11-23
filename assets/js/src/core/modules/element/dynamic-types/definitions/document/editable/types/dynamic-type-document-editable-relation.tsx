@@ -71,7 +71,7 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
       id: value.id,
       type: value.elementType,
       fullPath: value.path,
-      subtype: value.subType
+      subtype: value.subtype
     }
   }
 }
