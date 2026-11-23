@@ -302,11 +302,8 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
     setOpenedDefinitionKey(undefined)
   }
 
-  const handleDefinitionSaved = (): void => {
-    setDefinitionModalOpen(false)
-    setDefinitionKeyId(undefined)
-    setOpenedDefinitionKey(undefined)
-  }
+  // Saving closes the dialog and clears the same state, so the two stay one implementation.
+  const handleDefinitionSaved = handleCloseDefinition
 
   const handleDelete = (key: ClassificationStoreConfigurationKeyDetail): void => {
     void modal.confirm({
