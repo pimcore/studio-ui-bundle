@@ -61,13 +61,16 @@ export const getTabTokens = (token): TabsToken => {
   return tabTokens
 }
 
+const insetTop = 8
+const insetBottom = 12
+
 export const useStyles = createStyles(({ token, css }) => {
   const tabToken = getTabTokens(token)
 
   return {
     widgetManager: css`
         position: absolute;
-        inset: 8px 6px 12px 6px;
+        inset: ${insetTop}px 6px ${insetBottom}px 6px;
   
         .flexlayout__layout {
           overflow: visible;
@@ -162,7 +165,8 @@ export const useStyles = createStyles(({ token, css }) => {
         }
   
         .flexlayout__border_inner_tab_container {
-          width: calc(100svh - 12px);
+          // Exactly the side bar length, longer makes FlexLayout scroll buttons that fit.
+          width: calc(100svh - ${insetTop + insetBottom}px);
           justify-content: flex-end;
           gap: 2px;
         }

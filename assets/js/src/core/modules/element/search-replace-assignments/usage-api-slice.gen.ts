@@ -6,14 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            elementUsageReplace: build.mutation<ElementUsageReplaceApiResponse, ElementUsageReplaceApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/elements/usage/replace/${queryArg.elementType}/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Elements"],
-            }),
             elementGetUsage: build.query<ElementGetUsageApiResponse, ElementGetUsageApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/usage/${queryArg.elementType}/${queryArg.id}`,
@@ -26,25 +18,18 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementUsageReplace: build.mutation<ElementUsageReplaceApiResponse, ElementUsageReplaceApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/usage/replace/${queryArg.elementType}/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Elements"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ElementUsageReplaceApiResponse = /** status 200 Id of the created job run */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
-export type ElementUsageReplaceApiArg = {
-    /** Id of the element */
-    id: number;
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-    body: {
-        targetType?: "data-object" | "object" | "asset" | "document";
-        targetId?: number;
-        elements?: ElementUsageBaseItem[];
-    };
-};
 export type ElementGetUsageApiResponse = /** status 200 Where the element is referenced */ ElementUsage;
 export type ElementGetUsageApiArg = {
     /** Id of the element */
@@ -60,15 +45,20 @@ export type ElementGetUsageApiArg = {
     /** Sort by field. */
     sortBy?: "id" | "path" | "type";
 };
-export type Error = {
-    /** Message */
-    message: string;
+export type ElementUsageReplaceApiResponse = /** status 200 Id of the created job run */ {
+    /** ID of created jobRun */
+    jobRunId: number;
 };
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
+export type ElementUsageReplaceApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    body: {
+        targetType?: "data-object" | "object" | "asset" | "document";
+        targetId?: number;
+        elements?: ElementUsageBaseItem[];
+    };
 };
 export type ElementUsageBaseItem = {
     /** ID */
@@ -100,4 +90,14 @@ export type ElementUsage = {
     /** totalCount */
     totalCount?: number;
 };
-export const { useElementUsageReplaceMutation, useElementGetUsageQuery } = injectedRtkApi;
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export const { useElementGetUsageQuery, useElementUsageReplaceMutation } = injectedRtkApi;

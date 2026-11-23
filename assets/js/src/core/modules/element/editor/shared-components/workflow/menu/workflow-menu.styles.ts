@@ -21,6 +21,7 @@ export const useStyles = createStyles(({ css, token }) => {
 
       .ant-dropdown-menu-item-group-title {
         padding-left: ${token.padding}px !important;
+        text-transform: uppercase;
       }
 
       .ant-dropdown-menu-item-group-list {

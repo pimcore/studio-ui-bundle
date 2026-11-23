@@ -72,3 +72,21 @@ describe('useGridOptions().transformGridColumn', () => {
     expect(transformGridColumn(column('name', ['fields'], 'input'), false).size).toBeUndefined()
   })
 })
+
+describe('useGridOptions().getDefaultVisibleFieldDefinitions', () => {
+  // The default columns are sent as-is to POST /data-objects/grid/{classId} whenever the
+  // relation's grid columns cannot be loaded (e.g. while the editor reloads or in a version
+  // preview). The backend needs a type, group and config for every column - without them the
+  // request failed and the editor showed an error modal (PEES-1995).
+  it('returns default visible fields that are valid grid columns', () => {
+    const { result } = renderHook(() => useGridOptions())
+
+    const columns = result.current.getDefaultVisibleFieldDefinitions()
+
+    expect(columns.map(({ key, type, group, config }) => ({ key, type, group, config }))).toEqual([
+      { key: 'id', type: 'system.id', group: ['system'], config: [] },
+      { key: 'fullpath', type: 'system.string', group: ['system'], config: [] },
+      { key: 'classname', type: 'system.string', group: ['system'], config: [] }
+    ])
+  })
+})

@@ -403,12 +403,9 @@ export interface ClassificationStoreConfigurationKeyCollectionApiResponse {
  * every other reader sends what it always sent. Shadowed because the generated body type predates
  * the parameter, and gone with the next regeneration.
  */
-export interface ClassificationStoreConfigurationKeyCollectionApiArg {
-  storeId: number
-  body: GeneratedKeyCollectionApiArg['body'] & {
-    excludeKeysOfGroupId?: number
-  }
-}
+// `excludeKeysOfGroupId` used to be added here because the generated argument did not carry it.
+// The endpoint declares it now, so the generated type is the whole contract.
+export type ClassificationStoreConfigurationKeyCollectionApiArg = GeneratedKeyCollectionApiArg
 
 export interface ClassificationStoreConfigurationKeyUpdateApiArg {
   /** Id of the key configuration */
@@ -1030,9 +1027,10 @@ const api = baseApi.enhanceEndpoints({
     classificationStoreConfigurationKeyCollection: {
       // A page read for a group's picker carries that group's tag; an unnarrowed page cannot change
       providesTags: (result, error, args) => {
-        const groupId = (args as ClassificationStoreConfigurationKeyCollectionApiArg).body?.excludeKeysOfGroupId
+        const groupId = args.body?.excludeKeysOfGroupId
 
-        return groupId === undefined
+        // the endpoint declares it nullable, and a null narrows nothing just as an absent one does
+        return groupId === undefined || groupId === null
           ? ['Classification Store']
           : ['Classification Store', { type: AVAILABLE_KEYS_TAG, id: groupId }]
       },

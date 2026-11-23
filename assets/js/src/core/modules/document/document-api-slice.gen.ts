@@ -6,10 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            documentPatchById: build.mutation<DocumentPatchByIdApiResponse, DocumentPatchByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/documents`, method: "PATCH", body: queryArg.body }),
-                invalidatesTags: ["Documents"],
-            }),
             documentAdd: build.mutation<DocumentAddApiResponse, DocumentAddApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/add/${queryArg.parentId}`,
@@ -26,14 +22,20 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
-            documentDocTypeList: build.query<DocumentDocTypeListApiResponse, DocumentDocTypeListApiArg>({
+            documentClone: build.mutation<DocumentCloneApiResponse, DocumentCloneApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/doc-types`,
-                    params: {
-                        type: queryArg["type"],
-                    },
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/clone/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.documentCloneParameters,
                 }),
-                providesTags: ["Documents"],
+                invalidatesTags: ["Documents"],
+            }),
+            documentConvert: build.mutation<DocumentConvertApiResponse, DocumentConvertApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/convert/${queryArg["type"]}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Documents"],
             }),
             documentDocTypeAdd: build.mutation<DocumentDocTypeAddApiResponse, DocumentDocTypeAddApiArg>({
                 query: (queryArg) => ({
@@ -42,10 +44,6 @@ const injectedRtkApi = api
                     body: queryArg.docTypeAddParameters,
                 }),
                 invalidatesTags: ["Documents"],
-            }),
-            documentDocTypeTypeList: build.query<DocumentDocTypeTypeListApiResponse, DocumentDocTypeTypeListApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/documents/doc-types/types` }),
-                providesTags: ["Documents"],
             }),
             documentDocTypeUpdateById: build.mutation<
                 DocumentDocTypeUpdateByIdApiResponse,
@@ -65,6 +63,53 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
+            documentDocTypeTypeList: build.query<DocumentDocTypeTypeListApiResponse, DocumentDocTypeTypeListApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/documents/doc-types/types` }),
+                providesTags: ["Documents"],
+            }),
+            documentDocTypeList: build.query<DocumentDocTypeListApiResponse, DocumentDocTypeListApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types`,
+                    params: {
+                        type: queryArg["type"],
+                    },
+                }),
+                providesTags: ["Documents"],
+            }),
+            documentGetTypes: build.query<DocumentGetTypesApiResponse, DocumentGetTypesApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/documents/types` }),
+                providesTags: ["Documents"],
+            }),
+            documentGetById: build.query<DocumentGetByIdApiResponse, DocumentGetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}` }),
+                providesTags: ["Documents"],
+            }),
+            documentUpdateById: build.mutation<DocumentUpdateByIdApiResponse, DocumentUpdateByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentPageCheckPrettyUrl: build.mutation<
+                DocumentPageCheckPrettyUrlApiResponse,
+                DocumentPageCheckPrettyUrlApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/page/check-pretty-url`,
+                    method: "POST",
+                    body: queryArg.checkPrettyUrl,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentPageStreamPreview: build.query<
+                DocumentPageStreamPreviewApiResponse,
+                DocumentPageStreamPreviewApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}/page/stream/preview` }),
+                providesTags: ["Documents"],
+            }),
             documentAvailableControllersList: build.query<
                 DocumentAvailableControllersListApiResponse,
                 DocumentAvailableControllersListApiArg
@@ -79,6 +124,17 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/documents/get-available-templates` }),
                 providesTags: ["Documents"],
             }),
+            documentPageSnippetChangeMainDocument: build.mutation<
+                DocumentPageSnippetChangeMainDocumentApiResponse,
+                DocumentPageSnippetChangeMainDocumentApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/page-snippet/change-main-document`,
+                    method: "PUT",
+                    body: queryArg.changeMainDocument,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
             documentPageSnippetAreaBlockRender: build.query<
                 DocumentPageSnippetAreaBlockRenderApiResponse,
                 DocumentPageSnippetAreaBlockRenderApiArg
@@ -89,6 +145,10 @@ const injectedRtkApi = api
                     body: queryArg.body,
                 }),
                 providesTags: ["Documents"],
+            }),
+            documentPatchById: build.mutation<DocumentPatchByIdApiResponse, DocumentPatchByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents`, method: "PATCH", body: queryArg.body }),
+                invalidatesTags: ["Documents"],
             }),
             documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
                 query: (queryArg) => ({
@@ -103,20 +163,11 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Documents"],
             }),
-            documentGetSite: build.query<DocumentGetSiteApiResponse, DocumentGetSiteApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.documentId}` }),
-                providesTags: ["Documents"],
-            }),
-            documentUpdateSite: build.mutation<DocumentUpdateSiteApiResponse, DocumentUpdateSiteApiArg>({
+            documentReplaceContent: build.mutation<DocumentReplaceContentApiResponse, DocumentReplaceContentApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/site/${queryArg.id}`,
+                    url: `/pimcore-studio/api/documents/${queryArg.sourceId}/replace/${queryArg.targetId}`,
                     method: "POST",
-                    body: queryArg.updateSite,
                 }),
-                invalidatesTags: ["Documents"],
-            }),
-            documentDeleteSite: build.mutation<DocumentDeleteSiteApiResponse, DocumentDeleteSiteApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Documents"],
             }),
             documentsListAvailableSites: build.query<
@@ -131,8 +182,20 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Documents"],
             }),
-            documentGetTranslations: build.query<DocumentGetTranslationsApiResponse, DocumentGetTranslationsApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/translations/${queryArg.id}` }),
+            documentUpdateSite: build.mutation<DocumentUpdateSiteApiResponse, DocumentUpdateSiteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/site/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.updateSite,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDeleteSite: build.mutation<DocumentDeleteSiteApiResponse, DocumentDeleteSiteApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentGetSite: build.query<DocumentGetSiteApiResponse, DocumentGetSiteApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.documentId}` }),
                 providesTags: ["Documents"],
             }),
             documentAddTranslation: build.mutation<DocumentAddTranslationApiResponse, DocumentAddTranslationApiArg>({
@@ -151,6 +214,10 @@ const injectedRtkApi = api
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Documents"],
+            }),
+            documentGetTranslations: build.query<DocumentGetTranslationsApiResponse, DocumentGetTranslationsApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/translations/${queryArg.id}` }),
+                providesTags: ["Documents"],
             }),
             documentGetTranslationParentByLanguage: build.query<
                 DocumentGetTranslationParentByLanguageApiResponse,
@@ -178,95 +245,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Documents"],
             }),
-            documentGetTypes: build.query<DocumentGetTypesApiResponse, DocumentGetTypesApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/documents/types` }),
-                providesTags: ["Documents"],
-            }),
-            documentGetById: build.query<DocumentGetByIdApiResponse, DocumentGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}` }),
-                providesTags: ["Documents"],
-            }),
-            documentUpdateById: build.mutation<DocumentUpdateByIdApiResponse, DocumentUpdateByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Documents"],
-            }),
-            documentClone: build.mutation<DocumentCloneApiResponse, DocumentCloneApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/${queryArg.id}/clone/${queryArg.parentId}`,
-                    method: "POST",
-                    body: queryArg.documentCloneParameters,
-                }),
-                invalidatesTags: ["Documents"],
-            }),
-            documentConvert: build.mutation<DocumentConvertApiResponse, DocumentConvertApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/${queryArg.id}/convert/${queryArg["type"]}`,
-                    method: "POST",
-                }),
-                invalidatesTags: ["Documents"],
-            }),
-            documentPageSnippetChangeMainDocument: build.mutation<
-                DocumentPageSnippetChangeMainDocumentApiResponse,
-                DocumentPageSnippetChangeMainDocumentApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/${queryArg.id}/page-snippet/change-main-document`,
-                    method: "PUT",
-                    body: queryArg.changeMainDocument,
-                }),
-                invalidatesTags: ["Documents"],
-            }),
-            documentPageCheckPrettyUrl: build.mutation<
-                DocumentPageCheckPrettyUrlApiResponse,
-                DocumentPageCheckPrettyUrlApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/${queryArg.id}/page/check-pretty-url`,
-                    method: "POST",
-                    body: queryArg.checkPrettyUrl,
-                }),
-                invalidatesTags: ["Documents"],
-            }),
-            documentPageStreamPreview: build.query<
-                DocumentPageStreamPreviewApiResponse,
-                DocumentPageStreamPreviewApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}/page/stream/preview` }),
-                providesTags: ["Documents"],
-            }),
-            documentReplaceContent: build.mutation<DocumentReplaceContentApiResponse, DocumentReplaceContentApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/${queryArg.sourceId}/replace/${queryArg.targetId}`,
-                    method: "POST",
-                }),
-                invalidatesTags: ["Documents"],
-            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type DocumentPatchByIdApiResponse =
-    /** status 201 Successfully created jobRun for patching multiple documents */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
-export type DocumentPatchByIdApiArg = {
-    body: {
-        data: {
-            /** Document ID */
-            id: number;
-            parentId?: number | null;
-            index?: number | null;
-            key?: string | null;
-            locked?: string | null;
-            published?: boolean | null;
-        }[];
-    };
-};
 export type DocumentAddApiResponse = /** status 200 ID of added document */ {
     /** ID of created document element */
     id: number;
@@ -286,21 +268,29 @@ export type DocumentBatchDeleteApiArg = {
         ids?: number[];
     };
 };
-export type DocumentDocTypeListApiResponse = /** status 200 List of all DocTypes */ {
-    items: DocType[];
+export type DocumentCloneApiResponse =
+    /** status 201 Successfully copied parent document and created <strong>jobRun</strong> for copying children */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DocumentCloneApiArg = {
+    /** Id of the document */
+    id: number;
+    /** ParentId of the document */
+    parentId: number;
+    documentCloneParameters: DocumentCloneParameters;
 };
-export type DocumentDocTypeListApiArg = {
-    /** Filter results by docType type */
-    type?: string;
+export type DocumentConvertApiResponse = unknown;
+export type DocumentConvertApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Document type to convert to */
+    type: string;
 };
 export type DocumentDocTypeAddApiResponse = /** status 200 New DocType data as JSON */ DocType;
 export type DocumentDocTypeAddApiArg = {
     docTypeAddParameters: DocTypeAdd;
 };
-export type DocumentDocTypeTypeListApiResponse = /** status 200 List of available DocType types */ {
-    items: DocTypeType[];
-};
-export type DocumentDocTypeTypeListApiArg = void;
 export type DocumentDocTypeUpdateByIdApiResponse = /** status 200 Successfully updated DocType */ DocType;
 export type DocumentDocTypeUpdateByIdApiArg = {
     /** The Id of the DocType to update */
@@ -312,6 +302,63 @@ export type DocumentDocTypeDeleteApiArg = {
     /** The Id of the DocType to delete */
     id: string;
 };
+export type DocumentDocTypeTypeListApiResponse = /** status 200 List of available DocType types */ {
+    items: DocTypeType[];
+};
+export type DocumentDocTypeTypeListApiArg = void;
+export type DocumentDocTypeListApiResponse = /** status 200 List of all DocTypes */ {
+    items: DocType[];
+};
+export type DocumentDocTypeListApiArg = {
+    /** Filter results by docType type */
+    type?: string;
+};
+export type DocumentGetTypesApiResponse = /** status 200 Successfully retrieved all available document types */ {
+    totalItems: number;
+    items: DocumentType[];
+};
+export type DocumentGetTypesApiArg = void;
+export type DocumentGetByIdApiResponse =
+    /** status 200 Successfully retrieved document data as JSON */ DocumentDetailData;
+export type DocumentGetByIdApiArg = {
+    /** Id of the document */
+    id: number;
+};
+export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */ DocumentDetailData;
+export type DocumentUpdateByIdApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        data: {
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            /** Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
+            coauthor?: string;
+            locked?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
+            settingsData?: object | null;
+            missingRequiredEditable?: boolean | null;
+            appendEditables?: boolean | null;
+            properties?: UpdateDataProperty[] | null;
+        };
+    };
+};
+export type DocumentPageCheckPrettyUrlApiResponse = unknown;
+export type DocumentPageCheckPrettyUrlApiArg = {
+    /** Id of the document */
+    id: number;
+    checkPrettyUrl: CheckPrettyUrl;
+};
+export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview stream */ Blob;
+export type DocumentPageStreamPreviewApiArg = {
+    /** Id of the page */
+    id: number;
+};
 export type DocumentAvailableControllersListApiResponse =
     /** status 200 document_available_controllers_list_success_response */ {
         items: DocumentController[];
@@ -322,6 +369,12 @@ export type DocumentAvailableTemplatesListApiResponse =
         items: DocumentTemplate[];
     };
 export type DocumentAvailableTemplatesListApiArg = void;
+export type DocumentPageSnippetChangeMainDocumentApiResponse = unknown;
+export type DocumentPageSnippetChangeMainDocumentApiArg = {
+    /** Id of the document */
+    id: number;
+    changeMainDocument: ChangeMainDocument;
+};
 export type DocumentPageSnippetAreaBlockRenderApiResponse =
     /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
 export type DocumentPageSnippetAreaBlockRenderApiArg = {
@@ -334,6 +387,24 @@ export type DocumentPageSnippetAreaBlockRenderApiArg = {
         blockStateStack: object | null;
         areaBlockConfig?: object | null;
         areaBlockData?: object | null;
+    };
+};
+export type DocumentPatchByIdApiResponse =
+    /** status 201 Successfully created jobRun for patching multiple documents */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DocumentPatchByIdApiArg = {
+    body: {
+        data: {
+            /** Document ID */
+            id: number;
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            published?: boolean | null;
+        }[];
     };
 };
 export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
@@ -349,10 +420,19 @@ export type DocumentRenderletRenderApiArg = {
     /** Renderlet template */
     template?: string;
 };
-export type DocumentGetSiteApiResponse = /** status 200 Site detail data */ SiteDetailData;
-export type DocumentGetSiteApiArg = {
-    /** DocumentId of the document */
-    documentId: number;
+export type DocumentReplaceContentApiResponse = unknown;
+export type DocumentReplaceContentApiArg = {
+    /** SourceId of the document */
+    sourceId: number;
+    /** TargetId of the document */
+    targetId: number;
+};
+export type DocumentsListAvailableSitesApiResponse = /** status 200 List of available sites */ {
+    items: Site[];
+};
+export type DocumentsListAvailableSitesApiArg = {
+    /** Exclude main site from the list */
+    excludeMainSite?: boolean;
 };
 export type DocumentUpdateSiteApiResponse = unknown;
 export type DocumentUpdateSiteApiArg = {
@@ -365,18 +445,10 @@ export type DocumentDeleteSiteApiArg = {
     /** Id of the document */
     id: number;
 };
-export type DocumentsListAvailableSitesApiResponse = /** status 200 List of available sites */ {
-    items: Site[];
-};
-export type DocumentsListAvailableSitesApiArg = {
-    /** Exclude main site from the list */
-    excludeMainSite?: boolean;
-};
-export type DocumentGetTranslationsApiResponse =
-    /** status 200 Get all existing translations */ DocumentTranslationLinks;
-export type DocumentGetTranslationsApiArg = {
-    /** Id of the document */
-    id: number;
+export type DocumentGetSiteApiResponse = /** status 200 Site detail data */ SiteDetailData;
+export type DocumentGetSiteApiArg = {
+    /** DocumentId of the document */
+    documentId: number;
 };
 export type DocumentAddTranslationApiResponse = unknown;
 export type DocumentAddTranslationApiArg = {
@@ -391,6 +463,12 @@ export type DocumentDeleteTranslationApiArg = {
     id: number;
     /** TranslationId of the document */
     translationId: number;
+};
+export type DocumentGetTranslationsApiResponse =
+    /** status 200 Get all existing translations */ DocumentTranslationLinks;
+export type DocumentGetTranslationsApiArg = {
+    /** Id of the document */
+    id: number;
 };
 export type DocumentGetTranslationParentByLanguageApiResponse =
     /** status 200 Parent translation document data */ DocumentTranslationParent;
@@ -425,84 +503,6 @@ export type DocumentGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
-export type DocumentGetTypesApiResponse = /** status 200 Successfully retrieved all available document types */ {
-    totalItems: number;
-    items: DocumentType[];
-};
-export type DocumentGetTypesApiArg = void;
-export type DocumentGetByIdApiResponse =
-    /** status 200 Successfully retrieved document data as JSON */ DocumentDetailData;
-export type DocumentGetByIdApiArg = {
-    /** Id of the document */
-    id: number;
-};
-export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */ DocumentDetailData;
-export type DocumentUpdateByIdApiArg = {
-    /** Id of the document */
-    id: number;
-    body: {
-        data: {
-            parentId?: number | null;
-            index?: number | null;
-            key?: string | null;
-            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
-            /** Optional coauthor type stored on versions created by this save */
-            coauthorType?: string;
-            /** Optional coauthor identifier stored on versions created by this save */
-            coauthor?: string;
-            locked?: string | null;
-            published?: boolean | null;
-            editableData?: object | null;
-            settingsData?: object | null;
-            missingRequiredEditable?: boolean | null;
-            appendEditables?: boolean | null;
-            properties?: UpdateDataProperty[] | null;
-        };
-    };
-};
-export type DocumentCloneApiResponse =
-    /** status 201 Successfully copied parent document and created <strong>jobRun</strong> for copying children */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
-export type DocumentCloneApiArg = {
-    /** Id of the document */
-    id: number;
-    /** ParentId of the document */
-    parentId: number;
-    documentCloneParameters: DocumentCloneParameters;
-};
-export type DocumentConvertApiResponse = unknown;
-export type DocumentConvertApiArg = {
-    /** Id of the document */
-    id: number;
-    /** Document type to convert to */
-    type: string;
-};
-export type DocumentPageSnippetChangeMainDocumentApiResponse = unknown;
-export type DocumentPageSnippetChangeMainDocumentApiArg = {
-    /** Id of the document */
-    id: number;
-    changeMainDocument: ChangeMainDocument;
-};
-export type DocumentPageCheckPrettyUrlApiResponse = unknown;
-export type DocumentPageCheckPrettyUrlApiArg = {
-    /** Id of the document */
-    id: number;
-    checkPrettyUrl: CheckPrettyUrl;
-};
-export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview stream */ Blob;
-export type DocumentPageStreamPreviewApiArg = {
-    /** Id of the page */
-    id: number;
-};
-export type DocumentReplaceContentApiResponse = unknown;
-export type DocumentReplaceContentApiArg = {
-    /** SourceId of the document */
-    sourceId: number;
-    /** TargetId of the document */
-    targetId: number;
-};
 export type Error = {
     /** Message */
     message: string;
@@ -532,6 +532,16 @@ export type DocumentAdd = {
     language: string | null;
     /** Id of the base document for content */
     inheritanceSourceId: number | null;
+};
+export type DocumentCloneParameters = {
+    /** Language for the new translation */
+    language: string | null;
+    /** Enable Inheritance */
+    enableInheritance: boolean;
+    /** Recursive */
+    recursive: boolean;
+    /** Update References */
+    updateReferences: boolean;
 };
 export type DocType = {
     /** AdditionalAttributes */
@@ -567,6 +577,22 @@ export type DocTypeAdd = {
     /** Type */
     type: string;
 };
+export type DocTypeUpdate = {
+    /** Name */
+    name: string;
+    /** Type */
+    type: string;
+    /** Group */
+    group: string | null;
+    /** Controller */
+    controller: string | null;
+    /** Template */
+    template: string | null;
+    /** Priority */
+    priority: number;
+    /** Static generator enabled */
+    staticGeneratorEnabled: boolean;
+};
 export type DocTypeType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -589,139 +615,13 @@ export type DocTypeType = {
     /** Only printable children */
     onlyPrintableChildren?: boolean;
 };
-export type DocTypeUpdate = {
-    /** Name */
-    name: string;
-    /** Type */
-    type: string;
-    /** Group */
-    group: string | null;
-    /** Controller */
-    controller: string | null;
-    /** Template */
-    template: string | null;
-    /** Priority */
-    priority: number;
-    /** Static generator enabled */
-    staticGeneratorEnabled: boolean;
-};
-export type DocumentController = {
+export type DocumentType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** Name */
-    name: string;
-};
-export type DocumentTemplate = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Path */
-    path: string;
-};
-export type AreaBlockRenderDataForEditmode = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Dynamic array of editable definitions */
-    editableDefinitions: object[];
-    /** HTML code of the snippet */
-    htmlCode: string;
-};
-export type RelatedElementData = {
-    /** ID */
-    id: number;
-    /** Type of the element */
-    type: string;
-    /** Subtype of the element */
-    subtype: string;
-    /** Full path of the element */
-    fullPath: string;
-    /** Is the element published */
-    isPublished: boolean | null;
-    /** Whether the current user is allowed to view the element */
-    hasViewAccess: boolean;
-};
-export type SiteDetailData = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID */
-    id: number;
-    /** Creation Date */
-    creationDate: number | null;
-    /** Modification Date */
-    modificationDate: number | null;
-    /** Main domain */
-    mainDomain: string;
-    /** Domains */
-    domains: string[];
-    /** Data of error document */
-    errorDocument: RelatedElementData | null;
-    /** Localized error documents mapped by locale */
-    localizedErrorDocuments: {
-        [key: string]: RelatedElementData;
-    };
-    /** Redirect to main domain */
-    redirectToMainDomain: boolean;
-};
-export type UpdateSite = {
-    /** Main domain */
-    mainDomain: string;
-    /** Domains */
-    domains: string[];
-    /** Error document */
-    errorDocument: string;
-    /** Localized error documents */
-    localizedErrorDocuments: object;
-    /** Redirect to main domain */
-    redirectToMainDomain: boolean;
-};
-export type Site = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID */
-    id: number;
-    /** Domains */
-    domains: string[];
-    /** Domain */
-    domain: string;
-    /** ID of the root */
-    rootId: number | null;
-    /** Root path */
-    rootPath: string | null;
-};
-export type DocumentTranslationLink = {
-    /** Language */
-    language: string;
-    /** Document Id */
-    documentId: number;
-};
-export type DocumentTranslationLinks = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Language */
-    language: string;
-    /** Translation links */
-    translationLinks?: DocumentTranslationLink[];
-};
-export type DocumentTranslationParent = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Document Id */
-    id: number;
-    /** Document full path */
-    fullPath: string;
+    /** key */
+    key: string;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -765,6 +665,20 @@ export type CustomAttributes = {
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
+export type WorkflowStatus = {
+    /** color */
+    color: string;
+    /** colorInverted */
+    colorInverted: boolean;
+    /** borderColor */
+    title: string;
+    /** label */
+    label: string;
+    /** layoutId */
+    layoutId: string | null;
+    /** visibleInDetail */
+    visibleInDetail: boolean;
+};
 export type Permissions = {
     /** List */
     list: boolean;
@@ -798,6 +712,8 @@ export type Document = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
+    /** Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders */
+    workflowStates?: WorkflowStatus[] | null;
     /** Full path */
     fullPath: string;
     /** Published */
@@ -817,14 +733,6 @@ export type Document = Element & {
     isSite: boolean;
     /** Exclude document from navigation */
     navigationExclude: boolean;
-};
-export type DocumentType = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** key */
-    key: string;
 };
 export type PageSnippetDraftData = {
     /** ID */
@@ -893,53 +801,161 @@ export type UpdateDataProperty = {
     /** inheritable */
     inheritable: boolean;
 };
-export type DocumentCloneParameters = {
-    /** Language for the new translation */
-    language: string | null;
-    /** Enable Inheritance */
-    enableInheritance: boolean;
-    /** Recursive */
-    recursive: boolean;
-    /** Update References */
-    updateReferences: boolean;
+export type CheckPrettyUrl = {
+    /** Pretty URL to check */
+    prettyUrl: string;
+};
+export type DocumentController = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+};
+export type DocumentTemplate = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Path */
+    path: string;
 };
 export type ChangeMainDocument = {
     /** Main document path */
     mainDocumentPath: string | null;
 };
-export type CheckPrettyUrl = {
-    /** Pretty URL to check */
-    prettyUrl: string;
+export type AreaBlockRenderDataForEditmode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Dynamic array of editable definitions */
+    editableDefinitions: object[];
+    /** HTML code of the snippet */
+    htmlCode: string;
+};
+export type Site = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Domains */
+    domains: string[];
+    /** Domain */
+    domain: string;
+    /** ID of the root */
+    rootId: number | null;
+    /** Root path */
+    rootPath: string | null;
+};
+export type UpdateSite = {
+    /** Main domain */
+    mainDomain: string;
+    /** Domains */
+    domains: string[];
+    /** Error document */
+    errorDocument: string;
+    /** Localized error documents */
+    localizedErrorDocuments: object;
+    /** Redirect to main domain */
+    redirectToMainDomain: boolean;
+};
+export type RelatedElementData = {
+    /** ID */
+    id: number;
+    /** Type of the element */
+    type: string;
+    /** Subtype of the element */
+    subtype: string;
+    /** Full path of the element */
+    fullPath: string;
+    /** Is the element published */
+    isPublished: boolean | null;
+    /** Whether the current user is allowed to view the element */
+    hasViewAccess: boolean;
+};
+export type SiteDetailData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Creation Date */
+    creationDate: number | null;
+    /** Modification Date */
+    modificationDate: number | null;
+    /** Main domain */
+    mainDomain: string;
+    /** Domains */
+    domains: string[];
+    /** Data of error document */
+    errorDocument: RelatedElementData | null;
+    /** Localized error documents mapped by locale */
+    localizedErrorDocuments: {
+        [key: string]: RelatedElementData;
+    };
+    /** Redirect to main domain */
+    redirectToMainDomain: boolean;
+};
+export type DocumentTranslationLink = {
+    /** Language */
+    language: string;
+    /** Document Id */
+    documentId: number;
+};
+export type DocumentTranslationLinks = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Language */
+    language: string;
+    /** Translation links */
+    translationLinks?: DocumentTranslationLink[];
+};
+export type DocumentTranslationParent = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Document Id */
+    id: number;
+    /** Document full path */
+    fullPath: string;
 };
 export const {
-    useDocumentPatchByIdMutation,
     useDocumentAddMutation,
     useDocumentBatchDeleteMutation,
-    useDocumentDocTypeListQuery,
+    useDocumentCloneMutation,
+    useDocumentConvertMutation,
     useDocumentDocTypeAddMutation,
-    useDocumentDocTypeTypeListQuery,
     useDocumentDocTypeUpdateByIdMutation,
     useDocumentDocTypeDeleteMutation,
-    useDocumentAvailableControllersListQuery,
-    useDocumentAvailableTemplatesListQuery,
-    useDocumentPageSnippetAreaBlockRenderQuery,
-    useDocumentRenderletRenderQuery,
-    useDocumentGetSiteQuery,
-    useDocumentUpdateSiteMutation,
-    useDocumentDeleteSiteMutation,
-    useDocumentsListAvailableSitesQuery,
-    useDocumentGetTranslationsQuery,
-    useDocumentAddTranslationMutation,
-    useDocumentDeleteTranslationMutation,
-    useDocumentGetTranslationParentByLanguageQuery,
-    useDocumentGetTreeQuery,
+    useDocumentDocTypeTypeListQuery,
+    useDocumentDocTypeListQuery,
     useDocumentGetTypesQuery,
     useDocumentGetByIdQuery,
     useDocumentUpdateByIdMutation,
-    useDocumentCloneMutation,
-    useDocumentConvertMutation,
-    useDocumentPageSnippetChangeMainDocumentMutation,
     useDocumentPageCheckPrettyUrlMutation,
     useDocumentPageStreamPreviewQuery,
+    useDocumentAvailableControllersListQuery,
+    useDocumentAvailableTemplatesListQuery,
+    useDocumentPageSnippetChangeMainDocumentMutation,
+    useDocumentPageSnippetAreaBlockRenderQuery,
+    useDocumentPatchByIdMutation,
+    useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
+    useDocumentsListAvailableSitesQuery,
+    useDocumentUpdateSiteMutation,
+    useDocumentDeleteSiteMutation,
+    useDocumentGetSiteQuery,
+    useDocumentAddTranslationMutation,
+    useDocumentDeleteTranslationMutation,
+    useDocumentGetTranslationsQuery,
+    useDocumentGetTranslationParentByLanguageQuery,
+    useDocumentGetTreeQuery,
 } = injectedRtkApi;

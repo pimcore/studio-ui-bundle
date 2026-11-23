@@ -6,10 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            telemetryOutboxNextBatch: build.query<TelemetryOutboxNextBatchApiResponse, TelemetryOutboxNextBatchApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/telemetry/outbox` }),
-                providesTags: ["Telemetry"],
-            }),
             telemetryOutboxAck: build.mutation<TelemetryOutboxAckApiResponse, TelemetryOutboxAckApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/telemetry/outbox/ack`,
@@ -18,17 +14,43 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Telemetry"],
             }),
+            telemetryOutboxNextBatch: build.query<TelemetryOutboxNextBatchApiResponse, TelemetryOutboxNextBatchApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/telemetry/outbox` }),
+                providesTags: ["Telemetry"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type TelemetryOutboxNextBatchApiResponse =
-    /** status 200 Next encrypted telemetry batch ready to forward to the relay */ TelemetryOutboxBatch;
-export type TelemetryOutboxNextBatchApiArg = void;
 export type TelemetryOutboxAckApiResponse =
     /** status 200 Number of spooled events removed from the outbox */ TelemetryOutboxAckResult;
 export type TelemetryOutboxAckApiArg = {
     telemetryOutboxAckParameters: TelemetryOutboxAckParameters;
+};
+export type TelemetryOutboxNextBatchApiResponse =
+    /** status 200 Next encrypted telemetry batch ready to forward to the relay */ TelemetryOutboxBatch;
+export type TelemetryOutboxNextBatchApiArg = void;
+export type TelemetryOutboxAckResult = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Number of spooled events removed from the outbox by the ack */
+    acked: number;
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export type TelemetryOutboxAckParameters = {
+    /** Lease nonce of the batch the relay has accepted */
+    nonce: string;
 };
 export type TelemetryOutboxBatch = {
     /** AdditionalAttributes */
@@ -46,26 +68,4 @@ export type TelemetryOutboxBatch = {
     /** Relay endpoint the browser must POST the ciphertext to */
     relayEndpoint: string;
 };
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
-export type TelemetryOutboxAckResult = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Number of spooled events removed from the outbox by the ack */
-    acked: number;
-};
-export type TelemetryOutboxAckParameters = {
-    /** Lease nonce of the batch the relay has accepted */
-    nonce: string;
-};
-export const { useTelemetryOutboxNextBatchQuery, useTelemetryOutboxAckMutation } = injectedRtkApi;
+export const { useTelemetryOutboxAckMutation, useTelemetryOutboxNextBatchQuery } = injectedRtkApi;

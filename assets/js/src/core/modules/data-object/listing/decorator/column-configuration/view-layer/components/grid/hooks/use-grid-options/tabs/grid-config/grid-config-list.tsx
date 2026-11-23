@@ -8,9 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, type ReactNode } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
-import { Empty } from 'antd'
+import { ConfigProvider, Empty } from 'antd'
+import { SettingsContext } from '@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/tabs/grid-config/povider/settings/settings-provider'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
 import { uuid } from '@Pimcore/utils/uuid'
@@ -57,6 +58,8 @@ export interface GridConfigListProps {
 
 export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: GridConfigListProps): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
+  // optional: the list and the modal also render outside a column configuration's settings
+  const readOnly = useContext(SettingsContext)?.readOnly === true
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const prevColumnKeysRef = useRef<string[]>([])
@@ -145,17 +148,23 @@ export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: Gr
     }
   }), [columns, advancedColumnTemplate, sourceFieldTypes, previewEnabled, onExpandPipelineItem, focusedPipelineItem])
 
+  // read-only: the columns without remove, convert, language or drag
+  const shownItems = readOnly ? stackListItems.map((item) => ({ ...item, sortable: false, renderRightToolbar: undefined })) : stackListItems
+
   return (
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
         <div ref={ containerRef }>
           <SimpleColumnPreviewsProvider columns={ columns }>
-            <StackList
-              items={ stackListItems }
-              onItemsChange={ onItemsChange }
-              sortable
-            />
+            { /* read-only: an advanced column's pipeline shows its settings with every control disabled */ }
+            <ConfigProvider componentDisabled={ readOnly ? true : undefined }>
+              <StackList
+                items={ shownItems }
+                onItemsChange={ onItemsChange }
+                sortable={ !readOnly }
+              />
+            </ConfigProvider>
           </SimpleColumnPreviewsProvider>
         </div>
       ) }

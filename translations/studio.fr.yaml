@@ -144,6 +144,7 @@ areablock.paste: Coller
 areablock.cut: Couper
 areablock.settings: Paramètres
 areablock.delete: Supprimer
+areablock.type-limit-reached: Le nombre maximum de blocs de ce type a été atteint.
 document.highlight-editables: Mettre en évidence les modifiables
 document.link.target: Cible du lien
 document.hardlink.source: Document source
@@ -1419,6 +1420,7 @@ element.delete.batch.show-paths: Afficher les éléments
 element.delete.batch.dependencies-warning.confirmed_one: 'Remarque : Cet élément a des dépendances.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Remarque : Ces éléments ont des dépendances.'
 element.open: Ouvrir
+element.open-multiple: 'Ouvrir {{count}} éléments'
 element.state: État
 element.state.unpublished: Non publié
 element.toolbar.copy-id: Copier l'ID
@@ -1431,6 +1433,7 @@ element.publish: Publier
 element.locate-in-tree: Localiser dans l'arborescence
 element.sidebar.filter.only-direct-children: Uniquement les enfants directs
 element.sidebar.filter.only-unreferenced: Uniquement les non référencés
+element.sidebar.filter.only-untagged: Uniquement sans tags
 element.sidebar.field-filters: Filtres de champs
 element.full-information: Informations complètes
 system-information.id: ID
@@ -1803,6 +1806,10 @@ redirects.source-site: Site source
 redirects.source: Source
 redirects.target-site: Site cible
 redirects.target: Cible
+redirects.target-type: Type de cible
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Statut
 redirects.priority: Priorité
 redirects.regex: RegEx
@@ -2517,6 +2524,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Paramètres
 widget.email-log.grid.name: Nom
 widget.email-log.grid.value: Valeur
+email-log.label: Historique des e-mails
 email-log.subject: Objet
 email-log.tooltip.resend: Renvoyer l'e-mail
 email-log.tooltip.forward: Transférer l'e-mail

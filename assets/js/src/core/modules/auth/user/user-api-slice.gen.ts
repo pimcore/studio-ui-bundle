@@ -6,33 +6,20 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            userCreate: build.mutation<UserCreateApiResponse, UserCreateApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["User Management"],
-            }),
-            userUpdateActivePerspective: build.mutation<
-                UserUpdateActivePerspectiveApiResponse,
-                UserUpdateActivePerspectiveApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/active-perspective/${queryArg.perspectiveId}`,
-                    method: "PUT",
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userGetAvailablePermissions: build.query<
-                UserGetAvailablePermissionsApiResponse,
-                UserGetAvailablePermissionsApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/user/available-permissions` }),
-                providesTags: ["User Management"],
-            }),
             userCloneById: build.mutation<UserCloneByIdApiResponse, UserCloneByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/clone/${queryArg.id}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
+                invalidatesTags: ["User Management"],
+            }),
+            userCreate: build.mutation<UserCreateApiResponse, UserCreateApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/`, method: "POST", body: queryArg.body }),
+                invalidatesTags: ["User Management"],
+            }),
+            userFolderCreate: build.mutation<UserFolderCreateApiResponse, UserFolderCreateApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["User Management"],
             }),
             userGetCurrentInformation: build.query<
@@ -42,8 +29,20 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/user/current-user-information` }),
                 providesTags: ["User Management"],
             }),
-            userFolderCreate: build.mutation<UserFolderCreateApiResponse, UserFolderCreateApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder`, method: "POST", body: queryArg.body }),
+            userGetById: build.query<UserGetByIdApiResponse, UserGetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}` }),
+                providesTags: ["User Management"],
+            }),
+            userUpdateById: build.mutation<UserUpdateByIdApiResponse, UserUpdateByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.updateUser,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
+            userDeleteById: build.mutation<UserDeleteByIdApiResponse, UserDeleteByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
             }),
             userFolderDeleteById: build.mutation<UserFolderDeleteByIdApiResponse, UserFolderDeleteByIdApiArg>({
@@ -57,6 +56,44 @@ const injectedRtkApi = api
             userImageDeleteById: build.mutation<UserImageDeleteByIdApiResponse, UserImageDeleteByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/user/image/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
+            }),
+            userDefaultKeyBindings: build.query<UserDefaultKeyBindingsApiResponse, UserDefaultKeyBindingsApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
+                providesTags: ["User Management"],
+            }),
+            userGetObjectDependencies: build.query<
+                UserGetObjectDependenciesApiResponse,
+                UserGetObjectDependenciesApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/${queryArg.id}/object-dependencies`,
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                    },
+                }),
+                providesTags: ["User Management"],
+            }),
+            userGetAvailablePermissions: build.query<
+                UserGetAvailablePermissionsApiResponse,
+                UserGetAvailablePermissionsApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/user/available-permissions` }),
+                providesTags: ["User Management"],
+            }),
+            userGetCollection: build.query<UserGetCollectionApiResponse, UserGetCollectionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/users` }),
+                providesTags: ["User Management"],
+            }),
+            userListWithPermission: build.query<UserListWithPermissionApiResponse, UserListWithPermissionApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/users/with-permission`,
+                    params: {
+                        permission: queryArg.permission,
+                        includeCurrentUser: queryArg.includeCurrentUser,
+                    },
+                }),
+                providesTags: ["User Management"],
             }),
             userResetPassword: build.mutation<UserResetPasswordApiResponse, UserResetPasswordApiArg>({
                 query: (queryArg) => ({
@@ -82,10 +119,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/user/token-link/${queryArg.id}`, method: "POST" }),
                 providesTags: ["User Management"],
             }),
-            userTwoFactorDisable: build.mutation<UserTwoFactorDisableApiResponse, UserTwoFactorDisableApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/user/two-factor`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
             userTwoFactorConfirm: build.mutation<UserTwoFactorConfirmApiResponse, UserTwoFactorConfirmApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/two-factor/confirm`,
@@ -94,8 +127,34 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["User Management"],
             }),
+            userTwoFactorDisable: build.mutation<UserTwoFactorDisableApiResponse, UserTwoFactorDisableApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/user/two-factor`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
+            userTwoFactorResetById: build.mutation<UserTwoFactorResetByIdApiResponse, UserTwoFactorResetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}/two-factor`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
             userTwoFactorSetup: build.mutation<UserTwoFactorSetupApiResponse, UserTwoFactorSetupApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/user/two-factor/setup`, method: "POST" }),
+                invalidatesTags: ["User Management"],
+            }),
+            userUpdateActivePerspective: build.mutation<
+                UserUpdateActivePerspectiveApiResponse,
+                UserUpdateActivePerspectiveApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/active-perspective/${queryArg.perspectiveId}`,
+                    method: "PUT",
+                }),
+                invalidatesTags: ["User Management"],
+            }),
+            userUpdatePasswordById: build.mutation<UserUpdatePasswordByIdApiResponse, UserUpdatePasswordByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/${queryArg.id}/password`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
                 invalidatesTags: ["User Management"],
             }),
             userUpdateProfile: build.mutation<UserUpdateProfileApiResponse, UserUpdateProfileApiArg>({
@@ -114,59 +173,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["User Management"],
             }),
-            userGetById: build.query<UserGetByIdApiResponse, UserGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}` }),
-                providesTags: ["User Management"],
-            }),
-            userUpdateById: build.mutation<UserUpdateByIdApiResponse, UserUpdateByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.updateUser,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userDeleteById: build.mutation<UserDeleteByIdApiResponse, UserDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userGetObjectDependencies: build.query<
-                UserGetObjectDependenciesApiResponse,
-                UserGetObjectDependenciesApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/${queryArg.id}/object-dependencies`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                    },
-                }),
-                providesTags: ["User Management"],
-            }),
-            userUpdatePasswordById: build.mutation<UserUpdatePasswordByIdApiResponse, UserUpdatePasswordByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/${queryArg.id}/password`,
-                    method: "PUT",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["User Management"],
-            }),
-            userTwoFactorResetById: build.mutation<UserTwoFactorResetByIdApiResponse, UserTwoFactorResetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}/two-factor`, method: "DELETE" }),
-                invalidatesTags: ["User Management"],
-            }),
-            userGetCollection: build.query<UserGetCollectionApiResponse, UserGetCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/users` }),
-                providesTags: ["User Management"],
-            }),
-            userGetShareCollection: build.query<UserGetShareCollectionApiResponse, UserGetShareCollectionApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/users-share-list` }),
-                providesTags: ["User Management"],
-            }),
-            userDefaultKeyBindings: build.query<UserDefaultKeyBindingsApiResponse, UserDefaultKeyBindingsApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
-                providesTags: ["User Management"],
-            }),
             userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/users/tree`,
@@ -176,37 +182,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
-            userListWithPermission: build.query<UserListWithPermissionApiResponse, UserListWithPermissionApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/users/with-permission`,
-                    params: {
-                        permission: queryArg.permission,
-                        includeCurrentUser: queryArg.includeCurrentUser,
-                    },
-                }),
+            userGetShareCollection: build.query<UserGetShareCollectionApiResponse, UserGetShareCollectionApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/users-share-list` }),
                 providesTags: ["User Management"],
             }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type UserCreateApiResponse = /** status 200 Node of the new created User. */ TreeNode;
-export type UserCreateApiArg = {
-    body: {
-        parentId: number | null;
-        name: string;
-    };
-};
-export type UserUpdateActivePerspectiveApiResponse = unknown;
-export type UserUpdateActivePerspectiveApiArg = {
-    /** Set active perspective by Id */
-    perspectiveId: string;
-};
-export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
-    totalItems: number;
-    items: UserPermission[];
-};
-export type UserGetAvailablePermissionsApiArg = void;
 export type UserCloneByIdApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
 export type UserCloneByIdApiArg = {
     /** Id of the user */
@@ -215,14 +198,37 @@ export type UserCloneByIdApiArg = {
         name?: string;
     };
 };
-export type UserGetCurrentInformationApiResponse = /** status 200 Current user information's. */ UserInformation;
-export type UserGetCurrentInformationApiArg = void;
+export type UserCreateApiResponse = /** status 200 Node of the new created User. */ TreeNode;
+export type UserCreateApiArg = {
+    body: {
+        parentId: number | null;
+        name: string;
+    };
+};
 export type UserFolderCreateApiResponse = /** status 200 Node of the new created Folder. */ TreeNode;
 export type UserFolderCreateApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
+};
+export type UserGetCurrentInformationApiResponse = /** status 200 Current user information's. */ UserInformation;
+export type UserGetCurrentInformationApiArg = void;
+export type UserGetByIdApiResponse = /** status 200 Node of the requested user. */ User;
+export type UserGetByIdApiArg = {
+    /** Id of the user */
+    id: number;
+};
+export type UserUpdateByIdApiResponse = /** status 200 Updated data. */ User;
+export type UserUpdateByIdApiArg = {
+    /** Id of the User */
+    id: number;
+    updateUser: User2;
+};
+export type UserDeleteByIdApiResponse = unknown;
+export type UserDeleteByIdApiArg = {
+    /** Id of the user */
+    id: number;
 };
 export type UserFolderDeleteByIdApiResponse = unknown;
 export type UserFolderDeleteByIdApiArg = {
@@ -238,6 +244,44 @@ export type UserImageDeleteByIdApiResponse = unknown;
 export type UserImageDeleteByIdApiArg = {
     /** Id of the user */
     id: number;
+};
+export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default key bindings */ {
+    totalItems: number;
+    items: KeyBindingForAUser[];
+};
+export type UserDefaultKeyBindingsApiArg = void;
+export type UserGetObjectDependenciesApiResponse =
+    /** status 200 Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body. */ {
+        totalItems: number;
+        items: DependencyToAnObject[];
+    };
+export type UserGetObjectDependenciesApiArg = {
+    /** Id of the user */
+    id: number;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+};
+export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
+    totalItems: number;
+    items: UserPermission[];
+};
+export type UserGetAvailablePermissionsApiArg = void;
+export type UserGetCollectionApiResponse = /** status 200 List of users */ {
+    totalItems: number;
+    items: SimpleUser[];
+};
+export type UserGetCollectionApiArg = void;
+export type UserListWithPermissionApiResponse = /** status 200 List of users with the given permission */ {
+    totalItems: number;
+    items: SimpleUser[];
+};
+export type UserListWithPermissionApiArg = {
+    /** List users with this permission */
+    permission: string;
+    /** Include current user in the list */
+    includeCurrentUser?: boolean;
 };
 export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
@@ -259,15 +303,35 @@ export type UserTokenLinkGetApiArg = {
     /** Id of the user */
     id: number;
 };
-export type UserTwoFactorDisableApiResponse = unknown;
-export type UserTwoFactorDisableApiArg = void;
 export type UserTwoFactorConfirmApiResponse = unknown;
 export type UserTwoFactorConfirmApiArg = {
     twoFactorCode: TwoFactorCode;
 };
+export type UserTwoFactorDisableApiResponse = unknown;
+export type UserTwoFactorDisableApiArg = void;
+export type UserTwoFactorResetByIdApiResponse = unknown;
+export type UserTwoFactorResetByIdApiArg = {
+    /** Id of the User */
+    id: number;
+};
 export type UserTwoFactorSetupApiResponse =
     /** status 200 The new secret, its otpauth URI and the number of digits in a code. */ TwoFactorSetup;
 export type UserTwoFactorSetupApiArg = void;
+export type UserUpdateActivePerspectiveApiResponse = unknown;
+export type UserUpdateActivePerspectiveApiArg = {
+    /** Set active perspective by Id */
+    perspectiveId: string;
+};
+export type UserUpdatePasswordByIdApiResponse = unknown;
+export type UserUpdatePasswordByIdApiArg = {
+    /** Id of the User */
+    id: number;
+    body: {
+        password: string;
+        passwordConfirmation: string;
+        oldPassword?: string;
+    };
+};
 export type UserUpdateProfileApiResponse = /** status 200 Successfully updated user profile */ UserInformation;
 export type UserUpdateProfileApiArg = {
     updateUserProfile: UserProfile;
@@ -281,65 +345,6 @@ export type UserUploadImageApiArg = {
         userImage: Blob;
     };
 };
-export type UserGetByIdApiResponse = /** status 200 Node of the requested user. */ User;
-export type UserGetByIdApiArg = {
-    /** Id of the user */
-    id: number;
-};
-export type UserUpdateByIdApiResponse = /** status 200 Updated data. */ User;
-export type UserUpdateByIdApiArg = {
-    /** Id of the User */
-    id: number;
-    updateUser: User2;
-};
-export type UserDeleteByIdApiResponse = unknown;
-export type UserDeleteByIdApiArg = {
-    /** Id of the user */
-    id: number;
-};
-export type UserGetObjectDependenciesApiResponse =
-    /** status 200 Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body. */ {
-        totalItems: number;
-        items: DependencyToAnObject[];
-    };
-export type UserGetObjectDependenciesApiArg = {
-    /** Id of the user */
-    id: number;
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
-};
-export type UserUpdatePasswordByIdApiResponse = unknown;
-export type UserUpdatePasswordByIdApiArg = {
-    /** Id of the User */
-    id: number;
-    body: {
-        password: string;
-        passwordConfirmation: string;
-        oldPassword?: string;
-    };
-};
-export type UserTwoFactorResetByIdApiResponse = unknown;
-export type UserTwoFactorResetByIdApiArg = {
-    /** Id of the User */
-    id: number;
-};
-export type UserGetCollectionApiResponse = /** status 200 List of users */ {
-    totalItems: number;
-    items: SimpleUser[];
-};
-export type UserGetCollectionApiArg = void;
-export type UserGetShareCollectionApiResponse = /** status 200 List of users for sharing */ {
-    totalItems: number;
-    items: SimpleUser[];
-};
-export type UserGetShareCollectionApiArg = void;
-export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default key bindings */ {
-    totalItems: number;
-    items: KeyBindingForAUser[];
-};
-export type UserDefaultKeyBindingsApiArg = void;
 export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
     items: TreeNode[];
@@ -348,16 +353,11 @@ export type UserGetTreeApiArg = {
     /** Filter users by parent id. */
     parentId: number;
 };
-export type UserListWithPermissionApiResponse = /** status 200 List of users with the given permission */ {
+export type UserGetShareCollectionApiResponse = /** status 200 List of users for sharing */ {
     totalItems: number;
     items: SimpleUser[];
 };
-export type UserListWithPermissionApiArg = {
-    /** List users with this permission */
-    permission: string;
-    /** Include current user in the list */
-    includeCurrentUser?: boolean;
-};
+export type UserGetShareCollectionApiArg = void;
 export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -381,16 +381,6 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
-};
-export type UserPermission = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Key of the Permission */
-    key: string;
-    /** Category of the Permission */
-    category: string;
 };
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
@@ -485,60 +475,6 @@ export type UserInformation = {
     activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
-};
-export type ResetPassword = {
-    /** Username */
-    username: string;
-    /** Reset password URL */
-    resetPasswordUrl: string;
-};
-export type SimpleUser = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the User */
-    id: number;
-    /** Name of the User */
-    username: string;
-};
-export type TwoFactorCode = {
-    /** Code */
-    code: string;
-};
-export type TwoFactorSetup = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Secret, for manual entry */
-    secret: string;
-    /** otpauth URI to show as a QR code */
-    otpauthUri: string;
-    /** Number of digits in a code */
-    digits: number;
-};
-export type UserProfile = {
-    /** Firstname of the User */
-    firstname: string | null;
-    /** Lastname of the User */
-    lastname: string | null;
-    /** Email of the User */
-    email: string | null;
-    /** Language of the User */
-    language: string;
-    /** Date Time Locale for the User */
-    dateTimeLocale: string | null;
-    /** Show Welcome Screen */
-    welcomeScreen: boolean;
-    /** Memorize Tabs */
-    memorizeTabs: boolean;
-    /** List of available content Language already sorted. */
-    contentLanguages: object;
-    /** Key Bindings */
-    keyBindings: KeyBindingForAUser[];
-    /** Theme of the User */
-    theme?: string;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -720,33 +656,97 @@ export type User2 = {
     /** Theme of the User */
     theme?: string;
 };
+export type UserPermission = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key of the Permission */
+    key: string;
+    /** Category of the Permission */
+    category: string;
+};
+export type SimpleUser = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the User */
+    id: number;
+    /** Name of the User */
+    username: string;
+};
+export type ResetPassword = {
+    /** Username */
+    username: string;
+    /** Reset password URL */
+    resetPasswordUrl: string;
+};
+export type TwoFactorCode = {
+    /** Code */
+    code: string;
+};
+export type TwoFactorSetup = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Secret, for manual entry */
+    secret: string;
+    /** otpauth URI to show as a QR code */
+    otpauthUri: string;
+    /** Number of digits in a code */
+    digits: number;
+};
+export type UserProfile = {
+    /** Firstname of the User */
+    firstname: string | null;
+    /** Lastname of the User */
+    lastname: string | null;
+    /** Email of the User */
+    email: string | null;
+    /** Language of the User */
+    language: string;
+    /** Date Time Locale for the User */
+    dateTimeLocale: string | null;
+    /** Show Welcome Screen */
+    welcomeScreen: boolean;
+    /** Memorize Tabs */
+    memorizeTabs: boolean;
+    /** List of available content Language already sorted. */
+    contentLanguages: object;
+    /** Key Bindings */
+    keyBindings: KeyBindingForAUser[];
+    /** Theme of the User */
+    theme?: string;
+};
 export const {
-    useUserCreateMutation,
-    useUserUpdateActivePerspectiveMutation,
-    useUserGetAvailablePermissionsQuery,
     useUserCloneByIdMutation,
-    useUserGetCurrentInformationQuery,
+    useUserCreateMutation,
     useUserFolderCreateMutation,
-    useUserFolderDeleteByIdMutation,
-    useUserGetImageQuery,
-    useUserImageDeleteByIdMutation,
-    useUserResetPasswordMutation,
-    usePimcoreStudioApiUserSearchQuery,
-    useUserTokenLinkGetQuery,
-    useUserTwoFactorDisableMutation,
-    useUserTwoFactorConfirmMutation,
-    useUserTwoFactorSetupMutation,
-    useUserUpdateProfileMutation,
-    useUserUploadImageMutation,
+    useUserGetCurrentInformationQuery,
     useUserGetByIdQuery,
     useUserUpdateByIdMutation,
     useUserDeleteByIdMutation,
-    useUserGetObjectDependenciesQuery,
-    useUserUpdatePasswordByIdMutation,
-    useUserTwoFactorResetByIdMutation,
-    useUserGetCollectionQuery,
-    useUserGetShareCollectionQuery,
+    useUserFolderDeleteByIdMutation,
+    useUserGetImageQuery,
+    useUserImageDeleteByIdMutation,
     useUserDefaultKeyBindingsQuery,
-    useUserGetTreeQuery,
+    useUserGetObjectDependenciesQuery,
+    useUserGetAvailablePermissionsQuery,
+    useUserGetCollectionQuery,
     useUserListWithPermissionQuery,
+    useUserResetPasswordMutation,
+    usePimcoreStudioApiUserSearchQuery,
+    useUserTokenLinkGetQuery,
+    useUserTwoFactorConfirmMutation,
+    useUserTwoFactorDisableMutation,
+    useUserTwoFactorResetByIdMutation,
+    useUserTwoFactorSetupMutation,
+    useUserUpdateActivePerspectiveMutation,
+    useUserUpdatePasswordByIdMutation,
+    useUserUpdateProfileMutation,
+    useUserUploadImageMutation,
+    useUserGetTreeQuery,
+    useUserGetShareCollectionQuery,
 } = injectedRtkApi;

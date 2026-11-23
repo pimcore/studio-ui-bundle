@@ -32,14 +32,21 @@ interface MenuItemLabelProps {
   onInsert?: (position: AreaInsertPosition) => void
 }
 
-const getMenuItems = (config?: AreablockEditableConfig, options?: { onAddArea?: OnAddArea, showInsertPosition?: boolean }): MenuItems => {
+interface GetMenuItemsOptions {
+  onAddArea?: OnAddArea
+  showInsertPosition?: boolean
+  typeUsageCounts?: Record<string, number>
+}
+
+const getMenuItems = (config?: AreablockEditableConfig, options?: GetMenuItemsOptions): MenuItems => {
   let result: UseAreablockMenuReturn['menuItems']
 
   const Probe = (): null => {
     result = useAreablockMenu({
       config,
       onAddArea: options?.onAddArea ?? jest.fn(),
-      showInsertPosition: options?.showInsertPosition
+      showInsertPosition: options?.showInsertPosition,
+      typeUsageCounts: options?.typeUsageCounts
     }).menuItems
     return null
   }
@@ -177,5 +184,69 @@ describe('useAreablockMenu insert position', () => {
     const children = (items[0] as { children: MenuItems }).children
 
     expect(getLabelProps(children[0]).onInsert).toBeDefined()
+  })
+})
+
+// Regression tests for pimcore/platform-version#688: a brick type whose
+// per-type limit (`config.limits`) is reached must be disabled in the picker.
+describe('useAreablockMenu per-brick-type limits', () => {
+  const types = [
+    { name: 'Brick A', type: 'a' },
+    { name: 'Brick B', type: 'b' }
+  ]
+
+  const isDisabled = (item: MenuItems[number]): boolean =>
+    Boolean((item as { disabled?: boolean }).disabled)
+
+  it('disables a brick type whose limit is reached and keeps other types enabled', () => {
+    const items = getMenuItems({ types, limits: { a: 1 } }, { typeUsageCounts: { a: 1 } })
+
+    expect(items).toHaveLength(2)
+    expect(isDisabled(items[0])).toBe(true)
+    expect(isDisabled(items[1])).toBe(false)
+  })
+
+  it('keeps a limited brick type enabled while its usage is below the limit', () => {
+    const items = getMenuItems({ types, limits: { a: 2 } }, { typeUsageCounts: { a: 1 } })
+
+    expect(isDisabled(items[0])).toBe(false)
+  })
+
+  it('keeps every type enabled when no usage counts are provided', () => {
+    const items = getMenuItems({ types, limits: { a: 1 } })
+
+    expect(isDisabled(items[0])).toBe(false)
+  })
+
+  it('explains a disabled entry with the limit-reached hint instead of the description', () => {
+    const items = getMenuItems(
+      { types: [{ name: 'Brick A', type: 'a', description: 'My description' }], limits: { a: 1 } },
+      { typeUsageCounts: { a: 1 } }
+    )
+
+    expect(getTooltipTitle(items[0])).toBe('areablock.type-limit-reached')
+  })
+
+  it('disables limit-reached entries inside grouped menus too', () => {
+    const items = getMenuItems(
+      { types, limits: { a: 1 }, group: { 'My Group': ['a', 'b'] } },
+      { typeUsageCounts: { a: 1 } }
+    )
+
+    expect(items).toHaveLength(1)
+    const children = (items[0] as { children: MenuItems }).children
+    expect(children).toHaveLength(2)
+    expect(isDisabled(children[0])).toBe(true)
+    expect(isDisabled(children[1])).toBe(false)
+  })
+
+  it('drops the insert position buttons from a limit-reached entry only', () => {
+    const items = getMenuItems(
+      { types, limits: { a: 1 } },
+      { showInsertPosition: true, typeUsageCounts: { a: 1 } }
+    )
+
+    expect(getLabelProps(items[0]).onInsert).toBeUndefined()
+    expect(getLabelProps(items[1]).onInsert).toBeDefined()
   })
 })

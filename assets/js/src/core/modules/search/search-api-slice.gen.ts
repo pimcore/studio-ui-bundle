@@ -6,15 +6,11 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            simpleSearchGet: build.query<SimpleSearchGetApiResponse, SimpleSearchGetApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                        searchTerm: queryArg.searchTerm,
-                    },
-                }),
+            assetGetSearchConfiguration: build.query<
+                AssetGetSearchConfigurationApiResponse,
+                AssetGetSearchConfigurationApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
                 providesTags: ["Search"],
             }),
             assetGetSearch: build.query<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
@@ -23,13 +19,6 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Search"],
-            }),
-            assetGetSearchConfiguration: build.query<
-                AssetGetSearchConfigurationApiResponse,
-                AssetGetSearchConfigurationApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
                 providesTags: ["Search"],
             }),
             dataObjectGetSearchConfiguration: build.query<
@@ -69,6 +58,23 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Search"],
             }),
+            savedSearchDeleteConfiguration: build.mutation<
+                SavedSearchDeleteConfigurationApiResponse,
+                SavedSearchDeleteConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/saved/configuration/delete/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Search"],
+            }),
+            savedSearchGetConfiguration: build.query<
+                SavedSearchGetConfigurationApiResponse,
+                SavedSearchGetConfigurationApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/search/saved/configuration/${queryArg.id}` }),
+                providesTags: ["Search"],
+            }),
             savedSearchGetConfigurations: build.query<
                 SavedSearchGetConfigurationsApiResponse,
                 SavedSearchGetConfigurationsApiArg
@@ -84,16 +90,6 @@ const injectedRtkApi = api
                     },
                 }),
                 providesTags: ["Search"],
-            }),
-            savedSearchDeleteConfiguration: build.mutation<
-                SavedSearchDeleteConfigurationApiResponse,
-                SavedSearchDeleteConfigurationApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/saved/configuration/delete/${queryArg.id}`,
-                    method: "DELETE",
-                }),
-                invalidatesTags: ["Search"],
             }),
             savedSearchGetMenuShortcutConfigurations: build.query<
                 SavedSearchGetMenuShortcutConfigurationsApiResponse,
@@ -113,17 +109,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Search"],
             }),
-            savedSearchUpdateMenuShortcut: build.mutation<
-                SavedSearchUpdateMenuShortcutApiResponse,
-                SavedSearchUpdateMenuShortcutApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/saved/configuration/update-menu-shortcut/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Search"],
-            }),
             savedSearchUpdateConfiguration: build.mutation<
                 SavedSearchUpdateConfigurationApiResponse,
                 SavedSearchUpdateConfigurationApiArg
@@ -135,29 +120,35 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Search"],
             }),
-            savedSearchGetConfiguration: build.query<
-                SavedSearchGetConfigurationApiResponse,
-                SavedSearchGetConfigurationApiArg
+            savedSearchUpdateMenuShortcut: build.mutation<
+                SavedSearchUpdateMenuShortcutApiResponse,
+                SavedSearchUpdateMenuShortcutApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/search/saved/configuration/${queryArg.id}` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/saved/configuration/update-menu-shortcut/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Search"],
+            }),
+            simpleSearchGet: build.query<SimpleSearchGetApiResponse, SimpleSearchGetApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search`,
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                        searchTerm: queryArg.searchTerm,
+                    },
+                }),
                 providesTags: ["Search"],
             }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type SimpleSearchGetApiResponse = /** status 200 Search results for elements */ {
-    totalItems: number;
-    items: SimpleSearchResult[];
-};
-export type SimpleSearchGetApiArg = {
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
-    /** Search term */
-    searchTerm?: string;
-};
+export type AssetGetSearchConfigurationApiResponse =
+    /** status 200 Asset search configuration */ GridDetailedConfiguration;
+export type AssetGetSearchConfigurationApiArg = void;
 export type AssetGetSearchApiResponse = /** status 200 Assets for search grid */ {
     totalItems: number;
     items: {
@@ -173,9 +164,6 @@ export type AssetGetSearchApiArg = {
         filters?: GridFilter;
     };
 };
-export type AssetGetSearchConfigurationApiResponse =
-    /** status 200 Asset search configuration */ GridDetailedConfiguration;
-export type AssetGetSearchConfigurationApiArg = void;
 export type DataObjectGetSearchConfigurationApiResponse =
     /** status 200 Data object search configuration */ GridDetailedConfiguration;
 export type DataObjectGetSearchConfigurationApiArg = {
@@ -224,6 +212,17 @@ export type SimpleSearchPreviewGetApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
+export type SavedSearchDeleteConfigurationApiResponse = unknown;
+export type SavedSearchDeleteConfigurationApiArg = {
+    /** Id of the saved search configuration */
+    id: number;
+};
+export type SavedSearchGetConfigurationApiResponse =
+    /** status 200 Saved search configuration */ SavedSearchDetailedConfiguration;
+export type SavedSearchGetConfigurationApiArg = {
+    /** Id of the saved search configuration */
+    id: number;
+};
 export type SavedSearchGetConfigurationsApiResponse = /** status 200 List of saved search configurations */ {
     totalItems: number;
     items: SavedSearchConfigurationListItem[];
@@ -239,11 +238,6 @@ export type SavedSearchGetConfigurationsApiArg = {
     sortBy?: "name" | "modificationDate";
     /** Sort order (asc or desc). */
     sortOrder?: "ASC" | "DESC";
-};
-export type SavedSearchDeleteConfigurationApiResponse = unknown;
-export type SavedSearchDeleteConfigurationApiArg = {
-    /** Id of the saved search configuration */
-    id: number;
 };
 export type SavedSearchGetMenuShortcutConfigurationsApiResponse =
     /** status 200 List of saved search menu shortcut configurations */ {
@@ -268,15 +262,6 @@ export type SavedSearchSaveConfigurationApiArg = {
         filter?: GridFilter | null;
     };
 };
-export type SavedSearchUpdateMenuShortcutApiResponse = unknown;
-export type SavedSearchUpdateMenuShortcutApiArg = {
-    /** Id of the saved search configuration */
-    id: number;
-    body: {
-        createMenuShortcut: boolean;
-        menuShortcutGroup?: string;
-    };
-};
 export type SavedSearchUpdateConfigurationApiResponse = unknown;
 export type SavedSearchUpdateConfigurationApiArg = {
     /** Id of the saved search configuration */
@@ -295,93 +280,36 @@ export type SavedSearchUpdateConfigurationApiArg = {
         filter?: GridFilter | null;
     };
 };
-export type SavedSearchGetConfigurationApiResponse =
-    /** status 200 Saved search configuration */ SavedSearchDetailedConfiguration;
-export type SavedSearchGetConfigurationApiArg = {
+export type SavedSearchUpdateMenuShortcutApiResponse = unknown;
+export type SavedSearchUpdateMenuShortcutApiArg = {
     /** Id of the saved search configuration */
     id: number;
-};
-export type ElementIcon = {
-    /** Icon type */
-    type: "name" | "path";
-    /** Icon value */
-    value: string;
-};
-export type CustomAttributes = {
-    /** Custom Icon */
-    icon: ElementIcon | null;
-    /** Custom Tooltip */
-    tooltip: string | null;
-    /** AdditionalIcons */
-    additionalIcons: string[];
-    /** Custom Key/Filename */
-    key: string | null;
-    /** Additional Css Classes */
-    additionalCssClasses: string[];
-};
-export type SimpleSearchResult = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+    body: {
+        createMenuShortcut: boolean;
+        menuShortcutGroup?: string;
     };
-    /** Custom attributes for the tree */
-    customAttributes?: CustomAttributes;
-    /** id */
-    id: number;
-    /** elementType */
-    elementType: string;
-    /** type */
-    type: string;
-    /** path */
-    path: string;
-    /** icon */
-    icon: ElementIcon;
 };
-export type Error = {
-    /** Message */
-    message: string;
+export type SimpleSearchGetApiResponse = /** status 200 Search results for elements */ {
+    totalItems: number;
+    items: SimpleSearchResult[];
 };
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
+export type SimpleSearchGetApiArg = {
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+    /** Search term */
+    searchTerm?: string;
 };
-export type GridColumnData = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Key */
-    key?: string;
-    /** Locale */
-    locale?: string | null;
-    /** Value */
-    value?: any | null;
-    /** Field Type of the column */
-    fieldType?: string | null;
-    /** inheritance */
-    inheritance?: object | null;
-};
-export type Permissions = {
-    /** List */
-    list: boolean;
-    /** View */
-    view: boolean;
-    /** Publish */
-    publish: boolean;
-    /** Delete */
-    delete: boolean;
-    /** Rename */
-    rename: boolean;
-    /** Create */
-    create: boolean;
-    /** Settings */
-    settings: boolean;
-    /** Versions */
-    versions: boolean;
-    /** Properties */
-    properties: boolean;
+export type Column = {
+    /** Key of the Column */
+    key: string;
+    /** Locale of the Column */
+    locale: string | null;
+    /** Define the group structure */
+    group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -457,16 +385,6 @@ export type GridFilter = {
     /** Additional Sort Filters for multi-column sorting */
     additionalSortFilters?: object[];
 };
-export type Column = {
-    /** Key of the Column */
-    key: string;
-    /** Locale of the Column */
-    locale: string | null;
-    /** Define the group structure */
-    group: object;
-    /** Width of the Column */
-    width?: number | null;
-};
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -500,6 +418,52 @@ export type GridDetailedConfiguration = {
     ownerId?: number | null;
     /** ID of the configuration */
     id?: number | null;
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export type GridColumnData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Value */
+    value?: any | null;
+    /** Field Type of the column */
+    fieldType?: string | null;
+    /** inheritance */
+    inheritance?: object | null;
+};
+export type Permissions = {
+    /** List */
+    list: boolean;
+    /** View */
+    view: boolean;
+    /** Publish */
+    publish: boolean;
+    /** Delete */
+    delete: boolean;
+    /** Rename */
+    rename: boolean;
+    /** Create */
+    create: boolean;
+    /** Settings */
+    settings: boolean;
+    /** Versions */
+    versions: boolean;
+    /** Properties */
+    properties: boolean;
 };
 export type SimpleSearchDetail = {
     /** AdditionalAttributes */
@@ -553,40 +517,6 @@ export type SimpleSearchDocumentDetail = SimpleSearchDetail & {
     /** Page document data */
     documentData: SimpleSearchPageDetail | null;
 };
-export type SavedSearchConfigurationListItem = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID */
-    id: number;
-    /** Name */
-    name: string;
-    /** Description */
-    description?: string | null;
-    /** Whether the configuration is owned by the current user (false if only shared) */
-    owner: boolean;
-    /** Modification Date */
-    modificationDate: number;
-    /** Creation Date */
-    creationDate?: number;
-    /** Name of the group in the menu the shortcut belongs to */
-    menuShortcutGroup?: string | null;
-    /** Element type the search targets (asset or data-object) */
-    elementType?: string | null;
-};
-export type SavedSearchConfiguration = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID */
-    id: number;
-    /** Name */
-    name: string;
-    /** Description */
-    description?: string | null;
-};
 export type SavedSearchDetailedConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -623,19 +553,89 @@ export type SavedSearchDetailedConfiguration = {
     /** Creation Date */
     creationDate?: number | null;
 };
+export type SavedSearchConfigurationListItem = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Name */
+    name: string;
+    /** Description */
+    description?: string | null;
+    /** Whether the configuration is owned by the current user (false if only shared) */
+    owner: boolean;
+    /** Modification Date */
+    modificationDate: number;
+    /** Creation Date */
+    creationDate?: number;
+    /** Name of the group in the menu the shortcut belongs to */
+    menuShortcutGroup?: string | null;
+    /** Element type the search targets (asset or data-object) */
+    elementType?: string | null;
+};
+export type SavedSearchConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Name */
+    name: string;
+    /** Description */
+    description?: string | null;
+};
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type CustomAttributes = {
+    /** Custom Icon */
+    icon: ElementIcon | null;
+    /** Custom Tooltip */
+    tooltip: string | null;
+    /** AdditionalIcons */
+    additionalIcons: string[];
+    /** Custom Key/Filename */
+    key: string | null;
+    /** Additional Css Classes */
+    additionalCssClasses: string[];
+};
+export type SimpleSearchResult = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Custom attributes for the tree */
+    customAttributes?: CustomAttributes;
+    /** id */
+    id: number;
+    /** elementType */
+    elementType: string;
+    /** type */
+    type: string;
+    /** path */
+    path: string;
+    /** icon */
+    icon: ElementIcon;
+};
 export const {
-    useSimpleSearchGetQuery,
-    useAssetGetSearchQuery,
     useAssetGetSearchConfigurationQuery,
+    useAssetGetSearchQuery,
     useDataObjectGetSearchConfigurationQuery,
     useDataObjectGetSearchQuery,
     useDocumentGetSearchQuery,
     useSimpleSearchPreviewGetQuery,
-    useSavedSearchGetConfigurationsQuery,
     useSavedSearchDeleteConfigurationMutation,
+    useSavedSearchGetConfigurationQuery,
+    useSavedSearchGetConfigurationsQuery,
     useSavedSearchGetMenuShortcutConfigurationsQuery,
     useSavedSearchSaveConfigurationMutation,
-    useSavedSearchUpdateMenuShortcutMutation,
     useSavedSearchUpdateConfigurationMutation,
-    useSavedSearchGetConfigurationQuery,
+    useSavedSearchUpdateMenuShortcutMutation,
+    useSimpleSearchGetQuery,
 } = injectedRtkApi;

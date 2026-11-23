@@ -27,6 +27,7 @@ import {
   functionalUpdate,
   getCoreRowModel,
   getSortedRowModel,
+  type Row,
   type RowData,
   type RowSelectionState,
   type SortingState,
@@ -35,6 +36,7 @@ import {
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Checkbox, ConfigProvider, Skeleton } from 'antd'
+import { type CheckboxChangeEvent } from 'antd/es/checkbox'
 import cn from 'classnames'
 import { isEmpty, isNumber, isFunction, isNull, isString, isUndefined } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -73,6 +75,7 @@ declare module '@tanstack/react-table' {
    
   export interface TableMeta<TData extends RowData> {
     onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any, rowData: TData, meta?: Record<string, any> }) => void
+    onSelectionCheckboxChange?: (event: CheckboxChangeEvent, row: Row<TData>) => void
   }
 }
 
@@ -128,6 +131,8 @@ export const Grid = ({
   const scrollElementRef = useRef<HTMLDivElement>(null) // ref to the scrollable container used by row and column virtualizers
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const warnedUndefinedRowIdRef = useRef(false)
+  // Row whose checkbox was last clicked without Shift: start of a Shift-click range
+  const selectionAnchorRowIdRef = useRef<string | undefined>(undefined)
 
   const rowStyleCache = useRef<Map<string, { style: React.CSSProperties, top: number }>>(new Map())
 
@@ -169,6 +174,13 @@ export const Grid = ({
   const rowSelection = useMemo(() => {
     return selectedRows
   }, [selectedRows])
+
+  // However the selection was emptied (toggle-all, reset by the parent), the old anchor no longer counts
+  useEffect(() => {
+    if (isEmpty(rowSelection)) {
+      selectionAnchorRowIdRef.current = undefined
+    }
+  }, [rowSelection])
 
   const columns = useMemo(
     () =>
@@ -244,7 +256,8 @@ export const Grid = ({
       : undefined,
     enableMultiSorting: false,
     meta: {
-      onUpdateCellData: props.onUpdateCellData
+      onUpdateCellData: props.onUpdateCellData,
+      onSelectionCheckboxChange
     }
   }), [data, columns, rowSelection, props.initialState, props.setRowId, props.isLoading])
 
@@ -587,6 +600,36 @@ export const Grid = ({
     props.onSelectedRowsChange?.(selectedRows)
   }
 
+  function onSelectionCheckboxChange (event: CheckboxChangeEvent, row: Row<any>): void {
+    if (event.nativeEvent.shiftKey && row.getCanMultiSelect() && selectRowRange(row.id)) {
+      return
+    }
+
+    selectionAnchorRowIdRef.current = row.id
+    row.getToggleSelectedHandler()(event)
+  }
+
+  function selectRowRange (targetRowId: string): boolean {
+    const rows = table.getRowModel().rows
+    const anchorIndex = rows.findIndex(row => row.id === selectionAnchorRowIdRef.current)
+    const targetIndex = rows.findIndex(row => row.id === targetRowId)
+
+    if (anchorIndex === -1 || targetIndex === -1) {
+      return false
+    }
+
+    const rangeSelection: RowSelectionState = { ...table.getState().rowSelection }
+
+    rows
+      .slice(Math.min(anchorIndex, targetIndex), Math.max(anchorIndex, targetIndex) + 1)
+      .filter(row => row.getCanSelect())
+      .forEach(row => { rangeSelection[row.id] = true })
+
+    table.setRowSelection(rangeSelection)
+
+    return true
+  }
+
   function hasRowSelectionColumn (): boolean {
     return columns.some(column => column.id === 'selection')
   }
@@ -610,11 +653,12 @@ export const Grid = ({
           )
         : '',
 
-      cell: ({ row }): React.JSX.Element => (
+      // Goes through the rendering table: the column stays in the caller's array and can outlive this grid
+      cell: ({ row, table }): React.JSX.Element => (
         <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center' } }>
           <Checkbox
             checked={ row.getIsSelected() }
-            onChange={ row.getToggleSelectedHandler() }
+            onChange={ (event) => { table.options.meta?.onSelectionCheckboxChange?.(event, row) } }
           />
         </div>
       ),

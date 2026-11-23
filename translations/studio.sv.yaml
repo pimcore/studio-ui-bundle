@@ -144,6 +144,7 @@ areablock.paste: Klistra in
 areablock.cut: Klipp ut
 areablock.settings: Inställningar
 areablock.delete: Ta bort
+areablock.type-limit-reached: Det maximala antalet block av den här typen har uppnåtts.
 document.highlight-editables: Markera redigerbara
 document.link.target: Länkmål
 document.hardlink.source: Källdokument
@@ -1419,6 +1420,7 @@ element.delete.batch.show-paths: Visa element
 element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
+element.open-multiple: 'Öppna {{count}} element'
 element.state: Status
 element.state.unpublished: Opublicerad
 element.toolbar.copy-id: Kopiera ID
@@ -1431,6 +1433,7 @@ element.publish: Publicera
 element.locate-in-tree: Hitta i träd
 element.sidebar.filter.only-direct-children: Bara direkta barn
 element.sidebar.filter.only-unreferenced: Bara utan referenser
+element.sidebar.filter.only-untagged: Bara utan taggar
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID
@@ -1803,6 +1806,10 @@ redirects.source-site: Källsajt
 redirects.source: Källa
 redirects.target-site: Målsajt
 redirects.target: Mål
+redirects.target-type: Måltyp
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Prioritet
 redirects.regex: RegEx
@@ -2517,6 +2524,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parametrar
 widget.email-log.grid.name: Namn
 widget.email-log.grid.value: Värde
+email-log.label: E-postlogg
 email-log.subject: Ämne
 email-log.tooltip.resend: Skicka om e-post
 email-log.tooltip.forward: Vidarebefordra e-post

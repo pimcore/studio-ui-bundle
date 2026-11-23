@@ -10,12 +10,9 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/notes`, method: "POST", body: queryArg.body }),
                 providesTags: ["Notes"],
             }),
-            noteElementGetTypeCollection: build.query<
-                NoteElementGetTypeCollectionApiResponse,
-                NoteElementGetTypeCollectionApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/type/${queryArg.elementType}` }),
-                providesTags: ["Notes"],
+            noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["Notes"],
             }),
             noteElementGetCollection: build.query<NoteElementGetCollectionApiResponse, NoteElementGetCollectionApiArg>({
                 query: (queryArg) => ({
@@ -39,9 +36,12 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Notes"],
             }),
-            noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["Notes"],
+            noteElementGetTypeCollection: build.query<
+                NoteElementGetTypeCollectionApiResponse,
+                NoteElementGetTypeCollectionApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/type/${queryArg.elementType}` }),
+                providesTags: ["Notes"],
             }),
         }),
         overrideExisting: false,
@@ -65,12 +65,10 @@ export type NoteGetCollectionApiArg = {
         fieldFilters?: object;
     };
 };
-export type NoteElementGetTypeCollectionApiResponse = /** status 200 Note types collection */ {
-    items: NoteType[];
-};
-export type NoteElementGetTypeCollectionApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
+export type NoteDeleteByIdApiResponse = unknown;
+export type NoteDeleteByIdApiArg = {
+    /** Id of the element */
+    id: number;
 };
 export type NoteElementGetCollectionApiResponse = /** status 200 Paginated notes with total count */ {
     totalItems: number;
@@ -102,10 +100,12 @@ export type NoteElementCreateApiArg = {
     id: number;
     createNote: CreateNote;
 };
-export type NoteDeleteByIdApiResponse = unknown;
-export type NoteDeleteByIdApiArg = {
-    /** Id of the element */
-    id: number;
+export type NoteElementGetTypeCollectionApiResponse = /** status 200 Note types collection */ {
+    items: NoteType[];
+};
+export type NoteElementGetTypeCollectionApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
 };
 export type Note = {
     /** AdditionalAttributes */
@@ -147,14 +147,6 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type NoteType = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** id */
-    id: string;
-};
 export type CreateNote = {
     /** title */
     title: string;
@@ -163,10 +155,18 @@ export type CreateNote = {
     /** type */
     type: string;
 };
+export type NoteType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** id */
+    id: string;
+};
 export const {
     useNoteGetCollectionQuery,
-    useNoteElementGetTypeCollectionQuery,
+    useNoteDeleteByIdMutation,
     useNoteElementGetCollectionQuery,
     useNoteElementCreateMutation,
-    useNoteDeleteByIdMutation,
+    useNoteElementGetTypeCollectionQuery,
 } = injectedRtkApi;

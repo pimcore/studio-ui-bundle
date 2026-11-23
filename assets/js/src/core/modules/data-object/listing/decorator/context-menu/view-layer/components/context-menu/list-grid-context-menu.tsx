@@ -15,10 +15,12 @@ import { type MenuProps } from 'antd'
 import React, { useState } from 'react'
 import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
+import { useContextMenuRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/context-menu/hooks/use-context-menu-row-selection'
 
 export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.Element => {
   const { row } = props
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
+  const { selectRowIfUnselected } = useContextMenuRowSelection(row)
 
   const context = {
     target: row,
@@ -40,6 +42,7 @@ export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.
         items,
         onClick: handleMenuClick
       } }
+      onOpenChange={ (open) => { if (open) { selectRowIfUnselected() } } }
       open={ isOpen }
       trigger={ ['contextMenu'] }
     >

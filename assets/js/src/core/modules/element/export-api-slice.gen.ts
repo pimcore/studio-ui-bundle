@@ -6,17 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            exportCsv: build.mutation<ExportCsvApiResponse, ExportCsvApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/export/csv`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Export"],
-            }),
-            exportCsvFolder: build.mutation<ExportCsvFolderApiResponse, ExportCsvFolderApiArg>({
+            exportDownloadCsvAvailable: build.query<
+                ExportDownloadCsvAvailableApiResponse,
+                ExportDownloadCsvAvailableApiArg
+            >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/export/csv/folder/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.body,
+                    url: `/pimcore-studio/api/export/download/csv/${queryArg.jobRunId}/available`,
                 }),
-                invalidatesTags: ["Export"],
+                providesTags: ["Export"],
             }),
             exportDownloadCsv: build.query<ExportDownloadCsvApiResponse, ExportDownloadCsvApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/export/download/csv/${queryArg.jobRunId}` }),
@@ -29,12 +26,24 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Export"],
             }),
-            exportDownloadCsvAvailable: build.query<
-                ExportDownloadCsvAvailableApiResponse,
-                ExportDownloadCsvAvailableApiArg
+            exportCsv: build.mutation<ExportCsvApiResponse, ExportCsvApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/export/csv`, method: "POST", body: queryArg.body }),
+                invalidatesTags: ["Export"],
+            }),
+            exportCsvFolder: build.mutation<ExportCsvFolderApiResponse, ExportCsvFolderApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/export/csv/folder/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Export"],
+            }),
+            exportDownloadXlsxAvailable: build.query<
+                ExportDownloadXlsxAvailableApiResponse,
+                ExportDownloadXlsxAvailableApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/export/download/csv/${queryArg.jobRunId}/available`,
+                    url: `/pimcore-studio/api/export/download/xlsx/${queryArg.jobRunId}/available`,
                 }),
                 providesTags: ["Export"],
             }),
@@ -48,15 +57,6 @@ const injectedRtkApi = api
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Export"],
-            }),
-            exportDownloadXlsxAvailable: build.query<
-                ExportDownloadXlsxAvailableApiResponse,
-                ExportDownloadXlsxAvailableApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/export/download/xlsx/${queryArg.jobRunId}/available`,
-                }),
-                providesTags: ["Export"],
             }),
             exportXlsx: build.mutation<ExportXlsxApiResponse, ExportXlsxApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/export/xlsx`, method: "POST", body: queryArg.body }),
@@ -74,6 +74,22 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type ExportDownloadCsvAvailableApiResponse =
+    /** status 200 Availability flag for the CSV export */ DownloadAvailability;
+export type ExportDownloadCsvAvailableApiArg = {
+    /** JobRunId of the JobRun */
+    jobRunId: number;
+};
+export type ExportDownloadCsvApiResponse = /** status 200 CSV File as attachment */ Blob;
+export type ExportDownloadCsvApiArg = {
+    /** JobRunId of the JobRun */
+    jobRunId: number;
+};
+export type ExportDeleteCsvApiResponse = unknown;
+export type ExportDeleteCsvApiArg = {
+    /** JobRunId of the JobRun */
+    jobRunId: number;
+};
 export type ExportCsvApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
     /** ID of created jobRun */
     jobRunId: number;
@@ -178,19 +194,9 @@ export type ExportCsvFolderApiArg = {
         classId?: string | null;
     };
 };
-export type ExportDownloadCsvApiResponse = /** status 200 CSV File as attachment */ Blob;
-export type ExportDownloadCsvApiArg = {
-    /** JobRunId of the JobRun */
-    jobRunId: number;
-};
-export type ExportDeleteCsvApiResponse = unknown;
-export type ExportDeleteCsvApiArg = {
-    /** JobRunId of the JobRun */
-    jobRunId: number;
-};
-export type ExportDownloadCsvAvailableApiResponse =
-    /** status 200 Availability flag for the CSV export */ DownloadAvailability;
-export type ExportDownloadCsvAvailableApiArg = {
+export type ExportDownloadXlsxAvailableApiResponse =
+    /** status 200 Availability flag for the XLSX export */ DownloadAvailability;
+export type ExportDownloadXlsxAvailableApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
@@ -201,12 +207,6 @@ export type ExportDownloadXlsxApiArg = {
 };
 export type ExportDeleteXlsxApiResponse = unknown;
 export type ExportDeleteXlsxApiArg = {
-    /** JobRunId of the JobRun */
-    jobRunId: number;
-};
-export type ExportDownloadXlsxAvailableApiResponse =
-    /** status 200 Availability flag for the XLSX export */ DownloadAvailability;
-export type ExportDownloadXlsxAvailableApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
@@ -313,6 +313,10 @@ export type ExportXlsxFolderApiArg = {
         classId?: string | null;
     };
 };
+export type DownloadAvailability = {
+    /** Whether the exported file is still available for download */
+    available: boolean;
+};
 export type Error = {
     /** Message */
     message: string;
@@ -391,19 +395,15 @@ export type ExportAllFilter = {
     /** Additional Sort Filters for multi-column sorting */
     additionalSortFilters?: object[];
 };
-export type DownloadAvailability = {
-    /** Whether the exported file is still available for download */
-    available: boolean;
-};
 export const {
-    useExportCsvMutation,
-    useExportCsvFolderMutation,
+    useExportDownloadCsvAvailableQuery,
     useExportDownloadCsvQuery,
     useExportDeleteCsvMutation,
-    useExportDownloadCsvAvailableQuery,
+    useExportCsvMutation,
+    useExportCsvFolderMutation,
+    useExportDownloadXlsxAvailableQuery,
     useExportDownloadXlsxQuery,
     useExportDeleteXlsxMutation,
-    useExportDownloadXlsxAvailableQuery,
     useExportXlsxMutation,
     useExportXlsxFolderMutation,
 } = injectedRtkApi;

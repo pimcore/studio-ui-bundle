@@ -21,19 +21,16 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/notifications`, method: "DELETE" }),
                 invalidatesTags: ["Notifications"],
             }),
-            notificationGetRecipients: build.query<
-                NotificationGetRecipientsApiResponse,
-                NotificationGetRecipientsApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/notifications/recipients` }),
+            notificationGetById: build.query<NotificationGetByIdApiResponse, NotificationGetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}` }),
                 providesTags: ["Notifications"],
             }),
-            notificationSend: build.mutation<NotificationSendApiResponse, NotificationSendApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/notifications/send`,
-                    method: "POST",
-                    body: queryArg.sendNotificationParameters,
-                }),
+            notificationReadById: build.mutation<NotificationReadByIdApiResponse, NotificationReadByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}`, method: "POST" }),
+                invalidatesTags: ["Notifications"],
+            }),
+            notificationDeleteById: build.mutation<NotificationDeleteByIdApiResponse, NotificationDeleteByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Notifications"],
             }),
             notificationGetSubscriptions: build.query<
@@ -61,16 +58,19 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/notifications/unread-count` }),
                 providesTags: ["Notifications"],
             }),
-            notificationGetById: build.query<NotificationGetByIdApiResponse, NotificationGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}` }),
+            notificationGetRecipients: build.query<
+                NotificationGetRecipientsApiResponse,
+                NotificationGetRecipientsApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/notifications/recipients` }),
                 providesTags: ["Notifications"],
             }),
-            notificationReadById: build.mutation<NotificationReadByIdApiResponse, NotificationReadByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}`, method: "POST" }),
-                invalidatesTags: ["Notifications"],
-            }),
-            notificationDeleteById: build.mutation<NotificationDeleteByIdApiResponse, NotificationDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}`, method: "DELETE" }),
+            notificationSend: build.mutation<NotificationSendApiResponse, NotificationSendApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/notifications/send`,
+                    method: "POST",
+                    body: queryArg.sendNotificationParameters,
+                }),
                 invalidatesTags: ["Notifications"],
             }),
         }),
@@ -94,27 +94,6 @@ export type NotificationGetCollectionApiArg = {
 };
 export type NotificationDeleteAllApiResponse = unknown;
 export type NotificationDeleteAllApiArg = void;
-export type NotificationGetRecipientsApiResponse =
-    /** status 200 List of notification recipients for the current user */ {
-        totalItems: number;
-        items: Recipient[];
-    };
-export type NotificationGetRecipientsApiArg = void;
-export type NotificationSendApiResponse = unknown;
-export type NotificationSendApiArg = {
-    sendNotificationParameters: SendEmailParameters;
-};
-export type NotificationGetSubscriptionsApiResponse =
-    /** status 200 Notification preferences for the current user */ NotificationSubscriptionCollection;
-export type NotificationGetSubscriptionsApiArg = void;
-export type NotificationUpdateSubscriptionsApiResponse =
-    /** status 200 The stored notification preferences for the current user */ NotificationSubscriptionCollection;
-export type NotificationUpdateSubscriptionsApiArg = {
-    notificationUpdateSubscriptionsParameters: NotificationUpdateSubscriptionsParameters;
-};
-export type NotificationGetUnreadCountApiResponse =
-    /** status 200 Count of unread notifications for the current user */ UnreadCount;
-export type NotificationGetUnreadCountApiArg = void;
 export type NotificationGetByIdApiResponse = /** status 200 Notification data as JSON */ Notification;
 export type NotificationGetByIdApiArg = {
     /** Id of the notification */
@@ -129,6 +108,27 @@ export type NotificationDeleteByIdApiResponse = unknown;
 export type NotificationDeleteByIdApiArg = {
     /** Id of the notification */
     id: number;
+};
+export type NotificationGetSubscriptionsApiResponse =
+    /** status 200 Notification preferences for the current user */ NotificationSubscriptionCollection;
+export type NotificationGetSubscriptionsApiArg = void;
+export type NotificationUpdateSubscriptionsApiResponse =
+    /** status 200 The stored notification preferences for the current user */ NotificationSubscriptionCollection;
+export type NotificationUpdateSubscriptionsApiArg = {
+    notificationUpdateSubscriptionsParameters: NotificationUpdateSubscriptionsParameters;
+};
+export type NotificationGetUnreadCountApiResponse =
+    /** status 200 Count of unread notifications for the current user */ UnreadCount;
+export type NotificationGetUnreadCountApiArg = void;
+export type NotificationGetRecipientsApiResponse =
+    /** status 200 List of notification recipients for the current user */ {
+        totalItems: number;
+        items: Recipient[];
+    };
+export type NotificationGetRecipientsApiArg = void;
+export type NotificationSendApiResponse = unknown;
+export type NotificationSendApiArg = {
+    sendNotificationParameters: SendEmailParameters;
 };
 export type NotificationListItem = {
     /** AdditionalAttributes */
@@ -160,27 +160,17 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type Recipient = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the Recipient */
-    id: number;
-    /** User name or Group Name of the Recipient */
-    recipientName: string;
-};
-export type SendEmailParameters = {
-    /** recipient ID */
-    recipientId: number;
-    /** title */
-    title: string;
+export type Notification = NotificationListItem & {
     /** message */
-    message: string;
-    /** type of the attachment */
-    attachmentType?: ("asset" | "document" | "object") | ("asset" | "document" | "object");
-    /** ID of the attachment */
-    attachmentId?: number | null;
+    message: string | null;
+    /** payload */
+    payload: string | null;
+    /** linked attachment type */
+    attachmentType: string | null;
+    /** linked attachment ID */
+    attachmentId: number | null;
+    /** linked attachment fullPath */
+    attachmentFullPath: string | null;
 };
 export type NotificationAvailableChannel = {
     /** channel id */
@@ -242,27 +232,37 @@ export type UnreadCount = {
     /** Count of unread notifications */
     unreadNotificationsCount: number;
 };
-export type Notification = NotificationListItem & {
+export type Recipient = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the Recipient */
+    id: number;
+    /** User name or Group Name of the Recipient */
+    recipientName: string;
+};
+export type SendEmailParameters = {
+    /** recipient ID */
+    recipientId: number;
+    /** title */
+    title: string;
     /** message */
-    message: string | null;
-    /** payload */
-    payload: string | null;
-    /** linked attachment type */
-    attachmentType: string | null;
-    /** linked attachment ID */
-    attachmentId: number | null;
-    /** linked attachment fullPath */
-    attachmentFullPath: string | null;
+    message: string;
+    /** type of the attachment */
+    attachmentType?: ("asset" | "document" | "object") | ("asset" | "document" | "object");
+    /** ID of the attachment */
+    attachmentId?: number | null;
 };
 export const {
     useNotificationGetCollectionQuery,
     useNotificationDeleteAllMutation,
-    useNotificationGetRecipientsQuery,
-    useNotificationSendMutation,
-    useNotificationGetSubscriptionsQuery,
-    useNotificationUpdateSubscriptionsMutation,
-    useNotificationGetUnreadCountQuery,
     useNotificationGetByIdQuery,
     useNotificationReadByIdMutation,
     useNotificationDeleteByIdMutation,
+    useNotificationGetSubscriptionsQuery,
+    useNotificationUpdateSubscriptionsMutation,
+    useNotificationGetUnreadCountQuery,
+    useNotificationGetRecipientsQuery,
+    useNotificationSendMutation,
 } = injectedRtkApi;

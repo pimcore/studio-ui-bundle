@@ -55,6 +55,8 @@ interface SavedSearchFormProps {
   showSharing: boolean
   /** the listing the panel belongs to: only the shown panel's values become the search's draft */
   elementType?: ElementType
+  /** shows the search's name, description and sharing without letting them change */
+  readOnly?: boolean
 }
 
 export const SavedSearchForm = ({
@@ -65,7 +67,8 @@ export const SavedSearchForm = ({
   sharedRoles,
   onUsersRolesChange,
   showSharing,
-  elementType
+  elementType,
+  readOnly = false
 }: SavedSearchFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -113,17 +116,19 @@ export const SavedSearchForm = ({
           <Text className={ styles.label }>
             {renderIcon('user')} {t('user-management.user')} | {renderIcon('shield')} {t('user-management.role')}
           </Text>
-          <Flex
-            align="center"
-            className={ styles.editButton }
-            gap={ 8 }
-            onClick={ () => { setIsOpenDropdown(!isOpenDropdown) } }
-          >
-            {renderIcon('edit', 16)}
-            <Text className={ styles.editButtonText }>{t('button.add-edit')}</Text>
-          </Flex>
+          { !readOnly && (
+            <Flex
+              align="center"
+              className={ styles.editButton }
+              gap={ 8 }
+              onClick={ () => { setIsOpenDropdown(!isOpenDropdown) } }
+            >
+              {renderIcon('edit', 16)}
+              <Text className={ styles.editButtonText }>{t('button.add-edit')}</Text>
+            </Flex>
+          ) }
         </Flex>
-        {isOpenDropdown && (
+        {isOpenDropdown && !readOnly && (
           <UsersRolesDropdown
             initialSharedRoles={ sharedRoles }
             initialSharedUsers={ sharedUsers }
@@ -171,6 +176,7 @@ export const SavedSearchForm = ({
 
   return (
     <Form
+      disabled={ readOnly }
       form={ form }
       initialValues={ defaultValues }
       layout="vertical"

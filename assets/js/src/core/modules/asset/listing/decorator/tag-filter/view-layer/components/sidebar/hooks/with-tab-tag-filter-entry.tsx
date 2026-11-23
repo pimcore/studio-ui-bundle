@@ -20,7 +20,7 @@ import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 export const withTabTagFilterEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions']): AbstractDecoratorProps['useSidebarOptions'] => {
   const useTabTagFilterEntry: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
-    const { tags } = useTagFilter()
+    const { tags, onlyUntagged } = useTagFilter()
     const { t } = useTranslation()
 
     const getProps: typeof baseGetProps = () => {
@@ -32,7 +32,7 @@ export const withTabTagFilterEntry = (useBaseHook: AbstractDecoratorProps['useSi
 
       let sidebarHighlights: typeof baseProps['highlights'] = baseProps.highlights ?? []
 
-      if (tags.length > 0) {
+      if (tags.length > 0 || onlyUntagged) {
         sidebarHighlights.push('tag-filters')
       } else {
         sidebarHighlights = sidebarHighlights.filter((highlight) => highlight !== 'tag-filters')

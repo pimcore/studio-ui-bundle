@@ -6,11 +6,15 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            bundleApplicationLoggerListComponents: build.query<
-                BundleApplicationLoggerListComponentsApiResponse,
-                BundleApplicationLoggerListComponentsApiArg
+            bundleApplicationLoggerGetCollection: build.query<
+                BundleApplicationLoggerGetCollectionApiResponse,
+                BundleApplicationLoggerGetCollectionApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/bundle/application-logger/components` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/application-logger/list`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
                 providesTags: ["Bundle Application Logger"],
             }),
             bundleApplicationLoggerGetFileObject: build.query<
@@ -25,15 +29,11 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Bundle Application Logger"],
             }),
-            bundleApplicationLoggerGetCollection: build.query<
-                BundleApplicationLoggerGetCollectionApiResponse,
-                BundleApplicationLoggerGetCollectionApiArg
+            bundleApplicationLoggerListComponents: build.query<
+                BundleApplicationLoggerListComponentsApiResponse,
+                BundleApplicationLoggerListComponentsApiArg
             >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/bundle/application-logger/list`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
+                query: () => ({ url: `/pimcore-studio/api/bundle/application-logger/components` }),
                 providesTags: ["Bundle Application Logger"],
             }),
             bundleApplicationLoggerListPriorities: build.query<
@@ -47,16 +47,6 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type BundleApplicationLoggerListComponentsApiResponse = /** status 200 List of available components */ {
-    /** Log components used in the ApplicationLogger. */
-    items: string[];
-};
-export type BundleApplicationLoggerListComponentsApiArg = void;
-export type BundleApplicationLoggerGetFileObjectApiResponse = /** status 200 File object content as plain text */ Blob;
-export type BundleApplicationLoggerGetFileObjectApiArg = {
-    /** Path to the file object in the application log storage */
-    filePath: string;
-};
 export type BundleApplicationLoggerGetCollectionApiResponse =
     /** status 200 Paginated log entries with total count as header param as JSON */ {
         totalItems: number;
@@ -73,21 +63,21 @@ export type BundleApplicationLoggerGetCollectionApiArg = {
         };
     };
 };
+export type BundleApplicationLoggerGetFileObjectApiResponse = /** status 200 File object content as plain text */ Blob;
+export type BundleApplicationLoggerGetFileObjectApiArg = {
+    /** Path to the file object in the application log storage */
+    filePath: string;
+};
+export type BundleApplicationLoggerListComponentsApiResponse = /** status 200 List of available components */ {
+    /** Log components used in the ApplicationLogger. */
+    items: string[];
+};
+export type BundleApplicationLoggerListComponentsApiArg = void;
 export type BundleApplicationLoggerListPrioritiesApiResponse = /** status 200 List of available priorities */ {
     /** Log priority levels used in the ApplicationLogger. */
     priorities: number[];
 };
 export type BundleApplicationLoggerListPrioritiesApiArg = void;
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
 export type RelatedElementData = {
     /** ID */
     id: number;
@@ -126,9 +116,19 @@ export type BundleApplicationLoggerLogEntry = {
     /** Source */
     source: string | null;
 };
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
 export const {
-    useBundleApplicationLoggerListComponentsQuery,
-    useBundleApplicationLoggerGetFileObjectQuery,
     useBundleApplicationLoggerGetCollectionQuery,
+    useBundleApplicationLoggerGetFileObjectQuery,
+    useBundleApplicationLoggerListComponentsQuery,
     useBundleApplicationLoggerListPrioritiesQuery,
 } = injectedRtkApi;

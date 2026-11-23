@@ -6,13 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            ownershipManagementGetTypes: build.query<
-                OwnershipManagementGetTypesApiResponse,
-                OwnershipManagementGetTypesApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/ownership-management/types` }),
-                providesTags: ["Ownership Management"],
-            }),
             ownershipManagementGetCollection: build.query<
                 OwnershipManagementGetCollectionApiResponse,
                 OwnershipManagementGetCollectionApiArg
@@ -46,16 +39,17 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Ownership Management"],
             }),
+            ownershipManagementGetTypes: build.query<
+                OwnershipManagementGetTypesApiResponse,
+                OwnershipManagementGetTypesApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/ownership-management/types` }),
+                providesTags: ["Ownership Management"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type OwnershipManagementGetTypesApiResponse =
-    /** status 200 Successfully retrieved the list of configuration types */ {
-        totalItems: number;
-        items: OwnershipConfigurationType[];
-    };
-export type OwnershipManagementGetTypesApiArg = void;
 export type OwnershipManagementGetCollectionApiResponse =
     /** status 200 Successfully retrieved the list of configurations */ {
         totalItems: number;
@@ -94,28 +88,12 @@ export type OwnershipManagementReassignOwnerApiArg = {
     type: string;
     ownershipReassignOwnerParameter: OwnershipReassignOwnerParameter;
 };
-export type OwnershipConfigurationType = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+export type OwnershipManagementGetTypesApiResponse =
+    /** status 200 Successfully retrieved the list of configuration types */ {
+        totalItems: number;
+        items: OwnershipConfigurationType[];
     };
-    /** Unique type identifier */
-    type: string;
-    /** Translation key for the tab label */
-    label: string;
-    /** Icon identifier for the tab */
-    icon: string;
-};
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
+export type OwnershipManagementGetTypesApiArg = void;
 export type OwnershipConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -138,6 +116,16 @@ export type OwnershipConfiguration = {
     /** Modification date as a unix timestamp */
     modificationDate?: number | null;
 };
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
 export type OwnershipDeleteParameter = {
     /** Identifiers of the configurations to delete */
     ids: string[];
@@ -148,9 +136,21 @@ export type OwnershipReassignOwnerParameter = {
     /** User ID of the new owner */
     newOwnerId: number;
 };
+export type OwnershipConfigurationType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Unique type identifier */
+    type: string;
+    /** Translation key for the tab label */
+    label: string;
+    /** Icon identifier for the tab */
+    icon: string;
+};
 export const {
-    useOwnershipManagementGetTypesQuery,
     useOwnershipManagementGetCollectionQuery,
     useOwnershipManagementDeleteConfigurationsMutation,
     useOwnershipManagementReassignOwnerMutation,
+    useOwnershipManagementGetTypesQuery,
 } = injectedRtkApi;

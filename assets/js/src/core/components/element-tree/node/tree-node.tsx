@@ -17,6 +17,7 @@ import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
+import { type TreeNodeWorkflowState } from '../element-tree-slice'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
@@ -53,6 +54,7 @@ export interface TreeNodeProps {
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
   isSite?: boolean
+  workflowStates?: TreeNodeWorkflowState[]
   wrapNode?: TreeNodeWrapper
 }
 

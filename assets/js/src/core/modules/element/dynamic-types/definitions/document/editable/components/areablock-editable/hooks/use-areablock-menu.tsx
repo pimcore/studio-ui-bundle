@@ -25,6 +25,7 @@ export interface UseAreablockMenuOptions {
    * next to an existing area, so the empty state leaves it off.
    */
   showInsertPosition?: boolean
+  typeUsageCounts?: Record<string, number>
 }
 
 export interface UseAreablockMenuReturn {
@@ -47,23 +48,31 @@ const getTooltipTitle = (areaType: AreaType, t: UseTranslationResponse<'translat
   )
 }
 
-export const useAreablockMenu = ({ config, onAddArea, showInsertPosition = false }: UseAreablockMenuOptions): UseAreablockMenuReturn => {
+export const useAreablockMenu = ({ config, onAddArea, showInsertPosition = false, typeUsageCounts }: UseAreablockMenuOptions): UseAreablockMenuReturn => {
   const { t } = useTranslation()
 
   const menuItems = useMemo(() => {
     const groupedTypes = configUtils.getGroupedAreaTypes(config)
 
-    const toMenuItem = (areaType: AreaType): NonNullable<MenuProps['items']>[number] => ({
-      key: areaType.type,
-      label: (
-        <AreablockMenuItem
-          name={ t(areaType.name) }
-          onInsert={ showInsertPosition ? (position) => { onAddArea(areaType.type, position) } : undefined }
-          tooltipTitle={ getTooltipTitle(areaType, t) }
-        />
-      ),
-      onClick: () => { onAddArea(areaType.type, 'below') }
-    })
+    const toMenuItem = (areaType: AreaType): NonNullable<MenuProps['items']>[number] => {
+      const typeLimitReached = configUtils.isTypeLimitReached(config, areaType.type, typeUsageCounts?.[areaType.type] ?? 0)
+      // A limit-reached entry is disabled, so it must not offer the insert above and
+      // insert below buttons either: their clicks do not go through the menu item.
+      const canInsertAtPosition = showInsertPosition && !typeLimitReached
+
+      return {
+        key: areaType.type,
+        disabled: typeLimitReached,
+        label: (
+          <AreablockMenuItem
+            name={ t(areaType.name) }
+            onInsert={ canInsertAtPosition ? (position) => { onAddArea(areaType.type, position) } : undefined }
+            tooltipTitle={ typeLimitReached ? t('areablock.type-limit-reached') : getTooltipTitle(areaType, t) }
+          />
+        ),
+        onClick: () => { onAddArea(areaType.type, 'below') }
+      }
+    }
 
     if (Array.isArray(groupedTypes)) {
       return groupedTypes.map(toMenuItem)
@@ -80,7 +89,7 @@ export const useAreablockMenu = ({ config, onAddArea, showInsertPosition = false
     })
 
     return items
-  }, [config, onAddArea, showInsertPosition, t])
+  }, [config, onAddArea, showInsertPosition, typeUsageCounts, t])
 
   return {
     menuItems

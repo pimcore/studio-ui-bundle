@@ -32,6 +32,7 @@ export interface IRelationAllowedTypesDataComponent {
   assetsAllowed?: boolean
   documentsAllowed?: boolean
   dataObjectsAllowed?: boolean
+  combinedFieldName?: string
 }
 
 export const convertAllowedTypes = (props: IRelationAllowedTypesClassDefinition): IRelationAllowedTypesDataComponent => {
@@ -188,7 +189,8 @@ export const createElementSelectorConfig = (config: IRelationAllowedTypesDataCom
     },
     objects: {
       allowedTypes: config.allowedDataObjectTypes,
-      allowedClasses: config.allowedClasses
+      allowedClasses: config.allowedClasses,
+      ...(isNil(config.combinedFieldName) ? {} : { fieldName: config.combinedFieldName })
     }
   }
 }

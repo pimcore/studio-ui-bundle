@@ -144,6 +144,7 @@ areablock.paste: Plakken
 areablock.cut: Knippen
 areablock.settings: Instellingen
 areablock.delete: Verwijderen
+areablock.type-limit-reached: Het maximale aantal blokken van dit type is bereikt.
 document.highlight-editables: Bewerkbare velden markeren
 document.link.target: Linkdoel
 document.hardlink.source: Brondocument
@@ -1419,6 +1420,7 @@ element.delete.batch.show-paths: Items weergeven
 element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
 element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
 element.open: Openen
+element.open-multiple: '{{count}} elementen openen'
 element.state: Status
 element.state.unpublished: Niet gepubliceerd
 element.toolbar.copy-id: ID kopiëren
@@ -1431,6 +1433,7 @@ element.publish: Publiceren
 element.locate-in-tree: In boom zoeken
 element.sidebar.filter.only-direct-children: alleen directe onderliggende items
 element.sidebar.filter.only-unreferenced: Alleen zonder verwijzingen
+element.sidebar.filter.only-untagged: Alleen zonder tags
 element.sidebar.field-filters: Veldfilters
 element.full-information: Volledige informatie
 system-information.id: ID
@@ -1803,6 +1806,10 @@ redirects.source-site: Bronsite
 redirects.source: Bron
 redirects.target-site: Doelsite
 redirects.target: Doel
+redirects.target-type: Doeltype
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Gegevensobject
 redirects.status: Status
 redirects.priority: Prioriteit
 redirects.regex: RegEx
@@ -2517,6 +2524,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Naam
 widget.email-log.grid.value: Waarde
+email-log.label: E-maillog
 email-log.subject: Onderwerp
 email-log.tooltip.resend: E-mail opnieuw versturen
 email-log.tooltip.forward: E-mail doorsturen
