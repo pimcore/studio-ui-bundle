@@ -25,6 +25,7 @@ jest.mock('@Pimcore/modules/asset/asset-api-slice-enhanced', () => ({
 jest.mock('@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission', () => ({
   useTreePermission: () => ({ isTreeActionAllowed: () => mockTreeAllowed })
 }))
+jest.mock('./listing-drop-zone.styles', () => ({ useStyles: () => ({ styles: { dropArea: 'drop-area' } }) }))
 jest.mock('../../tree/dnd-upload/dnd-upload-zone', () => ({
   DndUploadZone: (props: any) => {
     mockZone(props)
