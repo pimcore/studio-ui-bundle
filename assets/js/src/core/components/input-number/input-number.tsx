@@ -51,7 +51,7 @@ export const InputNumber = ({ inherited, className, style, decimalSeparator, onK
   const fieldWidths = useFieldWidthOptional()
   const { i18n } = useTranslation()
   const effectiveDecimalSeparator = decimalSeparator ?? getDecimalSeparator(i18n?.language)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<React.ElementRef<typeof AntInputNumber>>(null)
   // A custom parser may accept other characters, so the filters below are skipped when one is given.
   const restrictInput = isUndefined(restProps.parser)
 
