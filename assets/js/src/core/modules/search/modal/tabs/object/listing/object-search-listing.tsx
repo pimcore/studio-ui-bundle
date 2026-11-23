@@ -26,7 +26,7 @@ import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { useDataQueryHelper } from './data-layer/use-data-query-helper'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
-import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
+import { ColumnConfigurationDecorator, type ColumnConfigurationDecoratorConfig } from './decorator/column-configuration/column-configuration-decorator'
 import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
 import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
@@ -43,26 +43,26 @@ const defaultProps = {
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
+const buildListingProps = (savedSearchReadOnly: boolean, hideSavedSearchActions: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
-  ColumnConfigurationDecorator,
+  [ColumnConfigurationDecorator, { readOnly: savedSearchReadOnly } as ColumnConfigurationDecoratorConfig],
   TagFilterDecorator,
-  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, elementType: elementTypes.dataObject } as GeneralFiltersDecoratorConfig],
+  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, elementType: elementTypes.dataObject, readOnly: savedSearchReadOnly } as GeneralFiltersDecoratorConfig],
   SortingDecorator,
   [ClassDefinitionSelectionDecorator, { showConfigLayer: false } as ClassDefinitionSelectionDecoratorConfig],
   [OpenElementDecorator, { elementType: elementTypes.dataObject } as OpenElementDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.dataObject } as TypeFilterDecoratorConfig],
   // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
-  [SavedSearchDecorator, { elementType: elementTypes.dataObject, supportsLoadedState: true, readOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
+  [SavedSearchDecorator, { elementType: elementTypes.dataObject, supportsLoadedState: true, readOnly: savedSearchReadOnly || hideSavedSearchActions, fieldsReadOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
-export const ObjectSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
+export const ObjectSearchListing = ({ savedSearchReadOnly = false, hideSavedSearchActions = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
   const { close } = useSearch()
   // buildListingProps composes NEW component types per call, and fresh types remount the whole
   // listing tree — so the composition is memoized apart from the entries, which an embedder may
   // well pass inline and which only wrap the sidebar hook
-  const baseProps = useMemo(() => buildListingProps(savedSearchReadOnly), [savedSearchReadOnly])
+  const baseProps = useMemo(() => buildListingProps(savedSearchReadOnly, hideSavedSearchActions), [savedSearchReadOnly, hideSavedSearchActions])
   const listingProps = useMemo(
     () => withExtraSidebarEntries(baseProps, extraSidebarEntries),
     [baseProps, extraSidebarEntries]

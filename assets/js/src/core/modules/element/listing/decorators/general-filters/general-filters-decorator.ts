@@ -19,6 +19,8 @@ export interface GeneralFiltersDecoratorConfig {
   showOnlyUnreferencedFilter?: boolean
   /** Enables registered search modes (SearchModeRegistry) for this listing; unset = plain search bar. */
   elementType?: ElementType
+  /** the filters are shown, not changed */
+  readOnly?: boolean
 }
 
 export const GeneralFiltersDecorator: AbstractDecorator<GeneralFiltersDecoratorConfig> = (props, config) => {
@@ -27,7 +29,7 @@ export const GeneralFiltersDecorator: AbstractDecorator<GeneralFiltersDecoratorC
   const newProps = {
     ContextComponent: withGeneralFiltersContext(ContextComponent, config),
     useDataQueryHelper: withGeneralFiltersQueryArg(useDataQueryHelper),
-    useSidebarOptions: withGeneralFiltersTab(useSidebarOptions),
+    useSidebarOptions: withGeneralFiltersTab(useSidebarOptions, config?.readOnly),
     ...baseProps
   }
 

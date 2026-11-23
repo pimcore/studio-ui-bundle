@@ -149,6 +149,7 @@ areablock.paste: Pegar
 areablock.cut: Cortar
 areablock.settings: Configuración
 areablock.delete: Eliminar
+areablock.type-limit-reached: Se ha alcanzado el número máximo de bloques de este tipo.
 document.highlight-editables: Resaltar editables
 document.link.target: Destino del enlace
 document.hardlink.source: Documento de origen
@@ -1424,6 +1425,7 @@ element.delete.batch.show-paths: Mostrar elementos
 element.delete.batch.dependencies-warning.confirmed_one: 'Tenga en cuenta: Este elemento tiene dependencias.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Tenga en cuenta: Estos elementos tienen dependencias.'
 element.open: Abrir
+element.open-multiple: 'Abrir {{count}} elementos'
 element.state: Estado
 element.state.unpublished: No publicado
 element.toolbar.copy-id: Copiar ID
@@ -1436,6 +1438,7 @@ element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
 element.sidebar.filter.only-direct-children: Solo hijos directos
 element.sidebar.filter.only-unreferenced: Solo sin referencias
+element.sidebar.filter.only-untagged: Solo sin etiquetas
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
@@ -2408,6 +2411,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parámetros
 widget.email-log.grid.name: Nombre
 widget.email-log.grid.value: Valor
+email-log.label: Log del correo
 email-log.subject: Asunto
 email-log.tooltip.resend: Reenviar correo electrónico
 email-log.tooltip.forward: Reenviar correo electrónico

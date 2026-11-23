@@ -44,19 +44,6 @@ jest.mock('@Pimcore/modules/user/hooks/use-user-management-context', () => ({
   useUserManagementContext: () => ({ id: 42 })
 }))
 
-jest.mock('@Pimcore/app/config/app-config', () => ({
-  currentDomain: 'http://localhost'
-}))
-
-// the real router module builds the app router (and its whole import tree) at import time
-jest.mock('@Pimcore/app/router/router', () => ({
-  routes: { login: '/login' }
-}))
-
-jest.mock('react-router-dom', () => ({
-  generatePath: (path: string) => path
-}))
-
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
 }))
@@ -96,6 +83,8 @@ describe('LoginTokenModalContainer', () => {
     await waitFor(() => { expect(mockAddModal).toHaveBeenCalledTimes(1) })
     const modalElement = mockAddModal.mock.calls[0][1]
     expect(modalElement.props.tokenUrl).toBe(link)
+    // the endpoint takes no request body any more; the link is built server-side
+    expect(mockTrigger).toHaveBeenCalledWith({ id: 42 })
     expect(mockTrackError).not.toHaveBeenCalled()
   })
 

@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { currentDomain } from '@Pimcore/app/config/app-config'
-import { routes } from '@Pimcore/app/router/router'
 import { Button } from '@Pimcore/components/button/button'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
@@ -18,7 +16,6 @@ import { useLazyUserTokenLinkGetQuery } from '@Pimcore/modules/user/user-api-sli
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { generatePath } from 'react-router-dom'
 import { LoginTokenModal } from './login-token-modal'
 
 interface LoginTokenModalContainerProps {
@@ -42,12 +39,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
 
   const openModal = async (): Promise<void> => {
     if (!isOpen) {
-      const { error } = await trigger({
-        id,
-        tokenLink: {
-          tokenLoginUrl: `${currentDomain}${generatePath(routes.login)}`
-        }
-      })
+      const { error } = await trigger({ id })
 
       if (!isUndefined(error)) {
         trackError(new ApiError(error))

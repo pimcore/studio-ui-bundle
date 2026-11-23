@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { getWorkflowActions } from './workflow-types'
+import { getVisibleWorkflowStatuses, getWorkflowActions } from './workflow-types'
 import { type WorkflowDetails } from '../../../shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
 const workflow = (behaviours: Array<string | undefined>): WorkflowDetails => ({
@@ -33,5 +33,24 @@ describe('getWorkflowActions', () => {
 
     expect(actions[0].unsavedChangesBehaviour).toBeUndefined()
     expect(actions[1].unsavedChangesBehaviour).toBeUndefined()
+  })
+})
+
+describe('getVisibleWorkflowStatuses', () => {
+  const status = (title: string, visibleInDetail: boolean): object => ({
+    color: '#ff0000', colorInverted: false, title, label: title, layoutId: null, visibleInDetail
+  })
+
+  it('returns the states marked visible in the header, workflow by workflow', () => {
+    const workflows = [
+      { workflowName: 'first', workflowStatus: [status('a', true), status('hidden', false)] },
+      { workflowName: 'second', workflowStatus: [status('b', true)] }
+    ] as unknown as WorkflowDetails[]
+
+    expect(getVisibleWorkflowStatuses(workflows).map((state) => state.title)).toEqual(['a', 'b'])
+  })
+
+  it('returns no states while the workflow details are not loaded', () => {
+    expect(getVisibleWorkflowStatuses(undefined)).toEqual([])
   })
 })

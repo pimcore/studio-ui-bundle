@@ -9,7 +9,7 @@
  */
 
 import { Modal } from '@Pimcore/components/modal/modal'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { type EditViewProps } from './views/edit-view'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -32,6 +32,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useStyles } from './grid-config-modal.styles'
 import { useOpenAnimationDone } from './use-open-animation-done'
+import { SettingsContext } from '@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/tabs/grid-config/povider/settings/settings-provider'
 
 export interface GridConfigModalProps extends EditViewProps {
   open?: boolean
@@ -74,6 +75,8 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   const { data: gridData } = useData()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { styles } = useStyles()
+  // optional: the list and the modal also render outside a column configuration's settings
+  const readOnly = useContext(SettingsContext)?.readOnly === true
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
   // scrolling waits for the open animation, the zoomed-in modal would throw off the scroll position
   const { isOpenAnimationDone, setIsOpenAnimationDone } = useOpenAnimationDone(open)
@@ -118,7 +121,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
 
                 <Content style={ { height: 'calc(80vh - 200px)' } }>
                   <div className={ styles.body }>
-                    { fieldsToAddOpen && (
+                    { fieldsToAddOpen && !readOnly && (
                       <FieldsToAddPanel
                         data-testid="listing-grid-config-fields-to-add"
                         fillHeight
@@ -134,6 +137,23 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                   </div>
                 </Content>
 
+                { readOnly && (
+                  <Toolbar
+                    justify="flex-end"
+                    padding={ { x: 'none' } }
+                    theme="secondary"
+                  >
+                    <Button
+                      data-testid="listing-grid-config-modal-close-button"
+                      onClick={ () => onOpenChange?.(false) }
+                      type='default'
+                    >
+                      { t('close') }
+                    </Button>
+                  </Toolbar>
+                ) }
+
+                { !readOnly && (
                 <Toolbar
                   padding={ { x: 'none' } }
                   theme="secondary"
@@ -167,6 +187,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                     </Button>
                   </Space>
                 </Toolbar>
+                ) }
               </ContentLayout>
             </Modal>
           </PipelineLayoutProvider>

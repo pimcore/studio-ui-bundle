@@ -74,6 +74,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     onLoadData,
     onExpand,
     defaultExpandAll,
+    disabled,
     withCustomSwitcherIcon,
     isHideRootChecker = true,
     hasRoot = true,
@@ -185,6 +186,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
               checkedKeys={ checkedKeys }
               className={ cn(styles.treeContainer, className) }
               defaultExpandAll={ defaultExpandAll }
+              disabled={ disabled }
               draggable={ draggable }
               height={ height }
               loadData={ onLoadData !== null ? onLoadData : undefined }

@@ -14,7 +14,11 @@ import { type AbstractDecorator } from '@Pimcore/modules/element/listing/decorat
 import { WithColumnConfiguration } from './configuration-layer/with-column-configuration'
 import { withConfigurationSidebarEntry } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/hooks/with-configuration-sidebar-entry'
 
-export const ColumnConfigurationDecorator: AbstractDecorator = (props) => {
+export interface ColumnConfigurationDecoratorConfig {
+  readOnly?: boolean
+}
+
+export const ColumnConfigurationDecorator: AbstractDecorator<ColumnConfigurationDecoratorConfig> = (props, config) => {
   const { ConfigurationComponent, ContextComponent, useGridOptions, useSidebarOptions, ...baseProps } = props
 
   return {
@@ -22,6 +26,6 @@ export const ColumnConfigurationDecorator: AbstractDecorator = (props) => {
     ConfigurationComponent: WithColumnConfiguration(ConfigurationComponent),
     ContextComponent: WithAvailableColumnsContext(ContextComponent),
     useGridOptions: withAdvancedColumnConfig(useGridOptions),
-    useSidebarOptions: withConfigurationSidebarEntry(useSidebarOptions, { saveEnabled: false })
+    useSidebarOptions: withConfigurationSidebarEntry(useSidebarOptions, { saveEnabled: false, readOnly: config?.readOnly })
   }
 }

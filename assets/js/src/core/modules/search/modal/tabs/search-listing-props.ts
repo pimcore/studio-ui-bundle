@@ -19,8 +19,10 @@ import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/de
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 
 export interface SearchListingProps {
-  /** show the saved-search panel without its write actions */
+  /** a view of the search: filters, columns and the saved-search panel shown, not changed; paging, sorting and selection stay */
   savedSearchReadOnly?: boolean
+  /** hide only the saved-search panel's write actions; filters, columns and fields stay editable */
+  hideSavedSearchActions?: boolean
   /** the sidebar entry to open on mount; without it the sidebar starts collapsed */
   defaultSidebarTab?: string
   /**

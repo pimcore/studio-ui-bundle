@@ -109,7 +109,10 @@ moduleSystem.registerModule({
 
     listingBuilder.addDecorator({
       name: 'tagFilter',
-      decorator: TagFilterDecorator
+      decorator: TagFilterDecorator,
+      config: {
+        showOnlyUntaggedFilter: true
+      }
     })
 
     listingBuilder.addDecorator({

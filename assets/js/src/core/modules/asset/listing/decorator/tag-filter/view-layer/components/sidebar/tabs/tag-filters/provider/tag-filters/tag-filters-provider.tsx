@@ -15,11 +15,15 @@ import React, { createContext, useEffect, useMemo, useState } from 'react'
 export interface ITagFiltersContext {
   tags: TagFilterData['tags']
   setTags: TagFilterData['setTags']
+  onlyUntagged: TagFilterData['onlyUntagged']
+  setOnlyUntagged: TagFilterData['setOnlyUntagged']
 }
 
 export const TagFiltersContext = createContext<ITagFiltersContext>({
   tags: [],
-  setTags: () => {}
+  setTags: () => {},
+  onlyUntagged: false,
+  setOnlyUntagged: () => {}
 })
 
 interface FilterProviderProps {
@@ -27,16 +31,18 @@ interface FilterProviderProps {
 }
 
 export const TagFiltersProvider = ({ children }: FilterProviderProps): React.JSX.Element => {
-  const { tags: ListingTags } = useListingTagFilter()
+  const { tags: ListingTags, onlyUntagged: listingOnlyUntagged } = useListingTagFilter()
   const [tags, setTags] = useState<TagFilterData['tags']>(ListingTags)
+  const [onlyUntagged, setOnlyUntagged] = useState<boolean>(listingOnlyUntagged)
 
   useEffect(() => {
     setTags(ListingTags)
-  }, [ListingTags])
+    setOnlyUntagged(listingOnlyUntagged)
+  }, [ListingTags, listingOnlyUntagged])
 
   return useMemo(() => (
-    <TagFiltersContext.Provider value={ { tags, setTags } }>
+    <TagFiltersContext.Provider value={ { tags, setTags, onlyUntagged, setOnlyUntagged } }>
       {children}
     </TagFiltersContext.Provider>
-  ), [tags])
+  ), [tags, onlyUntagged])
 }

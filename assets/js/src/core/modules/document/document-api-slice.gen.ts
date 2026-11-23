@@ -665,6 +665,20 @@ export type CustomAttributes = {
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
+export type WorkflowStatus = {
+    /** color */
+    color: string;
+    /** colorInverted */
+    colorInverted: boolean;
+    /** borderColor */
+    title: string;
+    /** label */
+    label: string;
+    /** layoutId */
+    layoutId: string | null;
+    /** visibleInDetail */
+    visibleInDetail: boolean;
+};
 export type Permissions = {
     /** List */
     list: boolean;
@@ -698,6 +712,8 @@ export type Document = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
+    /** Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders */
+    workflowStates?: WorkflowStatus[] | null;
     /** Full path */
     fullPath: string;
     /** Published */

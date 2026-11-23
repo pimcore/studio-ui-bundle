@@ -19,6 +19,7 @@ interface SavedSearchSidebarEntryConfig {
   elementType?: ElementType
   supportsLoadedState: boolean
   readOnly?: boolean
+  fieldsReadOnly?: boolean
 }
 
 export const withSavedSearchSidebarEntry = (
@@ -41,6 +42,7 @@ export const withSavedSearchSidebarEntry = (
             component: (
               <SavedSearchPanel
                 elementType={ config.elementType }
+                fieldsReadOnly={ config.fieldsReadOnly ?? false }
                 readOnly={ config.readOnly ?? false }
                 supportsLoadedState={ config.supportsLoadedState }
               />
