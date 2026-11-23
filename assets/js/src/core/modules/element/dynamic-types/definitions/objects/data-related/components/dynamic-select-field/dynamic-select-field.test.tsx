@@ -59,6 +59,7 @@ describe('DynamicSelectField', () => {
 
     expect(lastOptions()).toEqual([{ label: 'option_5', value: 'v5' }])
     expect(translate).toHaveBeenCalledTimes(1)
+    expect(selectProps[selectProps.length - 1].sortableTags).toBe(false)
   })
 
   it('seeds every selected option of a multiselect', () => {
@@ -71,6 +72,7 @@ describe('DynamicSelectField', () => {
            />)
 
     expect(lastOptions().map(option => option.value)).toEqual(['v2', 'v9'])
+    expect(selectProps[selectProps.length - 1].sortableTags).toBe(true)
   })
 
   it('seeds nothing without a value', () => {
