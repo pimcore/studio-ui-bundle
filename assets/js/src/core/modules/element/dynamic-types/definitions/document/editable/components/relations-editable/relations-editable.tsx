@@ -17,7 +17,7 @@ import { toCssDimension } from '@sdk/utils'
 import { ManyToManyRelationLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
 import { isEmpty, isNil } from 'lodash'
 import { useElementPublishedStates } from '../../hooks/use-element-published-states'
-import { withPublishedState } from '../../hooks/published-state'
+import { withoutLookedUpPublishedState, withPublishedState } from '../../hooks/published-state'
 
 interface RelationsEditableProps extends ManyToManyRelationProps {
   inherited?: boolean
@@ -38,6 +38,14 @@ export const RelationsEditable = ({
   const value = useMemo(() => {
     return isEmpty(publishedStates) ? otherProps.value : otherProps.value?.map((item) => withPublishedState(item, publishedStates))
   }, [otherProps.value, publishedStates])
+
+  const handleChange: ManyToManyRelationProps['onChange'] = (changed) => {
+    otherProps.onChange?.(
+      Array.isArray(changed)
+        ? changed.map((item) => withoutLookedUpPublishedState(item, otherProps.value ?? [], publishedStates))
+        : changed
+    )
+  }
 
   const handleOverwrite = (): void => {
     otherProps.onChange?.(otherProps.value ?? null)
@@ -73,6 +81,7 @@ export const RelationsEditable = ({
           { ...otherProps }
           disabled={ otherProps.disabled === true || inherited === true }
           height={ height }
+          onChange={ handleChange }
           value={ value }
           width={ width }
         />

@@ -126,4 +126,14 @@ describe('useElementPublishedStates', () => {
     await waitFor(() => { expect(Object.keys(result.current)).toHaveLength(6) })
     expect(dispatch).toHaveBeenCalledTimes(6)
   })
+
+  it('looks up an element only once when it is listed more than once', async () => {
+    answerWith({ 'document:7': false })
+    const refs: Ref[] = [{ id: 7, type: 'document' }, { id: 7, type: 'document' }]
+
+    const { result } = renderHook(() => useElementPublishedStates(refs))
+
+    await waitFor(() => { expect(result.current).toEqual({ 'document:7': false }) })
+    expect(dispatch).toHaveBeenCalledTimes(1)
+  })
 })

@@ -118,4 +118,46 @@ describe('RelationsEditable', () => {
 
     expect(onChange).toHaveBeenCalledWith(items)
   })
+
+  it('does not write the looked up state back when the relations change', () => {
+    publishedStates = { 'document:7': false, 'data-object:8': true }
+    const onChange = jest.fn()
+
+    render(<RelationsEditable
+      { ...baseProps }
+      onChange={ onChange }
+      value={ items }
+           />)
+    relationsProps.onChange?.(relationsProps.value.slice(0, 2))
+
+    expect(onChange).toHaveBeenCalledWith(items.slice(0, 2))
+  })
+
+  it('keeps a published state the stored relation already carries when the relations change', () => {
+    publishedStates = { 'document:7': false }
+    const onChange = jest.fn()
+    const stored = [{ ...items[0], isPublished: true }]
+
+    render(<RelationsEditable
+      { ...baseProps }
+      onChange={ onChange }
+      value={ stored }
+           />)
+    relationsProps.onChange?.(relationsProps.value)
+
+    expect(onChange).toHaveBeenCalledWith(stored)
+  })
+
+  it('passes a cleared relation on as it is', () => {
+    const onChange = jest.fn()
+
+    render(<RelationsEditable
+      { ...baseProps }
+      onChange={ onChange }
+      value={ items }
+           />)
+    relationsProps.onChange?.(null)
+
+    expect(onChange).toHaveBeenCalledWith(null)
+  })
 })

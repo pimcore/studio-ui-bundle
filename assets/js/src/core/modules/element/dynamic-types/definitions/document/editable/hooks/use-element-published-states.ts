@@ -41,8 +41,15 @@ export const useElementPublishedStates = (references: PublishedStateReference[])
   const lookupSignature = lookups.map(({ key }) => key).join(',')
 
   useEffect(() => {
-    const pending = lookups.filter(({ key }) => !requested.current.has(key))
-    pending.forEach(({ key }) => requested.current.add(key))
+    const pending = lookups.filter(({ key }) => {
+      if (requested.current.has(key)) {
+        return false
+      }
+
+      requested.current.add(key)
+
+      return true
+    })
 
     if (pending.length === 0) {
       return
