@@ -10,10 +10,16 @@
 
 import React from 'react'
 import { isNull } from 'lodash'
-import { closestCenter, DndContext, KeyboardSensor, PointerSensor, type DragEndEvent, useSensor, useSensors } from '@dnd-kit/core'
+import { closestCenter, DndContext, KeyboardSensor, PointerSensor, type DragEndEvent, type KeyboardCodes, useSensor, useSensors } from '@dnd-kit/core'
 import { rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import type { SelectProps } from 'antd'
 import { getSortableTagIds, reorderTags } from './reorder-tags'
+
+const KEYBOARD_CODES: KeyboardCodes = {
+  start: ['Space'],
+  cancel: ['Escape'],
+  end: ['Space', 'Tab']
+}
 
 export interface SortableTagsProps {
   enabled: boolean
@@ -27,7 +33,8 @@ export interface SortableTagsProps {
 export const SortableTags = ({ enabled, disabled = false, value, options, onChange, children }: SortableTagsProps): React.JSX.Element => {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    // SortableTag stops Enter before it reaches rc-select, so Space alone picks up and drops a tag.
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates, keyboardCodes: KEYBOARD_CODES })
   )
 
   const handleDragEnd = ({ active, over }: DragEndEvent): void => {

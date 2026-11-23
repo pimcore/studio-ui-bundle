@@ -21,6 +21,7 @@ import { useStyles } from '../../select.styles'
 import { getSortableTagId } from '../sortable-tags/reorder-tags'
 
 const MAX_TAG_SORTABLE_ID = '__sortable-tag-max__'
+const SELECT_KEYS = ['Backspace', 'Enter']
 
 export interface SortableTagProps extends CustomTagProps {
   /** rc-select's `disabled` belongs to the option, so the disabled state of the Select itself is passed separately. */
@@ -51,6 +52,17 @@ export const SortableTag = ({ label, value, disabled, selectDisabled = false, on
     event.stopPropagation()
   }
 
+  // rc-select handles keys on the whole selector: Backspace removes the last tag and Enter opens the dropdown.
+  // They mean nothing on a focused tag, so they stop here. The drag keys must bubble on, dnd-kit reads them on the document.
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>): void => {
+    listeners?.onKeyDown?.(event)
+
+    if (SELECT_KEYS.includes(event.key)) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
+
   const handleRemoveMouseDown = (event: React.MouseEvent): void => {
     event.preventDefault()
     event.stopPropagation()
@@ -69,7 +81,7 @@ export const SortableTag = ({ label, value, disabled, selectDisabled = false, on
       {/* The label is the drag handle, so the remove button is not nested inside an interactive element. */}
       <span
         className={ cn('ant-select-selection-item-content', { [styles.sortableTagHandle]: isSortable }) }
-        { ...(isSortable ? { ...attributes, ...listeners, onMouseDown: stopMouseDown } : {}) }
+        { ...(isSortable ? { ...attributes, ...listeners, onKeyDown: handleKeyDown, onMouseDown: stopMouseDown } : {}) }
       >
         {label}
       </span>

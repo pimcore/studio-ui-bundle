@@ -123,6 +123,23 @@ describe('Select sortableTags', () => {
     expect(onDropdownVisibleChange).not.toHaveBeenCalled()
   })
 
+  it('does not remove the last tag on Backspace while a tag label has focus', () => {
+    const onChange = renderSelect()
+
+    fireEvent.keyDown(getHandles()[0], { key: 'Backspace', code: 'Backspace' })
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('does not open the dropdown on Enter while a tag label has focus', () => {
+    const onDropdownVisibleChange = jest.fn()
+    renderSelect({ onDropdownVisibleChange })
+
+    fireEvent.keyDown(getHandles()[0], { key: 'Enter', code: 'Enter' })
+
+    expect(onDropdownVisibleChange).not.toHaveBeenCalled()
+  })
+
   it('renders the default tags without sortableTags', () => {
     renderSelect({ sortableTags: false })
 
