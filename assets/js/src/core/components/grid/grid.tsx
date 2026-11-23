@@ -444,6 +444,7 @@ export const Grid = ({
         onRowClick={ props.onRowClick }
         onRowDoubleClick={ props.onRowDoubleClick }
         row={ row }
+        rowClassName={ props.getRowClassName?.(row.original) }
         rowStyle={ rowStyle }
         size={ size }
         tableElement={ tableElement }
@@ -577,7 +578,7 @@ export const Grid = ({
         </div>
       </div>
     </ConfigProvider>
-  ), [table, modifiedCells, table.getTotalSize(), columnSizingKey, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
+  ), [table, modifiedCells, table.getTotalSize(), columnSizingKey, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns, props.getRowClassName])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

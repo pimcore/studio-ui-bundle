@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, useEffect, useState, useMemo } from 'react'
+import React, { forwardRef, type MutableRefObject, useCallback, useEffect, useState, useMemo } from 'react'
 import { isEqual, isNil } from 'lodash'
 import cn from 'classnames'
 import { arrayMove } from '@dnd-kit/sortable'
@@ -93,6 +93,11 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
     }
   }
 
+  // Unpublished elements are marked like they are in the relation tags and the element tree
+  const getRowClassName = useCallback((row: ManyToManyRelationValueItem): string | undefined => {
+    return row.isPublished === false ? styles.unpublishedRow : undefined
+  }, [styles.unpublishedRow])
+
   const content = useMemo(() => (
     <Content
       overflow={ { x: 'hidden', y: 'hidden' } }
@@ -109,6 +114,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           disabled={ props.disabled === true || props.inherited === true }
           enableRowDrag={ props.enableRowDrag }
           enableRowVirtualizer={ props?.enableRowVirtualizer }
+          getRowClassName={ getRowClassName }
           handleDragEnd={ handleDragEnd }
           onUpdateCellData={ props.onUpdateCellData }
           resizable
@@ -117,7 +123,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         {props.hint}
       </div>
     </Content>
-  ), [props, data])
+  ), [props, data, getRowClassName])
 
   return (
     <div
