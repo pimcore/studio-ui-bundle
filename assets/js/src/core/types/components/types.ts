@@ -73,6 +73,8 @@ export interface GridProps {
   dataTestId?: string
   onRowDoubleClick?: (row: any) => void
   onRowClick?: (row: any) => void
+  /** Extra class name for a row's table row, resolved from the row's original data */
+  getRowClassName?: (rowData: any) => string | undefined
   /** UI of the built-in selection column; selection capability itself is controlled by enableRowSelection/enableMultipleRowSelection and stays functional with 'none' */
   rowSelectionColumn?: 'checkbox' | 'none'
   enableRowDrag?: boolean
