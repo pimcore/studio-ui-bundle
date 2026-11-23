@@ -153,6 +153,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'classificationStoreConfigurationSubGroupCollection',
+      type: 'query'
+    },
+    {
       pattern: 'unitQuantityValueUnitsCollection',
       type: 'query'
     }

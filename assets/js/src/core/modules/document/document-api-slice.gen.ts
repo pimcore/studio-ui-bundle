@@ -334,9 +334,9 @@ export type DocumentUpdateByIdApiArg = {
             index?: number | null;
             key?: string | null;
             task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
-            /** Optional coauthor type stored on versions created by this save */
+            /** Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
             coauthorType?: string;
-            /** Optional coauthor identifier stored on versions created by this save */
+            /** Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
             coauthor?: string;
             locked?: string | null;
             published?: boolean | null;
@@ -787,7 +787,7 @@ export type ValidationFailedError = {
     /** Failure message in English. Untrusted, may contain markup: escape before rendering */
     message: string;
     /** Error key, not present when the request failed before the element was validated */
-    errorKey?: string;
+    errorKey?: string | null;
     /** Individual validation errors, present when the failure came from the element validation */
     validationErrors?: ValidationError[];
 };

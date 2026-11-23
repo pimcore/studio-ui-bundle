@@ -2234,12 +2234,25 @@ classification-store.rename-collection: Rinomina collection
 classification-store.delete-collection: "Eliminare la collection \"{{collectionName}}\"?"
 classification-store.add-key: Aggiungi chiave
 classification-store.rename-key: Rinomina chiave
-classification-store.delete-key: "Eliminare la chiave \"{{keyName}}\"?"
+classification-store.delete-key: "Rimuovere la chiave \"{{keyName}}\" da tutti i gruppi?"
 classification-store.delete-key-relation: "Rimuovere la chiave \"{{keyName}}\" da questo gruppo?"
 classification-store.delete-group-relation: "Rimuovere il gruppo \"{{groupName}}\" da questa collection?"
+classification-store.delete-group-consequence: "L'eliminazione di questo gruppo elimina anche i valori che ogni oggetto conserva al suo interno. Questa azione non può essere annullata."
+classification-store.delete-collection-consequence: "La collection e il relativo elenco di gruppi vengono rimossi. I gruppi e le loro chiavi restano nello store e nessun valore degli oggetti viene eliminato."
+classification-store.delete-key-relation-consequence: "La chiave viene rimossa solo da questo gruppo. La chiave stessa resta nello store e nulla di ciò che un oggetto conserva viene eliminato."
+classification-store.delete-key-consequence: "La chiave viene rimossa da ogni gruppo a cui appartiene e non viene più offerta da nessuna parte. Nulla di ciò che un oggetto conserva viene eliminato, ma quei valori restano irraggiungibili finché la chiave non viene ripristinata e assegnata di nuovo a un gruppo. Le sue assegnazioni ai gruppi, il loro ordine, i loro flag di obbligatorietà e i loro override per gruppo non tornano con essa."
+classification-store.keys-view.active: Attive
+classification-store.keys-view.deleted: Eliminate
+classification-store.restore-key: Ripristina
+classification-store.restore-key-question: "Ripristinare la chiave \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "La chiave torna senza appartenere ad alcun gruppo. Le sue assegnazioni ai gruppi, il loro ordine, i loro flag di obbligatorietà e i loro override per gruppo sono andati persi e non possono essere recuperati. Assegna di nuovo la chiave a un gruppo per rendere nuovamente raggiungibili i suoi valori."
+classification-store.keys-deleted-empty: Nessuna chiave eliminata.
+classification-store.keys-deleted-no-results: "Nessuna chiave eliminata corrisponde alla ricerca."
+classification-store.delete-group-relation-consequence: "Il gruppo viene rimosso solo da questa collection. Il gruppo, le sue chiavi e i valori che gli oggetti conservano al suo interno restano invariati."
 classification-store.edit-definition: Modifica definizione
 classification-store.edit-key-definition: "Modifica definizione chiave: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "ID di corrispondenza"
 classification-store.columns.name: Nome
 classification-store.columns.title: Titolo
 classification-store.columns.type: Tipo
@@ -2258,6 +2271,112 @@ classification-store.select-group: Seleziona gruppo
 classification-store.search-groups: Cerca gruppi…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Sottogruppi
+classification-store.engine.label: "Motore: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Documento"
+classification-store.key-type-needs-document-engine: "Il motore di questo store non può contenere questo tipo di chiave. Richiede il motore documenti."
+classification-store.keys-without-field-filter: "Per queste chiavi non è disponibile alcun filtro di campo, quindi non sono state aggiunte: {{keyNames}}"
+classification-store.add-sub-group: Aggiungi sottogruppo
+classification-store.delete-sub-group: "Eliminare il sottogruppo \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: Un sottogruppo appartiene allo store, quindi uno nuovo diventa disponibile per ogni gruppo di questo store.
+classification-store.key-indexed: "Includi nell'indice di ricerca del Classification Store"
+classification-store.key-indexed-hint: Quando è disattivata, questa chiave non può essere ordinata, filtrata o cercata e il suo valore viene rimosso dal documento di ricerca memorizzato. L'indice converge attraverso la coda, quindi le modifiche non sono immediate.
+classification-store.delete-sub-group-in-use-hint: Rimuovi prima l'assegnazione delle chiavi a questo sottogruppo nei gruppi indicati sopra, poi eliminalo.
+classification-store.no-sub-groups: Questo store non ha ancora sottogruppi
+classification-store.select-sub-group: Seleziona sottogruppo
+classification-store.search-sub-groups: Cerca sottogruppi…
+classification-store.assign-sub-group: Assegna sottogruppo
+classification-store.unassign-sub-group: Rimuovi assegnazione
+classification-store.select-keys-hint: Seleziona prima almeno una chiave
+classification-store.no-sub-group: Nessun sottogruppo
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Non assegnate ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Rimuovi l'assegnazione delle chiavi mostrate qui
+classification-store.aria.unassign-sub-group-keys: "Rimuovi l'assegnazione delle chiavi mostrate qui dal sottogruppo \"{{name}}\""
+classification-store.aria.edit-key-override: "Modifica opzioni e unità della chiave \"{{name}}\" in questo gruppo"
+classification-store.override.edit: "Modifica opzioni e unità in questo gruppo"
+classification-store.override.title: "Modifica opzioni e unità di {{keyName}} in {{groupName}}"
+classification-store.override.options-heading: "Opzioni in questo gruppo"
+classification-store.override.unit-heading: "Unità in questo gruppo"
+classification-store.override.default-unit: "Unità predefinita"
+classification-store.override.last-one: "l'ultima"
+classification-store.override.no-longer-offered: "non più offerta da questa chiave"
+classification-store.override.use-all-options: "Usa tutte le opzioni"
+classification-store.override.use-key-units: "Usa le unità della chiave"
+classification-store.override.use-key-default: "Usa il valore predefinito della chiave"
+classification-store.override.options-count: "{{count}} di {{total}} selezionate"
+classification-store.override.units-count: "{{count}} di {{total}} selezionate"
+classification-store.override.options-help: "Usa tutte le opzioni rimuove la restrizione. Deselezionare tutte le opzioni non è la stessa cosa, quindi l'ultima opzione non può essere deselezionata."
+classification-store.override.no-options-title: "Nessuna opzione è disponibile per questa chiave in questo gruppo"
+classification-store.override.key-offers-no-options: "Questa chiave non offre opzioni da restringere."
+classification-store.override.options-empty: "L'assegnazione restringe la chiave a un elenco vuoto."
+classification-store.override.options-stale-only: "Il sottoinsieme salvato nomina solo valori che la chiave non offre più."
+classification-store.override.stored-unreadable: "Il valore salvato non può essere letto come elenco."
+classification-store.override.options-unavailable: "Impossibile caricare le opzioni di questa chiave"
+classification-store.override.tag-options-unavailable: "opzioni non elencate"
+classification-store.override.options-stored-unlisted: "Questa chiave non pubblica opzioni con cui confrontare il sottoinsieme memorizzato. Viene conservato così com'è; usa tutte le opzioni per rimuoverlo."
+classification-store.override.units-no-vocabulary: "Questa chiave non definisce un vocabolario di unità, quindi qui non si può restringere nulla."
+classification-store.override.no-units-title: "Nessuna unità è disponibile per questa chiave in questo gruppo"
+classification-store.override.units-empty: "L'assegnazione restringe le unità valide a un elenco vuoto."
+classification-store.override.units-loading: "Le unità dell'installazione sono in caricamento."
+classification-store.override.units-unavailable: "Non è stato possibile caricare le unità dell'installazione, quindi le unità valide non possono essere mostrate né modificate."
+classification-store.override.units-key-permits-none: "Questa chiave non consente alcuna unità, quindi qui non si può restringere nulla."
+classification-store.override.units-installation-empty: "Questa installazione non definisce unità, quindi qui non si può restringere nulla."
+classification-store.override.units-stale-only: "Le unità valide salvate nominano solo unità che la chiave non consente più."
+classification-store.override.default-outside: "L'unità predefinita salvata {{unit}} non è tra le unità consentite da questo gruppo."
+classification-store.override.nothing-to-narrow: "Questa chiave non ha né opzioni né unità, quindi non c'è nulla da restringere."
+classification-store.override.tag-no-options: "nessuna opzione"
+classification-store.override.tag-options: "{{count}} di {{total}}"
+classification-store.override.tag-no-units: "nessuna unità"
+classification-store.override.tag-units: "{{count}} di {{total}} unità"
+classification-store.override.tag-unreadable: "illeggibile"
+classification-store.aria.delete-sub-group: "Elimina il sottogruppo \"{{name}}\""
+classification-store.aria.edit-metadata: "Modifica i metadati di \"{{name}}\""
+classification-store.aria.edit-titles: "Modifica i titoli interni di \"{{name}}\""
+classification-store.aria.remove-pair: "Rimuovi la coppia \"{{name}}\""
+classification-store.aria.remove-pair-at: "Rimuovi la coppia {{position}}"
+classification-store.edit-metadata: "Modifica metadati: {{name}}"
+classification-store.edit-titles: "Modifica titoli interni: {{name}}"
+classification-store.action-edit-metadata: "Modifica metadati"
+classification-store.action-edit-titles: "Modifica titoli interni"
+classification-store.add-pair: "Aggiungi coppia"
+classification-store.pair-key: "Chiave"
+classification-store.pair-value: "Valore"
+classification-store.pair-locale: "Lingua"
+classification-store.pair-title: "Titolo interno"
+classification-store.pair-no-content: "Ancora nessuna coppia"
+classification-store.pair-key-duplicate: "Questa chiave è già usata da un'altra coppia"
+classification-store.pair-key-reserved: "Questo prefisso è riservato ai titoli interni. Usa la finestra \"Modifica titoli interni\" o una chiave diversa"
+classification-store.pair-locale-duplicate: "Questa lingua è già usata da un altro titolo"
+classification-store.pair-key-list: "Queste chiavi verrebbero salvate come elenco. Usa una chiave che non sia un numero"
+classification-store.pair-type.object: "Oggetto"
+classification-store.pair-type.array: "Array"
+classification-store.pair-type.number: "Numero"
+classification-store.pair-type.boolean: "Booleano"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Le lingue sono testo libero e non vengono confrontate con le lingue configurate nel sistema."
+classification-store.metadata-saved: "Metadati salvati"
+classification-store.titles-saved: "Titoli salvati"
+classification-store.unassign-sub-group-confirm_one: "Rimuovere l'assegnazione di 1 chiave mostrata qui dal sottogruppo \"{{name}}\"? Le chiavi di questo gruppo in altre pagine la mantengono."
+classification-store.unassign-sub-group-confirm_other: "Rimuovere l'assegnazione di {{count}} chiavi mostrate qui dal sottogruppo \"{{name}}\"? Le chiavi di questo gruppo in altre pagine la mantengono."
+classification-store.sub-groups-strip-hint: Questi sono i sottogruppi usati dalle chiavi di questo gruppo. Il vocabolario resta dello store.
+classification-store.manage-sub-groups: Gestisci sottogruppi
+classification-store.sub-group-unused: "Nessuna chiave di questo gruppo usa più il sottogruppo \"{{name}}\". Esiste ancora nello store."
+classification-store.assign-sub-group-progress: "Assegnazione del sottogruppo a {{done}} di {{total}} chiavi…"
+classification-store.assign-sub-group-failed: "Non è stato possibile assegnare il sottogruppo a: {{keyNames}}"
+classification-store.assign-sub-group-running: Attendere il termine dell'assegnazione del sottogruppo
+classification-store.key-localization: "Localizzazione"
+classification-store.key-localization.inherit: "Eredita"
+classification-store.key-localization.localized: "Localizzato"
+classification-store.key-localization.not-localized: "Non localizzato"
+classification-store.key-localization-confirm: "I valori che questa chiave contiene in altre lingue potrebbero non essere più visualizzati né salvati. Salvare comunque?"
+classification-store.key-localized: "Chiave localizzata"
+classification-store.key-localized-tooltip: "Questa chiave contiene un valore proprio per ogni lingua."
+classification-store.import: Importa la configurazione dello store
+classification-store.import-success: Configurazione dello store importata correttamente
+classification-store.import-replace.title: "Sostituire la configurazione dello store?"
+classification-store.import-replace.warning: "Questo store non è vuoto. Un file che descrive un altro store sostituisce la configurazione di questo store ed elimina i valori che ogni oggetto conserva al suo interno. Questa azione non può essere annullata."
 home: Home
 preview.label: Anteprima
 preview.desktop: Desktop
@@ -3223,3 +3342,24 @@ maintenance-mode.logout.deactivate-and-log-out: Disattiva ed esci
 maintenance-mode.locked-out.title: Manutenzione
 maintenance-mode.locked-out.text: "Il sistema è in modalità manutenzione o temporaneamente non disponibile. L'ultima azione potrebbe non essere stata salvata. Questo avviso si chiuderà automaticamente non appena il sistema sarà di nuovo disponibile."
 maintenance-mode.locked-out.reload: Ricarica
+field-definition.multi-value: "Valore multiplo"
+classification-store.multi-value.delegate: "un multiValue di"
+classification-store.multi-value.delegate-required: "Scegliere il tipo contenuto da questo multiValue prima di salvare."
+classification-store.multi-value.variants: "Varianti"
+classification-store.multi-value.variant-name: "Nome"
+classification-store.multi-value.variant-label: "Etichetta"
+classification-store.multi-value.variant-add: "Aggiungi variante"
+classification-store.multi-value.variant-name-empty: "Una variante richiede un nome."
+classification-store.multi-value.variant-name-duplicate: "Due varianti non possono avere lo stesso nome \"{{name}}\"."
+classification-store.multi-value.move-up: "Sposta su"
+classification-store.multi-value.move-down: "Sposta giù"
+classification-store.multi-value.narrowing-confirm: "Le varianti sono state ridotte. I valori già memorizzati non vengono eliminati e restano visibili, ma non è possibile aggiungere altri valori oltre la nuova dichiarazione."
+classification-store.multi-value.default-variant: "Predefinita"
+classification-store.multi-value.not-declared: "non dichiarata"
+classification-store.multi-value.no-delegate: "Questa chiave non ha un tipo con cui modificare i suoi valori."
+classification-store.multi-value.unknown-delegate: "L'editor non ha un campo di input per il tipo {{type}}."
+classification-store.multi-value.unreadable-value: "Questa chiave contiene un valore che l'editor non può leggere; resta invariato."
+classification-store.multi-value.default-variant-permitted: "Consenti valori senza variante"
+classification-store.multi-value.default-variant-label: "Etichetta del valore predefinito"
+classification-store.multi-value.no-writable-slot: "Questa chiave non dichiara alcuna variante e non consente valori senza variante, quindi non c'è dove inserire un valore. Dichiara una variante o consenti valori senza variante."
+classification-store.multi-value.unreadable-entry: "Questo valore non è un numero che il campo può mostrare; resta così com'è finché non viene cancellato."

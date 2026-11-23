@@ -11,17 +11,16 @@
 import { useRefresh } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
-import { IconButton, useMessage, useFormModal, ButtonGroup } from '@sdk/components'
-import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
+import {
+  ImportExportActionsView,
+  type ImportExportExtraAction
+} from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
+import { useMessage, useFormModal } from '@sdk/components'
 import { isNil } from 'lodash'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
-
-const defaultValidateFile = (file: File): boolean => {
-  return file.type === 'application/json' || file.name.endsWith('.json')
-}
 
 export const CustomLayoutActions = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -31,7 +30,6 @@ export const CustomLayoutActions = (): React.JSX.Element => {
   const messageApi = useMessage()
   const modal = useFormModal()
 
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
   const canDelete = useItemsDeleteMutation !== undefined
   const [deleteItem, deleteResult] = (useItemsDeleteMutation ?? (() => [async () => {}, {}]))()
   const isDeleting = canDelete ? (deleteResult as { isLoading?: boolean }).isLoading === true : false
@@ -47,34 +45,6 @@ export const CustomLayoutActions = (): React.JSX.Element => {
 
   if (isNil(importExportConfig)) {
     return <></>
-  }
-
-  const {
-    getExportUrl,
-    getImportUrl,
-    validateFile = defaultValidateFile,
-    acceptFileTypes = '.json,application/json',
-    acceptMimeTypes = ['application/json'],
-    successMessageKey = 'class-definition.import-success'
-  } = importExportConfig
-
-  const handleExport = (): void => {
-    if (isNil(itemId)) {
-      return
-    }
-
-    const link = document.createElement('a')
-    link.href = getExportUrl(itemId)
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  const handleImportSuccess = (): void => {
-    void messageApi.success(t(successMessageKey))
-    setIsImportModalOpen(false)
-    void refreshLayout()
   }
 
   const handleDelete = (): void => {
@@ -98,54 +68,19 @@ export const CustomLayoutActions = (): React.JSX.Element => {
     })
   }
 
-  const uploadUrl = !isNil(itemId)
-    ? getImportUrl(itemId)
-    : ''
+  // Delete is this surface's own: the shared view owns export and import, so the fetched export,
+  // its refusal toast and the single import toast are the same here as everywhere else.
+  const extraActions: ImportExportExtraAction[] = canDelete
+    ? [{ key: 'delete', icon: 'trash', label: t('delete'), inFlight: isDeleting, onClick: handleDelete }]
+    : []
 
   return (
-    <>
-      <ButtonGroup
-        items={ [
-          <IconButton
-            icon={ { value: 'export' } }
-            key="export"
-            onClick={ handleExport }
-            title={ t('export') }
-            type="link"
-          />,
-          <IconButton
-            icon={ { value: 'upload-import' } }
-            key="import"
-            onClick={ () => { setIsImportModalOpen(true) } }
-            title={ t('import') }
-            type="link"
-          />,
-          ...(canDelete
-            ? [
-              <IconButton
-                icon={ { value: 'trash' } }
-                key="delete"
-                loading={ isDeleting }
-                onClick={ handleDelete }
-                title={ t('delete') }
-                type="link"
-              />
-              ]
-            : [])
-        ] }
-      />
-
-      <ImportModal
-        accept={ acceptFileTypes }
-        acceptMimeTypes={ acceptMimeTypes }
-        action={ uploadUrl }
-        onOpenChange={ setIsImportModalOpen }
-        onUploadSuccess={ handleImportSuccess }
-        open={ isImportModalOpen }
-        title={ t('class-definition.import') }
-        uploadButtonLabel={ t('import') }
-        validateFile={ validateFile }
-      />
-    </>
+    <ImportExportActionsView
+      config={ importExportConfig }
+      extraActions={ extraActions }
+      inline
+      itemId={ itemId }
+      onImported={ () => { void refreshLayout() } }
+    />
   )
 }

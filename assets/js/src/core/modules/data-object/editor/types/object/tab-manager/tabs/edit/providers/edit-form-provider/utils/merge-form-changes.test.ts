@@ -80,7 +80,7 @@ describe('mergeFormChanges', () => {
     expect(mergeFormChanges(current, incoming, registry, fieldTypeMap)).toEqual({
       localizedfields: { name: { de: 'Hallo', en: 'Hello' } }
     })
-    expect(mergeChangedValues).toHaveBeenCalledWith(current.localizedfields, incoming.localizedfields)
+    expect(mergeChangedValues).toHaveBeenCalledWith(current.localizedfields, incoming.localizedfields, undefined)
   })
 
   it('accumulates multiple localized field changes without losing previous ones', () => {

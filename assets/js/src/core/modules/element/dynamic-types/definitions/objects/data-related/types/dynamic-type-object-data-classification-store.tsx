@@ -9,10 +9,18 @@
  */
 
 import React from 'react'
-import { get, isEmpty, isUndefined } from 'lodash'
+import { cloneDeep, get, isEmpty, isNil, isPlainObject, isUndefined, mergeWith } from 'lodash'
 import { type FormItemProps } from 'antd'
-import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import {
+  DynamicTypeObjectDataAbstract,
+  type IMergeChangedValuesContext,
+  type IPrepareLanguageComparisonValueProps
+} from '../dynamic-type-object-data-abstract'
 import { ClassificationStore, type ClassificationStoreProps } from '../components/classification-store/classification-store'
+import { getKeyLabel, type KeyLabelKey } from '../components/classification-store/utils/key-label'
+import { multiValueMembersOf } from '../components/classification-store/utils/multi-value-members'
+import { filterInheritedFields } from '../components/classification-store/utils/group-value'
+import { coerceObjectPath, normalizeGroups, preferKeys, resolveBucketPath } from '../components/classification-store/utils/store-value-shape'
 import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
   type IFormattedDataStructureData,
@@ -20,21 +28,10 @@ import {
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { type ClassificationStoreCollection2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE = 'language-comparison-locale'
-
-const normalizeGroups = (value: unknown): any[] => {
-  if (Array.isArray(value)) {
-    return value
-  }
-
-  if (value != null && typeof value === 'object') {
-    return Object.values(value)
-  }
-
-  return []
-}
 
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
@@ -53,9 +50,9 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
     const { item, fieldBreadcrumbTitle, formPath } = props
 
-    if (item?.localized === false) {
-      return []
-    }
+    // The key's own flag decides, a null or absent one inherits the field's, so a mixed store
+    // lists exactly the keys that hold a value per language.
+    const isFieldLocalized = item?.localized === true
 
     const activeGroupDefinitions = normalizeGroups(item.activeGroupDefinitions)
 
@@ -91,16 +88,83 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           return []
         }
 
+        if ((dataItem.localized ?? isFieldLocalized) !== true) {
+          return []
+        }
+
+        // The key id stays a string: a numeric path segment makes rc-field-form write the
+        // value into an array instead of into the key bucket.
         return [{
           fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
-          fieldData: { ...dataItem.definition, name: dataItem.id },
-          formPath: [...formPath, item.name, String(groupId), CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE, dataItem.id],
+          // the layout members resolved, because the blob names the default variant `unqualifiedValue`
+          fieldData: {
+            ...dataItem.definition,
+            ...multiValueMembersOf(dataItem as ClassificationStoreCollection2),
+            name: String(dataItem.id),
+            title: getKeyLabel(dataItem as KeyLabelKey)
+          },
+          formPath: [...formPath, item.name, String(groupId), CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE, String(dataItem.id)],
           localeInFormPath: true
         }]
       })
     }
 
     return processClassificationStoreData({ data: activeGroupDefinitions })
+  }
+
+  /**
+   * The store the backend sends leaves an empty group and an empty language out, as an empty
+   * list or not at all. The normal editor writes its keys through Form.KeyedList, which creates
+   * the missing levels as objects; a comparison column is a plain form item, so the buckets it
+   * writes into are coerced here, before it can write.
+   */
+  prepareLanguageComparisonValue ({ value, descriptors, locales }: IPrepareLanguageComparisonValueProps): Record<string, any> {
+    const renderedLocales = locales.filter((locale): locale is string => !isNil(locale) && !isEmpty(locale))
+
+    const bucketPaths = descriptors.flatMap(
+      descriptor => renderedLocales.map(
+        locale => resolveBucketPath(descriptor.formPath, locale, CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE)
+      )
+    )
+
+    if (bucketPaths.length === 0) {
+      return value
+    }
+
+    const prepared = cloneDeep(value)
+
+    bucketPaths.forEach(({ wrapperPath, storePath }) => {
+      const container: unknown = wrapperPath.length === 0 ? prepared : get(prepared, wrapperPath)
+
+      // the item of the block or the collection the store sits in is never created here: only
+      // that field knows whether its own level is a list
+      if (!isPlainObject(container)) {
+        return
+      }
+
+      coerceObjectPath(container as Record<string, any>, storePath)
+    })
+
+    return prepared
+  }
+
+  /**
+   * The language comparison applies the whole store, the keys that still inherit included, so
+   * the payload is rebuilt the way the editor's own save path builds it. Dropping the inherited
+   * keys here also keeps them out of an auto save that follows a comparison change.
+   *
+   * Only a caller that knows the inheritance gets that treatment. A change of the editor's own
+   * control arrives as the payload the control already built, which replaces the current value
+   * as it always did - rebuilding it would encode its deleted groups as empty ones.
+   */
+  mergeChangedValues = (current: any, incoming: any, context?: IMergeChangedValuesContext): any => {
+    if (isUndefined(context) || !isPlainObject(incoming)) {
+      return incoming
+    }
+
+    const payload = filterInheritedFields(incoming, context.isInherited)
+
+    return isPlainObject(current) ? mergeWith({}, current, payload, preferKeys) : payload
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
@@ -130,6 +194,7 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           return processClassificationStoreData({ data: keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id, fieldPathValue: getFieldPathValue })
         }
 
+        // the field data carries the layout members resolved, because the blob names the default variant `unqualifiedValue`
         if (!isEmpty(dataItem.definition)) {
           if (isUndefined(groupId)) return []
 
@@ -138,13 +203,13 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           if (isEmpty(fieldValue)) {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, ...multiValueMembersOf(dataItem as ClassificationStoreCollection2), name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey) }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           }
 
           return Object.entries(fieldValue).map(([key, value]) => {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${key}` : `${fieldPathValue}.${key}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id, locale: key }, fieldValue: value?.[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, ...multiValueMembersOf(dataItem as ClassificationStoreCollection2), name: dataItem.id, title: getKeyLabel(dataItem as KeyLabelKey), locale: key }, fieldValue: value?.[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           })
         }
 

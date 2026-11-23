@@ -34,8 +34,11 @@ jest.mock('@Pimcore/modules/field-definitions/components/editor/items/detail/ref
   useRefresh: () => ({ refreshLayout })
 }))
 
+// `injectSliceWithState` is reached through the error handler the export refusal is reported
+// with: it registers the maintenance mode slice as its module is loaded.
 jest.mock('@Pimcore/app/store', () => ({
-  useAppDispatch: () => dispatch
+  useAppDispatch: () => dispatch,
+  injectSliceWithState: jest.fn()
 }))
 
 // The real modal pulls antd's untranspiled ESM and an axios upload; the success callback
