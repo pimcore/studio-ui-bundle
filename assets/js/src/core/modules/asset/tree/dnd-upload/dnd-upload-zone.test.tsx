@@ -52,7 +52,10 @@ jest.mock('@Pimcore/components/modal-upload/components/modal-upload-dragger/moda
     mockDraggerProps(props)
     return (
       <div data-testid="dragger">
-        <button data-testid="finish" onClick={ () => { void props.onSuccess() } } />
+        <button
+          data-testid="finish"
+          onClick={ () => { void props.onSuccess() } }
+        />
         {props.children}
       </div>
     )
@@ -68,7 +71,10 @@ describe('DndUploadZone', () => {
 
   it('AC1: passes plain file drops to the dragger with the target folder id', () => {
     (droppedItemsContainDirectory as jest.Mock).mockReturnValue(false)
-    const { container } = render(<DndUploadZone targetFolderId={ 7 } targetPath="/a">child</DndUploadZone>)
+    const { container } = render(<DndUploadZone
+      targetFolderId={ 7 }
+      targetPath="/a"
+                                 >child</DndUploadZone>)
 
     expect(lastDraggerProps().targetFolderId).toBe(7)
     fireEvent.drop(container.firstChild as Element, { dataTransfer: { items: [], files: [] } })
@@ -80,7 +86,10 @@ describe('DndUploadZone', () => {
     (droppedItemsContainDirectory as jest.Mock).mockReturnValue(true)
     const files = [new File(['x'], 'x.txt')];
     (processDirectoryDrop as jest.Mock).mockResolvedValue(files)
-    const { container } = render(<DndUploadZone targetFolderId={ 7 } targetPath="/a">child</DndUploadZone>)
+    const { container } = render(<DndUploadZone
+      targetFolderId={ 7 }
+      targetPath="/a"
+                                 >child</DndUploadZone>)
 
     fireEvent.drop(container.firstChild as Element, { dataTransfer: { items: [], files: [] } })
 
@@ -93,7 +102,11 @@ describe('DndUploadZone', () => {
 
   it('AC3: on batch end refreshes the tree, invalidates the grid tag once and calls onUploaded', async () => {
     const onUploaded = jest.fn()
-    render(<DndUploadZone onUploaded={ onUploaded } targetFolderId={ 7 } targetPath="/a">child</DndUploadZone>)
+    render(<DndUploadZone
+      onUploaded={ onUploaded }
+      targetFolderId={ 7 }
+      targetPath="/a"
+           >child</DndUploadZone>)
 
     fireEvent.click(screen.getByTestId('finish'))
 
@@ -102,15 +115,22 @@ describe('DndUploadZone', () => {
     expect(mockDispatch).toHaveBeenCalledTimes(1)
     const action = mockDispatch.mock.calls[0][0]
     expect(JSON.stringify(action.tags)).toContain('"id":7')
-    expect(JSON.stringify(action.tags)).toContain('"type":"AssetGrid"')
+    expect(JSON.stringify(action.tags)).toContain('"type":"ASSET_GRID"')
   })
 
   it('AC4: disabled renders only the children, and DndUpload renders through the zone', () => {
-    const { rerender } = render(<DndUploadZone disabled targetFolderId={ 7 } targetPath="/a">child</DndUploadZone>)
+    const { rerender } = render(<DndUploadZone
+      disabled
+      targetFolderId={ 7 }
+      targetPath="/a"
+                                >child</DndUploadZone>)
     expect(screen.queryByTestId('dragger')).toBeNull()
     expect(screen.getByText('child')).toBeInTheDocument()
 
-    rerender(<DndUpload nodeId="9" nodePath="/b">tree child</DndUpload>)
+    rerender(<DndUpload
+      nodeId="9"
+      nodePath="/b"
+             >tree child</DndUpload>)
     expect(screen.getByTestId('dragger')).toBeInTheDocument()
     expect(lastDraggerProps().targetFolderId).toBe(9)
   })
