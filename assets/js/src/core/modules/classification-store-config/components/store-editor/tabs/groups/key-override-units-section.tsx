@@ -18,6 +18,7 @@ import { Text } from '@Pimcore/components/text/text'
 import {
   clearUnits,
   defaultUnitChoices,
+  offeredUnitsOf,
   resolveSubset,
   setDefaultUnit,
   publishesUnits,
@@ -37,7 +38,7 @@ const noVocabularyNotice = (relation: Relation, keyUnits: string[]): string | nu
   if (keyUnits.length > 0) return null
 
   // An absent member is read as a null one: every installation unit, of which there are none.
-  return relation.units?.validUnits == null
+  return offeredUnitsOf(relation)?.validUnits == null
     ? 'classification-store.override.units-installation-empty'
     : 'classification-store.override.units-key-permits-none'
 }

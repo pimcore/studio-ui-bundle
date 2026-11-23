@@ -1003,6 +1003,12 @@ export type ClassificationStoreConfigurationKeyGroupRelationDetail = {
     optionsUnavailableReason?: string | null;
     /** The unit vocabulary of this assignment: the key's own definition with the assignment's definitionOverride applied, and null where its type holds no units. Where validUnits is null the definition restricts nothing; the type tells that apart from a type with no units at all. */
     units?: ClassificationStoreConfigurationKeyUnits | null;
+    /** The key's own option vocabulary, as the key configuration resolves it, not narrowed by this assignment's definitionOverride: the options an editor of the assignment can choose from, where options is the subset chosen. Null where the key is not a select or multiselect, and where keyOptionsUnavailableReason says why not. */
+    keyOptions?: SelectOption[] | null;
+    /** Why keyOptions is null for a select or multiselect key, with the values of optionsUnavailableReason. Null means nothing failed. */
+    keyOptionsUnavailableReason?: string | null;
+    /** The unit vocabulary of the key's own definition, without this assignment's definitionOverride applied: the units an editor of the assignment can choose from, where units is the subset chosen. Null where its type holds no units. */
+    keyUnits?: ClassificationStoreConfigurationKeyUnits | null;
 };
 export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
     /** ID of the key */

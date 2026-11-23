@@ -255,6 +255,49 @@ describe('KeyOverrideDialog', () => {
     expect(writes()).toHaveLength(1)
   })
 
+  it('keeps a deselected option listed and unchecked, offered from the key\'s own options, and ticks it back in', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    // As the server publishes a narrowed assignment: `options` is the subset, `keyOptions` what the key offers.
+    renderDialog(selectRow({
+      options: COLORS.slice(0, 2),
+      keyOptions: COLORS,
+      keyOptionsUnavailableReason: null,
+      definitionOverride: { options: ['red', 'green'] }
+    }))
+
+    expect(await screen.findByRole('checkbox', { name: /Blue/ }, WAIT_BUDGET)).not.toBeChecked()
+    expect(screen.getAllByRole('checkbox')).toHaveLength(3)
+    expect(checkbox(/Red/)).toBeChecked()
+    expect(screen.getByText(`${OVERRIDE}.options-count:2,3`)).toBeTruthy()
+
+    await user.click(checkbox(/Blue/))
+    await save(user)
+
+    await waitFor(() => { expect(upserts()).toHaveLength(1) }, WAIT_BUDGET)
+    expect(upserts()[0].body).toEqual({ keyId: 11, groupId: GROUP_ID, definitionOverride: { options: ['red', 'green', 'blue'] } })
+  })
+
+  it('keeps a deselected unit listed and unchecked, offered from the key\'s own units, and ticks it back in', async () => {
+    const user = userEvent.setup({ delay: null })
+
+    renderDialog(unitRow({
+      units: { defaultUnit: null, validUnits: ['kg', 'g'] },
+      keyUnits: UNITS,
+      definitionOverride: { validUnits: ['kg', 'g'] }
+    }))
+
+    expect(await screen.findByRole('checkbox', { name: /lb/ }, WAIT_BUDGET)).not.toBeChecked()
+    expect(screen.getAllByRole('checkbox')).toHaveLength(3)
+    expect(checkbox(/kg/)).toBeChecked()
+
+    await user.click(checkbox(/lb/))
+    await save(user)
+
+    await waitFor(() => { expect(upserts()).toHaveLength(1) }, WAIT_BUDGET)
+    expect(upserts()[0].body).toEqual({ keyId: 12, groupId: GROUP_ID, definitionOverride: { validUnits: ['kg', 'g', 'lb'] } })
+  })
+
   it('refuses the last offered option, and lets a stale value be dropped without holding the floor', async () => {
     const user = userEvent.setup({ delay: null })
 
