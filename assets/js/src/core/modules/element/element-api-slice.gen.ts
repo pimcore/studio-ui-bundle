@@ -79,6 +79,12 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementGetPublishedState: build.query<ElementGetPublishedStateApiResponse, ElementGetPublishedStateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/published-state/${queryArg.id}`,
+                }),
+                providesTags: ["Elements"],
+            }),
             elementGetSubtype: build.query<ElementGetSubtypeApiResponse, ElementGetSubtypeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/subtype/${queryArg.id}`,
@@ -202,6 +208,13 @@ export type ElementGetIdByPathApiArg = {
     /** Filter elements by matching element path. */
     elementPath: string;
 };
+export type ElementGetPublishedStateApiResponse = /** status 200 Published state of the element */ PublishedState;
+export type ElementGetPublishedStateApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
 export type ElementGetSubtypeApiResponse = /** status 200 Subtype of the element */ Subtype;
 export type ElementGetSubtypeApiArg = {
     /** Id of the element */
@@ -309,6 +322,18 @@ export type ElementLocationData = {
     /** Tree level data */
     treeLevelData: TreeLevelData[];
 };
+export type PublishedState = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Element Id */
+    elementId: number;
+    /** Element Type */
+    elementType: string;
+    /** Is the element published, null for elements without a published state like assets */
+    isPublished: boolean | null;
+};
 export type Subtype = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -362,6 +387,7 @@ export const {
     useElementGetContextPermissionsQuery,
     useElementGetTreeLocationQuery,
     useElementGetIdByPathQuery,
+    useElementGetPublishedStateQuery,
     useElementGetSubtypeQuery,
     useElementGetUsageQuery,
     useElementUsageReplaceMutation,

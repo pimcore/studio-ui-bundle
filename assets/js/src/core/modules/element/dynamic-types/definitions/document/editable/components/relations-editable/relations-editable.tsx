@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Form } from 'antd'
 import { ManyToManyRelation, type ManyToManyRelationProps } from '@Pimcore/components/many-to-many-relation'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
@@ -16,6 +16,8 @@ import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definition
 import { toCssDimension } from '@sdk/utils'
 import { ManyToManyRelationLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
 import { isEmpty, isNil } from 'lodash'
+import { useElementPublishedStates } from '../../hooks/use-element-published-states'
+import { withPublishedState } from '../../hooks/published-state'
 
 interface RelationsEditableProps extends ManyToManyRelationProps {
   inherited?: boolean
@@ -32,6 +34,10 @@ export const RelationsEditable = ({
   ...otherProps
 }: RelationsEditableProps): React.JSX.Element => {
   const fieldWidth = useFieldWidth()
+  const publishedStates = useElementPublishedStates(otherProps.value ?? [])
+  const value = useMemo(() => {
+    return isEmpty(publishedStates) ? otherProps.value : otherProps.value?.map((item) => withPublishedState(item, publishedStates))
+  }, [otherProps.value, publishedStates])
 
   const handleOverwrite = (): void => {
     otherProps.onChange?.(otherProps.value ?? null)
@@ -67,6 +73,7 @@ export const RelationsEditable = ({
           { ...otherProps }
           disabled={ otherProps.disabled === true || inherited === true }
           height={ height }
+          value={ value }
           width={ width }
         />
 
