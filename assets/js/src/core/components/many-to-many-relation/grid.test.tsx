@@ -33,9 +33,29 @@ jest.mock('./hooks/use-columns', () => ({
   useColumns: () => ({ columns: [] })
 }))
 
-jest.mock('./grid.styles', () => ({
-  useStyles: () => ({ styles: { unpublishedRow: 'unpublished-row' } })
-}))
+// The styles are reactive like the real ones, which re-render the component when the theme changes
+const defaultMockStyles = { unpublishedRow: 'unpublished-row' }
+let mockStyles = defaultMockStyles
+const mockStyleListeners = new Set<() => void>()
+
+jest.mock('./grid.styles', () => {
+  const { useEffect, useState } = jest.requireActual('react')
+
+  return {
+    useStyles: () => {
+      const [, forceUpdate] = useState(0)
+
+      useEffect(() => {
+        const listener = (): void => { forceUpdate((count: number) => count + 1) }
+        mockStyleListeners.add(listener)
+
+        return () => { mockStyleListeners.delete(listener) }
+      }, [])
+
+      return { styles: mockStyles }
+    }
+  }
+})
 
 // eslint-disable-next-line import/first
 import { ManyToManyRelationGrid, type ManyToManyRelationGridProps } from './grid'
@@ -62,6 +82,7 @@ const lastGridProps = (): any => mockGrid.mock.calls[mockGrid.mock.calls.length 
 describe('ManyToManyRelationGrid', () => {
   beforeEach(() => {
     mockGrid.mockClear()
+    mockStyles = defaultMockStyles
   })
 
   // Visible field values can arrive after the rows; the rows must pick them up without a value change.
@@ -100,5 +121,19 @@ describe('ManyToManyRelationGrid', () => {
     const { data, getRowClassName } = lastGridProps()
 
     expect(data.map((row: any) => getRowClassName(row))).toEqual(['unpublished-row', undefined, undefined])
+  })
+
+  // A theme change re-renders the grid with new generated classes while its props stay the same.
+  it('marks the unpublished rows with the new class when the styles change', () => {
+    render(<ManyToManyRelationGrid { ...gridProps({ value: [{ id: 1, type: 'object', subtype: 'Car', fullPath: '/cars/1', isPublished: false }] }) } />)
+
+    act(() => {
+      mockStyles = { unpublishedRow: 'themed-row' }
+      mockStyleListeners.forEach((listener) => { listener() })
+    })
+
+    const { data, getRowClassName } = lastGridProps()
+
+    expect(data.map((row: any) => getRowClassName(row))).toEqual(['themed-row'])
   })
 })

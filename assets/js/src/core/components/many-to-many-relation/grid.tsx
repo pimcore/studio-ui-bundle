@@ -123,7 +123,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         {props.hint}
       </div>
     </Content>
-  ), [props, data])
+  ), [props, data, getRowClassName])
 
   return (
     <div
