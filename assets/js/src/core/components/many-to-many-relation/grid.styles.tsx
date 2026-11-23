@@ -30,8 +30,8 @@ export const useStyles = createStyles(({ css, token }, { height }: UseStylesProp
     `,
 
     unpublishedRow: css`
-      .ant-table-cell {
-        background-color: ${token.colorWarningBg};
+      td.ant-table-cell {
+        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
       }
     `
   }
