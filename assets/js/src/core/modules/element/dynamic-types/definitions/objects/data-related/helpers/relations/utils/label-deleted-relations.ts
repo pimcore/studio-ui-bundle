@@ -9,10 +9,10 @@
  */
 
 import { t } from 'i18next'
-import { isArray, isObject } from 'lodash'
+import { isObject } from 'lodash'
 
 const SINGLE_RELATION = 'manyToOneRelation'
-const MULTIPLE_RELATIONS = ['manyToManyRelation', 'manyToManyObjectRelation']
+const MULTIPLE_RELATIONS = new Set(['manyToManyRelation', 'manyToManyObjectRelation'])
 
 interface DeletedRelationEntry {
   id: number
@@ -40,7 +40,7 @@ export const labelDeletedRelations = (fieldtype: string, value: unknown): unknow
     return labelEntry(value)
   }
 
-  if (MULTIPLE_RELATIONS.includes(fieldtype) && isArray(value)) {
+  if (MULTIPLE_RELATIONS.has(fieldtype) && Array.isArray(value)) {
     return value.map(labelEntry)
   }
 
