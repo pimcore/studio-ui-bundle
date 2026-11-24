@@ -69,7 +69,12 @@ export class DynamicTypePipelineGridSourceFieldsSimpleField extends DynamicTypeP
       return undefined
     }
 
-    const { groupId, keyId } = column.config as { groupId?: unknown, keyId?: unknown }
+    const { groupId, keyId, variant } = column.config as { groupId?: unknown, keyId?: unknown, variant?: unknown }
+
+    // The source field carries no variant, so converting a variant column would resolve the key's unqualified value instead.
+    if (!isEmptyValue(variant)) {
+      return undefined
+    }
 
     if (isEmptyValue(groupId) || isEmptyValue(keyId)) {
       return undefined

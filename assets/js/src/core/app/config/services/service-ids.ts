@@ -281,6 +281,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Gender': 'DynamicTypes/ObjectData/Gender',
   'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
   'DynamicTypes/ObjectData/EncryptedField': 'DynamicTypes/ObjectData/EncryptedField',
+  'DynamicTypes/ObjectData/MultiValue': 'DynamicTypes/ObjectData/MultiValue',
   'DynamicTypes/ObjectData/CalculatedValue': 'DynamicTypes/ObjectData/CalculatedValue',
   'DynamicTypes/ObjectData/Checkbox': 'DynamicTypes/ObjectData/Checkbox',
   'DynamicTypes/ObjectData/Link': 'DynamicTypes/ObjectData/Link',
@@ -419,6 +420,9 @@ export const serviceIds = {
   // AppLoader Registry
   'AppLoader/Registry': 'AppLoader/Registry',
 
+  // Welcome Screen Registry
+  'WelcomeScreen/Registry': 'WelcomeScreen/Registry',
+
   // Field Definitions
   'DynamicTypes/FieldDefinition/Block': 'DynamicTypes/FieldDefinition/Block',
   'DynamicTypes/FieldDefinition/Input': 'DynamicTypes/FieldDefinition/Input',
@@ -462,6 +466,7 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/LanguageMultiselect': 'DynamicTypes/FieldDefinition/LanguageMultiselect',
   'DynamicTypes/FieldDefinition/RgbaColor': 'DynamicTypes/FieldDefinition/RgbaColor',
   'DynamicTypes/FieldDefinition/EncryptedField': 'DynamicTypes/FieldDefinition/EncryptedField',
+  'DynamicTypes/FieldDefinition/MultiValue': 'DynamicTypes/FieldDefinition/MultiValue',
   'DynamicTypes/FieldDefinition/UrlSlug': 'DynamicTypes/FieldDefinition/UrlSlug',
   'DynamicTypes/FieldDefinition/Checkbox': 'DynamicTypes/FieldDefinition/Checkbox',
   'DynamicTypes/FieldDefinition/Link': 'DynamicTypes/FieldDefinition/Link',

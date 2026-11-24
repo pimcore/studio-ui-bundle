@@ -9,10 +9,6 @@
  */
 
 import React, { useEffect } from 'react'
-import { TagList } from '@Pimcore/components/tag-list/tag-list'
-import { Badge } from '@Pimcore/components/badge/badge'
-import type { TagProps } from '@Pimcore/components/tag/tag'
-
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { WorkflowTransitionGroup } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-transition-group'
@@ -21,6 +17,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu.styles'
+import { getVisibleWorkflowStatuses } from '@Pimcore/modules/element/editor/shared-components/workflow/types/workflow-types'
+import { WorkflowStatusList } from '@Pimcore/modules/element/editor/shared-components/workflow/status/workflow-status-list'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -30,54 +28,33 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
 
   useEffect(() => {
     if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
-      const workFlowItems: ItemType[] = workflowDetailsData.items.flatMap((workflow) => {
-        const result: ItemType[] = []
-        result.push({
-          key: ((workflowDetailsData?.items?.length ?? 0) + 1).toString(),
-          type: 'custom',
-          component: <WorkflowTransitionGroup workflow={ workflow } />
-        })
-
-        return {
+      const workFlowItems: ItemType[] = workflowDetailsData.items.flatMap((workflow, index) => {
+        const group: ItemType = {
           key: workflow.workflowName,
           type: 'group',
           label: t(workflow.workflowLabel),
-          children: result
+          children: [{
+            key: `${workflow.workflowName}-actions`,
+            type: 'custom',
+            component: <WorkflowTransitionGroup workflow={ workflow } />
+          }]
         }
+
+        return index === 0 ? [group] : [{ key: `${workflow.workflowName}-divider`, type: 'divider' }, group]
       })
       setItems(workFlowItems)
     }
   }, [workflowDetailsData])
 
-  const getVisibleWorkflowStatus = (): TagProps[][] => {
-    if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
-      const formattedStatuses = workflowDetailsData.items.reduce((result: TagProps[], workflow) => {
-        workflow.workflowStatus.forEach((status) => {
-          if (status.visibleInDetail !== undefined && status.visibleInDetail) {
-            result.push({
-              children: t(`${status.label}`),
-              colorInverted: status.colorInverted ? status.color : undefined,
-              icon: !status.colorInverted ? <Badge color={ status.color } /> : undefined
-            })
-          }
-        })
-        return result
-      }, [])
-      return [formattedStatuses]
-    }
-    return [[]]
-  }
+  const visibleStatuses = getVisibleWorkflowStatuses(workflowDetailsData?.items)
 
   return (
     <Flex
       align={ 'center' }
+      gap={ 'extra-small' }
       justify={ 'flex-end' }
     >
-      <TagList
-        itemGap={ 'extra-small' }
-        list={ getVisibleWorkflowStatus() }
-        wrap={ false }
-      />
+      <WorkflowStatusList statuses={ visibleStatuses } />
       {workflowDetailsData !== undefined && (
       <Dropdown
         disabled={ isFetchingWorkflowDetails }

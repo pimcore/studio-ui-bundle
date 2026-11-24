@@ -41,6 +41,7 @@ export interface GridRowProps {
   size?: Exclude<GridProps['size'], undefined>
   // Serialized column sizing, used to invalidate the memoised row when a column is resized.
   columnSizingKey: string
+  rowClassName?: string
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
   virtualIndex?: number
@@ -49,7 +50,7 @@ export interface GridRowProps {
   virtualPaddingRight?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, enableRowVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, rowClassName, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, enableRowVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -132,7 +133,8 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
       className={ [
         'ant-table-row',
         row.getIsSelected() ? 'ant-table-row-selected' : '',
-        hasRowInteraction ? 'hover' : ''
+        hasRowInteraction ? 'hover' : '',
+        rowClassName ?? ''
       ].join(' ') }
       data-index={ props?.virtualIndex } // needed for dynamic row height measurement
       data-testid={ createTableRowTestId(row.index) }
@@ -180,7 +182,7 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
         )
       })}
     </tr>
-  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells, props.columnSizingKey, props.distributeWidth])
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, rowClassName, props.columns, style, visibleCells, props.columnSizingKey, props.distributeWidth])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined

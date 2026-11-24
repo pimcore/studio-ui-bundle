@@ -12,7 +12,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Empty } from 'antd'
+import { ConfigProvider, Empty } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -32,7 +32,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
 import { useFilterPanel } from './use-filter-panel'
 
-export const FilterContainerInner = (): React.JSX.Element => {
+export const FilterContainerInner = ({ readOnly = false }: { readOnly?: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
 
   const draftStore = useDraftFilters()
@@ -49,113 +49,119 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={
-        <Toolbar theme='secondary'>
-          <ColumnPickerPopover<AvailableColumn>
-            data-testid="listing-field-filter-add"
-            groups={ columnGroups }
-            onSelect={ (item) => { handleColumnClick(item.meta!) } }
-            placement="leftBottom"
-          >
-            <IconTextButton
-              data-testid="listing-field-filter-add-button"
-              icon={ { value: 'new' } }
-              type='default'
+      renderToolbar={ readOnly
+        ? undefined
+        : (
+          <Toolbar theme='secondary'>
+            <ColumnPickerPopover<AvailableColumn>
+              data-testid="listing-field-filter-add"
+              groups={ columnGroups }
+              onSelect={ (item) => { handleColumnClick(item.meta!) } }
+              placement="leftBottom"
             >
-              {t('listing.add-column')}
-            </IconTextButton>
-          </ColumnPickerPopover>
+              <IconTextButton
+                data-testid="listing-field-filter-add-button"
+                icon={ { value: 'new' } }
+                type='default'
+              >
+                {t('listing.add-column')}
+              </IconTextButton>
+            </ColumnPickerPopover>
 
-          <Flex gap='extra-small'>
-            <Button
-              data-testid="listing-filter-clear-button"
-              onClick={ onClearAllClick }
-              type='link'
-            >
-              {t('clear-all')}
-            </Button>
+            <Flex gap='extra-small'>
+              <Button
+                data-testid="listing-filter-clear-button"
+                onClick={ onClearAllClick }
+                type='link'
+              >
+                {t('clear-all')}
+              </Button>
 
-            <Button
-              data-testid="listing-filter-apply-button"
-              onClick={ onApplyClick }
-              type='primary'
-            >
-              {t('button.apply')}
-            </Button>
-          </Flex>
-        </Toolbar>
+              <Button
+                data-testid="listing-filter-apply-button"
+                onClick={ onApplyClick }
+                type='primary'
+              >
+                {t('button.apply')}
+              </Button>
+            </Flex>
+          </Toolbar>
+          )
       }
     >
-      <Content
-        padded
-        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
-      >
-        <Flex
-          align='center'
-          justify='space-between'
+      { /* read-only: every antd control below is disabled */ }
+      <ConfigProvider componentDisabled={ readOnly ? true : undefined }>
+        <Content
+          padded
+          padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
         >
-          <Title>{t('sidebar.search_filter')}</Title>
-          <Switch
-            checked={ isPqlFilterEnabled }
-            data-testid="listing-filter-advanced-toggle"
-            labelLeft={ <Text>{isPqlFilterEnabled ? t('toggle.pql-filter.disable') : t('toggle.pql-filter.enable')}</Text> }
-            onChange={ onPqlFilterToggle }
-          />
-        </Flex>
-
-        <Form>
           <Flex
-            gap='small'
-            style={ { width: '100%' } }
-            vertical
+            align='center'
+            justify='space-between'
           >
-            { /* Lets a control apply on its own, e.g. Enter in the search field */ }
-            <FilterCommitProvider onCommit={ applyFilters }>
-              <FiltersRenderer
-                context={ filterContext }
-                descriptors={ elementFilterDefinitions }
-                section='controls'
-                store={ draftStore }
-              />
+            <Title>{t('sidebar.search_filter')}</Title>
+            <Switch
+              checked={ isPqlFilterEnabled }
+              data-testid="listing-filter-advanced-toggle"
+              labelLeft={ <Text>{isPqlFilterEnabled ? t('toggle.pql-filter.disable') : t('toggle.pql-filter.enable')}</Text> }
+              onChange={ onPqlFilterToggle }
+            />
+          </Flex>
 
-              {isPqlFilterEnabled && (
+          <Form>
+            <Flex
+              gap='small'
+              style={ { width: '100%' } }
+              vertical
+            >
+              { /* Lets a control apply on its own, e.g. Enter in the search field */ }
+              <FilterCommitProvider onCommit={ applyFilters }>
+                <FiltersRenderer
+                  context={ filterContext }
+                  descriptors={ elementFilterDefinitions }
+                  section='controls'
+                  store={ draftStore }
+                />
+
+                {isPqlFilterEnabled && (
                 <FiltersRenderer
                   context={ filterContext }
                   descriptors={ elementFilterDefinitions }
                   section='advanced'
                   store={ draftStore }
                 />
-              )}
-            </FilterCommitProvider>
-          </Flex>
-        </Form>
-
-        <Title>
-          {t('element.sidebar.field-filters')}
-        </Title>
-
-        { filters.length === 0
-          ? (
-            <Flex
-              align='center'
-              justify='center'
-              style={ { flex: 1 } }
-            >
-              <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+                )}
+              </FilterCommitProvider>
             </Flex>
-            )
-          : (
-            <MultiValueFilterSupportProvider supported>
-              <EmptyFilterSupportProvider supported>
-                <FieldFilters
-                  data={ filters }
-                  onChange={ onFilterChange }
-                  onCommit={ onFilterCommit }
-                />
-              </EmptyFilterSupportProvider>
-            </MultiValueFilterSupportProvider>
-            ) }
-      </Content>
+          </Form>
+
+          <Title>
+            {t('element.sidebar.field-filters')}
+          </Title>
+
+          { filters.length === 0
+            ? (
+              <Flex
+                align='center'
+                justify='center'
+                style={ { flex: 1 } }
+              >
+                <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+              </Flex>
+              )
+            : (
+              <MultiValueFilterSupportProvider supported>
+                <EmptyFilterSupportProvider supported>
+                  <FieldFilters
+                    data={ filters }
+                    onChange={ onFilterChange }
+                    onCommit={ onFilterCommit }
+                  />
+                </EmptyFilterSupportProvider>
+              </MultiValueFilterSupportProvider>
+              ) }
+        </Content>
+      </ConfigProvider>
     </ContentLayout>
   )
 }

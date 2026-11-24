@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
@@ -50,7 +50,7 @@ export const Sidebar = ({
   activeStoreId,
   handleOpenStore
 }: ISidebarProps): React.JSX.Element => {
-  const [filteredList, setFilteredList] = useState<ClassificationStoreConfigurationStoreTreeNode[]>([])
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const [contextStore, setContextStore] = useState<ClassificationStoreConfigurationStoreTreeNode | null>(null)
 
   const { styles } = useStyles()
@@ -61,18 +61,15 @@ export const Sidebar = ({
   const [createStore] = useClassificationStoreConfigurationStoreCreateMutation()
   const [updateStore] = useClassificationStoreConfigurationStoreUpdateMutation()
 
-  useEffect(() => {
-    setFilteredList(storeList)
-  }, [storeList])
+  const filteredList = useMemo(
+    () => isEmptyValue(searchTerm)
+      ? storeList
+      : storeList.filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())),
+    [storeList, searchTerm]
+  )
 
   const handleSearch = (value: string): void => {
-    if (isEmptyValue(value)) {
-      setFilteredList(storeList)
-      return
-    }
-    setFilteredList(
-      storeList.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()))
-    )
+    setSearchTerm(value)
   }
 
   const handleStoreAdd = (): void => {

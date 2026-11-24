@@ -9,7 +9,10 @@
  */
 
 import { isEmpty, isNil, isNumber, isString } from 'lodash'
-import { type WorkflowDetails } from '../../../shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
+import {
+  type WorkflowDetails,
+  type WorkflowStatus
+} from '../../../shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
 export type ActionType = 'transition' | 'global'
 
@@ -133,3 +136,6 @@ export const getWorkflowActions = (workflow: WorkflowDetails): WorkflowActionsLi
 
   return [...transitions, ...globalActions]
 }
+
+export const getVisibleWorkflowStatuses = (workflows: WorkflowDetails[] | undefined): WorkflowStatus[] =>
+  workflows?.flatMap((workflow) => workflow.workflowStatus.filter((status) => status.visibleInDetail)) ?? []

@@ -27,7 +27,7 @@ import {
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import { useFormGroupOptional } from '@Pimcore/components/form/group/provider/use-form-group-optional'
 import { useLocalizedFields } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/use-localized-fields'
-import { isArray } from 'lodash'
+import { isArray, isNil } from 'lodash'
 import { useFieldWidth } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { useCombinedFieldName } from '../providers/combined-field-name-provider/use-combined-field-name'
 import { useKeyedListOptional } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-optional'
@@ -113,10 +113,14 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     })
   }, [form, keyedList])
 
+  // Form.useFormInstance() gives no instance outside a Form, which is how the version detail view
+  // mounts a wrapped field's delegate: no field to seed, and handleDefaultValue dereferences it.
   useEffect(() => {
-    if (!objectDataType.isCollectionType) {
-      objectDataType.handleDefaultValue(_props, defaultValueForm, virtualFieldName)
+    if (isNil(form) || objectDataType.isCollectionType) {
+      return
     }
+
+    objectDataType.handleDefaultValue(_props, defaultValueForm, virtualFieldName)
   }, [defaultValueForm])
 
   if (!objectDataType.isCollectionType) {

@@ -17,6 +17,7 @@ const setPage = jest.fn()
 const setPageSize = jest.fn()
 const setSelectedColumns = jest.fn()
 const setTags = jest.fn()
+const setOnlyUntagged = jest.fn()
 const setDataLoadingState = jest.fn()
 const setType = jest.fn()
 const setSharedSearchTerm = jest.fn()
@@ -42,8 +43,9 @@ jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuratio
   useAvailableColumns: () => ({ availableColumns })
 }))
 
+let showOnlyUntaggedFilter = false
 jest.mock('@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter', () => ({
-  useTagFilter: () => ({ setTags })
+  useTagFilter: () => ({ setTags, setOnlyUntagged, showOnlyUntaggedFilter })
 }))
 
 jest.mock('@Pimcore/modules/element/components/type-select/provider/use-type-select', () => ({
@@ -66,6 +68,39 @@ describe('useApplySavedSearch', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     availableColumns = []
+    showOnlyUntaggedFilter = false
+  })
+
+  it('ticks "only untagged" from a saved empty operator on the tag filter, not as a field filter', () => {
+    showOnlyUntaggedFilter = true
+    const configuration = buildConfiguration([{ key: 'system_fields.tags', type: 'system.tag', operator: 'empty', filterValue: null }])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setOnlyUntagged).toHaveBeenCalledWith(true)
+    expect(setTags).toHaveBeenCalledWith([])
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ fieldFilters: [] }))
+  })
+
+  it('leaves "only untagged" unticked for a saved tag selection', () => {
+    showOnlyUntaggedFilter = true
+    const configuration = buildConfiguration([{ type: 'system.tag', filterValue: { considerChildTags: true, tags: [3] } }])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setOnlyUntagged).toHaveBeenCalledWith(false)
+    expect(setTags).toHaveBeenCalledWith([3])
+  })
+
+  it('leaves "only untagged" unticked on a listing without the option', () => {
+    const configuration = buildConfiguration([{ key: 'system_fields.tags', type: 'system.tag', operator: 'empty', filterValue: null }])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setOnlyUntagged).toHaveBeenCalledWith(false)
   })
 
   it('restores the type select from the saved `type` column filter', () => {

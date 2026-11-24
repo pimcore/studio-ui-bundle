@@ -15,6 +15,7 @@ import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/
 import { WorkflowLayoutOverrideContext } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/workflow-layout-override-context'
 import { type WorkflowActionSubject } from '../types/workflow-types'
 import { useUnsavedChangesGuard } from '../hooks/use-unsaved-changes-guard'
+import { useSyncTreeWorkflowStates } from '../hooks/use-sync-tree-workflow-states'
 import { WorkflowEditorCoordinatorFallback, useWorkflowEditorCoordinatorOptional } from './workflow-editor-coordinator'
 import { WorkflowActionSubjectContext } from './workflow-provider'
 
@@ -44,6 +45,7 @@ const EditorWorkflowSubjectBridgeInner = ({ children }: EditorWorkflowSubjectBri
   const setWorkflowLayoutOverride = useContext(WorkflowLayoutOverrideContext)
   const coordinator = useWorkflowEditorCoordinatorOptional()
   const { guard } = useUnsavedChangesGuard(element?.id ?? 0, element?.elementType ?? 'asset', () => coordinator?.getSaver())
+  useSyncTreeWorkflowStates(element?.id ?? 0, element?.elementType ?? 'asset', element !== null)
 
   const subject = useMemo<WorkflowActionSubject | null>(() => {
     if (element === null) {

@@ -60,6 +60,7 @@ export const DynamicSelectField = (props: SelectProps): React.JSX.Element => {
       optionFilterProp={ hasHtmlLabels ? 'title' : 'label' }
       options={ options }
       showSearch
+      sortableTags={ props.multiSelect === true }
       style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
       value={ normalizeSelectValue(props.value) }
     />

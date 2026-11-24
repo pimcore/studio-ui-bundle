@@ -14,7 +14,7 @@ export interface UseStylesProps {
   height: string | null
 }
 
-export const useStyles = createStyles(({ css }, { height }: UseStylesProps) => {
+export const useStyles = createStyles(({ css, token }, { height }: UseStylesProps) => {
   const maxHeight = height ?? '500px'
 
   return {
@@ -26,6 +26,12 @@ export const useStyles = createStyles(({ css }, { height }: UseStylesProps) => {
       
       .ant-table-content table {
         width: calc(100% - 2px) !important;
+      }
+    `,
+
+    unpublishedRow: css`
+      td.ant-table-cell {
+        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
       }
     `
   }

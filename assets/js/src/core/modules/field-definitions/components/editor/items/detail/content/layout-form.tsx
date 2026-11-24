@@ -10,7 +10,7 @@
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { type FieldDefinition as FieldDefinitionType } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
-import { Content, FormKit } from '@sdk/components'
+import { Content, FormKit, type formInstanceType } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
@@ -18,9 +18,12 @@ import { useTranslation } from 'react-i18next'
 
 interface ILayoutFormProps {
   noPadding?: boolean
+  // The caller's form instance: values reach the provider through a debounce, so a save driven
+  // from outside this component needs the live form to read what is not written yet.
+  form?: formInstanceType
 }
 
-export const LayoutForm = ({ noPadding = false }: ILayoutFormProps): React.JSX.Element => {
+export const LayoutForm = ({ noPadding = false, form }: ILayoutFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { useLayout, fieldDefinitionRegistry, readOnly = false } = useSettings()
   const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useLayout()
@@ -63,6 +66,7 @@ export const LayoutForm = ({ noPadding = false }: ILayoutFormProps): React.JSX.E
           >
             <FormKit
               formProps={ {
+                form,
                 initialValues: { ...fieldDefinition },
                 disabled: readOnly,
                 onValuesChange: (_, changedValues) => {

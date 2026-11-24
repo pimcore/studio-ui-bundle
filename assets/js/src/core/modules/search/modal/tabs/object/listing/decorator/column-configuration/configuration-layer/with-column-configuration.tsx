@@ -12,10 +12,17 @@ import React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { ColumnConfigLoader } from './components/column-config-loader/column-config-loader'
 
-export const WithColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
+export interface WithColumnConfigurationSettings {
+  saveEnabled?: boolean
+}
+
+export const WithColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent'], settings: WithColumnConfigurationSettings = {}): AbstractDecoratorProps['ConfigurationComponent'] => {
   const availableColumnsConfigurationComponent = (): React.JSX.Element => {
     return (
-      <ColumnConfigLoader Component={ Component } />
+      <ColumnConfigLoader
+        Component={ Component }
+        saveEnabled={ settings.saveEnabled }
+      />
     )
   }
 

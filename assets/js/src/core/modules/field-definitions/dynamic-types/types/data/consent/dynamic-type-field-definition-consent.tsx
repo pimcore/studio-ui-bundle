@@ -25,6 +25,10 @@ export class DynamicTypeFieldDefinitionConsent extends DynamicTypeFieldDefinitio
     return [...super.getGroup(), 'crm']
   }
 
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'classificationStore']
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     return super.getFormFields({ ...context, hideUnique: true })
   }

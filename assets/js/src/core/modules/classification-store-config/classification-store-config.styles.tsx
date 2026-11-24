@@ -53,6 +53,11 @@ export const useStyles = createStyles(({ css, token }) => {
       display: flex;
       flex-direction: column;
 
+      // the Matching ID and engine sit at the tab bar's right edge without it
+      .ant-tabs-extra-content {
+        padding-inline-end: ${token.paddingSM}px;
+      }
+
       .ant-tabs-content-holder {
         flex: 1;
         overflow: hidden;

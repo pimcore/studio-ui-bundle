@@ -40,6 +40,7 @@ const initialState: UserInformation = {
   perspectives: [],
   dateTimeLocale: '',
   welcomeScreen: false,
+  welcomeScreenTarget: null,
   memorizeTabs: false,
   theme: 'default',
   hasImage: false,

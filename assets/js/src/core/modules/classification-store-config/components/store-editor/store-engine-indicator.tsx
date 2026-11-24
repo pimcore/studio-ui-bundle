@@ -1,0 +1,43 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { useStoreEngine } from '@Pimcore/modules/classification-store-config/hooks/use-store-engine'
+
+interface IStoreEngineIndicatorProps {
+  storeId: number
+}
+
+export const StoreEngineIndicator = ({ storeId }: IStoreEngineIndicatorProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { engine } = useStoreEngine(storeId)
+
+  // The store response carries the RESOLVED engine, so a store that stores none reports 'eav'
+  // rather than nothing. Null is the one case left - a core that cannot be asked at all, which
+  // reports no capability set either - and there is nothing to name then.
+  if (isNil(engine)) {
+    return <></>
+  }
+
+  const engineName = t('classification-store.engine.' + engine.toLowerCase(), { defaultValue: engine })
+
+  return (
+    <Flex
+      align="center"
+      gap="small"
+    >
+      <Text strong>{t('classification-store.engine.label', { engine: engineName })}</Text>
+    </Flex>
+  )
+}

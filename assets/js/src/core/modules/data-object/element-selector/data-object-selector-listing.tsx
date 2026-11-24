@@ -25,7 +25,7 @@ import { DefaultView } from './view-layer/views/default-view'
 import { GeneralFiltersDecorator, type GeneralFiltersDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 import { FieldNameFilterDecorator } from './decorator/field-name-filter/field-name-filter-decorator'
-import { ColumnConfigurationDecorator } from '@Pimcore/modules/search/modal/tabs/object/listing/decorator/column-configuration/column-configuration-decorator'
+import { ColumnConfigurationDecorator, type ColumnConfigurationDecoratorConfig } from '@Pimcore/modules/search/modal/tabs/object/listing/decorator/column-configuration/column-configuration-decorator'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { useDataObjectGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
@@ -55,7 +55,7 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(
     PagingDecorator,
-    ColumnConfigurationDecorator,
+    [ColumnConfigurationDecorator, { saveEnabled: true } as ColumnConfigurationDecoratorConfig],
     [RowSelectionDecorator, { rowSelectionMode: config?.selectionType } as IRowSelectionDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'data-object' } as IGlobalRowSelectionConfig],

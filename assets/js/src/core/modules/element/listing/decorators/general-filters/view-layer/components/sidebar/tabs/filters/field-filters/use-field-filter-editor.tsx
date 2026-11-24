@@ -10,6 +10,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isEmpty } from 'lodash'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { type AvailableColumn, buildColumnPickerGroups, resolveColumnTranslationKey } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
@@ -22,8 +24,15 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { useFilterableColumns } from '../../../../../../search-modes/use-filterable-columns'
+import { getKeyLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/utils/key-label'
+import { keyFilterTypeOf } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/key-filter-type'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
 import { toFieldFilterType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/to-field-filter-type'
+import { classificationStoreFilterSlots, filterSlotId } from './classification-store-filter-slots'
+
+// The field filter a classification store key's own type is resolved through, as for any data object field.
+const CLASSIFICATION_STORE_KEY_FILTER_TYPE = 'dataobject.adapter'
 
 export interface UseFieldFilterEditorProps {
   /**
@@ -49,6 +58,7 @@ export interface UseFieldFilterEditorReturn {
  */
 export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): UseFieldFilterEditorReturn => {
   const { t } = useTranslation()
+  const messageApi = useMessage()
   // includes the draft search mode's columns, so a mode picked in the panel can be filtered on
   const availableColumns = useFilterableColumns('draft')
   const { getType } = useDynamicTypeResolver()
@@ -85,6 +95,40 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
 
   const [filters, setFilters] = useState<FieldFiltersProps['data']>(initialFilters)
 
+  const reportsFilter = (dynamicTypeIds: string[], frontendType: string | null): boolean => {
+    const dynamicType = toFieldFilterType(getType({ target: 'FIELD_FILTER', dynamicTypeIds }))
+
+    if (dynamicType === null) {
+      return false
+    }
+
+    // This panel applies the empty operator, so a field without a value filter is available as well as soon as it can
+    // be searched for "no value"
+    return dynamicType.isFilterAvailable(frontendType) || dynamicType.isEmptyFilterAvailable(frontendType)
+  }
+
+  /**
+   * A classification store key is a data object field definition, so its filter is resolved the way a
+   * column's is: through the object adapter, whose `isFilterAvailable` answers from the object data
+   * registry that the classification store filter itself reads when it transforms the filter.
+   */
+  const keyReportsFilter = (fieldtype: string): boolean => reportsFilter([CLASSIFICATION_STORE_KEY_FILTER_TYPE, fieldtype], fieldtype)
+
+  /**
+   * A configured empty title is a valid key state, so every level is tested for a non-empty string
+   * rather than for null - the same rule as the shared `getKeyLabel`, which this delegates to for
+   * the title/name pair. The id is the last resort, so the message always names the skipped key.
+   */
+  const keyLabel = (item: Record<string, any>): string => {
+    const label = getKeyLabel({ name: item.name as string, title: item.title as string | null })
+
+    if (isNonEmptyString(label)) {
+      return label
+    }
+
+    return isNonEmptyString(item.definition?.title) ? item.definition.title : String(item.id)
+  }
+
   const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
     key: filter.id,
     filterValue: filter.data,
@@ -120,34 +164,32 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
       throw new Error(`Could not find column configuration for field filter with key ${data.modalContext.fieldName}`)
     }
 
-    const newFilters = data.data.map((item) => {
-      const fieldDefinition = item.definition
+    // A key whose type reports no grid filter is not offered one; filters already saved are untouched.
+    const filterableItems: Array<Record<string, any>> = []
+    const skippedKeyNames: string[] = []
 
-      return {
-        data: undefined,
-        id: column.key,
-        translationKey: fieldDefinition.title,
-        type: column.type,
-        frontendType: fieldDefinition.fieldtype,
-        localizable: column.localizable,
-        locale: column.localizable ? 'default' : undefined,
-        config: {
-          fieldDefinition,
-          groupId: item.groupId,
-          keyId: item.id,
-          translationKey: fieldDefinition.title
-        },
-        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined
+    for (const item of data.data as Array<Record<string, any>>) {
+      if (keyReportsFilter(keyFilterTypeOf(item.definition))) {
+        filterableItems.push(item)
+      } else {
+        skippedKeyNames.push(keyLabel(item))
       }
-    })
+    }
+
+    // A shorter list than the selection must not be a silent one: name the keys that got no filter.
+    if (!isEmpty(skippedKeyNames)) {
+      void messageApi.info(t('classification-store.keys-without-field-filter', { keyNames: skippedKeyNames.join(', ') }))
+    }
+
+    const newFilters = filterableItems.flatMap((item) => classificationStoreFilterSlots(column, item))
 
     setFilters((prevFilters) => {
       // Prevent duplicates in case the user added the same classification store column twice
-      const prevFilterIds = prevFilters.map((filter) => filter.id + JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId }))
+      const prevFilterIds = prevFilters.map(filterSlotId)
 
       return [
         ...prevFilters,
-        ...newFilters.filter((filter) => !prevFilterIds.includes(filter.id + JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })))
+        ...newFilters.filter((filter) => !prevFilterIds.includes(filterSlotId(filter)))
       ]
     })
   }
@@ -206,15 +248,7 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
       return false
     }
 
-    const dynamicType = toFieldFilterType(getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] }))
-
-    if (dynamicType === null) {
-      return false
-    }
-
-    // This panel applies the empty operator, so a field without a value filter is available as well as soon as it can
-    // be searched for "no value"
-    return dynamicType.isFilterAvailable(column.frontendType ?? null) || dynamicType.isEmptyFilterAvailable(column.frontendType ?? null)
+    return reportsFilter([column.type, column.frontendType!], column.frontendType ?? null)
   }), [availableColumns, filters])
 
   const columnGroups = useMemo(

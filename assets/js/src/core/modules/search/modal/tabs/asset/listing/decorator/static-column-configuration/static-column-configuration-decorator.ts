@@ -13,14 +13,18 @@ import { withConfigurationSidebarEntry } from '@Pimcore/modules/asset/listing/de
 import { type AbstractDecoratorProps, type AbstractDecorator } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { withColumnConfiguration } from './config-layer/with-column-configuration'
 
-export const StaticColumnConfigurationDecorator: AbstractDecorator = (props) => {
+export interface StaticColumnConfigurationDecoratorConfig {
+  readOnly?: boolean
+}
+
+export const StaticColumnConfigurationDecorator: AbstractDecorator<StaticColumnConfigurationDecoratorConfig> = (props, config) => {
   const { ConfigurationComponent, ContextComponent, useSidebarOptions, ...defaultProps } = props
 
   const newProps: AbstractDecoratorProps = {
     ...defaultProps,
     ContextComponent: WithAvailableColumnsContext(ContextComponent),
     ConfigurationComponent: withColumnConfiguration(ConfigurationComponent),
-    useSidebarOptions: withConfigurationSidebarEntry(useSidebarOptions, { saveEnabled: false })
+    useSidebarOptions: withConfigurationSidebarEntry(useSidebarOptions, { saveEnabled: false, readOnly: config?.readOnly })
   }
 
   return newProps

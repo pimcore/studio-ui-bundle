@@ -8,8 +8,45 @@ The following steps are necessary when updating to newer versions.
 
 ## Upgrade to 2026.4.0
 
+- [Classification Store] Changed: the `multiValue` key type is offered but disabled in the key-type picker of a store whose engine does not report the `MultiValue` capability, with the existing "needs the document engine" tooltip, because core refuses such a key at definition time. Keys already defined that way keep working and stay editable. The engine indicator beside Export/Import also names the EAV engine now where it previously showed nothing: the store response reports the resolved engine, and a store that stores none is on EAV.
+
+- [Classification Store] Added: sub groups, the per-store vocabulary a key's assignment to a group can be tagged with.
+
+- [Classification Store] Added: a key assignment in a group can narrow the key's options and units for that group, from a new action on each row of the group's key grid.
+
+- [Classification Store] Added: free-form pairs and localized internal titles on keys, groups, collections and sub groups, edited from two new row actions in the Classification Store configuration screen.
+
+- [Classification Store] Added: Export and Import actions on a store in the Classification Store configuration screen, which write and read the store's whole configuration as one JSON artifact.
+
+- [Classification Store] Added: an Import action in the configuration screen's sidebar, which creates the store a configuration file describes, and a switch on a multiValue key to decline values without a variant.
+
+- [Data Objects] Added: the Group tab in the data object grid's add-column picker, which adds a column for every key of the picked group, in the order the group lists them, leaving out the keys the configuration already shows.
+
+- [Dependencies] `pimcore/studio-backend-bundle` is now required in `^2026.4`, because the Group tab asks for a group's key layout without an object in context and `2026.3` answers that with a 404.
+
+- [Data Objects] Classification Store key labels in the object editor now show the key title instead of the technical key name; keys without a title keep showing their name. The new label is used on the Edit tab, in the language comparison and in the version detail view; group names, the group-by-key selection, the grid column picker and batch edit are unchanged. Known gap: which title is shown still depends on how the key's group reached the object — a group added through the group dialog uses the `Title` column of `Settings > Classification Store > <store> > Keys`, a group that was already active uses the title stored inside the key definition, so a key whose two titles have drifted apart is labelled differently in each case. Resolving the already-active path by the configured title as well is still open.
+
+- [Data Objects] The `Title` column in `Settings > Classification Store > <store> > Keys` now reads and writes the configured key title instead of the title inside the key definition. Renaming a key, editing its description, changing its type or saving its definition no longer writes the definition's title over the configured one, so a title entered in that column survives those edits. Stores where the two titles had already drifted apart show the configured title in the column from now on; a key whose configured title is empty shows an empty cell even when its definition carries a title.
+
+- [Data Objects] `Image` can now be chosen as the type of a Classification Store key in `Settings > Classification Store > <store> > Keys`, and renders as the image field on the object's Classification Store tab.
+
+- [Classification Store] Added: every data field type except the container types, `URL Slug` and `Reverse Object Relation` can now be chosen as a key type, listed disabled on a store whose engine cannot hold it, and a store shows its engine on its own screen. Keys of a type without a grid filter are no longer offered one in the grid filter's group-by-key picker; filters already saved keep working.
+
+- [Data Objects] The `Edit key definition` dialog in `Settings > Classification Store > <store> > Keys` no longer offers `Mandatory`, `Index`, `Unique`, `Visible in grid view` or `Visible in search result`, because none of them had any effect on a Classification Store key — a key's values are stored in `classificationstore_data` rather than in the object's query table, and the per-assignment `Mandatory` of the `Groups` tab is the only one the object editor reads. `Not editable` and `Invisible` are read and stay. Values a key definition already carries for the five removed options are kept as they are on save; the dialogs of class, object brick and field collection fields are unchanged.
+
+- [Classification Store] Added: an `Include in the Classification Store search index` toggle on the `Edit key definition` dialog in `Settings > Classification Store > <store> > Keys`, stored as `indexed` inside the key definition. A key whose definition carries no such flag opens with the toggle on, so no existing key is reported as excluded.
+
+- [Classification Store] Added: a key can decide its own localization. The `Edit key definition` dialog in `Settings > Classification Store > <store> > Keys` carries an `Inherit` / `Localized` / `Not localized` control, and the object editor binds a key that resolves to not localized to the language-independent value even inside a localized field. A class field that is not localized but holds a key flagged localized now offers the language controls it previously withheld.
+
+- [Classification Store] Added: a `Deleted` view on the `Keys` tab of a store, where a deleted key can be found and restored; the key's delete dialog now says what deleting removes and what it leaves.
+
+- [Classification Store] Added: `Multi Value` as a key type, a key that holds several values of one other type, optionally split into named variants and repeatable up to a maximum, edited from the `Edit key definition` dialog and on the object's Classification Store tab.
+
+- [Classification Store] Added: a `multiValue` key now shows in the data object grid, in batch edit and in the grid filter as its value type, with one grid column per declared variant plus one for the default value, and the Classification Store configuration screen shows the generated matching ID of a store, collection, group, sub group and key.
+
 - [Listings] Search modes can contribute columns while they are applied (`SearchModeAbstract.getAdditionalColumns()`, default: none). They are shown via the new `visibleColumns` of `useSelectedColumns()`, can be filtered and reordered for the session, and are never stored in grid configurations or saved searches. A bundle with its own listing data query must request `visibleColumns` instead of `selectedColumns`, otherwise mode columns stay empty.
 - [Layout] New SDK component `PageLayout` (`@pimcore/studio-ui-bundle/components`) with `variant: 'content' | 'split' | 'config'` replaces three layout components. `ContentLayout` becomes `<PageLayout variant="content">` with the same props. `SplitLayout` becomes `<PageLayout variant="split">` and `ConfigLayout` becomes `<PageLayout variant="config">` (same defaults: 20/80 split, 170px minimum for the left item, divider and toolbar alignment on); for both, `resizeAble` is renamed to `resizable`. For `SplitLayout`, `leftItemFullWidth`/`rightItemFullWidth` are replaced by `fullWidth="left"`/`fullWidth="right"`; `ConfigLayout` ignores these flags, so drop them when migrating it (`fullWidth` on the config variant does hide the other item). The split and config variants also take a `className`, which the deprecated components do not. `SplitLayoutItem` has no replacement: `PageLayout` renders its items from `leftItem` and `rightItem`. New types: `PageLayoutProps`, `PageLayoutContentProps`, `PageLayoutSplitProps`, `PageLayoutConfigProps` and `PageLayoutPaneProps`. `ContentLayout`, `SplitLayout`, `SplitLayoutProps`, `SplitLayoutItem`, `SplitLayoutItemProps`, `ConfigLayout` and `ConfigLayoutProps` are deprecated: they keep their props, defaults and rendered markup, and will be removed in the next major version. The one exception: `SplitLayout` with both full-width flags set now shows both items at their own sizes instead of both at 100% width. `SplitLayoutDivider` is not deprecated. The `ConfigLayout` documentation now states its real defaults (20/80, 170px minimum, no maximum) instead of 25/75 with a 280px maximum.
+- [Classification Store] An open data object editor now picks up Classification Store configuration changes made in the same session (keys assigned, removed, renamed or retyped, groups renamed) without being closed and reopened; entered values are kept.
 
 ## Upgrade to 2026.3.7
 

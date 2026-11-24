@@ -19,6 +19,8 @@ export interface ILocalizedFieldDescriptor {
   fieldData: Layout
   formPath: Array<string | number>
   localeInFormPath?: boolean
+  /** Field type that contributed the column, see prepareLanguageComparisonValue. */
+  typeId?: string
 }
 
 export interface IExtractLocalizedFieldsProps {
@@ -93,7 +95,8 @@ export const processNestedLayoutData = async ({
         fieldBreadcrumbTitle,
         fieldData: child,
         formPath: [...formPath, item.name, child.name],
-        localeInFormPath: false
+        localeInFormPath: false,
+        typeId: item.fieldtype
       }))
     }
 
@@ -115,7 +118,12 @@ export const processNestedLayoutData = async ({
       setLayoutsList
     })
 
-    return extractedDescriptors === false ? [] : extractedDescriptors
+    // A wrapper field - an object brick, a block, a field collection - resolves its members
+    // through this function, so what it returns already names the type that contributed the
+    // column. Only a descriptor the type built itself is stamped here.
+    return extractedDescriptors === false
+      ? []
+      : extractedDescriptors.map(descriptor => ({ ...descriptor, typeId: descriptor.typeId ?? currentFieldType }))
   }))
 
   return descriptors.flatMap(item => item)
