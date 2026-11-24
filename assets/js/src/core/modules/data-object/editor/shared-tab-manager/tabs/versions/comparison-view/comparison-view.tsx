@@ -10,6 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { isEmpty, isUndefined } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import {
   type VersionComparisonViewProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
@@ -50,6 +51,8 @@ export const ComparisonView = ({
   const { id } = useElementContext()
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
+  // the formatted data contains translated labels, format it again when the language changes
+  const { i18n } = useTranslation()
 
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
@@ -86,7 +89,7 @@ export const ComparisonView = ({
         })
       })
       .catch(err => { console.log(err) })
-  }, [versionIds, layoutData])
+  }, [versionIds, layoutData, i18n.language])
 
   if (isEmpty(versionsData)) {
     return (
