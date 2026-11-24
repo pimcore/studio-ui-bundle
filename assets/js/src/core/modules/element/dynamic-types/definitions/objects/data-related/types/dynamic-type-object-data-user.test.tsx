@@ -30,7 +30,7 @@ jest.mock('@Pimcore/components/select/select', () => ({
 }))
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/dynamic-select-field/dynamic-select-field', () => ({
-  DynamicSelectField: () => null
+  DynamicSelectField: jest.fn()
 }))
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/hooks/use-dynamic-select-options', () => ({
