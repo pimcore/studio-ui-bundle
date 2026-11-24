@@ -37,5 +37,5 @@ export const ListingBaseView = (props: ListingBaseViewProps): React.JSX.Element 
         </ContentLayout>
       )}
     </>
-  ), [dataQueryResult])
+  ), [dataQueryResult, props.wrapGrid])
 }

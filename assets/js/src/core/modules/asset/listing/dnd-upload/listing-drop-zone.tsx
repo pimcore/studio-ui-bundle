@@ -25,7 +25,7 @@ const carriesFiles = (e: React.DragEvent): boolean => Array.from(e.dataTransfer?
 
 export const ListingDropZone = ({ children }: ListingDropZoneProps): React.JSX.Element => {
   const { id } = useElementContext()
-  const { data } = useAssetGetByIdQuery({ id })
+  const { currentData: data } = useAssetGetByIdQuery({ id })
   const { isTreeActionAllowed } = useTreePermission()
   const { styles } = useStyles()
   const [fileDrag, setFileDrag] = useState(false)
