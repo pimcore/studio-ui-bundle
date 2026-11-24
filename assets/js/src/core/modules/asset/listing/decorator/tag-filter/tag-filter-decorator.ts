@@ -13,11 +13,15 @@ import { withTagFilterContext } from './context-layer/with-tag-filter-context'
 import { withTagFilterQueryArg } from './data-layer/with-tag-filter-query-arg'
 import { withTabTagFilterEntry } from './view-layer/components/sidebar/hooks/with-tab-tag-filter-entry'
 
-export const TagFilterDecorator: AbstractDecorator = (props) => {
+export interface TagFilterDecoratorConfig {
+  showOnlyUntaggedFilter?: boolean
+}
+
+export const TagFilterDecorator: AbstractDecorator<TagFilterDecoratorConfig> = (props, config) => {
   const { ContextComponent, useDataQueryHelper, useSidebarOptions, ...baseProps } = props
 
   const newProps = {
-    ContextComponent: withTagFilterContext(ContextComponent),
+    ContextComponent: withTagFilterContext(ContextComponent, config),
     useDataQueryHelper: withTagFilterQueryArg(useDataQueryHelper),
     useSidebarOptions: withTabTagFilterEntry(useSidebarOptions),
     ...baseProps

@@ -25,6 +25,8 @@ export interface SavedSearchDecoratorConfig {
    * elsewhere, not a second way out of the panel.
    */
   readOnly?: boolean
+  /** name, description and sharing shown, not changed */
+  fieldsReadOnly?: boolean
 }
 
 /**
@@ -38,7 +40,8 @@ export const SavedSearchDecorator: AbstractDecorator<SavedSearchDecoratorConfig>
     useSidebarOptions: withSavedSearchSidebarEntry(useSidebarOptions, {
       elementType: config?.elementType,
       supportsLoadedState: config?.supportsLoadedState ?? false,
-      readOnly: config?.readOnly ?? false
+      readOnly: config?.readOnly ?? false,
+      fieldsReadOnly: config?.fieldsReadOnly ?? false
     })
   }
 

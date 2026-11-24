@@ -13,6 +13,9 @@ import { ManyToOneRelation, type ManyToOneRelationProps } from '@sdk/modules/ele
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { toCssDimension } from '@sdk/utils'
+import { isNil } from 'lodash'
+import { useElementPublishedStates } from '../../hooks/use-element-published-states'
+import { withPublishedState } from '../../hooks/published-state'
 
 interface RelationEditableProps extends ManyToOneRelationProps {
   inherited?: boolean
@@ -24,6 +27,9 @@ export const RelationEditable = ({
   ...otherProps
 }: RelationEditableProps): React.JSX.Element => {
   const fieldWidth = useFieldWidth()
+  const relation = isNil(otherProps.value) || otherProps.value.textInput === true ? null : otherProps.value
+  const publishedStates = useElementPublishedStates(isNil(relation) ? [] : [relation])
+  const value = isNil(relation) ? otherProps.value : withPublishedState(relation, publishedStates)
 
   const handleOverwrite = (): void => {
     otherProps.onChange?.(otherProps.value ?? null)
@@ -45,6 +51,7 @@ export const RelationEditable = ({
       <ManyToOneRelation
         { ...otherProps }
         disabled={ otherProps.disabled === true || inherited === true }
+        value={ value }
         width={ width }
       />
     </EditableOverlay>

@@ -686,9 +686,9 @@ export type AssetUpdateByIdApiArg = {
             parentId?: number | null;
             key?: string | null;
             locked?: string | null;
-            /** Optional coauthor type stored on versions created by this save */
+            /** Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
             coauthorType?: string;
-            /** Optional coauthor identifier stored on versions created by this save */
+            /** Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
             coauthor?: string;
             data?: string | null;
             dataUri?: string | null;
@@ -905,9 +905,9 @@ export type AssetPatchByIdApiArg = {
             parentId?: number | null;
             key?: string | null;
             locked?: string | null;
-            /** Optional coauthor type stored on versions created by this save */
+            /** Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
             coauthorType?: string;
-            /** Optional coauthor identifier stored on versions created by this save */
+            /** Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814) */
             coauthor?: string;
             metadata?: PatchCustomMetadata[] | null;
         }[];
@@ -1154,6 +1154,20 @@ export type CustomAttributes = {
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
+export type WorkflowStatus = {
+    /** color */
+    color: string;
+    /** colorInverted */
+    colorInverted: boolean;
+    /** borderColor */
+    title: string;
+    /** label */
+    label: string;
+    /** layoutId */
+    layoutId: string | null;
+    /** visibleInDetail */
+    visibleInDetail: boolean;
+};
 export type Permissions = {
     /** List */
     list: boolean;
@@ -1186,6 +1200,8 @@ export type Asset = Element & {
     score?: number | null;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
+    /** Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders */
+    workflowStates?: WorkflowStatus[] | null;
     /** Has children */
     hasChildren: boolean;
     /** Type */
@@ -1265,7 +1281,7 @@ export type ValidationFailedError = {
     /** Failure message in English. Untrusted, may contain markup: escape before rendering */
     message: string;
     /** Error key, not present when the request failed before the element was validated */
-    errorKey?: string;
+    errorKey?: string | null;
     /** Individual validation errors, present when the failure came from the element validation */
     validationErrors?: ValidationError[];
 };
@@ -1324,6 +1340,10 @@ export type RelationFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
@@ -1332,6 +1352,10 @@ export type SimpleFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
@@ -1362,7 +1386,7 @@ export type GridColumnRequest = {
     type: string;
     /** Group */
     group?: string[] | null;
-    /** Config */
+    /** Config; a classification store column names its key by ID or identifier and may name a variant */
     config?: (string | AdvancedColumnConfig)[];
     /** Width of the Column */
     width?: number | null;

@@ -6,6 +6,11 @@ common.clear: Fjern
 cache.clear-cache-success: Hurtigbufferen ble tømt
 cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
 cache.clear-temporary-files-success: Midlertidige filer ble slettet
+index-sync.confirmation.title: Synkroniser søkeindeks
+index-sync.confirmation.text: "Alle dataobjekter, ressurser og dokumenter er satt i kø for omindeksering i bakgrunnen. Eksisterende indekser oppdateres på plass; en indeks hvis endrede kartlegging ikke kan brukes på dokumentene (for eksempel etter en felttypsendring) opprettes på nytt og fylles opp. Avhengig av datamengden kan dette ta en stund og belaste søkeserveren. Vil du fortsette?"
+index-sync.confirmation.ok: Synkroniser
+index-sync.job.title: Synkroniserer søkeindeks
+index-sync.start-failed: Det gikk ikke å starte synkroniseringen av søkeindeksen
 dont-ask-again: Ikke spør igjen
 widget.missing-context.title: Manglende kontekst
 widget.missing-context.description: Ingen relatert element funnet
@@ -144,6 +149,7 @@ areablock.paste: Lim inn
 areablock.cut: Klipp ut
 areablock.settings: Innstillinger
 areablock.delete: Slett
+areablock.type-limit-reached: Maksimalt antall blokker av denne typen er nådd.
 document.highlight-editables: Marker redigerbare
 document.link.target: Lenke-mål
 document.hardlink.source: Kildedokument
@@ -1419,6 +1425,7 @@ element.delete.batch.show-paths: Vis elementer
 element.delete.batch.dependencies-warning.confirmed_one: 'Merk: Dette elementet har avhengigheter.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Merk: Disse elementene har avhengigheter.'
 element.open: Åpne
+element.open-multiple: 'Åpne {{count}} elementer'
 element.state: Status
 element.state.unpublished: Upublisert
 element.toolbar.copy-id: Kopier ID
@@ -1431,6 +1438,7 @@ element.publish: Publiser
 element.locate-in-tree: Finn i treet
 element.sidebar.filter.only-direct-children: Kun direkte underelementer
 element.sidebar.filter.only-unreferenced: Kun elementer uten referanser
+element.sidebar.filter.only-untagged: Kun elementer uten tagger
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID
@@ -1773,6 +1781,7 @@ navigation.cache: Hurtigbuffer
 navigation.cache.clear-cache: Tøm hurtigbuffer
 navigation.cache.clear-full-page-cache: Tøm fullsidebuffer
 navigation.cache.clear-temporary-files: Slett midlertidige filer
+navigation.index-sync: Synkroniser søkeindeks
 navigation.clear-cache: Tøm fullsidebuffer
 navigation.reports: Alle rapporter
 navigation.custom-reports: Konfigurasjon av egendefinerte rapporter
@@ -2227,12 +2236,25 @@ classification-store.rename-collection: Gi nytt navn til samling
 classification-store.delete-collection: "Slette samling \"{{collectionName}}\"?"
 classification-store.add-key: Legg til nøkkel
 classification-store.rename-key: Gi nytt navn til nøkkel
-classification-store.delete-key: "Slette nøkkel \"{{keyName}}\"?"
+classification-store.delete-key: "Fjerne nøkkel \"{{keyName}}\" fra alle grupper?"
 classification-store.delete-key-relation: "Fjerne nøkkel \"{{keyName}}\" fra denne gruppen?"
 classification-store.delete-group-relation: "Fjerne gruppe \"{{groupName}}\" fra denne samlingen?"
+classification-store.delete-group-consequence: "Når du sletter denne gruppen, slettes også verdiene hvert objekt har under den. Dette kan ikke angres."
+classification-store.delete-collection-consequence: "Samlingen og gruppelisten den inneholder fjernes. Gruppene og nøklene deres blir værende i store, og ingen objektverdier slettes."
+classification-store.delete-key-relation-consequence: "Nøkkelen fjernes bare fra denne gruppen. Selve nøkkelen blir værende i store, og ingenting et objekt har lagret slettes."
+classification-store.delete-key-consequence: "Nøkkelen fjernes fra alle grupper den tilhører, og tilbys ikke lenger noe sted. Ingenting et objekt har lagret slettes, men disse verdiene forblir utilgjengelige til nøkkelen er gjenopprettet og tildelt en gruppe på nytt. Gruppetilordningene, rekkefølgen deres, de obligatoriske flaggene og overstyringene per gruppe følger ikke med tilbake."
+classification-store.keys-view.active: Aktive
+classification-store.keys-view.deleted: Slettede
+classification-store.restore-key: Gjenopprett
+classification-store.restore-key-question: "Gjenopprette nøkkel \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "Nøkkelen kommer tilbake uten å tilhøre noen gruppe. Gruppetilordningene, rekkefølgen deres, de obligatoriske flaggene og overstyringene per gruppe er borte og kan ikke gjenopprettes. Tildel nøkkelen en gruppe på nytt for at verdiene skal bli tilgjengelige igjen."
+classification-store.keys-deleted-empty: Ingen slettede nøkler.
+classification-store.keys-deleted-no-results: "Ingen slettede nøkler samsvarer med søket."
+classification-store.delete-group-relation-consequence: "Gruppen fjernes bare fra denne samlingen. Gruppen, nøklene og verdiene objekter har under den berøres ikke."
 classification-store.edit-definition: Rediger definisjon
 classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Samsvars-ID"
 classification-store.columns.name: Navn
 classification-store.columns.title: Tittel
 classification-store.columns.type: Type
@@ -2251,6 +2273,112 @@ classification-store.select-group: Velg gruppe
 classification-store.search-groups: Søk i grupper…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Undergrupper
+classification-store.engine.label: "Motor: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Dokument"
+classification-store.key-type-needs-document-engine: "Motoren til denne storen kan ikke lagre denne nøkkeltypen. Den krever dokumentmotoren."
+classification-store.keys-without-field-filter: "Ingen feltfilter er tilgjengelig for disse nøklene, så de ble ikke lagt til: {{keyNames}}"
+classification-store.add-sub-group: Legg til undergruppe
+classification-store.delete-sub-group: "Slette undergruppen \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: En undergruppe hører til butikken, så en ny blir tilgjengelig for alle grupper i denne butikken.
+classification-store.key-indexed: Ta med i søkeindeksen til Classification Store
+classification-store.key-indexed-hint: Så lenge dette er slått av, kan denne nøkkelen ikke sorteres, filtreres eller søkes i, og verdien fjernes fra det lagrede søkedokumentet. Indeksen oppdateres via køen, så endringer skjer ikke umiddelbart.
+classification-store.delete-sub-group-in-use-hint: Fjern først tilknytningen av nøklene til denne undergruppen i gruppene nevnt over, og slett den deretter.
+classification-store.no-sub-groups: Denne butikken har ingen undergrupper ennå
+classification-store.select-sub-group: Velg undergruppe
+classification-store.search-sub-groups: Søk i undergrupper…
+classification-store.assign-sub-group: Tilknytt undergruppe
+classification-store.unassign-sub-group: Fjern tilknytning
+classification-store.select-keys-hint: Velg minst én nøkkel først
+classification-store.no-sub-group: Ingen undergruppe
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Uten tilknytning ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Fjern tilknytningen for nøklene som vises her
+classification-store.aria.unassign-sub-group-keys: "Fjern tilknytningen for nøklene som vises her til undergruppen \"{{name}}\""
+classification-store.aria.edit-key-override: "Rediger alternativer og enhet for nøkkelen \"{{name}}\" i denne gruppen"
+classification-store.override.edit: "Rediger alternativer og enhet i denne gruppen"
+classification-store.override.title: "Rediger alternativer og enhet for {{keyName}} i {{groupName}}"
+classification-store.override.options-heading: "Alternativer i denne gruppen"
+classification-store.override.unit-heading: "Enhet i denne gruppen"
+classification-store.override.default-unit: "Standardenhet"
+classification-store.override.last-one: "den siste"
+classification-store.override.no-longer-offered: "tilbys ikke lenger av denne nøkkelen"
+classification-store.override.use-all-options: "Bruk alle alternativer"
+classification-store.override.use-key-units: "Bruk nøkkelens enheter"
+classification-store.override.use-key-default: "Bruk nøkkelens standard"
+classification-store.override.options-count: "{{count}} av {{total}} valgt"
+classification-store.override.units-count: "{{count}} av {{total}} valgt"
+classification-store.override.options-help: "Bruk alle alternativer fjerner begrensningen. Å fjerne valget på alle alternativer er noe annet, så det siste alternativet kan ikke fravelges."
+classification-store.override.no-options-title: "Ingen alternativer er tilgjengelige for denne nøkkelen i denne gruppen"
+classification-store.override.key-offers-no-options: "Denne nøkkelen tilbyr ingen alternativer å begrense."
+classification-store.override.options-empty: "Tilknytningen begrenser nøkkelen til en tom liste."
+classification-store.override.options-stale-only: "Den lagrede delmengden nevner bare verdier nøkkelen ikke lenger tilbyr."
+classification-store.override.stored-unreadable: "Den lagrede verdien kan ikke leses som en liste."
+classification-store.override.options-unavailable: "Alternativene for denne nøkkelen kunne ikke lastes"
+classification-store.override.tag-options-unavailable: "alternativer ukjent"
+classification-store.override.options-stored-unlisted: "Denne nøkkelen publiserer ingen alternativer å sammenligne den lagrede delmengden med. Den beholdes som den er; bruk alle alternativer for å fjerne den."
+classification-store.override.units-no-vocabulary: "Denne nøkkelen oppgir ikke noe enhetsvokabular, så ingenting kan begrenses her."
+classification-store.override.no-units-title: "Ingen enheter er tilgjengelige for denne nøkkelen i denne gruppen"
+classification-store.override.units-empty: "Tilknytningen begrenser de gyldige enhetene til en tom liste."
+classification-store.override.units-loading: "Installasjonens enheter lastes."
+classification-store.override.units-unavailable: "Installasjonens enheter kunne ikke lastes, så de gyldige enhetene kan verken vises eller endres."
+classification-store.override.units-key-permits-none: "Denne nøkkelen tillater ingen enhet, så ingenting kan begrenses her."
+classification-store.override.units-installation-empty: "Denne installasjonen definerer ingen enheter, så ingenting kan begrenses her."
+classification-store.override.units-stale-only: "De lagrede gyldige enhetene nevner bare enheter nøkkelen ikke lenger tillater."
+classification-store.override.default-outside: "Den lagrede standardenheten {{unit}} er ikke blant enhetene denne gruppen tillater."
+classification-store.override.nothing-to-narrow: "Denne nøkkelen har verken alternativer eller enheter, så det er ingenting å begrense."
+classification-store.override.tag-no-options: "ingen alternativer"
+classification-store.override.tag-options: "{{count}} av {{total}}"
+classification-store.override.tag-no-units: "ingen enheter"
+classification-store.override.tag-units: "{{count}} av {{total}} enheter"
+classification-store.override.tag-unreadable: "uleselig"
+classification-store.aria.delete-sub-group: "Slett undergruppen \"{{name}}\""
+classification-store.aria.edit-metadata: "Rediger metadata for \"{{name}}\""
+classification-store.aria.edit-titles: "Rediger interne titler for \"{{name}}\""
+classification-store.aria.remove-pair: "Fjern paret \"{{name}}\""
+classification-store.aria.remove-pair-at: "Fjern par {{position}}"
+classification-store.edit-metadata: "Rediger metadata: {{name}}"
+classification-store.edit-titles: "Rediger interne titler: {{name}}"
+classification-store.action-edit-metadata: "Rediger metadata"
+classification-store.action-edit-titles: "Rediger interne titler"
+classification-store.add-pair: "Legg til par"
+classification-store.pair-key: "Nøkkel"
+classification-store.pair-value: "Verdi"
+classification-store.pair-locale: "Språk"
+classification-store.pair-title: "Intern tittel"
+classification-store.pair-no-content: "Ingen par ennå"
+classification-store.pair-key-duplicate: "Denne nøkkelen brukes allerede av et annet par"
+classification-store.pair-key-reserved: "Dette prefikset er reservert for interne titler. Bruk dialogen \"Rediger interne titler\" eller en annen nøkkel"
+classification-store.pair-locale-duplicate: "Dette språket brukes allerede av en annen tittel"
+classification-store.pair-key-list: "Disse nøklene ville blitt lagret som en liste. Bruk en nøkkel som ikke er et tall"
+classification-store.pair-type.object: "Objekt"
+classification-store.pair-type.array: "Matrise"
+classification-store.pair-type.number: "Tall"
+classification-store.pair-type.boolean: "Boolsk"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Språk er fritekst og kontrolleres ikke mot språkene som er konfigurert i systemet."
+classification-store.metadata-saved: "Metadata lagret"
+classification-store.titles-saved: "Titler lagret"
+classification-store.unassign-sub-group-confirm_one: "Fjerne tilknytningen av 1 nøkkel som vises her til undergruppen \"{{name}}\"? Nøkler i denne gruppen på andre sider beholder den."
+classification-store.unassign-sub-group-confirm_other: "Fjerne tilknytningen av {{count}} nøkler som vises her til undergruppen \"{{name}}\"? Nøkler i denne gruppen på andre sider beholder den."
+classification-store.sub-groups-strip-hint: Dette er undergruppene nøklene i denne gruppen bruker. Vokabularet tilhører butikken.
+classification-store.manage-sub-groups: Administrer undergrupper
+classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker undergruppen \"{{name}}\" lenger. Den finnes fortsatt i butikken."
+classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
+classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
+classification-store.assign-sub-group-running: Vent til tilknytningen av undergruppen er ferdig
+classification-store.key-localization: "Lokalisering"
+classification-store.key-localization.inherit: "Arv"
+classification-store.key-localization.localized: "Lokalisert"
+classification-store.key-localization.not-localized: "Ikke lokalisert"
+classification-store.key-localization-confirm: "Verdier denne nøkkelen har på andre språk kan slutte å vises eller lagres. Lagre likevel?"
+classification-store.key-localized: "Lokalisert nøkkel"
+classification-store.key-localized-tooltip: "Denne nøkkelen har en egen verdi per språk."
+classification-store.import: Importer store-konfigurasjon
+classification-store.import-success: Store-konfigurasjonen ble importert
+classification-store.import-replace.title: "Erstatte store-konfigurasjonen?"
+classification-store.import-replace.warning: "Denne butikken er ikke tom. En fil som beskriver en annen butikk erstatter konfigurasjonen til denne butikken og sletter verdiene hvert objekt har i den. Dette kan ikke angres."
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
@@ -3216,3 +3344,24 @@ maintenance-mode.logout.deactivate-and-log-out: Deaktiver og logg ut
 maintenance-mode.locked-out.title: Vedlikehold
 maintenance-mode.locked-out.text: 'Systemet er i vedlikeholdsmodus eller midlertidig utilgjengelig. Den siste handlingen din ble kanskje ikke lagret. Denne meldingen lukkes automatisk så snart systemet er tilgjengelig igjen.'
 maintenance-mode.locked-out.reload: Last på nytt
+field-definition.multi-value: "Flerverdi"
+classification-store.multi-value.delegate: "en multiValue av"
+classification-store.multi-value.delegate-required: "Velg typen denne multiValue inneholder før du lagrer."
+classification-store.multi-value.variants: "Varianter"
+classification-store.multi-value.variant-name: "Navn"
+classification-store.multi-value.variant-label: "Etikett"
+classification-store.multi-value.variant-add: "Legg til variant"
+classification-store.multi-value.variant-name-empty: "En variant må ha et navn."
+classification-store.multi-value.variant-name-duplicate: "To varianter kan ikke ha samme navn \"{{name}}\"."
+classification-store.multi-value.move-up: "Flytt opp"
+classification-store.multi-value.move-down: "Flytt ned"
+classification-store.multi-value.narrowing-confirm: "Variantene er innskrenket. Verdier som allerede er lagret slettes ikke og forblir synlige, men flere verdier utover den nye deklarasjonen kan ikke legges til."
+classification-store.multi-value.default-variant: "Standard"
+classification-store.multi-value.not-declared: "ikke deklarert"
+classification-store.multi-value.no-delegate: "Denne nøkkelen har ingen type å redigere verdiene med."
+classification-store.multi-value.unknown-delegate: "Editoren har ikke noe inndatafelt for typen {{type}}."
+classification-store.multi-value.unreadable-value: "Denne nøkkelen har en verdi som editoren ikke kan lese; den blir stående som den er."
+classification-store.multi-value.default-variant-permitted: "Tillat verdier uten variant"
+classification-store.multi-value.default-variant-label: "Etikett for standardverdien"
+classification-store.multi-value.no-writable-slot: "Denne nøkkelen deklarerer ingen variant og tillater ikke verdier uten variant, så det er ingen plass til å legge inn en verdi. Deklarer en variant eller tillat verdier uten variant."
+classification-store.multi-value.unreadable-entry: "Denne verdien er ikke et tall som feltet kan vise; den beholdes som lagret til den slettes."

@@ -6,6 +6,11 @@ common.clear: Effacer
 cache.clear-cache-success: Cache vidé avec succès
 cache.clear-full-page-cache-success: Cache des pages complètes vidé avec succès
 cache.clear-temporary-files-success: Fichiers temporaires supprimés avec succès
+index-sync.confirmation.title: Synchroniser l'index de recherche
+index-sync.confirmation.text: "Tous les objets de données, les assets et les documents sont mis en file d'attente pour une réindexation en arrière-plan. Les index existants sont mis à jour sur place ; un index dont le mappage modifié ne peut pas être appliqué à ses documents (par exemple après un changement de type de champ) est recréé et rempli. Selon la quantité de données, cela peut prendre un certain temps et surcharger le serveur de recherche. Voulez-vous continuer ?"
+index-sync.confirmation.ok: Synchroniser
+index-sync.job.title: Synchronisation de l'index de recherche en cours
+index-sync.start-failed: Impossible de démarrer la synchronisation de l'index de recherche
 dont-ask-again: Ne plus demander
 widget.missing-context.title: Contexte manquant
 widget.missing-context.description: Aucun élément associé trouvé
@@ -144,6 +149,7 @@ areablock.paste: Coller
 areablock.cut: Couper
 areablock.settings: Paramètres
 areablock.delete: Supprimer
+areablock.type-limit-reached: Le nombre maximum de blocs de ce type a été atteint.
 document.highlight-editables: Mettre en évidence les modifiables
 document.link.target: Cible du lien
 document.hardlink.source: Document source
@@ -1419,6 +1425,7 @@ element.delete.batch.show-paths: Afficher les éléments
 element.delete.batch.dependencies-warning.confirmed_one: 'Remarque : Cet élément a des dépendances.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Remarque : Ces éléments ont des dépendances.'
 element.open: Ouvrir
+element.open-multiple: 'Ouvrir {{count}} éléments'
 element.state: État
 element.state.unpublished: Non publié
 element.toolbar.copy-id: Copier l'ID
@@ -1431,6 +1438,7 @@ element.publish: Publier
 element.locate-in-tree: Localiser dans l'arborescence
 element.sidebar.filter.only-direct-children: Uniquement les enfants directs
 element.sidebar.filter.only-unreferenced: Uniquement les non référencés
+element.sidebar.filter.only-untagged: Uniquement sans tags
 element.sidebar.field-filters: Filtres de champs
 element.full-information: Informations complètes
 system-information.id: ID
@@ -1773,6 +1781,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Vider le cache
 navigation.cache.clear-full-page-cache: Vider le cache des pages complètes
 navigation.cache.clear-temporary-files: Supprimer les fichiers temporaires
+navigation.index-sync: Synchroniser l'index de recherche
 navigation.clear-cache: Vider le cache des pages complètes
 navigation.reports: Tous les rapports
 navigation.custom-reports: Configuration des rapports personnalisés
@@ -2227,12 +2236,25 @@ classification-store.rename-collection: Renommer la collection
 classification-store.delete-collection: "Supprimer la collection \"{{collectionName}}\" ?"
 classification-store.add-key: Ajouter une clé
 classification-store.rename-key: Renommer la clé
-classification-store.delete-key: "Supprimer la clé \"{{keyName}}\" ?"
+classification-store.delete-key: "Retirer la clé \"{{keyName}}\" de tous les groupes ?"
 classification-store.delete-key-relation: "Retirer la clé \"{{keyName}}\" de ce groupe ?"
 classification-store.delete-group-relation: "Retirer le groupe \"{{groupName}}\" de cette collection ?"
+classification-store.delete-group-consequence: "La suppression de ce groupe supprime aussi les valeurs que chaque objet conserve sous ce groupe. Cette action est irréversible."
+classification-store.delete-collection-consequence: "La collection et sa liste de groupes sont supprimées. Les groupes et leurs clés restent dans le store, et aucune valeur d'objet n'est supprimée."
+classification-store.delete-key-relation-consequence: "La clé est retirée de ce groupe uniquement. La clé elle-même reste dans le store, et rien de ce qu'un objet conserve n'est supprimé."
+classification-store.delete-key-consequence: "La clé est retirée de tous les groupes auxquels elle appartient et n'est plus proposée nulle part. Rien de ce qu'un objet conserve n'est supprimé, mais ces valeurs restent inaccessibles tant que la clé n'est pas restaurée et de nouveau affectée à un groupe. Ses affectations de groupe, leur ordre, leurs indicateurs obligatoires et leurs surcharges par groupe ne reviennent pas avec elle."
+classification-store.keys-view.active: Actives
+classification-store.keys-view.deleted: Supprimées
+classification-store.restore-key: Restaurer
+classification-store.restore-key-question: "Restaurer la clé \"{{keyName}}\" ?"
+classification-store.restore-key-consequence: "La clé revient sans appartenir à aucun groupe. Ses affectations de groupe, leur ordre, leurs indicateurs obligatoires et leurs surcharges par groupe sont perdus et ne peuvent pas être récupérés. Affectez de nouveau la clé à un groupe pour que ses valeurs redeviennent accessibles."
+classification-store.keys-deleted-empty: Aucune clé supprimée.
+classification-store.keys-deleted-no-results: "Aucune clé supprimée ne correspond à la recherche."
+classification-store.delete-group-relation-consequence: "Le groupe est retiré de cette collection uniquement. Le groupe, ses clés et les valeurs que les objets conservent sous lui ne sont pas modifiés."
 classification-store.edit-definition: Modifier la définition
 classification-store.edit-key-definition: "Modifier la définition de la clé : {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "ID de correspondance"
 classification-store.columns.name: Nom
 classification-store.columns.title: Titre
 classification-store.columns.type: Type
@@ -2251,6 +2273,112 @@ classification-store.select-group: Sélectionner un groupe
 classification-store.search-groups: Rechercher des groupes…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Sous-groupes
+classification-store.engine.label: "Moteur : {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Document"
+classification-store.key-type-needs-document-engine: "Le moteur de ce store ne peut pas contenir ce type de clé. Il nécessite le moteur de documents."
+classification-store.keys-without-field-filter: "Aucun filtre de champ n'est disponible pour ces clés, elles n'ont donc pas été ajoutées : {{keyNames}}"
+classification-store.add-sub-group: Ajouter un sous-groupe
+classification-store.delete-sub-group: "Supprimer le sous-groupe \"{{subGroupName}}\" ?"
+classification-store.add-sub-group-store-hint: Un sous-groupe appartient au magasin ; un nouveau sous-groupe devient donc disponible pour tous les groupes de ce magasin.
+classification-store.key-indexed: "Inclure dans l'index de recherche du Classification Store"
+classification-store.key-indexed-hint: Tant que cette option est désactivée, cette clé ne peut être ni triée, ni filtrée, ni recherchée, et sa valeur est retirée du document de recherche stocké. L'index converge via la file d'attente, les modifications ne sont donc pas immédiates.
+classification-store.delete-sub-group-in-use-hint: Retirez d'abord l'affectation des clés à ce sous-groupe dans les groupes nommés ci-dessus, puis supprimez-le.
+classification-store.no-sub-groups: Ce magasin n'a encore aucun sous-groupe
+classification-store.select-sub-group: Sélectionner un sous-groupe
+classification-store.search-sub-groups: Rechercher des sous-groupes…
+classification-store.assign-sub-group: Affecter un sous-groupe
+classification-store.unassign-sub-group: Retirer l'affectation
+classification-store.select-keys-hint: Sélectionnez d'abord au moins une clé
+classification-store.no-sub-group: Aucun sous-groupe
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Non affectées ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Retirer l'affectation des clés affichées ici
+classification-store.aria.unassign-sub-group-keys: "Retirer l'affectation des clés affichées ici au sous-groupe \"{{name}}\""
+classification-store.aria.edit-key-override: "Modifier les options et l'unité de la clé \"{{name}}\" dans ce groupe"
+classification-store.override.edit: "Modifier les options et l'unité dans ce groupe"
+classification-store.override.title: "Modifier les options et l'unité de {{keyName}} dans {{groupName}}"
+classification-store.override.options-heading: "Options dans ce groupe"
+classification-store.override.unit-heading: "Unité dans ce groupe"
+classification-store.override.default-unit: "Unité par défaut"
+classification-store.override.last-one: "la dernière"
+classification-store.override.no-longer-offered: "n'est plus proposée par cette clé"
+classification-store.override.use-all-options: "Utiliser toutes les options"
+classification-store.override.use-key-units: "Utiliser les unités de la clé"
+classification-store.override.use-key-default: "Utiliser la valeur par défaut de la clé"
+classification-store.override.options-count: "{{count}} sur {{total}} sélectionnées"
+classification-store.override.units-count: "{{count}} sur {{total}} sélectionnées"
+classification-store.override.options-help: "Utiliser toutes les options supprime la restriction. Tout désélectionner n'est pas la même chose : la dernière option ne peut donc pas être désélectionnée."
+classification-store.override.no-options-title: "Aucune option n'est disponible pour cette clé dans ce groupe"
+classification-store.override.key-offers-no-options: "Cette clé ne propose aucune option à restreindre."
+classification-store.override.options-empty: "L'affectation restreint la clé à une liste vide."
+classification-store.override.options-stale-only: "Le sous-ensemble enregistré ne nomme que des valeurs que la clé ne propose plus."
+classification-store.override.stored-unreadable: "La valeur enregistrée ne peut pas être lue comme une liste."
+classification-store.override.options-unavailable: "Les options de cette clé n'ont pas pu être chargées"
+classification-store.override.tag-options-unavailable: "options inconnues"
+classification-store.override.options-stored-unlisted: "Cette clé ne publie aucune option avec laquelle comparer le sous-ensemble enregistré. Il est conservé tel quel ; utilisez toutes les options pour le retirer."
+classification-store.override.units-no-vocabulary: "Cette clé ne définit aucun vocabulaire d'unités : rien ne peut être restreint ici."
+classification-store.override.no-units-title: "Aucune unité n'est disponible pour cette clé dans ce groupe"
+classification-store.override.units-empty: "L'affectation restreint les unités valides à une liste vide."
+classification-store.override.units-loading: "Les unités de l'installation sont en cours de chargement."
+classification-store.override.units-unavailable: "Les unités de l'installation n'ont pas pu être chargées : les unités valides ne peuvent être ni affichées ni modifiées."
+classification-store.override.units-key-permits-none: "Cette clé n'autorise aucune unité : rien ne peut être restreint ici."
+classification-store.override.units-installation-empty: "Cette installation ne définit aucune unité : rien ne peut être restreint ici."
+classification-store.override.units-stale-only: "Les unités valides enregistrées ne nomment que des unités que la clé n'autorise plus."
+classification-store.override.default-outside: "L'unité par défaut enregistrée {{unit}} ne fait pas partie des unités autorisées par ce groupe."
+classification-store.override.nothing-to-narrow: "Cette clé n'a ni options ni unités : il n'y a rien à restreindre."
+classification-store.override.tag-no-options: "aucune option"
+classification-store.override.tag-options: "{{count}} sur {{total}}"
+classification-store.override.tag-no-units: "aucune unité"
+classification-store.override.tag-units: "{{count}} sur {{total}} unités"
+classification-store.override.tag-unreadable: "illisible"
+classification-store.aria.delete-sub-group: "Supprimer le sous-groupe \"{{name}}\""
+classification-store.aria.edit-metadata: "Modifier les métadonnées de \"{{name}}\""
+classification-store.aria.edit-titles: "Modifier les titres internes de \"{{name}}\""
+classification-store.aria.remove-pair: "Retirer la paire \"{{name}}\""
+classification-store.aria.remove-pair-at: "Retirer la paire {{position}}"
+classification-store.edit-metadata: "Modifier les métadonnées : {{name}}"
+classification-store.edit-titles: "Modifier les titres internes : {{name}}"
+classification-store.action-edit-metadata: "Modifier les métadonnées"
+classification-store.action-edit-titles: "Modifier les titres internes"
+classification-store.add-pair: "Ajouter une paire"
+classification-store.pair-key: "Clé"
+classification-store.pair-value: "Valeur"
+classification-store.pair-locale: "Langue"
+classification-store.pair-title: "Titre interne"
+classification-store.pair-no-content: "Aucune paire pour l'instant"
+classification-store.pair-key-duplicate: "Cette clé est déjà utilisée par une autre paire"
+classification-store.pair-key-reserved: "Ce préfixe est réservé aux titres internes. Utilisez la boîte de dialogue \"Modifier les titres internes\" ou une autre clé"
+classification-store.pair-locale-duplicate: "Cette langue est déjà utilisée par un autre titre"
+classification-store.pair-key-list: "Ces clés seraient enregistrées sous forme de liste. Utilisez une clé qui n'est pas un nombre"
+classification-store.pair-type.object: "Objet"
+classification-store.pair-type.array: "Tableau"
+classification-store.pair-type.number: "Nombre"
+classification-store.pair-type.boolean: "Booléen"
+classification-store.pair-type.null: "Nul"
+classification-store.titles-locale-hint: "Les langues sont du texte libre et ne sont pas vérifiées par rapport aux langues configurées dans le système."
+classification-store.metadata-saved: "Métadonnées enregistrées"
+classification-store.titles-saved: "Titres enregistrés"
+classification-store.unassign-sub-group-confirm_one: "Retirer l'affectation de la clé affichée ici au sous-groupe \"{{name}}\" ? Les clés de ce groupe sur les autres pages la conservent."
+classification-store.unassign-sub-group-confirm_other: "Retirer l'affectation des {{count}} clés affichées ici au sous-groupe \"{{name}}\" ? Les clés de ce groupe sur les autres pages la conservent."
+classification-store.sub-groups-strip-hint: Voici les sous-groupes utilisés par les clés de ce groupe. Le vocabulaire reste au niveau du magasin.
+classification-store.manage-sub-groups: Gérer les sous-groupes
+classification-store.sub-group-unused: "Aucune clé de ce groupe n'utilise plus le sous-groupe \"{{name}}\". Il existe toujours dans le magasin."
+classification-store.assign-sub-group-progress: "Affectation du sous-groupe à {{done}} clé(s) sur {{total}}…"
+classification-store.assign-sub-group-failed: "Le sous-groupe n'a pas pu être affecté à : {{keyNames}}"
+classification-store.assign-sub-group-running: Attendez la fin de l'affectation du sous-groupe
+classification-store.key-localization: "Localisation"
+classification-store.key-localization.inherit: "Hériter"
+classification-store.key-localization.localized: "Localisé"
+classification-store.key-localization.not-localized: "Non localisé"
+classification-store.key-localization-confirm: "Les valeurs que cette clé contient dans d'autres langues risquent de ne plus être affichées ni enregistrées. Enregistrer quand même ?"
+classification-store.key-localized: "Clé localisée"
+classification-store.key-localized-tooltip: "Cette clé contient une valeur propre à chaque langue."
+classification-store.import: Importer la configuration du store
+classification-store.import-success: Configuration du store importée avec succès
+classification-store.import-replace.title: "Remplacer la configuration du store ?"
+classification-store.import-replace.warning: "Ce magasin n'est pas vide. Un fichier décrivant un autre magasin remplace la configuration de ce magasin et supprime les valeurs que chaque objet y conserve. Cette action est irréversible."
 home: Accueil
 preview.label: Aperçu
 preview.desktop: Bureau
@@ -3216,3 +3344,24 @@ maintenance-mode.logout.deactivate-and-log-out: Désactiver et se déconnecter
 maintenance-mode.locked-out.title: Maintenance
 maintenance-mode.locked-out.text: "Le système est en mode maintenance ou temporairement indisponible. Votre dernière action n'a peut-être pas été enregistrée. Ce message se fermera automatiquement dès que le système sera de nouveau disponible."
 maintenance-mode.locked-out.reload: Recharger
+field-definition.multi-value: "Valeur multiple"
+classification-store.multi-value.delegate: "un multiValue de"
+classification-store.multi-value.delegate-required: "Choisissez le type que contient ce multiValue avant d'enregistrer."
+classification-store.multi-value.variants: "Variantes"
+classification-store.multi-value.variant-name: "Nom"
+classification-store.multi-value.variant-label: "Libellé"
+classification-store.multi-value.variant-add: "Ajouter une variante"
+classification-store.multi-value.variant-name-empty: "Une variante doit avoir un nom."
+classification-store.multi-value.variant-name-duplicate: "Deux variantes ne peuvent pas porter le même nom \"{{name}}\"."
+classification-store.multi-value.move-up: "Monter"
+classification-store.multi-value.move-down: "Descendre"
+classification-store.multi-value.narrowing-confirm: "Les variantes ont été réduites. Les valeurs déjà enregistrées ne sont pas supprimées et restent visibles, mais aucune valeur supplémentaire ne peut être ajoutée au-delà de la nouvelle déclaration."
+classification-store.multi-value.default-variant: "Par défaut"
+classification-store.multi-value.not-declared: "non déclarée"
+classification-store.multi-value.no-delegate: "Cette clé n'a pas de type permettant de modifier ses valeurs."
+classification-store.multi-value.unknown-delegate: "L'éditeur n'a pas de champ de saisie pour le type {{type}}."
+classification-store.multi-value.unreadable-value: "Cette clé contient une valeur que l'éditeur ne peut pas lire ; elle reste inchangée."
+classification-store.multi-value.default-variant-permitted: "Autoriser les valeurs sans variante"
+classification-store.multi-value.default-variant-label: "Libellé de la valeur par défaut"
+classification-store.multi-value.no-writable-slot: "Cette clé ne déclare aucune variante et n'autorise pas les valeurs sans variante : il n'y a donc aucun emplacement où saisir une valeur. Déclarez une variante ou autorisez les valeurs sans variante."
+classification-store.multi-value.unreadable-entry: "Cette valeur n'est pas un nombre que le champ peut afficher ; elle reste telle quelle jusqu'à son effacement."

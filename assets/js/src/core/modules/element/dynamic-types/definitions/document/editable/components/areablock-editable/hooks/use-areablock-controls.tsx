@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { type AreaInsertPosition, type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
@@ -23,6 +23,7 @@ export interface UseAreablockControlsParams {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
+  getCurrentElements: () => HTMLElement[]
   onAddArea: (element: HTMLElement | null, areaType?: string, position?: AreaInsertPosition) => Promise<void>
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
@@ -45,6 +46,7 @@ export const useAreablockControls = ({
   areablockManager,
   areaTypes,
   config,
+  getCurrentElements,
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
@@ -59,6 +61,9 @@ export const useAreablockControls = ({
   onOverwrite
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
   const { t } = useTranslation()
+  // SortableAreablockToolbar is memoized on shallow prop equality, so the
+  // usage-counts object must keep its identity while its contents are unchanged.
+  const typeUsageCountsCacheRef = useRef<{ key: string, value: Record<string, number> }>({ key: '{}', value: {} })
   const {
     activeId,
     handleDragStart,
@@ -71,6 +76,8 @@ export const useAreablockControls = ({
   } = useAreablockDropzones({
     areablockManager,
     areaTypes,
+    config,
+    getCurrentElements,
     onMoveArea,
     onDropAreablock: async (areaType: string, index: number) => {
       if (isInherited) return
@@ -105,7 +112,7 @@ export const useAreablockControls = ({
     }
   }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
-  const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
+  const createEmptyStatePortal = useCallback((container: HTMLElement, typeUsageCounts: Record<string, number>): React.ReactPortal => {
     const emptyStateToolbar = (
       <EmptyStateAreablockToolbar
         areaTypes={ areaTypes }
@@ -116,6 +123,7 @@ export const useAreablockControls = ({
         } }
         onOverwrite={ onOverwrite }
         onPasteArea={ onPasteArea }
+        typeUsageCounts={ typeUsageCounts }
       />
     )
     return ReactDOM.createPortal(emptyStateToolbar, container)
@@ -125,12 +133,21 @@ export const useAreablockControls = ({
     const portals: React.ReactPortal[] = []
 
     const currentAreaEntries = areablockManager.queryElements()
-    const limitReached = configUtils.isLimitReached(currentAreaEntries.length, config?.limit)
+    // Counts come from the reload-aware source: in reload mode pending additions
+    // exist only as placeholders outside the DOM until the save-and-reload lands.
+    const countedElements = getCurrentElements()
+    const limitReached = configUtils.isLimitReached(countedElements.length, config?.limit)
+    const currentTypeUsageCounts = configUtils.getTypeUsageCounts(countedElements.map(entry => areablockManager.getElementType(entry)))
+    const typeUsageCountsKey = JSON.stringify(currentTypeUsageCounts)
+    if (typeUsageCountsCacheRef.current.key !== typeUsageCountsKey) {
+      typeUsageCountsCacheRef.current = { key: typeUsageCountsKey, value: currentTypeUsageCounts }
+    }
+    const typeUsageCounts = typeUsageCountsCacheRef.current.value
 
     if (currentAreaEntries.length === 0) {
       const container = areablockManager.getContainer()
       if (container !== null) {
-        const portal = createEmptyStatePortal(container)
+        const portal = createEmptyStatePortal(container, typeUsageCounts)
         portals.push(portal)
       }
     } else if (!isInherited) {
@@ -179,6 +196,7 @@ export const useAreablockControls = ({
           onRemoveArea={ handleRemoveArea }
           onToggleHidden={ onToggleHidden }
           toolbarTitle={ toolbarTitle }
+          typeUsageCounts={ typeUsageCounts }
         />
       )
       const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
@@ -197,7 +215,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onCopyArea, onCutArea, onPasteArea, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
+  }, [areablockManager, areaTypes, config, getCurrentElements, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onCopyArea, onCutArea, onPasteArea, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
 
   return {
     renderAreablockToolbar

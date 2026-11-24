@@ -6,6 +6,11 @@ common.clear: Wissen
 cache.clear-cache-success: Cache succesvol gewist
 cache.clear-full-page-cache-success: Volledige paginacache succesvol gewist
 cache.clear-temporary-files-success: Tijdelijke bestanden succesvol gewist
+index-sync.confirmation.title: Zoekindex synchroniseren
+index-sync.confirmation.text: "Alle gegevensobjecten, assets en documenten staan in de wachtrij voor herindexering op de achtergrond. Bestaande indices worden ter plaatse bijgewerkt; een index waarvan de gewijzigde mapping niet kan worden toegepast op de documenten (bijvoorbeeld na een veldtypewijziging) wordt opnieuw gemaakt en gevuld. Afhankelijk van de hoeveelheid gegevens kan dit enige tijd duren en belasting op de zoekserver veroorzaken. Wil je doorgaan?"
+index-sync.confirmation.ok: Synchroniseren
+index-sync.job.title: Zoekindex wordt gesynchroniseerd
+index-sync.start-failed: Kon de zoekindexsynchronisatie niet starten
 dont-ask-again: Niet meer vragen
 widget.missing-context.title: Ontbrekende context
 widget.missing-context.description: Geen gerelateerd element gevonden
@@ -144,6 +149,7 @@ areablock.paste: Plakken
 areablock.cut: Knippen
 areablock.settings: Instellingen
 areablock.delete: Verwijderen
+areablock.type-limit-reached: Het maximale aantal blokken van dit type is bereikt.
 document.highlight-editables: Bewerkbare velden markeren
 document.link.target: Linkdoel
 document.hardlink.source: Brondocument
@@ -1419,6 +1425,7 @@ element.delete.batch.show-paths: Items weergeven
 element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
 element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
 element.open: Openen
+element.open-multiple: '{{count}} elementen openen'
 element.state: Status
 element.state.unpublished: Niet gepubliceerd
 element.toolbar.copy-id: ID kopiëren
@@ -1431,6 +1438,7 @@ element.publish: Publiceren
 element.locate-in-tree: In boom zoeken
 element.sidebar.filter.only-direct-children: alleen directe onderliggende items
 element.sidebar.filter.only-unreferenced: Alleen zonder verwijzingen
+element.sidebar.filter.only-untagged: Alleen zonder tags
 element.sidebar.field-filters: Veldfilters
 element.full-information: Volledige informatie
 system-information.id: ID
@@ -1773,6 +1781,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Cache wissen
 navigation.cache.clear-full-page-cache: Volledige paginacache wissen
 navigation.cache.clear-temporary-files: Tijdelijke bestanden wissen
+navigation.index-sync: Zoekindex synchroniseren
 navigation.clear-cache: Volledige paginacache wissen
 navigation.reports: Alle rapporten
 navigation.custom-reports: Aangepaste rapporten configureren
@@ -2227,12 +2236,25 @@ classification-store.rename-collection: Collectie hernoemen
 classification-store.delete-collection: 'Collectie "{{collectionName}}" verwijderen?'
 classification-store.add-key: Sleutel toevoegen
 classification-store.rename-key: Sleutel hernoemen
-classification-store.delete-key: 'Sleutel "{{keyName}}" verwijderen?'
+classification-store.delete-key: 'Sleutel "{{keyName}}" uit elke groep verwijderen?'
 classification-store.delete-key-relation: 'Sleutel "{{keyName}}" uit deze groep verwijderen?'
 classification-store.delete-group-relation: 'Groep "{{groupName}}" uit deze collectie verwijderen?'
+classification-store.delete-group-consequence: "Als je deze groep verwijdert, worden ook de waarden verwijderd die elk object eronder bewaart. Dit kan niet ongedaan worden gemaakt."
+classification-store.delete-collection-consequence: "De collectie en de bijbehorende lijst met groepen worden verwijderd. De groepen en hun sleutels blijven in de store en er worden geen objectwaarden verwijderd."
+classification-store.delete-key-relation-consequence: "De sleutel wordt alleen uit deze groep verwijderd. De sleutel zelf blijft in de store en niets wat een object bewaart, wordt verwijderd."
+classification-store.delete-key-consequence: 'De sleutel wordt verwijderd uit elke groep waartoe hij behoort en wordt nergens meer aangeboden. Niets wat een object bewaart, wordt verwijderd, maar die waarden blijven onbereikbaar totdat de sleutel is hersteld en opnieuw aan een groep is toegewezen. Zijn groepstoewijzingen, hun volgorde, hun verplichtvlaggen en hun overschrijvingen per groep komen niet met hem terug.'
+classification-store.keys-view.active: Actief
+classification-store.keys-view.deleted: Verwijderd
+classification-store.restore-key: Herstellen
+classification-store.restore-key-question: 'Sleutel "{{keyName}}" herstellen?'
+classification-store.restore-key-consequence: 'De sleutel komt terug zonder tot een groep te behoren. Zijn groepstoewijzingen, hun volgorde, hun verplichtvlaggen en hun overschrijvingen per groep zijn verloren en kunnen niet worden hersteld. Wijs de sleutel opnieuw aan een groep toe om zijn waarden weer bereikbaar te maken.'
+classification-store.keys-deleted-empty: Geen verwijderde sleutels.
+classification-store.keys-deleted-no-results: "Geen verwijderde sleutels komen overeen met de zoekopdracht."
+classification-store.delete-group-relation-consequence: "De groep wordt alleen uit deze collectie verwijderd. De groep, haar sleutels en de waarden die objecten eronder bewaren blijven ongewijzigd."
 classification-store.edit-definition: Definitie bewerken
 classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Koppel-ID"
 classification-store.columns.name: Naam
 classification-store.columns.title: Titel
 classification-store.columns.type: Type
@@ -2251,6 +2273,112 @@ classification-store.select-group: Groep selecteren
 classification-store.search-groups: Groepen zoeken…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Subgroepen
+classification-store.engine.label: "Engine: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Document"
+classification-store.key-type-needs-document-engine: "De engine van deze store kan dit sleuteltype niet bevatten. Het vereist de documentengine."
+classification-store.keys-without-field-filter: "Voor deze sleutels is geen veldfilter beschikbaar, daarom zijn ze niet toegevoegd: {{keyNames}}"
+classification-store.add-sub-group: Subgroep toevoegen
+classification-store.delete-sub-group: "Subgroep \"{{subGroupName}}\" verwijderen?"
+classification-store.add-sub-group-store-hint: Een subgroep hoort bij de store, dus een nieuwe komt beschikbaar voor elke groep van deze store.
+classification-store.key-indexed: Opnemen in de zoekindex van de Classification Store
+classification-store.key-indexed-hint: Zolang dit uitgeschakeld is, kan deze sleutel niet worden gesorteerd, gefilterd of doorzocht en wordt de waarde uit het opgeslagen zoekdocument verwijderd. De index wordt via de wachtrij bijgewerkt, dus wijzigingen zijn niet meteen zichtbaar.
+classification-store.delete-sub-group-in-use-hint: Maak eerst de toewijzing van de sleutels aan deze subgroep ongedaan in de hierboven genoemde groepen en verwijder hem daarna.
+classification-store.no-sub-groups: Deze store heeft nog geen subgroepen
+classification-store.select-sub-group: Subgroep selecteren
+classification-store.search-sub-groups: Subgroepen zoeken…
+classification-store.assign-sub-group: Subgroep toewijzen
+classification-store.unassign-sub-group: Toewijzing opheffen
+classification-store.select-keys-hint: Selecteer eerst minstens één sleutel
+classification-store.no-sub-group: Geen subgroep
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Niet toegewezen ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Toewijzing van de hier weergegeven sleutels opheffen
+classification-store.aria.unassign-sub-group-keys: "Toewijzing van de hier weergegeven sleutels aan subgroep \"{{name}}\" opheffen"
+classification-store.aria.edit-key-override: "Opties en eenheid van sleutel \"{{name}}\" in deze groep bewerken"
+classification-store.override.edit: "Opties en eenheid in deze groep bewerken"
+classification-store.override.title: "Opties en eenheid van {{keyName}} in {{groupName}} bewerken"
+classification-store.override.options-heading: "Opties in deze groep"
+classification-store.override.unit-heading: "Eenheid in deze groep"
+classification-store.override.default-unit: "Standaardeenheid"
+classification-store.override.last-one: "de laatste"
+classification-store.override.no-longer-offered: "niet meer aangeboden door deze sleutel"
+classification-store.override.use-all-options: "Alle opties gebruiken"
+classification-store.override.use-key-units: "Eenheden van de sleutel gebruiken"
+classification-store.override.use-key-default: "Standaard van de sleutel gebruiken"
+classification-store.override.options-count: "{{count}} van {{total}} geselecteerd"
+classification-store.override.units-count: "{{count}} van {{total}} geselecteerd"
+classification-store.override.options-help: "Alle opties gebruiken heft de beperking op. Alle opties deselecteren is iets anders, daarom kan de laatste optie niet worden gedeselecteerd."
+classification-store.override.no-options-title: "Voor deze sleutel zijn in deze groep geen opties beschikbaar"
+classification-store.override.key-offers-no-options: "Deze sleutel biedt geen opties om te beperken."
+classification-store.override.options-empty: "De toewijzing beperkt de sleutel tot een lege lijst."
+classification-store.override.options-stale-only: "De opgeslagen subset noemt alleen waarden die de sleutel niet meer aanbiedt."
+classification-store.override.stored-unreadable: "De opgeslagen waarde kan niet als lijst worden gelezen."
+classification-store.override.options-unavailable: "De opties van deze sleutel konden niet worden geladen"
+classification-store.override.tag-options-unavailable: "opties onbekend"
+classification-store.override.options-stored-unlisted: "Deze sleutel publiceert geen opties om de opgeslagen deelverzameling mee te vergelijken. Ze blijft ongewijzigd; gebruik alle opties om haar te wissen."
+classification-store.override.units-no-vocabulary: "Deze sleutel noemt geen eenhedenvocabulaire, dus hier kan niets worden beperkt."
+classification-store.override.no-units-title: "Voor deze sleutel zijn in deze groep geen eenheden beschikbaar"
+classification-store.override.units-empty: "De toewijzing beperkt de geldige eenheden tot een lege lijst."
+classification-store.override.units-loading: "De eenheden van de installatie worden geladen."
+classification-store.override.units-unavailable: "De eenheden van de installatie konden niet worden geladen, dus de geldige eenheden kunnen niet worden getoond of gewijzigd."
+classification-store.override.units-key-permits-none: "Deze sleutel staat geen enkele eenheid toe, dus hier kan niets worden beperkt."
+classification-store.override.units-installation-empty: "Deze installatie definieert geen eenheden, dus hier kan niets worden beperkt."
+classification-store.override.units-stale-only: "De opgeslagen geldige eenheden noemen alleen eenheden die de sleutel niet meer toestaat."
+classification-store.override.default-outside: "De opgeslagen standaardeenheid {{unit}} hoort niet bij de eenheden die deze groep toestaat."
+classification-store.override.nothing-to-narrow: "Deze sleutel heeft geen opties en geen eenheden, dus er valt niets te beperken."
+classification-store.override.tag-no-options: "geen opties"
+classification-store.override.tag-options: "{{count}} van {{total}}"
+classification-store.override.tag-no-units: "geen eenheden"
+classification-store.override.tag-units: "{{count}} van {{total}} eenheden"
+classification-store.override.tag-unreadable: "onleesbaar"
+classification-store.aria.delete-sub-group: "Subgroep \"{{name}}\" verwijderen"
+classification-store.aria.edit-metadata: "Metadata van \"{{name}}\" bewerken"
+classification-store.aria.edit-titles: "Interne titels van \"{{name}}\" bewerken"
+classification-store.aria.remove-pair: "Paar \"{{name}}\" verwijderen"
+classification-store.aria.remove-pair-at: "Paar {{position}} verwijderen"
+classification-store.edit-metadata: "Metadata bewerken: {{name}}"
+classification-store.edit-titles: "Interne titels bewerken: {{name}}"
+classification-store.action-edit-metadata: "Metadata bewerken"
+classification-store.action-edit-titles: "Interne titels bewerken"
+classification-store.add-pair: "Paar toevoegen"
+classification-store.pair-key: "Sleutel"
+classification-store.pair-value: "Waarde"
+classification-store.pair-locale: "Taal"
+classification-store.pair-title: "Interne titel"
+classification-store.pair-no-content: "Nog geen paren"
+classification-store.pair-key-duplicate: "Deze sleutel wordt al door een ander paar gebruikt"
+classification-store.pair-key-reserved: "Dit voorvoegsel is gereserveerd voor interne titels. Gebruik het dialoogvenster \"Interne titels bewerken\" of een andere sleutel"
+classification-store.pair-locale-duplicate: "Deze taal wordt al door een andere titel gebruikt"
+classification-store.pair-key-list: "Deze sleutels zouden als lijst worden opgeslagen. Gebruik een sleutel die geen getal is"
+classification-store.pair-type.object: "Object"
+classification-store.pair-type.array: "Array"
+classification-store.pair-type.number: "Getal"
+classification-store.pair-type.boolean: "Boolean"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Talen zijn vrije tekst en worden niet gecontroleerd aan de hand van de in het systeem ingestelde talen."
+classification-store.metadata-saved: "Metadata opgeslagen"
+classification-store.titles-saved: "Titels opgeslagen"
+classification-store.unassign-sub-group-confirm_one: "Toewijzing van de 1 hier weergegeven sleutel aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
+classification-store.unassign-sub-group-confirm_other: "Toewijzing van de {{count}} hier weergegeven sleutels aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
+classification-store.sub-groups-strip-hint: Dit zijn de subgroepen die de sleutels van deze groep gebruiken. Het vocabulaire blijft bij de store.
+classification-store.manage-sub-groups: Subgroepen beheren
+classification-store.sub-group-unused: "Geen enkele sleutel van deze groep gebruikt subgroep \"{{name}}\" nog. Hij bestaat nog steeds in de store."
+classification-store.assign-sub-group-progress: "Subgroep wordt aan {{done}} van {{total}} sleutels toegewezen…"
+classification-store.assign-sub-group-failed: "De subgroep kon niet worden toegewezen aan: {{keyNames}}"
+classification-store.assign-sub-group-running: Wacht tot de toewijzing van de subgroep klaar is
+classification-store.key-localization: "Localisatie"
+classification-store.key-localization.inherit: "Overerven"
+classification-store.key-localization.localized: "Gelokaliseerd"
+classification-store.key-localization.not-localized: "Niet gelokaliseerd"
+classification-store.key-localization-confirm: "Waarden die deze sleutel in andere talen bevat, worden mogelijk niet meer weergegeven of opgeslagen. Toch opslaan?"
+classification-store.key-localized: "Gelokaliseerde sleutel"
+classification-store.key-localized-tooltip: "Deze sleutel bevat een eigen waarde per taal."
+classification-store.import: Storeconfiguratie importeren
+classification-store.import-success: Storeconfiguratie succesvol geïmporteerd
+classification-store.import-replace.title: "Storeconfiguratie vervangen?"
+classification-store.import-replace.warning: "Deze store is niet leeg. Een bestand dat een andere store beschrijft, vervangt de configuratie van deze store en verwijdert de waarden die elk object erin bewaart. Dit kan niet ongedaan worden gemaakt."
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad
@@ -3216,3 +3344,24 @@ maintenance-mode.logout.deactivate-and-log-out: Deactiveren en uitloggen
 maintenance-mode.locked-out.title: Onderhoud
 maintenance-mode.locked-out.text: 'Het systeem is in onderhoudsmodus of tijdelijk niet beschikbaar. Je laatste actie is mogelijk niet opgeslagen. Deze melding sluit automatisch zodra het systeem weer beschikbaar is.'
 maintenance-mode.locked-out.reload: Herladen
+field-definition.multi-value: "Meervoudige waarde"
+classification-store.multi-value.delegate: "een multiValue van"
+classification-store.multi-value.delegate-required: "Kies vóór het opslaan het type dat deze multiValue bevat."
+classification-store.multi-value.variants: "Varianten"
+classification-store.multi-value.variant-name: "Naam"
+classification-store.multi-value.variant-label: "Label"
+classification-store.multi-value.variant-add: "Variant toevoegen"
+classification-store.multi-value.variant-name-empty: "Een variant heeft een naam nodig."
+classification-store.multi-value.variant-name-duplicate: "Twee varianten kunnen niet dezelfde naam \"{{name}}\" hebben."
+classification-store.multi-value.move-up: "Omhoog"
+classification-store.multi-value.move-down: "Omlaag"
+classification-store.multi-value.narrowing-confirm: "Varianten zijn beperkt. Reeds opgeslagen waarden worden niet verwijderd en blijven zichtbaar, maar er kunnen geen extra waarden buiten de nieuwe declaratie worden toegevoegd."
+classification-store.multi-value.default-variant: "Standaard"
+classification-store.multi-value.not-declared: "niet gedeclareerd"
+classification-store.multi-value.no-delegate: "Deze sleutel heeft geen type om de waarden mee te bewerken."
+classification-store.multi-value.unknown-delegate: "De editor heeft geen invoerveld voor het type {{type}}."
+classification-store.multi-value.unreadable-value: "Deze sleutel bevat een waarde die de editor niet kan lezen; ze blijft ongewijzigd."
+classification-store.multi-value.default-variant-permitted: "Waarden zonder variant toestaan"
+classification-store.multi-value.default-variant-label: "Label van de standaardwaarde"
+classification-store.multi-value.no-writable-slot: "Deze sleutel declareert geen variant en staat geen waarden zonder variant toe, dus er is geen plek om een waarde in te voeren. Declareer een variant of sta waarden zonder variant toe."
+classification-store.multi-value.unreadable-entry: "Deze waarde is geen getal dat het invoerveld kan tonen; ze blijft ongewijzigd opgeslagen tot ze wordt gewist."

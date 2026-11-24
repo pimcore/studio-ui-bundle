@@ -13,6 +13,8 @@ import { Alert } from 'antd'
 import { type DynamicTypeFieldFilterAbstract, type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { useDynamicTypeResolver } from '../../../resolver/hooks/use-dynamic-type-resolver'
+import { delegateDefinitionOf } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/multi-value/multi-value-delegate-props'
+import { keyFilterTypeOf } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/key-filter-type'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export interface DynamicTypeFieldFilterObjectAdapterProps extends AbstractFieldFilterDefinition {}
@@ -26,7 +28,7 @@ export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Elemen
   }
 
   const { fieldDefinition } = config
-  const currentFieldType: string = fieldDefinition?.fieldType ?? fieldDefinition?.fieldtype ?? 'unknown'
+  const currentFieldType: string = keyFilterTypeOf(fieldDefinition ?? {})
 
   if (!hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [currentFieldType] })) {
     return (
@@ -51,7 +53,7 @@ export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Elemen
 
   return (
     <>
-      {ComponentRenderer(fieldDefinition as AbstractFieldFilterDefinition)}
+      {ComponentRenderer(((fieldDefinition.fieldType ?? fieldDefinition.fieldtype) === 'multiValue' && currentFieldType !== 'multiValue' ? delegateDefinitionOf(fieldDefinition) : fieldDefinition) as AbstractFieldFilterDefinition)}
     </>
   )
 }

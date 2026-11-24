@@ -42,6 +42,11 @@ jest.mock('@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-
   useUnsavedChangesGuard: () => ({ guard: async () => await Promise.resolve(true) })
 }))
 
+// the tree sync pulls in the tree slice (untranspiled antd ESM in jest); it is covered by its own test
+jest.mock('@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-sync-tree-workflow-states', () => ({
+  useSyncTreeWorkflowStates: jest.fn()
+}))
+
 jest.mock('@sdk/modules/element', () => ({
   useElementRefresh: () => ({ refreshElement: mockRefreshElement })
 }))

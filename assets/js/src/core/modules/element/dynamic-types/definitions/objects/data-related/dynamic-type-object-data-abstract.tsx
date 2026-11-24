@@ -80,6 +80,20 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
 
 export type GridCellColumnMeta = ColumnMetaType & { type: string }
 
+export interface IPrepareLanguageComparisonValueProps {
+  /** Form value of the whole object, as the language comparison holds it. */
+  value: Record<string, any>
+  /** Columns this type contributed, see extractLocalizedFields. */
+  descriptors: ILocalizedFieldDescriptor[]
+  /** Locales the comparison currently shows. */
+  locales: Array<string | null>
+}
+
+export interface IMergeChangedValuesContext {
+  /** Whether the field, named relative to the changed field, holds an inherited value. */
+  isInherited: (fieldName: string) => boolean
+}
+
 @injectable()
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
@@ -117,6 +131,14 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     return false
   }
 
+  /**
+   * Makes the loaded value writable in the language comparison, which renders the columns
+   * as plain form items instead of using the control of the type.
+   */
+  prepareLanguageComparisonValue (props: IPrepareLanguageComparisonValueProps): Record<string, any> {
+    return props.value
+  }
+
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
     return this.getObjectDataComponent({ ...props, noteditable: true })
   }
@@ -128,6 +150,11 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
    */
   getEmptyValue (): unknown {
     return null
+  }
+
+  /** Whether the editor of the type can show the stored value; a type whose editor cannot overrides it. */
+  canReadValue (_value: unknown): boolean {
+    return true
   }
 
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
@@ -208,9 +235,10 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
    *
    * @param current  The value currently accumulated for this field's key.
    * @param incoming The new partial value arriving from the form's onValuesChange event.
+   * @param context  Inheritance of the field, when the caller knows it.
    * @returns        The value that should be stored for this field's key.
    */
-  mergeChangedValues?: (current: any, incoming: any) => any
+  mergeChangedValues?: (current: any, incoming: any, context?: IMergeChangedValuesContext) => any
 
   getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
     return undefined

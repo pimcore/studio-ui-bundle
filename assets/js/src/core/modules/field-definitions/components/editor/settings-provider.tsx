@@ -29,6 +29,7 @@ export interface ImportExportConfig {
   acceptFileTypes?: string
   acceptMimeTypes?: string[]
   successMessageKey?: string
+  importModalTitleKey?: string
   // The upload posts straight to getImportUrl and never passes through an RTK Query
   // mutation, so nothing invalidates the cache for it. The whole action rather than a
   // tag list: only the module that owns the endpoints knows which api has those tag

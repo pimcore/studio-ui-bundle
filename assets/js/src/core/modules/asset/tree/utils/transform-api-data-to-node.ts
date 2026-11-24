@@ -12,6 +12,7 @@ import { type AssetGetTreeApiResponse, type AssetPermissions, type Image, type A
 import { getElementIcon, getElementKey, getElementRealKey } from '@Pimcore/modules/element/element-helper'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
+import { toTreeNodeWorkflowStates } from '@Pimcore/components/element-tree/utils/tree-node-workflow-states'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const transformApiDataToNode = (assetNode: Image | AssetDocument | Audio | Video | Archive | Text | AssetFolder | Unknown, node: DataTransformerSourceNode): TreeNode => {
@@ -27,6 +28,7 @@ export const transformApiDataToNode = (assetNode: Image | AssetDocument | Audio 
     hasChildren: assetNode.hasChildren,
     locked: assetNode.locked,
     isLocked: assetNode.isLocked,
+    workflowStates: toTreeNodeWorkflowStates(assetNode.workflowStates),
     metaData: {
       asset: assetNode
     },
