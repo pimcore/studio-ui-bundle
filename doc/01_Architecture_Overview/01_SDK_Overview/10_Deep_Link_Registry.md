@@ -30,6 +30,6 @@ deepLinkRegistry.register({
 })
 ```
 
-- The name is the value of the `deeplink` parameter and must be unique; prefix it with your bundle. A second handler with the same name is reported and ignored.
+- The name is the value of the `deeplink` parameter and must be unique across Studio: choose a name other bundles will not use, for example by prefixing it with your bundle. A second handler with the same name is reported and ignored.
 - An unknown name, a thrown error and a rejected promise are reported with Studio's error handling. An error the handler already showed with `trackError` is not reported a second time.
 - The parameters come from an address anyone can send: validate them before use and open only what the current user may see.
