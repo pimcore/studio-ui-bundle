@@ -288,8 +288,8 @@ final readonly class BuildArchiveExtractor
 
         if (!@rename($tmpDir, $targetDir)) {
             // Restore the previous build if the swap failed.
-            if ($backup !== null && !is_dir($targetDir)) {
-                @rename($backup, $targetDir);
+            if ($backup !== null) {
+                $this->restoreBackup($backup, $targetDir);
             }
 
             return false;
@@ -300,6 +300,17 @@ final readonly class BuildArchiveExtractor
         }
 
         return true;
+    }
+
+    /**
+     * Separate method on purpose: the renames in swapIntoPlace() change the filesystem, so the
+     * target must be checked afresh here rather than with the is_dir() result from before them.
+     */
+    private function restoreBackup(string $backup, string $targetDir): void
+    {
+        if (!is_dir($targetDir)) {
+            @rename($backup, $targetDir);
+        }
     }
 
     /**
