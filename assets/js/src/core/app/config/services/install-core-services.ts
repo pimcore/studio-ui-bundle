@@ -289,6 +289,7 @@ import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
 import { DynamicTypeFieldFilterRelation } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/relation/dynamic-type-field-filter-relation'
 import { AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
+import { WelcomeScreenRegistry } from '@Pimcore/modules/app/welcome-screen/services/welcome-screen-registry'
 import { DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
 import { DynamicTypeFieldDefinitionInput } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/input/dynamic-type-field-definition-input'
 import { DynamicTypeFieldDefinitionTextarea } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/textarea/dynamic-type-field-definition-textarea'
@@ -766,6 +767,7 @@ export function installCoreServices (container: Container): void {
 
   // App Loader
   container.bind(serviceIds['AppLoader/Registry']).to(AppLoaderRegistry).inSingletonScope()
+  container.bind(serviceIds['WelcomeScreen/Registry']).to(WelcomeScreenRegistry).inSingletonScope()
 
   // Field Definitions
   container.bind(serviceIds['DynamicTypes/FieldDefinitionRegistry']).to(DynamicTypeFieldDefinitionRegistry).inSingletonScope()
