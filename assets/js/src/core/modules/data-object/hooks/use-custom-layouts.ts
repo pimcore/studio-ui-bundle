@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useEffect } from 'react'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import {
   type CustomLayoutsInCompactFormatToBeUsedForEGListings,
@@ -29,9 +30,12 @@ export interface UseCustomLayoutsReturn {
 export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
   const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
   const { data, error, isLoading: isCustomLayoutLoading } = useClassCustomLayoutEditorCollectionQuery({ objectId: id }, { skip: dataObject === undefined || dataObject.type === 'folder' })
-  if (error !== undefined) {
-    trackError(new ApiError(error))
-  }
+  // Report in an effect: from the render body the same failed request would open a new error dialog on every re-render
+  useEffect(() => {
+    if (error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
 
   const layouts = data !== undefined ? data.items : undefined
   const hasWorkflowAvailable = isWorkflowAvailable(dataObject, 'data-object')
