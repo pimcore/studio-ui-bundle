@@ -483,6 +483,7 @@ version.versions: Versioner
 version.version: Version
 version.publish: Publicera
 version.coauthored-by: 'Medförfattad av {{type}} {{name}}'
+version.deleted-relation: 'Borttaget element ({{type}} ID {{id}})'
 version.published: Publicerad
 version.autosaved: Automatiskt sparad
 version.schedule-for: Schemalagd för

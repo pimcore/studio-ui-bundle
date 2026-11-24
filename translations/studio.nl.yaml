@@ -483,6 +483,7 @@ version.versions: Versies
 version.version: Versie
 version.publish: Publiceren
 version.coauthored-by: "Mede-bewerkt door {{type}} {{name}}"
+version.deleted-relation: 'Verwijderd element ({{type}} ID {{id}})'
 version.published: Gepubliceerd
 version.autosaved: Automatisch opgeslagen
 version.schedule-for: Gepland voor

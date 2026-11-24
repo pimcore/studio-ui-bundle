@@ -485,6 +485,7 @@ version.versions: Versions
 version.version: Version
 version.publish: Publish
 version.coauthored-by: 'Co-authored by {{type}} {{name}}'
+version.deleted-relation: 'Deleted element ({{type}} ID {{id}})'
 version.published: Published
 version.autosaved: Auto saved
 version.schedule-for: Scheduled for

@@ -123,7 +123,8 @@ export const PathTarget = forwardRef(function PathTarget (
         <ElementTag
           disabled={ props.disabled === true || props.inherited === true }
           elementType={ mapToElementType(value.type, true) }
-          id={ value.id }
+          // without an id the path tag is not clickable, so a denied or deleted element cannot be opened
+          id={ value.hasViewAccess === false ? undefined : value.id }
           onClose={ props.allowElementTagClose === true
             ? () => {
                 handleValueChange(null)
