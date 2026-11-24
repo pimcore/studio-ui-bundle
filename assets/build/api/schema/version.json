@@ -1,0 +1,1230 @@
+{
+  "components": {
+    "schemas": {
+      "AssetVersion": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "type": {
+            "description": "asset type",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "file name",
+            "type": "string"
+          },
+          "creationDate": {
+            "description": "creation date",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "fileSize": {
+            "description": "file size",
+            "type": "integer"
+          },
+          "mimeType": {
+            "description": "mime type",
+            "type": "string"
+          },
+          "metadata": {
+            "description": "Metadata",
+            "items": {
+              "$ref": "#/components/schemas/CustomMetadataVersion"
+            },
+            "type": "array"
+          },
+          "dimensions": {
+            "$ref": "#/components/schemas/Dimensions",
+            "description": "dimensions"
+          }
+        },
+        "required": [
+          "type",
+          "fileName",
+          "creationDate",
+          "fileSize",
+          "mimeType",
+          "metadata",
+          "dimensions"
+        ],
+        "title": "AssetVersion",
+        "type": "object"
+      },
+      "CustomMetadataVersion": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "language": {
+            "description": "Language",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "data"
+        ],
+        "title": "CustomMetadataVersion",
+        "type": "object"
+      },
+      "DataObjectVersion": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Element"
+          },
+          {
+            "properties": {
+              "additionalAttributes": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                },
+                "description": "AdditionalAttributes",
+                "type": "object"
+              },
+              "showVariants": {
+                "description": "Show variants",
+                "type": "boolean"
+              },
+              "allowInheritance": {
+                "description": "Inheritance allowed",
+                "type": "boolean"
+              },
+              "hasPreview": {
+                "description": "Has preview",
+                "type": "boolean"
+              },
+              "showAppLoggerTab": {
+                "description": "Show application logger tab",
+                "type": "boolean"
+              },
+              "hasWorkflowAvailable": {
+                "description": "Has workflow available",
+                "type": "boolean"
+              },
+              "key": {
+                "description": "Key",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string"
+              },
+              "hasChildren": {
+                "description": "Has children",
+                "type": "boolean"
+              },
+              "fullPath": {
+                "description": "Full path",
+                "type": "string"
+              },
+              "index": {
+                "description": "Custom index",
+                "type": "integer"
+              },
+              "className": {
+                "description": "Class name",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "published": {
+                "description": "Published",
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "objectData": {
+                "description": "Detail object data",
+                "type": "object"
+              },
+              "allowVariants": {
+                "description": "Allow variants",
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "properties": {
+                "description": "Properties",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ElementProperty"
+                }
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "allowInheritance",
+          "showVariants",
+          "hasPreview",
+          "hasWorkflowAvailable",
+          "key",
+          "type",
+          "hasChildren",
+          "fullPath",
+          "index",
+          "allowVariants",
+          "className",
+          "published",
+          "objectData"
+        ],
+        "title": "DataObjectVersion",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Dimensions": {
+        "properties": {
+          "width": {
+            "description": "width",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "height": {
+            "description": "height",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "title": "VersionDimensions",
+        "type": "object"
+      },
+      "DocumentVersion": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "modificationDate": {
+            "description": "modification date",
+            "type": "integer"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          },
+          "published": {
+            "description": "published",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "modificationDate",
+          "path",
+          "published"
+        ],
+        "title": "DocumentVersion",
+        "type": "object"
+      },
+      "Element": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "ID of parent",
+            "type": "integer"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "icon"
+          },
+          "userOwner": {
+            "description": "ID of owner",
+            "type": "integer"
+          },
+          "userModification": {
+            "description": "User that modified the element",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "locked": {
+            "description": "Locked",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isLocked": {
+            "description": "Is locked",
+            "type": "boolean"
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "elementType": {
+            "description": "elementType",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "parentId",
+          "path",
+          "icon",
+          "userOwner",
+          "userModification",
+          "locked",
+          "isLocked",
+          "creationDate",
+          "modificationDate",
+          "elementType"
+        ],
+        "title": "Element",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "ElementProperty": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "key",
+            "type": "string"
+          },
+          "data": {
+            "description": "data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "inheritable": {
+            "description": "inheritable",
+            "type": "boolean"
+          },
+          "inherited": {
+            "description": "inherited",
+            "type": "boolean"
+          },
+          "config": {
+            "description": "config",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "predefinedName": {
+            "description": "predefinedName",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "description": "description",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "data",
+          "type",
+          "inheritable",
+          "inherited"
+        ],
+        "title": "DataProperty",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "UpdateVersion": {
+        "properties": {
+          "public": {
+            "description": "Public",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "note": {
+            "description": "Note",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coauthorType": {
+            "deprecated": true,
+            "description": "Coauthor type, empty string clears it. Deprecated: removed in 2027.1 (pimcore/platform-version#814)",
+            "maxLength": 50,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coauthor": {
+            "deprecated": true,
+            "description": "Coauthor, empty string clears it. Deprecated: removed in 2027.1 (pimcore/platform-version#814)",
+            "maxLength": 255,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "title": "UpdateVersion",
+        "type": "object"
+      },
+      "Version": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "version ID",
+            "type": "integer"
+          },
+          "cid": {
+            "description": "element ID",
+            "type": "integer"
+          },
+          "ctype": {
+            "description": "element type",
+            "type": "string"
+          },
+          "note": {
+            "description": "note",
+            "type": "string"
+          },
+          "date": {
+            "description": "date",
+            "type": "integer"
+          },
+          "public": {
+            "description": "public",
+            "type": "boolean"
+          },
+          "published": {
+            "description": "published",
+            "type": "boolean"
+          },
+          "versionCount": {
+            "description": "version count",
+            "type": "integer"
+          },
+          "autosave": {
+            "description": "autosave",
+            "type": "boolean"
+          },
+          "user": {
+            "$ref": "#/components/schemas/VersionUser",
+            "description": "user"
+          },
+          "scheduled": {
+            "description": "scheduled",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "coauthorType": {
+            "description": "coauthor type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coauthor": {
+            "description": "coauthor",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "cid",
+          "ctype",
+          "note",
+          "date",
+          "public",
+          "published",
+          "versionCount",
+          "autosave",
+          "user"
+        ],
+        "title": "Version",
+        "type": "object"
+      },
+      "VersionUser": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "name",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "title": "VersionUser",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: version)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/versions/{id}/asset/download": {
+      "get": {
+        "description": "Download the asset version based on the provided version <strong>{id}</strong>.\n",
+        "operationId": "version_asset_download_by_id",
+        "parameters": [
+          {
+            "description": "Id of the version",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Asset version binary file",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download asset version by ID",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/pimcore-studio/api/versions/{id}/image/stream": {
+      "get": {
+        "description": "Stream the image version thumbnail based on the provided version <strong>{id}</strong>.\n",
+        "operationId": "version_image_stream_by_id",
+        "parameters": [
+          {
+            "description": "Id of the version",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Image thumbnail version stream",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream image version thumbnail by ID",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/pimcore-studio/api/versions/{id}/pdf/stream": {
+      "get": {
+        "description": "Stream the PDF version based on the provided version <strong>{id}</strong>.\n",
+        "operationId": "version_pdf_stream_by_id",
+        "parameters": [
+          {
+            "description": "Id of the version",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "PDF version stream",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "202 - Not Completed<br>400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Stream PDF version by ID",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/pimcore-studio/api/versions/{id}": {
+      "get": {
+        "description": "Retrieves a specific version data based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an id of existing version.\n",
+        "operationId": "version_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the version",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AssetVersion"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DataObjectVersion"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DocumentVersion"
+                    }
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved version data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get a specific version by ID",
+        "tags": [
+          "Versions"
+        ]
+      },
+      "put": {
+        "description": "Updates a version based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an id of existing version. <br> See the full description of updatable fields with the schema <strong>UpdateVersion</strong>\n",
+        "operationId": "version_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the version",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVersion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated version"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update a version by ID",
+        "tags": [
+          "Versions"
+        ]
+      },
+      "post": {
+        "description": "Publishes a specific version based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an id of existing version.\n",
+        "operationId": "version_publish_by_id",
+        "parameters": [
+          {
+            "description": "Id of the version",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "ID of published version",
+                      "title": "id",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ID of the published version"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Publish a specific version by ID",
+        "tags": [
+          "Versions"
+        ]
+      },
+      "delete": {
+        "description": "Deletes a specific version based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an id of existing version.\n",
+        "operationId": "version_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the version",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted version"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a specific version",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/pimcore-studio/api/versions/{elementType}/{id}": {
+      "get": {
+        "description": "List all the versions of the element. <br> The <strong>{id}</strong> must be an ID of an existing element of the provided <strong>{elementType}</strong>.\n",
+        "operationId": "version_get_collection_for_element_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Version"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated element Versions data as JSON with total count as header param"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get versions for an element",
+        "tags": [
+          "Versions"
+        ]
+      },
+      "delete": {
+        "description": "Cleans up all versions for a specific element based on the given <strong>{elementType}</strong> and <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an existing element of the provided <strong>{elementType}</strong>.\n",
+        "operationId": "version_cleanup_for_element_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the ID of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ids": {
+                      "description": "IDs of deleted versions",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "title": "IDs",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "ids"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "IDs of the removed versions"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Cleanup all versions for an element",
+        "tags": [
+          "Versions"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,2742 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "KeyBinding": {
+        "description": "Key Binding for a User",
+        "properties": {
+          "key": {
+            "description": "ASCII Code for a key on the Keyboard",
+            "type": "integer"
+          },
+          "action": {
+            "description": "The action the key binding should execute",
+            "type": "string"
+          },
+          "ctrl": {
+            "description": "If CTRL key should be pressed",
+            "type": "boolean"
+          },
+          "alt": {
+            "description": "If ALT key should be pressed",
+            "type": "boolean"
+          },
+          "shift": {
+            "description": "If SHIFT key should be pressed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "action",
+          "ctrl",
+          "alt",
+          "shift"
+        ],
+        "title": "Key Binding for a User",
+        "type": "object"
+      },
+      "ObjectDependencies": {
+        "description": "A bounded preview of dependencies - use GET /user/{id}/object-dependencies to browse beyond it.",
+        "properties": {
+          "dependencies": {
+            "description": "Dependencies to objects",
+            "items": {
+              "$ref": "#/components/schemas/UserDependency"
+            },
+            "type": "array"
+          },
+          "hasHidden": {
+            "description": "If it has hidden dependencies",
+            "type": "boolean"
+          },
+          "totalItems": {
+            "description": "Total number of objects referencing this user, including ones the caller may not view",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "hasHidden",
+          "dependencies"
+        ],
+        "title": "User Object Dependencies",
+        "type": "object"
+      },
+      "PerspectiveConfig": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Perspective ID",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "Icon"
+          },
+          "isWriteable": {
+            "description": "Is Writeable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "icon",
+          "isWriteable"
+        ],
+        "title": "Perspective Config",
+        "type": "object"
+      },
+      "ResetPassword": {
+        "description": "Reset password parameters",
+        "properties": {
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "resetPasswordUrl": {
+            "description": "Reset password URL",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "resetPasswordUrl"
+        ],
+        "title": "ResetPassword",
+        "type": "object"
+      },
+      "SimpleUser": {
+        "description": "A user with the most imported information.",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the User",
+            "type": "integer"
+          },
+          "username": {
+            "description": "Name of the User",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "username"
+        ],
+        "title": "Simple User",
+        "type": "object"
+      },
+      "TreeNode": {
+        "description": "One node in the a tree",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Unique Identifier",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the tree node",
+            "type": "string"
+          },
+          "type": {
+            "description": "Is ether folder or a specific item in the folder",
+            "type": "string"
+          },
+          "hasChildren": {
+            "description": "If a folder has sub items",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "hasChildren"
+        ],
+        "title": "Tree Node",
+        "type": "object"
+      },
+      "TwoFactorAuth": {
+        "description": "Two Factor Authentication Data for a User",
+        "properties": {
+          "required": {
+            "description": "Required",
+            "type": "boolean"
+          },
+          "enabled": {
+            "description": "Enabled",
+            "type": "boolean"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "active": {
+            "description": "Active",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "required",
+          "enabled",
+          "type",
+          "active"
+        ],
+        "title": "Two Factor Authentication Data",
+        "type": "object"
+      },
+      "TwoFactorCode": {
+        "description": "Code from the authenticator app",
+        "properties": {
+          "code": {
+            "description": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "Two-factor code",
+        "type": "object"
+      },
+      "TwoFactorSetup": {
+        "description": "New secret for the authenticator app, not active until a first code confirms it",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "secret": {
+            "description": "Secret, for manual entry",
+            "type": "string"
+          },
+          "otpauthUri": {
+            "description": "otpauth URI to show as a QR code",
+            "type": "string"
+          },
+          "digits": {
+            "description": "Number of digits in a code",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "secret",
+          "otpauthUri",
+          "digits"
+        ],
+        "title": "Two-factor setup",
+        "type": "object"
+      },
+      "UpdateUser": {
+        "description": "User Schema to update a User.",
+        "properties": {
+          "email": {
+            "description": "Email of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "firstname": {
+            "description": "Firstname of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastname": {
+            "description": "Lastname of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "admin": {
+            "description": "If User is admin",
+            "type": "boolean"
+          },
+          "active": {
+            "description": "If User is active",
+            "type": "boolean"
+          },
+          "classes": {
+            "description": "Classes the user is allows to see",
+            "type": "object"
+          },
+          "docTypes": {
+            "description": "Allowed Document types to create",
+            "type": "object"
+          },
+          "closeWarning": {
+            "description": "Show Close Warning",
+            "type": "boolean"
+          },
+          "allowDirtyClose": {
+            "description": "Allow Dirty Close",
+            "type": "boolean"
+          },
+          "contentLanguages": {
+            "description": "List of available content Language already sorted.",
+            "type": "object"
+          },
+          "keyBindings": {
+            "description": "Key Bindings",
+            "items": {
+              "$ref": "#/components/schemas/KeyBinding"
+            },
+            "type": "array"
+          },
+          "language": {
+            "description": "Language of the User",
+            "type": "string"
+          },
+          "dateTimeLocale": {
+            "description": "Date Time Locale for the User",
+            "type": "string"
+          },
+          "memorizeTabs": {
+            "description": "Memorize Tabs",
+            "type": "boolean"
+          },
+          "parentId": {
+            "description": "Parent ID",
+            "type": "integer"
+          },
+          "permissions": {
+            "description": "List of permissions for the user",
+            "type": "object"
+          },
+          "roles": {
+            "description": "ID List of roles the user is assigned",
+            "type": "object"
+          },
+          "twoFactorAuthenticationRequired": {
+            "description": "Two Factor Authentication Enabled",
+            "type": "boolean"
+          },
+          "websiteTranslationLanguagesEdit": {
+            "description": "Website Translation Languages Edit",
+            "type": "object"
+          },
+          "websiteTranslationLanguagesView": {
+            "description": "Website Translation Languages View",
+            "type": "object"
+          },
+          "welcomeScreen": {
+            "description": "Show welcome Screen",
+            "type": "boolean"
+          },
+          "assetWorkspaces": {
+            "description": "Asset Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "dataObjectWorkspaces": {
+            "description": "Data Object Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "documentWorkspaces": {
+            "description": "Document Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "perspectives": {
+            "description": "Allowed studio perspectives",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "theme": {
+            "description": "Theme of the User",
+            "type": "string"
+          },
+          "welcomeScreenTarget": {
+            "description": "Welcome screen opened after login, as `<provider>:<id>`. Omitted or null keeps the stored target, an empty string clears it",
+            "maxLength": 255,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "firstname",
+          "lastname",
+          "admin",
+          "active",
+          "classes",
+          "docTypes",
+          "closeWarning",
+          "allowDirtyClose",
+          "contentLanguages",
+          "keyBindings",
+          "language",
+          "memorizeTabs",
+          "parentId",
+          "permissions",
+          "roles",
+          "twoFactorAuthenticationRequired",
+          "websiteTranslationLanguagesEdit",
+          "websiteTranslationLanguagesView",
+          "welcomeScreen",
+          "assetWorkspaces",
+          "dataObjectWorkspaces",
+          "documentWorkspaces",
+          "perspectives"
+        ],
+        "title": "User",
+        "type": "object"
+      },
+      "UpdateUserProfile": {
+        "description": "Schema to update a current User Profile.",
+        "properties": {
+          "firstname": {
+            "description": "Firstname of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastname": {
+            "description": "Lastname of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "description": "Email of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Language of the User",
+            "type": "string"
+          },
+          "dateTimeLocale": {
+            "description": "Date Time Locale for the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "welcomeScreen": {
+            "description": "Show Welcome Screen",
+            "type": "boolean"
+          },
+          "memorizeTabs": {
+            "description": "Memorize Tabs",
+            "type": "boolean"
+          },
+          "contentLanguages": {
+            "description": "List of available content Language already sorted.",
+            "type": "object"
+          },
+          "keyBindings": {
+            "description": "Key Bindings",
+            "items": {
+              "$ref": "#/components/schemas/KeyBinding"
+            },
+            "type": "array"
+          },
+          "theme": {
+            "description": "Theme of the User",
+            "type": "string"
+          },
+          "welcomeScreenTarget": {
+            "description": "Welcome screen opened after login, as `<provider>:<id>`. Omitted or null keeps the stored target, an empty string clears it",
+            "maxLength": 255,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "email",
+          "language",
+          "dateTimeLocale",
+          "welcomeScreen",
+          "memorizeTabs",
+          "contentLanguages",
+          "keyBindings"
+        ],
+        "title": "User Profile",
+        "type": "object"
+      },
+      "User": {
+        "description": "Contains all information about a user",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the User",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of Folder or User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "description": "Email of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "firstname": {
+            "description": "Firstname of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastname": {
+            "description": "Lastname of the User",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "active": {
+            "description": "If a User is active",
+            "type": "boolean"
+          },
+          "admin": {
+            "description": "If User is admin",
+            "type": "boolean"
+          },
+          "classes": {
+            "description": "Classes the user is allows to see",
+            "type": "object"
+          },
+          "docTypes": {
+            "description": "Allowed doc types to create",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "closeWarning": {
+            "description": "Show close warning",
+            "type": "boolean"
+          },
+          "allowDirtyClose": {
+            "description": "Allow Dirty Close",
+            "type": "boolean"
+          },
+          "contentLanguages": {
+            "description": "List of available content Language already sorted.",
+            "type": "object"
+          },
+          "hasImage": {
+            "description": "If User has an Image",
+            "type": "boolean"
+          },
+          "keyBindings": {
+            "description": "Key Bindings",
+            "items": {
+              "$ref": "#/components/schemas/KeyBinding"
+            },
+            "type": "array"
+          },
+          "language": {
+            "description": "Language of the User",
+            "type": "string"
+          },
+          "dateTimeLocale": {
+            "description": "Locale for dateTime",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "theme": {
+            "description": "Theme of the User",
+            "type": "string"
+          },
+          "lastLogin": {
+            "description": "Timestamp of the last login",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "memorizeTabs": {
+            "description": "Memorize Tabs",
+            "type": "boolean"
+          },
+          "parentId": {
+            "description": "Parent ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "permissions": {
+            "description": "List of permissions for the user",
+            "type": "object"
+          },
+          "roles": {
+            "description": "ID List of roles the user is assigned",
+            "type": "object"
+          },
+          "twoFactorAuthentication": {
+            "$ref": "#/components/schemas/TwoFactorAuth",
+            "description": "Two Factor Authentication"
+          },
+          "websiteTranslationLanguagesEdit": {
+            "description": "Website Translation Languages Edit",
+            "type": "object"
+          },
+          "websiteTranslationLanguagesView": {
+            "description": "Website Translation Languages View",
+            "type": "object"
+          },
+          "welcomeScreen": {
+            "description": "Show Welcome Screen",
+            "type": "boolean"
+          },
+          "assetWorkspaces": {
+            "description": "Asset Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "dataObjectWorkspaces": {
+            "description": "Data Object Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserDataObjectWorkspace"
+            },
+            "type": "array"
+          },
+          "documentWorkspaces": {
+            "description": "Document Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserDocumentWorkspace"
+            },
+            "type": "array"
+          },
+          "objectDependencies": {
+            "$ref": "#/components/schemas/ObjectDependencies",
+            "description": "Object Dependencies"
+          },
+          "perspectives": {
+            "description": "Allowed studio perspectives",
+            "items": {
+              "$ref": "#/components/schemas/PerspectiveConfig"
+            },
+            "type": "array"
+          },
+          "welcomeScreenTarget": {
+            "description": "Welcome screen opened after login, as `<provider>:<id>`",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "firstname",
+          "lastname",
+          "active",
+          "admin",
+          "classes",
+          "docTypes",
+          "closeWarning",
+          "allowDirtyClose",
+          "contentLanguages",
+          "hasImage",
+          "keyBindings",
+          "language",
+          "theme",
+          "memorizeTabs",
+          "parentId",
+          "permissions",
+          "roles",
+          "twoFactorAuthentication",
+          "websiteTranslationLanguagesEdit",
+          "websiteTranslationLanguagesView",
+          "welcomeScreen",
+          "assetWorkspaces",
+          "dataObjectWorkspaces",
+          "documentWorkspaces",
+          "objectDependencies",
+          "perspectives",
+          "welcomeScreenTarget"
+        ],
+        "title": "User",
+        "type": "object"
+      },
+      "UserDataObjectWorkspace": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserWorkspace"
+          },
+          {
+            "properties": {
+              "save": {
+                "description": "Save",
+                "type": "boolean"
+              },
+              "unpublish": {
+                "description": "Unpublish",
+                "type": "boolean"
+              },
+              "localizedEdit": {
+                "description": "Localized Edit",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "localizedView": {
+                "description": "Localized View",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "layouts": {
+                "description": "Layouts",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "save",
+          "unpublish"
+        ],
+        "title": "User Document Workspace",
+        "type": "object"
+      },
+      "UserDependency": {
+        "description": "Dependency to an Object",
+        "properties": {
+          "id": {
+            "description": "ID of the object",
+            "type": "integer"
+          },
+          "path": {
+            "description": "Path to the object",
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Subtype of the object",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "path",
+          "subtype"
+        ],
+        "title": "Dependency to an Object",
+        "type": "object"
+      },
+      "UserDocumentWorkspace": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserWorkspace"
+          },
+          {
+            "properties": {
+              "save": {
+                "description": "Save",
+                "type": "boolean"
+              },
+              "unpublish": {
+                "description": "Unpublish",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "save",
+          "unpublish"
+        ],
+        "title": "User Document Workspace",
+        "type": "object"
+      },
+      "UserInformation": {
+        "description": "Information about the user",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "User ID",
+            "type": "integer"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "email": {
+            "description": "Email",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "firstname": {
+            "description": "Firstname",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastname": {
+            "description": "Lastname",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "permissions": {
+            "description": "Permissions",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "isAdmin": {
+            "description": "If user is an admin user",
+            "type": "boolean"
+          },
+          "classes": {
+            "description": "Allowed classes to create",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "docTypes": {
+            "description": "Allowed doc types to create",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "language": {
+            "description": "User Language",
+            "type": "string"
+          },
+          "dateTimeLocale": {
+            "description": "Locale for dateTime",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "theme": {
+            "description": "Theme of the User",
+            "type": "string"
+          },
+          "welcomeScreen": {
+            "description": "Welcome Screen",
+            "type": "boolean"
+          },
+          "memorizeTabs": {
+            "description": "Memorize Tabs",
+            "type": "boolean"
+          },
+          "allowDirtyClose": {
+            "description": "Allow Dirty Close",
+            "type": "boolean"
+          },
+          "hasImage": {
+            "description": "Has Image",
+            "type": "boolean"
+          },
+          "contentLanguages": {
+            "description": "List of available content Language already sorted.",
+            "type": "object"
+          },
+          "allowedLanguagesForEditingWebsiteTranslations": {
+            "description": "List of valid website Languages to edit.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "allowedLanguagesForViewingWebsiteTranslations": {
+            "description": "List of valid website Languages to view.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "keyBindings": {
+            "description": "Key Bindings",
+            "items": {
+              "$ref": "#/components/schemas/KeyBinding"
+            },
+            "type": "array"
+          },
+          "twoFactorAuthentication": {
+            "$ref": "#/components/schemas/TwoFactorAuth",
+            "description": "Two Factor Authentication"
+          },
+          "activePerspective": {
+            "description": "Active studio perspective ID",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "perspectives": {
+            "description": "Allowed studio perspectives",
+            "items": {
+              "$ref": "#/components/schemas/PerspectiveConfig"
+            },
+            "type": "array"
+          },
+          "welcomeScreenTarget": {
+            "description": "Welcome screen opened after login, as `<provider>:<id>`",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "email",
+          "firstname",
+          "lastname",
+          "permissions",
+          "isAdmin",
+          "classes",
+          "docTypes",
+          "language",
+          "dateTimeLocale",
+          "theme",
+          "welcomeScreen",
+          "memorizeTabs",
+          "allowDirtyClose",
+          "hasImage",
+          "contentLanguages",
+          "keyBindings",
+          "twoFactorAuthentication",
+          "activePerspective",
+          "perspectives",
+          "allowedLanguagesForEditingWebsiteTranslations",
+          "allowedLanguagesForViewingWebsiteTranslations",
+          "welcomeScreenTarget"
+        ],
+        "title": "User Information",
+        "type": "object"
+      },
+      "UserPermission": {
+        "description": "A permission for a user or role",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key of the Permission",
+            "type": "string"
+          },
+          "category": {
+            "description": "Category of the Permission",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "category"
+        ],
+        "title": "User Permission",
+        "type": "object"
+      },
+      "UserWorkspace": {
+        "description": "Workspace of a user",
+        "properties": {
+          "cid": {
+            "description": "ID of the element",
+            "type": "integer"
+          },
+          "cpath": {
+            "description": "Path of the element",
+            "type": "string"
+          },
+          "list": {
+            "description": "List Permission",
+            "type": "boolean"
+          },
+          "view": {
+            "description": "View Permission",
+            "type": "boolean"
+          },
+          "publish": {
+            "description": "Publish Permission",
+            "type": "boolean"
+          },
+          "delete": {
+            "description": "Delete Permission",
+            "type": "boolean"
+          },
+          "rename": {
+            "description": "Rename Permission",
+            "type": "boolean"
+          },
+          "create": {
+            "description": "Create Permission",
+            "type": "boolean"
+          },
+          "settings": {
+            "description": "Settings Permission",
+            "type": "boolean"
+          },
+          "versions": {
+            "description": "Versions Permission",
+            "type": "boolean"
+          },
+          "properties": {
+            "description": "Properties Permission",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "cid",
+          "cpath",
+          "list",
+          "view",
+          "publish",
+          "delete",
+          "rename",
+          "create",
+          "settings",
+          "versions",
+          "properties"
+        ],
+        "title": "User Workspace",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: user)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/user/clone/{id}": {
+      "post": {
+        "operationId": "user_clone_by_id",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeNode"
+                }
+              }
+            },
+            "description": "Node of the cloned user."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Clone a specific user.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/": {
+      "post": {
+        "operationId": "user_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "parentId": {
+                    "minimum": 1,
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "parentId",
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeNode"
+                }
+              }
+            },
+            "description": "Node of the new created User."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new user.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/folder": {
+      "post": {
+        "operationId": "user_folder_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "parentId": {
+                    "minimum": 1,
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "parentId",
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeNode"
+                }
+              }
+            },
+            "description": "Node of the new created Folder."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new user folder.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/current-user-information": {
+      "get": {
+        "operationId": "user_get_current_information",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInformation"
+                }
+              }
+            },
+            "description": "Current user information's."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Retrieve information's about the current logged in user.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/{id}": {
+      "get": {
+        "operationId": "user_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "Node of the requested user."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Retrieve a specific user by ID.",
+        "tags": [
+          "User Management"
+        ]
+      },
+      "put": {
+        "operationId": "user_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the User",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "Updated data."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update user by id.",
+        "tags": [
+          "User Management"
+        ]
+      },
+      "delete": {
+        "operationId": "user_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a specific user.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/folder/{id}": {
+      "delete": {
+        "operationId": "user_folder_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the user-folder",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete a specific user folder with all users in this folder.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/image/{id}": {
+      "get": {
+        "operationId": "user_get_image",
+        "parameters": [
+          {
+            "description": "Id of the User",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "User profile image"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get user profile image",
+        "tags": [
+          "User Management"
+        ]
+      },
+      "delete": {
+        "description": "Delete the image of a specific user based on the given <strong>{id}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing user.\n",
+        "operationId": "user_image_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted user image"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete user image by ID",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/users/default-key-bindings": {
+      "get": {
+        "description": "Get default key bindings for user management\n",
+        "operationId": "user_default_key_bindings",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/KeyBinding"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of default key bindings"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get default key bindings",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/{id}/object-dependencies": {
+      "get": {
+        "description": "Get paginated DataObjects referencing the given user via a <strong>User</strong>-type class field.\n<strong>totalItems</strong> counts every referencing object regardless of the caller's view permission\non it, so pages can come back shorter than <strong>pageSize</strong> (or empty) once permission-denied\nobjects are filtered out, and the sum of items actually returned across all pages can be lower than\n<strong>totalItems</strong>.\n",
+        "operationId": "user_get_object_dependencies",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/UserDependency"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated object dependencies for a user.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/available-permissions": {
+      "get": {
+        "operationId": "user_get_available_permissions",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/UserPermission"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available user permissions."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available user permissions.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/users": {
+      "get": {
+        "description": "Get all users with basic information",
+        "operationId": "user_get_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleUser"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of users"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all users",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/users/with-permission": {
+      "get": {
+        "description": "Get all users with the given permission <strong>{permission}</strong>. <br>\nThe <strong>{permission}</strong> must be an existing user permission.\n",
+        "operationId": "user_list_with_permission",
+        "parameters": [
+          {
+            "description": "List users with this permission",
+            "in": "query",
+            "name": "permission",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Include current user in the list",
+            "in": "query",
+            "name": "includeCurrentUser",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleUser"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of users with the given permission"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all users with a specific permission",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/reset-password": {
+      "post": {
+        "operationId": "user_reset_password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>429 - Too Many Requests"
+          }
+        },
+        "summary": "Sending username to reset password.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/search": {
+      "get": {
+        "description": "Search for users by query. The query can be a part of the username, first name, last name, email or user ID.",
+        "operationId": "pimcore_studio_api_user_search",
+        "parameters": [
+          {
+            "description": "Query to search for an user. This can be a part of username, firstname, lastname, email or ID.",
+            "in": "query",
+            "name": "searchQuery",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleUser"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of users"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Search for users by query.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/token-link/{id}": {
+      "post": {
+        "description": "Generate a login link with a token for a user based on the provided user <strong>{id}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of existing user.\n",
+        "operationId": "user_token_link_get",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "link": {
+                      "description": "Token link URL including the generated token as parameter.",
+                      "title": "Token link URL",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "link"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Token login link for the user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Generate login link and token for a user by ID",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/two-factor/confirm": {
+      "post": {
+        "description": "Confirms the pending secret from the setup with a first code from the authenticator app.\nOnly then is two-factor authentication enabled with this secret and required for the user; a previous secret is\nreplaced.\nA wrong code answers 422 and the setup stays pending; without a pending setup the answer is 409.\n",
+        "operationId": "user_two_factor_confirm",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TwoFactorCode"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Two-factor authentication is enabled with the new secret."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Confirm two-factor authentication setup",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/two-factor": {
+      "delete": {
+        "description": "Disables two-factor authentication for the current user and removes the secret.\nRefused with 403 while two-factor authentication is required for the user, so it only removes a setup that is no\nlonger required.\n",
+        "operationId": "user_two_factor_disable",
+        "responses": {
+          "200": {
+            "description": "Two-factor authentication is disabled."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Disable two-factor authentication",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/{id}/two-factor": {
+      "delete": {
+        "description": "Resets the two-factor authentication of a user: disables it and removes the secret.\nWhether it is required for the user stays as it is; a required user sets it up again at the next login.\nAdmins may reset any user, other users with user management only themselves.\n",
+        "operationId": "user_two_factor_reset_by_id",
+        "parameters": [
+          {
+            "description": "Id of the User",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Two-factor authentication of the user is reset."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Reset two-factor authentication of a user",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/two-factor/setup": {
+      "post": {
+        "description": "Creates a new secret for the current user's authenticator app, for a first setup or a renewal.\nThe secret is not active yet: it waits in the session until a first code confirms it, so during a\nrenewal the current secret keeps working. Show `otpauthUri` as a QR code and `secret` for manual entry.\nIt is also the only endpoint open during a login in the `setup` step; the first code then goes to `/login/2fa`.\n",
+        "operationId": "user_two_factor_setup",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwoFactorSetup"
+                }
+              }
+            },
+            "description": "The new secret, its otpauth URI and the number of digits in a code."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Set up or renew two-factor authentication",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/active-perspective/{perspectiveId}": {
+      "put": {
+        "operationId": "user_update_active_perspective",
+        "parameters": [
+          {
+            "description": "Set active perspective by Id",
+            "in": "path",
+            "name": "perspectiveId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated active perspective for the current user."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update the active perspective for the current user.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/{id}/password": {
+      "put": {
+        "operationId": "user_update_password_by_id",
+        "parameters": [
+          {
+            "description": "Id of the User",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  },
+                  "passwordConfirmation": {
+                    "type": "string"
+                  },
+                  "oldPassword": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "password",
+                  "passwordConfirmation"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update password for a User by the User id.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/update-profile": {
+      "put": {
+        "description": "Update the current user profile. <br> See the full description of updatable fields with the schema <strong>UpdateUserProfile</strong>\n",
+        "operationId": "user_update_profile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserProfile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInformation"
+                }
+              }
+            },
+            "description": "Successfully updated user profile"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update the current user profile",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/user/upload-image/{id}": {
+      "post": {
+        "operationId": "user_upload_image",
+        "parameters": [
+          {
+            "description": "Id of the User",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "userImage": {
+                    "description": "User image to upload",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "userImage"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Upload user image",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/users/tree": {
+      "get": {
+        "operationId": "user_get_tree",
+        "parameters": [
+          {
+            "description": "Filter users by parent id.",
+            "in": "query",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/TreeNode"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Collection of users including folders for the given parent id."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get collection of users for tree view.",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/users-share-list": {
+      "get": {
+        "description": "Get all users with basic information for sharing configurations",
+        "operationId": "user_get_share_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleUser"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of users for sharing"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all users for sharing configurations",
+        "tags": [
+          "User Management"
+        ]
+      }
+    }
+  }
+}

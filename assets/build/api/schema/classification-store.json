@@ -1,0 +1,4291 @@
+{
+  "components": {
+    "schemas": {
+      "ClassificationStoreConfigurationCollectionCreate": {
+        "properties": {
+          "name": {
+            "description": "Name of the collection",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this collection belongs to",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "storeId"
+        ],
+        "title": "Classification Store Configuration Collection Create",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationCollectionDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the collection",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the collection",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this collection belongs to",
+            "type": "integer"
+          },
+          "description": {
+            "description": "Description of the collection",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "identifier": {
+            "description": "Opaque identifier of the collection, assigned by the system and never writable",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs the collection carries, as stored; null where it holds none",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "storeId",
+          "description",
+          "creationDate",
+          "modificationDate"
+        ],
+        "title": "Classification Store Configuration Collection Detail",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationCollectionRelationCreate": {
+        "properties": {
+          "colId": {
+            "description": "ID of the collection",
+            "type": "integer"
+          },
+          "groupId": {
+            "description": "ID of the group",
+            "type": "integer"
+          },
+          "sorter": {
+            "description": "Sort order of the relation",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "colId",
+          "groupId",
+          "sorter"
+        ],
+        "title": "Classification Store Configuration Collection Relation Create",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationCollectionRelationDelete": {
+        "properties": {
+          "colId": {
+            "description": "ID of the collection",
+            "type": "integer"
+          },
+          "groupId": {
+            "description": "ID of the group",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "colId",
+          "groupId"
+        ],
+        "title": "Classification Store Configuration Collection Relation Delete",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationCollectionRelationDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the relation",
+            "type": "string"
+          },
+          "colId": {
+            "description": "ID of the collection",
+            "type": "integer"
+          },
+          "groupId": {
+            "description": "ID of the group",
+            "type": "integer"
+          },
+          "sorter": {
+            "description": "Sort order of the relation",
+            "type": "integer"
+          },
+          "groupName": {
+            "description": "Name of the group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "groupDescription": {
+            "description": "Description of the group",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "colId",
+          "groupId",
+          "sorter",
+          "groupName",
+          "groupDescription"
+        ],
+        "title": "Classification Store Configuration Collection Relation Detail",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationCollectionUpdate": {
+        "properties": {
+          "name": {
+            "description": "Name of the collection",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the collection",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs; omit to keep them, an object replaces them whole, null clears them",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Configuration Collection Update",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationGetPageResponse": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "page": {
+            "description": "Page number where the item is located",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "page"
+        ],
+        "title": "Classification Store Configuration Get Page Response",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationGroupCreate": {
+        "properties": {
+          "name": {
+            "description": "Name of the group",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this group belongs to",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "storeId"
+        ],
+        "title": "Classification Store Configuration Group Create",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationGroupDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the group",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the group",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this group belongs to",
+            "type": "integer"
+          },
+          "description": {
+            "description": "Description of the group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "identifier": {
+            "description": "Opaque identifier of the group, assigned by the system and never writable",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs the group carries, as stored; null where it holds none",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "storeId",
+          "description",
+          "creationDate",
+          "modificationDate"
+        ],
+        "title": "Classification Store Configuration Group Detail",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationGroupUpdate": {
+        "properties": {
+          "name": {
+            "description": "Name of the group",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs; omit to keep them, an object replaces them whole, null clears them",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Configuration Group Update",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationImportReport": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "created": {
+            "description": "Number of entries the import created",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Number of entries the import updated",
+            "type": "integer"
+          },
+          "adopted": {
+            "description": "Number of entries that carried no identifier and adopted the one of the file",
+            "type": "integer"
+          },
+          "matchedUnchanged": {
+            "description": "Number of entries the store already carried exactly as the file describes them",
+            "type": "integer"
+          },
+          "targetOnly": {
+            "description": "Number of entries the store carries and the file does not; they are left in place",
+            "type": "integer"
+          },
+          "createdEntries": {
+            "description": "The created entries by name, the last element naming how many more there are",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "updatedEntries": {
+            "description": "The updated entries by name, the last element naming how many more there are",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "adoptedEntries": {
+            "description": "The adopted entries by name, the last element naming how many more there are",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "targetOnlyEntries": {
+            "description": "The entries the store carries and the file does not, the last element naming how many more there are",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "conflicts": {
+            "description": "Conflicts of the import; always empty on a successful one",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "skipped": {
+            "description": "Number of entries skipped for a name the store holds under another identifier",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "skippedEntries": {
+            "description": "The skipped entries by name and reason, the last element naming how many more there are",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "replaced": {
+            "description": "Whether the file describes another store and replaced this store's configuration",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "removed": {
+            "description": "Number of entries removed before writing the file; a removed group loses its stored values",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "removedEntries": {
+            "description": "The removed entries by name, the last element naming how many more there are",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "storedValuesRemoved": {
+            "description": "Whether the import removed, or a dry run would remove, a group and with it stored values",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "created",
+          "updated",
+          "adopted",
+          "matchedUnchanged",
+          "targetOnly",
+          "createdEntries",
+          "updatedEntries",
+          "adoptedEntries",
+          "targetOnlyEntries",
+          "conflicts"
+        ],
+        "title": "Classification Store Configuration Import Report",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationKeyCreate": {
+        "properties": {
+          "name": {
+            "description": "Name of the key",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this key belongs to",
+            "type": "integer"
+          },
+          "title": {
+            "description": "Title of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "storeId"
+        ],
+        "title": "Classification Store Configuration Key Create",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationKeyDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the key",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the key",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this key belongs to",
+            "type": "integer"
+          },
+          "type": {
+            "description": "Data type of the key",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Whether the key is enabled",
+            "type": "boolean"
+          },
+          "description": {
+            "description": "Description of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "definition": {
+            "description": "Stored key definition; \"indexed\" is its search index flag, \"variants\" applies to \"multiValue\" keys",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "title": {
+            "description": "Title of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "identifier": {
+            "description": "Opaque identifier of the key, assigned by the system and never writable",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "localized": {
+            "description": "Per-language flag as the key stores it; null defers to the class definition field",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs the key carries, as stored; null where it holds none",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "options": {
+            "description": "Resolved options of a select or multiselect key for this request; null otherwise",
+            "items": {
+              "$ref": "#/components/schemas/SelectOption"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "optionsUnavailableReason": {
+            "description": "Why options is null for a select key: providerNotStatic or resolutionFailed; null if nothing failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "units": {
+            "description": "Unit vocabulary of the key's own definition; null where its type holds no units",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyUnits",
+                "description": "Unit vocabulary of the key's own definition; null where its type holds no units"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "storeId",
+          "type",
+          "enabled",
+          "description",
+          "definition",
+          "creationDate",
+          "modificationDate"
+        ],
+        "title": "Classification Store Configuration Key Detail",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationKeyGroupRelationCreate": {
+        "description": "Every property but the pair is optional: one absent from the payload leaves the stored value\nuntouched, and a supplied one replaces it rather than merging into it. The three per assignment\nones are optional in both directions, so one carrying an explicit null clears it; `sorter` and\n`mandatory` cannot be cleared and refuse an explicit null.\n\nAll five defaults therefore stand for \"the payload did not carry it\" rather than for a value,\nwhich is why they are typed `mixed` - the two states have to stay distinguishable, and the\npayload mapping substitutes the default for a missing key. `sorter` and `mandatory` used to\ndefault to `0` and `false`, which made a payload naming neither reset them on an already stored\nassignment; only a new assignment takes those values now, and it takes them from the repository.",
+        "properties": {
+          "keyId": {
+            "description": "ID of the key",
+            "type": "integer"
+          },
+          "groupId": {
+            "description": "ID of the group",
+            "type": "integer"
+          },
+          "sorter": {
+            "description": "Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "mandatory": {
+            "description": "Whether the key is mandatory here. Omitting it keeps the stored flag, false if new",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "definitionOverride": {
+            "description": "Partial field definition overriding the key's own for this assignment",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "subGroup": {
+            "description": "Sub group of the store this assignment belongs to",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "description": "Free-form metadata carried by this assignment",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "keyId",
+          "groupId"
+        ],
+        "title": "Classification Store Configuration Key Group Relation Create",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationKeyGroupRelationDelete": {
+        "properties": {
+          "keyId": {
+            "description": "ID of the key",
+            "type": "integer"
+          },
+          "groupId": {
+            "description": "ID of the group",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "keyId",
+          "groupId"
+        ],
+        "title": "Classification Store Configuration Key Group Relation Delete",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationKeyGroupRelationDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "keyId": {
+            "description": "ID of the key",
+            "type": "integer"
+          },
+          "groupId": {
+            "description": "ID of the group",
+            "type": "integer"
+          },
+          "sorter": {
+            "description": "Sort order of the relation",
+            "type": "integer"
+          },
+          "mandatory": {
+            "description": "Whether the key is mandatory in this group",
+            "type": "boolean"
+          },
+          "keyName": {
+            "description": "Name of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyDescription": {
+            "description": "Description of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "groupName": {
+            "description": "Name of the group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subGroup": {
+            "description": "Identifier of the sub group this assignment carries",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "definitionOverride": {
+            "description": "Partial field definition overriding the one of the key for this assignment",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "metadata": {
+            "description": "Free-form metadata carried by this assignment, reported as it is stored. No member is reserved.",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "localized": {
+            "description": "Whether the key holds a value per language; null lets the class definition field decide",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "keyType": {
+            "description": "Data type of the key as stored, or null where the key configuration is gone",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "options": {
+            "description": "This assignment's resolved option vocabulary, narrowed by its definitionOverride",
+            "items": {
+              "$ref": "#/components/schemas/SelectOption"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "optionsUnavailableReason": {
+            "description": "Why options is null for a select or multiselect key; null means nothing failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "units": {
+            "description": "This assignment's unit vocabulary, or null where the key's type holds no units",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyUnits",
+                "description": "This assignment's unit vocabulary, or null where the key's type holds no units"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "keyOptions": {
+            "description": "The key's own option vocabulary, not narrowed by this assignment",
+            "items": {
+              "$ref": "#/components/schemas/SelectOption"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "keyOptionsUnavailableReason": {
+            "description": "Why keyOptions is null for a select or multiselect key; null means nothing failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyUnits": {
+            "description": "The key's own unit vocabulary, or null where its type holds no units",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyUnits",
+                "description": "The key's own unit vocabulary, or null where its type holds no units"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "keyId",
+          "groupId",
+          "sorter",
+          "mandatory",
+          "keyName",
+          "keyDescription",
+          "groupName"
+        ],
+        "title": "Classification Store Configuration Key Group Relation Detail",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationKeyUnits": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "defaultUnit": {
+            "description": "ID of the unit the key preselects, as stored, or null where it names none",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "validUnits": {
+            "description": "IDs of the units the key permits, or null where it restricts nothing and every unit is permitted",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "defaultUnit",
+          "validUnits"
+        ],
+        "title": "Classification Store Configuration Key Units",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationKeyUpdate": {
+        "properties": {
+          "name": {
+            "description": "Name of the key",
+            "type": "string"
+          },
+          "title": {
+            "description": "Title of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "description": "Description of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Data type of the key (e.g. input, textarea, select)",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "definition": {
+            "description": "Replaces the stored definition; \"indexed\" flags search indexing, \"variants\" is for \"multiValue\" keys",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "localized": {
+            "description": "Per-language flag; omit to keep the stored value, null defers to the class definition field",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs; omit to keep them, an object replaces them whole, null clears them",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "definition"
+        ],
+        "title": "Classification Store Configuration Key Update",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationStoreCreate": {
+        "properties": {
+          "name": {
+            "description": "Name of the store",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Classification Store Configuration Store Create",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationStoreDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the store",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the store",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the store",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "identifier": {
+            "description": "Opaque identifier of the store, assigned by the system and never writable",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "engine": {
+            "description": "Resolved engine the store stores its values with; null where it cannot be determined",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "engineCapabilities": {
+            "description": "Capabilities the store's engine supports; empty if it reports none, null if unknown",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Configuration Store Detail",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationStoreTreeNode": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the store",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the store",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the store",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "identifier": {
+            "description": "Opaque identifier of the store, assigned by the system and never writable",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "engine": {
+            "description": "Resolved engine the store stores its values with; null where it cannot be determined",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "engineCapabilities": {
+            "description": "Capabilities the store's engine supports; empty if it reports none, null if unknown",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Configuration Store Tree Node",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationStoreUpdate": {
+        "properties": {
+          "name": {
+            "description": "Name of the store",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the store",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Configuration Store Update",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationSubGroupCreate": {
+        "properties": {
+          "name": {
+            "description": "Name of the sub group",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this sub group belongs to",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "storeId"
+        ],
+        "title": "Classification Store Configuration Sub Group Create",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationSubGroupDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the sub group",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the sub group",
+            "type": "string"
+          },
+          "storeId": {
+            "description": "ID of the store this sub group belongs to",
+            "type": "integer"
+          },
+          "description": {
+            "description": "Description of the sub group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date as Unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "identifier": {
+            "description": "Generated identifier a key assignment names this sub group by, read-only",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs the sub group carries, as stored; null where it holds none",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "storeId",
+          "description",
+          "creationDate",
+          "modificationDate"
+        ],
+        "title": "Classification Store Configuration Sub Group Detail",
+        "type": "object"
+      },
+      "ClassificationStoreConfigurationSubGroupUpdate": {
+        "properties": {
+          "name": {
+            "description": "Name of the sub group",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the sub group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customMetadata": {
+            "description": "Free-form pairs; omit to keep them, an object replaces them whole, null clears them",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Configuration Sub Group Update",
+        "type": "object"
+      },
+      "ClassificationStoreStoreConfig": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "Classification Store Configuration",
+        "type": "object"
+      },
+      "Collection": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": "string"
+          },
+          "groups": {
+            "description": "List of Group IDs in collection",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "groups"
+        ],
+        "title": "Classification Store Collection",
+        "type": "object"
+      },
+      "CollectionLayout": {
+        "properties": {
+          "groups": {
+            "description": "Groups",
+            "items": {
+              "$ref": "#/components/schemas/GroupLayout"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "groups"
+        ],
+        "title": "Classification Store Group Layout",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "Group": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Group",
+        "type": "object"
+      },
+      "GroupLayout": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keys": {
+            "description": "Description",
+            "items": {
+              "$ref": "#/components/schemas/KeyLayout"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Title of the group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subGroups": {
+            "description": "Sub groups the keys of this group are assigned to, ordered by their first key",
+            "items": {
+              "$ref": "#/components/schemas/SubGroupLayout"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "keys"
+        ],
+        "title": "Classification Store Group Layout",
+        "type": "object"
+      },
+      "KeyGroupRelation": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "keyId": {
+            "description": "Key ID",
+            "type": "integer"
+          },
+          "groupId": {
+            "description": "Group ID",
+            "type": "integer"
+          },
+          "keyName": {
+            "description": "Key Name",
+            "type": "string"
+          },
+          "groupName": {
+            "description": "Group Name",
+            "type": "string"
+          },
+          "keyDescription": {
+            "description": "Key Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "groupDescription": {
+            "description": "Key Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "localized": {
+            "description": "Per-language flag as the key stores it; null defers to the class definition field",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "keyType": {
+            "description": "Data type of the key, as the relation stores it; null where the relation states none",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "filterable": {
+            "description": "Whether a grid filter can be applied to this key",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "filterUnavailableReason": {
+            "description": "Why the key cannot be filtered: indexExcluded, typeUnsupported or resolutionFailed; null otherwise",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "keyId",
+          "groupId",
+          "keyName",
+          "groupName",
+          "keyDescription",
+          "groupDescription"
+        ],
+        "title": "Classification Store KeyGroupRelation",
+        "type": "object"
+      },
+      "KeyLayout": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": "string"
+          },
+          "definition": {
+            "description": "Layout Definition",
+            "type": "object"
+          },
+          "title": {
+            "description": "Resolved label of the key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subGroup": {
+            "description": "Identifier of the sub group this key is assigned to within the group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "localized": {
+            "description": "Per language; null defers to the class definition field. It is not resolved against that field here.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "variants": {
+            "description": "Variants a `multiValue` key permits; null for a key of any other type",
+            "items": {
+              "$ref": "#/components/schemas/VariantLayout"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "defaultVariant": {
+            "description": "Whether a `multiValue` key permits a value with no variant; null for any other type",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "defaultVariantLabel": {
+            "description": "Default variant label of a `multiValue` key; null where it declares none or for other types",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "definition"
+        ],
+        "title": "Classification Store Collection",
+        "type": "object"
+      },
+      "SelectOption": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "Select Option",
+        "type": "object"
+      },
+      "SubGroupLayout": {
+        "properties": {
+          "identifier": {
+            "description": "Identifier the key assignments name this sub group by",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "identifier",
+          "name",
+          "description"
+        ],
+        "title": "Classification Store Sub Group Layout",
+        "type": "object"
+      },
+      "VariantLayout": {
+        "properties": {
+          "name": {
+            "description": "Name a value addresses the variant by",
+            "type": "string"
+          },
+          "label": {
+            "description": "Label of the variant",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Classification Store Variant Layout",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: classification-store)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/classification-store/configuration/stores/{storeId}/collections": {
+      "post": {
+        "description": "Get a paginated list of classification store collection configurations.\nSupports filtering, sorting, and pagination via the collection filter parameter.\n",
+        "operationId": "classification_store_configuration_collection_collection",
+        "parameters": [
+          {
+            "description": "ID of the store to list collections for",
+            "in": "path",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionDetail"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated list of collection configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List collection configurations",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/collections/add": {
+      "post": {
+        "description": "Create a new classification store collection configuration with a name and store ID",
+        "operationId": "classification_store_configuration_collection_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionDetail"
+                }
+              }
+            },
+            "description": "Created collection configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a collection",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/collections/{id}": {
+      "put": {
+        "description": "Update an existing classification store collection configuration by ID",
+        "operationId": "classification_store_configuration_collection_update",
+        "parameters": [
+          {
+            "description": "Id of the collection configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionDetail"
+                }
+              }
+            },
+            "description": "Updated collection configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a collection",
+        "tags": [
+          "Classification Store"
+        ]
+      },
+      "delete": {
+        "description": "Delete a classification store collection configuration by ID.\nThis also removes all associated collection-group relations.\n",
+        "operationId": "classification_store_configuration_collection_delete",
+        "parameters": [
+          {
+            "description": "Id of the collection configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted collection configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a collection",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/collections/{colId}/relations": {
+      "post": {
+        "description": "List collection-group relations for a given collection ID.\nSupports filtering, sorting, and pagination via the collection filter parameter.\nThe colId query parameter is required.\n",
+        "operationId": "classification_store_configuration_collection_relation_collection",
+        "parameters": [
+          {
+            "description": "ID of the collection to list relations for",
+            "in": "path",
+            "name": "colId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionRelationDetail"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated list of collection-group relations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List collection-group relations",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/collection-relations/add": {
+      "post": {
+        "description": "Create or update a collection-group relation with collection ID, group ID, and optional sorter",
+        "operationId": "classification_store_configuration_collection_relation_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionRelationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionRelationDetail"
+                }
+              }
+            },
+            "description": "Created or updated collection-group relation"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create or update a collection-group relation",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/collection-relations": {
+      "delete": {
+        "description": "Delete a collection-group relation by collection ID and group ID",
+        "operationId": "classification_store_configuration_collection_relation_delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationCollectionRelationDelete"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully deleted collection-group relation"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a collection-group relation",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores/{storeId}/groups": {
+      "post": {
+        "description": "Get a paginated list of classification store group configurations.\nYou can specify filters, sorting and pagination in the request body.\n",
+        "operationId": "classification_store_configuration_group_collection",
+        "parameters": [
+          {
+            "description": "ID of the store to list groups for",
+            "in": "path",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ClassificationStoreConfigurationGroupDetail"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated list of group configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List group configurations",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/groups/add": {
+      "post": {
+        "description": "Create a new classification store group configuration within a store",
+        "operationId": "classification_store_configuration_group_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationGroupCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationGroupDetail"
+                }
+              }
+            },
+            "description": "Created group configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new group",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/groups/{id}": {
+      "put": {
+        "description": "Update an existing classification store group configuration by ID",
+        "operationId": "classification_store_configuration_group_update",
+        "parameters": [
+          {
+            "description": "Id of the group configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationGroupUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationGroupDetail"
+                }
+              }
+            },
+            "description": "Updated group configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a group",
+        "tags": [
+          "Classification Store"
+        ]
+      },
+      "delete": {
+        "description": "Delete a classification store group configuration by ID",
+        "operationId": "classification_store_configuration_group_delete",
+        "parameters": [
+          {
+            "description": "Id of the group configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted group configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a group",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores/{storeId}/keys": {
+      "post": {
+        "description": "Get a paginated list of classification store key configurations.\nSupports filtering, sorting, and pagination via the collection request body.\nBy default the list holds the enabled keys only. Setting `disabledOnly` to true switches the list to the\ndisabled keys only, including keys that were never enabled; it never adds them to the enabled ones.\nFilters, sorting, paging and the total count apply within the selected list.\nSetting `excludeKeysOfGroupId` to the id of a group leaves the keys already assigned to that group out\nof the list, so that filters, sorting, paging and the total count all apply to the keys still available\nfor it. Omitted, the enabled or disabled selection above is left untouched.\n",
+        "operationId": "classification_store_configuration_key_collection",
+        "parameters": [
+          {
+            "description": "ID of the store to list keys for",
+            "in": "path",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "disabledOnly": {
+                    "default": false,
+                    "description": "Return the disabled keys instead of the enabled ones",
+                    "type": "boolean"
+                  },
+                  "excludeKeysOfGroupId": {
+                    "description": "Leave out the keys already assigned to this group, from the list and from the total count.\nOmit it to leave the enabled or disabled selection untouched.\n",
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyDetail"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated list of key configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List key configurations",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/keys/add": {
+      "post": {
+        "description": "Create a new classification store key configuration within a store",
+        "operationId": "classification_store_configuration_key_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyDetail"
+                }
+              }
+            },
+            "description": "Created key configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new key",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/keys/{id}": {
+      "put": {
+        "description": "Update an existing classification store key configuration by ID",
+        "operationId": "classification_store_configuration_key_update",
+        "parameters": [
+          {
+            "description": "Id of the key configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyDetail"
+                }
+              }
+            },
+            "description": "Updated key configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a key",
+        "tags": [
+          "Classification Store"
+        ]
+      },
+      "delete": {
+        "description": "Soft-delete a classification store key configuration by ID.\nThe key is not permanently removed but disabled (enabled is set to false).\n",
+        "operationId": "classification_store_configuration_key_delete",
+        "parameters": [
+          {
+            "description": "Id of the key configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully disabled key configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Disable a key (soft-delete)",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/keys/{id}/restore": {
+      "post": {
+        "description": "Re-enable a disabled classification store key configuration by ID.\nRe-enabling restores the key configuration. This endpoint neither deletes nor re-creates any group assignment —\nwhether a key's assignments survive being disabled is decided by the disable itself.\nThe endpoint writes the key's enabled flag and nothing else. A key that is already enabled is returned unchanged.\nNote: disabling a key removes its group assignments, so a restored key belongs to no group, and its sorter,\nmandatory flags and per-assignment overrides are gone. This endpoint creates no assignment and nothing else restores\nthem.\n",
+        "operationId": "classification_store_configuration_key_restore",
+        "parameters": [
+          {
+            "description": "Id of the key configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyDetail"
+                }
+              }
+            },
+            "description": "The re-enabled key configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Re-enable a disabled key",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/groups/{groupId}/key-relations": {
+      "post": {
+        "description": "List key-group relations for a given group ID.\nSupports filtering, sorting, and pagination via the collection filter parameter.\nThe groupId query parameter is required. Returns key details with layout definition.\n",
+        "operationId": "classification_store_configuration_key_group_relation_collection",
+        "parameters": [
+          {
+            "description": "ID of the group to list key relations for",
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyGroupRelationDetail"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated list of key-group relations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List key-group relations",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/key-group-relations/add": {
+      "post": {
+        "description": "Create or update a key-group relation with key ID, group ID, optional sorter and mandatory flag, and the optional per-assignment definition override, sub group and metadata. Each of the three is left as stored when the payload omits it and cleared when the payload sends it as null",
+        "operationId": "classification_store_configuration_key_group_relation_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyGroupRelationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyGroupRelationDetail"
+                }
+              }
+            },
+            "description": "Created or updated key-group relation"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create or update a key-group relation",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/key-group-relations": {
+      "delete": {
+        "description": "Delete a key-group relation by key ID and group ID",
+        "operationId": "classification_store_configuration_key_group_relation_delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationKeyGroupRelationDelete"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully deleted key-group relation"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a key-group relation",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores": {
+      "post": {
+        "description": "Create a new classification store configuration",
+        "operationId": "classification_store_configuration_store_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationStoreCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationStoreDetail"
+                }
+              }
+            },
+            "description": "Created store configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new store",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores/{id}/export": {
+      "get": {
+        "description": "Download the configuration of one classification store as a single JSON file: the store, its sub groups,\ncollections, groups and keys, and the collection-group and key-group assignments between them.\nEvery entry is named by its identifier, so the file can be applied to another installation.\nRefused with 409 while the store, or any collection, group, sub group or key in it, carries no identifier.\n",
+        "operationId": "classification_store_configuration_store_export",
+        "parameters": [
+          {
+            "description": "Id of the store configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The store configuration as a JSON download",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Export a store configuration",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores/{id}/import": {
+      "post": {
+        "description": "Apply a store configuration file to the store given in the URL, as a multipart <strong>file</strong> field.\nA file describing the store in the URL is restored into it: entries are matched by identifier, falling back\nto the name for a row that carries no identifier yet. An entry whose identifier the store does not carry is\ncreated, an entry whose name the store holds under another identifier is skipped and named in the report,\nand nothing is deleted - what the store carries and the file does not is left in place and named too.\nA file describing another store is imported as a duplicate instead: every sub group, collection, group and\nkey gets a freshly generated identifier, the store keeps its own identifier and name, and the configuration\nthe store held is removed and replaced by the file's. Importing the same file again gives the same store\nrather than a second copy. The report says which of the two happened and names what was removed.\nA replace also deletes data: removing a group removes every stored Classification Store value under it, on\nboth storage engines, through the cascade of the value tables, and importing the file again does not bring\nthose values back. <strong>storedValuesRemoved</strong> says so - it is a statement about the import, not a\ncount of the values.\nSend <strong>dryRun</strong> to get the same report without writing anything, which is how a replace can be\nshown before it happens. Refused with 409 when the configuration cannot be applied - including a key whose\nfield type is withdrawn as a key type, or wraps one no key is defined with, or cannot be held by the storage\nengine of the store - and with 422 when the file is not a parseable\nartifact.\n",
+        "operationId": "classification_store_configuration_store_import",
+        "parameters": [
+          {
+            "description": "Id of the store configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "Store configuration artifact as written by the export endpoint",
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "dryRun": {
+                    "default": false,
+                    "description": "Report what would be decided - what a replace would remove included - and write nothing",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationImportReport"
+                }
+              }
+            },
+            "description": "Report of what the import created, updated, adopted, skipped, removed and left in place"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Import a store configuration",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores/tree": {
+      "get": {
+        "description": "Get all classification store configurations as a flat tree list",
+        "operationId": "classification_store_configuration_store_tree",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ClassificationStoreConfigurationStoreTreeNode"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List of store tree nodes"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get store tree",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores/{id}": {
+      "put": {
+        "description": "Update an existing classification store configuration by ID",
+        "operationId": "classification_store_configuration_store_update",
+        "parameters": [
+          {
+            "description": "Id of the store configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationStoreUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationStoreDetail"
+                }
+              }
+            },
+            "description": "Updated store configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a store",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/stores/{storeId}/sub-groups": {
+      "post": {
+        "description": "Get a paginated list of classification store sub group configurations of a store.\nYou can specify filters, sorting and pagination in the request body.\n",
+        "operationId": "classification_store_configuration_sub_group_collection",
+        "parameters": [
+          {
+            "description": "ID of the store to list sub groups for",
+            "in": "path",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ClassificationStoreConfigurationSubGroupDetail"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated list of sub group configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List sub group configurations",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/sub-groups/add": {
+      "post": {
+        "description": "Create a new classification store sub group configuration within a store",
+        "operationId": "classification_store_configuration_sub_group_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationSubGroupCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationSubGroupDetail"
+                }
+              }
+            },
+            "description": "Created sub group configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new sub group",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/sub-groups/{id}": {
+      "put": {
+        "description": "Update an existing classification store sub group configuration by ID",
+        "operationId": "classification_store_configuration_sub_group_update",
+        "parameters": [
+          {
+            "description": "Id of the sub group configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationStoreConfigurationSubGroupUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationSubGroupDetail"
+                }
+              }
+            },
+            "description": "Updated sub group configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a sub group",
+        "tags": [
+          "Classification Store"
+        ]
+      },
+      "delete": {
+        "description": "Delete a classification store sub group configuration by ID.\nRefused with 409 while a key assignment of the store is still assigned to the sub group.\n",
+        "operationId": "classification_store_configuration_sub_group_delete",
+        "parameters": [
+          {
+            "description": "Id of the sub group configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted sub group configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a sub group",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/configuration/get-page": {
+      "get": {
+        "description": "Calculate the page number where a specific item (key or group) is located within a paginated listing.\nUseful for navigating directly to the page containing a specific item.\n",
+        "operationId": "classification_store_configuration_get_page",
+        "parameters": [
+          {
+            "description": "Table to search in (keys or groups)",
+            "in": "query",
+            "name": "table",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ID of the item to find",
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "ID of the store",
+            "in": "query",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Column to sort by",
+            "in": "query",
+            "name": "sortKey",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort direction (ASC or DESC)",
+            "in": "query",
+            "name": "sortDir",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Locate a key in the list of disabled keys instead of the enabled ones (keys only)",
+            "in": "query",
+            "name": "disabledOnly",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassificationStoreConfigurationGetPageResponse"
+                }
+              }
+            },
+            "description": "Page number where the item is located"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get page number for a specific item",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/collections": {
+      "get": {
+        "description": "Get all classification store collections for given fieldName",
+        "operationId": "classification_store_get_collections",
+        "parameters": [
+          {
+            "description": "Classification Store ID",
+            "in": "query",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Class ID",
+            "in": "query",
+            "name": "classId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Field Name",
+            "in": "query",
+            "name": "fieldName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Search Term",
+            "in": "query",
+            "name": "searchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Collection"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of classification store collections"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all classification store collections for given fieldName",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/groups": {
+      "get": {
+        "description": "Get all classification store groups for given fieldName",
+        "operationId": "classification_store_get_groups",
+        "parameters": [
+          {
+            "description": "Classification Store ID",
+            "in": "query",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Class ID",
+            "in": "query",
+            "name": "classId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Search Term",
+            "in": "query",
+            "name": "searchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Field Name",
+            "in": "query",
+            "name": "fieldName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Group"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of classification store groups"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all classification store groups for given fieldName",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/key-group-relations": {
+      "get": {
+        "description": "Get all classification store key group relations for given fieldName",
+        "operationId": "classification_store_get_key_group_relations",
+        "parameters": [
+          {
+            "description": "Classification Store ID",
+            "in": "query",
+            "name": "storeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Class ID",
+            "in": "query",
+            "name": "classId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Search Term",
+            "in": "query",
+            "name": "searchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Field Name",
+            "in": "query",
+            "name": "fieldName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/KeyGroupRelation"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of classification store key group relations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all classification store key group relations for given fieldName",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/layout-by-collection/{collectionId}": {
+      "get": {
+        "description": "Get Layout definition for given collection",
+        "operationId": "classification_store_get_layout_by_collection",
+        "parameters": [
+          {
+            "description": "object ID",
+            "in": "query",
+            "name": "objectId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "CollectionId of the Collection ID",
+            "in": "path",
+            "name": "collectionId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Field Name",
+            "in": "query",
+            "name": "fieldName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionLayout"
+                }
+              }
+            },
+            "description": "Layout definition"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get Layout definition for given collection",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/layout-by-group/{groupId}": {
+      "get": {
+        "description": "Get Layout definition for given group",
+        "operationId": "classification_store_get_layout_by_group",
+        "parameters": [
+          {
+            "description": "object ID",
+            "in": "query",
+            "name": "objectId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "GroupId of the Group ID",
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Field Name",
+            "in": "query",
+            "name": "fieldName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupLayout"
+                }
+              }
+            },
+            "description": "Layout definition"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get Layout definition for given group",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/layout-by-key/{keyId}/{groupId}": {
+      "get": {
+        "description": "Get Layout definition for given key",
+        "operationId": "classification_store_get_layout_by_key",
+        "parameters": [
+          {
+            "description": "object ID",
+            "in": "query",
+            "name": "objectId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "KeyId of the Key ID",
+            "in": "path",
+            "name": "keyId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "GroupId of the Group ID",
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Field Name",
+            "in": "query",
+            "name": "fieldName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyLayout"
+                }
+              }
+            },
+            "description": "Layout definition"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get Layout definition for given key",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    },
+    "/pimcore-studio/api/classification-store/config/collection": {
+      "get": {
+        "description": "Get all available classification stores",
+        "operationId": "classification_store_get_config_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ClassificationStoreStoreConfig"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of classification store configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all classification store configurations",
+        "tags": [
+          "Classification Store"
+        ]
+      }
+    }
+  }
+}

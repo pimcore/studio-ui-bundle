@@ -1,0 +1,715 @@
+{
+  "components": {
+    "schemas": {
+      "CreatePredefinedMetadata": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetSubType": {
+            "description": "Target sub type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "Config",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Language",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "description",
+          "targetSubType",
+          "data",
+          "config",
+          "language",
+          "group"
+        ],
+        "title": "Create Predefined Metadata",
+        "type": "object"
+      },
+      "CustomMetadata": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "language": {
+            "description": "Language",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "language",
+          "type",
+          "data"
+        ],
+        "title": "CustomMetadata",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "PredefinedMetadata": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Id",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "targetSubType": {
+            "description": "Target sub type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "Config",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Language",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation Date",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "Modfication Date",
+            "type": "integer"
+          },
+          "isWriteable": {
+            "description": "Writable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "creationDate",
+          "modificationDate",
+          "isWriteable"
+        ],
+        "title": "PredefinedMetadata",
+        "type": "object"
+      },
+      "UpdatePredefinedMetadata": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "targetSubType": {
+            "description": "Target sub type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "Config",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Language",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "type",
+          "targetSubType",
+          "data",
+          "config",
+          "language",
+          "group"
+        ],
+        "title": "Update Predefined Metadata",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: metadata)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/metadata/asset": {
+      "get": {
+        "description": "Get predefined metadata entries filtered by asset type, sub-type and group.\nReturns metadata definitions applicable to a specific asset type.\n",
+        "operationId": "metadata_asset_get_collection",
+        "parameters": [
+          {
+            "description": "Filter by asset sub-type (e.g. image, video).",
+            "in": "query",
+            "name": "subType",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by metadata group. Use 'default' to match entries with no group assigned.",
+            "in": "query",
+            "name": "group",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/PredefinedMetadata"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Filtered predefined metadata entries for the specified asset type"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get predefined metadata for assets by type",
+        "tags": [
+          "Metadata"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/custom-metadata": {
+      "get": {
+        "description": "Retrieves custom metadata based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing asset\n",
+        "operationId": "asset_custom_metadata_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/CustomMetadata"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved custom metadata as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get custom metadata of an asset by ID",
+        "tags": [
+          "Metadata"
+        ]
+      }
+    },
+    "/pimcore-studio/api/metadata": {
+      "post": {
+        "description": "Get predefined metadata collection with optional search, column filtering, and sorting.\nSupports <strong>searchTerm</strong> for global text search across all fields,\n<strong>columnFilters</strong> for per-column filtering (like/equals), and\n<strong>sortFilter</strong> for sorting by any filterable column.\n",
+        "operationId": "metadata_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "searchTerm": {
+                    "description": "Global search term applied across all fields",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "columnFilters": {
+                    "description": "Per-column filters",
+                    "items": {
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "filterValue": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": [
+                      "array",
+                      "null"
+                    ]
+                  },
+                  "sortFilter": {
+                    "description": "Sort configuration",
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "direction": {
+                        "type": "string"
+                      }
+                    },
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/PredefinedMetadata"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Predefined metadata collection with total item count"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get predefined metadata collection with filtering and sorting",
+        "tags": [
+          "Metadata"
+        ]
+      }
+    },
+    "/pimcore-studio/api/metadata/predefined": {
+      "post": {
+        "description": "Create a new predefined metadata entry.\nAn optional request body can be provided to set name, type, language, and other fields.\nIf no body is sent, the entry is created with default values (name: \"New Definition\", type: \"input\").\n",
+        "operationId": "metadata_predefined_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePredefinedMetadata"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredefinedMetadata"
+                }
+              }
+            },
+            "description": "Newly created predefined metadata entry"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new predefined metadata entry",
+        "tags": [
+          "Metadata"
+        ]
+      }
+    },
+    "/pimcore-studio/api/metadata/predefined/{id}": {
+      "put": {
+        "description": "Update the predefined metadata entry with the given <strong>{id}</strong>.\nAll provided fields will be updated on the existing entry.\n",
+        "operationId": "metadata_predefined_update",
+        "parameters": [
+          {
+            "description": "Id of the metadata",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePredefinedMetadata"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredefinedMetadata"
+                }
+              }
+            },
+            "description": "Updated predefined metadata entry"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update predefined metadata entry by id",
+        "tags": [
+          "Metadata"
+        ]
+      },
+      "delete": {
+        "description": "Delete the predefined metadata entry with the given <strong>{id}</strong>.\n",
+        "operationId": "metadata_predefined_delete",
+        "parameters": [
+          {
+            "description": "Id of the metadata",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted predefined metadata entry"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete predefined metadata entry by id",
+        "tags": [
+          "Metadata"
+        ]
+      }
+    }
+  }
+}

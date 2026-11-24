@@ -1,0 +1,3467 @@
+{
+  "components": {
+    "schemas": {
+      "ChangeMainDocument": {
+        "properties": {
+          "mainDocumentPath": {
+            "description": "Main document path",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "mainDocumentPath"
+        ],
+        "title": "Change Main Document",
+        "type": "object"
+      },
+      "CheckPrettyUrl": {
+        "properties": {
+          "prettyUrl": {
+            "description": "Pretty URL to check",
+            "type": "string"
+          }
+        },
+        "required": [
+          "prettyUrl"
+        ],
+        "title": "Check Pretty URL",
+        "type": "object"
+      },
+      "CustomAttributes": {
+        "description": "Custom attributes used mainly for the tree",
+        "properties": {
+          "icon": {
+            "description": "Custom Icon",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElementIcon",
+                "description": "Custom Icon"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tooltip": {
+            "description": "Custom Tooltip",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalIcons": {
+            "description": "AdditionalIcons",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "key": {
+            "description": "Custom Key/Filename",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalCssClasses": {
+            "description": "Additional Css Classes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "icon",
+          "tooltip",
+          "additionalIcons",
+          "key",
+          "additionalCssClasses"
+        ],
+        "title": "CustomAttributes",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "DocType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "controller": {
+            "description": "Controller",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "template": {
+            "description": "Template",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "priority": {
+            "description": "Priority",
+            "type": "integer"
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "staticGeneratorEnabled": {
+            "description": "Static generator enabled",
+            "type": "boolean"
+          },
+          "writeable": {
+            "description": "Is writeable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "group",
+          "controller",
+          "template",
+          "priority",
+          "creationDate",
+          "modificationDate",
+          "staticGeneratorEnabled",
+          "writeable"
+        ],
+        "title": "DocType",
+        "type": "object"
+      },
+      "DocTypeAddParameters": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "title": "DocTypeAdd",
+        "type": "object"
+      },
+      "DocTypeType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "validTable": {
+            "description": "Valid table",
+            "type": "string"
+          },
+          "childrenSupported": {
+            "description": "Children supported",
+            "type": "boolean"
+          },
+          "directRoute": {
+            "description": "Direct route",
+            "type": "boolean"
+          },
+          "predefinedDocumentTypes": {
+            "description": "Predefined document types",
+            "type": "boolean"
+          },
+          "translatable": {
+            "description": "Translatable",
+            "type": "boolean"
+          },
+          "translatableInheritance": {
+            "description": "Translatable Inheritance",
+            "type": "boolean"
+          },
+          "onlyPrintableChildren": {
+            "description": "Only printable children",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "validTable"
+        ],
+        "title": "DocType Type",
+        "type": "object"
+      },
+      "DocTypeUpdateParameters": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "controller": {
+            "description": "Controller",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "template": {
+            "description": "Template",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "priority": {
+            "description": "Priority",
+            "type": "integer"
+          },
+          "staticGeneratorEnabled": {
+            "description": "Static generator enabled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "group",
+          "controller",
+          "template",
+          "priority",
+          "staticGeneratorEnabled"
+        ],
+        "title": "DocTypeUpdate",
+        "type": "object"
+      },
+      "Document": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Element"
+          },
+          {
+            "properties": {
+              "additionalAttributes": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                },
+                "description": "AdditionalAttributes",
+                "type": "object"
+              },
+              "customAttributes": {
+                "$ref": "#/components/schemas/CustomAttributes",
+                "description": "Custom attributes for the tree"
+              },
+              "workflowStates": {
+                "description": "Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders",
+                "items": {
+                  "$ref": "#/components/schemas/WorkflowStatus"
+                },
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "fullPath": {
+                "description": "Full path",
+                "type": "string"
+              },
+              "published": {
+                "description": "Published",
+                "type": "boolean"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string"
+              },
+              "key": {
+                "description": "Key",
+                "type": "string"
+              },
+              "index": {
+                "description": "Custom index",
+                "type": "integer"
+              },
+              "hasChildren": {
+                "description": "Has children",
+                "type": "boolean"
+              },
+              "hasWorkflowWithPermissions": {
+                "description": "Workflow permissions",
+                "type": "boolean"
+              },
+              "permissions": {
+                "$ref": "#/components/schemas/DocumentPermissions"
+              },
+              "isSite": {
+                "description": "Is document a site",
+                "type": "boolean"
+              },
+              "navigationExclude": {
+                "description": "Exclude document from navigation",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "fullPath",
+          "published",
+          "type",
+          "key",
+          "index",
+          "hasChildren",
+          "hasWorkflowWithPermissions",
+          "permissions",
+          "isSite",
+          "navigationExclude"
+        ],
+        "title": "Document",
+        "type": "object"
+      },
+      "DocumentAddParameters": {
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "title": {
+            "description": "Title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "navigationName": {
+            "description": "Navigation name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "docTypeId": {
+            "description": "Document type ID",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "template": {
+            "description": "Document template",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "translationsSourceId": {
+            "description": "Id of the base document for new translation",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Document language when adding a translation",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "inheritanceSourceId": {
+            "description": "Id of the base document for content",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "type",
+          "title",
+          "navigationName",
+          "docTypeId",
+          "template",
+          "translationsSourceId",
+          "language",
+          "inheritanceSourceId"
+        ],
+        "title": "DocumentAdd",
+        "type": "object"
+      },
+      "DocumentCloneParameters": {
+        "properties": {
+          "language": {
+            "description": "Language for the new translation",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "enableInheritance": {
+            "description": "Enable Inheritance",
+            "type": "boolean"
+          },
+          "recursive": {
+            "description": "Recursive",
+            "type": "boolean"
+          },
+          "updateReferences": {
+            "description": "Update References",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "language",
+          "enableInheritance",
+          "recursive",
+          "updateReferences"
+        ],
+        "title": "Document Clone Parameters",
+        "type": "object"
+      },
+      "DocumentController": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Document Controller",
+        "type": "object"
+      },
+      "DocumentDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Document"
+          },
+          {
+            "properties": {
+              "editableData": {
+                "description": "Document Editable Data",
+                "type": "object"
+              },
+              "missingRequiredEditable": {
+                "description": "Is missing required editable",
+                "type": "boolean"
+              },
+              "settingsData": {
+                "description": "Document Settings Data",
+                "type": "object"
+              },
+              "draftData": {
+                "$ref": "#/components/schemas/PageSnippetDraftData"
+              },
+              "hasWorkflowAvailable": {
+                "description": "Has workflow available",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "editableData",
+          "missingRequiredEditable",
+          "settingsData",
+          "draftData",
+          "hasWorkflowAvailable"
+        ],
+        "title": "Document Detail Data",
+        "type": "object"
+      },
+      "DocumentPermissions": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Permissions"
+          },
+          {
+            "properties": {
+              "save": {
+                "description": "Save",
+                "type": "boolean"
+              },
+              "unpublish": {
+                "description": "Unpublish",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "save",
+          "unpublish"
+        ],
+        "title": "Document Permissions",
+        "type": "object"
+      },
+      "DocumentTemplate": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "path": {
+            "description": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "title": "Document Template",
+        "type": "object"
+      },
+      "DocumentTranslationLink": {
+        "properties": {
+          "language": {
+            "description": "Language",
+            "type": "string"
+          },
+          "documentId": {
+            "description": "Document Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "language",
+          "documentId"
+        ],
+        "title": "Document Translation Link",
+        "type": "object"
+      },
+      "DocumentTranslationLinks": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "language": {
+            "description": "Language",
+            "type": "string"
+          },
+          "translationLinks": {
+            "description": "Translation links",
+            "items": {
+              "$ref": "#/components/schemas/DocumentTranslationLink"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "language"
+        ],
+        "title": "Document Translation Links",
+        "type": "object"
+      },
+      "DocumentTranslationParent": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Document Id",
+            "type": "integer"
+          },
+          "fullPath": {
+            "description": "Document full path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "fullPath"
+        ],
+        "title": "Document Translation Parent",
+        "type": "object"
+      },
+      "DocumentType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Document Type",
+        "type": "object"
+      },
+      "Element": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "ID of parent",
+            "type": "integer"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "icon"
+          },
+          "userOwner": {
+            "description": "ID of owner",
+            "type": "integer"
+          },
+          "userModification": {
+            "description": "User that modified the element",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "locked": {
+            "description": "Locked",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isLocked": {
+            "description": "Is locked",
+            "type": "boolean"
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "elementType": {
+            "description": "elementType",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "parentId",
+          "path",
+          "icon",
+          "userOwner",
+          "userModification",
+          "locked",
+          "isLocked",
+          "creationDate",
+          "modificationDate",
+          "elementType"
+        ],
+        "title": "Element",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "PageSnippetDraftData": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": "integer"
+          },
+          "isAutoSave": {
+            "description": "Is auto save",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "modificationDate",
+          "isAutoSave"
+        ],
+        "title": "PageSnippetDraftData",
+        "type": "object"
+      },
+      "Permissions": {
+        "properties": {
+          "list": {
+            "description": "List",
+            "type": "boolean"
+          },
+          "view": {
+            "description": "View",
+            "type": "boolean"
+          },
+          "publish": {
+            "description": "Publish",
+            "type": "boolean"
+          },
+          "delete": {
+            "description": "Delete",
+            "type": "boolean"
+          },
+          "rename": {
+            "description": "Rename",
+            "type": "boolean"
+          },
+          "create": {
+            "description": "Create",
+            "type": "boolean"
+          },
+          "settings": {
+            "description": "Settings",
+            "type": "boolean"
+          },
+          "versions": {
+            "description": "Versions",
+            "type": "boolean"
+          },
+          "properties": {
+            "description": "Properties",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "list",
+          "view",
+          "publish",
+          "delete",
+          "rename",
+          "create",
+          "settings",
+          "versions",
+          "properties"
+        ],
+        "title": "Permissions",
+        "type": "object"
+      },
+      "RelatedElementData": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "type": {
+            "description": "Type of the element",
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Subtype of the element",
+            "type": "string"
+          },
+          "fullPath": {
+            "description": "Full path of the element",
+            "type": "string"
+          },
+          "isPublished": {
+            "description": "Is the element published",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasViewAccess": {
+            "description": "Whether the current user is allowed to view the element",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "subtype",
+          "fullPath",
+          "isPublished",
+          "hasViewAccess"
+        ],
+        "title": "RelatedElementData",
+        "type": "object"
+      },
+      "RenderAreaBlockData": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "editableDefinitions": {
+            "description": "Dynamic array of editable definitions",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "htmlCode": {
+            "description": "HTML code of the snippet",
+            "type": "string"
+          }
+        },
+        "required": [
+          "editableDefinitions",
+          "htmlCode"
+        ],
+        "title": "Area block render data for editmode",
+        "type": "object"
+      },
+      "Site": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "domains": {
+            "description": "Domains",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "domain": {
+            "description": "Domain",
+            "type": "string"
+          },
+          "rootId": {
+            "description": "ID of the root",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "rootPath": {
+            "description": "Root path",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "domains",
+          "domain",
+          "rootId",
+          "rootPath"
+        ],
+        "title": "Site",
+        "type": "object"
+      },
+      "SiteDetailData": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "creationDate": {
+            "description": "Creation Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "mainDomain": {
+            "description": "Main domain",
+            "type": "string"
+          },
+          "domains": {
+            "description": "Domains",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "errorDocument": {
+            "description": "Data of error document",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RelatedElementData",
+                "description": "Data of error document"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "type": "object"
+          },
+          "localizedErrorDocuments": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RelatedElementData",
+              "description": "Error document data for locale"
+            },
+            "description": "Localized error documents mapped by locale",
+            "type": "object"
+          },
+          "redirectToMainDomain": {
+            "description": "Redirect to main domain",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "creationDate",
+          "modificationDate",
+          "mainDomain",
+          "domains",
+          "errorDocument",
+          "localizedErrorDocuments",
+          "redirectToMainDomain"
+        ],
+        "title": "Site Detail Data",
+        "type": "object"
+      },
+      "UpdateElementProperty": {
+        "properties": {
+          "key": {
+            "description": "key",
+            "type": "string"
+          },
+          "data": {
+            "description": "data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "inheritable": {
+            "description": "inheritable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "data",
+          "type",
+          "inheritable"
+        ],
+        "title": "UpdateDataProperty",
+        "type": "object"
+      },
+      "UpdateSite": {
+        "properties": {
+          "mainDomain": {
+            "description": "Main domain",
+            "type": "string"
+          },
+          "domains": {
+            "description": "Domains",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "errorDocument": {
+            "description": "Error document",
+            "type": "string"
+          },
+          "localizedErrorDocuments": {
+            "description": "Localized error documents",
+            "type": "object"
+          },
+          "redirectToMainDomain": {
+            "description": "Redirect to main domain",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "mainDomain",
+          "domains",
+          "errorDocument",
+          "localizedErrorDocuments",
+          "redirectToMainDomain"
+        ],
+        "title": "Update Site",
+        "type": "object"
+      },
+      "ValidationError": {
+        "description": "A single validation error of an element, with the data needed to translate it",
+        "properties": {
+          "field": {
+            "description": "Name of the field that failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fieldTitle": {
+            "description": "Raw, untranslated field title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "path": {
+            "description": "Location of the field, innermost level first",
+            "items": {
+              "$ref": "#/components/schemas/ValidationErrorPath"
+            },
+            "type": "array"
+          },
+          "message": {
+            "description": "Untranslated message, untrusted: escape it before rendering it as HTML",
+            "type": "string"
+          },
+          "messageKey": {
+            "description": "Translation key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "description": "Translation parameters",
+            "type": "object"
+          }
+        },
+        "required": [
+          "field",
+          "fieldTitle",
+          "path",
+          "message",
+          "messageKey",
+          "parameters"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "ValidationErrorPath": {
+        "description": "One level of the location of a validation error, e.g. a localized field or an object brick",
+        "properties": {
+          "field": {
+            "description": "Field name of this level",
+            "type": "string"
+          },
+          "title": {
+            "description": "Raw, untranslated title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Language of this level",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "index": {
+            "description": "Row index within a block or field collection",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Object brick key or field collection type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "typeTitle": {
+            "description": "Raw, untranslated title of the object brick or field collection",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field",
+          "title",
+          "language",
+          "index",
+          "type",
+          "typeTitle"
+        ],
+        "title": "ValidationErrorPath",
+        "type": "object"
+      },
+      "ValidationFailedError": {
+        "description": "Error response of a failed element validation",
+        "properties": {
+          "message": {
+            "description": "Failure message in English. Untrusted, may contain markup: escape before rendering",
+            "type": "string"
+          },
+          "errorKey": {
+            "description": "Error key, not present when the request failed before the element was validated",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "validationErrors": {
+            "description": "Individual validation errors, present when the failure came from the element validation",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "ValidationFailedError",
+        "type": "object"
+      },
+      "WorkflowStatus": {
+        "properties": {
+          "color": {
+            "description": "color",
+            "type": "string"
+          },
+          "colorInverted": {
+            "description": "colorInverted",
+            "type": "boolean"
+          },
+          "title": {
+            "description": "borderColor",
+            "type": "string"
+          },
+          "label": {
+            "description": "label",
+            "type": "string"
+          },
+          "layoutId": {
+            "description": "layoutId",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "visibleInDetail": {
+            "description": "visibleInDetail",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "color",
+          "colorInverted",
+          "title",
+          "label",
+          "layoutId",
+          "visibleInDetail"
+        ],
+        "title": "WorkflowStatus",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: document)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/documents/add/{parentId}": {
+      "post": {
+        "description": "Add a new data object to the given <strong>{parentId}</strong>. <br> The <strong>{parentId}</strong> must be an ID of a folder or another data object. See the full description of request fields with the schema <strong>DocumentAdd</strong>\n",
+        "operationId": "document_add",
+        "parameters": [
+          {
+            "description": "ParentId of the document",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentAddParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "ID of created document element",
+                      "title": "id",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ID of added document"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Add a new document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/batch-delete": {
+      "delete": {
+        "description": "Batch delete documents based on the given <strong>{ids}</strong>. <br> The <strong>{ids}</strong> must be a list of IDs of existing documents. <br>\nDeletion is done asynchronously and the jobRun ID is returned in the response\n",
+        "operationId": "document_batch_delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "ids": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for batch delete"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Batch delete documents by IDs",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/{id}/clone/{parentId}": {
+      "post": {
+        "description": "Clones a specific document with the given <strong>{id}</strong>. <br> The <strong>{parentId}</strong> must be a folder or another document. See the full description of request fields with the schema <strong>Document Clone Parameters</strong>\n",
+        "operationId": "document_clone",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "ParentId of the document",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentCloneParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully copied documents"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully copied parent document and created <strong>jobRun</strong> for copying children"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Clone a specific document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/{id}/convert/{type}": {
+      "post": {
+        "description": "Change the <strong>{type}</strong> of a specific document with the given <strong>{id}</strong>. \n<br>The <strong>{id}</strong> must be an ID of existing document or folder and the <strong>{type}</strong> must be an existing Document Type type.\n",
+        "operationId": "document_convert",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Document type to convert to",
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully changed document type"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Change document type",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/doc-types/add": {
+      "post": {
+        "description": "Add a new document <strong>DocType</string>. <br> See the full description of request fields with the schema <strong>DocTypeAdd</strong>\n",
+        "operationId": "document_doc_type_add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocTypeAddParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocType"
+                }
+              }
+            },
+            "description": "New DocType data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Add a new document DocType",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/doc-types/{id}": {
+      "put": {
+        "description": "Update the DocType with the given <strong>{id}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of an existing DocType. <br>\nPlease note that <strong>all fields<strong> have to be provided.\n",
+        "operationId": "document_doc_type_update_by_id",
+        "parameters": [
+          {
+            "description": "The Id of the DocType to update",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocTypeUpdateParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocType"
+                }
+              }
+            },
+            "description": "Successfully updated DocType"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update a document DocType by ID",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "delete": {
+        "description": "Delete the existing document <strong>DocType</strong> with the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of an existing DocType.\n",
+        "operationId": "document_doc_type_delete",
+        "parameters": [
+          {
+            "description": "The Id of the DocType to delete",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted document DocType"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete an existing document DocType by ID",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/doc-types/types": {
+      "get": {
+        "description": "List all available types for DocType.\n",
+        "operationId": "document_doc_type_type_list",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/DocTypeType"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available DocType types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "List DocType types",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/doc-types": {
+      "get": {
+        "description": "List all DocTypes. Results can be filtered based on the given <strong>{type}</strong>. <br> The <strong>{type}</strong> must be an existing DocType type.\n",
+        "operationId": "document_doc_type_list",
+        "parameters": [
+          {
+            "description": "Filter results by docType type",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/DocType"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of all DocTypes"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List all document DocTypes",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/types": {
+      "get": {
+        "description": "Retrieves all available document types in the system.\n",
+        "operationId": "document_get_types",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/DocumentType"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved all available document types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available document types",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/{id}": {
+      "get": {
+        "description": "Retrieves a specific document based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing document or folder.\n",
+        "operationId": "document_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentDetail"
+                }
+              }
+            },
+            "description": "Successfully retrieved document data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get a specific document by ID",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "put": {
+        "description": "You can create/update/delete list entries like properties, settings or editable fields.\n",
+        "operationId": "document_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "properties": {
+                      "parentId": {
+                        "minimum": 1,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "index": {
+                        "minimum": 0,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "task": {
+                        "enum": [
+                          "autoSave",
+                          "publish",
+                          "save",
+                          "unpublish",
+                          "version"
+                        ],
+                        "type": "string"
+                      },
+                      "coauthorType": {
+                        "deprecated": true,
+                        "description": "Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                        "maxLength": 50,
+                        "type": "string"
+                      },
+                      "coauthor": {
+                        "deprecated": true,
+                        "description": "Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                        "maxLength": 255,
+                        "type": "string"
+                      },
+                      "locked": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "published": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      "editableData": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "settingsData": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "missingRequiredEditable": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      "appendEditables": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      "properties": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/components/schemas/UpdateElementProperty"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentDetail"
+                }
+              }
+            },
+            "description": "Successfully updated document"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailedError"
+                }
+              }
+            },
+            "description": "Element validation failed. The optional validationErrors list the individual errors."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update a document by ID",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/{id}/page/check-pretty-url": {
+      "post": {
+        "description": "Check if the given <strong>{prettyUrl}</strong> is available and valid for the document with the given <strong>{id}</strong>. \n<br> The <strong>{id}</strong> must be an ID of existing document.\n",
+        "operationId": "document_page_check_pretty_url",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckPrettyUrl"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns success if pretty URL is available and valid"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Check if pretty URL is available and valid",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/{id}/page/stream/preview": {
+      "get": {
+        "description": "Stream page document PDF preview based on the provided <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing page\n",
+        "operationId": "document_page_stream_preview",
+        "parameters": [
+          {
+            "description": "Id of the page",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Page preview stream",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Stream page document preview by ID",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/get-available-controllers": {
+      "get": {
+        "description": "List all available controllers for documents.\n",
+        "operationId": "document_available_controllers_list",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/DocumentController"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "document_available_controllers_list_success_response"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "List document controllers",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/get-available-templates": {
+      "get": {
+        "description": "List all available templates for documents.\n",
+        "operationId": "document_available_templates_list",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/DocumentTemplate"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "document_available_templates_list_success_response"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List document templates",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/{id}/page-snippet/change-main-document": {
+      "put": {
+        "description": "Set the main document of a page snippet with the given <strong>{id}</strong> based on the the given <strong>{mainDocumentPath}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of existing page snippet. <br>\nThe <strong>{mainDocumentPath}</strong> must be a valid path of an existing document or null.\n",
+        "operationId": "document_page_snippet_change_main_document",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeMainDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully changed main document of page snippet"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Change main document of a page snippet",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/page-snippet/{id}/area-block/render": {
+      "post": {
+        "description": "Generate the editmode HTML and editable definitions based on the document <strong>{id}</strong> and data provided. <br>\nThe <strong>{id}</strong> must be an ID of existing page snippet document. <br> \nFollowing fields are required in the request body:\n  <ul>\n      <li><strong>name</strong>: Name of the areablock</li>\n      <li><strong>realName</strong>: Real name of the areaBlock</li>\n      <li><strong>index</strong>: Index of the areablock within the document</li>\n      <li><strong>blockStateStack</strong>: State stack of the areaBlock</li>\n      <li><strong>areaBlockConfig</strong>: areaBlock config</li>\n      <li><strong>areaBlockData</strong>: Data of the areaBlock</li>\n  </ul>\n",
+        "operationId": "document_page_snippet_area_block_render",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "realName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "index": {
+                    "minimum": 0,
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "blockStateStack": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  },
+                  "areaBlockConfig": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  },
+                  "areaBlockData": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "realName",
+                  "index",
+                  "blockStateStack",
+                  "areablockConfig",
+                  "areablockData"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RenderAreaBlockData"
+                }
+              }
+            },
+            "description": "Rendered HTML and editable definitions"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Render area brick for editmode",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents": {
+      "patch": {
+        "description": "Patching documents based on the given ID and data. <br> Patching can be used for moving, sorting, renaming, locking and publishing. <br> If single element is being patched, operation is executed synchronously. Multiple elements are patched asynchronously.\n",
+        "operationId": "document_patch_by_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "items": {
+                      "properties": {
+                        "id": {
+                          "description": "Document ID",
+                          "type": "integer"
+                        },
+                        "parentId": {
+                          "minimum": 1,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "index": {
+                          "minimum": 0,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "key": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "locked": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "published": {
+                          "type": [
+                            "boolean",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully patched document"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created jobRun for patching multiple documents"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Patch documents by ID",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/renderlet/render": {
+      "get": {
+        "description": "Render a specific renderlet based on the provided parameters.\n",
+        "operationId": "document_renderlet_render",
+        "parameters": [
+          {
+            "description": "ElementId of the renderlet element",
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Type of the renderlet element.",
+            "in": "query",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Renderlet controller action",
+            "in": "query",
+            "name": "controller",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Parent document id of the renderlet",
+            "in": "query",
+            "name": "parentDocumentId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Renderlet template",
+            "in": "query",
+            "name": "template",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Rendered renderlet",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Render a specific renderlet",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/{sourceId}/replace/{targetId}": {
+      "post": {
+        "description": "Replace the content of the document with the given <strong>{targetId}</strong> with the content of the document matching the <strong>{sourceId}</strong>. <br> The <strong>{targetId}</strong> and <strong>{sourceId}</strong> must be an ID of existing document\n",
+        "operationId": "document_replace_content",
+        "parameters": [
+          {
+            "description": "SourceId of the document",
+            "in": "path",
+            "name": "sourceId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "TargetId of the document",
+            "in": "path",
+            "name": "targetId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully replaced contents of the document"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Replace content of a document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/sites/list-available": {
+      "get": {
+        "description": "List all available sites\n",
+        "operationId": "documents_list_available_sites",
+        "parameters": [
+          {
+            "description": "Exclude main site from the list",
+            "in": "query",
+            "name": "excludeMainSite",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Site"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available sites"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List all available sites",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/site/{id}": {
+      "post": {
+        "description": "Use document as a site or update the existing site by the given document <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing document\n",
+        "operationId": "document_update_site",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created/updated site"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Use document as a site or update the existing site",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "delete": {
+        "description": "Delete the existing site by the given document <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing document\n",
+        "operationId": "document_delete_site",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted site"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete the existing site by its document ID",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/site/{documentId}": {
+      "get": {
+        "description": "Get the site detail data by the given document <strong>{documentId}</strong>. <br> \nThe <strong>{documentId}</strong> must be an ID of existing root document of the site\n",
+        "operationId": "document_get_site",
+        "parameters": [
+          {
+            "description": "DocumentId of the document",
+            "in": "path",
+            "name": "documentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiteDetailData"
+                }
+              }
+            },
+            "description": "Site detail data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get the site detail data by its document ID",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/translations/{id}/add/{translationId}": {
+      "post": {
+        "description": "Link a new translation document (by <strong>{translationId}</strong>) to the given document with <strong>{id}</strong>. <br>\nThe <strong>{id}</strong> and <strong>{translationId}</strong> must be an ID of existing documents.\n",
+        "operationId": "document_add_translation",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "TranslationId of the document",
+            "in": "path",
+            "name": "translationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully linked translation document"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Link a new translation document to the existing document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/translations/{id}/delete/{translationId}": {
+      "delete": {
+        "description": "Delete the translation document with the given <strong>{translationId}</strong> from the given document with <strong>{id}</strong>. <br>\nThe <strong>{id}</strong> and <strong>{translationId}</strong> must be an ID of existing documents.\n",
+        "operationId": "document_delete_translation",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "TranslationId of the document",
+            "in": "path",
+            "name": "translationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted translation document"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a translation document from the existing document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/translations/{id}": {
+      "get": {
+        "description": "Get all existing translations of the document with the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing document.\n",
+        "operationId": "document_get_translations",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentTranslationLinks"
+                }
+              }
+            },
+            "description": "Get all existing translations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all existing translations of the document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/translations/{id}/get-parent/{language}": {
+      "get": {
+        "description": "Get the parent translation document of the document with the given <strong>{id}</strong> by <strong>{language}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of existing document and the <strong>{language}</strong> must be a valid language code.\n",
+        "operationId": "document_get_translation_parent_by_language",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Language code for the translation parent",
+            "in": "path",
+            "name": "language",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentTranslationParent"
+                }
+              }
+            },
+            "description": "Parent translation document data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get the parent translation document data by language",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/pimcore-studio/api/documents/tree": {
+      "get": {
+        "description": "Listing of all documents and document folders in the system. <br>\nReturns only data which are relevant for the tree <br>\nYou can use different query parameters to filter the assets and it is possible to exclude folders from the result completely\n",
+        "operationId": "document_get_tree",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter documents by parent id.",
+            "in": "query",
+            "name": "parentId",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter assets/data-objects by matching ids. As a wildcard * can be used",
+            "in": "query",
+            "name": "idSearchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Pql query filter",
+            "in": "query",
+            "name": "pqlQuery",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter folders from result.",
+            "in": "query",
+            "name": "excludeFolders",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by path.",
+            "in": "query",
+            "name": "path",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Include the parent item in the result.",
+            "in": "query",
+            "name": "pathIncludeParent",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include all descendants in the result.",
+            "in": "query",
+            "name": "pathIncludeDescendants",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Document"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated documents with total count as header param as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all document data for the tree",
+        "tags": [
+          "Documents"
+        ]
+      }
+    }
+  }
+}

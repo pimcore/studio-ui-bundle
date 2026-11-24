@@ -1,0 +1,342 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "GdprDataProvider": {
+        "description": "GDPR Data Extractor search source(e.g., \"Data Objects\", \"Pimcore user\").",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Unique key of the provider",
+            "type": "string"
+          },
+          "label": {
+            "description": "Label of the provider",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "GDPR Data Provider",
+        "type": "object"
+      },
+      "GdprDataRow": {
+        "description": "GDPR Data Row",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "data": {
+            "description": "Data row values",
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "GDPR Data Row",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: gdpr-data-extractor)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/gdpr/export-data/{id}": {
+      "get": {
+        "description": "Fetches the data for a single data provider item (by ID) and returns it as a downloadable JSON file.",
+        "operationId": "gdpr_export",
+        "parameters": [
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The key of the single provider to export",
+            "in": "query",
+            "name": "providerKey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successfully retrieved the data export as a downloadable JSON file.",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Export a single GDPR data provider item",
+        "tags": [
+          "GDPR Data Extractor"
+        ]
+      }
+    },
+    "/pimcore-studio/api/gdpr/providers": {
+      "get": {
+        "description": "Returns a list of all configured GDPR providers that can be used for data compliance operations.",
+        "operationId": "gdpr_list_providers",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/GdprDataProvider"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved the list of GDPR providers"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List of available GDPR providers",
+        "tags": [
+          "GDPR Data Extractor"
+        ]
+      }
+    },
+    "/pimcore-studio/api/gdpr/search": {
+      "post": {
+        "description": "Searches for GDPR data using the provided search terms and returns a list of results grouped by each provider name.",
+        "operationId": "gdpr_search_data",
+        "parameters": [
+          {
+            "description": "Define the data provider to search in.",
+            "in": "query",
+            "name": "provider",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/GdprDataRow"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved the list of matching data from all searched providers."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Search for GDPR data from all the available data providers",
+        "tags": [
+          "GDPR Data Extractor"
+        ]
+      }
+    }
+  }
+}

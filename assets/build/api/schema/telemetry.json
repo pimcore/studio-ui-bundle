@@ -1,0 +1,236 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "TelemetryOutboxAckParameters": {
+        "properties": {
+          "nonce": {
+            "description": "Lease nonce of the batch the relay has accepted",
+            "type": "string"
+          }
+        },
+        "required": [
+          "nonce"
+        ],
+        "title": "Telemetry Outbox Ack Parameters",
+        "type": "object"
+      },
+      "TelemetryOutboxAckResult": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "acked": {
+            "description": "Number of spooled events removed from the outbox by the ack",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "acked"
+        ],
+        "title": "Telemetry Outbox Ack Result",
+        "type": "object"
+      },
+      "TelemetryOutboxBatch": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "nonce": {
+            "description": "Lease nonce identifying the claimed batch, passed back on ack",
+            "type": "string"
+          },
+          "instanceIdentifier": {
+            "description": "Cleartext instance identifier the relay uses to look up the product key",
+            "type": "string"
+          },
+          "v": {
+            "description": "Outbox payload protocol version",
+            "type": "integer"
+          },
+          "ciphertext": {
+            "description": "Opaque product-key encrypted envelope to forward verbatim to the relay",
+            "type": "string"
+          },
+          "relayEndpoint": {
+            "description": "Relay endpoint the browser must POST the ciphertext to",
+            "type": "string"
+          }
+        },
+        "required": [
+          "nonce",
+          "instanceIdentifier",
+          "v",
+          "ciphertext",
+          "relayEndpoint"
+        ],
+        "title": "Telemetry Outbox Batch",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: telemetry)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/telemetry/outbox/ack": {
+      "post": {
+        "description": "Acknowledge a telemetry outbox batch that the relay has accepted, identified by the given <strong>{nonce}</strong>. <br>\nAcknowledged events are permanently removed from the outbox pool.\n",
+        "operationId": "telemetry_outbox_ack",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelemetryOutboxAckParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelemetryOutboxAckResult"
+                }
+              }
+            },
+            "description": "Number of spooled events removed from the outbox"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Acknowledge a drained telemetry batch",
+        "tags": [
+          "Telemetry"
+        ]
+      }
+    },
+    "/pimcore-studio/api/telemetry/outbox": {
+      "get": {
+        "description": "Get the next encrypted telemetry batch from the outbox so the browser can forward it to the relay. <br>\nReturns <strong>204 No Content</strong> when the outbox is not ready or the pool is empty.\n",
+        "operationId": "telemetry_outbox_next_batch",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelemetryOutboxBatch"
+                }
+              }
+            },
+            "description": "Next encrypted telemetry batch ready to forward to the relay"
+          },
+          "204": {
+            "description": "No telemetry batch is currently available to drain"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get the next telemetry outbox batch",
+        "tags": [
+          "Telemetry"
+        ]
+      }
+    }
+  }
+}

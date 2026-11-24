@@ -1,0 +1,1160 @@
+{
+  "components": {
+    "schemas": {
+      "BlocklistEntry": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "email": {
+            "description": "email address",
+            "type": "string"
+          },
+          "creationDate": {
+            "description": "creation date",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "creationDate",
+          "modificationDate"
+        ],
+        "title": "Blocklist",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "EmailAddressParameter": {
+        "properties": {
+          "email": {
+            "description": "email address",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "Blocklist",
+        "type": "object"
+      },
+      "EmailDocumentParameters": {
+        "properties": {
+          "key": {
+            "description": "parameter key",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "parameter value",
+            "type": "mixed"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "EmailDocumentParameters",
+        "type": "object"
+      },
+      "EmailLogEntry": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "integer"
+          },
+          "sentDate": {
+            "description": "sent date",
+            "type": "integer"
+          },
+          "hasHtmlLog": {
+            "description": "HTML log exists",
+            "type": "boolean"
+          },
+          "hasTextLog": {
+            "description": "Text log exists",
+            "type": "boolean"
+          },
+          "hasError": {
+            "description": "Error occurred",
+            "type": "boolean"
+          },
+          "from": {
+            "description": "from",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "description": "to",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subject": {
+            "description": "subject",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "sentDate",
+          "hasHtmlLog",
+          "hasTextLog",
+          "hasError",
+          "from",
+          "to",
+          "subject"
+        ],
+        "title": "EmailLog",
+        "type": "object"
+      },
+      "EmailLogEntryDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EmailLogEntry"
+          },
+          {
+            "properties": {
+              "bcc": {
+                "description": "bcc",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "cc": {
+                "description": "cc",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "error": {
+                "description": "error",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "bcc",
+          "cc",
+          "error"
+        ],
+        "title": "EmailLogDetail",
+        "type": "object"
+      },
+      "EmailLogEntryParameter": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "value": {
+            "description": "value",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "objectData": {
+            "description": "data for object parameters",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ObjectParameter",
+                "description": "data for object parameters"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "objectData"
+        ],
+        "title": "EmailLogParameters",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "ObjectParameter": {
+        "properties": {
+          "id": {
+            "description": "id",
+            "type": "integer"
+          },
+          "elementType": {
+            "description": "elementType",
+            "type": "string"
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "class": {
+            "description": "class",
+            "type": "string"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "class",
+          "path"
+        ],
+        "title": "EmailLogObjectParameterData",
+        "type": "object"
+      },
+      "SendEmailParameters": {
+        "properties": {
+          "from": {
+            "description": "from email address(es)",
+            "type": "string"
+          },
+          "to": {
+            "description": "to email address(es)",
+            "type": "string"
+          },
+          "subject": {
+            "description": "email subject",
+            "type": "string"
+          },
+          "contentType": {
+            "description": "email content type",
+            "enum": [
+              "document",
+              "html",
+              "text"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "description": "email content",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "documentPath": {
+            "description": "path to the email document",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "documentParameters": {
+            "description": "email document parameters",
+            "items": {
+              "$ref": "#/components/schemas/EmailDocumentParameters"
+            },
+            "type": "array"
+          },
+          "attachmentId": {
+            "description": "id of the asset attachment",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "subject",
+          "contentType"
+        ],
+        "title": "SendEmailParameters",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: emails)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/emails/blocklist": {
+      "get": {
+        "description": "Get paginated E-Mail blocklist entries. <br>\nYou can use different query parameters to filter the E-Mail blocklist\n",
+        "operationId": "email_blocklist_get_collection",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Email address to be filtered by",
+            "in": "query",
+            "name": "email",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/BlocklistEntry"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated E-Mail blocklist entries with total count as header param"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated collection of blocklist entries",
+        "tags": [
+          "E-Mails"
+        ]
+      },
+      "post": {
+        "description": "Add an E-mail address to the blocklist. <br> The E-mail address has to be compliant with the PHP validate filter.\n",
+        "operationId": "email_blocklist_add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailAddressParameter"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added E-mail address to blocklist"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Add an E-mail address to the blocklist",
+        "tags": [
+          "E-Mails"
+        ]
+      },
+      "delete": {
+        "description": "Delete an E-mail address from the blocklist with the given <strong>{email}</strong> <br> The E-mail address has to be present in the blocklist.\n",
+        "operationId": "email_blocklist_delete",
+        "parameters": [
+          {
+            "description": "Email address to be deleted from blocklist",
+            "in": "query",
+            "name": "email",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted E-mail address from blocklist"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete an E-mail address from the blocklist",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails": {
+      "get": {
+        "description": "Get paginated E-Mail log entries. <br>\nYou can use different query parameters to filter the E-Mail logs\n",
+        "operationId": "email_log_get_collection",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter the email log by the ID of the email document that sent the emails",
+            "in": "query",
+            "name": "documentId",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/EmailLogEntry"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated E-Mail log entries with total count as header param"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated collection of E-Mail log entries",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/{id}": {
+      "get": {
+        "description": "Get the E-Mail log entry with the given <strong>{id}</strong>\n",
+        "operationId": "email_log_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the E-Mail",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailLogEntryDetail"
+                }
+              }
+            },
+            "description": "E-Mail log entry data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get an E-Mail log entry by ID",
+        "tags": [
+          "E-Mails"
+        ]
+      },
+      "delete": {
+        "description": "Delete the E-Mail log entry with the given <strong>{id}</strong>\n",
+        "operationId": "email_log_delete",
+        "parameters": [
+          {
+            "description": "Id of the E-Mail",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted E-Mail log entry"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete E-Mail log entry",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/{id}/html": {
+      "get": {
+        "description": "Get the HTML content of the E-Mail log entry with the given <strong>{id}</strong>\n",
+        "operationId": "email_log_get_html",
+        "parameters": [
+          {
+            "description": "Id of the E-Mail",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "description": "Email log entry HTML data.",
+                      "title": "data",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "HTML content of the E-Mail log entry"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get HTML content of an E-Mail log entry by ID",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/{id}/params": {
+      "get": {
+        "description": "Get the parameters of the E-Mail log entry with the given <strong>{id}</strong>\n",
+        "operationId": "email_log_get_params",
+        "parameters": [
+          {
+            "description": "Id of the E-Mail",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "description": "Email log entry parameters",
+                      "items": {
+                        "$ref": "#/components/schemas/EmailLogEntryParameter"
+                      },
+                      "title": "data",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Parameters of the E-Mail log entry"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get parameters of an E-Mail log entry by ID",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/{id}/text": {
+      "get": {
+        "description": "Get the text content of the E-Mail log entry with the given <strong>{id}</strong>\n",
+        "operationId": "email_log_get_text",
+        "parameters": [
+          {
+            "description": "Id of the E-Mail",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "description": "Email log entry text data.",
+                      "title": "data",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Text content of the E-Mail log entry"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get text content of an E-Mail log entry by ID",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/{id}/forward": {
+      "post": {
+        "description": "Forward the E-Mail log entry with the given <strong>{id}</strong> to the given <strong>{email}</strong>\n",
+        "operationId": "email_log_forward_by_id",
+        "parameters": [
+          {
+            "description": "Id of the E-Mail",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailAddressParameter"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "E-Mail was successfully forwarded"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Forward and existing E-Mail log entry",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/{id}/resend": {
+      "post": {
+        "description": "Resend the E-Mail log entry with the given <strong>{id}</strong>\n",
+        "operationId": "email_log_resend_by_id",
+        "parameters": [
+          {
+            "description": "Id of the E-Mail",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "E-Mail was successfully resent"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Resend an existing E-Mail log entry",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/search": {
+      "post": {
+        "description": "Search email log entries.",
+        "operationId": "email_log_search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/EmailLogEntry"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated matching email log entries."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Search email log entries",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/emails/test": {
+      "post": {
+        "description": "Send a test E-Mail based on the provided query parameters. <br> See the full description of request fields with the schema <strong>SendEmailParameters</strong>\n",
+        "operationId": "email_send_test",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendEmailParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "E-Mail was successfully sent"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Send a test E-Mail",
+        "tags": [
+          "E-Mails"
+        ]
+      }
+    }
+  }
+}

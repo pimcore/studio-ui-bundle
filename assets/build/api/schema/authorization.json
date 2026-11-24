@@ -1,0 +1,364 @@
+{
+  "components": {
+    "schemas": {
+      "AuthenticationToken": {
+        "description": "Token for authentication",
+        "properties": {
+          "token": {
+            "description": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "Authentication Token",
+        "type": "object"
+      },
+      "Credentials": {
+        "description": "Credentials for authentication",
+        "properties": {
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Credentials",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "InvalidCredentials": {
+        "description": "Invalid credentials after login attempt",
+        "properties": {
+          "error": {
+            "description": "Error",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "Invalid Credentials",
+        "type": "object"
+      },
+      "SessionStatus": {
+        "description": "Whether the request carries an authenticated Studio session. A login that waits for its two-factor code is not authenticated yet and carries the same fields as the login answer",
+        "properties": {
+          "authenticated": {
+            "description": "True if a Studio user is logged in",
+            "type": "boolean"
+          },
+          "twoFactorRequired": {
+            "description": "A two-factor code is needed",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "twoFactorStep": {
+            "description": "What to do next",
+            "enum": [
+              "verify",
+              "setup"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "digits": {
+            "description": "Number of digits in a code",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "authenticated"
+        ],
+        "title": "Session Status",
+        "type": "object"
+      },
+      "TwoFactorCode": {
+        "description": "Code from the authenticator app",
+        "properties": {
+          "code": {
+            "description": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "Two-factor code",
+        "type": "object"
+      },
+      "TwoFactorLoginStep": {
+        "description": "Answer to a correct password when a two-factor code is needed; no user data",
+        "properties": {
+          "twoFactorRequired": {
+            "description": "A code is needed",
+            "type": "boolean"
+          },
+          "twoFactorStep": {
+            "description": "What to do next",
+            "enum": [
+              "verify",
+              "setup"
+            ],
+            "type": "string"
+          },
+          "digits": {
+            "description": "Number of digits in a code",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "twoFactorRequired",
+          "twoFactorStep",
+          "digits"
+        ],
+        "title": "Two-factor login step",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: authorization)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/login": {
+      "post": {
+        "description": "Logs in a user with the provided credentials. For users with two-factor authentication, the password is only the\nfirst step; see the success response.\n",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwoFactorLoginStep"
+                }
+              }
+            },
+            "description": "Login successful, with an empty body.\nWhen the user needs a two-factor code, the password was correct but the login is not finished:\nthe body says so, names the next step and the number of digits in a code: `verify` (send the code to `/login/2fa`), or `setup` when the user\nmust use two-factor authentication but has not set it up (create a secret with `/user/two-factor/setup`,\nthen send the first code from it to `/login/2fa`).\nUntil then, other endpoints answer 401. To go back, log out.\n"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidCredentials"
+                }
+              }
+            },
+            "description": "Invalid credentials Response"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Session-based login with user credentials.",
+        "tags": [
+          "Authorization"
+        ]
+      }
+    },
+    "/pimcore-studio/api/logout": {
+      "post": {
+        "description": "Logout and invalidate current session for active user.",
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "Logout successful."
+          }
+        },
+        "summary": "Logout and invalidate current session for active user.",
+        "tags": [
+          "Authorization"
+        ]
+      }
+    },
+    "/pimcore-studio/api/session": {
+      "get": {
+        "description": "Tells whether the request carries an authenticated Studio session. Always answers with HTTP 200, so\nthe Studio UI can find out whether to show the login page without triggering a 401.\n",
+        "operationId": "session_get_status",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionStatus"
+                }
+              }
+            },
+            "description": "Session status."
+          }
+        },
+        "summary": "Get the status of the current Studio session",
+        "tags": [
+          "Authorization"
+        ]
+      }
+    },
+    "/pimcore-studio/api/login/token": {
+      "post": {
+        "description": "Logs in a user based on the provided token and returns the user information.\n",
+        "operationId": "login_token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationToken"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidCredentials"
+                }
+              }
+            },
+            "description": "Invalid credentials Response"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Session-based login with user token.",
+        "tags": [
+          "Authorization"
+        ]
+      }
+    },
+    "/pimcore-studio/api/login/2fa": {
+      "post": {
+        "description": "Finishes a login that needs a two-factor code. Send the current code from the authenticator app;\nin the `setup` step, the first code from the new secret, which also enables two-factor authentication.\nA wrong code answers 401 and the code can be tried again; after too many wrong codes the endpoint\nanswers 429, even for the right code, until the waiting time is over.\n",
+        "operationId": "login_two_factor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TwoFactorCode"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Code accepted, login successful."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>429 - Too Many Requests"
+          }
+        },
+        "summary": "Finish the login with a two-factor code.",
+        "tags": [
+          "Authorization"
+        ]
+      }
+    }
+  }
+}

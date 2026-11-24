@@ -1,0 +1,501 @@
+{
+  "components": {
+    "schemas": {
+      "ConfigurationType": {
+        "description": "A manageable user-owned configuration type, represented as a tab in the ownership management area.",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "type": {
+            "description": "Unique type identifier",
+            "type": "string"
+          },
+          "label": {
+            "description": "Translation key for the tab label",
+            "type": "string"
+          },
+          "icon": {
+            "description": "Icon identifier for the tab",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "label",
+          "icon"
+        ],
+        "title": "Ownership Configuration Type",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "OwnershipConfiguration": {
+        "description": "Configuration detail data",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Unique identifier of the configuration",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type identifier of the configuration",
+            "type": "string"
+          },
+          "name": {
+            "description": "Display name of the configuration",
+            "type": "string"
+          },
+          "ownerId": {
+            "description": "User ID of the current owner",
+            "type": "integer"
+          },
+          "ownerName": {
+            "description": "Username of the current owner. Null when the owner has been deleted.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ownerDeleted": {
+            "description": "Whether the owner user no longer exists. When true the UI should show the owner id only.",
+            "type": "boolean"
+          },
+          "creationDate": {
+            "description": "Creation date as a unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date as a unix timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "name",
+          "ownerId",
+          "ownerDeleted"
+        ],
+        "title": "Ownership Configuration",
+        "type": "object"
+      },
+      "OwnershipDeleteParameter": {
+        "properties": {
+          "ids": {
+            "description": "Identifiers of the configurations to delete",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "ids"
+        ],
+        "title": "Ownership Delete Parameter",
+        "type": "object"
+      },
+      "OwnershipReassignOwnerParameter": {
+        "properties": {
+          "ids": {
+            "description": "Identifiers of the configurations whose owner should be reassigned",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "newOwnerId": {
+            "description": "User ID of the new owner",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ids",
+          "newOwnerId"
+        ],
+        "title": "Ownership Reassign Owner Parameter",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: ownership-management)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/ownership-management/{type}/configurations": {
+      "post": {
+        "description": "Returns a paginated list of all user-owned configurations of the given type across all users.",
+        "operationId": "ownership_management_get_collection",
+        "parameters": [
+          {
+            "description": "Configuration type to list.",
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/OwnershipConfiguration"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved the list of configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List configurations of a type",
+        "tags": [
+          "Ownership Management"
+        ]
+      },
+      "delete": {
+        "description": "Deletes one or more configurations of the given type.",
+        "operationId": "ownership_management_delete_configurations",
+        "parameters": [
+          {
+            "description": "Configuration type to delete from.",
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OwnershipDeleteParameter"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Configurations deleted successfully"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "A job run was created to delete the configurations asynchronously"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete configurations",
+        "tags": [
+          "Ownership Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/ownership-management/{type}/owner": {
+      "put": {
+        "description": "Reassigns the owner of one or more configurations of the given type to another user.",
+        "operationId": "ownership_management_reassign_owner",
+        "parameters": [
+          {
+            "description": "Configuration type whose owner should be reassigned.",
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OwnershipReassignOwnerParameter"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Owner reassigned successfully"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "A job run was created to reassign the owner asynchronously"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Reassign the owner of configurations",
+        "tags": [
+          "Ownership Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/ownership-management/types": {
+      "get": {
+        "description": "Returns the list of user-owned configuration types (tabs) that can be administered, collected from all registered providers.",
+        "operationId": "ownership_management_get_types",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ConfigurationType"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved the list of configuration types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List manageable configuration types",
+        "tags": [
+          "Ownership Management"
+        ]
+      }
+    }
+  }
+}

@@ -12,16 +12,19 @@
 */
 
 import { type ConfigFile } from '@rtk-query/codegen-openapi'
-import { EndpointMatcherFunction } from '@rtk-query/codegen-openapi/lib/types';
+import { apiSlices, schemaFileFor } from './slices'
 
-const pathMatcher = (pattern: RegExp): EndpointMatcherFunction => {
-  return (name, definition) => {
+const pathMatcher = (pattern: RegExp) => {
+  return (name: string, definition: { path: string }): boolean => {
     return pattern.test(definition.path);
   }
 }
 
 const config: ConfigFile = {
-  schemaFile: './docs.jsonopenapi.json',
+  // Required by the ConfigFile type, but never read: every output file below
+  // carries its own per-slice schemaFile. Regenerate a slice's snapshot and
+  // client with `npm run api:sync -- <slice>`.
+  schemaFile: './schema/__per-slice__.json',
   apiFile: '@sdk/api',
   apiImport: 'api',
   endpointOverrides: [
@@ -161,137 +164,13 @@ const config: ConfigFile = {
       type: 'query'
     }
   ],
-  outputFiles: {
-    '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/assets?/i)
-    },
-    '../../js/src/core/modules/data-object/data-object-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/data-object?/i)
-    },
-    '../../js/src/core/modules/document/document-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/document?/i)
-    },
-    '../../js/src/core/modules/website-settings/website-settings-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/website-settings?/i)
-    },
-    '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/translation/i)
-    },
-    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/propert(y|ies)/i)
-    },
-    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/workflow/i)
-    },
-    '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/user/i)
-    },
-    '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/role/i)
-    },
-    '../../js/src/core/modules/user/service-users/service-users-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/service-users?(\/|$)/i)
-    },
-    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/version/i)
-    },
-    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/schedule/i)
-    },
-    '../../js/src/core/modules/element/element-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/elements/i)
-    },
-    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/dependencies/i)
-    },
-    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/tag/i)
-    },
-    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/note/i)
-    },
-    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/metadata|api\/assets\/\{id\}\/custom-metadata/i)
-    },
-    '../../js/src/core/modules/app/settings/settings-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/settings?/i)
-    },
-    '../../js/src/core/modules/app/mercure-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/mercure/i)
-    },
-    '../../js/src/core/modules/asset/editor/types/asset-thumbnails-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/thumbnails/i)
-    },
-    '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/(login|logout|session)/i)
-    },
-    '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/class\//i)
-    },
-    '../../js/src/core/modules/data-object/unit-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/unit\//i)
-    },
-    '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/perspectives\//i)
-    },
-    '../../js/src/core/modules/notifications/notifications-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/notifications\/?/i)
-    },
-    '../../js/src/core/modules/search/search-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/search\/?/i)
-    },
-    '../../js/src/core/modules/data-object/classification-store/classification-store-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/classification-store\/?/i)
-    },
-    '../../js/src/core/modules/reports/custom-reports-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/bundle\/custom-reports\/?/i)
-    },
-    '../../js/src/core/modules/redirects/seo-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/bundle\/seo\/?/i)
-    },
-    '../../js/src/core/modules/element/export-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/export\/?/i)
-    },
-    '../../js/src/core/modules/element/search-replace-assignments/usage-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/elements\/usage\/?/i)
-    },
-    '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
-    },
-    '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
-    },
-    '../../js/src/core/modules/ownership-management/ownership-management-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/ownership-management\/?/i)
-    },
-    '../../js/src/core/modules/execution-engine/execution-engine-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/execution-engine\/?/i)
-    },
-    '../../js/src/core/modules/gdpr-data-extractor/gdpr-data-extractor-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/gdpr\/?/i)
-    },
-    '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
-    },
-    '../../js/src/core/modules/index-sync/index-sync-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/index-sync\/?/i)
-    },
-    '../../js/src/core/modules/application-logger/application-logger-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/bundle\/application-logger/i)
-    },
-    '../../js/src/core/modules/telemetry/telemetry-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/telemetry\/?/i)
-    },
-    '../../js/src/core/modules/oauth/oauth-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/oauth\//i)
-    },
-    '../../js/src/core/modules/mcp-servers/mcp-servers-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/mcp\//i)
-    },
-    '../../js/src/core/modules/maintenance-mode/maintenance-mode-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/maintenance-mode/i)
+  outputFiles: Object.fromEntries(apiSlices.map((slice) => [
+    slice.outputFile,
+    {
+      schemaFile: schemaFileFor(slice),
+      filterEndpoints: pathMatcher(slice.pattern)
     }
-  },
+  ])),
   exportName: 'api',
   hooks: true,
   tag: true

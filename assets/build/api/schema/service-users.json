@@ -1,0 +1,1131 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "ServiceUser": {
+        "description": "A machine identity with its own permissions, roles and workspaces",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the service user",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Unique name, shared with human users",
+            "type": "string"
+          },
+          "email": {
+            "description": "Contact email of the team responsible",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "active": {
+            "description": "Whether the service user may authenticate",
+            "type": "boolean"
+          },
+          "permissions": {
+            "description": "Permissions",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "roles": {
+            "description": "IDs of the assigned roles",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "classes": {
+            "description": "Allowed classes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "docTypes": {
+            "description": "Allowed document types",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "assetWorkspaces": {
+            "description": "Asset workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "dataObjectWorkspaces": {
+            "description": "Data object workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserDataObjectWorkspace"
+            },
+            "type": "array"
+          },
+          "documentWorkspaces": {
+            "description": "Document workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserDocumentWorkspace"
+            },
+            "type": "array"
+          },
+          "clientId": {
+            "description": "ID of the bound OAuth client (client_credentials)",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastLogin": {
+            "description": "Timestamp of the last login",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "clientCredentialsEnabled": {
+            "description": "Whether the OAuth client_credentials grant is enabled; if false, use an MCP access token",
+            "type": "boolean"
+          },
+          "mcpTokens": {
+            "$ref": "#/components/schemas/ServiceUserMcpTokens",
+            "description": "Summary of the MCP access tokens of the service user (never the tokens themselves)"
+          },
+          "responsibleUsers": {
+            "description": "IDs of the users who answer for the service user",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "responsibleRoles": {
+            "description": "IDs of the roles whose members answer for the service user",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "active",
+          "permissions",
+          "roles",
+          "classes",
+          "docTypes",
+          "assetWorkspaces",
+          "dataObjectWorkspaces",
+          "documentWorkspaces",
+          "clientId",
+          "lastLogin",
+          "clientCredentialsEnabled",
+          "mcpTokens",
+          "responsibleUsers",
+          "responsibleRoles"
+        ],
+        "title": "Service User",
+        "type": "object"
+      },
+      "ServiceUserCreate": {
+        "description": "A new service user with its permissions, roles and workspaces",
+        "properties": {
+          "name": {
+            "description": "Unique name across users and service users",
+            "type": "string"
+          },
+          "email": {
+            "description": "Contact email of the team responsible",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "permissions": {
+            "description": "Permissions",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "roles": {
+            "description": "IDs of the roles",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "classes": {
+            "description": "Allowed classes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "docTypes": {
+            "description": "Allowed document types",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "assetWorkspaces": {
+            "description": "Asset workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "dataObjectWorkspaces": {
+            "description": "Data object workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserDataObjectWorkspace"
+            },
+            "type": "array"
+          },
+          "documentWorkspaces": {
+            "description": "Document workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserDocumentWorkspace"
+            },
+            "type": "array"
+          },
+          "responsibleUsers": {
+            "description": "IDs of the users who answer for the service user; service users are not allowed",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "responsibleRoles": {
+            "description": "IDs of the roles whose members answer for the service user",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "scopes": {
+            "description": "OAuth scopes the bound client may request; all known scopes when omitted",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Create Service User",
+        "type": "object"
+      },
+      "ServiceUserCreateFromUser": {
+        "description": "A new service user that takes over the permissions, roles and workspaces of a user",
+        "properties": {
+          "name": {
+            "description": "Unique name across users and service users",
+            "type": "string"
+          },
+          "email": {
+            "description": "Contact email of the team responsible",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "scopes": {
+            "description": "OAuth scopes the bound client may request; all known scopes when omitted",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Create Service User From User",
+        "type": "object"
+      },
+      "ServiceUserCredentials": {
+        "description": "Client credentials of a service user. The secret is shown only in this response.",
+        "properties": {
+          "serviceUserId": {
+            "description": "ID of the service user",
+            "type": "integer"
+          },
+          "clientId": {
+            "description": "OAuth client id",
+            "type": "string"
+          },
+          "clientSecret": {
+            "description": "OAuth client secret, shown once; null while the client_credentials grant is disabled",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "serviceUserId",
+          "clientId",
+          "clientSecret"
+        ],
+        "title": "Service User Credentials",
+        "type": "object"
+      },
+      "ServiceUserMcpToken": {
+        "description": "An MCP access token for a service user. The token is shown only in this response.",
+        "properties": {
+          "token": {
+            "description": "The bearer token, shown once",
+            "type": "string"
+          },
+          "expiresAt": {
+            "description": "Expiry as a Unix timestamp",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "token",
+          "expiresAt"
+        ],
+        "title": "Service User MCP Access Token",
+        "type": "object"
+      },
+      "ServiceUserMcpTokenRequest": {
+        "description": "Lifetime of a new MCP access token for a service user",
+        "properties": {
+          "ttlDays": {
+            "description": "Lifetime in days, 1 to 90",
+            "type": "integer"
+          }
+        },
+        "title": "Issue MCP Access Token",
+        "type": "object"
+      },
+      "ServiceUserMcpTokens": {
+        "description": "How many MCP access tokens of a service user are still valid",
+        "properties": {
+          "active": {
+            "description": "Number of tokens that have not expired",
+            "type": "integer"
+          },
+          "latestExpiresAt": {
+            "description": "Latest expiry among the active tokens as a Unix timestamp, null without one",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "active",
+          "latestExpiresAt"
+        ],
+        "title": "Service User MCP Access Token Summary",
+        "type": "object"
+      },
+      "ServiceUserUpdate": {
+        "description": "Contact, permissions, roles and workspaces of a service user",
+        "properties": {
+          "email": {
+            "description": "Contact email of the team responsible",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "permissions": {
+            "description": "Permissions",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "roles": {
+            "description": "IDs of the roles",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "classes": {
+            "description": "Allowed classes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "docTypes": {
+            "description": "Allowed document types",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "assetWorkspaces": {
+            "description": "Asset workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "dataObjectWorkspaces": {
+            "description": "Data object workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserDataObjectWorkspace"
+            },
+            "type": "array"
+          },
+          "documentWorkspaces": {
+            "description": "Document workspaces",
+            "items": {
+              "$ref": "#/components/schemas/UserDocumentWorkspace"
+            },
+            "type": "array"
+          },
+          "responsibleUsers": {
+            "description": "IDs of the users who answer for the service user; service users are not allowed. Leave the key out to keep the stored users, send an empty list to clear them",
+            "items": {
+              "type": "integer"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "responsibleRoles": {
+            "description": "IDs of the roles whose members answer for the service user. Leave the key out to keep the stored roles, send an empty list to clear them",
+            "items": {
+              "type": "integer"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "title": "Update Service User",
+        "type": "object"
+      },
+      "UserDataObjectWorkspace": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserWorkspace"
+          },
+          {
+            "properties": {
+              "save": {
+                "description": "Save",
+                "type": "boolean"
+              },
+              "unpublish": {
+                "description": "Unpublish",
+                "type": "boolean"
+              },
+              "localizedEdit": {
+                "description": "Localized Edit",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "localizedView": {
+                "description": "Localized View",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "layouts": {
+                "description": "Layouts",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "save",
+          "unpublish"
+        ],
+        "title": "User Document Workspace",
+        "type": "object"
+      },
+      "UserDocumentWorkspace": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserWorkspace"
+          },
+          {
+            "properties": {
+              "save": {
+                "description": "Save",
+                "type": "boolean"
+              },
+              "unpublish": {
+                "description": "Unpublish",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "save",
+          "unpublish"
+        ],
+        "title": "User Document Workspace",
+        "type": "object"
+      },
+      "UserWorkspace": {
+        "description": "Workspace of a user",
+        "properties": {
+          "cid": {
+            "description": "ID of the element",
+            "type": "integer"
+          },
+          "cpath": {
+            "description": "Path of the element",
+            "type": "string"
+          },
+          "list": {
+            "description": "List Permission",
+            "type": "boolean"
+          },
+          "view": {
+            "description": "View Permission",
+            "type": "boolean"
+          },
+          "publish": {
+            "description": "Publish Permission",
+            "type": "boolean"
+          },
+          "delete": {
+            "description": "Delete Permission",
+            "type": "boolean"
+          },
+          "rename": {
+            "description": "Rename Permission",
+            "type": "boolean"
+          },
+          "create": {
+            "description": "Create Permission",
+            "type": "boolean"
+          },
+          "settings": {
+            "description": "Settings Permission",
+            "type": "boolean"
+          },
+          "versions": {
+            "description": "Versions Permission",
+            "type": "boolean"
+          },
+          "properties": {
+            "description": "Properties Permission",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "cid",
+          "cpath",
+          "list",
+          "view",
+          "publish",
+          "delete",
+          "rename",
+          "create",
+          "settings",
+          "versions",
+          "properties"
+        ],
+        "title": "User Workspace",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: service-users)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/service-user": {
+      "post": {
+        "description": "Creates a service user, a machine identity with its own permissions, roles and workspaces, together with\nits confidential OAuth client (client_credentials). The response carries the client id and the client secret.\nThe secret is shown only in this response; only its hash is stored. A service user is never an administrator\nand has no password. Optionally names the users (responsibleUsers) and roles (responsibleRoles) who answer for it;\na service user cannot be one of them.\n",
+        "operationId": "service_user_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceUserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceUserCredentials"
+                }
+              }
+            },
+            "description": "Client credentials of the new service user. The secret is shown only once."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Create a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/service-user/from-user/{id}": {
+      "post": {
+        "description": "Creates a service user that takes over the permissions, roles, class and document type restrictions and\nworkspaces of the user with the given {id}. The user itself is not changed, and admin rights are never taken\nover. Only an administrator may create a service user from an administrator.\n",
+        "operationId": "service_user_create_from_user",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceUserCreateFromUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceUserCredentials"
+                }
+              }
+            },
+            "description": "Client credentials of the new service user. The secret is shown only once."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Create a service user from a user",
+        "tags": [
+          "Service User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/service-user/{id}/deactivate": {
+      "post": {
+        "description": "Deactivates the service user with the given {id}. Its client credentials, OAuth tokens and MCP access tokens\nare refused from the next request on.\n",
+        "operationId": "service_user_deactivate_by_id",
+        "parameters": [
+          {
+            "description": "Id of the service user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceUser"
+                }
+              }
+            },
+            "description": "The deactivated service user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Deactivate a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/service-user/{id}": {
+      "get": {
+        "description": "Returns the service user with the given {id}, with its permissions, roles, workspaces and the id of its\nOAuth client. The client secret is never returned here.\n",
+        "operationId": "service_user_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the service user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceUser"
+                }
+              }
+            },
+            "description": "The service user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      },
+      "put": {
+        "description": "Updates the contact email, permissions, roles, class and document type restrictions, workspaces and the\nresponsible users and roles (responsibleUsers, responsibleRoles; empty lists clear them) of the\nservice user with the given {id}. Name, password, admin rights and two-factor settings cannot be set; a\nrequest that contains any other field is refused.\n",
+        "operationId": "service_user_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the service user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceUserUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceUser"
+                }
+              }
+            },
+            "description": "The updated service user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      },
+      "delete": {
+        "description": "Deletes the service user with the given {id}. Its OAuth client is deleted, its OAuth tokens and MCP access\ntokens are revoked, and its entries are removed from the access lists of every managed MCP server, so a later\nuser with the same name inherits nothing.\n",
+        "operationId": "service_user_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the service user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service user deleted"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/service-users": {
+      "get": {
+        "description": "Lists all service users. Service users are not part of the user tree or the user collection.\n",
+        "operationId": "service_user_get_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ServiceUser"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of service users"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List service users",
+        "tags": [
+          "Service User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/service-user/{id}/mcp-token": {
+      "post": {
+        "description": "Issues an MCP access token for the service user with the given {id}, the interim credential until OAuth\nclient_credentials is enabled. The lifetime is 1 to 90 days (default 30). The token is shown only in this\nresponse; only its hash is stored. Earlier tokens stay valid until they expire or are revoked.\n",
+        "operationId": "service_user_mcp_token_issue",
+        "parameters": [
+          {
+            "description": "Id of the service user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceUserMcpTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceUserMcpToken"
+                }
+              }
+            },
+            "description": "The MCP access token. It is shown only once."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Issue an MCP access token for a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      },
+      "delete": {
+        "description": "Revokes every MCP access token of the service user with the given {id}.\n",
+        "operationId": "service_user_mcp_token_revoke",
+        "parameters": [
+          {
+            "description": "Id of the service user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MCP access tokens revoked"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Revoke the MCP access tokens of a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/service-user/{id}/rotate-secret": {
+      "post": {
+        "description": "Replaces the client secret of the service user with the given {id}. The previous secret stops working at\nonce. The new secret is shown only in this response.\n",
+        "operationId": "service_user_rotate_secret",
+        "parameters": [
+          {
+            "description": "Id of the service user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceUserCredentials"
+                }
+              }
+            },
+            "description": "Client credentials with the new secret. The secret is shown only once."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Rotate the client secret of a service user",
+        "tags": [
+          "Service User Management"
+        ]
+      }
+    }
+  }
+}

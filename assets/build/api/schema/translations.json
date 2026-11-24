@@ -1,0 +1,1011 @@
+{
+  "components": {
+    "schemas": {
+      "CreateTranslation": {
+        "description": "Translation Create Scheme for API",
+        "properties": {
+          "errorOnDuplicate": {
+            "description": "Throw an error on duplicate key",
+            "type": "boolean"
+          },
+          "translationData": {
+            "description": "Translation Data",
+            "items": {
+              "$ref": "#/components/schemas/CreateTranslationData"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "translationData"
+        ],
+        "title": "Translation Create",
+        "type": "object"
+      },
+      "CreateTranslationData": {
+        "description": "Translation Data Scheme for create endpoint of the API",
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "domain": {
+            "description": "Domain",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "type"
+        ],
+        "title": "Translation Data for create",
+        "type": "object"
+      },
+      "CsvSettings": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "delimiter": {
+            "description": "Field delimiter character",
+            "type": "string"
+          },
+          "quoteChar": {
+            "description": "Quote character for fields",
+            "type": "string"
+          },
+          "escapeChar": {
+            "description": "Escape character",
+            "type": "string"
+          },
+          "lineTerminator": {
+            "description": "Line terminator character",
+            "type": "string"
+          }
+        },
+        "required": [
+          "delimiter",
+          "quoteChar",
+          "escapeChar",
+          "lineTerminator"
+        ],
+        "title": "CSV Settings",
+        "type": "object"
+      },
+      "DeltaItem": {
+        "description": "Translation delta item after merge",
+        "properties": {
+          "key": {
+            "description": "Key of the translation",
+            "type": "string"
+          },
+          "deltaValues": {
+            "description": "List of translation deltas for the given key",
+            "items": {
+              "$ref": "#/components/schemas/TranslationDeltaValues"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "deltaValues"
+        ],
+        "title": "Delta Item",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "Translation": {
+        "description": "Translation Scheme for API",
+        "properties": {
+          "locale": {
+            "description": "Locale",
+            "type": "string"
+          },
+          "keys": {
+            "description": "Keys for Translation - Fallback will be  applied to all Keys automatically",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "useFallback": {
+            "description": "Apply Fallback Language. Used only if no keys are defined",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "locale",
+          "keys"
+        ],
+        "title": "Translation",
+        "type": "object"
+      },
+      "TranslationData": {
+        "description": "Translation Data Scheme for API",
+        "properties": {
+          "locale": {
+            "description": "Locale",
+            "type": "string"
+          },
+          "translation": {
+            "description": "Translation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "locale",
+          "translation"
+        ],
+        "title": "Translation Data",
+        "type": "object"
+      },
+      "TranslationDeltaValues": {
+        "description": "Translation delta values",
+        "properties": {
+          "locale": {
+            "description": "Locale",
+            "type": "string"
+          },
+          "currentTranslation": {
+            "description": "Current translation",
+            "type": "string"
+          },
+          "importTranslation": {
+            "description": "Imported translation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "locale",
+          "currentTranslation",
+          "importTranslation"
+        ],
+        "title": "Translation delta values",
+        "type": "object"
+      },
+      "Translations": {
+        "description": "Translations including all languages and keys",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key of the translation",
+            "type": "string"
+          },
+          "translations": {
+            "description": "List of translations for the given key",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "Type simple or custom",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "translations",
+          "type"
+        ],
+        "title": "Translations",
+        "type": "object"
+      },
+      "UpdateTranslation": {
+        "description": "Translation Update Scheme for API",
+        "properties": {
+          "key": {
+            "description": "Key of the translation",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of the translation",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "translationData": {
+            "description": "Translation Data",
+            "items": {
+              "$ref": "#/components/schemas/TranslationData"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "type",
+          "translationData"
+        ],
+        "title": "Translation Update",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: translations)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/translations/available-locales": {
+      "get": {
+        "description": "Get all available locales in the system",
+        "operationId": "translation_get_available_locales",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "locale": {
+                        "description": "Locale code.",
+                        "title": "locale",
+                        "type": "string"
+                      },
+                      "displayName": {
+                        "description": "The display name of the locale.",
+                        "title": "Display Name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "local",
+                      "displayName"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List of available locales in the system"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available locales in the system",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/{domain}/cleanup": {
+      "delete": {
+        "description": "Cleanup translations for the given domain",
+        "operationId": "translation_cleanup_by_domain",
+        "parameters": [
+          {
+            "description": "Domain of the translation, to be cleaned up",
+            "in": "path",
+            "name": "domain",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Translation cleaned up successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Cleanup translations for the given domain",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/create": {
+      "post": {
+        "description": "Add new translation entries for given translation key\n",
+        "operationId": "translation_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTranslation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created translations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Create translations",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/csv-settings": {
+      "post": {
+        "description": "Determine CSV dialect settings for import from a sample string.\n",
+        "operationId": "translation_determine_csv_settings_for_import",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "sample": {
+                    "description": "Sample CSV content (first few lines)",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sample"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsvSettings"
+                }
+              }
+            },
+            "description": "Detected CSV dialect settings"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Determine CSV dialect settings for import",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/{key}": {
+      "delete": {
+        "description": "Delete translations for given translation key",
+        "operationId": "translation_delete_by_key",
+        "parameters": [
+          {
+            "description": "Delete translations by matching key",
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Domain of the translation, defaults to \"studio\"",
+            "in": "query",
+            "name": "domain",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "translation_delete_by_key_success_description"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete translations",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/domains": {
+      "get": {
+        "description": "Get all available translation domains",
+        "operationId": "translation_get_domains",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "domain": {
+                        "description": "The domain name.",
+                        "title": "Domain",
+                        "type": "string"
+                      },
+                      "isFrontendDomain": {
+                        "description": "If the domain is a frontend or main domain.",
+                        "title": "Is Frontend Domain",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "domain",
+                      "isFrontendDomain"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "List of available translation domains"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available translation domains",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/export": {
+      "post": {
+        "description": "Export translations for the given domain. <br> \nYou can specify different filters in your request body. Example filters are: <br>\n  <ul>\n  <li><strong>translationLike</strong>: Filter by value</li>\n  <li><strong>search</strong>: Filter by search term</li>\n  </ul>\n",
+        "operationId": "translation_export_list",
+        "parameters": [
+          {
+            "description": "Domain to filter translations by",
+            "in": "query",
+            "name": "domain",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV export file for the given domain",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Export translations for the given domain",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/{domain}/import": {
+      "post": {
+        "description": "Import translations from a CSV file for the given domain. <br>\nSee the full description of request fields with the schema <strong>CsvSettings</strong>\n",
+        "operationId": "translation_import_csv",
+        "parameters": [
+          {
+            "description": "Domain of the translation for import",
+            "in": "path",
+            "name": "domain",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "CSV import file to upload",
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "csvSettings": {
+                    "description": "Settings for CSV import",
+                    "properties": {
+                      "delimiter": {
+                        "type": "string"
+                      },
+                      "quoteChar": {
+                        "type": "string"
+                      },
+                      "escapeChar": {
+                        "type": "string"
+                      },
+                      "lineTerminator": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "file",
+                  "csvSettings"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/DeltaItem"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Translation delta based on imported data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Import translations from a CSV file",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/list": {
+      "post": {
+        "description": "Get all paginated translations for the given domain. <br>\nYou can specify different filters in your request body. Example filters are: <br>\n  <ul>\n  <li><strong>page</strong>: Used for offset calculation in pagination. To be used, needs to be defined together with the pageSize</li>\n  <li><strong>pageSize</strong>: Used for limiting the result numbers per page. To be used, needs to be defined together with the page</li>\n  <li><strong>translationLike</strong>: Filter by value</li>\n  <li><strong>search</strong>: Filter by search term</li>\n  </ul>\n",
+        "operationId": "translation_get_list",
+        "parameters": [
+          {
+            "description": "Domain to filter translations by",
+            "in": "query",
+            "name": "domain",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Translations"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of translations for the given domain including all languages"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all translations for the given domain",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations": {
+      "post": {
+        "description": "Get translations for given keys and locale",
+        "operationId": "translation_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Translation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Translation"
+                }
+              }
+            },
+            "description": "Key value pairs for given keys and locale"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get translations",
+        "tags": [
+          "Translation"
+        ]
+      }
+    },
+    "/pimcore-studio/api/translations/{domain}": {
+      "put": {
+        "description": "Update translations for given translation data and locale.The <strong>{key}</strong> must be an existing translation key. <br> \nSee the full description of updatable translation data fields with the schema <strong>TranslationData</strong>\n",
+        "operationId": "translation_update",
+        "parameters": [
+          {
+            "description": "Domain of the translation, to be updated",
+            "in": "path",
+            "name": "domain",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "items": {
+                      "$ref": "#/components/schemas/UpdateTranslation"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated translations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update translations",
+        "tags": [
+          "Translation"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,1057 @@
+{
+  "components": {
+    "schemas": {
+      "AddPerspectiveConfig": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Add Perspective Config",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "ElementTreeWidgetConfig": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/WidgetConfig"
+          },
+          {
+            "properties": {
+              "contextPermissions": {
+                "description": "Context Permissions",
+                "type": "object"
+              },
+              "elementType": {
+                "description": "Element Type",
+                "type": "string"
+              },
+              "rootFolder": {
+                "$ref": "#/components/schemas/RelatedElementData",
+                "description": "Data of root folder element"
+              },
+              "showRoot": {
+                "description": "Show Root",
+                "type": "boolean"
+              },
+              "classes": {
+                "description": "Classes",
+                "type": "object"
+              },
+              "pql": {
+                "description": "PQL",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pageSize": {
+                "description": "Page size",
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "isWriteable": {
+                "description": "Is Writeable",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "contextPermissions",
+          "elementType",
+          "rootFolder",
+          "showRoot",
+          "classes",
+          "pql",
+          "pageSize",
+          "isWriteable"
+        ],
+        "title": "Element Tree Widget",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "PerspectiveConfig": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Perspective ID",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "Icon"
+          },
+          "isWriteable": {
+            "description": "Is Writeable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "icon",
+          "isWriteable"
+        ],
+        "title": "Perspective Config",
+        "type": "object"
+      },
+      "PerspectiveConfigDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PerspectiveConfig"
+          },
+          {
+            "properties": {
+              "contextPermissions": {
+                "description": "Context Permissions",
+                "type": "object"
+              },
+              "widgetsLeft": {
+                "description": "Widgets Left",
+                "items": {
+                  "$ref": "#/components/schemas/ElementTreeWidgetConfig"
+                },
+                "type": "array"
+              },
+              "widgetsRight": {
+                "description": "Widgets Right",
+                "items": {
+                  "$ref": "#/components/schemas/ElementTreeWidgetConfig"
+                },
+                "type": "array"
+              },
+              "widgetsBottom": {
+                "description": "Widgets Bottom",
+                "items": {
+                  "$ref": "#/components/schemas/ElementTreeWidgetConfig"
+                },
+                "type": "array"
+              },
+              "expandedLeft": {
+                "description": "Left Expanded Widget",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expandedRight": {
+                "description": "Right Expanded Widget",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "contextPermissions",
+          "widgetsLeft",
+          "widgetsRight",
+          "widgetsBottom",
+          "expandedLeft",
+          "expandedRight"
+        ],
+        "title": "Perspective Config Detail",
+        "type": "object"
+      },
+      "RelatedElementData": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "type": {
+            "description": "Type of the element",
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Subtype of the element",
+            "type": "string"
+          },
+          "fullPath": {
+            "description": "Full path of the element",
+            "type": "string"
+          },
+          "isPublished": {
+            "description": "Is the element published",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasViewAccess": {
+            "description": "Whether the current user is allowed to view the element",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "subtype",
+          "fullPath",
+          "isPublished",
+          "hasViewAccess"
+        ],
+        "title": "RelatedElementData",
+        "type": "object"
+      },
+      "SavePerspectiveConfig": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AddPerspectiveConfig"
+          },
+          {
+            "properties": {
+              "icon": {
+                "$ref": "#/components/schemas/ElementIcon",
+                "description": "Icon"
+              },
+              "contextPermissions": {
+                "description": "Context Permissions",
+                "type": "object"
+              },
+              "widgetsLeft": {
+                "description": "Widgets Left",
+                "type": "object"
+              },
+              "widgetsRight": {
+                "description": "Widgets Right",
+                "type": "object"
+              },
+              "widgetsBottom": {
+                "description": "Widgets Bottom",
+                "type": "object"
+              },
+              "expandedLeft": {
+                "description": "Left Expanded Widget",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "expandedRight": {
+                "description": "Right Expanded Widget",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "icon",
+          "contextPermissions",
+          "widgetsLeft",
+          "widgetsRight",
+          "widgetsBottom",
+          "expandedLeft",
+          "expandedRight"
+        ],
+        "title": "Create Perspective Config",
+        "type": "object"
+      },
+      "WidgetConfig": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Widget ID",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "widgetType": {
+            "description": "Widget Type",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "Icon"
+          },
+          "onlyWrapper": {
+            "description": "If widget is only wrapper of another configuration",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "widgetType",
+          "icon",
+          "onlyWrapper"
+        ],
+        "title": "Widget Config",
+        "type": "object"
+      },
+      "WidgetType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "WidgetType",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: perspectives)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/perspectives/configuration": {
+      "post": {
+        "description": "Create a new perspective with default values.\n",
+        "operationId": "perspective_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPerspectiveConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Id of the new perspective"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new perspective",
+        "tags": [
+          "Perspectives"
+        ]
+      }
+    },
+    "/pimcore-studio/api/perspectives/configurations": {
+      "get": {
+        "description": "Listing of all available perspectives",
+        "operationId": "perspective_get_config_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/PerspectiveConfig"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of perspective configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all perspective configurations",
+        "tags": [
+          "Perspectives"
+        ]
+      }
+    },
+    "/pimcore-studio/api/perspectives/configuration/{perspectiveId}": {
+      "get": {
+        "description": "Get the perspective configuration with the given <strong>{perspectiveId}</strong>. <br> \nThe <strong>{perspectiveId}</strong> must be an ID of an existing perspective.\n",
+        "operationId": "perspective_get_config_by_id",
+        "parameters": [
+          {
+            "description": "Get perspective by matching Id",
+            "in": "path",
+            "name": "perspectiveId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PerspectiveConfigDetail"
+                }
+              }
+            },
+            "description": "Perspective configuration data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get perspective configuration by ID",
+        "tags": [
+          "Perspectives"
+        ]
+      },
+      "put": {
+        "description": "Update the perspective configuration with the given <strong>{perspectiveId}</strong>. <br> \nThe <strong>{perspectiveId}</strong> must be an ID of an existing perspective. <br>\nPlease note that <strong>all configuration fields<strong> have to be provided.\n",
+        "operationId": "perspective_update_config_by_id",
+        "parameters": [
+          {
+            "description": "Update perspective by matching Id",
+            "in": "path",
+            "name": "perspectiveId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavePerspectiveConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated perspective configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update widget configuration by id and type",
+        "tags": [
+          "Perspectives"
+        ]
+      },
+      "delete": {
+        "description": "Delete the perspective with the given <strong>{perspectiveId}</strong>. <br>\nThe <strong>{perspectiveId}</strong> must be an ID of an existing perspective.\n",
+        "operationId": "perspective_delete",
+        "parameters": [
+          {
+            "description": "Get perspective by matching Id",
+            "in": "path",
+            "name": "perspectiveId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted perspective"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete perspective by given id",
+        "tags": [
+          "Perspectives"
+        ]
+      }
+    },
+    "/pimcore-studio/api/perspectives/widgets/{widgetType}/configuration": {
+      "post": {
+        "description": "Create a new widget with default values based on the provided <strong>{widgetType}</strong>.\n<br> The widget type has to be registered via Symfony Configuration.\n<br> Please note that <strong>{name}</strong> has to be provided.\n",
+        "operationId": "perspective_widget_create",
+        "parameters": [
+          {
+            "description": "Create widget by matching widget type",
+            "in": "path",
+            "name": "widgetType",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "properties": {
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Id of the new widget"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new widget",
+        "tags": [
+          "Perspectives"
+        ]
+      }
+    },
+    "/pimcore-studio/api/perspectives/widgets/configurations": {
+      "get": {
+        "description": "Listing of all available widget configurations",
+        "operationId": "perspective_widget_get_config_collection",
+        "parameters": [
+          {
+            "description": "Skip wrapper widget configurations",
+            "in": "query",
+            "name": "skipWrapperWidgets",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WidgetConfig"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of widget configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all widget configurations",
+        "tags": [
+          "Perspectives"
+        ]
+      }
+    },
+    "/pimcore-studio/api/perspectives/widgets/{widgetType}/configuration/{widgetId}": {
+      "get": {
+        "description": "Get the widget configuration with the given <strong>{widgetId}</strong> and <strong>{widgetType}</strong>. <br> \nThe <strong>{widgetId}</strong> must be an ID of an existing widget. The widget type has to be registered via Symfony Configuration.\n",
+        "operationId": "perspective_widget_get_config_by_id",
+        "parameters": [
+          {
+            "description": "Filter widgets by matching widget Id",
+            "in": "path",
+            "name": "widgetId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter widgets by matching widget type",
+            "in": "path",
+            "name": "widgetType",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "description": "Data of the widget configuration",
+                      "title": "data",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Widget configuration data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get widget configuration by id and type",
+        "tags": [
+          "Perspectives"
+        ]
+      },
+      "put": {
+        "description": "Update the widget configuration with the given <strong>{widgetId}</strong> and <strong>{widgetType}</strong>. <br> \nThe <strong>{widgetId}</strong> must be an ID of an existing widget. The widget type has to be registered via Symfony Configuration. <br>\nPlease note that <strong>all configuration fields<strong> have to be provided.\n",
+        "operationId": "perspective_widget_update_config_by_id",
+        "parameters": [
+          {
+            "description": "Update widget by matching widget Id",
+            "in": "path",
+            "name": "widgetId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Update widget by matching widget type",
+            "in": "path",
+            "name": "widgetType",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "properties": {
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated widget configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update widget configuration by id and type",
+        "tags": [
+          "Perspectives"
+        ]
+      },
+      "delete": {
+        "description": "Delete the widget with the given <strong>{widgetId}</strong> and <strong>{widgetType}</strong>. <br>\nThe <strong>{widgetId}</strong> must be an ID of an existing widget. The widget type has to be registered via Symfony Configuration.\n",
+        "operationId": "perspective_widget_delete",
+        "parameters": [
+          {
+            "description": "Filter widgets by matching widget Id",
+            "in": "path",
+            "name": "widgetId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter widgets by matching widget type",
+            "in": "path",
+            "name": "widgetType",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted widget"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete widget with given id and type",
+        "tags": [
+          "Perspectives"
+        ]
+      }
+    },
+    "/pimcore-studio/api/perspectives/widgets/types": {
+      "get": {
+        "description": "Get widget types collection",
+        "operationId": "perspective_widget_get_type_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WidgetType"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of widget types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get widget types",
+        "tags": [
+          "Perspectives"
+        ]
+      }
+    }
+  }
+}

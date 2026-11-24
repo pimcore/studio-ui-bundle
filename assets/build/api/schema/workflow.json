@@ -1,0 +1,721 @@
+{
+  "components": {
+    "schemas": {
+      "AllowedTransition": {
+        "properties": {
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "label": {
+            "description": "label",
+            "type": "string"
+          },
+          "iconCls": {
+            "description": "iconCls",
+            "type": "string"
+          },
+          "objectLayout": {
+            "description": "objectLayout",
+            "type": "boolean"
+          },
+          "unsavedChangesBehaviour": {
+            "description": "unsavedChangesBehaviour",
+            "type": "string"
+          },
+          "notes": {
+            "description": "notes",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "label",
+          "iconCls",
+          "objectLayout",
+          "unsavedChangesBehaviour",
+          "notes"
+        ],
+        "title": "AllowedTransition",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "GlobalAction": {
+        "properties": {
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "label": {
+            "description": "label",
+            "type": "string"
+          },
+          "iconCls": {
+            "description": "iconCls",
+            "type": "string"
+          },
+          "objectLayout": {
+            "description": "objectLayout",
+            "type": "boolean"
+          },
+          "notes": {
+            "description": "notes",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "label",
+          "iconCls",
+          "objectLayout",
+          "notes"
+        ],
+        "title": "GlobalAction",
+        "type": "object"
+      },
+      "SubmitAction": {
+        "description": "Schema for submission of workflow action",
+        "properties": {
+          "actionType": {
+            "description": "type of the action",
+            "type": "string"
+          },
+          "elementId": {
+            "description": "Id of the element",
+            "type": "integer"
+          },
+          "elementType": {
+            "description": "Type of the element",
+            "type": "string"
+          },
+          "workflowId": {
+            "description": "Id of the workflow",
+            "type": "string"
+          },
+          "transitionId": {
+            "description": "Id of the transition",
+            "type": "string"
+          },
+          "workflowOptions": {
+            "description": "workflowOptions",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "actionType",
+          "elementId",
+          "elementType",
+          "workflowId",
+          "transitionId",
+          "workflowOptions"
+        ],
+        "title": "SubmitAction",
+        "type": "object"
+      },
+      "WorkflowDetails": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "workflowName": {
+            "description": "workflowName",
+            "type": "string"
+          },
+          "workflowLabel": {
+            "description": "workflowLabel",
+            "type": "string"
+          },
+          "workflowStatus": {
+            "description": "workflowStatus",
+            "items": {
+              "$ref": "#/components/schemas/WorkflowStatus"
+            },
+            "type": "array"
+          },
+          "graph": {
+            "description": "graph",
+            "type": "string"
+          },
+          "workflowLayoutId": {
+            "description": "workflowLayoutId",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "allowedTransitions": {
+            "description": "allowedTransitions",
+            "items": {
+              "$ref": "#/components/schemas/AllowedTransition"
+            },
+            "type": "array"
+          },
+          "globalActions": {
+            "description": "globalActions",
+            "items": {
+              "$ref": "#/components/schemas/GlobalAction"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "workflowName",
+          "workflowLabel",
+          "workflowStatus",
+          "graph",
+          "workflowLayoutId",
+          "allowedTransitions",
+          "globalActions"
+        ],
+        "title": "WorkflowDetails",
+        "type": "object"
+      },
+      "WorkflowElement": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "elementId": {
+            "description": "Element ID",
+            "type": "integer"
+          },
+          "elementType": {
+            "description": "Element type",
+            "type": "string"
+          },
+          "path": {
+            "description": "Full path",
+            "type": "string"
+          },
+          "objectKey": {
+            "description": "Element key",
+            "type": "string"
+          },
+          "workflowName": {
+            "description": "Workflow name",
+            "type": "string"
+          },
+          "stateName": {
+            "description": "Current state name",
+            "type": "string"
+          },
+          "stateLabel": {
+            "description": "Human-readable state label",
+            "type": "string"
+          },
+          "stateColor": {
+            "description": "State color",
+            "type": "string"
+          },
+          "modificationDate": {
+            "description": "Modification timestamp",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "elementId",
+          "elementType",
+          "path",
+          "objectKey",
+          "workflowName",
+          "stateName",
+          "stateLabel",
+          "stateColor",
+          "modificationDate"
+        ],
+        "title": "WorkflowElement",
+        "type": "object"
+      },
+      "WorkflowStatus": {
+        "properties": {
+          "color": {
+            "description": "color",
+            "type": "string"
+          },
+          "colorInverted": {
+            "description": "colorInverted",
+            "type": "boolean"
+          },
+          "title": {
+            "description": "borderColor",
+            "type": "string"
+          },
+          "label": {
+            "description": "label",
+            "type": "string"
+          },
+          "layoutId": {
+            "description": "layoutId",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "visibleInDetail": {
+            "description": "visibleInDetail",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "color",
+          "colorInverted",
+          "title",
+          "label",
+          "layoutId",
+          "visibleInDetail"
+        ],
+        "title": "WorkflowStatus",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: workflow)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/workflows/details": {
+      "get": {
+        "description": "Get details of the element workflows based on the given <strong>{elementType}</strong> and <strong>{elementId}</strong>.\n",
+        "operationId": "workflow_get_details",
+        "parameters": [
+          {
+            "description": "ID of the element",
+            "in": "query",
+            "name": "elementId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "query",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WorkflowDetails"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    },
+                    "layoutId": {
+                      "title": "layoutId",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "layoutId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Detail data of element workflows"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all workflow details of an element",
+        "tags": [
+          "Workflows"
+        ]
+      }
+    },
+    "/pimcore-studio/api/workflows/elements/{elementType}": {
+      "get": {
+        "description": "Get a paginated list of elements that are currently in the given workflow and (optionally) state.\n",
+        "operationId": "workflow_get_elements",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Workflow name",
+            "in": "query",
+            "name": "workflowName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Workflow state / place name",
+            "in": "query",
+            "name": "stateName",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WorkflowElement"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated list of elements in the given workflow state"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get elements in a workflow state",
+        "tags": [
+          "Workflows"
+        ]
+      }
+    },
+    "/pimcore-studio/api/workflows/names": {
+      "get": {
+        "description": "Get all configured workflow names in the system.",
+        "operationId": "workflow_get_names",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of all configured workflow names"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all workflow names",
+        "tags": [
+          "Workflows"
+        ]
+      }
+    },
+    "/pimcore-studio/api/workflows/places": {
+      "get": {
+        "description": "Get all configured places for a specific workflow.",
+        "operationId": "workflow_get_places",
+        "parameters": [
+          {
+            "description": "Name of the workflow",
+            "in": "query",
+            "name": "workflowName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of all configured place names for the workflow"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all places for a workflow",
+        "tags": [
+          "Workflows"
+        ]
+      }
+    },
+    "/pimcore-studio/api/workflows/action": {
+      "post": {
+        "description": "Submit action based on the workflow name, action name and action type.",
+        "operationId": "workflow_action_submit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitAction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "workflowName": {
+                      "title": "workflowName",
+                      "type": "string"
+                    },
+                    "actionName": {
+                      "title": "actionName",
+                      "type": "string"
+                    },
+                    "actionType": {
+                      "title": "actionType",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Json encoded name of workflow, name and type of submitted action."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Submit workflow action",
+        "tags": [
+          "Workflows"
+        ]
+      }
+    }
+  }
+}
