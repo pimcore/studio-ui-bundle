@@ -146,10 +146,34 @@ const GLOBAL_TRIGGER_SUFFIXES = [
 ]
 const GLOBAL_TRIGGER_SEGMENT = 'build/api/sync/'
 
-const normalizePath = (file: string): string => file.replace(/\\/g, '/')
+const normalizePath = (file: string): string => file.replaceAll('\\', '/')
 
 const matchesSuffix = (file: string, suffix: string): boolean =>
   file === suffix || file.endsWith(`/${suffix}`)
+
+const isGlobalTrigger = (file: string): boolean =>
+  GLOBAL_TRIGGER_SUFFIXES.some((suffix) => matchesSuffix(file, suffix)) || file.includes(GLOBAL_TRIGGER_SEGMENT)
+
+const snapshotSlice = (file: string, slices: SliceOutput[]): string | null => {
+  const match = /(?:^|\/)build\/api\/schema\/([^/]+)\.json$/.exec(file)
+  if (match === null) {
+    return null
+  }
+
+  return slices.find((candidate) => candidate.name === match[1])?.name ?? null
+}
+
+const outputFileSlice = (file: string, slices: SliceOutput[]): string | null => {
+  for (const slice of slices) {
+    // outputFile is relative to build/api, e.g. ../../js/…/x.gen.ts
+    const withoutDots = normalizePath(slice.outputFile).replace(/^(\.\.\/)+/, '')
+    if (matchesSuffix(file, withoutDots)) {
+      return slice.name
+    }
+  }
+
+  return null
+}
 
 /**
  * Maps a list of changed files (repo-relative or absolute, as `git diff
@@ -160,28 +184,13 @@ export const affectedSlices = (changedFiles: string[], slices: SliceOutput[]): s
   const affected = new Set<string>()
 
   for (const file of changedFiles.map(normalizePath)) {
-    if (GLOBAL_TRIGGER_SUFFIXES.some((suffix) => matchesSuffix(file, suffix))) {
-      return '*'
-    }
-    if (file.includes(GLOBAL_TRIGGER_SEGMENT)) {
+    if (isGlobalTrigger(file)) {
       return '*'
     }
 
-    const snapshotMatch = /(?:^|\/)build\/api\/schema\/([^/]+)\.json$/.exec(file)
-    if (snapshotMatch !== null) {
-      const slice = slices.find((candidate) => candidate.name === snapshotMatch[1])
-      if (slice !== undefined) {
-        affected.add(slice.name)
-      }
-      continue
-    }
-
-    for (const slice of slices) {
-      // outputFile is relative to build/api, e.g. ../../js/…/x.gen.ts
-      const withoutDots = normalizePath(slice.outputFile).replace(/^(\.\.\/)+/, '')
-      if (matchesSuffix(file, withoutDots)) {
-        affected.add(slice.name)
-      }
+    const slice = snapshotSlice(file, slices) ?? outputFileSlice(file, slices)
+    if (slice !== null) {
+      affected.add(slice)
     }
   }
 

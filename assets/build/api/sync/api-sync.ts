@@ -32,7 +32,6 @@
  * Exit codes: 0 ok, 1 drift, 2 usage error (e.g. an unknown slice name).
  */
 
-import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -129,15 +128,28 @@ const loadSchema = async (source: string): Promise<OpenApiSpec> => {
   return JSON.parse(fs.readFileSync(source, 'utf-8')) as OpenApiSpec
 }
 
+/**
+ * Line-by-line difference report (positional, capped) — enough to see what
+ * drifted without shelling out to an external diff tool.
+ */
 const printDiff = (expectedContent: string, actualPath: string, label: string): void => {
-  const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'api-sync-diff-')), path.basename(actualPath))
-  fs.writeFileSync(tmp, expectedContent)
-  try {
-    execFileSync('git', ['diff', '--no-index', '--', actualPath, tmp], { stdio: 'inherit' })
-  } catch {
-    // git diff --no-index exits 1 when the files differ — the diff itself is the output we want
+  const expected = expectedContent.split('\n')
+  const actual = (fs.existsSync(actualPath) ? fs.readFileSync(actualPath, 'utf-8') : '').split('\n')
+  const total = Math.max(expected.length, actual.length)
+  let shown = 0
+  for (let line = 0; line < total && shown < 20; line++) {
+    if (expected[line] !== actual[line]) {
+      console.error(`@ line ${line + 1}`)
+      if (actual[line] !== undefined) {
+        console.error(`- ${actual[line]}`)
+      }
+      if (expected[line] !== undefined) {
+        console.error(`+ ${expected[line]}`)
+      }
+      shown++
+    }
   }
-  console.error(`^ ${label}`)
+  console.error(`^ ${label}${shown === 20 ? ' (differences truncated)' : ''}`)
 }
 
 const generationOptionsByOutputFile = (): Map<string, Parameters<typeof generateEndpoints>[0]> => {
@@ -187,6 +199,9 @@ const checkClientsAgainstSnapshots = async (options: CliOptions): Promise<SliceR
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'api-sync-check-'))
   const results: SliceResult[] = []
 
+  // Sequential on purpose: generateEndpoints swaps the typescript entry in
+  // require.cache around every call (enforceOazapftsTsVersion), so concurrent
+  // runs would corrupt each other.
   for (const slice of options.slices) {
     const baseOptions = generationOptions.get(slice.outputFile)
     if (baseOptions === undefined) {
@@ -221,6 +236,7 @@ const syncSlices = async (spec: OpenApiSpec, options: CliOptions): Promise<Slice
   fs.mkdirSync('./schema', { recursive: true })
   const results: SliceResult[] = []
 
+  // Sequential on purpose — see checkClientsAgainstSnapshots.
   for (const slice of options.slices) {
     const snapshotFile = schemaFileFor(slice)
     const content = snapshotContent(spec, slice)
