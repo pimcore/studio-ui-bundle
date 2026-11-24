@@ -97,4 +97,14 @@ describe('ListingDropZone', () => {
     expect(screen.queryByTestId('listing-drop-area')).not.toBeInTheDocument()
     expect(mockZone).not.toHaveBeenCalled()
   })
+
+  it('AC2: accepts drops once the current folder data is loaded', () => {
+    mockQuery = {
+      data: { permissions: { create: false }, fullPath: '/Old' },
+      currentData: { permissions: { create: true }, fullPath: '/New' }
+    }
+    renderZone()
+    expect(screen.getByTestId('listing-drop-area')).toBeInTheDocument()
+    expect(mockZone).toHaveBeenCalledWith(expect.objectContaining({ targetFolderId: 42, targetPath: '/New' }))
+  })
 })
