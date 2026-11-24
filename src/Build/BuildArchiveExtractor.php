@@ -303,8 +303,8 @@ final readonly class BuildArchiveExtractor
     }
 
     /**
-     * Separate method on purpose: the renames in swapIntoPlace() change the filesystem, so the
-     * target must be checked afresh here rather than with the is_dir() result from before them.
+     * Separate method on purpose: inside swapIntoPlace() PHPStan reuses the is_dir($targetDir)
+     * result from the top of that method, although the renames in between change the filesystem.
      */
     private function restoreBackup(string $backup, string $targetDir): void
     {
