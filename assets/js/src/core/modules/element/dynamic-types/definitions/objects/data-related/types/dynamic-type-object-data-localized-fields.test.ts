@@ -24,6 +24,7 @@ const { DynamicTypeObjectDataLocalizedFields } = jest.requireActual('./dynamic-t
 
 interface DynamicTypeObjectDataLocalizedFieldsLike {
   mergeChangedValues: (current: any, incoming: any) => any
+  processVersionFieldData: (props: any) => Promise<any[]>
 }
 
 describe('DynamicTypeObjectDataLocalizedFields.mergeChangedValues', () => {
@@ -113,5 +114,63 @@ describe('DynamicTypeObjectDataLocalizedFields.mergeChangedValues', () => {
     )
 
     consoleSpy.mockRestore()
+  })
+})
+
+describe('DynamicTypeObjectDataLocalizedFields.processVersionFieldData', () => {
+  const nameField = { datatype: 'data', fieldtype: 'input', name: 'name', title: 'Name' }
+  const priceField = { datatype: 'data', fieldtype: 'quantityValue', name: 'price', title: 'Price' }
+
+  const process = async (children: any[], fieldValueByName: any): Promise<any[]> => {
+    const type: DynamicTypeObjectDataLocalizedFieldsLike = new DynamicTypeObjectDataLocalizedFields()
+
+    return await type.processVersionFieldData({
+      item: { datatype: 'data', fieldtype: 'localizedfields', name: 'localizedfields', children },
+      fieldValueByName,
+      fieldPath: 'localizedfields',
+      fieldBreadcrumbTitle: 'Main',
+      versionId: 7,
+      versionCount: 2
+    })
+  }
+
+  it('returns one entry per locale of a direct child field', async () => {
+    expect(await process([nameField], { name: { en: 'Hello', de: 'Hallo' } })).toEqual([
+      { fieldBreadcrumbTitle: 'Main', versionId: 7, versionCount: 2, fieldData: { ...nameField, locale: 'en' }, fieldValue: 'Hello', fieldPath: 'localizedfields.name.en' },
+      { fieldBreadcrumbTitle: 'Main', versionId: 7, versionCount: 2, fieldData: { ...nameField, locale: 'de' }, fieldValue: 'Hallo', fieldPath: 'localizedfields.name.de' }
+    ])
+  })
+
+  it('returns a single entry for a field without values', async () => {
+    expect(await process([nameField], {})).toEqual([
+      { fieldBreadcrumbTitle: 'Main', versionId: 7, versionCount: 2, fieldData: nameField, fieldValue: undefined, fieldPath: 'localizedfields.name' }
+    ])
+  })
+
+  it('returns fields nested in layouts, with the layout titles in the breadcrumb', async () => {
+    const children = [
+      nameField,
+      {
+        datatype: 'layout',
+        fieldtype: 'tabpanel',
+        name: 'tabs',
+        title: '',
+        children: [{
+          datatype: 'layout',
+          fieldtype: 'panel',
+          name: 'pricing',
+          title: 'Pricing',
+          children: [priceField]
+        }]
+      }
+    ]
+    const price = { value: 10, unitId: 'EUR' }
+
+    const result = await process(children, { name: { en: 'Hello' }, price: { en: price } })
+
+    expect(result).toEqual([
+      { fieldBreadcrumbTitle: 'Main', versionId: 7, versionCount: 2, fieldData: { ...nameField, locale: 'en' }, fieldValue: 'Hello', fieldPath: 'localizedfields.name.en' },
+      { fieldBreadcrumbTitle: 'Main/Pricing', versionId: 7, versionCount: 2, fieldData: { ...priceField, locale: 'en' }, fieldValue: price, fieldPath: 'localizedfields.price.en' }
+    ])
   })
 })
