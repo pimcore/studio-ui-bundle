@@ -21,7 +21,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import trackError, { GeneralError } from '../error-handler'
 import { type DeepLinkRegistryInterface } from '../deep-link-registry/deep-link-registry'
 
-const DEEP_LINK_HANDLER_PARAM = 'link'
+const DEEP_LINK_HANDLER_PARAM = 'deeplink'
 
 const runDeepLinkHandler = async (name: string, params: URLSearchParams): Promise<void> => {
   const handler = container.get<DeepLinkRegistryInterface>(serviceIds['App/DeepLinkRegistry/DeepLinkRegistry']).get(name)

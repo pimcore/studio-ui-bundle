@@ -12,16 +12,16 @@ import { injectable } from 'inversify'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 /**
- * Opens what a Studio deep link points to: `<studio base url>?link=<name>&…`
+ * Opens what a Studio deep link points to: `<studio base url>?deeplink=<name>&…`
  * is passed to the handler registered under `<name>`.
  */
 export interface DeepLinkHandler {
-  /** The value of the `link` query parameter this handler answers to, unique across Studio. */
+  /** The value of the `deeplink` query parameter this handler answers to, unique across Studio. */
   name: string
 
   /**
    * Called once after the widget layout is restored, with all query parameters of the link
-   * (`link` included). A thrown error or a rejected promise is reported by Studio.
+   * (`deeplink` included). A thrown error or a rejected promise is reported by Studio.
    */
   handle: (params: URLSearchParams) => void | Promise<void>
 }

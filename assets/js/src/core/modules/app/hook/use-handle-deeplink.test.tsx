@@ -71,7 +71,7 @@ describe('useHandleDeepLink', () => {
     mockGetHandler.mockReturnValue({ name: 'tree', handle })
     mockIsRestored = false
 
-    const { rerender } = renderAt('/studio/?link=tree&path=%2FGermany%2F')
+    const { rerender } = renderAt('/studio/?deeplink=tree&path=%2FGermany%2F')
 
     expect(handle).not.toHaveBeenCalled()
     expect(mockNavigate).not.toHaveBeenCalled()
@@ -82,7 +82,7 @@ describe('useHandleDeepLink', () => {
     expect(mockGetHandler).toHaveBeenCalledWith('tree')
     expect(handle).toHaveBeenCalledTimes(1)
     const params: URLSearchParams = handle.mock.calls[0][0]
-    expect(params.get('link')).toBe('tree')
+    expect(params.get('deeplink')).toBe('tree')
     expect(params.get('path')).toBe('/Germany/')
   })
 
@@ -90,7 +90,7 @@ describe('useHandleDeepLink', () => {
     const handle = jest.fn()
     mockGetHandler.mockReturnValue({ name: 'tree', handle })
 
-    const { rerender } = renderAt('/studio/?link=tree#top')
+    const { rerender } = renderAt('/studio/?deeplink=tree#top')
     rerender()
 
     expect(handle).toHaveBeenCalledTimes(1)
@@ -105,7 +105,7 @@ describe('useHandleDeepLink', () => {
   it('reports an unknown handler name and still removes the query', async () => {
     mockGetHandler.mockReturnValue(undefined)
 
-    renderAt('/studio/?link=unknown-name')
+    renderAt('/studio/?deeplink=unknown-name')
 
     await waitFor(() => { expect(trackErrorMock).toHaveBeenCalledTimes(1) })
     expect(generalErrorMock).toHaveBeenCalledWith('No handler is registered for this link')
@@ -121,7 +121,7 @@ describe('useHandleDeepLink', () => {
   ])('reports a handler that %s', async (_, handle) => {
     mockGetHandler.mockReturnValue({ name: 'tree', handle })
 
-    renderAt('/studio/?link=tree')
+    renderAt('/studio/?deeplink=tree')
 
     await waitFor(() => { expect(trackErrorMock).toHaveBeenCalledTimes(1) })
     expect(generalErrorMock).toHaveBeenCalledWith('An error occurred while opening the link')
