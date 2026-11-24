@@ -13,7 +13,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { ListingDropZone } from './listing-drop-zone'
 
 const mockZone = jest.fn()
-let mockQuery: { data?: { permissions: Record<string, boolean>, fullPath: string } } = {}
+let mockQuery: { data?: { permissions: Record<string, boolean>, fullPath: string }, currentData?: { permissions: Record<string, boolean>, fullPath: string } } = {}
 let mockTreeAllowed = true
 
 jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
@@ -33,7 +33,7 @@ jest.mock('../../tree/dnd-upload/dnd-upload-zone', () => ({
   }
 }))
 
-const allowed = { data: { permissions: { create: true }, fullPath: '/Images/Cars' } }
+const allowed = { currentData: { permissions: { create: true }, fullPath: '/Images/Cars' } }
 
 const renderZone = (): void => {
   render(<ListingDropZone><div data-testid="grid" /></ListingDropZone>)
@@ -70,7 +70,7 @@ describe('ListingDropZone', () => {
   })
 
   it('AC3: renders no drop target without create permission', () => {
-    mockQuery = { data: { permissions: { create: false }, fullPath: '/x' } }
+    mockQuery = { currentData: { permissions: { create: false }, fullPath: '/x' } }
     renderZone()
     expect(screen.getByTestId('grid')).toBeInTheDocument()
     expect(screen.queryByTestId('listing-drop-area')).not.toBeInTheDocument()
@@ -88,5 +88,13 @@ describe('ListingDropZone', () => {
     mockTreeAllowed = false
     renderZone()
     expect(screen.queryByTestId('listing-drop-area')).not.toBeInTheDocument()
+  })
+
+  it('AC1: renders no drop target while the previous folder data is still shown', () => {
+    mockQuery = { data: { permissions: { create: true }, fullPath: '/Old/Folder' } }
+    renderZone()
+    expect(screen.getByTestId('grid')).toBeInTheDocument()
+    expect(screen.queryByTestId('listing-drop-area')).not.toBeInTheDocument()
+    expect(mockZone).not.toHaveBeenCalled()
   })
 })

@@ -12,8 +12,9 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { ListingBaseView } from './listing-base-view'
 
+const mockQueryResult = {}
 jest.mock('../../data-layer/provider/data/use-data', () => ({
-  useData: () => ({ dataQueryResult: {} })
+  useData: () => ({ dataQueryResult: mockQueryResult })
 }))
 jest.mock('../components/grid/grid-container', () => ({ GridContainer: () => <div data-testid="grid" /> }))
 jest.mock('../components/sidebar/sidebar', () => ({ Sidebar: () => <div data-testid="sidebar" /> }))
@@ -32,5 +33,13 @@ describe('ListingBaseView', () => {
   it('AC4: renders the grid inside wrapGrid when it is passed', () => {
     render(<ListingBaseView wrapGrid={ (grid) => <div data-testid="wrapper">{grid}</div> } />)
     expect(screen.getByTestId('wrapper')).toContainElement(screen.getByTestId('grid'))
+  })
+
+  it('AC3: applies a changed wrapGrid on rerender with the same query result', () => {
+    const { rerender } = render(<ListingBaseView wrapGrid={ (grid) => <div data-testid="wrapper-a">{grid}</div> } />)
+    expect(screen.getByTestId('wrapper-a')).toBeInTheDocument()
+    rerender(<ListingBaseView wrapGrid={ (grid) => <div data-testid="wrapper-b">{grid}</div> } />)
+    expect(screen.queryByTestId('wrapper-a')).not.toBeInTheDocument()
+    expect(screen.getByTestId('wrapper-b')).toContainElement(screen.getByTestId('grid'))
   })
 })
