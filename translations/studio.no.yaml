@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Alle dataobjekter, ressurser og dokumenter er sat
 index-sync.confirmation.ok: Synkroniser
 index-sync.job.title: Synkroniserer søkeindeks
 index-sync.start-failed: Det gikk ikke å starte synkroniseringen av søkeindeksen
+deep-link.unknown-link: Ingen behandler er registrert for denne lenken
+deep-link.open-failed: En feil oppstod under åpning av lenken
 dont-ask-again: Ikke spør igjen
 widget.missing-context.title: Manglende kontekst
 widget.missing-context.description: Ingen relatert element funnet

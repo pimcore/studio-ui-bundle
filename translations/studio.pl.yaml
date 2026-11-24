@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Wszystkie obiekty danych, zasoby i dokumenty są 
 index-sync.confirmation.ok: Synchronizuj
 index-sync.job.title: Synchronizowanie indeksu wyszukiwania
 index-sync.start-failed: Nie można rozpocząć synchronizacji indeksu wyszukiwania
+deep-link.unknown-link: Żaden handler nie jest zarejestrowany dla tego linku
+deep-link.open-failed: Podczas otwierania linku wystąpił błąd
 dont-ask-again: Nie pytaj ponownie
 widget.missing-context.title: Brakujący kontekst
 widget.missing-context.description: Nie znaleziono powiązanego elementu

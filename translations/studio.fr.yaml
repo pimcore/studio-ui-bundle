@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Tous les objets de données, les assets et les do
 index-sync.confirmation.ok: Synchroniser
 index-sync.job.title: Synchronisation de l'index de recherche en cours
 index-sync.start-failed: Impossible de démarrer la synchronisation de l'index de recherche
+deep-link.unknown-link: Aucun gestionnaire n'est enregistré pour ce lien
+deep-link.open-failed: Une erreur s'est produite lors de l'ouverture du lien
 dont-ask-again: Ne plus demander
 widget.missing-context.title: Contexte manquant
 widget.missing-context.description: Aucun élément associé trouvé
