@@ -109,6 +109,10 @@ jest.mock('@Pimcore/modules/data-object/data-object-api-slice.gen', () => ({
     return { isLoading: false, data, currentData: data }
   }
 }))
+// the saved-grid-configuration loader (relation select dialog only) is not under test here
+jest.mock('@Pimcore/modules/data-object/listing/decorator/column-configuration/configuration-layer/components/column-config-loader/column-config-loader', () => ({
+  ColumnConfigLoader: () => null
+}))
 jest.mock('@Pimcore/modules/search/search-api-slice.gen', () => ({
   useDataObjectGetSearchConfigurationQuery: (args: { classId?: string }) => {
     const data = args.classId === undefined
