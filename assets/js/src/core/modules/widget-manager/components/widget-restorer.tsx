@@ -19,6 +19,7 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isNil } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { getFocusInnerModelJson, isFocusMode } from '@Pimcore/modules/app/focus-mode/focus-mode'
 
 export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Element | null => {
   const dispatch = useAppDispatch()
@@ -26,6 +27,14 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
 
   useEffect(() => {
     const restore = async (): Promise<void> => {
+      // the focus view starts empty and shows only what its deep link opens; the saved layout stays as it is
+      if (isFocusMode()) {
+        dispatch(updateInnerModel(getFocusInnerModelJson()))
+        dispatch(setWidgetManagerRestored(true))
+
+        return
+      }
+
       const widgetRestorerRegistry = container.get<WidgetRestorerRegistry>(serviceIds.widgetRestorerRegistry)
       const userId = user.id
 

@@ -3367,3 +3367,5 @@ classification-store.multi-value.default-variant-permitted: "Allow values withou
 classification-store.multi-value.default-variant-label: "Label of the default value"
 classification-store.multi-value.no-writable-slot: "This key declares no variant and does not allow values without one, so there is nowhere to enter a value. Declare a variant or allow values without a variant."
 classification-store.multi-value.unreadable-entry: "This value is not a number the input can show; it is kept as stored until it is cleared."
+focus-view.open-in-studio: "Open in Pimcore Studio"
+focus-view.nothing-to-show: "Nothing to show here. Open the link again or continue in Pimcore Studio."

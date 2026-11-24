@@ -3363,3 +3363,5 @@ classification-store.multi-value.default-variant-permitted: "Zezwalaj na wartoś
 classification-store.multi-value.default-variant-label: "Etykieta wartości domyślnej"
 classification-store.multi-value.no-writable-slot: "Ten klucz nie deklaruje żadnego wariantu i nie zezwala na wartości bez wariantu, więc nie ma miejsca na wpisanie wartości. Zadeklaruj wariant lub zezwól na wartości bez wariantu."
 classification-store.multi-value.unreadable-entry: "Ta wartość nie jest liczbą, którą pole może wyświetlić; pozostaje zapisana bez zmian, dopóki nie zostanie wyczyszczona."
+focus-view.open-in-studio: "Otwórz w Pimcore Studio"
+focus-view.nothing-to-show: "Nie ma tu nic do wyświetlenia. Otwórz link ponownie lub kontynuuj w Pimcore Studio."
