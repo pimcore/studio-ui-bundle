@@ -21,7 +21,8 @@ export interface DeepLinkHandler {
 
   /**
    * Called once after the widget layout is restored, with all query parameters of the link
-   * (`deeplink` included). A thrown error or a rejected promise is reported by Studio.
+   * (`deeplink` included). A thrown error or a rejected promise is reported by Studio,
+   * unless the handler already showed it with `trackError`.
    */
   handle: (params: URLSearchParams) => void | Promise<void>
 }

@@ -16,29 +16,33 @@ import { openMainWidget, selectWidgetManagerRestored } from '@Pimcore/modules/wi
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { isEmpty, isNull, isUndefined } from 'lodash'
+import { type TFunction } from 'i18next'
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import trackError, { GeneralError } from '../error-handler'
+import trackError, { GeneralError, TrackedError } from '../error-handler'
 import { type DeepLinkRegistryInterface } from '../deep-link-registry/deep-link-registry'
+import { DEEP_LINK_HANDLER_PARAM } from '../deep-link-registry/deep-link-param'
 
-const DEEP_LINK_HANDLER_PARAM = 'deeplink'
-
-const runDeepLinkHandler = async (name: string, params: URLSearchParams): Promise<void> => {
+const runDeepLinkHandler = async (name: string, params: URLSearchParams, t: TFunction): Promise<void> => {
   const handler = container.get<DeepLinkRegistryInterface>(serviceIds['App/DeepLinkRegistry/DeepLinkRegistry']).get(name)
 
   if (isUndefined(handler)) {
-    trackError(new GeneralError('No handler is registered for this link'))
+    trackError(new GeneralError(t('deep-link.unknown-link')))
     return
   }
 
   try {
     await handler.handle(params)
-  } catch {
-    trackError(new GeneralError('An error occurred while opening the link'))
+  } catch (error) {
+    if (!(error instanceof TrackedError)) {
+      trackError(new GeneralError(t('deep-link.open-failed')))
+    }
   }
 }
 
 export const useHandleDeepLink = (): void => {
+  const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -85,7 +89,7 @@ export const useHandleDeepLink = (): void => {
     if (!isNull(linkName) && !isLinkHandledRef.current) {
       isLinkHandledRef.current = true
 
-      runDeepLinkHandler(linkName, searchParams).catch(() => {
+      runDeepLinkHandler(linkName, searchParams, t).catch(() => {
         // trackError re-throws GeneralError after showing it
       })
 

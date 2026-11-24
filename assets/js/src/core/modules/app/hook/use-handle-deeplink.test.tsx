@@ -11,7 +11,7 @@
 import React from 'react'
 import { renderHook, waitFor } from '@testing-library/react'
 import { MemoryRouter, type InitialEntry } from 'react-router-dom'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, TrackedError } from '@Pimcore/modules/app/error-handler'
 import { useHandleDeepLink } from './use-handle-deeplink'
 
 const mockNavigate = jest.fn()
@@ -42,7 +42,11 @@ jest.mock('@Pimcore/app/depency-injection', () => ({
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
   default: jest.fn(),
-  GeneralError: jest.fn()
+  GeneralError: jest.fn(),
+  TrackedError: jest.requireActual('@Pimcore/modules/app/error-handler/classes/tracked-error').default
+}))
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key })
 }))
 
 const trackErrorMock = trackError as jest.Mock
@@ -108,7 +112,7 @@ describe('useHandleDeepLink', () => {
     renderAt('/studio/?deeplink=unknown-name')
 
     await waitFor(() => { expect(trackErrorMock).toHaveBeenCalledTimes(1) })
-    expect(generalErrorMock).toHaveBeenCalledWith('No handler is registered for this link')
+    expect(generalErrorMock).toHaveBeenCalledWith('deep-link.unknown-link')
     expect(mockNavigate).toHaveBeenCalledWith(
       { pathname: '/studio/', search: '', hash: '' },
       { replace: true, state: null }
@@ -124,7 +128,22 @@ describe('useHandleDeepLink', () => {
     renderAt('/studio/?deeplink=tree')
 
     await waitFor(() => { expect(trackErrorMock).toHaveBeenCalledTimes(1) })
-    expect(generalErrorMock).toHaveBeenCalledWith('An error occurred while opening the link')
+    expect(generalErrorMock).toHaveBeenCalledWith('deep-link.open-failed')
+  })
+
+  it.each([
+    ['throws', () => { trackError(new GeneralError('Folder not found')) }],
+    ['rejects', async () => { trackError(new GeneralError('Folder not found')) }]
+  ])('shows only the own error of a handler that reports it with trackError and %s', async (_, handle) => {
+    trackErrorMock.mockImplementation(() => { throw new TrackedError('Folder not found') })
+    mockGetHandler.mockReturnValue({ name: 'tree', handle })
+
+    renderAt('/studio/?deeplink=tree')
+    await new Promise((resolve) => { setTimeout(resolve, 0) })
+
+    expect(trackErrorMock).toHaveBeenCalledTimes(1)
+    expect(generalErrorMock).toHaveBeenCalledTimes(1)
+    expect(generalErrorMock).toHaveBeenCalledWith('Folder not found')
   })
 
   it('opens the element of an element deep link as before, without touching the address', async () => {

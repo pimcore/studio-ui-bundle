@@ -6,7 +6,7 @@ title: Deep Link Registry
 
 The Deep Link Registry lets a bundle open its own content from a link to Pimcore Studio. A link has the form `<studio base url>?deeplink=<name>&<your parameters>`, for example `https://example.com/pimcore-studio/?deeplink=my-bundle-report&report=42`.
 
-When Studio starts with such an address, it waits until the widget layout of the previous session is restored, calls the handler registered under `<name>` once with all query parameters, and then removes the query from the address, so a reload does not open the link again. When the user has to log in first, the login screen keeps the address, so the handler runs after the login.
+When Studio starts with such an address, it waits until the widget layout of the previous session is restored, calls the handler registered under `<name>` once with all query parameters, and then removes the query from the address, so a reload does not open the link again. When the user has to log in first, the login screen keeps the address, so the handler runs after the login. As with a link to an element, the user's welcome screen does not open.
 
 ## Registering a Handler
 
@@ -31,5 +31,5 @@ deepLinkRegistry.register({
 ```
 
 - The name is the value of the `deeplink` parameter and must be unique; prefix it with your bundle. A second handler with the same name is reported and ignored.
-- An unknown name, a thrown error and a rejected promise are reported with Studio's error handling.
+- An unknown name, a thrown error and a rejected promise are reported with Studio's error handling. An error the handler already showed with `trackError` is not reported a second time.
 - The parameters come from an address anyone can send: validate them before use and open only what the current user may see.

@@ -11,6 +11,8 @@ index-sync.confirmation.text: All data objects, assets and documents are queued 
 index-sync.confirmation.ok: Synchronize
 index-sync.job.title: Synchronizing search index
 index-sync.start-failed: Failed to start the search index synchronization
+deep-link.unknown-link: No handler is registered for this link
+deep-link.open-failed: An error occurred while opening the link
 dont-ask-again: "Don't ask again"
 widget.missing-context.title: Missing context
 widget.missing-context.description: No related element found
