@@ -30,9 +30,9 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('pimcore_studio_ui');
 
-        // @phpstan-ignore-next-line
         $treeBuilder
             ->getRootNode()
+            // @phpstan-ignore method.notFound (symfony/config 6.4 types the root node as NodeDefinition)
             ->children()
                 ->scalarNode('url_path')
                 ->defaultValue('/pimcore-studio')
