@@ -171,7 +171,7 @@
             ]
           },
           "targetType": {
-            "description": "Type of the element the target points to - 'document', 'asset' or 'object'. Detected from the target when omitted.",
+            "description": "Target element type: document, asset or object. Detected from the target when omitted",
             "type": [
               "string",
               "null"
@@ -320,7 +320,7 @@
             ]
           },
           "targetType": {
-            "description": "Type of the element the target points to - 'document', 'asset' or 'object'. Detected from the target when omitted.",
+            "description": "Target element type: document, asset or object. Detected from the target when omitted",
             "type": [
               "string",
               "null"
