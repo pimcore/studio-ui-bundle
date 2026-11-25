@@ -54,6 +54,9 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   const { asset, addCustomMetadata, customMetadata } = useAssetDraft(id)
   const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataAssetGetCollectionQuery()
 
+  // The table hydrates the draft with the persisted metadata; adding before that would hide the persisted rows.
+  const isDraftHydrated = asset?.changes.customMetadata !== undefined
+
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -149,7 +152,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
     if (!disableAddPredefinedMetadata) {
       buttons.push((
         <IconTextButton
-          disabled={ isFetching }
+          disabled={ isFetching || !isDraftHydrated }
           icon={ { value: 'add-something' } }
           key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
           loading={ isFetching }
