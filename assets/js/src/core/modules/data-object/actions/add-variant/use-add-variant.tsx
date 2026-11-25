@@ -48,14 +48,16 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
   const dispatch = useAppDispatch()
   const { openDataObject } = useDataObjectHelper()
   const { isTreeActionAllowed } = useTreePermission()
-  const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
+  const { getByName } = useClassDefinitions()
 
+  // A variant always has the class of its parent. Like the classic admin UI, creating it depends on the
+  // create permission on the parent only, not on the classes the user is allowed to create objects of.
   const findClassDefinitionByName = (name?: string): ClassDefinitionListItem | undefined => {
     if (isNil(name)) {
       return undefined
     }
 
-    return getClassDefinitionsForCurrentUser().find((classDefinition) => classDefinition.name === name)
+    return getByName(name)
   }
 
   const createDataObjectVariantFromListItem = (
@@ -129,7 +131,6 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
   const isAddObjectHidden = (node: TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.AddVariant) ||
       !checkElementPermission(node.permissions, 'create') ||
-      // a variant has the class of its parent, so the user must be allowed to create that class
       isNil(findClassDefinitionByName(node.metaData.dataObject.className as string | undefined))
   }
 

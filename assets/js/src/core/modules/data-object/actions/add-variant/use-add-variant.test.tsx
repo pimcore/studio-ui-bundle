@@ -54,13 +54,16 @@ jest.mock('@Pimcore/components/element-tree/provider/tree-permission-provider/us
   useTreePermission: () => ({ isTreeActionAllowed: () => true })
 }))
 
-const mockClassDefinitionsForCurrentUser: ClassDefinitionListItem[] = [
-  { id: 'BRAND', name: 'ExampleBrand' } as unknown as ClassDefinitionListItem
+// All class definitions; ExampleProduct is not among the classes the user may create objects of
+const mockAllClassDefinitions: ClassDefinitionListItem[] = [
+  { id: 'BRAND', name: 'ExampleBrand' } as unknown as ClassDefinitionListItem,
+  { id: 'PRODUCT', name: 'ExampleProduct' } as unknown as ClassDefinitionListItem
 ]
 
 jest.mock('@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions', () => ({
   useClassDefinitions: () => ({
-    getClassDefinitionsForCurrentUser: () => mockClassDefinitionsForCurrentUser
+    getByName: (name: string) => mockAllClassDefinitions.find((classDefinition) => classDefinition.name === name),
+    getClassDefinitionsForCurrentUser: () => [mockAllClassDefinitions[0]]
   })
 }))
 
@@ -86,7 +89,7 @@ describe('useAddVariant - add variant tree context menu', () => {
     mockModalInput.mockClear()
   })
 
-  it('shows the menu entry and opens the dialog when the user may create the class of the node', () => {
+  it('shows the menu entry and opens the dialog when the user may create objects of the class of the node', () => {
     const menuItem = getMenuItem('ExampleBrand')
 
     expect(menuItem.hidden).toBe(false)
@@ -96,14 +99,24 @@ describe('useAddVariant - add variant tree context menu', () => {
     expect(mockModalInput).toHaveBeenCalledTimes(1)
   })
 
-  it('hides the menu entry when the class of the node is not among the classes the user may create', () => {
+  it('shows the menu entry and opens the dialog even when the class of the node is not among the classes the user may create objects of', () => {
     const menuItem = getMenuItem('ExampleProduct')
+
+    expect(menuItem.hidden).toBe(false)
+
+    menuItem.onClick()
+
+    expect(mockModalInput).toHaveBeenCalledTimes(1)
+  })
+
+  it('hides the menu entry when the class definition of the node is unknown', () => {
+    const menuItem = getMenuItem('UnknownClass')
 
     expect(menuItem.hidden).toBe(true)
   })
 
-  it('does not throw nor open the dialog when clicked for a class the user may not create', () => {
-    const menuItem = getMenuItem('ExampleProduct')
+  it('does not throw nor open the dialog when clicked for an unknown class definition', () => {
+    const menuItem = getMenuItem('UnknownClass')
 
     expect(() => { menuItem.onClick() }).not.toThrow()
     expect(mockModalInput).not.toHaveBeenCalled()
