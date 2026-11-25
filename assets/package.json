@@ -64,7 +64,6 @@
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "devDependencies": {
-    "@types/adm-zip": "^0.5.7",
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9",
     "@module-federation/rsbuild-plugin": "^2.2.3",
@@ -119,7 +118,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "dependencies": {
-    "adm-zip": "^0.5.16",
+    "adm-zip": "^0.6.1",
     "@ant-design/charts": "^2.4.0",
     "@ant-design/colors": "^7.2.1",
     "@codemirror/lang-css": "^6.3.0",
@@ -171,6 +170,7 @@
     "uuid": "^10.0.0"
   },
   "overrides": {
+    "adm-zip": "$adm-zip",
     "axios": "1.16.0",
     "fast-uri": "3.1.2",
     "qs": "6.15.2",
