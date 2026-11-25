@@ -72,6 +72,32 @@ describe('mercure authorization', () => {
     expect(module.getAuthorizationLifetimeMs()).toBe(900_000)
   })
 
+  it('assumes the 0.x protocol until the server reports one', async () => {
+    const module = await loadModule()
+
+    expect(module.getMercureProtocolVersion()).toBe('0.x')
+
+    await module.renewMercureAuthorization()
+
+    expect(module.getMercureProtocolVersion()).toBe('0.x')
+  })
+
+  it('learns the hub protocol from the response and keeps it when a response lacks it', async () => {
+    const module = await loadModule()
+    respondWith({ cookieLifetime: 3600, protocolVersion: '1.0' })
+
+    await module.renewMercureAuthorization()
+    expect(module.getMercureProtocolVersion()).toBe('1.0')
+
+    respondWith({ cookieLifetime: 3600, protocolVersion: 'unknown' })
+    await module.renewMercureAuthorization()
+    expect(module.getMercureProtocolVersion()).toBe('1.0')
+
+    respondWith({ cookieLifetime: 3600, protocolVersion: '0.x' })
+    await module.renewMercureAuthorization()
+    expect(module.getMercureProtocolVersion()).toBe('0.x')
+  })
+
   it('rejects when the request fails, so the caller can fall back to the cookie it has', async () => {
     const module = await loadModule()
     rejectWith(new Error('offline'))

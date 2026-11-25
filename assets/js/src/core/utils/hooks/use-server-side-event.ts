@@ -13,6 +13,7 @@ import { type topics } from '../../modules/execution-engine/topics'
 import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { buildMercureSubscriptionUrl } from '@Pimcore/modules/app/mercure/mercure-subscription-url'
 
 const ServerSideEventDomain = appConfig.mercureUrl
 
@@ -35,10 +36,7 @@ export const useServerSideEvent = ({ topics, messageHandler, openHandler }: UseS
   }
 
   function open (): void {
-    const url = new URL(ServerSideEventDomain)
-    topics.forEach(topic => {
-      url.searchParams.append('match', topic)
-    })
+    const url = buildMercureSubscriptionUrl(ServerSideEventDomain, topics)
 
     event = new EventSource(url.toString(), { withCredentials: true })
 

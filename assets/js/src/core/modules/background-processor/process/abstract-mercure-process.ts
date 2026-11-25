@@ -14,6 +14,7 @@ import {
   isAuthorizationValid,
   renewMercureAuthorization
 } from '@Pimcore/modules/app/mercure/mercure-authorization'
+import { buildMercureSubscriptionUrl } from '@Pimcore/modules/app/mercure/mercure-subscription-url'
 import { AbstractBackgroundProcess, type AbstractMessage } from './abstract-background-process'
 import { ExponentialBackoff } from '@Pimcore/utils/exponential-backoff'
 
@@ -92,15 +93,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
   }
 
   private openStream (generation: number): void {
-    const url = new URL(appConfig.mercureUrl)
-
-    this.getTopics().forEach(topic => {
-      url.searchParams.append('match', topic)
-    })
-
-    if (this.lastEventId !== undefined) {
-      url.searchParams.append('last_event_id', this.lastEventId)
-    }
+    const url = buildMercureSubscriptionUrl(appConfig.mercureUrl, this.getTopics(), this.lastEventId)
 
     this.eventSource = new EventSource(url.toString(), { withCredentials: true })
 
