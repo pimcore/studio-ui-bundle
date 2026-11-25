@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   api-client-check:
-    uses: pimcore/workflows-collection-public/.github/workflows/reusable-studio-api-client-check.yaml@main
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-studio-api-client-check.yaml@feature/so1713-api-client-check
     with:
       working-directory: ./assets
       node-version: "24"
