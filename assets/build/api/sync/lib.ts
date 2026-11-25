@@ -69,6 +69,54 @@ export const canonicalize = (value: unknown): unknown => canonicalizeValue(value
 
 const REF_PATTERN = /^#\/components\/([^/]+)\/(.+)$/
 
+const parseRef = (key: string, value: unknown): [string, string] | null => {
+  const match = key === '$ref' && typeof value === 'string' ? REF_PATTERN.exec(value) : null
+
+  return match === null ? null : [match[1], match[2]]
+}
+
+const walkNodeForRefs = (
+  node: Record<string, unknown>,
+  source: Record<string, Record<string, unknown>>,
+  kept: Record<string, Record<string, unknown>>,
+  stack: unknown[]
+): void => {
+  for (const [key, value] of Object.entries(node)) {
+    const ref = parseRef(key, value)
+    if (ref === null) {
+      stack.push(value)
+      continue
+    }
+    const [bucket, name] = ref
+    const component = source[bucket]?.[name]
+    if (component !== undefined && kept[bucket]?.[name] === undefined) {
+      kept[bucket] = kept[bucket] ?? {}
+      kept[bucket][name] = component
+      stack.push(component)
+    }
+  }
+}
+
+/** Every component transitively referenced from the given paths, in source order per bucket. */
+const referencedComponents = (
+  paths: Record<string, Record<string, unknown>>,
+  source: Record<string, Record<string, unknown>>
+): Record<string, Record<string, unknown>> => {
+  const kept: Record<string, Record<string, unknown>> = {}
+  const stack: unknown[] = [paths]
+
+  while (stack.length > 0) {
+    const current = stack.pop()
+    if (Array.isArray(current)) {
+      stack.push(...current)
+    } else if (isPlainObject(current)) {
+      walkNodeForRefs(current, source, kept, stack)
+    }
+  }
+
+  return kept
+}
+
 /**
  * Extracts one slice from the full spec: the paths matching the slice pattern
  * plus every component they transitively reference, under a slice-scoped info
@@ -83,34 +131,7 @@ export const sliceSpec = (spec: OpenApiSpec, slice: SliceRef): OpenApiSpec => {
     }
   }
 
-  const sourceComponents = spec.components ?? {}
-  const kept: Record<string, Record<string, unknown>> = {}
-  const stack: unknown[] = [paths]
-
-  while (stack.length > 0) {
-    const current = stack.pop()
-    if (Array.isArray(current)) {
-      stack.push(...current)
-      continue
-    }
-    if (!isPlainObject(current)) {
-      continue
-    }
-    for (const [key, value] of Object.entries(current)) {
-      const match = key === '$ref' && typeof value === 'string' ? REF_PATTERN.exec(value) : null
-      if (match !== null) {
-        const [, bucket, name] = match
-        const component = sourceComponents[bucket]?.[name]
-        if (component !== undefined && kept[bucket]?.[name] === undefined) {
-          kept[bucket] = kept[bucket] ?? {}
-          kept[bucket][name] = component
-          stack.push(component)
-        }
-      } else {
-        stack.push(value)
-      }
-    }
-  }
+  const kept = referencedComponents(paths, spec.components ?? {})
 
   const result: OpenApiSpec = {
     openapi: spec.openapi,
