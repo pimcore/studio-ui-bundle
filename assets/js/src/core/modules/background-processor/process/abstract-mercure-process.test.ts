@@ -50,6 +50,12 @@ class FakeEventSource {
     FakeEventSource.instances.push(this)
   }
 
+  /** Simulate the hub accepting the subscription. */
+  public open (): void {
+    this.readyState = FakeEventSource.OPEN
+    this.onopen?.()
+  }
+
   /** Simulate the hub or the network dropping the stream. */
   public fail (readyState: number): void {
     this.readyState = readyState
@@ -135,6 +141,56 @@ describe('AbstractMercureProcess authorization and reconnect', () => {
     const url = new URL(lastSource().url)
     expect(url.searchParams.getAll('match')).toEqual(['studio-backend-default'])
     expect(url.searchParams.has('topic')).toBe(false)
+  })
+
+  it('renews a fresh authorization when a subscription fails before it opens, to pick up a new protocol', async () => {
+    freshMock.mockReturnValue(true)
+    process.start()
+    await settle()
+    expect(renewMock).not.toHaveBeenCalled()
+    expect(new URL(lastSource().url).searchParams.has('topic')).toBe(true)
+
+    // The hub now speaks 1.0 and rejects `topic` with 400; the backend reports the new protocol
+    renewMock.mockImplementation(async () => { protocolMock.mockReturnValue('1.0') })
+    lastSource().fail(FakeEventSource.CLOSED)
+    expect(renewMock).not.toHaveBeenCalled()
+
+    await jest.advanceTimersByTimeAsync(FIRST_RECONNECT_DELAY)
+
+    expect(renewMock).toHaveBeenCalledTimes(1)
+    expect(new URL(lastSource().url).searchParams.getAll('match')).toEqual(['studio-backend-default'])
+  })
+
+  it('keeps renewing on each backed-off attempt until a stream opens, then stops', async () => {
+    freshMock.mockReturnValue(true)
+    process.start()
+    await settle()
+
+    lastSource().fail(FakeEventSource.CLOSED)
+    await jest.advanceTimersByTimeAsync(FIRST_RECONNECT_DELAY)
+    lastSource().fail(FakeEventSource.CLOSED)
+    await jest.advanceTimersByTimeAsync(FIRST_RECONNECT_DELAY * 2)
+    expect(renewMock).toHaveBeenCalledTimes(2)
+
+    lastSource().open()
+    lastSource().fail(FakeEventSource.CONNECTING)
+    await jest.advanceTimersByTimeAsync(FIRST_RECONNECT_DELAY)
+
+    expect(renewMock).toHaveBeenCalledTimes(2)
+    expect(FakeEventSource.instances).toHaveLength(4)
+  })
+
+  it('does not renew a fresh authorization when an opened stream drops', async () => {
+    freshMock.mockReturnValue(true)
+    process.start()
+    await settle()
+
+    lastSource().open()
+    lastSource().fail(FakeEventSource.CONNECTING)
+    await jest.advanceTimersByTimeAsync(FIRST_RECONNECT_DELAY)
+
+    expect(renewMock).not.toHaveBeenCalled()
+    expect(FakeEventSource.instances).toHaveLength(2)
   })
 
   it('renews the authorization before opening the stream', async () => {

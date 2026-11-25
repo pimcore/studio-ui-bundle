@@ -32,6 +32,13 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
    * be able to tell that it has been superseded instead of opening a second EventSource.
    */
   private connectionGeneration = 0
+  /**
+   * Set when a stream failed before it opened. The hub may have been switched to the other
+   * protocol and rejected our parameters, so the next connect renews the authorization even while
+   * the cookie is fresh, which also refreshes the protocol. Cleared once a stream opens; the
+   * backoff spaces the attempts.
+   */
+  private renewBeforeConnect = false
 
   constructor () {
     super()
@@ -71,7 +78,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
    * to connect with, the backoff retries the authorization instead.
    */
   private async connect (generation: number): Promise<void> {
-    if (!isAuthorizationFresh()) {
+    if (this.renewBeforeConnect || !isAuthorizationFresh()) {
       try {
         await renewMercureAuthorization()
       } catch {
@@ -96,8 +103,11 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
     const url = buildMercureSubscriptionUrl(appConfig.mercureUrl, this.getTopics(), this.lastEventId)
 
     this.eventSource = new EventSource(url.toString(), { withCredentials: true })
+    let opened = false
 
     this.eventSource.onopen = () => {
+      opened = true
+      this.renewBeforeConnect = false
       this.reconnectBackoff.reset()
     }
 
@@ -116,6 +126,10 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
     }
 
     this.eventSource.onerror = (error: Event) => {
+      if (!opened) {
+        this.renewBeforeConnect = true
+      }
+
       this.handleConnectionLoss(error, generation)
     }
   }
