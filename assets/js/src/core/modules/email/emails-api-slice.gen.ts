@@ -120,7 +120,7 @@ export type EmailBlocklistAddApiArg = {
 };
 export type EmailBlocklistDeleteApiResponse = unknown;
 export type EmailBlocklistDeleteApiArg = {
-    /** Email address to be deleted from blocklist */
+    /**  Email address to be deleted from blocklist */
     email?: string;
 };
 export type EmailLogGetCollectionApiResponse =

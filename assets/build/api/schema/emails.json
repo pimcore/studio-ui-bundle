@@ -103,8 +103,7 @@
                 "type": "null"
               }
             ],
-            "description": "parameter value",
-            "type": "mixed"
+            "description": "parameter value"
           }
         },
         "required": [
@@ -531,7 +530,7 @@
         "operationId": "email_blocklist_delete",
         "parameters": [
           {
-            "description": "Email address to be deleted from blocklist",
+            "description": " Email address to be deleted from blocklist",
             "in": "query",
             "name": "email",
             "required": false,
