@@ -20,8 +20,6 @@ export type MercureCreateCookieApiArg = void;
 export type MercureAuthorization = {
     /** Lifetime of the authorization cookie in seconds, renew it before it elapses */
     cookieLifetime: number;
-    /** Mercure protocol to subscribe with: "topic" and "lastEventID" for 0.x, "match" and "last_event_id" for 1.0 */
-    protocolVersion: "0.x" | "1.0";
 };
 export type Error = {
     /** Message */
