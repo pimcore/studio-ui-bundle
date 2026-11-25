@@ -319,3 +319,4 @@ export const {
     useEmailLogSearchQuery,
     useEmailSendTestMutation,
 } = injectedRtkApi;
+// hand edit that must fail the strict check
