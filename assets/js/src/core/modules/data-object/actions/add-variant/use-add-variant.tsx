@@ -146,7 +146,7 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
           return
         }
 
-        createDataObjectVariantFromListItem(classDefinition, parseInt(node.id))
+        createDataObjectVariantFromListItem(classDefinition, Number.parseInt(node.id))
       }
     }
   }
