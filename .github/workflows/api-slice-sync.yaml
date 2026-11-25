@@ -1,0 +1,44 @@
+name: "Studio API Slice Sync"
+
+# On-demand API slice sync (pimcore/service-operations#1713): pick a branch,
+# optionally name the slices, run — the workflow exports the backend spec,
+# regenerates the snapshots and clients, and pushes the result as a commit to
+# that branch. The branch is an input, so feature branches do not need to carry
+# this workflow. Typical uses: pull a freshly merged backend endpoint into a
+# feature branch, or materialise the snapshot and client for a slice that was
+# just added to assets/build/api/slices.ts.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to sync — it receives the commit"
+        required: true
+        type: string
+      slices:
+        description: "Space-separated slice names; empty syncs every drifted slice"
+        required: false
+        default: ""
+        type: string
+      backend-branch:
+        description: "studio-backend-bundle branch to export the spec from"
+        required: false
+        default: "2026.x"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  slice-sync:
+    permissions:
+      contents: write
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-studio-api-slice-sync.yaml@main
+    with:
+      ui-ref: ${{ inputs.branch }}
+      backend-branch: ${{ inputs.backend-branch }}
+      slices: ${{ inputs.slices }}
+      working-directory: ./assets
+      node-version: "24"
+    secrets:
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
