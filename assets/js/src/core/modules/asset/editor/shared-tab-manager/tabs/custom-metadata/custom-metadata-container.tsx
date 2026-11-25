@@ -20,6 +20,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
   useLazyMetadataAssetGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
+import { useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
@@ -54,8 +55,9 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   const { asset, addCustomMetadata, customMetadata } = useAssetDraft(id)
   const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataAssetGetCollectionQuery()
 
-  // The table hydrates the draft with the persisted metadata; adding before that would hide the persisted rows.
-  const isDraftHydrated = asset?.changes.customMetadata !== undefined
+  // The table hydrates the draft from this (shared) query; adding before that would hide the persisted rows.
+  const { isSuccess: isPersistedMetadataLoaded } = useAssetCustomMetadataGetByIdQuery({ id })
+  const isDraftHydrated = isPersistedMetadataLoaded || asset?.changes.customMetadata !== undefined
 
   const {
     showModal: showDuplicateEntryModal,
