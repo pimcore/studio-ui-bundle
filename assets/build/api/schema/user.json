@@ -2046,7 +2046,7 @@
                 }
               }
             },
-            "description": "List of users with the given permission"
+            "description": " user_list_with_permission_success_response"
           },
           "default": {
             "content": {

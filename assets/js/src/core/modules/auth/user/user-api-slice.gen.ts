@@ -273,7 +273,7 @@ export type UserGetCollectionApiResponse = /** status 200 List of users */ {
     items: SimpleUser[];
 };
 export type UserGetCollectionApiArg = void;
-export type UserListWithPermissionApiResponse = /** status 200 List of users with the given permission */ {
+export type UserListWithPermissionApiResponse = /** status 200  user_list_with_permission_success_response */ {
     totalItems: number;
     items: SimpleUser[];
 };
