@@ -129,7 +129,7 @@ export type EmailLogGetCollectionApiResponse =
         items: EmailLog[];
     };
 export type EmailLogGetCollectionApiArg = {
-    /** Page number */
+    /** Page number (1-based) */
     page: number;
     /** Number of items per page */
     pageSize: number;

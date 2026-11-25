@@ -574,7 +574,7 @@
         "operationId": "email_log_get_collection",
         "parameters": [
           {
-            "description": "Page number",
+            "description": "Page number (1-based)",
             "in": "query",
             "name": "page",
             "required": true,
