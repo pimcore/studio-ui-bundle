@@ -1669,10 +1669,7 @@
           },
           "errorKey": {
             "description": "Error key, not present when the request failed before the element was validated",
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "validationErrors": {
             "description": "Individual validation errors, present when the failure came from the element validation",
