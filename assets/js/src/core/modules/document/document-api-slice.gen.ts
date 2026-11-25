@@ -787,7 +787,7 @@ export type ValidationFailedError = {
     /** Failure message in English. Untrusted, may contain markup: escape before rendering */
     message: string;
     /** Error key, not present when the request failed before the element was validated */
-    errorKey?: string | null;
+    errorKey?: string;
     /** Individual validation errors, present when the failure came from the element validation */
     validationErrors?: ValidationError[];
 };
