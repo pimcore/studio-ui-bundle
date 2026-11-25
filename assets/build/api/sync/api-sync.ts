@@ -14,11 +14,12 @@
 /**
  * Per-slice API client sync tool.
  *
- *   npm run api:sync -- <slice…>                       sync the named slices (default: all) from the
- *                                                      source schema: write the snapshot and regenerate
- *                                                      the slice's client
- *   npm run api:sync -- --schema <file|url> <slice…>   use another schema source (default:
- *                                                      ./docs.jsonopenapi.json, relative to build/api)
+ *   npm run api:sync -- --schema <file|url> <slice…>   sync the named slices (default: all) from the
+ *                                                      given source schema: write the snapshot and
+ *                                                      regenerate the slice's client. The schema comes
+ *                                                      from the backend export — locally via
+ *                                                      pimcore:studio-api:generate-config-json, in CI
+ *                                                      via the "Studio API Slice Sync" workflow.
  *   npm run api:check                                  committed .gen.ts == codegen(snapshot)?
  *                                                      exit 1 on drift
  *   npm run api:sync -- --check --schema <src> <slice…>  committed snapshot == source schema?
@@ -39,8 +40,6 @@ import { generateEndpoints, parseConfig } from '@rtk-query/codegen-openapi'
 import config from '../openapi-config'
 import { apiSlices, schemaFileFor, type ApiSlice } from '../slices'
 import { affectedSlices, coverageReport, snapshotContent, type OpenApiSpec } from './lib'
-
-const DEFAULT_SCHEMA = './docs.jsonopenapi.json'
 
 interface CliOptions {
   slices: ApiSlice[]
@@ -284,7 +283,9 @@ const main = async (): Promise<void> => {
   if (options.check && options.schema === null) {
     results = await checkClientsAgainstSnapshots(options)
   } else {
-    const spec = await loadSchema(options.schema ?? DEFAULT_SCHEMA)
+    const schemaSource = options.schema ??
+      fail('Syncing needs a source schema: pass --schema <file|url> (export it with pimcore:studio-api:generate-config-json, or use the "Studio API Slice Sync" workflow)', 2)
+    const spec = await loadSchema(schemaSource)
     reportCoverage(spec, isFullRun)
     results = options.check
       ? checkSnapshotsAgainstSchema(spec, options)

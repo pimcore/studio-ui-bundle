@@ -151,17 +151,15 @@ export const snapshotContent = (spec: OpenApiSpec, slice: SliceRef): string =>
 
 /**
  * Files whose change invalidates every slice: the generator configuration,
- * the sync tool itself, the dependency lockfile and the aggregated source
- * schema (while it is still committed). Matched as path suffixes so the same
- * rules work for the assets/ and the assets/studio layouts, and for absolute
- * paths a CI checkout produces. Over-matching (e.g. another package.json
- * somewhere in the repository) errs towards checking every slice, which is
- * safe.
+ * the sync tool itself and the dependency lockfile. Matched as path suffixes
+ * so the same rules work for the assets/ and the assets/studio layouts, and
+ * for absolute paths a CI checkout produces. Over-matching (e.g. another
+ * package.json somewhere in the repository) errs towards checking every
+ * slice, which is safe.
  */
 const GLOBAL_TRIGGER_SUFFIXES = [
   'build/api/openapi-config.ts',
   'build/api/slices.ts',
-  'build/api/docs.jsonopenapi.json',
   'package.json',
   'package-lock.json'
 ]

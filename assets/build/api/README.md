@@ -33,10 +33,12 @@ npm run api:sync -- --affected-by changed-files.txt # which slices does a change
 Useful flags: `--diff` prints a unified diff per drifted slice, `--fix` (with
 `api:check`) regenerates a drifted client from its snapshot.
 
-The default source schema is `./docs.jsonopenapi.json`, the aggregated document
-of a running instance. It will be replaced by a scoped, translated export from
-`studio-backend-bundle` (`pimcore:studio-api:generate-config-json`) — see
-[service-operations#1713](https://github.com/pimcore/service-operations/issues/1713).
+The source schema is the scoped, translated export from
+`studio-backend-bundle`: run `bin/console pimcore:studio-api:generate-config-json`
+there and pass the file via `--schema`, or skip the local commands entirely and
+dispatch the **Studio API Slice Sync** workflow on your branch — it exports the
+backend spec, syncs the slices and pushes the commit for you (see
+[service-operations#1713](https://github.com/pimcore/service-operations/issues/1713)).
 
 ## Rules
 

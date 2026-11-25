@@ -162,6 +162,10 @@ describe('affectedSlices', () => {
     expect(affectedSlices(['/home/runner/work/repo/repo/assets/build/api/schema/tags.json'], slices)).toEqual(['tags'])
   })
 
+  it('does not treat the removed aggregated schema as a global trigger', () => {
+    expect(affectedSlices(['assets/build/api/docs.jsonopenapi.json'], slices)).toEqual([])
+  })
+
   it('works for bundles with the assets/studio layout', () => {
     expect(affectedSlices(['assets/studio/build/api/schema/tags.json'], slices)).toEqual(['tags'])
     expect(affectedSlices(['assets/studio/js/src/core/modules/email/emails-api-slice.gen.ts'], slices)).toEqual(['emails'])
