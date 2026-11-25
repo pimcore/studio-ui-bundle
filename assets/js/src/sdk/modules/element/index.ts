@@ -345,3 +345,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
 
 export type { AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+
+// A bundle building its own grid source field opens the same classification store picker Studio's advanced column uses
+export { ClassificationStoreFieldPickerProvider, useClassificationStoreFieldPicker } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
+export type { ClassificationStoreFieldValue } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
