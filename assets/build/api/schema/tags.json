@@ -753,20 +753,6 @@
           "Tags for Element"
         ]
       }
-    },
-    "/pimcore-studio/api/tags/fake-endpoint": {
-      "get": {
-        "operationId": "tag_fake_endpoint",
-        "summary": "Fake endpoint that the backend does not have",
-        "tags": [
-          "Tags"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   }
 }

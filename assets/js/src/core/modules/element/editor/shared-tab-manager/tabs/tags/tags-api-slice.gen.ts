@@ -74,10 +74,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
-            tagFakeEndpoint: build.query<TagFakeEndpointApiResponse, TagFakeEndpointApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/tags/fake-endpoint` }),
-                providesTags: ["Tags"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -162,8 +158,6 @@ export type TagUnassignFromElementApiArg = {
     /** TagId of the tag */
     tagId: number;
 };
-export type TagFakeEndpointApiResponse = unknown;
-export type TagFakeEndpointApiArg = void;
 export type Tag = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -216,5 +210,4 @@ export const {
     useTagBatchOperationToElementsByTypeAndIdMutation,
     useTagGetCollectionForElementByTypeAndIdQuery,
     useTagUnassignFromElementMutation,
-    useTagFakeEndpointQuery,
 } = injectedRtkApi;
