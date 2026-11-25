@@ -1016,9 +1016,9 @@ export type ClassificationStoreConfigurationKeyGroupRelationCreate = {
     /** ID of the group */
     groupId: number;
     /** Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation */
-    sorter?: number | null;
+    sorter?: number;
     /** Whether the key is mandatory here. Omitting it keeps the stored flag, false if new */
-    mandatory?: boolean | null;
+    mandatory?: boolean;
     /** Partial field definition overriding the key's own for this assignment */
     definitionOverride?: object | null;
     /** Sub group of the store this assignment belongs to */
@@ -1211,6 +1211,8 @@ export type ClassificationStoreKeyGroupRelation = {
     filterable?: boolean | null;
     /** Why the key cannot be filtered: indexExcluded, typeUnsupported or resolutionFailed; null otherwise */
     filterUnavailableReason?: string | null;
+    /** Resolved label of the key in the label language, falling back to its name; null where the key configuration is gone */
+    keyTitle?: string | null;
 };
 export type ClassificationStoreVariantLayout = {
     /** Name a value addresses the variant by */

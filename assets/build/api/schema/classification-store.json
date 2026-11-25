@@ -714,17 +714,11 @@
           },
           "sorter": {
             "description": "Sort order of the relation. Omitting it keeps the stored one, 0 on a new relation",
-            "type": [
-              "integer",
-              "null"
-            ]
+            "type": "integer"
           },
           "mandatory": {
             "description": "Whether the key is mandatory here. Omitting it keeps the stored flag, false if new",
-            "type": [
-              "boolean",
-              "null"
-            ]
+            "type": "boolean"
           },
           "definitionOverride": {
             "description": "Partial field definition overriding the key's own for this assignment",
@@ -1667,6 +1661,13 @@
           },
           "filterUnavailableReason": {
             "description": "Why the key cannot be filtered: indexExcluded, typeUnsupported or resolutionFailed; null otherwise",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyTitle": {
+            "description": "Resolved label of the key in the label language, falling back to its name; null where the key configuration is gone",
             "type": [
               "string",
               "null"
