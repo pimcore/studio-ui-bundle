@@ -1211,6 +1211,8 @@ export type ClassificationStoreKeyGroupRelation = {
     filterable?: boolean | null;
     /** Why the key cannot be filtered: indexExcluded, typeUnsupported or resolutionFailed; null otherwise */
     filterUnavailableReason?: string | null;
+    /** Resolved label of the key in the label language, falling back to its name; null where the key configuration is gone */
+    keyTitle?: string | null;
 };
 export type ClassificationStoreVariantLayout = {
     /** Name a value addresses the variant by */
