@@ -38,6 +38,7 @@ test('AC2: fails on a new Redux Toolkit deep import that the baseline does not l
   const result = check('known', 'rtk');
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stderr, /^known\/new\.d\.ts:1 @reduxjs\/toolkit\/dist\/query\/react /m);
+  assert.match(result.stderr, /^known\/new\.d\.ts:4 @reduxjs\/toolkit\/dist\/query\/react /m);
   assert.doesNotMatch(result.stderr, /known\.d\.ts/);
 });
 
@@ -47,10 +48,17 @@ test('AC3: passes on exported subpaths, relative paths and packages without expo
   assert.match(result.stdout, /4 <pkg>\/dist\/\.\.\. import\(s\) checked/);
 });
 
-test('AC3: passes on the known reactHooksModuleName deep import from the baseline', () => {
-  const result = spawnSync(process.execPath, [
-    SCRIPT, 'known', '--node-modules', path.join(FIXTURES, 'rtk')
-  ], { cwd: FIXTURES, encoding: 'utf8' });
+test('AC3: passes on the known old deep imports the baseline lists, in both forms', () => {
+  const result = check('known', 'rtk');
   assert.match(result.stderr, /known\/new\.d\.ts/);
   assert.doesNotMatch(result.stderr, /known\/known\.d\.ts/);
+});
+
+test('AC2: without the baseline the known old deep imports fail too', () => {
+  const result = spawnSync(process.execPath, [
+    SCRIPT, 'known', '--node-modules', path.join(FIXTURES, 'rtk'), '--baseline', path.join(FIXTURES, 'empty-baseline.json')
+  ], { cwd: FIXTURES, encoding: 'utf8' });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stderr, /^known\/known\.d\.ts:1 @reduxjs\/toolkit\/dist\/query\/react /m);
+  assert.match(result.stderr, /^known\/known\.d\.ts:2 @reduxjs\/toolkit\/dist\/query\/react /m);
 });

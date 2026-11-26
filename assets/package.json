@@ -19,7 +19,7 @@
     "build-sdk": "rsbuild build --config rsbuild.sdk.config.ts",
     "build-app": "npm run build-sdk && npm run build",
     "ci-build": "npm run build-app && npm run build-rsbuild-plugins && npm run package-build",
-    "ci-prepublish": "npm run generate-types && npm run build-rsbuild-plugins",
+    "ci-prepublish": "npm run generate-types && node ./bundler/check-type-imports.cjs dist/build/types && npm run build-rsbuild-plugins",
     "package-build": "node ./bundler/package-build.cjs",
     "build-rsbuild-plugins": "rsbuild build --config rsbuild.plugins.config.ts",
     "build-storybook": "storybook build --output-dir ./storybook-static",
@@ -31,7 +31,7 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "check-types": "tsc --noEmit",
     "check-types-watch": "tsc --noEmit --watch",
-    "generate-types": "tsc && tsc-alias",
+    "generate-types": "tsc && tsc-alias && node ./bundler/fix-type-imports.cjs",
     "generate-icons": "npx ts-node -O '{\"module\": \"CommonJS\", \"esModuleInterop\": true}' -r tsconfig-paths/register build/generate-icon-index.ts"
   },
   "exports": {
