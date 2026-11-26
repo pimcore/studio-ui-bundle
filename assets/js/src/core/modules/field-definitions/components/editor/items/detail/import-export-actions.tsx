@@ -11,7 +11,7 @@
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useRefresh } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { type ImportExportConfig, useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { ButtonGroup, Dropdown, type DropdownMenuProps, Icon, IconTextButton, Tooltip, useMessage } from '@sdk/components'
+import { ButtonGroup, Dropdown, type DropdownMenuProps, Icon, IconTextButton, useMessage } from '@sdk/components'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { downloadFile } from '@Pimcore/modules/app/utils/download'
 import { parseContentDispositionFilename } from '@Pimcore/modules/app/utils/content-disposition'
@@ -65,8 +65,6 @@ export interface ImportExportExtraAction {
   icon: string
   label: string
   inFlight?: boolean
-  disabled?: boolean
-  disabledReason?: string
   onClick: () => void
 }
 
@@ -81,19 +79,7 @@ export interface ImportExportActionsViewProps {
   extraActions?: ImportExportExtraAction[]
   /** asked with the chosen file before the import is posted; answering false calls it off */
   confirmImport?: (files: File[]) => Promise<boolean>
-  /** keeps the import listed but unavailable, e.g. for a configuration that cannot be saved */
-  importDisabled?: boolean
-  /** shown as a tooltip on the import, e.g. why it is unavailable */
-  importDisabledReason?: string
 }
-
-const withDisabledReason = <T extends React.ReactNode>(content: T, reason: string | undefined): T | React.JSX.Element => isNil(reason)
-  ? content
-  : (
-    <Tooltip title={ reason }>
-      <span>{content}</span>
-    </Tooltip>
-    )
 
 /**
  * The export and import actions themselves, free of the field-definitions Editor contexts so
@@ -105,9 +91,7 @@ export const ImportExportActionsView = ({
   onImported,
   inline = false,
   extraActions = [],
-  confirmImport,
-  importDisabled = false,
-  importDisabledReason
+  confirmImport
 }: ImportExportActionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const messageApi = useMessage()
@@ -181,18 +165,16 @@ export const ImportExportActionsView = ({
       icon: 'upload-import',
       label: t(IMPORT_ACTION),
       inFlight: false,
-      disabled: importDisabled,
-      disabledReason: importDisabledReason,
       onClick: () => { setIsImportModalOpen(true) }
     },
     ...extraActions
   ]
 
-  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, label, inFlight, disabled, disabledReason, onClick }) => ({
+  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, label, inFlight, onClick }) => ({
     key,
-    disabled: inFlight === true || disabled === true,
+    disabled: inFlight === true,
     icon: <Icon value={ icon } />,
-    label: withDisabledReason(label, disabledReason),
+    label,
     onClick
   }))
 
@@ -201,9 +183,9 @@ export const ImportExportActionsView = ({
       {inline
         ? (
           <ButtonGroup
-            items={ actions.map(({ key, icon, label, inFlight, disabled, disabledReason, onClick }) => withDisabledReason(
+            items={ actions.map(({ key, icon, label, inFlight, onClick }) => (
               <IconTextButton
-                disabled={ inFlight === true || disabled === true }
+                disabled={ inFlight === true }
                 icon={ { value: icon } }
                 key={ key }
                 loading={ inFlight === true }
@@ -211,8 +193,7 @@ export const ImportExportActionsView = ({
                 type="link"
               >
                 {label}
-              </IconTextButton>,
-              disabledReason
+              </IconTextButton>
             )) }
           />
           )

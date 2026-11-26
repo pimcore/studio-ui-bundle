@@ -14,12 +14,9 @@ import { api } from '@Pimcore/modules/class-definition/class-definition-slice-en
 import { ImportExportActionsView } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
 import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 export interface SelectOptionImportExportActionsProps {
   id: string
-  isWriteable: boolean
-  disabled?: boolean
   onImported: () => void
 }
 
@@ -34,16 +31,10 @@ const selectOptionImportExportConfig: ImportExportConfig = {
   getImportInvalidation: () => api.util.invalidateTags(invalidatingTags.SELECT_OPTION_COLLECTION())
 }
 
-export const SelectOptionImportExportActions = (props: SelectOptionImportExportActionsProps): React.JSX.Element => {
-  const { t } = useTranslation()
-
-  return (
-    <ImportExportActionsView
-      config={ selectOptionImportExportConfig }
-      importDisabled={ props.disabled === true || !props.isWriteable }
-      importDisabledReason={ props.isWriteable ? undefined : t('config_not_writeable') }
-      itemId={ props.id }
-      onImported={ props.onImported }
-    />
-  )
-}
+export const SelectOptionImportExportActions = ({ id, onImported }: SelectOptionImportExportActionsProps): React.JSX.Element => (
+  <ImportExportActionsView
+    config={ selectOptionImportExportConfig }
+    itemId={ id }
+    onImported={ onImported }
+  />
+)

@@ -93,9 +93,7 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
             />
 
             <SelectOptionImportExportActions
-              disabled={ isLoading }
               id={ selectOption.id }
-              isWriteable={ isWriteable }
               onImported={ () => { void reload() } }
             />
 

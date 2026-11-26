@@ -75,9 +75,8 @@ jest.mock('@sdk/components', () => ({
   Dropdown: ({ children, menu }: any) => (
     <div>
       {children}
-      {menu.items.map(({ key, label, disabled, onClick }: any) => (
+      {menu.items.map(({ key, label, onClick }: any) => (
         <button
-          disabled={ disabled }
           key={ key }
           onClick={ onClick }
         >
@@ -88,7 +87,6 @@ jest.mock('@sdk/components', () => ({
   ),
   Icon: ({ value }: any) => <i>{value}</i>,
   IconTextButton: ({ children, onClick }: any) => <button onClick={ onClick }>{children}</button>,
-  Tooltip: ({ children, title }: any) => <span data-tooltip={ title }>{children}</span>,
   useMessage: () => ({ success })
 }))
 
@@ -96,15 +94,13 @@ jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) =>
 
 const { SelectOptionImportExportActions } = jest.requireActual('./select-option-import-export-actions')
 
-const renderActions = (props: Record<string, unknown> = {}): { onImported: jest.Mock } => {
+const renderActions = (): { onImported: jest.Mock } => {
   const onImported = jest.fn()
 
   render(
     <SelectOptionImportExportActions
       id={ SELECT_OPTION_ID }
-      isWriteable
       onImported={ onImported }
-      { ...props }
     />
   )
 
@@ -145,21 +141,6 @@ describe('SelectOptionImportExportActions', () => {
 
     expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-action', `${SELECT_OPTION_PATH}/import`)
     expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-title', 'select-option.import.title')
-  })
-
-  it('keeps the import unavailable where saving is not allowed, says why, and leaves the export', () => {
-    renderActions({ isWriteable: false })
-
-    expect(screen.getByText(IMPORT).closest('button')).toBeDisabled()
-    expect(screen.getByText(IMPORT).closest('[data-tooltip]')).toHaveAttribute('data-tooltip', 'config_not_writeable')
-    expect(screen.getByText(EXPORT)).toBeEnabled()
-  })
-
-  it('keeps the import unavailable while the editor is busy, without the not writeable reason', () => {
-    renderActions({ disabled: true })
-
-    expect(screen.getByText(IMPORT)).toBeDisabled()
-    expect(screen.getByText(IMPORT).closest('[data-tooltip]')).toBeNull()
   })
 
   it('refreshes the tree and the editor after an import', () => {
