@@ -44,6 +44,11 @@ export interface IUsersRolesDropdownProps {
   renderAsPopup?: boolean
   onClose?: () => void
   /**
+   * Called after `onChange` when the selection is emptied with the Clear button, so that a
+   * caller which keeps entries the dropdown does not offer can drop those too.
+   */
+  onClear?: () => void
+  /**
    * Whether the signed-in user is offered as a selectable option.
    *
    * Defaults to false, because the original use case is sharing an entity with
@@ -63,6 +68,7 @@ export const UsersRolesDropdown = ({
   placement = 'bottom',
   renderAsPopup = false,
   onClose,
+  onClear,
   includeCurrentUser = false
 }: IUsersRolesDropdownProps): React.JSX.Element => {
   const userData = useUser()
@@ -167,7 +173,10 @@ export const UsersRolesDropdown = ({
     applyChanges(users, roles)
   }
 
-  const handleClear = (): void => { applyChanges([], []) }
+  const handleClear = (): void => {
+    applyChanges([], [])
+    onClear?.()
+  }
 
   const tabItems: ITabsProps['items'] = [
     {
