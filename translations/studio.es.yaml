@@ -34,9 +34,9 @@ error.error_recycle_bin_restore: No se puede restaurar el elemento de la papeler
 error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
 error.error_login_token_as_admin_non_admin_user: Solo los usuarios administradores pueden generar un enlace de inicio de sesión para un usuario administrador
 error.error_login_token_no_user_password: No se puede generar un enlace de inicio de sesión para este usuario porque no tiene contraseña establecida
-error.error_invitation_as_admin_non_admin_user: Only admin users can send an invitation to an admin user
-error.error_invitation_no_email: An invitation cannot be sent because the user has no valid email address
-error.error_invitation_user_inactive: An invitation cannot be sent to an inactive user
+error.error_invitation_as_admin_non_admin_user: Solo los usuarios administradores pueden enviar una invitación a un usuario administrador
+error.error_invitation_no_email: No se puede enviar una invitación porque el usuario no tiene una dirección de correo electrónico válida
+error.error_invitation_user_inactive: No se puede enviar una invitación a un usuario inactivo
 error.syntax_error: Error de sintaxis
 validation.mandatory: "{{field}} es obligatorio"
 validation.regex_mismatch: "{{field}} no coincide con el patrón requerido {{regex}}"
@@ -1736,11 +1736,11 @@ user-management.add-folder: Nueva carpeta
 user-management.add-folder.label: Introduzca el nombre de la nueva carpeta
 user-management.add-user: Nuevo usuario
 user-management.add-user.label: Introduzca el nombre del nuevo usuario
-user-management.send-invitation: Send invitation link
-user-management.send-invitation.success: "Invitation sent to {{email}}"
-user-management.send-invitation.no-email: The user has no email address
-user-management.send-invitation.inactive: The user is inactive
-user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
+user-management.send-invitation: Enviar enlace de invitación
+user-management.send-invitation.success: "Invitación enviada a {{email}}"
+user-management.send-invitation.no-email: El usuario no tiene dirección de correo electrónico
+user-management.send-invitation.inactive: El usuario está inactivo
+user-management.send-invitation.unsaved-changes: Guarde el usuario antes de enviar una invitación
 user-management.last-login: Último inicio de sesión
 user-management.search.id: ID
 roles.tree.all: Todos los roles

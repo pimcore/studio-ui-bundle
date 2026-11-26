@@ -34,9 +34,9 @@ error.error_recycle_bin_restore: Nie można przywrócić elementu z kosza
 error.error_recycle_bin_restore_missing_parent: Nie można przywrócić elementu z kosza, brak elementu nadrzędnego
 error.error_login_token_as_admin_non_admin_user: Tylko administratorzy mogą wygenerować link logowania dla użytkownika administracyjnego
 error.error_login_token_no_user_password: Nie można wygenerować linku logowania dla tego użytkownika, ponieważ nie ustawiono hasła
-error.error_invitation_as_admin_non_admin_user: Only admin users can send an invitation to an admin user
-error.error_invitation_no_email: An invitation cannot be sent because the user has no valid email address
-error.error_invitation_user_inactive: An invitation cannot be sent to an inactive user
+error.error_invitation_as_admin_non_admin_user: Tylko administratorzy mogą wysłać zaproszenie do użytkownika administracyjnego
+error.error_invitation_no_email: Nie można wysłać zaproszenia, ponieważ użytkownik nie ma prawidłowego adresu e-mail
+error.error_invitation_user_inactive: Nie można wysłać zaproszenia do nieaktywnego użytkownika
 error.syntax_error: Błąd składni
 validation.mandatory: "{{field}} jest wymagane"
 validation.regex_mismatch: "{{field}} nie pasuje do wymaganego wzorca {{regex}}"
@@ -1736,11 +1736,11 @@ user-management.add-folder: Nowy folder
 user-management.add-folder.label: Wprowadź nazwę nowego folderu
 user-management.add-user: Nowy użytkownik
 user-management.add-user.label: Wprowadź nazwę nowego użytkownika
-user-management.send-invitation: Send invitation link
-user-management.send-invitation.success: "Invitation sent to {{email}}"
-user-management.send-invitation.no-email: The user has no email address
-user-management.send-invitation.inactive: The user is inactive
-user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
+user-management.send-invitation: Wyślij link z zaproszeniem
+user-management.send-invitation.success: "Wysłano zaproszenie do {{email}}"
+user-management.send-invitation.no-email: Użytkownik nie ma adresu e-mail
+user-management.send-invitation.inactive: Użytkownik jest nieaktywny
+user-management.send-invitation.unsaved-changes: Zapisz użytkownika przed wysłaniem zaproszenia
 user-management.last-login: Ostatnie logowanie
 user-management.search.id: ID
 roles.tree.all: Wszystkie role
