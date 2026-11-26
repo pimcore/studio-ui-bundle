@@ -112,6 +112,10 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   // The edit form shows the label after the control on one row (as for a checkbox) instead of above it.
   labelAfterControl: boolean = false
 
+  // The edit form renders the field addon slots (componentConfig.dataObject.editor.field) for a field
+  // of this type. Containers turn it off: their own fields get the addons, not the container.
+  rendersFieldAddons: boolean = true
+
   gridCellEditMode: EditMode = 'default'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'M',

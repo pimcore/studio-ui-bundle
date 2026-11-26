@@ -30,6 +30,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstract {
   id: string = 'objectbricks'
   isCollectionType: boolean = false
+  rendersFieldAddons: boolean = false
 
   getObjectDataComponent (props: ObjectBrickProps): React.ReactElement<ObjectBrickProps> {
     return <ObjectBrick { ...props } />

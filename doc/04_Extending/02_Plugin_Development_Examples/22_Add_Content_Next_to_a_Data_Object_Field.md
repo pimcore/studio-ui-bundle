@@ -31,6 +31,8 @@ Every data field of the edit form renders three component registry slots:
 Studio takes care of the layout and keeps the field bound to the form, so your component only renders
 its own content. The slots are rendered for the fields inside object bricks, field collections, blocks,
 classification stores and localized fields too, but not for those containers themselves.
+A custom data type that is a container of other fields opts out the same way by setting
+`rendersFieldAddons = false` on its `DynamicTypeObjectDataAbstract` subclass.
 
 A slot is only rendered for a field when at least one component is registered to it, so a field nobody
 extends renders exactly as before.

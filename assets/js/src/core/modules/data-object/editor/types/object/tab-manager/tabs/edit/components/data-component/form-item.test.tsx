@@ -109,8 +109,9 @@ jest.mock('@Pimcore/components/tooltip/tooltip', () => ({
   Tooltip: ({ title, children }: { title: string, children?: React.ReactNode }) => <span data-tooltip={ title }>{ children }</span>
 }))
 
-const objectDataType = (labelAfterControl: boolean): DynamicTypeObjectDataAbstract => ({
+const objectDataType = (labelAfterControl: boolean, rendersFieldAddons = true): DynamicTypeObjectDataAbstract => ({
   labelAfterControl,
+  rendersFieldAddons,
   inheritedMaskOverlay: false,
   getObjectDataFormItemProps: (props: AbstractObjectDataDefinition) => ({
     className: 'w-full',
@@ -132,13 +133,13 @@ const objectDataType = (labelAfterControl: boolean): DynamicTypeObjectDataAbstra
   getEmptyValue: () => null
 }) as unknown as DynamicTypeObjectDataAbstract
 
-const renderItem = (labelAfterControl: boolean, title: React.ReactNode = 'Active', fieldPath?: Array<string | number>): HTMLElement => {
+const renderItem = (labelAfterControl: boolean, title: React.ReactNode = 'Active', fieldPath?: Array<string | number>, rendersFieldAddons = true): HTMLElement => {
   render(
     <DataComponentFormItem
       _props={ { name: 'active', title } as unknown as AbstractObjectDataDefinition }
       fieldPath={ fieldPath }
       formFieldName={ ['active'] }
-      objectDataType={ objectDataType(labelAfterControl) }
+      objectDataType={ objectDataType(labelAfterControl, rendersFieldAddons) }
       technicalName="active"
     />
   )
@@ -221,6 +222,13 @@ describe('DataComponentFormItem', () => {
     // e.g. a wrapped field's delegate in the version detail view, which mounts it outside a form
     it('asks for no addons for a field rendered without a path', () => {
       renderItem(false)
+
+      expect(fieldAddonCalls[0][1]).toBeUndefined()
+    })
+
+    // containers such as object bricks or blocks: their fields get the addons, not the container
+    it('asks for no addons for a type that renders none', () => {
+      renderItem(false, 'Attributes', ['attributes'], false)
 
       expect(fieldAddonCalls[0][1]).toBeUndefined()
     })

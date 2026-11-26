@@ -29,6 +29,7 @@ import { type FormItemProps } from 'antd'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
+  rendersFieldAddons: boolean = false
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'XL',

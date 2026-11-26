@@ -44,7 +44,7 @@ interface DataComponentFormItemProps {
 
 const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDataType, _props, formFieldName, technicalName, fieldPath }: DataComponentFormItemProps) => {
   const formItemProps = objectDataType.getObjectDataFormItemProps(_props)
-  const addons = useFieldAddons(_props, fieldPath)
+  const addons = useFieldAddons(_props, objectDataType.rendersFieldAddons ? fieldPath : undefined)
   const objectDataComponent = withFieldAddons(objectDataType.getObjectDataComponent(_props), addons.after, addons.below)
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
   const { styles } = useStyles()
