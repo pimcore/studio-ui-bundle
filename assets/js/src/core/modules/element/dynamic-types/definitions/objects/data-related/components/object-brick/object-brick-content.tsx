@@ -27,7 +27,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
   const { values, operations } = useKeyedList()
 
   const modal = useFormModal()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const objectBrick = useObjectBrick()
 
   const maxItemsCount = props?.maxItems ?? 0
@@ -90,5 +90,5 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
         onClose={ !isNoteditable ? onClose : undefined }
       />
     </BaseView>
-  ), [values, objectBrick])
+  ), [values, objectBrick, t, i18n.language])
 }

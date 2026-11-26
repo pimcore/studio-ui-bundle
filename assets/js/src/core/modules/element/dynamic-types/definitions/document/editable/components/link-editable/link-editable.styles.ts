@@ -13,25 +13,20 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     documentLink: css`
-      position: relative;
       display: inline-flex !important;
-      align-items: flex-start;
+      align-items: center;
+      gap: ${token.marginXXS}px;
+      max-width: 100%;
+      vertical-align: middle;
     `,
     documentLinkPreview: css`
-      margin-right: 30px; /* Reserve space for buttons */
+      min-width: 0;
+      overflow-wrap: anywhere;
     `,
     documentLinkActionsBase: css`
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
       display: flex;
+      flex-shrink: 0;
       gap: 2px;
-    `,
-    documentLinkActions: css`
-      right: -38px;
-    `,
-    documentLinkActionsSingle: css`
-      right: -4px;
     `
   }
 })

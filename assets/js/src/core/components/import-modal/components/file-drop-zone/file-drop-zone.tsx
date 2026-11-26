@@ -18,7 +18,7 @@ import { useStyle } from './file-drop-zone.styles'
 
 const { Dragger } = Upload
 
-interface FileDropZoneProps {
+export interface FileDropZoneProps {
   uploadProps: UploadProps
   dragDropLabel?: string
 }

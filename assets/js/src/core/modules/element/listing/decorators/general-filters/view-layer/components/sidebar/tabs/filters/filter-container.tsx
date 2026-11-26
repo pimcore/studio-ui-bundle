@@ -23,7 +23,7 @@ const DraftSync = ({ children }: { children: React.ReactNode }): React.JSX.Eleme
   return <>{children}</>
 }
 
-export const FilterContainer = (): React.JSX.Element => {
+export const FilterContainer = ({ readOnly = false }: { readOnly?: boolean }): React.JSX.Element => {
   const { values } = useAppliedFilters()
 
   return (
@@ -33,7 +33,7 @@ export const FilterContainer = (): React.JSX.Element => {
     >
       <DraftSync>
         <ClassificationStoreModalProvider>
-          <FilterContainerInner />
+          <FilterContainerInner readOnly={ readOnly } />
         </ClassificationStoreModalProvider>
       </DraftSync>
     </DraftFiltersProvider>

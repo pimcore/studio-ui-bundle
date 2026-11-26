@@ -6,6 +6,13 @@ common.clear: Clear
 cache.clear-cache-success: Cache successfully cleared
 cache.clear-full-page-cache-success: Full page cache successfully cleared
 cache.clear-temporary-files-success: Temporary files successfully cleared
+index-sync.confirmation.title: Synchronize search index
+index-sync.confirmation.text: All data objects, assets and documents are queued for re-indexing in the background. Existing indices are updated in place; an index whose changed mapping cannot be applied to its documents (for example after a field type change) is recreated and refilled. Depending on the amount of data this can take a while and put load on the search server. Do you want to continue?
+index-sync.confirmation.ok: Synchronize
+index-sync.job.title: Synchronizing search index
+index-sync.start-failed: Failed to start the search index synchronization
+deep-link.unknown-link: No handler is registered for this link
+deep-link.open-failed: An error occurred while opening the link
 dont-ask-again: "Don't ask again"
 widget.missing-context.title: Missing context
 widget.missing-context.description: No related element found
@@ -29,7 +36,33 @@ error.error_recycle_bin_restore: Cannot restore element from recycle bin
 error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
 error.error_login_token_as_admin_non_admin_user: Only admin users can generate a login link for an admin user
 error.error_login_token_no_user_password: A login link cannot be generated for this user because no password is set
+error.error_invitation_as_admin_non_admin_user: Only admin users can send an invitation to an admin user
+error.error_invitation_no_email: An invitation cannot be sent because the user has no valid email address
+error.error_invitation_user_inactive: An invitation cannot be sent to an inactive user
 error.syntax_error: Syntax error
+validation.mandatory: "{{field}} is mandatory"
+validation.regex_mismatch: "{{field}} does not match the required pattern {{regex}}"
+validation.max_length: "{{field}} must not be longer than {{max}} characters"
+validation.min_length: "{{field}} must be at least {{min}} characters long"
+validation.not_numeric: "{{field}} must be a number, got {{value}}"
+validation.not_integer: "{{field}} must be a whole number, got {{value}}"
+validation.not_unsigned: "{{field}} must not be negative, got {{value}}"
+validation.min_value: "{{field}} must be at least {{min}}, got {{value}}"
+validation.max_value: "{{field}} must be at most {{max}}, got {{value}}"
+validation.range_start_after_end: "{{field}}: the start must not be after the end"
+validation.invalid_email: "{{field}} is not a valid email address: {{value}}"
+validation.invalid_option: "{{field}} has an invalid option: {{value}}"
+validation.invalid_time: "{{field}} is not a valid time: {{value}}"
+validation.invalid_relation: "{{field}} contains an invalid relation"
+validation.max_relations: "{{field}} allows at most {{max}} relations"
+validation.max_items: "{{field}} allows at most {{max}} items"
+validation.slug_not_unique: "The URL slug {{value}} in {{field}} is already in use"
+validation.slug_invalid: "{{field}} is not a valid URL slug"
+validation.slug_reserved_characters: "{{field}} contains reserved characters: {{characters}}"
+validation.unique_constraint: "A unique constraint is violated"
+validation.missing_required_editables: "Values for required editables are missing"
+validation.image_too_large: "Image {{filename}} is too large (max. {{max_megapixels}} megapixels). Resize it to {{suggested_width}}×{{suggested_height}} pixels or smaller"
+validation.and_more: "and {{n}} more"
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid Config
 sidebar.tag_filters: Tag Filters
@@ -72,6 +105,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
+asset.upload-new-version.rename-confirmation.title: Asset will be renamed
+asset.upload-new-version.rename-confirmation.message: 'The new file is a .{{extension}} — the asset will be renamed from "{{oldFilename}}" to "{{newFilename}}" and its public URL will change. Continue?'
+asset.upload-new-version.renamed: 'The asset was renamed from "{{oldFilename}}" to "{{newFilename}}". Its public URL has changed.'
 asset.copy-info: Copy & Info
 asset.upload: Upload
 asset.upload.label: Select file
@@ -120,6 +156,7 @@ areablock.paste: Paste
 areablock.cut: Cut
 areablock.settings: Settings
 areablock.delete: Delete
+areablock.type-limit-reached: The maximum number of blocks of this type has been reached.
 document.highlight-editables: Highlight editables
 document.link.target: Link Target
 document.hardlink.source: Source Document
@@ -368,6 +405,10 @@ grid.filter.less: Less than
 grid.filter.more: More than
 grid.filter.string.placeholder: Search, or paste a list with one value per line to match any of them exactly
 grid.filter.column: 'Filter {{column}}'
+grid.filter.operator.label: Condition
+grid.filter.operator.value: Matches value
+grid.filter.operator.empty: Is empty
+grid.filter.operator.not-empty: Is not empty
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -474,6 +515,10 @@ action-could-not-be-applied: Action could not be applied
 failed-to-assign-tag-to-element: Failed to assign tag to element
 failed-to-un-assign-tag-to-element: Failed to un-assign tag to element
 workflow-modal.perform-action: Perform Action
+workflow.unsaved-changes.title: Unsaved changes
+workflow.unsaved-changes.warn: There are unsaved changes. They will be lost when this action is applied. Apply it anyway?
+workflow.unsaved-changes.apply-anyway: Apply anyway
+workflow.unsaved-changes.save-failed: The unsaved changes could not be saved, so the action was not applied.
 workflow-modal.cancel: Cancel
 workflow-modal.notes: Notes
 workflow-modal.notes-required: Please enter your notes
@@ -666,6 +711,7 @@ mcp-servers.read-only-notice: Server definitions are file-managed on this enviro
 mcp-servers.save-success: MCP server saved
 mcp-servers.access.users-count: "Users: {{number}}"
 mcp-servers.access.roles-count: "Roles: {{number}}"
+mcp-servers.access.service-users-count: "Service users: {{number}}"
 mcp-servers.access.global-extra: any authenticated user
 mcp-servers.access.nobody: Nobody yet
 mcp-servers.badge.read: Read
@@ -691,11 +737,16 @@ mcp-servers.editor.copy-url: Copy server URL
 mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
 mcp-servers.sharing.title: Sharing
 mcp-servers.sharing.share-globally: Share globally
-mcp-servers.sharing.share-globally-tooltip: Any authenticated user gets Config Read and MCP Server Access (not Config Edit)
+mcp-servers.sharing.share-globally-tooltip: Any authenticated user, including service users, gets Config Read and MCP Server Access (not Config Edit)
 mcp-servers.sharing.users: Users
 mcp-servers.sharing.roles: Roles
 mcp-servers.sharing.add-user: Add a user…
 mcp-servers.sharing.add-role: Add a role…
+mcp-servers.sharing.service-users: Service users
+mcp-servers.sharing.add-service-user: Add a service user…
+mcp-servers.sharing.service-users-hint: Service users can only connect; they cannot read or edit the configuration.
+mcp-servers.sharing.service-users-unavailable: Service users are not listed because you lack the user management permission. Their existing access is kept.
+mcp-servers.sharing.inactive: inactive
 mcp-servers.sharing.name: Name
 mcp-servers.sharing.config-read: Config Read
 mcp-servers.sharing.config-edit: Config Edit
@@ -1297,6 +1348,7 @@ close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+use-full-space: Use Full Space
 asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
 element-selector.title.single: Select Element
@@ -1380,6 +1432,7 @@ element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning.confirmed_one: 'Please note: This item has dependencies.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Please note: These items have dependencies.'
 element.open: Open
+element.open-multiple: 'Open {{count}} elements'
 element.state: State
 element.state.unpublished: Unpublished
 element.toolbar.copy-id: Copy ID
@@ -1392,6 +1445,7 @@ element.publish: Publish
 element.locate-in-tree: Locate in Tree
 element.sidebar.filter.only-direct-children: Only direct children
 element.sidebar.filter.only-unreferenced: Only unreferenced
+element.sidebar.filter.only-untagged: Only untagged
 element.sidebar.field-filters: Field Filters
 element.full-information: Full information
 system-information.id: ID
@@ -1402,6 +1456,7 @@ system-information.type: Type
 system-information.class-id: Class ID
 system-information.class: Class
 system-information.file-size: File Size
+system-information.checksum: Checksum
 system-information.modification-date: Modification Date
 system-information.creation-date: Creation Date
 system-information.user-modification: User Modification
@@ -1611,6 +1666,8 @@ user-management.email: Email
 user-management.language: Language
 user-management.dateTime: Date Time Locale
 user-management.welcomeScreen: Show welcome screen on startup
+user-management.welcomeScreenDashboard: Welcome screen dashboard
+user-management.welcomeScreenDashboard.placeholder: Select a dashboard
 user-management.memorizeTabs: Memorize open tabs
 user-management.allowDirtyClose: Disable unsaved content warning
 user-management.closeWarning: Show close warning
@@ -1686,6 +1743,7 @@ user-management.add-user.label: Enter the name of the new user
 user-management.send-invitation: Send invitation link
 user-management.send-invitation.success: "Invitation sent to {{email}}"
 user-management.send-invitation.no-email: The user has no email address
+user-management.send-invitation.inactive: The user is inactive
 user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
 user-management.last-login: Last Login
 user-management.search.id: ID
@@ -1737,6 +1795,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Clear Cache
 navigation.cache.clear-full-page-cache: Clear Full Page Cache
 navigation.cache.clear-temporary-files: Clear Temporary Files
+navigation.index-sync: Synchronize Search Index
 navigation.clear-cache: Clear Full Page Cache
 navigation.reports: All Reports
 navigation.custom-reports: Custom Reports Configuration
@@ -1769,6 +1828,10 @@ redirects.source-site: Source Site
 redirects.source: Source
 redirects.target-site: Target Site
 redirects.target: Target
+redirects.target-type: Target Type
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Priority
 redirects.regex: RegEx
@@ -2187,12 +2250,25 @@ classification-store.rename-collection: Rename collection
 classification-store.delete-collection: "Delete collection \"{{collectionName}}\"?"
 classification-store.add-key: Add key
 classification-store.rename-key: Rename key
-classification-store.delete-key: "Delete key \"{{keyName}}\"?"
+classification-store.delete-key: "Remove key \"{{keyName}}\" from every group?"
 classification-store.delete-key-relation: "Remove key \"{{keyName}}\" from this group?"
 classification-store.delete-group-relation: "Remove group \"{{groupName}}\" from this collection?"
+classification-store.delete-group-consequence: "Deleting this group also deletes the values every object holds under it. This cannot be undone."
+classification-store.delete-collection-consequence: "The collection and its list of groups are removed. The groups and their keys stay in the store, and no object values are deleted."
+classification-store.delete-key-relation-consequence: "The key is removed from this group only. The key itself stays in the store, and nothing an object holds is deleted."
+classification-store.delete-key-consequence: "The key is removed from every group it belongs to and is no longer offered anywhere. Nothing an object holds is deleted, but those values stay out of reach until the key is restored and assigned to a group again. Its group assignments, their order, their mandatory flags and their per-group overrides do not come back with it."
+classification-store.keys-view.active: Active
+classification-store.keys-view.deleted: Deleted
+classification-store.restore-key: Restore
+classification-store.restore-key-question: "Restore key \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "The key comes back belonging to no group. Its group assignments, their order, their mandatory flags and their per-group overrides are gone and cannot be recovered, so assign the key to a group again before its values are reachable."
+classification-store.keys-deleted-empty: No deleted keys.
+classification-store.keys-deleted-no-results: "No deleted keys match the search."
+classification-store.delete-group-relation-consequence: "The group is removed from this collection only. The group, its keys and the values objects hold under it are untouched."
 classification-store.edit-definition: Edit definition
 classification-store.edit-key-definition: "Edit key definition: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Matching ID"
 classification-store.columns.name: Name
 classification-store.columns.title: Title
 classification-store.columns.type: Type
@@ -2211,6 +2287,112 @@ classification-store.select-group: Select group
 classification-store.search-groups: Search groups…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Sub groups
+classification-store.engine.label: "Engine: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Document"
+classification-store.key-type-needs-document-engine: "The engine of this store cannot hold this key type. It needs the document engine."
+classification-store.keys-without-field-filter: "No field filter is available for these keys, so they were not added: {{keyNames}}"
+classification-store.add-sub-group: Add sub group
+classification-store.delete-sub-group: "Delete sub group \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: A sub group belongs to the store, so a new one becomes available to every group of this store.
+classification-store.key-indexed: Include in the Classification Store search index
+classification-store.key-indexed-hint: While off, this key cannot be sorted, filtered or searched on, and its value is removed from the stored search document. The index converges through the queue, so changes are not immediate.
+classification-store.delete-sub-group-in-use-hint: Unassign the keys from this sub group in the groups named above first, then delete it.
+classification-store.no-sub-groups: This store has no sub groups yet
+classification-store.select-sub-group: Select sub group
+classification-store.search-sub-groups: Search sub groups…
+classification-store.assign-sub-group: Assign sub group
+classification-store.unassign-sub-group: Unassign
+classification-store.select-keys-hint: Select at least one key first
+classification-store.no-sub-group: No sub group
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Unassigned ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Unassign the keys shown here
+classification-store.aria.unassign-sub-group-keys: "Unassign the keys shown here from sub group \"{{name}}\""
+classification-store.aria.edit-key-override: "Edit options and unit of key \"{{name}}\" in this group"
+classification-store.override.edit: "Edit options and unit in this group"
+classification-store.override.title: "Edit options and unit of {{keyName}} in {{groupName}}"
+classification-store.override.options-heading: "Options in this group"
+classification-store.override.unit-heading: "Unit in this group"
+classification-store.override.default-unit: "Default unit"
+classification-store.override.last-one: "the last one"
+classification-store.override.no-longer-offered: "no longer offered by this key"
+classification-store.override.use-all-options: "Use all options"
+classification-store.override.use-key-units: "Use the key's units"
+classification-store.override.use-key-default: "Use the key's default"
+classification-store.override.options-count: "{{count}} of {{total}} selected"
+classification-store.override.units-count: "{{count}} of {{total}} selected"
+classification-store.override.options-help: "Use all options removes the narrowing. Deselecting every option is not the same thing, so the last option cannot be deselected."
+classification-store.override.no-options-title: "No options are available for this key in this group"
+classification-store.override.key-offers-no-options: "This key offers no options to narrow."
+classification-store.override.options-empty: "The assignment narrows the key to an empty list."
+classification-store.override.options-stale-only: "The stored subset names only values the key no longer offers."
+classification-store.override.stored-unreadable: "The stored value cannot be read as a list."
+classification-store.override.options-unavailable: "This key's options could not be loaded"
+classification-store.override.tag-options-unavailable: "options unlisted"
+classification-store.override.options-stored-unlisted: "This key publishes no options to compare the stored subset with. The subset is kept as stored; use all options to clear it."
+classification-store.override.units-no-vocabulary: "This key names no unit vocabulary, so nothing can be narrowed here."
+classification-store.override.no-units-title: "No units are available for this key in this group"
+classification-store.override.units-empty: "The assignment narrows the valid units to an empty list."
+classification-store.override.units-loading: "The installation's units are loading."
+classification-store.override.units-unavailable: "The installation's units could not be loaded, so the valid units cannot be shown or changed."
+classification-store.override.units-key-permits-none: "This key permits no unit, so nothing can be narrowed here."
+classification-store.override.units-installation-empty: "This installation defines no units, so nothing can be narrowed here."
+classification-store.override.units-stale-only: "The stored valid units name only units the key no longer permits."
+classification-store.override.default-outside: "The stored default unit {{unit}} is not among the units this group allows."
+classification-store.override.nothing-to-narrow: "This key carries neither options nor units, so there is nothing to narrow."
+classification-store.override.tag-no-options: "no options"
+classification-store.override.tag-options: "{{count}} of {{total}}"
+classification-store.override.tag-no-units: "no units"
+classification-store.override.tag-units: "{{count}} of {{total}} units"
+classification-store.override.tag-unreadable: "unreadable"
+classification-store.aria.delete-sub-group: "Delete sub group \"{{name}}\""
+classification-store.aria.edit-metadata: "Edit metadata of \"{{name}}\""
+classification-store.aria.edit-titles: "Edit internal titles of \"{{name}}\""
+classification-store.aria.remove-pair: "Remove pair \"{{name}}\""
+classification-store.aria.remove-pair-at: "Remove pair {{position}}"
+classification-store.edit-metadata: "Edit metadata: {{name}}"
+classification-store.edit-titles: "Edit internal titles: {{name}}"
+classification-store.action-edit-metadata: "Edit metadata"
+classification-store.action-edit-titles: "Edit internal titles"
+classification-store.add-pair: "Add pair"
+classification-store.pair-key: "Key"
+classification-store.pair-value: "Value"
+classification-store.pair-locale: "Locale"
+classification-store.pair-title: "Internal title"
+classification-store.pair-no-content: "No pairs yet"
+classification-store.pair-key-duplicate: "This key is already used by another pair"
+classification-store.pair-key-reserved: "This prefix is reserved for internal titles. Use the \"Edit internal titles\" dialog, or a different key"
+classification-store.pair-locale-duplicate: "This locale is already used by another title"
+classification-store.pair-key-list: "These keys would be stored as a list. Use a key that is not a number"
+classification-store.pair-type.object: "Object"
+classification-store.pair-type.array: "Array"
+classification-store.pair-type.number: "Number"
+classification-store.pair-type.boolean: "Boolean"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Locales are free text and are not checked against the languages configured in the system."
+classification-store.metadata-saved: "Metadata saved"
+classification-store.titles-saved: "Titles saved"
+classification-store.unassign-sub-group-confirm_one: "Unassign the 1 key shown here from sub group \"{{name}}\"? Keys of this group on other pages keep it."
+classification-store.unassign-sub-group-confirm_other: "Unassign the {{count}} keys shown here from sub group \"{{name}}\"? Keys of this group on other pages keep it."
+classification-store.sub-groups-strip-hint: These are the sub groups the keys of this group use. The store keeps the vocabulary.
+classification-store.manage-sub-groups: Manage sub groups
+classification-store.sub-group-unused: "No key of this group uses sub group \"{{name}}\" any more. It still exists in the store."
+classification-store.assign-sub-group-progress: "Assigning the sub group to {{done}} of {{total}} keys…"
+classification-store.assign-sub-group-failed: "The sub group could not be assigned to: {{keyNames}}"
+classification-store.assign-sub-group-running: Wait for the sub group assignment to finish
+classification-store.key-localization: "Localization"
+classification-store.key-localization.inherit: "Inherit"
+classification-store.key-localization.localized: "Localized"
+classification-store.key-localization.not-localized: "Not localized"
+classification-store.key-localization-confirm: "Values this key holds in other languages may no longer be shown or saved. Save anyway?"
+classification-store.key-localized: "Localized key"
+classification-store.key-localized-tooltip: "This key holds its own value per language."
+classification-store.import: Import store configuration
+classification-store.import-success: Store configuration imported successfully
+classification-store.import-replace.title: "Replace the store configuration?"
+classification-store.import-replace.warning: "This store is not empty. A file that describes another store replaces its configuration and deletes the values every object holds under it. This cannot be undone."
 home: Home
 preview.label: Preview
 preview.desktop: Desktop
@@ -2265,6 +2447,7 @@ user-menu.notification.modal.form.validation.provide-title: Please provide a tit
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
 reports.reports-title: Reports
 reports.select-report-name: Select the name of the report
+reports.report-load-failed: The report could not be loaded.
 reports.select-report: Select report
 reports.export: Export
 reports.csv-export: CSV Export
@@ -2278,6 +2461,9 @@ reports.field-filters: Field Filters
 reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
 reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
 reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
+reports.editor.import.title: Import Custom Report
+reports.editor.import.success: Custom report imported successfully
+reports.editor.import.invalid-file: Please select a JSON export file
 reports.editor.content.validation.message: The customer report name is invalid
 reports.editor.general-settings.title: General Settings
 reports.editor.general-settings.name-label: Name
@@ -2289,6 +2475,7 @@ reports.editor.general-settings.report-class-label: Report Class
 reports.editor.general-settings.group-icon-class-label: Group Icon Class
 reports.editor.general-settings.shortcut-menu-label: Create shortcut in menu
 reports.editor.source-definition.title: Source Definition
+reports.editor.source-definition.not-available: The source definition of this report is not available. The bundle that provides it may not be installed.
 reports.editor.source-definition.no-content: No available fields yet. Start by adding a field.
 reports.editor.source-definition.select-source-definition: Select a source definition
 reports.editor.source-definition.sql-select-field: SELECT (eg. a,b,c)*
@@ -2359,6 +2546,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Name
 widget.email-log.grid.value: Value
+email-log.label: Email Log
 email-log.subject: Subject
 email-log.tooltip.resend: Resend email
 email-log.tooltip.forward: Forward email
@@ -2482,6 +2670,8 @@ recycle-bin.actions.delete: Delete
 recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Recycle Bin Items
+recycle-bin.actions.restore.relocated_one: Element located in __restored. The permissions of that folder now apply.
+recycle-bin.actions.restore.relocated_other: '{{count}} elements located in __restored. The permissions of that folder now apply.'
 ownership-management.title: Ownership Management
 ownership-management.show-deleted-owners: Show items from deleted users
 ownership-management.deleted-user: Deleted user
@@ -3056,6 +3246,7 @@ translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
 select.clear-selection: Clear selection
+select.select-all: Select all
 asset.folder.preview.image-display: Image display
 asset.folder.preview.image-display.small: Small
 asset.folder.preview.image-display.large: Large
@@ -3078,9 +3269,113 @@ saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
 skip-to-content: Skip to content
+preview-mode.switch: Preview mode
+preview-mode.preview-item: Preview item
+preview-mode.no-item: No preview item available
+preview-mode.preview: Preview
 tag-configuration.move-under: 'Move under'
 tag-configuration.move-search-placeholder: 'Search for a tag'
 tree.actions.edit-tag: Edit
 tag-configuration.edit-tag: 'Edit "{{name}}"'
 tag-configuration.name-required: 'Please enter a tag name'
 tag-configuration.move-targets-failed: 'The list of tags could not be loaded, so only the name can be changed'
+navigation.service-users: Service Users
+widget.service-user-management: Service Users
+service-users.create: New
+service-users.create.title: New service user
+service-users.create.ok: Create
+service-users.create-from-user: From user
+service-users.create-from-user.title: New service user from a user
+service-users.create-from-user.description: 'Copies the permissions, roles and workspaces of the user. The user is not changed and admin rights are never copied.'
+service-users.field.name: Name
+service-users.field.name.fixed: 'The name cannot be changed, because MCP server access is granted by name.'
+service-users.field.name.invalid: 'Use up to 64 letters, digits, dots, hyphens or underscores, starting with a letter or a digit, for example svc-erp-sync.'
+service-users.field.email: Contact email
+service-users.field.responsible-users: Responsible users
+service-users.field.responsible-users.help: 'They answer for this service user wherever a human is needed, for example for notices about it.'
+service-users.field.source-user: User to copy from
+service-users.filter.unused-days: Unused for more than N days
+service-users.status.inactive: Inactive
+service-users.dormancy.never-used: Never used
+service-users.dormancy.warning: Unused for 90 days
+service-users.dormancy.dormant: Dormant
+service-users.tab.settings: Settings
+service-users.tab.permissions: Permissions
+service-users.tab.roles: Roles
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roles
+service-users.save.success: Service user saved
+service-users.deactivate: Deactivate
+service-users.deactivate.confirm: 'Deactivate service user "{{name}}"? Its credentials stop working with the next request.'
+service-users.delete: Delete
+service-users.delete.confirm: 'Delete service user "{{name}}" permanently? Its OAuth client, its tokens and its MCP server access are removed. This cannot be undone.'
+service-users.credentials.title: Credentials
+service-users.credentials.client-id: Client ID
+service-users.credentials.last-used: Last used
+service-users.credentials.never-used: Never
+service-users.credentials.no-client: No OAuth client
+service-users.credentials.rotate: Rotate secret
+service-users.credentials.rotate.confirm: 'Create a new client secret for "{{name}}"? The current secret stops working at once.'
+service-users.credentials.mcp-tokens: MCP access tokens
+service-users.credentials.mcp-tokens.active: Active tokens
+service-users.credentials.mcp-tokens.latest-expiry: Latest expiry
+service-users.credentials.mcp-tokens.none: No active tokens
+service-users.credentials.issue: Issue token
+service-users.credentials.issue.title: Issue an MCP access token
+service-users.credentials.issue.ttl: Lifetime in days (1 to 90)
+service-users.credentials.issue.ttl.invalid: Enter a whole number of days from 1 to 90.
+service-users.credentials.issue.hint: The token is shown only once. Clients send it as a Bearer token in the Authorization header.
+service-users.credentials.revoke: Revoke all tokens
+service-users.credentials.revoke.confirm: Revoke every MCP access token of this service user? Connected clients stop working immediately.
+service-users.credentials.revoke.success: All MCP access tokens of the service user are revoked.
+service-users.credentials.oauth: OAuth client
+service-users.credentials.oauth.disabled: OAuth client credentials are disabled on this instance; use an MCP access token.
+service-users.credentials.oauth.rotate-hint: Access tokens already issued with the old secret stay valid until they expire.
+service-users.credentials.token: Access token
+service-users.credentials.token.expires: Expires
+service-users.create.credentials.title: Credentials
+service-users.create.credentials.skip: Skip, issue later
+service-users.create.credentials.which: 'Use the OAuth client for pipelines that can run the client_credentials grant; use an MCP access token for everything else.'
+service-users.create.credentials.token-description: 'Clients connect with an MCP access token. Issue one now, or later from the credentials of the service user.'
+service-users.secret.title: Client secret
+service-users.secret.client-secret: Client secret
+service-users.secret.warning: 'Copy the secret now. It is shown only once and cannot be displayed again.'
+service-users.secret.copy: Copy secret
+service-users.secret.close: Close
+navigation.maintenance-mode: Maintenance Mode
+maintenance-mode.activate.title: Activate maintenance mode?
+maintenance-mode.activate.text: 'All services, including the website, go into maintenance. Only this browser session keeps access.'
+maintenance-mode.activate.lock-out: 'Logging out, closing the browser or an expired session locks you out as well.'
+maintenance-mode.activate.background-jobs: 'Background jobs and message consumers do not start while maintenance mode is active.'
+maintenance-mode.activate.ok: Activate
+maintenance-mode.indicator.tooltip: 'Maintenance mode is active. Click to deactivate it.'
+maintenance-mode.deactivate.title: Deactivate maintenance mode?
+maintenance-mode.deactivate.text: 'All sessions regain access.'
+maintenance-mode.deactivate.ok: Deactivate
+maintenance-mode.logout.title: Deactivate maintenance mode first?
+maintenance-mode.logout.text: 'Maintenance mode is active and only this session has access. After logging out it can only be switched off from the command line.'
+maintenance-mode.logout.deactivate-and-log-out: Deactivate and log out
+maintenance-mode.locked-out.title: Maintenance
+maintenance-mode.locked-out.text: 'The system is in maintenance mode or temporarily unavailable. Your last action may not have been saved. This notice closes itself as soon as the system is available again.'
+maintenance-mode.locked-out.reload: Reload
+field-definition.multi-value: "Multi Value"
+classification-store.multi-value.delegate: "a multiValue of"
+classification-store.multi-value.delegate-required: "Choose the type this multiValue holds before saving."
+classification-store.multi-value.variants: "Variants"
+classification-store.multi-value.variant-name: "Name"
+classification-store.multi-value.variant-label: "Label"
+classification-store.multi-value.variant-add: "Add variant"
+classification-store.multi-value.variant-name-empty: "A variant needs a name."
+classification-store.multi-value.variant-name-duplicate: "Two variants cannot share the name \"{{name}}\"."
+classification-store.multi-value.move-up: "Move up"
+classification-store.multi-value.move-down: "Move down"
+classification-store.multi-value.narrowing-confirm: "Variants were narrowed. Values already stored are not deleted and stay visible, but no further values can be added beyond the new declaration."
+classification-store.multi-value.default-variant: "Default"
+classification-store.multi-value.not-declared: "not declared"
+classification-store.multi-value.no-delegate: "This key has no type to edit its values with."
+classification-store.multi-value.unknown-delegate: "The editor has no input for the type {{type}}."
+classification-store.multi-value.unreadable-value: "This key holds a value the editor cannot read; it is left as it is."
+classification-store.multi-value.default-variant-permitted: "Allow values without a variant"
+classification-store.multi-value.default-variant-label: "Label of the default value"
+classification-store.multi-value.no-writable-slot: "This key declares no variant and does not allow values without one, so there is nowhere to enter a value. Declare a variant or allow values without a variant."
+classification-store.multi-value.unreadable-entry: "This value is not a number the input can show; it is kept as stored until it is cleared."

@@ -27,12 +27,6 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   }
 }))
 jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ id: 1, isAdmin: true }) }))
-jest.mock('@Pimcore/app/config/app-config', () => ({ currentDomain: 'http://localhost' }))
-// the real router module builds the app router (and its whole import tree) at import time
-jest.mock('@Pimcore/app/router/router', () => ({
-  routes: { passwordReset: '/pimcore-studio/reset-password/' }
-}))
-jest.mock('react-router-dom', () => ({ generatePath: (path: string) => path }))
 jest.mock('@Pimcore/components/button/button', () => ({
   Button: ({ children, onClick, disabled, title }: {
     children: React.ReactNode
@@ -125,7 +119,20 @@ describe('SendInvitationButton', () => {
     expect(screen.getByRole('button')).toBeDisabled()
   })
 
-  it('sends the invitation with the reset password URL', async () => {
+  it('is disabled for an inactive user', () => {
+    render(
+      <SendInvitationButton
+        active={ false }
+        email="invitee@example.com"
+        userId={ 42 }
+      />
+    )
+
+    // the endpoint refuses an inactive user, so the button says so instead of failing
+    expect(screen.getByRole('button')).toBeDisabled()
+  })
+
+  it('sends the invitation with the user id alone', async () => {
     render(
       <SendInvitationButton
         email="invitee@example.com"
@@ -135,13 +142,9 @@ describe('SendInvitationButton', () => {
 
     fireEvent.click(screen.getByRole('button'))
 
+    // the backend builds the link, the client has no say in where it points
     await waitFor(() => {
-      expect(mockSendInvitation).toHaveBeenCalledWith({
-        id: 42,
-        invitation: {
-          invitationUrl: 'http://localhost/pimcore-studio/reset-password/'
-        }
-      })
+      expect(mockSendInvitation).toHaveBeenCalledWith({ id: 42 })
     })
   })
 

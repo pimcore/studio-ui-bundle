@@ -18,6 +18,7 @@ import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Content } from '@Pimcore/components/content/content'
 import { Sidebar } from '@Pimcore/modules/classification-store-config/components/sidebar/sidebar'
 import { StoreEditor } from '@Pimcore/modules/classification-store-config/components/store-editor/store-editor'
+import { StoreImportExportActions } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-export-actions'
 import { useClassificationStoreConfigurationStoreTreeQuery } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { type ClassificationStoreConfigurationStoreTreeNode } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
@@ -50,7 +51,12 @@ export const ClassificationStoreConfig = (): React.JSX.Element => {
         key: String(store.id),
         icon: <Icon value='classification-store' />,
         label: t('classification-store.store-tab-label', { name: store.name, id: store.id }),
-        children: <StoreEditor storeId={ store.id } />
+        children: (
+          <StoreEditor
+            importExportActions={ <StoreImportExportActions storeId={ store.id } /> }
+            storeId={ store.id }
+          />
+        )
       }))
   }, [storeList, openedStores, t])
 

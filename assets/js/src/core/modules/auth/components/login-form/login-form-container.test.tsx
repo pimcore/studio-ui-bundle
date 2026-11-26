@@ -58,14 +58,23 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { LoginFormContainer } from './login-form-container'
 
 describe('LoginFormContainer two-factor steps', () => {
-  const originalLocation = globalThis.location
+  // jsdom 26 (jest 30): window.location is not redefinable. location.reload() reports jsdom's "not implemented:
+  // navigation" error instead, so that report stands in for the reload spy.
+  let errorSpy: jest.SpyInstance
 
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: { ...originalLocation, reload: mockReload } })
+    const originalError = console.error.bind(console)
+    errorSpy = jest.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+      if (String(args[0]).includes('Not implemented: navigation')) {
+        mockReload()
+        return
+      }
+      originalError(...args)
+    })
   })
 
   afterAll(() => {
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: originalLocation })
+    errorSpy.mockRestore()
   })
 
   afterEach(() => {

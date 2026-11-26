@@ -65,7 +65,12 @@ export const CollectionGroupRelationsGrid = ({
   const handleRemove = useCallback((relation: ClassificationStoreConfigurationCollectionRelationDetail): void => {
     void modal.confirm({
       title: t('delete'),
-      content: t('classification-store.delete-group-relation', { groupName: relation.groupName ?? String(relation.groupId) }),
+      content: (
+        <>
+          <p>{ t('classification-store.delete-group-relation', { groupName: relation.groupName ?? String(relation.groupId) }) }</p>
+          <p>{ t('classification-store.delete-group-relation-consequence') }</p>
+        </>
+      ),
       onOk: async () => {
         const response = await deleteRelation({
           classificationStoreConfigurationCollectionRelationDelete: {
@@ -169,10 +174,11 @@ export const CollectionGroupRelationsGrid = ({
               ? null
               : (
                 <IconButton
+                  aria-label={ t('toolbar.reload') }
                   icon={ { value: 'refresh' } }
                   loading={ isFetching }
                   onClick={ () => { void refetch() } }
-                  tooltip={ { title: t('refresh') } }
+                  tooltip={ { title: t('toolbar.reload') } }
                 />
                 ) }
             <Pagination

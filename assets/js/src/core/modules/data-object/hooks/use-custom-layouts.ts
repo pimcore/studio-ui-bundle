@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useEffect, useRef } from 'react'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import {
   type CustomLayoutsInCompactFormatToBeUsedForEGListings,
@@ -15,7 +16,6 @@ import {
 } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
-import { useRef } from 'react'
 import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
 
@@ -43,9 +43,12 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
   const skipLayouts = !isLayoutHolder.current && (isUndefined(dataObject) || dataObject.type === 'folder')
 
   const { data, error, isLoading: isCustomLayoutLoading } = useClassCustomLayoutEditorCollectionQuery({ objectId: id }, { skip: skipLayouts })
-  if (error !== undefined) {
-    trackError(new ApiError(error))
-  }
+  // Report in an effect: from the render body the same failed request would open a new error dialog on every re-render
+  useEffect(() => {
+    if (error !== undefined) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
 
   const layouts = data !== undefined ? data.items : undefined
   const hasWorkflowAvailable = isWorkflowAvailable(dataObject, 'data-object')

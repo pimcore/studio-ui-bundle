@@ -17,6 +17,7 @@ import { type DynamicTypeFieldFilterObjectAdapter } from './definitions/field-fi
 import { type DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { type DynamicTypeFieldFilterString } from './definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { type DynamicTypeFieldFilterNone } from './definitions/field-filters/types/none/dynamic-type-field-filter-none'
+import { type DynamicTypeFieldFilterEmptyOnly } from './definitions/field-filters/types/empty-only/dynamic-type-field-filter-empty-only'
 import { type DynamicTypeFieldFilterId } from './definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { type DynamicTypeFieldFilterFileSize } from './definitions/field-filters/types/file-size/dynamic-type-field-filter-file-size'
@@ -97,6 +98,7 @@ import { type DynamicTypeObjectDataEmail } from '@Pimcore/modules/element/dynami
 import { type DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-gender'
 import { type DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
 import { type DynamicTypeObjectDataEncryptedField } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-encrypted-field'
+import { type DynamicTypeObjectDataMultiValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-multi-value'
 import { type DynamicTypeObjectDataCalculatedValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-calculated-value'
 import { type DynamicTypeObjectDataCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-checkbox'
 import { type DynamicTypeObjectDataLink } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-link'
@@ -243,6 +245,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDataObjectObjectBrick>(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterString>(serviceIds['DynamicTypes/FieldFilter/String']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNone>(serviceIds['DynamicTypes/FieldFilter/None']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterEmptyOnly>(serviceIds['DynamicTypes/FieldFilter/EmptyOnly']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterId>(serviceIds['DynamicTypes/FieldFilter/Id']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterFileSize>(serviceIds['DynamicTypes/FieldFilter/FileSize']))
@@ -382,6 +385,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGender>(serviceIds['DynamicTypes/ObjectData/Gender']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataRgbaColor>(serviceIds['DynamicTypes/ObjectData/RgbaColor']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataEncryptedField>(serviceIds['DynamicTypes/ObjectData/EncryptedField']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataMultiValue>(serviceIds['DynamicTypes/ObjectData/MultiValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCalculatedValue>(serviceIds['DynamicTypes/ObjectData/CalculatedValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCheckbox>(serviceIds['DynamicTypes/ObjectData/Checkbox']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLink>(serviceIds['DynamicTypes/ObjectData/Link']))

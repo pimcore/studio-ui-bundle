@@ -10,6 +10,20 @@
 
 import { isUndefined } from 'lodash'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
+import { type IMergeChangedValuesContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
+
+export interface IFormChangesContext {
+  /** Whether the field, named by its full form path, holds an inherited value. */
+  isInherited: (fieldName: string) => boolean
+}
+
+const getFieldContext = (fieldName: string, context?: IFormChangesContext): IMergeChangedValuesContext | undefined => {
+  if (isUndefined(context)) {
+    return undefined
+  }
+
+  return { isInherited: (name: string) => context.isInherited(`${fieldName}.${name}`) }
+}
 
 /**
  * Merges incoming form changedValues into the accumulated modified-attributes map.
@@ -24,7 +38,8 @@ export const mergeFormChanges = (
   current: Record<string, any>,
   changedValues: Record<string, any>,
   objectDataRegistry: DynamicTypeObjectDataRegistry,
-  fieldTypeMap: Map<string, string>
+  fieldTypeMap: Map<string, string>,
+  context?: IFormChangesContext
 ): Record<string, any> => {
   const merged: Record<string, any> = { ...current }
 
@@ -35,7 +50,7 @@ export const mergeFormChanges = (
       : undefined
     const mergedValue = isUndefined(dynamicType?.mergeChangedValues)
       ? incoming
-      : dynamicType.mergeChangedValues(current[key], incoming)
+      : dynamicType.mergeChangedValues(current[key], incoming, getFieldContext(key, context))
     // Cleared values are undefined; JSON.stringify drops them, so coerce to null.
     merged[key] = isUndefined(mergedValue) ? null : mergedValue
   }

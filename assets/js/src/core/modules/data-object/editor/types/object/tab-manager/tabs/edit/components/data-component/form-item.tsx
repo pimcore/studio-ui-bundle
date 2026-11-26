@@ -18,6 +18,7 @@ import {
 import cn from 'classnames'
 import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 import { AutoHideEmptyContent } from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
+import { HIDE_BOUNDARY_SELECTOR } from '@Pimcore/modules/app/utils/auto-hide-empty-content/hide-boundary'
 import { useSuppressEmptyFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
 import { FieldLabelTechnicalNameProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label-technical-name-provider'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
@@ -42,7 +43,9 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const inheritanceStateContext = useInheritanceState()
   const inheritedState = inheritanceStateContext?.getInheritanceState(formFieldName)?.inherited
   const hasInheritanceIcon = inheritedState === true || inheritedState === 'broken'
-  const labelIsEmpty = !isNonEmptyString(_props.title) && !isNonEmptyString(_props.tooltip) && !hasInheritanceIcon
+  // A title can also be a node, e.g. a classification store key label carrying its localization indicator
+  const hasTitle = isNonEmptyString(_props.title) || React.isValidElement(_props.title)
+  const labelIsEmpty = !hasTitle && !isNonEmptyString(_props.tooltip) && !hasInheritanceIcon
   const shouldSuppressLabel = suppressEmptyLabel && labelIsEmpty
 
   const effectiveFormItemProps = shouldSuppressLabel
@@ -53,7 +56,7 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
     <ErrorBoundary>
       <AutoHideEmptyContent
         contentSelector=".ant-form-item-control-input-content"
-        parentSelector=".ant-space-item"
+        parentSelector={ HIDE_BOUNDARY_SELECTOR }
       >
         <RestoreInheritanceLabelExtraProvider
           emptyValue={ objectDataType.getEmptyValue() }

@@ -10,7 +10,7 @@
 
 const mockLoginWithToken = jest.fn()
 const mockNavigate = jest.fn()
-const mockUseIsAuthenticated = jest.fn(() => ({ isAuthenticated: false }))
+const mockUseIsAuthenticated = jest.fn((): { isAuthenticated: boolean | undefined } => ({ isAuthenticated: false }))
 
 // The router barrel builds the browser router, which pulls in the whole application shell
 // and antd-style's untranspiled ESM. Only the two route constants are read here.
@@ -48,6 +48,8 @@ import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 // eslint-disable-next-line import/first
 import { LoginPage } from './login-page'
+// eslint-disable-next-line import/first
+import { isWelcomeScreenHandled, markWelcomeScreenHandled } from '@Pimcore/modules/app/welcome-screen/utils/welcome-screen-session'
 
 const renderAt = (url: string, inPlace: boolean): void => {
   render(
@@ -97,5 +99,31 @@ describe('LoginPage token login', () => {
 
     expect(mockNavigate).not.toHaveBeenCalled()
     mockUseIsAuthenticated.mockReturnValue({ isAuthenticated: false })
+  })
+})
+
+describe('LoginPage welcome screen', () => {
+  beforeEach(() => {
+    markWelcomeScreenHandled(7)
+  })
+
+  afterEach(() => {
+    mockUseIsAuthenticated.mockReturnValue({ isAuthenticated: false })
+  })
+
+  it('lets the welcome screen open on the next login when the login screen shows', () => {
+    renderAt('/pimcore-studio/', true)
+
+    expect(isWelcomeScreenHandled(7)).toBe(false)
+  })
+
+  it.each([
+    ['while the session is checked', undefined],
+    ['for a running session', true]
+  ])('keeps the welcome screen handled %s', (_, isAuthenticated) => {
+    mockUseIsAuthenticated.mockReturnValue({ isAuthenticated })
+    renderAt('/pimcore-studio/login/', false)
+
+    expect(isWelcomeScreenHandled(7)).toBe(true)
   })
 })

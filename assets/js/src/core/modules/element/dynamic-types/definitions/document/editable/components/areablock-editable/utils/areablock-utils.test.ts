@@ -65,3 +65,55 @@ describe('configUtils.getGroupedAreaTypes', () => {
     })
   })
 })
+
+// Regression tests for pimcore/platform-version#688: per-brick-type limits
+// (`config.limits`) must be enforced by the editor, the way core enforces
+// them when rendering (Areablock::loop() skips over-limit bricks).
+describe('configUtils.getTypeLimit', () => {
+  it('returns the configured limit for a brick type', () => {
+    expect(configUtils.getTypeLimit({ limits: { 'demo-brick': 1 } }, 'demo-brick')).toBe(1)
+  })
+
+  it('returns undefined for a type without a configured limit', () => {
+    expect(configUtils.getTypeLimit({ limits: { 'demo-brick': 1 } }, 'text')).toBeUndefined()
+  })
+
+  it('returns undefined when no limits config is set', () => {
+    expect(configUtils.getTypeLimit({}, 'demo-brick')).toBeUndefined()
+    expect(configUtils.getTypeLimit(undefined, 'demo-brick')).toBeUndefined()
+  })
+})
+
+describe('configUtils.isTypeLimitReached', () => {
+  it('is false for a type without a configured limit', () => {
+    expect(configUtils.isTypeLimitReached({}, 'demo-brick', 5)).toBe(false)
+    expect(configUtils.isTypeLimitReached(undefined, 'demo-brick', 5)).toBe(false)
+  })
+
+  it('is false while the usage count is below the limit', () => {
+    expect(configUtils.isTypeLimitReached({ limits: { 'demo-brick': 2 } }, 'demo-brick', 1)).toBe(false)
+  })
+
+  it('is true once the usage count equals the limit', () => {
+    expect(configUtils.isTypeLimitReached({ limits: { 'demo-brick': 1 } }, 'demo-brick', 1)).toBe(true)
+  })
+
+  it('is true when the usage count exceeds the limit', () => {
+    expect(configUtils.isTypeLimitReached({ limits: { 'demo-brick': 1 } }, 'demo-brick', 2)).toBe(true)
+  })
+
+  it('treats a limit of 0 as "never addable"', () => {
+    expect(configUtils.isTypeLimitReached({ limits: { 'demo-brick': 0 } }, 'demo-brick', 0)).toBe(true)
+  })
+})
+
+describe('configUtils.getTypeUsageCounts', () => {
+  it('counts how often each brick type occurs', () => {
+    expect(configUtils.getTypeUsageCounts(['a', 'b', 'a', 'a'])).toEqual({ a: 3, b: 1 })
+  })
+
+  it('ignores null types and returns an empty record for no elements', () => {
+    expect(configUtils.getTypeUsageCounts(['a', null, 'a'])).toEqual({ a: 2 })
+    expect(configUtils.getTypeUsageCounts([])).toEqual({})
+  })
+})

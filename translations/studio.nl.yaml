@@ -6,6 +6,13 @@ common.clear: Wissen
 cache.clear-cache-success: Cache succesvol gewist
 cache.clear-full-page-cache-success: Volledige paginacache succesvol gewist
 cache.clear-temporary-files-success: Tijdelijke bestanden succesvol gewist
+index-sync.confirmation.title: Zoekindex synchroniseren
+index-sync.confirmation.text: "Alle gegevensobjecten, assets en documenten staan in de wachtrij voor herindexering op de achtergrond. Bestaande indices worden ter plaatse bijgewerkt; een index waarvan de gewijzigde mapping niet kan worden toegepast op de documenten (bijvoorbeeld na een veldtypewijziging) wordt opnieuw gemaakt en gevuld. Afhankelijk van de hoeveelheid gegevens kan dit enige tijd duren en belasting op de zoekserver veroorzaken. Wil je doorgaan?"
+index-sync.confirmation.ok: Synchroniseren
+index-sync.job.title: Zoekindex wordt gesynchroniseerd
+index-sync.start-failed: Kon de zoekindexsynchronisatie niet starten
+deep-link.unknown-link: Er is geen handler geregistreerd voor deze link
+deep-link.open-failed: Er is een fout opgetreden bij het openen van de link
 dont-ask-again: Niet meer vragen
 widget.missing-context.title: Ontbrekende context
 widget.missing-context.description: Geen gerelateerd element gevonden
@@ -27,7 +34,33 @@ error.error_recycle_bin_restore: Kan element niet herstellen uit de prullenbak
 error.error_recycle_bin_restore_missing_parent: Kan element niet herstellen uit de prullenbak, bovenliggend element ontbreekt
 error.error_login_token_as_admin_non_admin_user: Alleen administratieve gebruikers kunnen een inloglink voor een administratieve gebruiker genereren
 error.error_login_token_no_user_password: Er kan geen inloglink voor deze gebruiker worden gegenereerd omdat er geen wachtwoord is ingesteld
+error.error_invitation_as_admin_non_admin_user: Only admin users can send an invitation to an admin user
+error.error_invitation_no_email: An invitation cannot be sent because the user has no valid email address
+error.error_invitation_user_inactive: An invitation cannot be sent to an inactive user
 error.syntax_error: Syntaxisfout
+validation.mandatory: "{{field}} is verplicht"
+validation.regex_mismatch: "{{field}} komt niet overeen met het vereiste patroon {{regex}}"
+validation.max_length: "{{field}} mag niet langer zijn dan {{max}} tekens"
+validation.min_length: "{{field}} moet minimaal {{min}} tekens lang zijn"
+validation.not_numeric: "{{field}} moet een getal zijn, ontvangen: {{value}}"
+validation.not_integer: "{{field}} moet een geheel getal zijn, ontvangen: {{value}}"
+validation.not_unsigned: "{{field}} mag niet negatief zijn, ontvangen: {{value}}"
+validation.min_value: "{{field}} moet minimaal {{min}} zijn, ontvangen: {{value}}"
+validation.max_value: "{{field}} mag maximaal {{max}} zijn, ontvangen: {{value}}"
+validation.range_start_after_end: "{{field}}: het begin mag niet na het einde liggen"
+validation.invalid_email: "{{field}} is geen geldig e-mailadres: {{value}}"
+validation.invalid_option: "{{field}} heeft een ongeldige optie: {{value}}"
+validation.invalid_time: "{{field}} is geen geldige tijd: {{value}}"
+validation.invalid_relation: "{{field}} bevat een ongeldige relatie"
+validation.max_relations: "{{field}} staat maximaal {{max}} relaties toe"
+validation.max_items: "{{field}} staat maximaal {{max}} items toe"
+validation.slug_not_unique: "De URL-slug {{value}} in {{field}} is al in gebruik"
+validation.slug_invalid: "{{field}} is geen geldige URL-slug"
+validation.slug_reserved_characters: "{{field}} bevat gereserveerde tekens: {{characters}}"
+validation.unique_constraint: "Een uniciteitsbeperking wordt geschonden"
+validation.missing_required_editables: "Waarden voor verplichte editables ontbreken"
+validation.image_too_large: "Afbeelding {{filename}} is te groot (max. {{max_megapixels}} megapixels). Verklein haar tot {{suggested_width}}×{{suggested_height}} pixels of minder"
+validation.and_more: "en nog {{n}}"
 sidebar.selected_elements: Geselecteerde elementen
 sidebar.grid_config: Rasterinstelling
 sidebar.tag_filters: Tagfilters
@@ -70,6 +103,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Volledig pad
 asset.asset-editor-tabs.list.columns.creationDate: Aanmaakdatum
 asset.asset-editor-tabs.list.columns.modificationDate: Wijzigingsdatum
 asset.tree.context-menu.upload-new-version: Nieuwe versie uploaden
+asset.upload-new-version.rename-confirmation.title: Asset wordt hernoemd
+asset.upload-new-version.rename-confirmation.message: 'Het nieuwe bestand is van het type .{{extension}} — de asset wordt hernoemd van "{{oldFilename}}" naar "{{newFilename}}" en de openbare URL verandert. Doorgaan?'
+asset.upload-new-version.renamed: 'De asset is hernoemd van "{{oldFilename}}" naar "{{newFilename}}". De openbare URL is gewijzigd.'
 asset.copy-info: Kopiëren & info
 asset.upload: Uploaden
 asset.upload.label: Bestand selecteren
@@ -118,6 +154,7 @@ areablock.paste: Plakken
 areablock.cut: Knippen
 areablock.settings: Instellingen
 areablock.delete: Verwijderen
+areablock.type-limit-reached: Het maximale aantal blokken van dit type is bereikt.
 document.highlight-editables: Bewerkbare velden markeren
 document.link.target: Linkdoel
 document.hardlink.source: Brondocument
@@ -366,6 +403,10 @@ grid.filter.less: Minder dan
 grid.filter.more: Meer dan
 grid.filter.string.placeholder: Zoeken of een lijst met één waarde per regel plakken om exact één van deze waarden te vinden
 grid.filter.column: "Filter {{column}}"
+grid.filter.operator.label: Voorwaarde
+grid.filter.operator.value: Komt overeen met waarde
+grid.filter.operator.empty: Is leeg
+grid.filter.operator.not-empty: Is niet leeg
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -472,6 +513,10 @@ action-could-not-be-applied: Actie kon niet worden toegepast
 failed-to-assign-tag-to-element: Tag aan element toewijzen mislukt
 failed-to-un-assign-tag-to-element: Tag van element verwijderen mislukt
 workflow-modal.perform-action: Actie uitvoeren
+workflow.unsaved-changes.title: Niet-opgeslagen wijzigingen
+workflow.unsaved-changes.warn: Er zijn niet-opgeslagen wijzigingen. Deze gaan verloren als deze actie wordt toegepast. Toch toepassen?
+workflow.unsaved-changes.apply-anyway: Toch toepassen
+workflow.unsaved-changes.save-failed: De niet-opgeslagen wijzigingen konden niet worden opgeslagen, dus de actie is niet toegepast.
 workflow-modal.cancel: Annuleren
 workflow-modal.notes: Notities
 workflow-modal.notes-required: Voer je notities in
@@ -664,6 +709,7 @@ mcp-servers.read-only-notice: Serverdefinities worden in deze omgeving via besta
 mcp-servers.save-success: MCP-server opgeslagen
 mcp-servers.access.users-count: "Gebruikers: {{number}}"
 mcp-servers.access.roles-count: "Rollen: {{number}}"
+mcp-servers.access.service-users-count: 'Servicegebruikers: {{number}}'
 mcp-servers.access.global-extra: elke geauthenticeerde gebruiker
 mcp-servers.access.nobody: "Nog niemand"
 mcp-servers.badge.read: Lezen
@@ -689,11 +735,16 @@ mcp-servers.editor.copy-url: "Server-URL kopiëren"
 mcp-servers.editor.connect-hint: Richt je MCP-client op deze URL en authenticeer je met je Pimcore-account.
 mcp-servers.sharing.title: Delen
 mcp-servers.sharing.share-globally: Globaal delen
-mcp-servers.sharing.share-globally-tooltip: Elke geauthenticeerde gebruiker krijgt Configuratie lezen en MCP-servertoegang (geen Configuratie bewerken)
+mcp-servers.sharing.share-globally-tooltip: Elke geauthenticeerde gebruiker, inclusief servicegebruikers, krijgt Configuratie lezen en MCP-servertoegang (geen Configuratie bewerken)
 mcp-servers.sharing.users: Gebruikers
 mcp-servers.sharing.roles: Rollen
 mcp-servers.sharing.add-user: Gebruiker toevoegen…
 mcp-servers.sharing.add-role: Rol toevoegen…
+mcp-servers.sharing.service-users: Servicegebruikers
+mcp-servers.sharing.add-service-user: Servicegebruiker toevoegen…
+mcp-servers.sharing.service-users-hint: Servicegebruikers kunnen alleen verbinding maken; ze kunnen de configuratie niet lezen of bewerken.
+mcp-servers.sharing.service-users-unavailable: Servicegebruikers worden niet weergegeven omdat je het recht voor gebruikersbeheer niet hebt. Hun bestaande toegang blijft behouden.
+mcp-servers.sharing.inactive: inactief
 mcp-servers.sharing.name: Naam
 mcp-servers.sharing.config-read: Configuratie lezen
 mcp-servers.sharing.config-edit: Configuratie bewerken
@@ -1295,6 +1346,7 @@ close-tab: Tabblad sluiten
 close-others: Overige sluiten
 close-unmodified: Ongewijzigde sluiten
 close-all: Alles sluiten
+use-full-space: Volledige ruimte gebruiken
 asset.tree.context-menu.download: Downloaden
 asset.tree.context-menu.download-as-zip: Downloaden als ZIP
 element-selector.title.single: Element selecteren
@@ -1378,6 +1430,7 @@ element.delete.batch.show-paths: Items weergeven
 element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
 element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
 element.open: Openen
+element.open-multiple: '{{count}} elementen openen'
 element.state: Status
 element.state.unpublished: Niet gepubliceerd
 element.toolbar.copy-id: ID kopiëren
@@ -1390,6 +1443,7 @@ element.publish: Publiceren
 element.locate-in-tree: In boom zoeken
 element.sidebar.filter.only-direct-children: alleen directe onderliggende items
 element.sidebar.filter.only-unreferenced: Alleen zonder verwijzingen
+element.sidebar.filter.only-untagged: Alleen zonder tags
 element.sidebar.field-filters: Veldfilters
 element.full-information: Volledige informatie
 system-information.id: ID
@@ -1400,6 +1454,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Bestandsgrootte
+system-information.checksum: Checksum
 system-information.modification-date: Wijzigingsdatum
 system-information.creation-date: Aanmaakdatum
 system-information.user-modification: Gebruiker wijziging
@@ -1607,6 +1662,8 @@ user-management.email: E-mail
 user-management.language: Taal
 user-management.dateTime: Datum-tijdlocale
 user-management.welcomeScreen: Welkomstscherm tonen bij opstarten
+user-management.welcomeScreenDashboard: Dashboard voor het welkomstscherm
+user-management.welcomeScreenDashboard.placeholder: Selecteer een dashboard
 user-management.memorizeTabs: Open tabbladen onthouden
 user-management.allowDirtyClose: Waarschuwing voor niet-opgeslagen inhoud uitschakelen
 user-management.closeWarning: Sluitwaarschuwing weergeven
@@ -1682,6 +1739,7 @@ user-management.add-user.label: Voer de naam in van de nieuwe gebruiker
 user-management.send-invitation: Send invitation link
 user-management.send-invitation.success: "Invitation sent to {{email}}"
 user-management.send-invitation.no-email: The user has no email address
+user-management.send-invitation.inactive: The user is inactive
 user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
 user-management.last-login: Laatste aanmelding
 user-management.search.id: ID
@@ -1733,6 +1791,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Cache wissen
 navigation.cache.clear-full-page-cache: Volledige paginacache wissen
 navigation.cache.clear-temporary-files: Tijdelijke bestanden wissen
+navigation.index-sync: Zoekindex synchroniseren
 navigation.clear-cache: Volledige paginacache wissen
 navigation.reports: Alle rapporten
 navigation.custom-reports: Aangepaste rapporten configureren
@@ -1765,6 +1824,10 @@ redirects.source-site: Bronsite
 redirects.source: Bron
 redirects.target-site: Doelsite
 redirects.target: Doel
+redirects.target-type: Doeltype
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Gegevensobject
 redirects.status: Status
 redirects.priority: Prioriteit
 redirects.regex: RegEx
@@ -2183,12 +2246,25 @@ classification-store.rename-collection: Collectie hernoemen
 classification-store.delete-collection: 'Collectie "{{collectionName}}" verwijderen?'
 classification-store.add-key: Sleutel toevoegen
 classification-store.rename-key: Sleutel hernoemen
-classification-store.delete-key: 'Sleutel "{{keyName}}" verwijderen?'
+classification-store.delete-key: 'Sleutel "{{keyName}}" uit elke groep verwijderen?'
 classification-store.delete-key-relation: 'Sleutel "{{keyName}}" uit deze groep verwijderen?'
 classification-store.delete-group-relation: 'Groep "{{groupName}}" uit deze collectie verwijderen?'
+classification-store.delete-group-consequence: "Als je deze groep verwijdert, worden ook de waarden verwijderd die elk object eronder bewaart. Dit kan niet ongedaan worden gemaakt."
+classification-store.delete-collection-consequence: "De collectie en de bijbehorende lijst met groepen worden verwijderd. De groepen en hun sleutels blijven in de store en er worden geen objectwaarden verwijderd."
+classification-store.delete-key-relation-consequence: "De sleutel wordt alleen uit deze groep verwijderd. De sleutel zelf blijft in de store en niets wat een object bewaart, wordt verwijderd."
+classification-store.delete-key-consequence: 'De sleutel wordt verwijderd uit elke groep waartoe hij behoort en wordt nergens meer aangeboden. Niets wat een object bewaart, wordt verwijderd, maar die waarden blijven onbereikbaar totdat de sleutel is hersteld en opnieuw aan een groep is toegewezen. Zijn groepstoewijzingen, hun volgorde, hun verplichtvlaggen en hun overschrijvingen per groep komen niet met hem terug.'
+classification-store.keys-view.active: Actief
+classification-store.keys-view.deleted: Verwijderd
+classification-store.restore-key: Herstellen
+classification-store.restore-key-question: 'Sleutel "{{keyName}}" herstellen?'
+classification-store.restore-key-consequence: 'De sleutel komt terug zonder tot een groep te behoren. Zijn groepstoewijzingen, hun volgorde, hun verplichtvlaggen en hun overschrijvingen per groep zijn verloren en kunnen niet worden hersteld. Wijs de sleutel opnieuw aan een groep toe om zijn waarden weer bereikbaar te maken.'
+classification-store.keys-deleted-empty: Geen verwijderde sleutels.
+classification-store.keys-deleted-no-results: "Geen verwijderde sleutels komen overeen met de zoekopdracht."
+classification-store.delete-group-relation-consequence: "De groep wordt alleen uit deze collectie verwijderd. De groep, haar sleutels en de waarden die objecten eronder bewaren blijven ongewijzigd."
 classification-store.edit-definition: Definitie bewerken
 classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Koppel-ID"
 classification-store.columns.name: Naam
 classification-store.columns.title: Titel
 classification-store.columns.type: Type
@@ -2207,6 +2283,112 @@ classification-store.select-group: Groep selecteren
 classification-store.search-groups: Groepen zoeken…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Subgroepen
+classification-store.engine.label: "Engine: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Document"
+classification-store.key-type-needs-document-engine: "De engine van deze store kan dit sleuteltype niet bevatten. Het vereist de documentengine."
+classification-store.keys-without-field-filter: "Voor deze sleutels is geen veldfilter beschikbaar, daarom zijn ze niet toegevoegd: {{keyNames}}"
+classification-store.add-sub-group: Subgroep toevoegen
+classification-store.delete-sub-group: "Subgroep \"{{subGroupName}}\" verwijderen?"
+classification-store.add-sub-group-store-hint: Een subgroep hoort bij de store, dus een nieuwe komt beschikbaar voor elke groep van deze store.
+classification-store.key-indexed: Opnemen in de zoekindex van de Classification Store
+classification-store.key-indexed-hint: Zolang dit uitgeschakeld is, kan deze sleutel niet worden gesorteerd, gefilterd of doorzocht en wordt de waarde uit het opgeslagen zoekdocument verwijderd. De index wordt via de wachtrij bijgewerkt, dus wijzigingen zijn niet meteen zichtbaar.
+classification-store.delete-sub-group-in-use-hint: Maak eerst de toewijzing van de sleutels aan deze subgroep ongedaan in de hierboven genoemde groepen en verwijder hem daarna.
+classification-store.no-sub-groups: Deze store heeft nog geen subgroepen
+classification-store.select-sub-group: Subgroep selecteren
+classification-store.search-sub-groups: Subgroepen zoeken…
+classification-store.assign-sub-group: Subgroep toewijzen
+classification-store.unassign-sub-group: Toewijzing opheffen
+classification-store.select-keys-hint: Selecteer eerst minstens één sleutel
+classification-store.no-sub-group: Geen subgroep
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Niet toegewezen ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Toewijzing van de hier weergegeven sleutels opheffen
+classification-store.aria.unassign-sub-group-keys: "Toewijzing van de hier weergegeven sleutels aan subgroep \"{{name}}\" opheffen"
+classification-store.aria.edit-key-override: "Opties en eenheid van sleutel \"{{name}}\" in deze groep bewerken"
+classification-store.override.edit: "Opties en eenheid in deze groep bewerken"
+classification-store.override.title: "Opties en eenheid van {{keyName}} in {{groupName}} bewerken"
+classification-store.override.options-heading: "Opties in deze groep"
+classification-store.override.unit-heading: "Eenheid in deze groep"
+classification-store.override.default-unit: "Standaardeenheid"
+classification-store.override.last-one: "de laatste"
+classification-store.override.no-longer-offered: "niet meer aangeboden door deze sleutel"
+classification-store.override.use-all-options: "Alle opties gebruiken"
+classification-store.override.use-key-units: "Eenheden van de sleutel gebruiken"
+classification-store.override.use-key-default: "Standaard van de sleutel gebruiken"
+classification-store.override.options-count: "{{count}} van {{total}} geselecteerd"
+classification-store.override.units-count: "{{count}} van {{total}} geselecteerd"
+classification-store.override.options-help: "Alle opties gebruiken heft de beperking op. Alle opties deselecteren is iets anders, daarom kan de laatste optie niet worden gedeselecteerd."
+classification-store.override.no-options-title: "Voor deze sleutel zijn in deze groep geen opties beschikbaar"
+classification-store.override.key-offers-no-options: "Deze sleutel biedt geen opties om te beperken."
+classification-store.override.options-empty: "De toewijzing beperkt de sleutel tot een lege lijst."
+classification-store.override.options-stale-only: "De opgeslagen subset noemt alleen waarden die de sleutel niet meer aanbiedt."
+classification-store.override.stored-unreadable: "De opgeslagen waarde kan niet als lijst worden gelezen."
+classification-store.override.options-unavailable: "De opties van deze sleutel konden niet worden geladen"
+classification-store.override.tag-options-unavailable: "opties onbekend"
+classification-store.override.options-stored-unlisted: "Deze sleutel publiceert geen opties om de opgeslagen deelverzameling mee te vergelijken. Ze blijft ongewijzigd; gebruik alle opties om haar te wissen."
+classification-store.override.units-no-vocabulary: "Deze sleutel noemt geen eenhedenvocabulaire, dus hier kan niets worden beperkt."
+classification-store.override.no-units-title: "Voor deze sleutel zijn in deze groep geen eenheden beschikbaar"
+classification-store.override.units-empty: "De toewijzing beperkt de geldige eenheden tot een lege lijst."
+classification-store.override.units-loading: "De eenheden van de installatie worden geladen."
+classification-store.override.units-unavailable: "De eenheden van de installatie konden niet worden geladen, dus de geldige eenheden kunnen niet worden getoond of gewijzigd."
+classification-store.override.units-key-permits-none: "Deze sleutel staat geen enkele eenheid toe, dus hier kan niets worden beperkt."
+classification-store.override.units-installation-empty: "Deze installatie definieert geen eenheden, dus hier kan niets worden beperkt."
+classification-store.override.units-stale-only: "De opgeslagen geldige eenheden noemen alleen eenheden die de sleutel niet meer toestaat."
+classification-store.override.default-outside: "De opgeslagen standaardeenheid {{unit}} hoort niet bij de eenheden die deze groep toestaat."
+classification-store.override.nothing-to-narrow: "Deze sleutel heeft geen opties en geen eenheden, dus er valt niets te beperken."
+classification-store.override.tag-no-options: "geen opties"
+classification-store.override.tag-options: "{{count}} van {{total}}"
+classification-store.override.tag-no-units: "geen eenheden"
+classification-store.override.tag-units: "{{count}} van {{total}} eenheden"
+classification-store.override.tag-unreadable: "onleesbaar"
+classification-store.aria.delete-sub-group: "Subgroep \"{{name}}\" verwijderen"
+classification-store.aria.edit-metadata: "Metadata van \"{{name}}\" bewerken"
+classification-store.aria.edit-titles: "Interne titels van \"{{name}}\" bewerken"
+classification-store.aria.remove-pair: "Paar \"{{name}}\" verwijderen"
+classification-store.aria.remove-pair-at: "Paar {{position}} verwijderen"
+classification-store.edit-metadata: "Metadata bewerken: {{name}}"
+classification-store.edit-titles: "Interne titels bewerken: {{name}}"
+classification-store.action-edit-metadata: "Metadata bewerken"
+classification-store.action-edit-titles: "Interne titels bewerken"
+classification-store.add-pair: "Paar toevoegen"
+classification-store.pair-key: "Sleutel"
+classification-store.pair-value: "Waarde"
+classification-store.pair-locale: "Taal"
+classification-store.pair-title: "Interne titel"
+classification-store.pair-no-content: "Nog geen paren"
+classification-store.pair-key-duplicate: "Deze sleutel wordt al door een ander paar gebruikt"
+classification-store.pair-key-reserved: "Dit voorvoegsel is gereserveerd voor interne titels. Gebruik het dialoogvenster \"Interne titels bewerken\" of een andere sleutel"
+classification-store.pair-locale-duplicate: "Deze taal wordt al door een andere titel gebruikt"
+classification-store.pair-key-list: "Deze sleutels zouden als lijst worden opgeslagen. Gebruik een sleutel die geen getal is"
+classification-store.pair-type.object: "Object"
+classification-store.pair-type.array: "Array"
+classification-store.pair-type.number: "Getal"
+classification-store.pair-type.boolean: "Boolean"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Talen zijn vrije tekst en worden niet gecontroleerd aan de hand van de in het systeem ingestelde talen."
+classification-store.metadata-saved: "Metadata opgeslagen"
+classification-store.titles-saved: "Titels opgeslagen"
+classification-store.unassign-sub-group-confirm_one: "Toewijzing van de 1 hier weergegeven sleutel aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
+classification-store.unassign-sub-group-confirm_other: "Toewijzing van de {{count}} hier weergegeven sleutels aan subgroep \"{{name}}\" opheffen? Sleutels van deze groep op andere pagina's houden die."
+classification-store.sub-groups-strip-hint: Dit zijn de subgroepen die de sleutels van deze groep gebruiken. Het vocabulaire blijft bij de store.
+classification-store.manage-sub-groups: Subgroepen beheren
+classification-store.sub-group-unused: "Geen enkele sleutel van deze groep gebruikt subgroep \"{{name}}\" nog. Hij bestaat nog steeds in de store."
+classification-store.assign-sub-group-progress: "Subgroep wordt aan {{done}} van {{total}} sleutels toegewezen…"
+classification-store.assign-sub-group-failed: "De subgroep kon niet worden toegewezen aan: {{keyNames}}"
+classification-store.assign-sub-group-running: Wacht tot de toewijzing van de subgroep klaar is
+classification-store.key-localization: "Localisatie"
+classification-store.key-localization.inherit: "Overerven"
+classification-store.key-localization.localized: "Gelokaliseerd"
+classification-store.key-localization.not-localized: "Niet gelokaliseerd"
+classification-store.key-localization-confirm: "Waarden die deze sleutel in andere talen bevat, worden mogelijk niet meer weergegeven of opgeslagen. Toch opslaan?"
+classification-store.key-localized: "Gelokaliseerde sleutel"
+classification-store.key-localized-tooltip: "Deze sleutel bevat een eigen waarde per taal."
+classification-store.import: Storeconfiguratie importeren
+classification-store.import-success: Storeconfiguratie succesvol geïmporteerd
+classification-store.import-replace.title: "Storeconfiguratie vervangen?"
+classification-store.import-replace.warning: "Deze store is niet leeg. Een bestand dat een andere store beschrijft, vervangt de configuratie van deze store en verwijdert de waarden die elk object erin bewaart. Dit kan niet ongedaan worden gemaakt."
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad
@@ -2261,6 +2443,7 @@ user-menu.notification.modal.form.validation.provide-title: Geef een titel op
 user-menu.notification.modal.form.validation.provide-message: Geef een bericht op
 reports.reports-title: Rapporten
 reports.select-report-name: Selecteer de naam van het rapport
+reports.report-load-failed: Het rapport kon niet worden geladen.
 reports.select-report: Rapport selecteren
 reports.export: Exporteren
 reports.csv-export: CSV exporteren
@@ -2274,6 +2457,9 @@ reports.field-filters: Veldfilters
 reports.editor.delete.content: 'Weet je echt zeker dat je aangepast rapport "{{reportName}}" wilt verwijderen?'
 reports.editor.clone.content: Voer de naam in van het nieuwe item (a-zA-Z-_)
 reports.editor.add.content: Voer de naam in van het nieuwe item. De naam moet alfanumeriek zijn en minimaal 3 tekens lang (a-zA-Z0-9_-)
+reports.editor.import.title: Aangepast rapport importeren
+reports.editor.import.success: Aangepast rapport succesvol geïmporteerd
+reports.editor.import.invalid-file: Selecteer een JSON-exportbestand
 reports.editor.content.validation.message: De naam van het aangepaste rapport is ongeldig
 reports.editor.general-settings.title: Algemene instellingen
 reports.editor.general-settings.name-label: Naam
@@ -2285,6 +2471,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Groepspictogramklasse
 reports.editor.general-settings.shortcut-menu-label: Snelkoppeling in menu aanmaken
 reports.editor.source-definition.title: Brondefinitie
+reports.editor.source-definition.not-available: De brondefinitie van dit rapport is niet beschikbaar. De bundle die deze levert, is mogelijk niet geïnstalleerd.
 reports.editor.source-definition.no-content: Nog geen velden beschikbaar. Begin met het toevoegen van een veld.
 reports.editor.source-definition.select-source-definition: Selecteer een brondefinitie
 reports.editor.source-definition.sql-select-field: SELECT (bijv. a,b,c)*
@@ -2355,6 +2542,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Naam
 widget.email-log.grid.value: Waarde
+email-log.label: E-maillog
 email-log.subject: Onderwerp
 email-log.tooltip.resend: E-mail opnieuw versturen
 email-log.tooltip.forward: E-mail doorsturen
@@ -2478,6 +2666,8 @@ recycle-bin.actions.delete: Verwijderen
 recycle-bin.actions.delete.title: Prullenbakitems verwijderen
 recycle-bin.actions.restore: Herstellen
 recycle-bin.actions.restore.title: Prullenbakitems herstellen
+recycle-bin.actions.restore.relocated_one: Element geplaatst in __restored. Nu gelden de rechten van die map.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementen geplaatst in __restored. Nu gelden de rechten van die map."
 ownership-management.title: Eigendomsbeheer
 ownership-management.show-deleted-owners: Items van verwijderde gebruikers weergeven
 ownership-management.deleted-user: Verwijderde gebruiker
@@ -3052,6 +3242,7 @@ translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
 translations.merger.column.language: Taal
 translations.merger.items: items
 select.clear-selection: Selectie wissen
+select.select-all: Alles selecteren
 asset.folder.preview.image-display: Afbeeldingsweergave
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groot
@@ -3074,9 +3265,113 @@ saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
 saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
 saved-search.menu-shortcut-group: Menugroep
 skip-to-content: Naar de inhoud
+preview-mode.switch: Voorbeeldmodus
+preview-mode.preview-item: Voorbeelditem
+preview-mode.no-item: Geen voorbeelditem beschikbaar
+preview-mode.preview: Voorbeeld
 tag-configuration.move-under: 'Verplaatsen onder'
 tag-configuration.move-search-placeholder: 'Zoek een tag'
 tree.actions.edit-tag: Bewerken
 tag-configuration.edit-tag: '"{{name}}" bewerken'
 tag-configuration.name-required: 'Voer een tagnaam in'
 tag-configuration.move-targets-failed: 'De lijst met tags kon niet worden geladen, dus alleen de naam kan worden gewijzigd'
+navigation.service-users: Servicegebruikers
+widget.service-user-management: Servicegebruikers
+service-users.create: Nieuw
+service-users.create.title: Nieuwe servicegebruiker
+service-users.create.ok: Aanmaken
+service-users.create-from-user: Van gebruiker
+service-users.create-from-user.title: Nieuwe servicegebruiker op basis van een gebruiker
+service-users.create-from-user.description: Kopieert de rechten, rollen en workspaces van de gebruiker. De gebruiker wordt niet gewijzigd en beheerdersrechten worden nooit gekopieerd.
+service-users.field.name: Naam
+service-users.field.name.fixed: De naam kan niet worden gewijzigd, omdat MCP-servertoegang op naam wordt verleend.
+service-users.field.name.invalid: Gebruik maximaal 64 letters, cijfers, punten, koppeltekens of underscores, beginnend met een letter of cijfer, bijvoorbeeld svc-erp-sync.
+service-users.field.email: Contact-e-mailadres
+service-users.field.responsible-users: Verantwoordelijke gebruikers
+service-users.field.responsible-users.help: 'Zij staan in voor deze servicegebruiker waar een mens nodig is, bijvoorbeeld voor meldingen erover.'
+service-users.field.source-user: Gebruiker om van te kopiëren
+service-users.filter.unused-days: Langer dan N dagen ongebruikt
+service-users.status.inactive: Inactief
+service-users.dormancy.never-used: Nooit gebruikt
+service-users.dormancy.warning: 90 dagen ongebruikt
+service-users.dormancy.dormant: Slapend
+service-users.tab.settings: Instellingen
+service-users.tab.permissions: Rechten
+service-users.tab.roles: Rollen
+service-users.tab.workspaces: Workspaces
+service-users.roles: Rollen
+service-users.save.success: Servicegebruiker opgeslagen
+service-users.deactivate: Deactiveren
+service-users.deactivate.confirm: Servicegebruiker "{{name}}" deactiveren? De inloggegevens werken vanaf het volgende verzoek niet meer.
+service-users.delete: Verwijderen
+service-users.delete.confirm: Servicegebruiker "{{name}}" definitief verwijderen? De OAuth-client, de tokens en de MCP-servertoegang worden verwijderd. Dit kan niet ongedaan worden gemaakt.
+service-users.credentials.title: Inloggegevens
+service-users.credentials.client-id: Client-ID
+service-users.credentials.last-used: Laatst gebruikt
+service-users.credentials.never-used: Nooit
+service-users.credentials.no-client: Geen OAuth-client
+service-users.credentials.rotate: Secret vernieuwen
+service-users.credentials.rotate.confirm: Een nieuw client-secret voor "{{name}}" aanmaken? Het huidige secret werkt direct niet meer.
+service-users.credentials.mcp-tokens: MCP-toegangstokens
+service-users.credentials.mcp-tokens.active: Actieve tokens
+service-users.credentials.mcp-tokens.latest-expiry: Laatste vervaldatum
+service-users.credentials.mcp-tokens.none: Geen actieve tokens
+service-users.credentials.issue: Token uitgeven
+service-users.credentials.issue.title: MCP-toegangstoken uitgeven
+service-users.credentials.issue.ttl: Geldigheidsduur in dagen (1 tot 90)
+service-users.credentials.issue.ttl.invalid: Voer een geheel aantal dagen in van 1 tot 90.
+service-users.credentials.issue.hint: Het token wordt maar één keer getoond. Clients sturen het als Bearer-token mee in de Authorization-header.
+service-users.credentials.revoke: Alle tokens intrekken
+service-users.credentials.revoke.confirm: Alle MCP-toegangstokens van deze servicegebruiker intrekken? Verbonden clients werken direct niet meer.
+service-users.credentials.revoke.success: Alle MCP-toegangstokens van de servicegebruiker zijn ingetrokken.
+service-users.credentials.oauth: OAuth-client
+service-users.credentials.oauth.disabled: OAuth-clientgegevens zijn op deze instantie uitgeschakeld; gebruik een MCP-toegangstoken.
+service-users.credentials.oauth.rotate-hint: Toegangstokens die al met het oude secret zijn uitgegeven, blijven geldig tot ze verlopen.
+service-users.credentials.token: Toegangstoken
+service-users.credentials.token.expires: Verloopt
+service-users.create.credentials.title: Inloggegevens
+service-users.create.credentials.skip: Overslaan, later uitgeven
+service-users.create.credentials.which: Gebruik de OAuth-client voor pipelines die de client_credentials-grant kunnen uitvoeren; gebruik voor al het andere een MCP-toegangstoken.
+service-users.create.credentials.token-description: Clients maken verbinding met een MCP-toegangstoken. Geef er nu een uit, of later via de inloggegevens van de servicegebruiker.
+service-users.secret.title: Client-secret
+service-users.secret.client-secret: Client-secret
+service-users.secret.warning: Kopieer het secret nu. Het wordt maar één keer getoond en kan niet opnieuw worden weergegeven.
+service-users.secret.copy: Secret kopiëren
+service-users.secret.close: Sluiten
+navigation.maintenance-mode: Onderhoudsmodus
+maintenance-mode.activate.title: Onderhoudsmodus activeren?
+maintenance-mode.activate.text: 'Alle services, inclusief de website, gaan in onderhoud. Alleen deze browsersessie behoudt toegang.'
+maintenance-mode.activate.lock-out: 'Als je uitlogt, de browser sluit of je sessie verloopt, word je ook buitengesloten.'
+maintenance-mode.activate.background-jobs: 'Achtergrondtaken en message consumers starten niet zolang de onderhoudsmodus actief is.'
+maintenance-mode.activate.ok: Activeren
+maintenance-mode.indicator.tooltip: 'De onderhoudsmodus is actief. Klik om deze te deactiveren.'
+maintenance-mode.deactivate.title: Onderhoudsmodus deactiveren?
+maintenance-mode.deactivate.text: 'Alle sessies krijgen weer toegang.'
+maintenance-mode.deactivate.ok: Deactiveren
+maintenance-mode.logout.title: Onderhoudsmodus eerst deactiveren?
+maintenance-mode.logout.text: 'De onderhoudsmodus is actief en alleen deze sessie heeft toegang. Na het uitloggen kan deze alleen nog via de opdrachtregel worden uitgeschakeld.'
+maintenance-mode.logout.deactivate-and-log-out: Deactiveren en uitloggen
+maintenance-mode.locked-out.title: Onderhoud
+maintenance-mode.locked-out.text: 'Het systeem is in onderhoudsmodus of tijdelijk niet beschikbaar. Je laatste actie is mogelijk niet opgeslagen. Deze melding sluit automatisch zodra het systeem weer beschikbaar is.'
+maintenance-mode.locked-out.reload: Herladen
+field-definition.multi-value: "Meervoudige waarde"
+classification-store.multi-value.delegate: "een multiValue van"
+classification-store.multi-value.delegate-required: "Kies vóór het opslaan het type dat deze multiValue bevat."
+classification-store.multi-value.variants: "Varianten"
+classification-store.multi-value.variant-name: "Naam"
+classification-store.multi-value.variant-label: "Label"
+classification-store.multi-value.variant-add: "Variant toevoegen"
+classification-store.multi-value.variant-name-empty: "Een variant heeft een naam nodig."
+classification-store.multi-value.variant-name-duplicate: "Twee varianten kunnen niet dezelfde naam \"{{name}}\" hebben."
+classification-store.multi-value.move-up: "Omhoog"
+classification-store.multi-value.move-down: "Omlaag"
+classification-store.multi-value.narrowing-confirm: "Varianten zijn beperkt. Reeds opgeslagen waarden worden niet verwijderd en blijven zichtbaar, maar er kunnen geen extra waarden buiten de nieuwe declaratie worden toegevoegd."
+classification-store.multi-value.default-variant: "Standaard"
+classification-store.multi-value.not-declared: "niet gedeclareerd"
+classification-store.multi-value.no-delegate: "Deze sleutel heeft geen type om de waarden mee te bewerken."
+classification-store.multi-value.unknown-delegate: "De editor heeft geen invoerveld voor het type {{type}}."
+classification-store.multi-value.unreadable-value: "Deze sleutel bevat een waarde die de editor niet kan lezen; ze blijft ongewijzigd."
+classification-store.multi-value.default-variant-permitted: "Waarden zonder variant toestaan"
+classification-store.multi-value.default-variant-label: "Label van de standaardwaarde"
+classification-store.multi-value.no-writable-slot: "Deze sleutel declareert geen variant en staat geen waarden zonder variant toe, dus er is geen plek om een waarde in te voeren. Declareer een variant of sta waarden zonder variant toe."
+classification-store.multi-value.unreadable-entry: "Deze waarde is geen getal dat het invoerveld kan tonen; ze blijft ongewijzigd opgeslagen tot ze wordt gewist."

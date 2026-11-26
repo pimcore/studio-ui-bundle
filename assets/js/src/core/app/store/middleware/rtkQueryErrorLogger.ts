@@ -16,7 +16,8 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isSessionGone } from '@Pimcore/modules/auth/util/session-end'
 
 interface ErrorPayload {
-  status?: number
+  status?: number | string
+  originalStatus?: number
   data?: {
     error: string
   }
@@ -39,6 +40,7 @@ const initialState: UserInformation = {
   perspectives: [],
   dateTimeLocale: '',
   welcomeScreen: false,
+  welcomeScreenTarget: null,
   memorizeTabs: false,
   theme: 'default',
   hasImage: false,
@@ -78,6 +80,13 @@ const isStudioApiRequest = (meta: unknown): boolean => {
   }
 }
 
+// The requests that ask whether a session exists: their 401 is their answer, not the end of a session
+const SESSION_CHECK_ENDPOINTS = new Set(['userGetCurrentInformation', 'sessionGetStatus'])
+
+// Maintenance mode answers every session but the exempt one with an HTML page and status 503
+const isMaintenancePage = (payload: ErrorPayload | undefined): boolean =>
+  payload?.status === 'PARSING_ERROR' && payload.originalStatus === 503
+
 const logOut = (dispatch: MiddlewareAPI['dispatch']): void => {
   dispatch({ type: 'auth/setUser', payload: initialState })
   dispatch({ type: 'authentication/setAuthState', payload: false })
@@ -92,7 +101,7 @@ export const rtkQueryErrorLogger: Middleware =
 
       // Handle the case when the user's session has expired and further requests return a 401 status.
       if (payload?.status === 401) {
-        if ('endpointName' in actionMetaArgs && actionMetaArgs.endpointName === 'userGetCurrentInformation') {
+        if ('endpointName' in actionMetaArgs && SESSION_CHECK_ENDPOINTS.has(String(actionMetaArgs.endpointName))) {
           return next(action)
         }
 
@@ -114,6 +123,10 @@ export const rtkQueryErrorLogger: Middleware =
 
         // Need to prevent further handling of the error to avoid triggering the error boundary etc.
         return
+      }
+
+      if (isMaintenancePage(payload) && isStudioApiRequest(action.meta)) {
+        api.dispatch({ type: 'maintenance-mode/setLockedOut', payload: true })
       }
     }
 

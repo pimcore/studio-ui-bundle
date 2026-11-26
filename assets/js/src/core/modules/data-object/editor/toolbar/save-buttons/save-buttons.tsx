@@ -38,13 +38,14 @@ import { useTranslation } from 'react-i18next'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useTemporaryValue } from '@Pimcore/utils/hooks/use-temporary-value'
 import { confirmWhenSchedulesSaved } from '@Pimcore/modules/element/editor/save-confirmation'
+import { getWorkflowSaveTask, useWorkflowSave } from './use-workflow-save'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
   const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
-  const { isAutoSaveLoading, runningTask } = useSaveContext()
+  const { isAutoSaveLoading, runningTask, runningTaskRef } = useSaveContext()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
@@ -80,8 +81,10 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
   }, [isError, isSchedulesError, error, schedulesError])
 
-  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
-    if (dataObject?.changes === undefined) return
+  // Saves the data and the schedules; resolves with the outcome of the schedules save (the data
+  // save reports its success through onFinish).
+  const saveDataAndSchedules = async (task: SaveTaskType, onFinish?: () => void): Promise<boolean> => {
+    if (dataObject?.changes === undefined) return false
     // The reset compares against the data the save actually sent, not the data read
     // here: the save may run much later (queued behind another one), take over the data
     // of an auto save folded into it meanwhile, and the user can keep editing after that.
@@ -96,10 +99,22 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     })
     action.schedulesSaved = saveSchedules()
 
-    Promise.all([objectSaved, action.schedulesSaved]).catch((error) => {
+    return await Promise.all([objectSaved, action.schedulesSaved]).then(([, schedulesSaved]) => schedulesSaved).catch((error) => {
       console.error(error)
+      return false
     })
   }
+
+  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
+    void saveDataAndSchedules(task, onFinish)
+  }
+
+  // A transition with unsavedChangesBehaviour "save" saves through this same flow, using the
+  // task of the primary button. A user's own save that is still running is not queued behind.
+  useWorkflowSave({
+    getTask: () => getWorkflowSaveTask(dataObject, runningTaskRef?.current),
+    startSave: saveDataAndSchedules
+  })
 
   const getSecondaryButtons = (): ReactElement[] => {
     if (dataObject?.type === 'folder') {

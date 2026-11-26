@@ -146,10 +146,10 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
 
       if (success) {
         dispatch(renameNode({ elementType, nodeId: String(id), newLabel: value }))
+        updateFilenameOrKey(id, value)
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
-      updateFilenameOrKey(id, value)
 
       onFinish?.(value)
     } catch (error) {

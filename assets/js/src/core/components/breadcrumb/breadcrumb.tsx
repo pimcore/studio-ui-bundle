@@ -10,7 +10,7 @@
 
 import React, { useEffect, useRef, useState, type ReactElement, type CSSProperties } from 'react'
 import { Breadcrumb as AntBreadcrumb, type MenuItemProps, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
-import { type BreadcrumbItemType, type ItemType } from 'antd/es/breadcrumb/Breadcrumb'
+import { type ItemType } from 'antd/es/breadcrumb/Breadcrumb'
 import cn from 'classnames'
 import { useAppDispatch } from '@sdk/app'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
@@ -102,7 +102,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
     }
 
     // Prepend the "..." menu to the existing items array
-    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemProps[], items: BreadcrumbItemType[] }): ItemType[] => [
+    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemProps[], items: ItemType[] }): ItemType[] => [
       {
         title: '...',
         menu: { items: dotsMenuItems, className: styles.dropdownMenu }

@@ -6,6 +6,13 @@ common.clear: Fjern
 cache.clear-cache-success: Hurtigbufferen ble tømt
 cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
 cache.clear-temporary-files-success: Midlertidige filer ble slettet
+index-sync.confirmation.title: Synkroniser søkeindeks
+index-sync.confirmation.text: "Alle dataobjekter, ressurser og dokumenter er satt i kø for omindeksering i bakgrunnen. Eksisterende indekser oppdateres på plass; en indeks hvis endrede kartlegging ikke kan brukes på dokumentene (for eksempel etter en felttypsendring) opprettes på nytt og fylles opp. Avhengig av datamengden kan dette ta en stund og belaste søkeserveren. Vil du fortsette?"
+index-sync.confirmation.ok: Synkroniser
+index-sync.job.title: Synkroniserer søkeindeks
+index-sync.start-failed: Det gikk ikke å starte synkroniseringen av søkeindeksen
+deep-link.unknown-link: Ingen behandler er registrert for denne lenken
+deep-link.open-failed: En feil oppstod under åpning av lenken
 dont-ask-again: Ikke spør igjen
 widget.missing-context.title: Manglende kontekst
 widget.missing-context.description: Ingen relatert element funnet
@@ -27,7 +34,33 @@ error.error_recycle_bin_restore: Kan ikke gjenopprette elementet fra papirkurven
 error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet fra papirkurven, overordnet element mangler
 error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
 error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
+error.error_invitation_as_admin_non_admin_user: Only admin users can send an invitation to an admin user
+error.error_invitation_no_email: An invitation cannot be sent because the user has no valid email address
+error.error_invitation_user_inactive: An invitation cannot be sent to an inactive user
 error.syntax_error: Syntaksfeil
+validation.mandatory: "{{field}} er obligatorisk"
+validation.regex_mismatch: "{{field}} samsvarer ikke med det påkrevde mønsteret {{regex}}"
+validation.max_length: "{{field}} kan ikke være lengre enn {{max}} tegn"
+validation.min_length: "{{field}} må være minst {{min}} tegn langt"
+validation.not_numeric: "{{field}} må være et tall, fikk: {{value}}"
+validation.not_integer: "{{field}} må være et heltall, fikk: {{value}}"
+validation.not_unsigned: "{{field}} kan ikke være negativt, fikk: {{value}}"
+validation.min_value: "{{field}} må være minst {{min}}, fikk: {{value}}"
+validation.max_value: "{{field}} kan være høyst {{max}}, fikk: {{value}}"
+validation.range_start_after_end: "{{field}}: starten kan ikke være etter slutten"
+validation.invalid_email: "{{field}} er ikke en gyldig e-postadresse: {{value}}"
+validation.invalid_option: "{{field}} har et ugyldig alternativ: {{value}}"
+validation.invalid_time: "{{field}} er ikke et gyldig klokkeslett: {{value}}"
+validation.invalid_relation: "{{field}} inneholder en ugyldig relasjon"
+validation.max_relations: "{{field}} tillater høyst {{max}} relasjoner"
+validation.max_items: "{{field}} tillater høyst {{max}} elementer"
+validation.slug_not_unique: "URL-sluggen {{value}} i {{field}} er allerede i bruk"
+validation.slug_invalid: "{{field}} er ikke en gyldig URL-slug"
+validation.slug_reserved_characters: "{{field}} inneholder reserverte tegn: {{characters}}"
+validation.unique_constraint: "En unikhetsbegrensning brytes"
+validation.missing_required_editables: "Verdier for obligatoriske redigerbare elementer mangler"
+validation.image_too_large: "Bildet {{filename}} er for stort (maks. {{max_megapixels}} megapiksler). Endre størrelsen til {{suggested_width}}×{{suggested_height}} piksler eller mindre"
+validation.and_more: "og {{n}} til"
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
 sidebar.tag_filters: Taggfiltre
@@ -70,6 +103,9 @@ asset.asset-editor-tabs.list.columns.fullPath: Full sti
 asset.asset-editor-tabs.list.columns.creationDate: Opprettelsesdato
 asset.asset-editor-tabs.list.columns.modificationDate: Endringsdato
 asset.tree.context-menu.upload-new-version: Last opp ny versjon
+asset.upload-new-version.rename-confirmation.title: Asseten får nytt navn
+asset.upload-new-version.rename-confirmation.message: 'Den nye filen er av typen .{{extension}} — asseten får nytt navn fra "{{oldFilename}}" til "{{newFilename}}", og den offentlige URL-en endres. Vil du fortsette?'
+asset.upload-new-version.renamed: 'Asseten har fått nytt navn fra "{{oldFilename}}" til "{{newFilename}}". Den offentlige URL-en er endret.'
 asset.copy-info: Kopier og info
 asset.upload: Last opp
 asset.upload.label: Velg fil
@@ -118,6 +154,7 @@ areablock.paste: Lim inn
 areablock.cut: Klipp ut
 areablock.settings: Innstillinger
 areablock.delete: Slett
+areablock.type-limit-reached: Maksimalt antall blokker av denne typen er nådd.
 document.highlight-editables: Marker redigerbare
 document.link.target: Lenke-mål
 document.hardlink.source: Kildedokument
@@ -366,6 +403,10 @@ grid.filter.less: Mindre enn
 grid.filter.more: Mer enn
 grid.filter.string.placeholder: Søk eller lim inn en liste med en verdi per linje for å få nøyaktig match med en av dem
 grid.filter.column: 'Filtrer {{column}}'
+grid.filter.operator.label: Betingelse
+grid.filter.operator.value: Samsvarer med verdi
+grid.filter.operator.empty: Er tom
+grid.filter.operator.not-empty: Er ikke tom
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -472,6 +513,10 @@ action-could-not-be-applied: Handling kunne ikke utføres
 failed-to-assign-tag-to-element: Kunne ikke tilordne tagg til element
 failed-to-un-assign-tag-to-element: Kunne ikke fjerne tagg fra element
 workflow-modal.perform-action: Utfør handling
+workflow.unsaved-changes.title: Ulagrede endringer
+workflow.unsaved-changes.warn: Det finnes ulagrede endringer. De går tapt når handlingen utføres. Vil du utføre den likevel?
+workflow.unsaved-changes.apply-anyway: Utfør likevel
+workflow.unsaved-changes.save-failed: De ulagrede endringene kunne ikke lagres, så handlingen ble ikke utført.
 workflow-modal.cancel: Avbryt
 workflow-modal.notes: Notater
 workflow-modal.notes-required: Vennligst skriv inn notatene dine
@@ -664,6 +709,7 @@ mcp-servers.read-only-notice: Serverdefinisjoner administreres via filer i dette
 mcp-servers.save-success: MCP-server lagret
 mcp-servers.access.users-count: "Brukere: {{number}}"
 mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.service-users-count: 'Tjenestebrukere: {{number}}'
 mcp-servers.access.global-extra: alle autentiserte brukere
 mcp-servers.access.nobody: "Ingen ennå"
 mcp-servers.badge.read: Les
@@ -689,11 +735,16 @@ mcp-servers.editor.copy-url: "Kopier server-URL"
 mcp-servers.editor.connect-hint: Pek MCP-klienten din mot denne URL-en og autentiser deg med Pimcore-kontoen din.
 mcp-servers.sharing.title: Deling
 mcp-servers.sharing.share-globally: Del globalt
-mcp-servers.sharing.share-globally-tooltip: Alle autentiserte brukere får konfigurasjonslesing og MCP-servertilgang (ikke konfigurasjonsredigering)
+mcp-servers.sharing.share-globally-tooltip: Alle autentiserte brukere, inkludert tjenestebrukere, får konfigurasjonslesing og MCP-servertilgang (ikke konfigurasjonsredigering)
 mcp-servers.sharing.users: Brukere
 mcp-servers.sharing.roles: Roller
 mcp-servers.sharing.add-user: Legg til en bruker…
 mcp-servers.sharing.add-role: Legg til en rolle…
+mcp-servers.sharing.service-users: Tjenestebrukere
+mcp-servers.sharing.add-service-user: Legg til en tjenestebruker…
+mcp-servers.sharing.service-users-hint: Tjenestebrukere kan bare koble til; de kan ikke lese eller redigere konfigurasjonen.
+mcp-servers.sharing.service-users-unavailable: Tjenestebrukere vises ikke fordi du mangler tillatelsen til brukeradministrasjon. Deres eksisterende tilgang beholdes.
+mcp-servers.sharing.inactive: inaktiv
 mcp-servers.sharing.name: Navn
 mcp-servers.sharing.config-read: Konfigurasjonslesing
 mcp-servers.sharing.config-edit: Konfigurasjonsredigering
@@ -1295,6 +1346,7 @@ close-tab: Lukk fane
 close-others: Lukk andre
 close-unmodified: Lukk uendrede
 close-all: Lukk alle
+use-full-space: Bruk hele området
 asset.tree.context-menu.download: Last ned
 asset.tree.context-menu.download-as-zip: Last ned som ZIP
 element-selector.title.single: Velg element
@@ -1378,6 +1430,7 @@ element.delete.batch.show-paths: Vis elementer
 element.delete.batch.dependencies-warning.confirmed_one: 'Merk: Dette elementet har avhengigheter.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Merk: Disse elementene har avhengigheter.'
 element.open: Åpne
+element.open-multiple: 'Åpne {{count}} elementer'
 element.state: Status
 element.state.unpublished: Upublisert
 element.toolbar.copy-id: Kopier ID
@@ -1390,6 +1443,7 @@ element.publish: Publiser
 element.locate-in-tree: Finn i treet
 element.sidebar.filter.only-direct-children: Kun direkte underelementer
 element.sidebar.filter.only-unreferenced: Kun elementer uten referanser
+element.sidebar.filter.only-untagged: Kun elementer uten tagger
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID
@@ -1400,6 +1454,7 @@ system-information.type: Type
 system-information.class-id: Klasse-ID
 system-information.class: Klasse
 system-information.file-size: Filstørrelse
+system-information.checksum: Kontrollsum
 system-information.modification-date: Endringsdato
 system-information.creation-date: Opprettelsesdato
 system-information.user-modification: Endret av bruker
@@ -1607,6 +1662,8 @@ user-management.email: E-post
 user-management.language: Språk
 user-management.dateTime: Dato og tid-locale
 user-management.welcomeScreen: Vis velkomstskjerm ved oppstart
+user-management.welcomeScreenDashboard: Dashbord for velkomstskjermen
+user-management.welcomeScreenDashboard.placeholder: Velg et dashbord
 user-management.memorizeTabs: Husk åpne faner
 user-management.allowDirtyClose: Deaktiver advarsel om ulagret innhold
 user-management.closeWarning: Vis lukkeadvarsel
@@ -1682,6 +1739,7 @@ user-management.add-user.label: Oppgi navnet på den nye brukeren
 user-management.send-invitation: Send invitation link
 user-management.send-invitation.success: "Invitation sent to {{email}}"
 user-management.send-invitation.no-email: The user has no email address
+user-management.send-invitation.inactive: The user is inactive
 user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
 user-management.last-login: Siste innlogging
 user-management.search.id: ID
@@ -1733,6 +1791,7 @@ navigation.cache: Hurtigbuffer
 navigation.cache.clear-cache: Tøm hurtigbuffer
 navigation.cache.clear-full-page-cache: Tøm fullsidebuffer
 navigation.cache.clear-temporary-files: Slett midlertidige filer
+navigation.index-sync: Synkroniser søkeindeks
 navigation.clear-cache: Tøm fullsidebuffer
 navigation.reports: Alle rapporter
 navigation.custom-reports: Konfigurasjon av egendefinerte rapporter
@@ -1765,6 +1824,10 @@ redirects.source-site: Kildenettsted
 redirects.source: Kilde
 redirects.target-site: Målnettsted
 redirects.target: Mål
+redirects.target-type: Måltype
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Prioritet
 redirects.regex: RegEx
@@ -2183,12 +2246,25 @@ classification-store.rename-collection: Gi nytt navn til samling
 classification-store.delete-collection: "Slette samling \"{{collectionName}}\"?"
 classification-store.add-key: Legg til nøkkel
 classification-store.rename-key: Gi nytt navn til nøkkel
-classification-store.delete-key: "Slette nøkkel \"{{keyName}}\"?"
+classification-store.delete-key: "Fjerne nøkkel \"{{keyName}}\" fra alle grupper?"
 classification-store.delete-key-relation: "Fjerne nøkkel \"{{keyName}}\" fra denne gruppen?"
 classification-store.delete-group-relation: "Fjerne gruppe \"{{groupName}}\" fra denne samlingen?"
+classification-store.delete-group-consequence: "Når du sletter denne gruppen, slettes også verdiene hvert objekt har under den. Dette kan ikke angres."
+classification-store.delete-collection-consequence: "Samlingen og gruppelisten den inneholder fjernes. Gruppene og nøklene deres blir værende i store, og ingen objektverdier slettes."
+classification-store.delete-key-relation-consequence: "Nøkkelen fjernes bare fra denne gruppen. Selve nøkkelen blir værende i store, og ingenting et objekt har lagret slettes."
+classification-store.delete-key-consequence: "Nøkkelen fjernes fra alle grupper den tilhører, og tilbys ikke lenger noe sted. Ingenting et objekt har lagret slettes, men disse verdiene forblir utilgjengelige til nøkkelen er gjenopprettet og tildelt en gruppe på nytt. Gruppetilordningene, rekkefølgen deres, de obligatoriske flaggene og overstyringene per gruppe følger ikke med tilbake."
+classification-store.keys-view.active: Aktive
+classification-store.keys-view.deleted: Slettede
+classification-store.restore-key: Gjenopprett
+classification-store.restore-key-question: "Gjenopprette nøkkel \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "Nøkkelen kommer tilbake uten å tilhøre noen gruppe. Gruppetilordningene, rekkefølgen deres, de obligatoriske flaggene og overstyringene per gruppe er borte og kan ikke gjenopprettes. Tildel nøkkelen en gruppe på nytt for at verdiene skal bli tilgjengelige igjen."
+classification-store.keys-deleted-empty: Ingen slettede nøkler.
+classification-store.keys-deleted-no-results: "Ingen slettede nøkler samsvarer med søket."
+classification-store.delete-group-relation-consequence: "Gruppen fjernes bare fra denne samlingen. Gruppen, nøklene og verdiene objekter har under den berøres ikke."
 classification-store.edit-definition: Rediger definisjon
 classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Samsvars-ID"
 classification-store.columns.name: Navn
 classification-store.columns.title: Tittel
 classification-store.columns.type: Type
@@ -2207,6 +2283,112 @@ classification-store.select-group: Velg gruppe
 classification-store.search-groups: Søk i grupper…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Undergrupper
+classification-store.engine.label: "Motor: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Dokument"
+classification-store.key-type-needs-document-engine: "Motoren til denne storen kan ikke lagre denne nøkkeltypen. Den krever dokumentmotoren."
+classification-store.keys-without-field-filter: "Ingen feltfilter er tilgjengelig for disse nøklene, så de ble ikke lagt til: {{keyNames}}"
+classification-store.add-sub-group: Legg til undergruppe
+classification-store.delete-sub-group: "Slette undergruppen \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: En undergruppe hører til butikken, så en ny blir tilgjengelig for alle grupper i denne butikken.
+classification-store.key-indexed: Ta med i søkeindeksen til Classification Store
+classification-store.key-indexed-hint: Så lenge dette er slått av, kan denne nøkkelen ikke sorteres, filtreres eller søkes i, og verdien fjernes fra det lagrede søkedokumentet. Indeksen oppdateres via køen, så endringer skjer ikke umiddelbart.
+classification-store.delete-sub-group-in-use-hint: Fjern først tilknytningen av nøklene til denne undergruppen i gruppene nevnt over, og slett den deretter.
+classification-store.no-sub-groups: Denne butikken har ingen undergrupper ennå
+classification-store.select-sub-group: Velg undergruppe
+classification-store.search-sub-groups: Søk i undergrupper…
+classification-store.assign-sub-group: Tilknytt undergruppe
+classification-store.unassign-sub-group: Fjern tilknytning
+classification-store.select-keys-hint: Velg minst én nøkkel først
+classification-store.no-sub-group: Ingen undergruppe
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Uten tilknytning ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Fjern tilknytningen for nøklene som vises her
+classification-store.aria.unassign-sub-group-keys: "Fjern tilknytningen for nøklene som vises her til undergruppen \"{{name}}\""
+classification-store.aria.edit-key-override: "Rediger alternativer og enhet for nøkkelen \"{{name}}\" i denne gruppen"
+classification-store.override.edit: "Rediger alternativer og enhet i denne gruppen"
+classification-store.override.title: "Rediger alternativer og enhet for {{keyName}} i {{groupName}}"
+classification-store.override.options-heading: "Alternativer i denne gruppen"
+classification-store.override.unit-heading: "Enhet i denne gruppen"
+classification-store.override.default-unit: "Standardenhet"
+classification-store.override.last-one: "den siste"
+classification-store.override.no-longer-offered: "tilbys ikke lenger av denne nøkkelen"
+classification-store.override.use-all-options: "Bruk alle alternativer"
+classification-store.override.use-key-units: "Bruk nøkkelens enheter"
+classification-store.override.use-key-default: "Bruk nøkkelens standard"
+classification-store.override.options-count: "{{count}} av {{total}} valgt"
+classification-store.override.units-count: "{{count}} av {{total}} valgt"
+classification-store.override.options-help: "Bruk alle alternativer fjerner begrensningen. Å fjerne valget på alle alternativer er noe annet, så det siste alternativet kan ikke fravelges."
+classification-store.override.no-options-title: "Ingen alternativer er tilgjengelige for denne nøkkelen i denne gruppen"
+classification-store.override.key-offers-no-options: "Denne nøkkelen tilbyr ingen alternativer å begrense."
+classification-store.override.options-empty: "Tilknytningen begrenser nøkkelen til en tom liste."
+classification-store.override.options-stale-only: "Den lagrede delmengden nevner bare verdier nøkkelen ikke lenger tilbyr."
+classification-store.override.stored-unreadable: "Den lagrede verdien kan ikke leses som en liste."
+classification-store.override.options-unavailable: "Alternativene for denne nøkkelen kunne ikke lastes"
+classification-store.override.tag-options-unavailable: "alternativer ukjent"
+classification-store.override.options-stored-unlisted: "Denne nøkkelen publiserer ingen alternativer å sammenligne den lagrede delmengden med. Den beholdes som den er; bruk alle alternativer for å fjerne den."
+classification-store.override.units-no-vocabulary: "Denne nøkkelen oppgir ikke noe enhetsvokabular, så ingenting kan begrenses her."
+classification-store.override.no-units-title: "Ingen enheter er tilgjengelige for denne nøkkelen i denne gruppen"
+classification-store.override.units-empty: "Tilknytningen begrenser de gyldige enhetene til en tom liste."
+classification-store.override.units-loading: "Installasjonens enheter lastes."
+classification-store.override.units-unavailable: "Installasjonens enheter kunne ikke lastes, så de gyldige enhetene kan verken vises eller endres."
+classification-store.override.units-key-permits-none: "Denne nøkkelen tillater ingen enhet, så ingenting kan begrenses her."
+classification-store.override.units-installation-empty: "Denne installasjonen definerer ingen enheter, så ingenting kan begrenses her."
+classification-store.override.units-stale-only: "De lagrede gyldige enhetene nevner bare enheter nøkkelen ikke lenger tillater."
+classification-store.override.default-outside: "Den lagrede standardenheten {{unit}} er ikke blant enhetene denne gruppen tillater."
+classification-store.override.nothing-to-narrow: "Denne nøkkelen har verken alternativer eller enheter, så det er ingenting å begrense."
+classification-store.override.tag-no-options: "ingen alternativer"
+classification-store.override.tag-options: "{{count}} av {{total}}"
+classification-store.override.tag-no-units: "ingen enheter"
+classification-store.override.tag-units: "{{count}} av {{total}} enheter"
+classification-store.override.tag-unreadable: "uleselig"
+classification-store.aria.delete-sub-group: "Slett undergruppen \"{{name}}\""
+classification-store.aria.edit-metadata: "Rediger metadata for \"{{name}}\""
+classification-store.aria.edit-titles: "Rediger interne titler for \"{{name}}\""
+classification-store.aria.remove-pair: "Fjern paret \"{{name}}\""
+classification-store.aria.remove-pair-at: "Fjern par {{position}}"
+classification-store.edit-metadata: "Rediger metadata: {{name}}"
+classification-store.edit-titles: "Rediger interne titler: {{name}}"
+classification-store.action-edit-metadata: "Rediger metadata"
+classification-store.action-edit-titles: "Rediger interne titler"
+classification-store.add-pair: "Legg til par"
+classification-store.pair-key: "Nøkkel"
+classification-store.pair-value: "Verdi"
+classification-store.pair-locale: "Språk"
+classification-store.pair-title: "Intern tittel"
+classification-store.pair-no-content: "Ingen par ennå"
+classification-store.pair-key-duplicate: "Denne nøkkelen brukes allerede av et annet par"
+classification-store.pair-key-reserved: "Dette prefikset er reservert for interne titler. Bruk dialogen \"Rediger interne titler\" eller en annen nøkkel"
+classification-store.pair-locale-duplicate: "Dette språket brukes allerede av en annen tittel"
+classification-store.pair-key-list: "Disse nøklene ville blitt lagret som en liste. Bruk en nøkkel som ikke er et tall"
+classification-store.pair-type.object: "Objekt"
+classification-store.pair-type.array: "Matrise"
+classification-store.pair-type.number: "Tall"
+classification-store.pair-type.boolean: "Boolsk"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Språk er fritekst og kontrolleres ikke mot språkene som er konfigurert i systemet."
+classification-store.metadata-saved: "Metadata lagret"
+classification-store.titles-saved: "Titler lagret"
+classification-store.unassign-sub-group-confirm_one: "Fjerne tilknytningen av 1 nøkkel som vises her til undergruppen \"{{name}}\"? Nøkler i denne gruppen på andre sider beholder den."
+classification-store.unassign-sub-group-confirm_other: "Fjerne tilknytningen av {{count}} nøkler som vises her til undergruppen \"{{name}}\"? Nøkler i denne gruppen på andre sider beholder den."
+classification-store.sub-groups-strip-hint: Dette er undergruppene nøklene i denne gruppen bruker. Vokabularet tilhører butikken.
+classification-store.manage-sub-groups: Administrer undergrupper
+classification-store.sub-group-unused: "Ingen nøkkel i denne gruppen bruker undergruppen \"{{name}}\" lenger. Den finnes fortsatt i butikken."
+classification-store.assign-sub-group-progress: "Tilknytter undergruppen til {{done}} av {{total}} nøkler…"
+classification-store.assign-sub-group-failed: "Undergruppen kunne ikke tilknyttes: {{keyNames}}"
+classification-store.assign-sub-group-running: Vent til tilknytningen av undergruppen er ferdig
+classification-store.key-localization: "Lokalisering"
+classification-store.key-localization.inherit: "Arv"
+classification-store.key-localization.localized: "Lokalisert"
+classification-store.key-localization.not-localized: "Ikke lokalisert"
+classification-store.key-localization-confirm: "Verdier denne nøkkelen har på andre språk kan slutte å vises eller lagres. Lagre likevel?"
+classification-store.key-localized: "Lokalisert nøkkel"
+classification-store.key-localized-tooltip: "Denne nøkkelen har en egen verdi per språk."
+classification-store.import: Importer store-konfigurasjon
+classification-store.import-success: Store-konfigurasjonen ble importert
+classification-store.import-replace.title: "Erstatte store-konfigurasjonen?"
+classification-store.import-replace.warning: "Denne butikken er ikke tom. En fil som beskriver en annen butikk erstatter konfigurasjonen til denne butikken og sletter verdiene hvert objekt har i den. Dette kan ikke angres."
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
@@ -2261,6 +2443,7 @@ user-menu.notification.modal.form.validation.provide-title: Vennligst oppgi en t
 user-menu.notification.modal.form.validation.provide-message: Vennligst oppgi en melding
 reports.reports-title: Rapporter
 reports.select-report-name: Velg rapportens navn
+reports.report-load-failed: Rapporten kunne ikke lastes.
 reports.select-report: Velg rapport
 reports.export: Eksporter
 reports.csv-export: CSV-eksport
@@ -2274,6 +2457,9 @@ reports.field-filters: Feltfiltre
 reports.editor.delete.content: Vil du virkelig slette egendefinert rapport "{{reportName}}"?
 reports.editor.clone.content: Oppgi navnet på det nye elementet (a-zA-Z-_)
 reports.editor.add.content: Oppgi navnet på det nye elementet. Navnet må være alfanumerisk og minst 3 tegn langt (a-zA-Z0-9_-)
+reports.editor.import.title: Importer egendefinert rapport
+reports.editor.import.success: Egendefinert rapport ble importert
+reports.editor.import.invalid-file: Velg en JSON-eksportfil
 reports.editor.content.validation.message: Rapportnavnet er ugyldig
 reports.editor.general-settings.title: Generelle innstillinger
 reports.editor.general-settings.name-label: Navn
@@ -2285,6 +2471,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Gruppeikon-klasse
 reports.editor.general-settings.shortcut-menu-label: Opprett snarvei i menyen
 reports.editor.source-definition.title: Kildedefinisjon
+reports.editor.source-definition.not-available: Kildedefinisionen for denne rapporten er ikke tilgjengelig. Bundlen som gir den, er kanskje ikke installert.
 reports.editor.source-definition.no-content: Ingen tilgjengelige felt ennå. Begynn med å legge til et felt.
 reports.editor.source-definition.select-source-definition: Velg en kildedefinisjon
 reports.editor.source-definition.sql-select-field: SELECT (f.eks. a,b,c)*
@@ -2355,6 +2542,7 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parametere
 widget.email-log.grid.name: Navn
 widget.email-log.grid.value: Verdi
+email-log.label: E-postlogg
 email-log.subject: Emne
 email-log.tooltip.resend: Send e-post på nytt
 email-log.tooltip.forward: Videresend e-post
@@ -2478,6 +2666,8 @@ recycle-bin.actions.delete: Slett
 recycle-bin.actions.delete.title: Sletter papirkurvelementer
 recycle-bin.actions.restore: Gjenopprett
 recycle-bin.actions.restore.title: Gjenoppretter papirkurvelementer
+recycle-bin.actions.restore.relocated_one: Element plassert i __restored. Nå gjelder tillatelsene for denne mappen.
+recycle-bin.actions.restore.relocated_other: "{{count}} elementer plassert i __restored. Nå gjelder tillatelsene for denne mappen."
 ownership-management.title: Eierskapsadministrasjon
 ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
 ownership-management.deleted-user: Slettet bruker
@@ -3052,6 +3242,7 @@ translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
 select.clear-selection: Fjern valg
+select.select-all: Velg alle
 asset.folder.preview.image-display: Bildevisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
@@ -3074,9 +3265,113 @@ saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
 skip-to-content: Hopp til innhold
+preview-mode.switch: Forhåndsvisningsmodus
+preview-mode.preview-item: Forhåndsvisningselement
+preview-mode.no-item: Ingen forhåndsvisningselement tilgjengelig
+preview-mode.preview: Forhåndsvisning
 tag-configuration.move-under: 'Flytt under'
 tag-configuration.move-search-placeholder: 'Søk etter en tagg'
 tree.actions.edit-tag: Rediger
 tag-configuration.edit-tag: 'Rediger "{{name}}"'
 tag-configuration.name-required: 'Skriv inn et taggnavn'
 tag-configuration.move-targets-failed: 'Listen over tagger kunne ikke lastes inn, så bare navnet kan endres'
+navigation.service-users: Tjenestebrukere
+widget.service-user-management: Tjenestebrukere
+service-users.create: Ny
+service-users.create.title: Ny tjenestebruker
+service-users.create.ok: Opprett
+service-users.create-from-user: Fra bruker
+service-users.create-from-user.title: Ny tjenestebruker fra en bruker
+service-users.create-from-user.description: Kopierer tillatelsene, rollene og workspaces til brukeren. Brukeren endres ikke, og admin-rettigheter kopieres aldri.
+service-users.field.name: Navn
+service-users.field.name.fixed: Navnet kan ikke endres, fordi MCP-servertilgang gis basert på navn.
+service-users.field.name.invalid: Bruk opptil 64 bokstaver, tall, punktum, bindestreker eller understreker, og start med en bokstav eller et tall, for eksempel svc-erp-sync.
+service-users.field.email: Kontakt-e-post
+service-users.field.responsible-users: Ansvarlige brukere
+service-users.field.responsible-users.help: 'De svarer for denne tjenestebrukeren overalt der et menneske trengs, for eksempel for varsler om den.'
+service-users.field.source-user: Bruker å kopiere fra
+service-users.filter.unused-days: Ubrukt i mer enn N dager
+service-users.status.inactive: Inaktiv
+service-users.dormancy.never-used: Aldri brukt
+service-users.dormancy.warning: Ubrukt i 90 dager
+service-users.dormancy.dormant: Hvilende
+service-users.tab.settings: Innstillinger
+service-users.tab.permissions: Tillatelser
+service-users.tab.roles: Roller
+service-users.tab.workspaces: Workspaces
+service-users.roles: Roller
+service-users.save.success: Tjenestebruker lagret
+service-users.deactivate: Deaktiver
+service-users.deactivate.confirm: Deaktivere tjenestebrukeren "{{name}}"? Påloggingsinformasjonen slutter å fungere ved neste forespørsel.
+service-users.delete: Slett
+service-users.delete.confirm: Slette tjenestebrukeren "{{name}}" permanent? OAuth-klienten, tokenene og MCP-servertilgangen fjernes. Dette kan ikke angres.
+service-users.credentials.title: Påloggingsinformasjon
+service-users.credentials.client-id: Klient-ID
+service-users.credentials.last-used: Sist brukt
+service-users.credentials.never-used: Aldri
+service-users.credentials.no-client: Ingen OAuth-klient
+service-users.credentials.rotate: Roter hemmelighet
+service-users.credentials.rotate.confirm: Opprette en ny klienthemmelighet for "{{name}}"? Den nåværende hemmeligheten slutter å fungere umiddelbart.
+service-users.credentials.mcp-tokens: MCP-tilgangstokener
+service-users.credentials.mcp-tokens.active: Aktive tokener
+service-users.credentials.mcp-tokens.latest-expiry: Seneste utløp
+service-users.credentials.mcp-tokens.none: Ingen aktive tokener
+service-users.credentials.issue: Utsted token
+service-users.credentials.issue.title: Utsted et MCP-tilgangstoken
+service-users.credentials.issue.ttl: Levetid i dager (1 til 90)
+service-users.credentials.issue.ttl.invalid: Oppgi et helt antall dager fra 1 til 90.
+service-users.credentials.issue.hint: Tokenet vises bare én gang. Klienter sender det som et Bearer-token i Authorization-headeren.
+service-users.credentials.revoke: Tilbakekall alle tokener
+service-users.credentials.revoke.confirm: Tilbakekalle alle MCP-tilgangstokener for denne tjenestebrukeren? Tilkoblede klienter slutter å fungere umiddelbart.
+service-users.credentials.revoke.success: Alle MCP-tilgangstokener for tjenestebrukeren er tilbakekalt.
+service-users.credentials.oauth: OAuth-klient
+service-users.credentials.oauth.disabled: OAuth-klientlegitimasjon er deaktivert på denne instansen; bruk et MCP-tilgangstoken.
+service-users.credentials.oauth.rotate-hint: Tilgangstokener som allerede er utstedt med den gamle hemmeligheten, forblir gyldige til de utløper.
+service-users.credentials.token: Tilgangstoken
+service-users.credentials.token.expires: Utløper
+service-users.create.credentials.title: Påloggingsinformasjon
+service-users.create.credentials.skip: Hopp over, utsted senere
+service-users.create.credentials.which: Bruk OAuth-klienten for pipelines som kan kjøre client_credentials-grant; bruk et MCP-tilgangstoken for alt annet.
+service-users.create.credentials.token-description: Klienter kobler til med et MCP-tilgangstoken. Utsted et nå, eller senere fra påloggingsinformasjonen til tjenestebrukeren.
+service-users.secret.title: Klienthemmelighet
+service-users.secret.client-secret: Klienthemmelighet
+service-users.secret.warning: Kopier hemmeligheten nå. Den vises bare én gang og kan ikke vises igjen.
+service-users.secret.copy: Kopier hemmelighet
+service-users.secret.close: Lukk
+navigation.maintenance-mode: Vedlikeholdsmodus
+maintenance-mode.activate.title: Aktivere vedlikeholdsmodus?
+maintenance-mode.activate.text: 'Alle tjenester, inkludert nettstedet, settes i vedlikehold. Bare denne nettleserøkten beholder tilgangen.'
+maintenance-mode.activate.lock-out: 'Hvis du logger ut, lukker nettleseren eller økten utløper, blir også du stengt ute.'
+maintenance-mode.activate.background-jobs: 'Bakgrunnsjobber og meldingskonsumenter starter ikke mens vedlikeholdsmodus er aktiv.'
+maintenance-mode.activate.ok: Aktiver
+maintenance-mode.indicator.tooltip: 'Vedlikeholdsmodus er aktiv. Klikk for å deaktivere den.'
+maintenance-mode.deactivate.title: Deaktivere vedlikeholdsmodus?
+maintenance-mode.deactivate.text: 'Alle økter får tilgang igjen.'
+maintenance-mode.deactivate.ok: Deaktiver
+maintenance-mode.logout.title: Deaktivere vedlikeholdsmodus først?
+maintenance-mode.logout.text: 'Vedlikeholdsmodus er aktiv, og bare denne økten har tilgang. Etter utlogging kan den bare slås av fra kommandolinjen.'
+maintenance-mode.logout.deactivate-and-log-out: Deaktiver og logg ut
+maintenance-mode.locked-out.title: Vedlikehold
+maintenance-mode.locked-out.text: 'Systemet er i vedlikeholdsmodus eller midlertidig utilgjengelig. Den siste handlingen din ble kanskje ikke lagret. Denne meldingen lukkes automatisk så snart systemet er tilgjengelig igjen.'
+maintenance-mode.locked-out.reload: Last på nytt
+field-definition.multi-value: "Flerverdi"
+classification-store.multi-value.delegate: "en multiValue av"
+classification-store.multi-value.delegate-required: "Velg typen denne multiValue inneholder før du lagrer."
+classification-store.multi-value.variants: "Varianter"
+classification-store.multi-value.variant-name: "Navn"
+classification-store.multi-value.variant-label: "Etikett"
+classification-store.multi-value.variant-add: "Legg til variant"
+classification-store.multi-value.variant-name-empty: "En variant må ha et navn."
+classification-store.multi-value.variant-name-duplicate: "To varianter kan ikke ha samme navn \"{{name}}\"."
+classification-store.multi-value.move-up: "Flytt opp"
+classification-store.multi-value.move-down: "Flytt ned"
+classification-store.multi-value.narrowing-confirm: "Variantene er innskrenket. Verdier som allerede er lagret slettes ikke og forblir synlige, men flere verdier utover den nye deklarasjonen kan ikke legges til."
+classification-store.multi-value.default-variant: "Standard"
+classification-store.multi-value.not-declared: "ikke deklarert"
+classification-store.multi-value.no-delegate: "Denne nøkkelen har ingen type å redigere verdiene med."
+classification-store.multi-value.unknown-delegate: "Editoren har ikke noe inndatafelt for typen {{type}}."
+classification-store.multi-value.unreadable-value: "Denne nøkkelen har en verdi som editoren ikke kan lese; den blir stående som den er."
+classification-store.multi-value.default-variant-permitted: "Tillat verdier uten variant"
+classification-store.multi-value.default-variant-label: "Etikett for standardverdien"
+classification-store.multi-value.no-writable-slot: "Denne nøkkelen deklarerer ingen variant og tillater ikke verdier uten variant, så det er ingen plass til å legge inn en verdi. Deklarer en variant eller tillat verdier uten variant."
+classification-store.multi-value.unreadable-entry: "Denne verdien er ikke et tall som feltet kan vise; den beholdes som lagret til den slettes."

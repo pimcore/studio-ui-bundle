@@ -10,13 +10,14 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../../form'
-import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useMemo, useCallback, useRef } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 import { useFormGroupOptional } from '../../group/provider/use-form-group-optional'
+import { useNumberedListState } from './hooks/use-numbered-list-state'
 
 export interface NumberedListProps {
   children: React.ReactNode
@@ -28,13 +29,7 @@ export interface NumberedListProps {
 
 const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: NumberedListProps): React.JSX.Element => {
   const initialValue = baseValue ?? []
-  const [value, setValue] = useState(cloneDeep(initialValue))
-  // Mirror of the current value, kept in sync during render so the (referentially
-  // stable) operations and the store can read the latest value without depending
-  // on it — that is what keeps the provider context from changing on every keystroke.
-  const valueRef = useRef(value)
-  valueRef.current = value
-  const listenersRef = useRef<Set<() => void>>(new Set())
+  const { value, valueRef, setValue, store } = useNumberedListState(initialValue)
   // Parents recreate these callbacks on every render. Routing them through refs
   // keeps `operations` and the provider context referentially stable.
   const baseOnChangeRef = useRef(baseOnChange)
@@ -47,6 +42,16 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
   const previousInitialValue = useRef(initialValue)
+  // indexes of the entries added through add() since the last incoming value: their field registrations
+  // (null or prefilled defaults) are content the user brought in, not part of the loaded state, so they
+  // stay a change (an added entry whose fields all register null would otherwise look unchanged)
+  const addedIndexesRef = useRef<Set<number>>(new Set())
+  // current number of entries, kept in step with add() and remove() calls that are not rendered yet
+  const lengthRef = useRef(value.length)
+  lengthRef.current = value.length
+  // the last value handed to onChange since the last incoming value: reverting to the baseline after that
+  // report still has to be reported, otherwise the consumer keeps the reported state
+  const lastReportedRef = useRef<NumberedListData['values'] | null>(null)
   const { name: tempItemName } = useItem()
   const bufferedValue = useDebounce(value, 10)
 
@@ -74,6 +79,8 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     }
 
     previousInitialValue.current = initialValue
+    addedIndexesRef.current.clear()
+    lastReportedRef.current = null
 
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -81,7 +88,16 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     baselineValue.current = cloneDeep(initialValue)
   }, [baseValue])
 
+  const shiftAddedIndexes = useCallback((from: number, delta: 1 | -1): void => {
+    addedIndexesRef.current = new Set([...addedIndexesRef.current].map((index) => index >= from ? index + delta : index))
+  }, [])
+
   const add: NumberedListData['operations']['add'] = useCallback((newValue, key) => {
+    const addedKey = key ?? lengthRef.current
+    shiftAddedIndexes(addedKey, 1)
+    addedIndexesRef.current.add(addedKey)
+    lengthRef.current += 1
+
     setValue((currentValue) => {
       const currentKey = key ?? currentValue.length
       const _newValue = cloneDeep(currentValue)
@@ -91,6 +107,10 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   }, [])
 
   const remove: NumberedListData['operations']['remove'] = useCallback((key) => {
+    addedIndexesRef.current.delete(key)
+    shiftAddedIndexes(key + 1, -1)
+    lengthRef.current -= 1
+
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       newValue.splice(key, 1)
@@ -111,7 +131,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
     if (!isInitialValue) {
       onFieldChangeRef.current?.(currentSubFieldname, newSubValue)
-    } else {
+    } else if (!addedIndexesRef.current.has(Number(nameDifference[0]))) {
       const newBaseline = cloneDeep(baselineValue.current)
       set(newBaseline, nameDifference, newSubValue)
       baselineValue.current = newBaseline
@@ -129,7 +149,26 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     })
   }, [itemName])
 
-  const move: NumberedListData['operations']['move'] = useCallback((from, to) => {
+  const move: NumberedListData['operations']['move'] = useCallback((fromIndex, toIndex) => {
+    const from = fromIndex
+    // the destination is an index in the list after the removal, so it cannot exceed the last position
+    const to = Math.max(0, Math.min(toIndex, lengthRef.current - 1))
+    if (from === to) {
+      return
+    }
+
+    addedIndexesRef.current = new Set([...addedIndexesRef.current].map((index) => {
+      if (index === from) {
+        return to
+      }
+
+      if (from < to && index > from && index <= to) {
+        return index - 1
+      }
+
+      return from > to && index >= to && index < from ? index + 1 : index
+    }))
+
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       const [removed] = newValue.splice(from, 1)
@@ -140,7 +179,15 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
   // Trigger onChange when value changes, but outside of setState
   useEffect(() => {
-    if (!isEqual(value, baselineValue.current) && !isUndefined(value)) {
+    if (isUndefined(value)) {
+      return
+    }
+
+    const differsFromBaseline = !isEqual(value, baselineValue.current)
+    const revertsReported = lastReportedRef.current !== null && !isEqual(value, lastReportedRef.current)
+    if (differsFromBaseline || revertsReported) {
+      // a return to baseline is reported once; keeping its snapshot would turn a later registration into a change
+      lastReportedRef.current = differsFromBaseline ? cloneDeep(value) : null
       onChange(value)
     }
   }, [bufferedValue])
@@ -166,22 +213,6 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     (componentName: NamePath): Record<string, any> => getAdditionalComponentPropsRef.current?.(componentName) ?? {},
     []
   )
-
-  // Stable external store: subscribers (per-item via useNumberedListValue) read the
-  // current value through getSnapshot and are notified whenever it changes.
-  const store = useMemo(() => ({
-    subscribe: (listener: () => void): (() => void) => {
-      listenersRef.current.add(listener)
-      return () => {
-        listenersRef.current.delete(listener)
-      }
-    },
-    getSnapshot: () => valueRef.current
-  }), [])
-
-  useEffect(() => {
-    listenersRef.current.forEach((listener) => { listener() })
-  }, [value])
 
   return (
     <NumberedListProvider

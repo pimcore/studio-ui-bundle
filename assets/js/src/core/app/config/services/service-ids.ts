@@ -152,6 +152,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
   'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
+  'DynamicTypes/FieldFilter/EmptyOnly': 'DynamicTypes/FieldFilter/EmptyOnly',
   'DynamicTypes/FieldFilter/Id': 'DynamicTypes/FieldFilter/Id',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/FileSize': 'DynamicTypes/FieldFilter/FileSize',
@@ -280,6 +281,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Gender': 'DynamicTypes/ObjectData/Gender',
   'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
   'DynamicTypes/ObjectData/EncryptedField': 'DynamicTypes/ObjectData/EncryptedField',
+  'DynamicTypes/ObjectData/MultiValue': 'DynamicTypes/ObjectData/MultiValue',
   'DynamicTypes/ObjectData/CalculatedValue': 'DynamicTypes/ObjectData/CalculatedValue',
   'DynamicTypes/ObjectData/Checkbox': 'DynamicTypes/ObjectData/Checkbox',
   'DynamicTypes/ObjectData/Link': 'DynamicTypes/ObjectData/Link',
@@ -400,6 +402,9 @@ export const serviceIds = {
   // Context menu registry
   'App/ContextMenuRegistry/ContextMenuRegistry': 'App/ContextMenuRegistry/ContextMenuRegistry',
 
+  // Deep link registry
+  'App/DeepLinkRegistry/DeepLinkRegistry': 'App/DeepLinkRegistry/DeepLinkRegistry',
+
   // Document required fields validation service
   'Document/RequiredFieldsValidationService': 'Document/RequiredFieldsValidationService',
 
@@ -414,6 +419,9 @@ export const serviceIds = {
 
   // AppLoader Registry
   'AppLoader/Registry': 'AppLoader/Registry',
+
+  // Welcome Screen Registry
+  'WelcomeScreen/Registry': 'WelcomeScreen/Registry',
 
   // Field Definitions
   'DynamicTypes/FieldDefinition/Block': 'DynamicTypes/FieldDefinition/Block',
@@ -458,6 +466,7 @@ export const serviceIds = {
   'DynamicTypes/FieldDefinition/LanguageMultiselect': 'DynamicTypes/FieldDefinition/LanguageMultiselect',
   'DynamicTypes/FieldDefinition/RgbaColor': 'DynamicTypes/FieldDefinition/RgbaColor',
   'DynamicTypes/FieldDefinition/EncryptedField': 'DynamicTypes/FieldDefinition/EncryptedField',
+  'DynamicTypes/FieldDefinition/MultiValue': 'DynamicTypes/FieldDefinition/MultiValue',
   'DynamicTypes/FieldDefinition/UrlSlug': 'DynamicTypes/FieldDefinition/UrlSlug',
   'DynamicTypes/FieldDefinition/Checkbox': 'DynamicTypes/FieldDefinition/Checkbox',
   'DynamicTypes/FieldDefinition/Link': 'DynamicTypes/FieldDefinition/Link',

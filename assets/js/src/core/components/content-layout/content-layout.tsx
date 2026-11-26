@@ -8,51 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { memo, type ReactNode } from 'react'
-import { useStyles } from './content-layout.styles'
-import { Content } from '../content/content'
+import React, { memo } from 'react'
+import { PageLayout, type PageLayoutContentProps } from '../page-layout/page-layout'
 
-interface ContentToolbarViewProps {
-  children: ReactNode
-  className?: string
-  renderTopBar?: ReactNode
-  renderSidebar?: ReactNode
-  renderToolbar?: ReactNode
-}
+interface ContentToolbarViewProps extends Omit<PageLayoutContentProps, 'variant'> {}
 
-const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
-  const { styles } = useStyles()
-  const classes = ['content-toolbar-sidebar-layout', styles.ContentLayout, props.className ?? '']
+const Component = (props: ContentToolbarViewProps): React.JSX.Element => (
+  <PageLayout
+    { ...props }
+    variant="content"
+  />
+)
 
-  if (props.renderToolbar !== undefined) {
-    classes.push('content-toolbar-sidebar-layout--with-toolbar')
-  }
-
-  return (
-    <div className={ classes.join(' ') }>
-      { props.renderTopBar !== undefined && (
-        <div className='content-toolbar-sidebar-layout__top-bar'>
-          {props.renderTopBar}
-        </div>
-      )}
-
-      <Content className='content-toolbar-sidebar-layout__content relative'>
-        {props.children}
-      </Content>
-
-      { props.renderToolbar !== undefined && (
-        <div className='content-toolbar-sidebar-layout__toolbar'>
-          {props.renderToolbar}
-        </div>
-      )}
-
-      { props.renderSidebar !== undefined && (
-        <div className='content-toolbar-sidebar-layout__sidebar'>
-          {props.renderSidebar}
-        </div>
-      )}
-    </div>
-  )
-}
-
+/**
+ * @deprecated Use `PageLayout` with `variant="content"` instead; the props are the same.
+ * This alias is kept for backward compatibility and will be removed in the next major version.
+ */
 export const ContentLayout = memo(Component)

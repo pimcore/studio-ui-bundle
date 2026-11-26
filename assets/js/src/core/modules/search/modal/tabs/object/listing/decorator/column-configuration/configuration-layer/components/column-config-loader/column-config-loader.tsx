@@ -8,34 +8,31 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import React from 'react'
 import { StaticLoader } from './loader/static-loader'
 import { ApiLoader } from './loader/api-loader'
-import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/provider/use-type-select'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeObjectRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/dynamic-type-object-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { ColumnConfigLoader as GridConfigurationLoader } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/configuration-layer/components/column-config-loader/column-config-loader'
+import { useIsClassColumnConfiguration } from './use-is-class-column-configuration'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
+  /**
+   * Load the columns from the saved grid configurations (the selected template, else the
+   * user's favorite, else the class defaults) instead of the search defaults, so templates
+   * saved and shared from this listing can be applied.
+   */
+  saveEnabled?: boolean
 }
 
-export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Element => {
-  const { selectedClassDefinition } = useClassDefinitionSelection()
-  const { value } = useTypeSelect()
-  const objectRegistry = useInjection<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
-  let isValidClass = false
+export const ColumnConfigLoader = ({ Component, saveEnabled = false }: ColumnConfigLoaderProps): React.JSX.Element => {
+  const isClassColumnConfiguration = useIsClassColumnConfiguration()
 
-  const hasType = typeof value === 'string' && objectRegistry.hasDynamicType(value)
-
-  if (hasType) {
-    const type = objectRegistry.getDynamicType(value)
-    isValidClass = type.allowClassSelectionInSearch && selectedClassDefinition?.id !== undefined
+  if (isClassColumnConfiguration && saveEnabled) {
+    return <GridConfigurationLoader Component={ Component } />
   }
 
-  if (isValidClass) {
+  if (isClassColumnConfiguration) {
     return <ApiLoader Component={ Component } />
   }
 

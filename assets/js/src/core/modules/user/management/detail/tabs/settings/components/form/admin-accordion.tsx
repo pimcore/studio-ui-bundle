@@ -9,6 +9,7 @@
  */
 
 import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { getCurrentUser } from '@sdk/modules/auth'
 import { Form, Typography } from 'antd'
@@ -22,9 +23,10 @@ interface IAdminAccordion {
   userId?: number
   email?: string | null
   lastLogin?: number | null
+  active?: boolean | null
   hasUnsavedChanges?: boolean
 }
-const AdminAccordion = ({ isDisabled, userId, email, lastLogin, hasUnsavedChanges, ...props }: IAdminAccordion): React.JSX.Element => {
+const AdminAccordion = ({ isDisabled, userId, email, lastLogin, active, hasUnsavedChanges, ...props }: IAdminAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { Text } = Typography
   const user = getCurrentUser()
@@ -50,20 +52,24 @@ const AdminAccordion = ({ isDisabled, userId, email, lastLogin, hasUnsavedChange
           </div>
         )}
 
-        <div>
+        <Flex
+          gap="small"
+          wrap
+        >
           <LoginTokenModalContainer
             disabled={ isDisabled }
           />
 
           {userId !== undefined && (
             <SendInvitationButton
+              active={ active }
               email={ email }
               hasUnsavedChanges={ hasUnsavedChanges }
               lastLogin={ lastLogin }
               userId={ userId }
             />
           )}
-        </div>
+        </Flex>
       </>
     }
   ]

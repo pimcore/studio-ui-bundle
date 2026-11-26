@@ -44,8 +44,8 @@ describe('disabled and placeholder text contrast', () => {
 
     const token = resolveToken(darkChild)
 
-    expect(token.colorTextDisabled).toBe('rgba(255, 255, 255, 0.25)')
-    expect(token.colorTextPlaceholder).toBe('rgba(255, 255, 255, 0.25)')
+    expect(token.colorTextDisabled.replace(/\s/g, '')).toBe('rgba(255,255,255,0.25)')
+    expect(token.colorTextPlaceholder.replace(/\s/g, '')).toBe('rgba(255,255,255,0.25)')
   })
 
   it('lets a dark theme raise it with its own override', () => {

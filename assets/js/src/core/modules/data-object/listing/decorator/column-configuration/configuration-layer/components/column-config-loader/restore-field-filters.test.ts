@@ -36,6 +36,21 @@ describe('restoreFieldFilters', () => {
     ])
   })
 
+  it('restores the operator of a saved filter', () => {
+    const savedFilter: GridFilter = {
+      page: 1,
+      pageSize: 0,
+      includeDescendants: false,
+      columnFilters: [
+        { key: 'name', type: 'system.string', operator: 'notEmpty', filterValue: null, locale: 'en', meta: { translationKey: 'Name' } }
+      ]
+    }
+
+    expect(restoreFieldFilters(savedFilter, availableColumns)).toEqual([
+      { key: 'name', type: 'input', filterValue: null, operator: 'notEmpty', locale: 'en', meta: { translationKey: 'Name' } }
+    ])
+  })
+
   it('falls back to the column key as translation key when meta is missing', () => {
     const savedFilter: GridFilter = {
       page: 1,

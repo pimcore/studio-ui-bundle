@@ -18,6 +18,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { createColumnHelper, type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import {
+  asKeyDetail,
   type ClassificationStoreConfigurationKeyDetail,
   useClassificationStoreConfigurationKeyCollectionQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
@@ -26,7 +27,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 interface IKeySelectionDialogProps {
   open: boolean
   storeId: number
-  excludedKeyIds: number[]
+  /** The group the picked keys are assigned to; the keys it already holds are not offered. */
+  groupId: number | undefined
   onConfirm: (keys: ClassificationStoreConfigurationKeyDetail[]) => void
   onCancel: () => void
 }
@@ -34,7 +36,7 @@ interface IKeySelectionDialogProps {
 export const KeySelectionDialog = ({
   open,
   storeId,
-  excludedKeyIds,
+  groupId,
   onConfirm,
   onCancel
 }: IKeySelectionDialogProps): React.JSX.Element => {
@@ -54,6 +56,8 @@ export const KeySelectionDialog = ({
   const queryArgs = useMemo(() => ({
     storeId,
     body: {
+      // The server leaves out what the group holds, so the rows and the `totalItems` are one set
+      ...(groupId !== undefined ? { excludeKeysOfGroupId: groupId } : {}),
       filters: {
         page,
         pageSize,
@@ -70,11 +74,11 @@ export const KeySelectionDialog = ({
           : {})
       }
     }
-  }), [storeId, page, pageSize, searchTerm, sorting])
+  }), [storeId, groupId, page, pageSize, searchTerm, sorting])
 
   const { data, isLoading } = useClassificationStoreConfigurationKeyCollectionQuery(
     queryArgs,
-    { skip: !open }
+    { skip: !open || groupId === undefined }
   )
 
   const total = data?.totalItems ?? 0
@@ -89,10 +93,8 @@ export const KeySelectionDialog = ({
     }
   }, [open])
 
-  const availableKeys = useMemo(() => {
-    const excludedSet = new Set(excludedKeyIds)
-    return (data?.items ?? []).filter((k) => !excludedSet.has(k.id))
-  }, [data?.items, excludedKeyIds])
+  // Every row the answer carries: narrowing it here would not narrow the total counted above
+  const availableKeys = useMemo(() => (data?.items ?? []).map(asKeyDetail), [data?.items])
 
   const columnHelper = createColumnHelper<ClassificationStoreConfigurationKeyDetail>()
 

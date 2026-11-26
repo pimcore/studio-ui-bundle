@@ -31,9 +31,9 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('pimcore_studio_ui');
 
-        // @phpstan-ignore-next-line
         $treeBuilder
             ->getRootNode()
+            // @phpstan-ignore method.notFound (symfony/config 6.4 types the root node as NodeDefinition)
             ->children()
                 ->scalarNode('url_path')
                 ->defaultValue('/pimcore-studio')
@@ -130,9 +130,32 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
             ->end()
-            ->append($this->createPaginationNode());
+            ->append($this->createPaginationNode())
+            ->append($this->createLanguageFlagMappingNode());
 
         return $treeBuilder;
+    }
+
+    /**
+     * Country flag shown for a language, merged over the built-in language to flag mapping of the UI.
+     */
+    private function createLanguageFlagMappingNode(): NodeDefinition
+    {
+        $node = (new TreeBuilder('language_flag_mapping'))->getRootNode();
+
+        $node
+            ->info(
+                'Country flag shown for a language, keyed by language code (en, en_GB or en-GB). ' .
+                'Overrides the built-in mapping, which shows gb for en.'
+            )
+            ->example(['en' => 'us'])
+            ->useAttributeAsKey('language')
+            ->normalizeKeys(false)
+            ->stringPrototype()
+                ->cannotBeEmpty()
+            ->end();
+
+        return $node;
     }
 
     /**

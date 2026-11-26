@@ -18,6 +18,7 @@ import { SaveTaskType } from '@sdk/modules/data-object'
 import { documentSaveService } from '../../services'
 import { useAppDispatch } from '@sdk/app'
 import { setDocumentNodeNavigationExclude } from '@Pimcore/components/element-tree/element-tree-slice'
+import { isDocumentAutoSaveEnabled } from '../../utils/document-auto-save'
 
 export interface UseSaveHookReturn {
   save: (task?: SaveTaskType, onFinish?: () => void) => Promise<void>
@@ -41,6 +42,10 @@ export const useSave = (): UseSaveHookReturn => {
 
   const debouncedAutoSave = useCallback(
     debounce(() => {
+      if (!isDocumentAutoSaveEnabled()) {
+        return
+      }
+
       documentSaveService.saveDocument(id, SaveTaskType.AutoSave).catch(console.error)
     }, 500),
     [id]

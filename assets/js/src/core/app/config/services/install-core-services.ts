@@ -14,6 +14,7 @@ import { type Container } from 'inversify'
 import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
+import { DeepLinkRegistry } from '@Pimcore/modules/app/deep-link-registry/deep-link-registry'
 import { DebouncedFormRegistry } from '@Pimcore/components/form/services/debounced-form-registry'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
@@ -123,6 +124,7 @@ import { DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeObjectDataDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-datetime'
 import { DynamicTypeObjectDataEmail } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-email'
 import { DynamicTypeObjectDataEncryptedField } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-encrypted-field'
+import { DynamicTypeObjectDataMultiValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-multi-value'
 import { DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-external-image'
 import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 import { DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-firstname'
@@ -245,6 +247,7 @@ import { DynamicTypeGridCellSystemDatetime } from '@Pimcore/modules/element/dyna
 import { DynamicTypeGridCellSystemInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
 import { DynamicTypeGridCellSystemUser } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-user/dynamic-type-grid-cell-system-user'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
+import { DynamicTypeFieldFilterEmptyOnly } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/empty-only/dynamic-type-field-filter-empty-only'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
 import { DynamicTypeDocumentEmail } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-email'
@@ -287,6 +290,7 @@ import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
 import { DynamicTypeFieldFilterRelation } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/relation/dynamic-type-field-filter-relation'
 import { AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
+import { WelcomeScreenRegistry } from '@Pimcore/modules/app/welcome-screen/services/welcome-screen-registry'
 import { DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
 import { DynamicTypeFieldDefinitionInput } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/input/dynamic-type-field-definition-input'
 import { DynamicTypeFieldDefinitionTextarea } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/textarea/dynamic-type-field-definition-textarea'
@@ -326,6 +330,7 @@ import { DynamicTypeFieldDefinitionCountryMultiselect } from '@Pimcore/modules/f
 import { DynamicTypeFieldDefinitionLanguageMultiselect } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/languagemultiselect/dynamic-type-field-definition-languagemultiselect'
 import { DynamicTypeFieldDefinitionRgbaColor } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/rgbaColor/dynamic-type-field-definition-rgba-color'
 import { DynamicTypeFieldDefinitionEncryptedField } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/encryptedField/dynamic-type-field-definition-encrypted-field'
+import { DynamicTypeFieldDefinitionMultiValue } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/multiValue/dynamic-type-field-definition-multi-value'
 import { DynamicTypeFieldDefinitionUrlSlug } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/urlSlug/dynamic-type-field-definition-url-slug'
 import { DynamicTypeFieldDefinitionCheckbox } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/checkbox/dynamic-type-field-definition-checkbox'
 import { DynamicTypeFieldDefinitionLink } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/link/dynamic-type-field-definition-link'
@@ -401,6 +406,9 @@ export function installCoreServices (container: Container): void {
 
   // Context menu registry
   container.bind(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry']).to(ContextMenuRegistry).inSingletonScope()
+
+  // Deep link registry
+  container.bind(serviceIds['App/DeepLinkRegistry/DeepLinkRegistry']).to(DeepLinkRegistry).inSingletonScope()
 
   // Main nav
   container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
@@ -480,6 +488,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFieldFilterString).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/FieldFilter/EmptyOnly']).to(DynamicTypeFieldFilterEmptyOnly).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFilterId).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/FileSize']).to(DynamicTypeFieldFilterFileSize).inSingletonScope()
@@ -619,6 +628,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/ObjectData/Gender']).to(DynamicTypeObjectDataGender).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/ObjectData/RgbaColor']).to(DynamicTypeObjectDataRgbaColor).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/ObjectData/EncryptedField']).to(DynamicTypeObjectDataEncryptedField).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/ObjectData/MultiValue']).to(DynamicTypeObjectDataMultiValue).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/ObjectData/CalculatedValue']).to(DynamicTypeObjectDataCalculatedValue).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/ObjectData/Checkbox']).to(DynamicTypeObjectDataCheckbox).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/ObjectData/Link']).to(DynamicTypeObjectDataLink).inSingletonScope()
@@ -761,6 +771,7 @@ export function installCoreServices (container: Container): void {
 
   // App Loader
   container.bind(serviceIds['AppLoader/Registry']).to(AppLoaderRegistry).inSingletonScope()
+  container.bind(serviceIds['WelcomeScreen/Registry']).to(WelcomeScreenRegistry).inSingletonScope()
 
   // Field Definitions
   container.bind(serviceIds['DynamicTypes/FieldDefinitionRegistry']).to(DynamicTypeFieldDefinitionRegistry).inSingletonScope()
@@ -798,6 +809,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/FieldDefinition/LanguageMultiselect']).to(DynamicTypeFieldDefinitionLanguageMultiselect).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldDefinition/RgbaColor']).to(DynamicTypeFieldDefinitionRgbaColor).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldDefinition/EncryptedField']).to(DynamicTypeFieldDefinitionEncryptedField).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/FieldDefinition/MultiValue']).to(DynamicTypeFieldDefinitionMultiValue).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldDefinition/UrlSlug']).to(DynamicTypeFieldDefinitionUrlSlug).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldDefinition/Checkbox']).to(DynamicTypeFieldDefinitionCheckbox).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldDefinition/Link']).to(DynamicTypeFieldDefinitionLink).inSingletonScope()

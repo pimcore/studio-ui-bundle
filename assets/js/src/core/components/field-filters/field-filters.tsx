@@ -18,6 +18,11 @@ import { Flex } from '../flex/flex'
 import { Tooltip } from '../tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { useTranslation } from 'react-i18next'
+import { Select } from '../select/select'
+import { type FilterOperator } from '../dynamic-filter/filter-operator'
+import { useEmptyFilterSupport } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/empty-filter-support'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { toFieldFilterType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/to-field-filter-type'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -25,8 +30,12 @@ export interface FieldFiltersProps {
   onCommit?: (data: IDynamicFilter[]) => void
 }
 
+const VALUE_MODE = 'value'
+
 export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const emptyFilterSupported = useEmptyFilterSupport()
+  const { getType } = useDynamicTypeResolver()
   const [_data, _setData] = useState(data)
 
   const setData = (data: IDynamicFilter[]): void => {
@@ -42,14 +51,15 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
   }, [data])
 
   /**
-   * Classification store filters share one id across groups and keys, so they are only
-   * identified together with their config; every other type is unique by id alone.
+   * Classification store filters share one id across groups, keys and the variants of a key, so they
+   * are only identified together with their config; every other type is unique by id alone.
    */
   const isSameFilter = (candidate: IDynamicFilter, filter: IDynamicFilter): boolean => {
     if (filter.type === 'dataobject.classificationstore') {
       return candidate.id === filter.id &&
         candidate.config?.keyId === filter.config?.keyId &&
-        candidate.config?.groupId === filter.config?.groupId
+        candidate.config?.groupId === filter.config?.groupId &&
+        (candidate.config?.variant ?? null) === (filter.config?.variant ?? null)
     }
 
     return candidate.id === filter.id
@@ -76,6 +86,76 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
     }
   }
 
+  /**
+   * Only a filter type of its own knows whether the field can be searched for "no value" and whether it has a value
+   * filter next to it. Anything else (or an unknown type) keeps filtering by value only.
+   */
+  const getOperatorSupport = (filter: IDynamicFilter): { empty: boolean, value: boolean } => {
+    if (!emptyFilterSupported) {
+      return { empty: false, value: true }
+    }
+
+    const fieldFilterType = toFieldFilterType(getType({ target: 'FIELD_FILTER', dynamicTypeIds: [filter.type, filter.frontendType ?? ''] }))
+
+    if (fieldFilterType === null) {
+      return { empty: false, value: true }
+    }
+
+    return {
+      empty: fieldFilterType.isEmptyFilterAvailable(filter.frontendType ?? null),
+      value: fieldFilterType.isFilterAvailable(filter.frontendType ?? null)
+    }
+  }
+
+  const onOperatorChange = (filter: IDynamicFilter, mode: string): void => {
+    setData(withUpdatedFilter(filter, { operator: mode === VALUE_MODE ? undefined : mode as FilterOperator }))
+  }
+
+  const renderBody = (filter: IDynamicFilter): React.JSX.Element => {
+    const dynamicFilter = (
+      <DynamicFilter
+        { ...filter }
+        onChange={ (data) => { onFilterChange(filter, data) } }
+        onCommit={ onCommit === undefined ? undefined : (data) => { onFilterCommit(filter, data) } }
+      />
+    )
+
+    const operatorSupport = getOperatorSupport(filter)
+
+    if (!operatorSupport.empty) {
+      return dynamicFilter
+    }
+
+    const options = [
+      ...(operatorSupport.value ? [{ value: VALUE_MODE, label: t('grid.filter.operator.value') }] : []),
+      { value: 'empty', label: t('grid.filter.operator.empty') },
+      { value: 'notEmpty', label: t('grid.filter.operator.not-empty') }
+    ]
+
+    return (
+      <Flex
+        gap="extra-small"
+        vertical
+      >
+        <Select
+          aria-label={ t('grid.filter.operator.label') }
+          onChange={ (mode: string) => { onOperatorChange(filter, mode) } }
+          options={ options }
+          style={ { width: '100%' } }
+          value={ filter.operator ?? VALUE_MODE }
+        />
+
+        {operatorSupport.value && (
+          // Stays mounted while an operator is picked, so what the editor holds (e.g. selected relations) is still
+          // there when going back to the value.
+          <div style={ filter.operator === undefined ? undefined : { display: 'none' } }>
+            {dynamicFilter}
+          </div>
+        )}
+      </Flex>
+    )
+  }
+
   const onLanguageSelectionChanged = (filter: IDynamicFilter, locale: string | null): void => {
     setData(withUpdatedFilter(filter, { locale }))
   }
@@ -90,7 +170,7 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
     const isClassificationStore = filter.type === 'dataobject.classificationstore'
 
     if (isClassificationStore) {
-      key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })}`
+      key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId, variant: filter.config?.variant ?? null })}`
     }
 
     return {
@@ -100,13 +180,7 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
       children: <Tooltip title={ filter.nameTooltip }>
         <Tag>{filter.translationKey}</Tag>
       </Tooltip>,
-      body: (
-        <DynamicFilter
-          { ...filter }
-          onChange={ (data) => { onFilterChange(filter, data) } }
-          onCommit={ onCommit === undefined ? undefined : (data) => { onFilterCommit(filter, data) } }
-        />
-      ),
+      body: renderBody(filter),
       renderRightToolbar: (
         <Flex gap="mini">
           {filter.localizable === true && (

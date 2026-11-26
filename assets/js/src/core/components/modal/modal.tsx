@@ -29,6 +29,7 @@ export interface IModalProps extends AntModalProps {
    * built-in drag behaviour.
    */
   draggable?: boolean
+  onClose?: (e: React.MouseEvent<HTMLElement>) => void
   useModal?: typeof useModal
   children: React.ReactNode
 }

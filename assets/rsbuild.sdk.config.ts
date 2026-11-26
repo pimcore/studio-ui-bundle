@@ -10,6 +10,9 @@ import fs from 'fs';
 import { getBuildGroupId } from './bundler/build-id';
 import packages from './package.json'
 
+// dayjs is declared for the host's shared singleton only; the SDK build does not share it
+const { dayjs: _hostOnlyDayjs, ...sdkSharedDependencies } = packages.dependencies
+
 const buildGroupId = getBuildGroupId();
 const buildId = `${buildGroupId}-sdk`;
 const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
@@ -115,6 +118,7 @@ export default defineConfig({
       './api/perspectives': './js/src/sdk/api/perspectives/index.ts',
       './api/properties': './js/src/sdk/api/properties/index.ts',
       './api/role': './js/src/sdk/api/role/index.ts',
+      './api/service-user': './js/src/sdk/api/service-user/index.ts',
       './api/schedule': './js/src/sdk/api/schedule/index.ts',
       './api/settings': './js/src/sdk/api/settings/index.ts',
       './api/tags': './js/src/sdk/api/tags/index.ts',
@@ -151,7 +155,7 @@ export default defineConfig({
       },
       dts: false,
       shared: {
-        ...packages.dependencies,
+        ...sdkSharedDependencies,
         classnames: {
           singleton: true,
           eager: true,

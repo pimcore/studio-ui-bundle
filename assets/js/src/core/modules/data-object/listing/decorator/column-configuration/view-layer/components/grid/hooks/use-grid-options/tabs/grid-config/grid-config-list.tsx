@@ -8,29 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, type ReactNode } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
-import { Empty, Tag } from 'antd'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { ConfigProvider, Empty } from 'antd'
+import { SettingsContext } from '@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/tabs/grid-config/povider/settings/settings-provider'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
-import { Space } from '@Pimcore/components/space/space'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { SimpleColumnPreview, SimpleColumnPreviewsProvider } from './simple-column-preview/simple-column-preview'
+import { usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { convertColumnToAdvanced, findColumnConversion } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/convert-column-to-advanced'
-import { isSearchModeDraftColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
-import { SearchModeColumnBadge } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/search-mode-column-badge/search-mode-column-badge'
-import { type PipelineItemPosition, PipelineItemExpandProvider } from '@Pimcore/components/pipeline/provider/pipeline-item-expand/pipeline-item-expand-provider'
+import { buildAdvancedBody, renderColumnTitle, renderRightToolbar } from './grid-config-list-items'
+import { type PipelineItemPosition } from '@Pimcore/components/pipeline/provider/pipeline-item-expand/pipeline-item-expand-provider'
 
 function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
   if (element === null || element === document.documentElement) return null
@@ -62,10 +58,13 @@ export interface GridConfigListProps {
 
 export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: GridConfigListProps): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
+  // optional: the list and the modal also render outside a column configuration's settings
+  const readOnly = useContext(SettingsContext)?.readOnly === true
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const prevColumnKeysRef = useRef<string[]>([])
   const hasMountedRef = useRef(false)
+  const { enabled: previewEnabled } = usePreviewModeOptional()
   const { getAdvancedColumnTemplate } = useAvailableColumns()
   const sourceFieldsRegistry = useInjection<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'])
 
@@ -114,15 +113,15 @@ export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: Gr
 
   const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
     const uniqueId = column.__meta?.uniqueId ?? uuid()
-    let translationKey = `${column.key}`
     const isAdvancedColumn = column.key === 'advanced'
-    // @todo translation
-    const advancedColumnName = column?.__meta?.advancedColumnConfig?.title ?? 'Add a title'
-
-    if (hasFieldDefinition(column.config)) {
-      const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-      translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
-    }
+    const advancedBody = buildAdvancedBody({
+      column,
+      uniqueId,
+      previewEnabled,
+      focusedPipelineItem,
+      onExpandPipelineItem,
+      onChange: (newColumn) => { onAdvancedColumnChange(newColumn, uniqueId) }
+    })
 
     return {
       id: uniqueId,
@@ -131,66 +130,42 @@ export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: Gr
 
       type: isAdvancedColumn ? 'collapse' : 'default',
       defaultActive: isAdvancedColumn,
-      children: (
-        () => isAdvancedColumn
-          ? <Tag color='purple'>{advancedColumnName}</Tag>
-          : <Tooltip title={ Array.isArray(column.group) ? column.group.join('/') : undefined }><Tag>{t(`${translationKey}`)}</Tag></Tooltip>
-      )(),
+      children: renderColumnTitle(column, t),
 
-      ...(column.key === 'advanced'
-        ? {
-            body: (
-              <PipelineItemExpandProvider
-                focusedItem={ focusedPipelineItem?.columnId === uniqueId ? focusedPipelineItem : undefined }
-                onExpandItem={ onExpandPipelineItem === undefined ? undefined : (position) => { onExpandPipelineItem({ ...position, columnId: uniqueId }) } }
-              >
-                <AdvancedColumnForm
-                  column={ column }
-                  onChange={ (newColumn) => { onAdvancedColumnChange(newColumn, uniqueId) } }
-                />
-              </PipelineItemExpandProvider>
-            )
-          }
-        : {}),
+      ...(isAdvancedColumn
+        ? advancedBody
+        : (previewEnabled ? { body: <SimpleColumnPreview column={ column } /> } : {})),
 
-      // search mode columns can only be moved: they come and go with the mode
-      renderRightToolbar: isSearchModeDraftColumn(column)
-        ? <SearchModeColumnBadge />
-        : (
-          <Space size='mini'>
-            { isConvertible(column) && (
-              <IconButton
-                icon={ { value: 'transformation' } }
-                onClick={ () => { onConvertColumn(uniqueId) } }
-                size='small'
-                theme='secondary'
-                tooltip={ { title: t('listing.grid-config.convert-to-advanced') } }
-              />
-            ) }
-            { getLanguageSelection(uniqueId, column) }
-            <IconButton
-              aria-label={ t('remove') }
-              icon={ { value: 'trash' } }
-              onClick={ () => { onRemoveColumn(uniqueId) } }
-              size='small'
-              theme='secondary'
-              tooltip={ { title: t('remove') } }
-            />
-          </Space>
-          )
+      renderRightToolbar: renderRightToolbar({
+        column,
+        uniqueId,
+        t,
+        isConvertible: isConvertible(column),
+        languageSelection: getLanguageSelection(uniqueId, column),
+        onConvert: () => { onConvertColumn(uniqueId) },
+        onRemove: () => { onRemoveColumn(uniqueId) }
+      })
     }
-  }), [columns, advancedColumnTemplate, sourceFieldTypes, onExpandPipelineItem, focusedPipelineItem])
+  }), [columns, advancedColumnTemplate, sourceFieldTypes, previewEnabled, onExpandPipelineItem, focusedPipelineItem])
+
+  // read-only: the columns without remove, convert, language or drag
+  const shownItems = readOnly ? stackListItems.map((item) => ({ ...item, sortable: false, renderRightToolbar: undefined })) : stackListItems
 
   return (
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
         <div ref={ containerRef }>
-          <StackList
-            items={ stackListItems }
-            onItemsChange={ onItemsChange }
-            sortable
-          />
+          <SimpleColumnPreviewsProvider columns={ columns }>
+            { /* read-only: an advanced column's pipeline shows its settings with every control disabled */ }
+            <ConfigProvider componentDisabled={ readOnly ? true : undefined }>
+              <StackList
+                items={ shownItems }
+                onItemsChange={ onItemsChange }
+                sortable={ !readOnly }
+              />
+            </ConfigProvider>
+          </SimpleColumnPreviewsProvider>
         </div>
       ) }
     </>
@@ -275,19 +250,9 @@ export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: Gr
   }
 
   function onLanguageSelection (uniqueId: string, column: AvailableColumn, locale: string | null): void {
-    const itemList = stackListItems.map((item) => {
-      if (item.id === uniqueId) {
-        return {
-          ...item,
-          meta: {
-            ...item.meta,
-            locale
-          }
-        }
-      }
-
-      return item
-    })
+    const itemList = stackListItems.map((item) => (
+      item.id === uniqueId ? { ...item, meta: { ...item.meta, locale } } : item
+    ))
 
     const newColumns = itemList.map((item) => item.meta)
     setColumns(newColumns)

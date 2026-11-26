@@ -38,6 +38,7 @@ export interface UseAreablockEditableParams {
 
 export interface UseAreablockEditableReturn {
   dynamicEditables: AbstractDocumentEditableDefinition[]
+  getCurrentElements: () => HTMLElement[]
   addArea: (element: HTMLElement | null, areaType?: string, position?: AreaInsertPosition) => Promise<void>
   removeArea: (element: HTMLElement) => void
   moveAreaUp: (element: HTMLElement) => void
@@ -103,6 +104,32 @@ export const useAreablockEditable = ({
     return areablockValueUtils.filterEditableNames(Object.keys(currentValues), areablockManager.getEditableName(), elementKey)
   }
 
+  // The reload-aware element source: in reload mode pending additions exist only
+  // as placeholders in reloadModeElementsRef until the triggered save-and-reload
+  // lands, so DOM queries would undercount them.
+  const getCurrentElements = useCallback((): HTMLElement[] => {
+    return configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
+  }, [config, areablockManager])
+
+  // In-flight additions per brick type: the limit guards run before the awaited
+  // render request inserts anything, so without a reservation two rapid add
+  // actions would both pass the same count.
+  const pendingTypeAdditionsRef = useRef<Record<string, number>>({})
+
+  const canAddAreaType = useCallback((type: string, currentElements: HTMLElement[]): boolean => {
+    const pendingAdditions = pendingTypeAdditionsRef.current
+    const pendingTotal = Object.values(pendingAdditions).reduce((sum, count) => sum + count, 0)
+
+    const limit = configUtils.getEffectiveLimit(config)
+    if (configUtils.isLimitReached(currentElements.length + pendingTotal, limit)) return false
+
+    if (!configUtils.isTypeAllowed(config, type)) return false
+
+    const typeUsageCounts = configUtils.getTypeUsageCounts(currentElements.map(el => areablockManager.getElementType(el)))
+    const currentTypeCount = (typeUsageCounts[type] ?? 0) + (pendingAdditions[type] ?? 0)
+    return !configUtils.isTypeLimitReached(config, type, currentTypeCount)
+  }, [config, areablockManager])
+
   const handleReloadMode = useCallback((elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
     const currentElements = reloadModeElementsRef.current
     const newElements = elementsUpdater([...currentElements])
@@ -150,14 +177,13 @@ export const useAreablockEditable = ({
   const addArea = useCallback(async (element: HTMLElement | null, areaType?: string, position: AreaInsertPosition = 'below') => {
     if (disabled) return
 
-    const limit = configUtils.getEffectiveLimit(config)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
-    if (configUtils.isLimitReached(currentElements.length, limit)) return
+    const currentElements = getCurrentElements()
 
     const availableTypes = configUtils.getAvailableTypes(config)
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
-    if (!configUtils.isTypeAllowed(config, typeToUse)) return
+    if (!canAddAreaType(typeToUse, currentElements)) return
+
     // Without an element the area becomes the first one.
     const index = isNil(element) ? 0 : getInsertIndex(areablockManager.findElementIndex(element), position)
     const nextKey = areablockManager.calculateNextKey()
@@ -174,6 +200,9 @@ export const useAreablockEditable = ({
       })
       return
     }
+
+    const pendingAdditions = pendingTypeAdditionsRef.current
+    pendingAdditions[typeToUse] = (pendingAdditions[typeToUse] ?? 0) + 1
 
     try {
       const container = areablockManager.getContainer()
@@ -222,8 +251,12 @@ export const useAreablockEditable = ({
       trackError(new GeneralError('Failed to add area'))
       console.error('Failed to add area:', error)
       handlePostOperation()
+    } finally {
+      // The rendered element (if any) is in the DOM by now, so the reservation
+      // has served its purpose; on failure it must not keep the slot occupied.
+      pendingAdditions[typeToUse] = Math.max(0, (pendingAdditions[typeToUse] ?? 1) - 1)
     }
-  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, insertRenderedArea])
+  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, insertRenderedArea, getCurrentElements, canAddAreaType])
 
   const removeArea = useCallback((element: HTMLElement) => {
     if (disabled) return
@@ -366,10 +399,8 @@ export const useAreablockEditable = ({
 
     if (!configUtils.isTypePasteable(config, clipboardItem.type)) return
 
-    const limit = configUtils.getEffectiveLimit(config)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
-
-    if (configUtils.isLimitReached(currentElements.length, limit)) return
+    const currentElements = getCurrentElements()
+    if (!canAddAreaType(clipboardItem.type, currentElements)) return
 
     const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
     const nextKey = areablockManager.calculateNextKey()
@@ -406,10 +437,11 @@ export const useAreablockEditable = ({
     onChange?.(newValue)
 
     triggerSaveAndReload()
-  }, [disabled, config, handleReloadMode, onChange, areablockManager, triggerSaveAndReload])
+  }, [disabled, config, handleReloadMode, onChange, areablockManager, triggerSaveAndReload, getCurrentElements, canAddAreaType])
 
   return {
     dynamicEditables,
+    getCurrentElements,
     addArea,
     removeArea,
     moveAreaUp,

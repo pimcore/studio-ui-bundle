@@ -8,8 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React, { useState } from 'react'
 import { type Meta } from '@storybook/react'
-import { Select } from '@Pimcore/components/select/select'
+import { Select, type SelectProps } from '@Pimcore/components/select/select'
 
 const SAMPLE_SELECT_OPTIONS = [
   { value: '1', label: 'Option 1' },
@@ -37,6 +38,17 @@ export const Multiple = {
   args: {
     placeholder: 'Choose an option...',
     mode: 'multiple'
+  }
+}
+
+export const MultipleWithSelectAll = {
+  args: {
+    placeholder: 'Choose options...',
+    mode: 'multiple',
+    allowSelectAll: true,
+    allowClear: true,
+    showSearch: true,
+    optionFilterProp: 'label'
   }
 }
 
@@ -89,6 +101,28 @@ export const WithClearOption = {
     value: '1',
     allowClear: true
   }
+}
+
+const SortableMultipleSelect = (props: SelectProps): React.JSX.Element => {
+  const [value, setValue] = useState<string[]>(['1', '2', '3'])
+
+  return (
+    <Select
+      { ...props }
+      onChange={ setValue }
+      value={ value }
+    />
+  )
+}
+
+export const SortableMultiple = {
+  args: {
+    placeholder: 'Choose options...',
+    mode: 'multiple',
+    sortableTags: true,
+    width: 400
+  },
+  render: (args: SelectProps) => <SortableMultipleSelect { ...args } />
 }
 
 export default config

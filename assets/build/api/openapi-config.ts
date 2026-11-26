@@ -69,6 +69,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'emailLogSearch',
+      type: 'query'
+    },
+    {
       pattern: 'documentGetSearch',
       type: 'query',
     },
@@ -149,6 +153,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'classificationStoreConfigurationSubGroupCollection',
+      type: 'query'
+    },
+    {
       pattern: 'unitQuantityValueUnitsCollection',
       type: 'query'
     }
@@ -181,6 +189,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/role/i)
     },
+    '../../js/src/core/modules/user/service-users/service-users-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/service-users?(\/|$)/i)
+    },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/version/i)
     },
@@ -212,7 +223,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/thumbnails/i)
     },
     '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/\/api\/(login|logout)/i)
+      filterEndpoints: pathMatcher(/\/api\/(login|logout|session)/i)
     },
     '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/class\//i)
@@ -262,6 +273,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
     },
+    '../../js/src/core/modules/index-sync/index-sync-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/index-sync\/?/i)
+    },
     '../../js/src/core/modules/application-logger/application-logger-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/bundle\/application-logger/i)
     },
@@ -273,6 +287,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/mcp-servers/mcp-servers-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/mcp\//i)
+    },
+    '../../js/src/core/modules/maintenance-mode/maintenance-mode-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/maintenance-mode/i)
     }
   },
   exportName: 'api',

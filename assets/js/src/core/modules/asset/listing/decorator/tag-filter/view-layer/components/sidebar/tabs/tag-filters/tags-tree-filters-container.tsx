@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next'
 interface TagsTreeFiltersContainerProps {
   checkedKeys: Key[]
   setCheckedKeys: (keys: Key[]) => void
+  disabled?: boolean
 }
 
 const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
@@ -39,7 +40,7 @@ const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
   return result
 }
 
-export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTreeFiltersContainerProps): React.JSX.Element => {
+export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys, disabled = false }: TagsTreeFiltersContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [filter, setFilter] = useState<string>('')
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([0])
@@ -50,9 +51,13 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
   })
 
   const treeData = useMemo(
-    () => !isUndefined(tags?.items)
-      ? createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
-      : [],
+    () => {
+      if (isUndefined(tags?.items)) {
+        return []
+      }
+
+      return createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
+    },
     [tags?.items]
   )
 
@@ -80,6 +85,7 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
       vertical
     >
       <SearchInput
+        disabled={ disabled }
         loading={ tagsLoading }
         onSearch={ setFilter }
         placeholder={ t('search') }
@@ -89,6 +95,7 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
         checkStrictly
         checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
         defaultExpandedKeys={ activeExpandedKeys }
+        disabled={ disabled }
         onCheck={ handleCheck }
         onExpand={ (keys) => { setExpandedKeys(keys) } }
         treeData={ treeData }

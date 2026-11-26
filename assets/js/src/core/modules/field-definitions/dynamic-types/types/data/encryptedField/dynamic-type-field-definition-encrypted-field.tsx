@@ -13,8 +13,9 @@ import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from
 import { FieldDefinitionEncryptedFieldFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/encryptedField/field-definition-encrypted-field-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
+import { BASE_FIELD_KEYS } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/base-field-keys'
 
-export const BASE_FIELD_KEYS = new Set(['fieldtype', 'fieldType', 'datatype', 'name', 'title', 'tooltip'])
+export { BASE_FIELD_KEYS }
 
 export class DynamicTypeFieldDefinitionEncryptedField extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'encryptedField'

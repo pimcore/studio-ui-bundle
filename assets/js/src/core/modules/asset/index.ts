@@ -21,6 +21,7 @@ import '@Pimcore/modules/asset/listing/decorator/context-menu'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
+import { TreeNodeWorkflowStates } from '@Pimcore/components/element-tree/node/content/tree-node-workflow-states'
 import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { AssetBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/asset-batch-delete-job'
 import { ZipUploadJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/zip-upload-job'
@@ -45,6 +46,12 @@ moduleSystem.registerModule({
       name: 'lockIcon',
       component: TreeNodeLockIcon,
       priority: 100
+    })
+
+    componentRegistry.registerToSlot(componentConfig.asset.tree.node.meta.name, {
+      name: 'workflowStates',
+      component: TreeNodeWorkflowStates,
+      priority: 200
     })
 
     const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])

@@ -37,12 +37,20 @@ export function useHideParentWhenHidden<T extends HTMLElement = HTMLDivElement> 
     const computedStyle = window.getComputedStyle(element)
     const isHidden = computedStyle.display === 'none'
 
-    if (isHidden) {
-      parent.style.display = 'none'
+    if (!isHidden) {
+      return
     }
 
+    // The boundary's inline display may already be owned by whoever rendered it
+    // — a layout container hides the wrapper of an invisible field that way.
+    // Restoring '' would clobber that, and React does not re-apply a style it
+    // still believes is set, so the field would come back visible. Put back
+    // exactly what was there instead, and only when we actually wrote.
+    const previousDisplay = parent.style.display
+    parent.style.display = 'none'
+
     return () => {
-      parent.style.display = ''
+      parent.style.display = previousDisplay
     }
   }, [parentSelector])
 

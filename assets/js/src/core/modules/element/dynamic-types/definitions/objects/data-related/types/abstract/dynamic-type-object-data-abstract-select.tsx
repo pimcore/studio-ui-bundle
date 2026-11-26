@@ -48,6 +48,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     return (
       <Select
         allowClear={ props.allowClear !== false }
+        allowSelectAll
         className={ props.className }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
@@ -56,6 +57,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
         optionFilterProp={ hasHtmlLabels ? 'title' : 'label' }
         options={ options }
         showSearch
+        sortableTags={ props.multiSelect === true }
         style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
         value={ this.normalizeValue(props.value) }
       />

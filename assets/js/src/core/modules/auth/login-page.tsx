@@ -21,6 +21,7 @@ import { useAuthentication } from './hooks/use-authentication'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { setAuthState } from './auth-slice'
 import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
+import { clearWelcomeScreenHandled } from '@Pimcore/modules/app/welcome-screen/utils/welcome-screen-session'
 
 export interface LoginPageProps {
   /**
@@ -44,6 +45,13 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
   const { loginWithToken } = useAuthentication()
   const { customLogoSmall, loginScreenCustomBackgroundImage } = useAdminThumbnails()
   const { styles } = useStyle({ backgroundImageUrl: loginScreenCustomBackgroundImage })
+
+  // a reload of a running session never shows this screen, so the next session opens the welcome screen again
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      clearWelcomeScreenHandled()
+    }
+  }, [isAuthenticated])
 
   useEffect(() => {
     // Rendered by the guard: the URL is already the target, and the guard swaps to the

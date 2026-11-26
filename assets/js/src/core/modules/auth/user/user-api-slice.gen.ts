@@ -116,19 +116,11 @@ const injectedRtkApi = api
                 providesTags: ["User Management"],
             }),
             userSendInvitation: build.mutation<UserSendInvitationApiResponse, UserSendInvitationApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/invitation/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.invitation,
-                }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/invitation/${queryArg.id}`, method: "POST" }),
                 invalidatesTags: ["User Management"],
             }),
             userTokenLinkGet: build.query<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/token-link/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.tokenLink,
-                }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/token-link/${queryArg.id}`, method: "POST" }),
                 providesTags: ["User Management"],
             }),
             userTwoFactorConfirm: build.mutation<UserTwoFactorConfirmApiResponse, UserTwoFactorConfirmApiArg>({
@@ -311,7 +303,6 @@ export type UserSendInvitationApiResponse = unknown;
 export type UserSendInvitationApiArg = {
     /** Id of the user */
     id: number;
-    invitation: Invitation;
 };
 export type UserTokenLinkGetApiResponse = /** status 200 Token login link for the user */ {
     /** Token link URL including the generated token as parameter. */
@@ -320,7 +311,6 @@ export type UserTokenLinkGetApiResponse = /** status 200 Token login link for th
 export type UserTokenLinkGetApiArg = {
     /** Id of the user */
     id: number;
-    tokenLink: TokenLink;
 };
 export type UserTwoFactorConfirmApiResponse = unknown;
 export type UserTwoFactorConfirmApiArg = {
@@ -333,7 +323,8 @@ export type UserTwoFactorResetByIdApiArg = {
     /** Id of the User */
     id: number;
 };
-export type UserTwoFactorSetupApiResponse = /** status 200 The new secret and its otpauth URI. */ TwoFactorSetup;
+export type UserTwoFactorSetupApiResponse =
+    /** status 200 The new secret, its otpauth URI and the number of digits in a code. */ TwoFactorSetup;
 export type UserTwoFactorSetupApiArg = void;
 export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
@@ -493,6 +484,8 @@ export type UserInformation = {
     activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Welcome screen opened after login, as `<provider>:<id>` */
+    welcomeScreenTarget: string | null;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -549,7 +542,7 @@ export type UserObjectDependencies = {
     dependencies: DependencyToAnObject[];
     /** If it has hidden dependencies */
     hasHidden: boolean;
-    /** Total number of objects referencing this user, including ones the caller is not permitted to view - not the count of objects actually returned via dependencies or the paginated endpoint. */
+    /** Total number of objects referencing this user, including ones the caller may not view */
     totalItems?: number;
 };
 export type User = {
@@ -619,6 +612,8 @@ export type User = {
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Welcome screen opened after login, as `<provider>:<id>` */
+    welcomeScreenTarget: string | null;
 };
 export type User2 = {
     /** Email of the User */
@@ -673,6 +668,8 @@ export type User2 = {
     perspectives: string[];
     /** Theme of the User */
     theme?: string;
+    /** Welcome screen opened after login, as `<provider>:<id>`. Omitted or null keeps the stored target, an empty string clears it */
+    welcomeScreenTarget?: string | null;
 };
 export type UserPermission = {
     /** AdditionalAttributes */
@@ -699,14 +696,6 @@ export type ResetPassword = {
     username: string;
     /** Reset password URL */
     resetPasswordUrl: string;
-};
-export type Invitation = {
-    /** URL the invitation link points to. Must belong to a configured domain. */
-    invitationUrl: string;
-};
-export type TokenLink = {
-    /** Token login URL */
-    tokenLoginUrl: string;
 };
 export type TwoFactorCode = {
     /** Code */
@@ -745,6 +734,8 @@ export type UserProfile = {
     keyBindings: KeyBindingForAUser[];
     /** Theme of the User */
     theme?: string;
+    /** Welcome screen opened after login, as `<provider>:<id>`. Omitted or null keeps the stored target, an empty string clears it */
+    welcomeScreenTarget?: string | null;
 };
 export const {
     useUserCloneByIdMutation,

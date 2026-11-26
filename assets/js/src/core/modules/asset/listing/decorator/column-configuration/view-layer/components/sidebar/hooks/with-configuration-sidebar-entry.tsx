@@ -16,6 +16,8 @@ import { GridConfig } from '../tabs/grid-config/grid-config'
 
 export interface Settings {
   saveEnabled?: boolean
+  /** the columns are shown, not changed: no add, remove, reorder or apply */
+  readOnly?: boolean
 }
 
 export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions'], settings: Settings = { saveEnabled: true }): AbstractDecoratorProps['useSidebarOptions'] => {

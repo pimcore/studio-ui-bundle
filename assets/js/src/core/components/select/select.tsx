@@ -17,12 +17,15 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
+import { SelectActionButton } from './select-action-button'
+import { useTrackedSearch } from './use-tracked-search'
+import { useSelectAllValue } from './use-select-all-value'
 import { useTranslation } from 'react-i18next'
-import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { createSortableTagRender } from './components/sortable-tag/sortable-tag'
+import { SortableTags } from './components/sortable-tags/sortable-tags'
+import { type SelectSize, useSelectWidth } from './use-select-width'
 
-export const sizeOptions = {
-  normal: 150
-}
+export { sizeOptions } from './use-select-width'
 
 export type SelectTheme = 'default' | 'primary'
 
@@ -31,10 +34,14 @@ export interface SelectProps extends AntdSelectProps {
   customIcon?: string
   dataTestId?: string
   inherited?: boolean
-  width?: number | keyof typeof sizeOptions
-  minWidth?: number | keyof typeof sizeOptions
+  width?: SelectSize
+  minWidth?: SelectSize
   theme?: SelectTheme
   loadingSkeleton?: boolean
+  /** Adds a "Select all" row to the dropdown (only for `mode="multiple"` without `maxCount` or `labelInValue`, hidden while `loading`). */
+  allowSelectAll?: boolean
+  /** Reorder the selected tags by drag and drop (`mode="multiple"` only). Needs a controlled `value`, or `allowSelectAll` without `labelInValue`; replaces `tagRender`. The options passed to `onChange` come from the `options` prop, so with JSX children they only carry the value. */
+  sortableTags?: boolean
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({
@@ -50,49 +57,42 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   minWidth,
   theme = 'default',
   loadingSkeleton = false,
+  allowSelectAll = false,
+  sortableTags = false,
   dataTestId,
   loading = false,
   onDropdownVisibleChange,
+  onSearch,
+  onSelect,
+  onDeselect,
   onFocus,
   onBlur,
+  onChange,
   ...antdSelectProps
 }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
-  const fieldWidths = useFieldWidthOptional()
+  const { computedWidth, computedMinWidth } = useSelectWidth(width, minWidth, mode)
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
+  const { searchValue, controlledSearchValue, resetSearch, handleSearch, handleSelect, handleDeselect } = useTrackedSearch({
+    enabled: allowSelectAll && mode === 'multiple' && antdSelectProps.searchValue === undefined,
+    mode,
+    autoClearSearchValue: antdSelectProps.autoClearSearchValue,
+    onSearch,
+    onSelect,
+    onDeselect
+  })
 
   useImperativeHandle(ref, () => selectRef.current!)
 
-  // Calculate width: explicit width prop takes precedence over fieldWidths
-  const getComputedWidth = (): number | undefined => {
-    if (width !== undefined) {
-      // Handle explicit width prop
-      if (typeof width === 'number') {
-        return width
-      }
-      if (typeof width === 'string' && width in sizeOptions) {
-        return sizeOptions[width as keyof typeof sizeOptions]
-      }
-    }
+  const { currentValue, handleChange, shouldShowSelectAll, handleSelectAll } = useSelectAllValue({
+    allowSelectAll, mode, value, onChange, loading, searchValue, antdSelectProps
+  })
 
-    // Fall back to fieldWidths
-    return mode === 'multiple' ? fieldWidths?.large : fieldWidths?.medium
-  }
-
-  const computedWidth = getComputedWidth()
-
-  let computedMinWidth: undefined | number
-
-  if (typeof minWidth === 'number') {
-    computedMinWidth = minWidth
-  }
-
-  if (typeof minWidth === 'string') {
-    computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
-  }
+  const isSelectDisabled = antdSelectProps.disabled === true
+  const isTagSortingEnabled = mode === 'multiple' && sortableTags
 
   const selectStyle = antdSelectProps.style
   const skeletonWidth = computedWidth ?? selectStyle?.width ?? selectStyle?.maxWidth ?? '100%'
@@ -158,9 +158,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     setIsFocus(true)
     onFocus?.(event)
   }
-
   const handleBlur = (event: React.FocusEvent<HTMLElement>): void => {
     setIsFocus(false)
+    resetSearch()
     onBlur?.(event)
   }
 
@@ -198,26 +198,32 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   }
 
   const isClearable = allowClear !== undefined && allowClear !== false
-  const shouldShowClearOption = isClearable && !isEmptyValue(value)
+  const shouldShowClearOption = isClearable && !isEmptyValue(currentValue)
 
   const handleClearSelection = (): void => {
     const clearedValue = mode === 'multiple' ? [] as string[] : undefined
-    antdSelectProps.onChange?.(clearedValue, [])
+    handleChange(clearedValue, [])
     selectRef.current?.blur()
   }
-
-  const dropdownRender = shouldShowClearOption
+  const dropdownRender = shouldShowClearOption || shouldShowSelectAll
     ? (menu: React.ReactElement): React.JSX.Element => (
       <div className={ styles.clearOptionWrapper }>
-        <button
-          className={ styles.clearOption }
-          onClick={ handleClearSelection }
-          onMouseDown={ (e) => { e.preventDefault() } }
-          type="button"
-        >
-          <Icon value={ 'trash' } />
-          <span>{t('select.clear-selection')}</span>
-        </button>
+        {shouldShowSelectAll && (
+          <SelectActionButton
+            className={ styles.clearOption }
+            icon={ 'checkmark' }
+            label={ t('select.select-all') }
+            onClick={ handleSelectAll }
+          />
+        )}
+        {shouldShowClearOption && (
+          <SelectActionButton
+            className={ styles.clearOption }
+            icon={ 'trash' }
+            label={ t('select.clear-selection') }
+            onClick={ handleClearSelection }
+          />
+        )}
         {menu}
       </div>
       )
@@ -233,30 +239,44 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       value={ customIcon! }
     />
     )}
-      <AntdSelect
-        allowClear={ false }
-        className={ selectClassNames }
-        dropdownRender={ dropdownRender }
-        menuItemSelectedIcon={ getItemSelectedIcon() }
-        mode={ mode }
-        notFoundContent={ <Flex
-          align={ 'center' }
-          justify={ 'center' }
-                          >
-          <Icon
-            className={ 'm-r-mini' }
-            value={ 'alert-outline' }
-          /> {t('no-data-available')}</Flex> }
-        onBlur={ handleBlur }
-        onDropdownVisibleChange={ handleDropdownVisibleChange }
-        onFocus={ handleFocus }
-        ref={ selectRef }
-        status={ status }
-        style={ computedStyle }
-        suffixIcon={ getSuffixIcon() }
-        value={ value }
-        { ...antdSelectProps }
-      />
+      <SortableTags
+        disabled={ isSelectDisabled }
+        enabled={ isTagSortingEnabled }
+        onChange={ handleChange }
+        options={ antdSelectProps.options }
+        value={ currentValue }
+      >
+        <AntdSelect
+          allowClear={ false }
+          className={ selectClassNames }
+          dropdownRender={ dropdownRender }
+          menuItemSelectedIcon={ getItemSelectedIcon() }
+          mode={ mode }
+          notFoundContent={ <Flex
+            align={ 'center' }
+            justify={ 'center' }
+                            >
+            <Icon
+              className={ 'm-r-mini' }
+              value={ 'alert-outline' }
+            /> {t('no-data-available')}</Flex> }
+          onBlur={ handleBlur }
+          onChange={ handleChange }
+          onDeselect={ handleDeselect }
+          onDropdownVisibleChange={ handleDropdownVisibleChange }
+          onFocus={ handleFocus }
+          onSearch={ handleSearch }
+          onSelect={ handleSelect }
+          ref={ selectRef }
+          searchValue={ controlledSearchValue }
+          status={ status }
+          style={ computedStyle }
+          suffixIcon={ getSuffixIcon() }
+          value={ currentValue }
+          { ...antdSelectProps }
+          tagRender={ isTagSortingEnabled ? createSortableTagRender(isSelectDisabled) : antdSelectProps.tagRender }
+        />
+      </SortableTags>
     </div>
   )
 })

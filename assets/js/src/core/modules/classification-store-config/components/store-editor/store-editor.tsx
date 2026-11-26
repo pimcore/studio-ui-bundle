@@ -8,22 +8,37 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { GroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/groups-tab'
 import { KeysTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/keys-tab'
 import { CollectionsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/collections-tab'
+import { SubGroupsTab } from '@Pimcore/modules/classification-store-config/components/store-editor/tabs/sub-groups-tab'
+import { StoreIdentifier } from '@Pimcore/modules/classification-store-config/components/store-editor/store-identifier'
+import { StoreEngineIndicator } from '@Pimcore/modules/classification-store-config/components/store-editor/store-engine-indicator'
+import { StoreImportProvider } from '@Pimcore/modules/classification-store-config/components/store-editor/store-import-provider'
 import { useStyles } from '@Pimcore/modules/classification-store-config/classification-store-config.styles'
 
 interface IStoreEditorProps {
   storeId: number
+  /** the store's own export and import actions, rendered in the footer below the tabs */
+  importExportActions?: React.ReactNode
 }
 
-export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element => {
+const SUB_GROUPS_TAB_KEY = 'sub-groups'
+
+export const StoreEditor = ({ storeId, importExportActions }: IStoreEditorProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const [activeKey, setActiveKey] = useState<string>('keys')
+
+  const showSubGroups = useCallback(() => { setActiveKey(SUB_GROUPS_TAB_KEY) }, [])
 
   const tabItems = [
     {
@@ -35,11 +50,22 @@ export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element =
       )
     },
     {
+      key: SUB_GROUPS_TAB_KEY,
+      icon: <Icon value='hierarchy' />,
+      label: t('classification-store.tabs.sub-groups'),
+      children: (
+        <SubGroupsTab storeId={ storeId } />
+      )
+    },
+    {
       key: 'groups',
       icon: <Icon value='group' />,
       label: t('classification-store.tabs.groups'),
       children: (
-        <GroupsTab storeId={ storeId } />
+        <GroupsTab
+          onShowSubGroups={ showSubGroups }
+          storeId={ storeId }
+        />
       )
     },
     {
@@ -52,12 +78,35 @@ export const StoreEditor = ({ storeId }: IStoreEditorProps): React.JSX.Element =
     }
   ]
 
+  // The actions are rendered inside the provider, so the tabs hear about an import they trigger.
   return (
-    <Tabs
-      className={ styles.storeEditorTabsContainer }
-      defaultActiveKey="keys"
-      items={ tabItems }
-      noTabBarMargin
-    />
+    <StoreImportProvider>
+      <ContentLayout
+        renderToolbar={ (
+          <Toolbar>
+            <Flex gap="mini">
+              {importExportActions}
+            </Flex>
+          </Toolbar>
+        ) }
+      >
+        <Tabs
+          activeKey={ activeKey }
+          className={ styles.storeEditorTabsContainer }
+          items={ tabItems }
+          noTabBarMargin
+          onChange={ setActiveKey }
+          tabBarExtraContent={ (
+            <Flex
+              align="center"
+              gap="small"
+            >
+              <StoreIdentifier storeId={ storeId } />
+              <StoreEngineIndicator storeId={ storeId } />
+            </Flex>
+          ) }
+        />
+      </ContentLayout>
+    </StoreImportProvider>
   )
 }

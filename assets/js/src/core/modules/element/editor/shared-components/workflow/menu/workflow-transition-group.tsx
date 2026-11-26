@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { getWorkflowActions, type WorkflowAction } from '../types/workflow-types'
 import { Button } from '@Pimcore/components/button/button'
@@ -18,6 +19,7 @@ import type {
   WorkflowDetails
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 import { useWorkflowAction } from '../hooks/use-workflow-action'
+import { WorkflowStateDot } from '@Pimcore/components/workflow-state/workflow-state-dot/workflow-state-dot'
 
 interface WorkflowItemProps {
   workflow: WorkflowDetails
@@ -28,12 +30,17 @@ export const WorkflowTransitionGroup = ({ workflow }: WorkflowItemProps): React.
   const workflowActions = getWorkflowActions(workflow)
   const { styles } = useStyles()
   const { t } = useTranslation()
+  // with several current places, the first one in configuration order colours the actions
+  const [currentStatus] = workflow.workflowStatus
+  const stateDot = isUndefined(currentStatus) ? undefined : <WorkflowStateDot color={ currentStatus.color } />
 
   const isFirst = true
   const renderButton = (action: WorkflowAction): React.JSX.Element => {
     return (
       <Button
         className={ isFirst ? `${styles.button}` : cn(`${styles.button}`, `${styles['not-first']}`) }
+        icon={ stateDot }
+        key={ `${action.actionType}-${action.transitionId}` }
         onClick={ () => {
           triggerAction(action)
         } }

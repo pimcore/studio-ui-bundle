@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { currentDomain } from '@Pimcore/app/config/app-config'
-import { routes } from '@Pimcore/app/router/router'
 import { Button } from '@Pimcore/components/button/button'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -18,12 +16,13 @@ import { useUserSendInvitationMutation } from '@Pimcore/modules/user/user-api-sl
 import { isUndefined } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { generatePath } from 'react-router-dom'
 
 export interface SendInvitationButtonProps {
   userId: number
   email?: string | null
   lastLogin?: number | null
+  /** An inactive user is refused by the endpoint, so the button says so instead of failing. */
+  active?: boolean | null
   /** The editor holds unsaved changes, so the stored email may not be the one on screen. */
   hasUnsavedChanges?: boolean
   disabled?: boolean
@@ -33,6 +32,7 @@ export const SendInvitationButton = ({
   userId,
   email,
   lastLogin,
+  active,
   hasUnsavedChanges,
   disabled
 }: SendInvitationButtonProps): React.JSX.Element | null => {
@@ -55,10 +55,15 @@ export const SendInvitationButton = ({
   // dirty would hand an account access token to the previous mailbox and then name the new one in
   // the confirmation, so the invitation waits until the change is saved.
   const isUnsaved = hasUnsavedChanges === true
+  const isInactive = active === false
 
   const getBlockedReason = (): string | undefined => {
     if (!hasEmail) {
       return t('user-management.send-invitation.no-email')
+    }
+
+    if (isInactive) {
+      return t('user-management.send-invitation.inactive')
     }
 
     if (isUnsaved) {
@@ -69,15 +74,9 @@ export const SendInvitationButton = ({
   }
 
   const handleClick = async (): Promise<void> => {
-    // The link must land on the reset password route: it logs the user in with the token and
-    // opens the profile in reset mode, so the invitee sets a password of their own. The plain
-    // login route would drop them at the root holding a password they do not know.
-    const { error } = await sendInvitation({
-      id: userId,
-      invitation: {
-        invitationUrl: `${currentDomain}${generatePath(routes.passwordReset)}`
-      }
-    })
+    // The backend builds the link from the configured origin and points it at the reset password
+    // route, so the invitee is logged in by the token and set to choose a password of their own.
+    const { error } = await sendInvitation({ id: userId })
 
     if (!isUndefined(error)) {
       trackError(new ApiError(error))
@@ -89,8 +88,7 @@ export const SendInvitationButton = ({
 
   return (
     <Button
-      className="m-t-small"
-      disabled={ disabled === true || !hasEmail || isUnsaved || isLoading }
+      disabled={ disabled === true || !hasEmail || isInactive || isUnsaved || isLoading }
       loading={ isLoading }
       onClick={ () => { void handleClick() } }
       title={ getBlockedReason() }

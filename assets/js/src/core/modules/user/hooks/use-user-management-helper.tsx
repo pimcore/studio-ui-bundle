@@ -188,7 +188,9 @@ export const useUserManagementHelper = (): UseUserReturn => {
       twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false,
       parentId: user.parentId ?? 0,
       dateTimeLocale: user.dateTimeLocale ?? '',
-      perspectives: toPerspectiveIds(user.perspectives)
+      perspectives: toPerspectiveIds(user.perspectives),
+      // each user picks it in the own profile; left out, the backend keeps the stored choice
+      welcomeScreenTarget: undefined
     }
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
@@ -227,7 +229,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false, dateTimeLocale: user.dateTimeLocale ?? '', perspectives: toPerspectiveIds(user.perspectives) } }))
+    // like the settings save, the welcome screen target is left out: the fetched user may be cached and outdated
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false, dateTimeLocale: user.dateTimeLocale ?? '', perspectives: toPerspectiveIds(user.perspectives), welcomeScreenTarget: undefined } }))
     await handleNotification(t('user-management.save-user.success'), error)
     return data
   }

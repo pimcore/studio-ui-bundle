@@ -8,8 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import type { DisplayManyToManyRelationValueItem } from '@Pimcore/components/many-to-many-relation/hooks/use-value'
+import type { RelationFilterColumn } from '@Pimcore/components/many-to-many-relation/filters/types'
+import { buildVisibleFieldsMap, resolveRowValue } from '@Pimcore/components/many-to-many-relation/filters/utils/filter-columns'
+import type { IUseDataObjectGridsReturn } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
 
 let currentLanguage = 'de'
 
@@ -75,7 +80,7 @@ interface GridQueryArgs {
   columns: Array<{ key: string, locale?: string }>
 }
 
-let gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn(), loadedCount: 0, totalCount: 0 }
+let gridResult: IUseDataObjectGridsReturn = { data: [], isLoading: false, isError: false, refetchAll: jest.fn(), loadedCount: 0, totalCount: 0 }
 const mockUseDataObjectGrids = jest.fn((args: GridQueryArgs) => gridResult)
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids', () => ({
@@ -246,7 +251,7 @@ describe('ManyToManyObjectRelation visible field loading', () => {
       data: [{ id: 5, columns: [{ key: 'name', value: 'Golf' }] }] as any
     }
 
-    expect(renderRelation().visibleFieldsValue).toEqual([{ name: 'Golf' }])
+    expect(renderRelation().visibleFieldsValue).toEqual([{ name: 'Golf', id: 5 }])
   })
 
   it('shows an error hint when the visible field values could not be loaded', () => {
@@ -268,5 +273,58 @@ describe('ManyToManyObjectRelation visible field loading', () => {
 
   it('passes only the hint of the field definition when the visible field values are loaded', () => {
     expect(renderRelation({ hint: 'Field hint' }).hint).toBe('Field hint')
+  })
+})
+
+describe('ManyToManyObjectRelation visible field values', () => {
+  const chair: DisplayManyToManyRelationValueItem = { id: 5, type: 'object', subtype: 'Car', fullPath: '/cars/5', isPublished: true }
+  const table: DisplayManyToManyRelationValueItem = { id: 7, type: 'object', subtype: 'Car', fullPath: '/cars/7', isPublished: true }
+
+  const nameColumn: RelationFilterColumn = {
+    key: '{"key":"name"}',
+    valueKey: 'name',
+    title: 'Name',
+    type: 'dataobject.adapter',
+    frontendType: 'input'
+  }
+
+  beforeEach(() => {
+    mockManyToManyRelation.mockClear()
+    availableGridColumnsLoading = false
+    gridResult = { data: [], isLoading: false, isError: false, refetchAll: jest.fn(), loadedCount: 0, totalCount: 0 }
+  })
+
+  // The relation mock is untyped, so the one prop this test reads is narrowed here instead of
+  // handing an `any` to the lookup under test.
+  const lastVisibleFieldsValue = (): Array<Record<string, any> | undefined> | undefined => {
+    const calls = mockManyToManyRelation.mock.calls
+    const lastProps = calls[calls.length - 1][0] as { visibleFieldsValue?: Array<Record<string, any> | undefined> }
+
+    return lastProps.visibleFieldsValue
+  }
+
+  // The visible fields need not contain `id`, so the values of a row cannot be found by an `id`
+  // column - they belong to the grid item they were loaded for and must be keyed by its id. The
+  // grid items arrive per allowed class and in their own order, so their position says nothing.
+  it('lets a column filter resolve a visible field value of a row when id is not a visible field', () => {
+    gridResult = {
+      ...gridResult,
+      data: [
+        { id: table.id, columns: [{ key: 'name', value: 'Oak table' }] },
+        { id: chair.id, columns: [{ key: 'name', value: 'Wooden chair' }] }
+      ]
+    }
+
+    render(
+      <ManyToManyObjectRelation
+        { ...defaultProps }
+        value={ [chair, table] }
+      />
+    )
+
+    const visibleFieldsMap = buildVisibleFieldsMap(lastVisibleFieldsValue())
+
+    expect(resolveRowValue(chair, nameColumn, visibleFieldsMap)).toBe('Wooden chair')
+    expect(resolveRowValue(table, nameColumn, visibleFieldsMap)).toBe('Oak table')
   })
 })

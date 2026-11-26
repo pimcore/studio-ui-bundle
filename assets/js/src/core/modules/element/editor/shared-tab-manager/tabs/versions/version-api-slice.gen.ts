@@ -285,9 +285,9 @@ export type UpdateVersion = {
     public?: boolean | null;
     /** Note */
     note?: string | null;
-    /** Coauthor type, empty string clears it */
+    /** Coauthor type, empty string clears it. Deprecated: removed in 2027.1 (pimcore/platform-version#814) */
     coauthorType?: string | null;
-    /** Coauthor, empty string clears it */
+    /** Coauthor, empty string clears it. Deprecated: removed in 2027.1 (pimcore/platform-version#814) */
     coauthor?: string | null;
 };
 export type VersionUser = {

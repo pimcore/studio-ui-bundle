@@ -112,6 +112,7 @@ export type ExportCsvApiArg = {
                 | "element_type_to_rewrite_references"
                 | "export_format"
                 | "folder_to_export"
+                | "folders_to_clone"
                 | "grid_export_data"
                 | "grid_export_data_info"
                 | "config"
@@ -164,6 +165,7 @@ export type ExportCsvFolderApiArg = {
                 | "element_type_to_rewrite_references"
                 | "export_format"
                 | "folder_to_export"
+                | "folders_to_clone"
                 | "grid_export_data"
                 | "grid_export_data_info"
                 | "config"
@@ -230,6 +232,7 @@ export type ExportXlsxApiArg = {
                 | "element_type_to_rewrite_references"
                 | "export_format"
                 | "folder_to_export"
+                | "folders_to_clone"
                 | "grid_export_data"
                 | "grid_export_data_info"
                 | "config"
@@ -282,6 +285,7 @@ export type ExportXlsxFolderApiArg = {
                 | "element_type_to_rewrite_references"
                 | "export_format"
                 | "folder_to_export"
+                | "folders_to_clone"
                 | "grid_export_data"
                 | "grid_export_data_info"
                 | "config"
@@ -332,6 +336,10 @@ export type RelationFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
@@ -340,6 +348,10 @@ export type SimpleFieldConfig = {
     groupId?: number | null;
     /** Classification store key id */
     keyId?: number | null;
+    /** Classification store group identifier */
+    groupIdentifier?: string | null;
+    /** Classification store key identifier */
+    keyIdentifier?: string | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
@@ -370,7 +382,7 @@ export type GridColumnRequest = {
     type: string;
     /** Group */
     group?: string[] | null;
-    /** Config */
+    /** Config; a classification store column names its key by ID or identifier and may name a variant */
     config?: (string | AdvancedColumnConfig)[];
     /** Width of the Column */
     width?: number | null;

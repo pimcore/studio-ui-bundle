@@ -17,6 +17,7 @@ export { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 export { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 export * from '@Pimcore/modules/app/context-menu-registry'
 export * from '@Pimcore/modules/app/context-menu-registry/context-types'
+export * from '@Pimcore/modules/app/deep-link-registry'
 
 export * from '@Pimcore/modules/app/error-boundary/error-boundary'
 export { default as trackError, ApiError, GeneralError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
@@ -47,6 +48,7 @@ export * from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
 export * from '@Pimcore/modules/app/base-layout/right-sidebar/logo/subscription-details'
 
 export * from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
+export * from '@Pimcore/modules/app/welcome-screen/services/welcome-screen-registry'
 export type { LoadPhase } from '@Pimcore/modules/app/app-loader/app-loader'
 export { Background } from '@Pimcore/components/background/background'
 export type { BackgroundProps } from '@Pimcore/components/background/background'

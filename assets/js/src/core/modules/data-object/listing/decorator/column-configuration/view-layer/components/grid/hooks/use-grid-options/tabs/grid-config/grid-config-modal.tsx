@@ -9,12 +9,13 @@
  */
 
 import { Modal } from '@Pimcore/components/modal/modal'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { type EditViewProps } from './views/edit-view'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
@@ -23,15 +24,39 @@ import { AddColumnControls } from '@Pimcore/modules/element/listing/decorators/u
 import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
 import { PipelineLayoutProvider } from './forms/advanced-column-form/pipeline-layout-provider'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
-import { PreviewItemProvider } from './forms/advanced-column-form/preview/preview-item-provider'
-import { PreviewItemSelection } from './forms/advanced-column-form/preview/preview-item-selection'
+import { PreviewModeProvider, usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
+import { PreviewModeSwitch } from '@Pimcore/components/preview-mode/preview-mode-switch'
+import { PreviewModeBar } from '@Pimcore/components/preview-mode/preview-mode-bar'
+import { getFallbackItem, type FallbackRow } from '@Pimcore/components/preview-mode/fallback-item'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useStyles } from './grid-config-modal.styles'
 import { useOpenAnimationDone } from './use-open-animation-done'
+import { SettingsContext } from '@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/tabs/grid-config/povider/settings/settings-provider'
 
 export interface GridConfigModalProps extends EditViewProps {
   open?: boolean
   onOpenChange?: (open: boolean) => void
   focusedPipelineItem?: GridConfigPipelineItem
+}
+
+const PreviewModeToolbarContent = (): React.JSX.Element => {
+  const { enabled } = usePreviewModeOptional()
+  const { selectedClassDefinition } = useClassDefinitionSelection()
+
+  return (
+    <Flex
+      align="center"
+      gap="small"
+      style={ { width: '100%' } }
+    >
+      <PreviewModeSwitch />
+      <PreviewModeBar
+        allowedClasses={ selectedClassDefinition?.name !== undefined ? [selectedClassDefinition.name] : undefined }
+        showItem={ enabled }
+      />
+    </Flex>
+  )
 }
 
 export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element => {
@@ -47,10 +72,16 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   } = props
 
   const { t } = useTranslation()
+  const { data: gridData } = useData()
+  const { selectedClassDefinition } = useClassDefinitionSelection()
   const { styles } = useStyles()
+  // optional: the list and the modal also render outside a column configuration's settings
+  const readOnly = useContext(SettingsContext)?.readOnly === true
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
   // scrolling waits for the open animation, the zoomed-in modal would throw off the scroll position
   const { isOpenAnimationDone, setIsOpenAnimationDone } = useOpenAnimationDone(open)
+
+  const firstRow = gridData?.items?.[0] as FallbackRow | undefined
 
   const onApplyClick = (): void => {
     baseOnApplyClick()
@@ -60,7 +91,10 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   return (
     <>
       {open && (
-        <PreviewItemProvider>
+        <PreviewModeProvider
+          fallbackItem={ getFallbackItem(firstRow) }
+          resetKey={ selectedClassDefinition?.id }
+        >
           <PipelineLayoutProvider pipelineLayout="verbose">
             <Modal
               afterOpenChange={ setIsOpenAnimationDone }
@@ -82,12 +116,12 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                   position="content"
                   theme="secondary"
                 >
-                  <PreviewItemSelection />
+                  <PreviewModeToolbarContent />
                 </Toolbar>
 
                 <Content style={ { height: 'calc(80vh - 200px)' } }>
                   <div className={ styles.body }>
-                    { fieldsToAddOpen && (
+                    { fieldsToAddOpen && !readOnly && (
                       <FieldsToAddPanel
                         data-testid="listing-grid-config-fields-to-add"
                         fillHeight
@@ -103,6 +137,23 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                   </div>
                 </Content>
 
+                { readOnly && (
+                  <Toolbar
+                    justify="flex-end"
+                    padding={ { x: 'none' } }
+                    theme="secondary"
+                  >
+                    <Button
+                      data-testid="listing-grid-config-modal-close-button"
+                      onClick={ () => onOpenChange?.(false) }
+                      type='default'
+                    >
+                      { t('close') }
+                    </Button>
+                  </Toolbar>
+                ) }
+
+                { !readOnly && (
                 <Toolbar
                   padding={ { x: 'none' } }
                   theme="secondary"
@@ -136,10 +187,11 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                     </Button>
                   </Space>
                 </Toolbar>
+                ) }
               </ContentLayout>
             </Modal>
           </PipelineLayoutProvider>
-        </PreviewItemProvider>
+        </PreviewModeProvider>
       )}
     </>
   )

@@ -20,7 +20,7 @@ import { Form, type formInstanceType } from '@sdk/components'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
-import { mergeFormChanges } from './utils/merge-form-changes'
+import { type IFormChangesContext, mergeFormChanges } from './utils/merge-form-changes'
 import { clearFormField } from './utils/clear-form-field'
 import { type NamePath } from 'antd/es/form/interface'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -28,7 +28,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 interface EditFormContextProps {
   form: formInstanceType
   setFieldTypeMap: (fieldTypeMap: Map<string, string>) => void
-  updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
+  updateModifiedDataObjectAttributes: (changedValues: Record<string, any>, context?: IFormChangesContext) => void
   clearDataObjectAttribute: (name: NamePath, emptyValue?: unknown) => void
   /**
    * Clears the modified-attributes map after a save of it went through.
@@ -57,7 +57,7 @@ export const useEditFormContext = (): EditFormContextProps => {
 
 /**
  * For components that are also rendered outside the object editor, e.g. field labels
- * in grid cells or in the version comparison.
+ * in grid cells or in the version comparison, or the workflow of an asset or document editor.
  */
 export const useEditFormContextOptional = (): EditFormContextProps | undefined => {
   return useContext(EditFormContext)
@@ -89,9 +89,9 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     fieldTypeMapRef.current = fieldTypeMap
   }
 
-  const updateModifiedDataObjectAttributes = (changedValues: Record<string, any>): void => {
+  const updateModifiedDataObjectAttributes = (changedValues: Record<string, any>, context?: IFormChangesContext): void => {
     const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-    modifiedDataObjectAttributesRef.current = mergeFormChanges(modifiedDataObjectAttributesRef.current, changedValues, objectDataRegistry, fieldTypeMapRef.current)
+    modifiedDataObjectAttributesRef.current = mergeFormChanges(modifiedDataObjectAttributesRef.current, changedValues, objectDataRegistry, fieldTypeMapRef.current, context)
   }
 
   const clearDataObjectAttribute = (name: NamePath, emptyValue: unknown = null): void => {
