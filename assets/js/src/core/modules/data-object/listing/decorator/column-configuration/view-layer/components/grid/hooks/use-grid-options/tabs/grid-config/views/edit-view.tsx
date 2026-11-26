@@ -67,7 +67,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
   } = props
 
   const { t } = useTranslation()
-  const { saveEnabled } = useSettings()
+  const { saveEnabled, readOnly } = useSettings()
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
   const isGridTemplateOwner = currentUserId === gridConfig?.ownerId
@@ -95,27 +95,30 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
       />
 
       <ContentLayout
-        renderToolbar={
-          <Toolbar theme='secondary'>
-            <AddColumnControls
-              groups={ availableColumnsTree }
-              onAddAdvancedColumn={ onAddAdvancedColumn }
-              onColumnSelect={ onColumnSelect }
-              placement="leftBottom"
-            />
+        renderToolbar={ readOnly === true
+          ? undefined
+          : (
+            <Toolbar theme='secondary'>
+              <AddColumnControls
+                groups={ availableColumnsTree }
+                onAddAdvancedColumn={ onAddAdvancedColumn }
+                onColumnSelect={ onColumnSelect }
+                placement="leftBottom"
+              />
 
-            <Space size="extra-small">
-              { renderSaveButton() }
+              <Space size="extra-small">
+                { renderSaveButton() }
 
-              <Button
-                data-testid="listing-grid-config-apply-button"
-                onClick={ onApplyClick }
-                type='primary'
-              >
-                { t('button.apply') }
-              </Button>
-            </Space>
-          </Toolbar>
+                <Button
+                  data-testid="listing-grid-config-apply-button"
+                  onClick={ onApplyClick }
+                  type='primary'
+                >
+                  { t('button.apply') }
+                </Button>
+              </Space>
+            </Toolbar>
+            )
         }
       >
         <Content

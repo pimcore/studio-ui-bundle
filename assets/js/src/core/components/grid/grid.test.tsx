@@ -147,3 +147,44 @@ describe('Grid column resizing without the row virtualizer', () => {
     expect(getWidth(getFirstBodyCell())).toBe(`${COLUMN_SIZE + 5}px`)
   })
 })
+
+describe('Grid row class names', () => {
+  it('adds the class name resolved for a row to its table row', () => {
+    render(
+      <Grid
+        columns={ columns }
+        data={ data.slice(0, 3) }
+        enableRowVirtualizer={ false }
+        getRowClassName={ (row) => row.id === 2 ? 'row-flagged' : undefined }
+        setRowId={ (originalRow) => String(originalRow.id) }
+      />
+    )
+
+    const rows = document.querySelectorAll('tbody tr.ant-table-row')
+
+    expect(Array.from(rows).map((row) => row.classList.contains('row-flagged'))).toEqual([false, true, false])
+  })
+
+  it('applies the class names again when the resolver changes', () => {
+    // Stable data, so that the resolver is the only thing which differs between the renders
+    const stableData = data.slice(0, 2)
+    const renderWith = (getRowClassName: (row: any) => string | undefined): React.JSX.Element => (
+      <Grid
+        columns={ columns }
+        data={ stableData }
+        enableRowVirtualizer={ false }
+        getRowClassName={ getRowClassName }
+        setRowId={ (originalRow) => String(originalRow.id) }
+      />
+    )
+
+    const { rerender } = render(renderWith((row) => row.id === 1 ? 'row-first' : undefined))
+
+    expect(document.querySelectorAll('tbody tr.row-first')).toHaveLength(1)
+
+    rerender(renderWith((row) => row.id === 2 ? 'row-second' : undefined))
+
+    expect(document.querySelectorAll('tbody tr.row-first')).toHaveLength(0)
+    expect(document.querySelectorAll('tbody tr.row-second')).toHaveLength(1)
+  })
+})

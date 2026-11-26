@@ -11,6 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Input } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Select } from '@Pimcore/components/select/select'
@@ -18,11 +19,19 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import { SendInvitationButton } from '../send-invitation-button/send-invitation-button'
 
 interface ICustomisationAccordion {
   isAdmin?: boolean
+  userId?: number
+  email?: string | null
+  lastLogin?: number | null
+  active?: boolean | null
+  hasUnsavedChanges?: boolean
 }
-const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion): React.JSX.Element => {
+const CustomisationAccordion = (
+  { isAdmin, userId, email, lastLogin, active, hasUnsavedChanges, ...props }: ICustomisationAccordion
+): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableAdminLanguages, validLocales } = useSettings()
   const { getDisplayName } = useLanguageLookup()
@@ -95,12 +104,30 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           <Input />
         </Form.Item>
 
-        <Form.Item
-          label={ t('user-management.email') }
-          name="email"
+        {/* the invitation sits beside the address it is sent to, as in the Classic UI */}
+        <Flex
+          align="flex-end"
+          className="m-b-normal"
+          gap="small"
         >
-          <Input type={ 'email' } />
-        </Form.Item>
+          <Form.Item
+            className="w-full m-b-none"
+            label={ t('user-management.email') }
+            name="email"
+          >
+            <Input type={ 'email' } />
+          </Form.Item>
+
+          {userId !== undefined && (
+            <SendInvitationButton
+              active={ active }
+              email={ email }
+              hasUnsavedChanges={ hasUnsavedChanges }
+              lastLogin={ lastLogin }
+              userId={ userId }
+            />
+          )}
+        </Flex>
 
         <Form.Item
           label={ t('user-management.language') }

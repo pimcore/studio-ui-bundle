@@ -71,7 +71,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
   const { setPage, setPageSize } = usePaging()
   const { setSelectedColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
-  const { setTags } = useTagFilter()
+  const { setTags, setOnlyUntagged, showOnlyUntaggedFilter } = useTagFilter()
   const { setDataLoadingState } = useData()
   const { setSearchTerm: setSharedSearchTerm } = useSearch()
   const { setValue: setType } = useTypeSelect()
@@ -122,6 +122,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     const tagEntry = entries.find((entry) => entry.type === tagFilterType)
     const restoredTags = (tagEntry?.filterValue as { tags?: SelectedTags } | undefined)?.tags
     setTags(isArray(restoredTags) ? restoredTags : [])
+    setOnlyUntagged(showOnlyUntaggedFilter && tagEntry?.operator === 'empty')
 
     // Type select — restored from the `type` column filter rather than as a field filter (see
     // isTypeSelectEntry). Always set (including null) so opening a search replaces a type left over

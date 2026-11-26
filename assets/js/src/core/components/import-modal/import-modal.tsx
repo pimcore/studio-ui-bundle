@@ -38,6 +38,7 @@ export const ImportModal = ({
   filesKey,
   onUploadSuccess,
   onUploadError,
+  confirmUpload,
   showSuccessMessage = true,
   successMessage,
   multiple = false,
@@ -106,6 +107,11 @@ export const ImportModal = ({
 
   const handleUpload = async (): Promise<void> => {
     if (isEmpty(selectedFiles)) return
+
+    // Asked before the first byte goes out, so a refusal leaves the selection untouched.
+    if (!isNil(confirmUpload) && !(await confirmUpload(selectedFiles.map(({ file }) => file)))) {
+      return
+    }
 
     try {
       if (multiple) {

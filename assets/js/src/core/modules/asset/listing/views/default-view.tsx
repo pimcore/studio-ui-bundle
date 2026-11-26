@@ -9,9 +9,17 @@
  */
 
 import { ListingBaseView } from '@Pimcore/modules/element/listing/abstract/view-layer/base-view/listing-base-view'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { Toolbar } from '../toolbar/toolbar'
+import { ListingDropZone } from '../dnd-upload/listing-drop-zone'
+
+const wrapGrid = (grid: ReactNode): ReactNode => <ListingDropZone>{grid}</ListingDropZone>
 
 export const DefaultView = (): React.JSX.Element => {
-  return <ListingBaseView renderToolbar={ Toolbar } />
+  return (
+    <ListingBaseView
+      renderToolbar={ Toolbar }
+      wrapGrid={ wrapGrid }
+    />
+  )
 }

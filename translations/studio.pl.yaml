@@ -6,6 +6,13 @@ common.clear: Wyczyść
 cache.clear-cache-success: Pamięć podręczna pomyślnie wyczyszczona
 cache.clear-full-page-cache-success: Pamięć podręczna całej strony pomyślnie wyczyszczona
 cache.clear-temporary-files-success: Pliki tymczasowe pomyślnie wyczyszczone
+index-sync.confirmation.title: Synchronizuj indeks wyszukiwania
+index-sync.confirmation.text: "Wszystkie obiekty danych, zasoby i dokumenty są kolejkowane do ponownego indeksowania w tle. Istniejące indeksy są aktualizowane w miejscu; indeks, którego zmienione mapowanie nie może być zastosowane do jego dokumentów (na przykład po zmianie typu pola), jest odtwarzany i uzupełniany. W zależności od ilości danych może to zająć trochę czasu i obciążyć serwer wyszukiwania. Czy chcesz kontynuować?"
+index-sync.confirmation.ok: Synchronizuj
+index-sync.job.title: Synchronizowanie indeksu wyszukiwania
+index-sync.start-failed: Nie można rozpocząć synchronizacji indeksu wyszukiwania
+deep-link.unknown-link: Żaden handler nie jest zarejestrowany dla tego linku
+deep-link.open-failed: Podczas otwierania linku wystąpił błąd
 dont-ask-again: Nie pytaj ponownie
 widget.missing-context.title: Brakujący kontekst
 widget.missing-context.description: Nie znaleziono powiązanego elementu
@@ -27,6 +34,9 @@ error.error_recycle_bin_restore: Nie można przywrócić elementu z kosza
 error.error_recycle_bin_restore_missing_parent: Nie można przywrócić elementu z kosza, brak elementu nadrzędnego
 error.error_login_token_as_admin_non_admin_user: Tylko administratorzy mogą wygenerować link logowania dla użytkownika administracyjnego
 error.error_login_token_no_user_password: Nie można wygenerować linku logowania dla tego użytkownika, ponieważ nie ustawiono hasła
+error.error_invitation_as_admin_non_admin_user: Tylko administratorzy mogą wysłać zaproszenie do użytkownika administracyjnego
+error.error_invitation_no_email: Nie można wysłać zaproszenia, ponieważ użytkownik nie ma prawidłowego adresu e-mail
+error.error_invitation_user_inactive: Nie można wysłać zaproszenia do nieaktywnego użytkownika
 error.syntax_error: Błąd składni
 validation.mandatory: "{{field}} jest wymagane"
 validation.regex_mismatch: "{{field}} nie pasuje do wymaganego wzorca {{regex}}"
@@ -144,6 +154,7 @@ areablock.paste: Wklej
 areablock.cut: Wytnij
 areablock.settings: Ustawienia
 areablock.delete: Usuń
+areablock.type-limit-reached: Osiągnięto maksymalną liczbę bloków tego typu.
 document.highlight-editables: Wyróżnij pola edytowalne
 document.link.target: Cel linku
 document.hardlink.source: Dokument źródłowy
@@ -1421,6 +1432,7 @@ element.delete.batch.show-paths: Pokaż elementy
 element.delete.batch.dependencies-warning.confirmed_one: "Uwaga: ten element ma zależności."
 element.delete.batch.dependencies-warning.confirmed_other: "Uwaga: te elementy mają zależności."
 element.open: Otwórz
+element.open-multiple: 'Otwórz {{count}} elementów'
 element.state: Status
 element.state.unpublished: Nieopublikowany
 element.toolbar.copy-id: Kopiuj ID
@@ -1433,6 +1445,7 @@ element.publish: Opublikuj
 element.locate-in-tree: Znajdź w drzewie
 element.sidebar.filter.only-direct-children: tylko bezpośrednie elementy podrzędne
 element.sidebar.filter.only-unreferenced: Tylko bez odwołań
+element.sidebar.filter.only-untagged: Tylko bez tagów
 element.sidebar.field-filters: Filtry pól
 element.full-information: Pełne informacje
 system-information.id: ID
@@ -1651,6 +1664,8 @@ user-management.email: E-mail
 user-management.language: Język
 user-management.dateTime: Ustawienia regionalne daty i godziny
 user-management.welcomeScreen: Pokaż ekran powitalny przy uruchomieniu
+user-management.welcomeScreenDashboard: Dashboard ekranu powitalnego
+user-management.welcomeScreenDashboard.placeholder: Wybierz dashboard
 user-management.memorizeTabs: Zapamiętaj otwarte karty
 user-management.allowDirtyClose: Wyłącz ostrzeżenie o niezapisanej treści
 user-management.closeWarning: Pokaż ostrzeżenie przy zamykaniu
@@ -1723,6 +1738,11 @@ user-management.add-folder: Nowy folder
 user-management.add-folder.label: Wprowadź nazwę nowego folderu
 user-management.add-user: Nowy użytkownik
 user-management.add-user.label: Wprowadź nazwę nowego użytkownika
+user-management.send-invitation: Wyślij link z zaproszeniem
+user-management.send-invitation.success: "Wysłano zaproszenie do {{email}}"
+user-management.send-invitation.no-email: Użytkownik nie ma adresu e-mail
+user-management.send-invitation.inactive: Użytkownik jest nieaktywny
+user-management.send-invitation.unsaved-changes: Zapisz użytkownika przed wysłaniem zaproszenia
 user-management.last-login: Ostatnie logowanie
 user-management.search.id: ID
 roles.tree.all: Wszystkie role
@@ -1773,6 +1793,7 @@ navigation.cache: Pamięć podręczna
 navigation.cache.clear-cache: Wyczyść pamięć podręczną
 navigation.cache.clear-full-page-cache: Wyczyść pamięć podręczną całej strony
 navigation.cache.clear-temporary-files: Wyczyść pliki tymczasowe
+navigation.index-sync: Synchronizuj indeks wyszukiwania
 navigation.clear-cache: Wyczyść pamięć podręczną całej strony
 navigation.reports: Wszystkie raporty
 navigation.custom-reports: Konfiguruj niestandardowe raporty
@@ -2227,12 +2248,25 @@ classification-store.rename-collection: Zmień nazwę kolekcji
 classification-store.delete-collection: 'Usunąć kolekcję "{{collectionName}}"?'
 classification-store.add-key: Dodaj klucz
 classification-store.rename-key: Zmień nazwę klucza
-classification-store.delete-key: 'Usunąć klucz "{{keyName}}"?'
+classification-store.delete-key: 'Usunąć klucz "{{keyName}}" ze wszystkich grup?'
 classification-store.delete-key-relation: 'Usunąć klucz "{{keyName}}" z tej grupy?'
 classification-store.delete-group-relation: 'Usunąć grupę "{{groupName}}" z tej kolekcji?'
+classification-store.delete-group-consequence: "Usunięcie tej grupy usuwa także wartości, które każdy obiekt przechowuje w tej grupie. Tej operacji nie można cofnąć."
+classification-store.delete-collection-consequence: "Kolekcja i jej lista grup zostają usunięte. Grupy i ich klucze pozostają w store, a żadne wartości obiektów nie są usuwane."
+classification-store.delete-key-relation-consequence: "Klucz zostaje usunięty tylko z tej grupy. Sam klucz pozostaje w store, a nic, co przechowuje obiekt, nie jest usuwane."
+classification-store.delete-key-consequence: 'Klucz zostaje usunięty ze wszystkich grup, do których należy, i nie jest już nigdzie oferowany. Nic, co przechowuje obiekt, nie jest usuwane, ale te wartości pozostają niedostępne, dopóki klucz nie zostanie przywrócony i ponownie przypisany do grupy. Jego przypisania do grup, ich kolejność, flagi obowiązkowości i nadpisania dla poszczególnych grup nie wracają razem z nim.'
+classification-store.keys-view.active: Aktywne
+classification-store.keys-view.deleted: Usunięte
+classification-store.restore-key: Przywróć
+classification-store.restore-key-question: 'Przywrócić klucz "{{keyName}}"?'
+classification-store.restore-key-consequence: 'Klucz wraca bez przynależności do żadnej grupy. Jego przypisania do grup, ich kolejność, flagi obowiązkowości i nadpisania dla poszczególnych grup przepadły i nie można ich odzyskać. Przypisz klucz ponownie do grupy, aby jego wartości znów były dostępne.'
+classification-store.keys-deleted-empty: Brak usuniętych kluczy.
+classification-store.keys-deleted-no-results: "Żaden usunięty klucz nie pasuje do wyszukiwania."
+classification-store.delete-group-relation-consequence: "Grupa zostaje usunięta tylko z tej kolekcji. Grupa, jej klucze i wartości przechowywane przez obiekty w tej grupie pozostają nienaruszone."
 classification-store.edit-definition: Edytuj definicję
 classification-store.edit-key-definition: "Edytuj definicję klucza: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "ID dopasowania"
 classification-store.columns.name: Nazwa
 classification-store.columns.title: Tytuł
 classification-store.columns.type: Typ
@@ -2251,6 +2285,112 @@ classification-store.select-group: Wybierz grupę
 classification-store.search-groups: Szukaj grup…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Podgrupy
+classification-store.engine.label: "Silnik: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Dokument"
+classification-store.key-type-needs-document-engine: "Silnik tego store'a nie może przechowywać tego typu klucza. Wymaga silnika dokumentowego."
+classification-store.keys-without-field-filter: "Dla tych kluczy nie jest dostępny żaden filtr pola, więc nie zostały dodane: {{keyNames}}"
+classification-store.add-sub-group: Dodaj podgrupę
+classification-store.delete-sub-group: "Usunąć podgrupę \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: Podgrupa należy do magazynu, więc nowa staje się dostępna dla każdej grupy tego magazynu.
+classification-store.key-indexed: Uwzględnij w indeksie wyszukiwania Classification Store
+classification-store.key-indexed-hint: Gdy ta opcja jest wyłączona, tego klucza nie można sortować, filtrować ani wyszukiwać, a jego wartość zostaje usunięta z zapisanego dokumentu wyszukiwania. Indeks jest uzgadniany przez kolejkę, więc zmiany nie są natychmiastowe.
+classification-store.delete-sub-group-in-use-hint: Najpierw usuń przypisanie kluczy do tej podgrupy w wymienionych powyżej grupach, a następnie ją usuń.
+classification-store.no-sub-groups: Ten magazyn nie ma jeszcze podgrup
+classification-store.select-sub-group: Wybierz podgrupę
+classification-store.search-sub-groups: Szukaj podgrup…
+classification-store.assign-sub-group: Przypisz podgrupę
+classification-store.unassign-sub-group: Usuń przypisanie
+classification-store.select-keys-hint: Najpierw wybierz co najmniej jeden klucz
+classification-store.no-sub-group: Brak podgrupy
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Nieprzypisane ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Usuń przypisanie kluczy pokazanych tutaj
+classification-store.aria.unassign-sub-group-keys: "Usuń przypisanie kluczy pokazanych tutaj do podgrupy \"{{name}}\""
+classification-store.aria.edit-key-override: "Edytuj opcje i jednostkę klucza \"{{name}}\" w tej grupie"
+classification-store.override.edit: "Edytuj opcje i jednostkę w tej grupie"
+classification-store.override.title: "Edytuj opcje i jednostkę klucza {{keyName}} w grupie {{groupName}}"
+classification-store.override.options-heading: "Opcje w tej grupie"
+classification-store.override.unit-heading: "Jednostka w tej grupie"
+classification-store.override.default-unit: "Jednostka domyślna"
+classification-store.override.last-one: "ostatnia"
+classification-store.override.no-longer-offered: "klucz już jej nie oferuje"
+classification-store.override.use-all-options: "Użyj wszystkich opcji"
+classification-store.override.use-key-units: "Użyj jednostek klucza"
+classification-store.override.use-key-default: "Użyj wartości domyślnej klucza"
+classification-store.override.options-count: "Wybrano {{count}} z {{total}}"
+classification-store.override.units-count: "Wybrano {{count}} z {{total}}"
+classification-store.override.options-help: "Użycie wszystkich opcji usuwa zawężenie. Odznaczenie wszystkich opcji to coś innego, dlatego ostatniej opcji nie można odznaczyć."
+classification-store.override.no-options-title: "Dla tego klucza w tej grupie nie ma dostępnych opcji"
+classification-store.override.key-offers-no-options: "Ten klucz nie oferuje opcji do zawężenia."
+classification-store.override.options-empty: "Przypisanie zawęża klucz do pustej listy."
+classification-store.override.options-stale-only: "Zapisany podzbiór wymienia tylko wartości, których klucz już nie oferuje."
+classification-store.override.stored-unreadable: "Zapisanej wartości nie można odczytać jako listy."
+classification-store.override.options-unavailable: "Nie udało się wczytać opcji tego klucza"
+classification-store.override.tag-options-unavailable: "opcje nieznane"
+classification-store.override.options-stored-unlisted: "Ten klucz nie publikuje opcji, z którymi można porównać zapisany podzbiór. Pozostaje bez zmian; użyj wszystkich opcji, aby go usunąć."
+classification-store.override.units-no-vocabulary: "Ten klucz nie określa słownika jednostek, więc nic nie można tu zawęzić."
+classification-store.override.no-units-title: "Dla tego klucza w tej grupie nie ma dostępnych jednostek"
+classification-store.override.units-empty: "Przypisanie zawęża dozwolone jednostki do pustej listy."
+classification-store.override.units-loading: "Jednostki instalacji są ładowane."
+classification-store.override.units-unavailable: "Nie udało się załadować jednostek instalacji, więc dozwolonych jednostek nie można wyświetlić ani zmienić."
+classification-store.override.units-key-permits-none: "Ten klucz nie dopuszcza żadnej jednostki, więc nic nie można tu zawęzić."
+classification-store.override.units-installation-empty: "Ta instalacja nie definiuje jednostek, więc nic nie można tu zawęzić."
+classification-store.override.units-stale-only: "Zapisane dozwolone jednostki wymieniają tylko jednostki, których klucz już nie dopuszcza."
+classification-store.override.default-outside: "Zapisana jednostka domyślna {{unit}} nie należy do jednostek dozwolonych przez tę grupę."
+classification-store.override.nothing-to-narrow: "Ten klucz nie ma ani opcji, ani jednostek, więc nie ma czego zawężać."
+classification-store.override.tag-no-options: "brak opcji"
+classification-store.override.tag-options: "{{count}} z {{total}}"
+classification-store.override.tag-no-units: "brak jednostek"
+classification-store.override.tag-units: "{{count}} z {{total}} jednostek"
+classification-store.override.tag-unreadable: "nieczytelne"
+classification-store.aria.delete-sub-group: "Usuń podgrupę \"{{name}}\""
+classification-store.aria.edit-metadata: "Edytuj metadane \"{{name}}\""
+classification-store.aria.edit-titles: "Edytuj tytuły wewnętrzne \"{{name}}\""
+classification-store.aria.remove-pair: "Usuń parę \"{{name}}\""
+classification-store.aria.remove-pair-at: "Usuń parę {{position}}"
+classification-store.edit-metadata: "Edytuj metadane: {{name}}"
+classification-store.edit-titles: "Edytuj tytuły wewnętrzne: {{name}}"
+classification-store.action-edit-metadata: "Edytuj metadane"
+classification-store.action-edit-titles: "Edytuj tytuły wewnętrzne"
+classification-store.add-pair: "Dodaj parę"
+classification-store.pair-key: "Klucz"
+classification-store.pair-value: "Wartość"
+classification-store.pair-locale: "Język"
+classification-store.pair-title: "Tytuł wewnętrzny"
+classification-store.pair-no-content: "Brak par"
+classification-store.pair-key-duplicate: "Ten klucz jest już używany przez inną parę"
+classification-store.pair-key-reserved: "Ten prefiks jest zarezerwowany dla tytułów wewnętrznych. Użyj okna \"Edytuj tytuły wewnętrzne\" lub innego klucza"
+classification-store.pair-locale-duplicate: "Ten język jest już używany przez inny tytuł"
+classification-store.pair-key-list: "Te klucze zostałyby zapisane jako lista. Użyj klucza, który nie jest liczbą"
+classification-store.pair-type.object: "Obiekt"
+classification-store.pair-type.array: "Tablica"
+classification-store.pair-type.number: "Liczba"
+classification-store.pair-type.boolean: "Wartość logiczna"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Języki są dowolnym tekstem i nie są sprawdzane z językami skonfigurowanymi w systemie."
+classification-store.metadata-saved: "Metadane zapisane"
+classification-store.titles-saved: "Tytuły zapisane"
+classification-store.unassign-sub-group-confirm_one: "Usunąć przypisanie 1 klucza pokazanego tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
+classification-store.unassign-sub-group-confirm_other: "Usunąć przypisanie {{count}} kluczy pokazanych tutaj do podgrupy \"{{name}}\"? Klucze tej grupy na innych stronach je zachowają."
+classification-store.sub-groups-strip-hint: To są podgrupy używane przez klucze tej grupy. Słownik pozostaje w magazynie.
+classification-store.manage-sub-groups: Zarządzaj podgrupami
+classification-store.sub-group-unused: "Żaden klucz tej grupy nie używa już podgrupy \"{{name}}\". Nadal istnieje w magazynie."
+classification-store.assign-sub-group-progress: "Przypisywanie podgrupy do {{done}} z {{total}} kluczy…"
+classification-store.assign-sub-group-failed: "Nie udało się przypisać podgrupy do: {{keyNames}}"
+classification-store.assign-sub-group-running: Poczekaj na zakończenie przypisywania podgrupy
+classification-store.key-localization: "Lokalizacja"
+classification-store.key-localization.inherit: "Dziedzicz"
+classification-store.key-localization.localized: "Zlokalizowane"
+classification-store.key-localization.not-localized: "Niezlokalizowane"
+classification-store.key-localization-confirm: "Wartości, które ten klucz przechowuje w innych językach, mogą przestać być wyświetlane lub zapisywane. Zapisać mimo to?"
+classification-store.key-localized: "Zlokalizowany klucz"
+classification-store.key-localized-tooltip: "Ten klucz przechowuje własną wartość dla każdego języka."
+classification-store.import: Importuj konfigurację store
+classification-store.import-success: Konfiguracja store została zaimportowana
+classification-store.import-replace.title: "Zastąpić konfigurację store?"
+classification-store.import-replace.warning: "Ten magazyn nie jest pusty. Plik opisujący inny magazyn zastępuje konfigurację tego magazynu i usuwa wartości, które każdy obiekt w nim przechowuje. Tej operacji nie można cofnąć."
 home: Strona główna
 preview.label: Podgląd
 preview.desktop: Komputer
@@ -3216,3 +3356,24 @@ maintenance-mode.logout.deactivate-and-log-out: Dezaktywuj i wyloguj się
 maintenance-mode.locked-out.title: Konserwacja
 maintenance-mode.locked-out.text: 'System jest w trybie konserwacji lub tymczasowo niedostępny. Ostatnia czynność mogła nie zostać zapisana. Ten komunikat zamknie się automatycznie, gdy system znów będzie dostępny.'
 maintenance-mode.locked-out.reload: Przeładuj
+field-definition.multi-value: "Wartość wielokrotna"
+classification-store.multi-value.delegate: "multiValue typu"
+classification-store.multi-value.delegate-required: "Przed zapisaniem wybierz typ, który zawiera ten multiValue."
+classification-store.multi-value.variants: "Warianty"
+classification-store.multi-value.variant-name: "Nazwa"
+classification-store.multi-value.variant-label: "Etykieta"
+classification-store.multi-value.variant-add: "Dodaj wariant"
+classification-store.multi-value.variant-name-empty: "Wariant wymaga nazwy."
+classification-store.multi-value.variant-name-duplicate: "Dwa warianty nie mogą mieć tej samej nazwy \"{{name}}\"."
+classification-store.multi-value.move-up: "W górę"
+classification-store.multi-value.move-down: "W dół"
+classification-store.multi-value.narrowing-confirm: "Zawężono warianty. Zapisane już wartości nie są usuwane i pozostają widoczne, ale nie można dodać kolejnych wartości poza nową deklaracją."
+classification-store.multi-value.default-variant: "Domyślny"
+classification-store.multi-value.not-declared: "niezadeklarowany"
+classification-store.multi-value.no-delegate: "Ten klucz nie ma typu, którym można edytować jego wartości."
+classification-store.multi-value.unknown-delegate: "Edytor nie ma pola wprowadzania dla typu {{type}}."
+classification-store.multi-value.unreadable-value: "Ten klucz zawiera wartość, której edytor nie może odczytać; pozostaje bez zmian."
+classification-store.multi-value.default-variant-permitted: "Zezwalaj na wartości bez wariantu"
+classification-store.multi-value.default-variant-label: "Etykieta wartości domyślnej"
+classification-store.multi-value.no-writable-slot: "Ten klucz nie deklaruje żadnego wariantu i nie zezwala na wartości bez wariantu, więc nie ma miejsca na wpisanie wartości. Zadeklaruj wariant lub zezwól na wartości bez wariantu."
+classification-store.multi-value.unreadable-entry: "Ta wartość nie jest liczbą, którą pole może wyświetlić; pozostaje zapisana bez zmian, dopóki nie zostanie wyczyszczona."

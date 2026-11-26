@@ -14,6 +14,7 @@ import { type WorkflowDetails } from '../../../shared-tab-manager/tabs/workflow/
 import { getWorkflowActions, type WorkflowActionSubject } from '../types/workflow-types'
 import { EditorWorkflowSubjectBridge } from './editor-workflow-subject-bridge'
 import { useWorkflowActionSubject } from './workflow-provider'
+import { useSyncTreeWorkflowStates } from '../hooks/use-sync-tree-workflow-states'
 
 const mockRefreshElement = jest.fn()
 const mockSetCurrentLayout = jest.fn()
@@ -34,6 +35,8 @@ jest.mock('@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-
 jest.mock('@sdk/modules/element', () => ({
   useElementRefresh: () => ({ refreshElement: mockRefreshElement })
 }))
+
+jest.mock('../hooks/use-sync-tree-workflow-states', () => ({ useSyncTreeWorkflowStates: jest.fn() }))
 
 const createWorkflow = (objectLayout: unknown): WorkflowDetails => ({
   workflowName: 'product_workflow',
@@ -112,5 +115,15 @@ describe('EditorWorkflowSubjectBridge', () => {
     ['numeric 0', 0]
   ])('keeps layout id 0 (the main layout) when the transition object layout is %s', (_, objectLayout) => {
     expect(applyTransition(objectLayout)).toHaveBeenCalledWith('0')
+  })
+
+  it('keeps the tree node of its element in sync with the workflow states', () => {
+    render(
+      <EditorWorkflowSubjectBridge>
+        <span />
+      </EditorWorkflowSubjectBridge>
+    )
+
+    expect(useSyncTreeWorkflowStates).toHaveBeenCalledWith(42, 'data-object', true)
   })
 })

@@ -37,6 +37,7 @@ export const {
   useAssetCustomMetadataGetByIdQuery,
   useMetadataGetCollectionQuery,
   useLazyMetadataGetCollectionQuery,
+  useLazyMetadataAssetGetCollectionQuery,
   useMetadataPredefinedCreateMutation,
   useMetadataPredefinedUpdateMutation,
   useMetadataPredefinedDeleteMutation

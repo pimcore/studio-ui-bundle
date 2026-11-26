@@ -51,14 +51,15 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
   }, [data])
 
   /**
-   * Classification store filters share one id across groups and keys, so they are only
-   * identified together with their config; every other type is unique by id alone.
+   * Classification store filters share one id across groups, keys and the variants of a key, so they
+   * are only identified together with their config; every other type is unique by id alone.
    */
   const isSameFilter = (candidate: IDynamicFilter, filter: IDynamicFilter): boolean => {
     if (filter.type === 'dataobject.classificationstore') {
       return candidate.id === filter.id &&
         candidate.config?.keyId === filter.config?.keyId &&
-        candidate.config?.groupId === filter.config?.groupId
+        candidate.config?.groupId === filter.config?.groupId &&
+        (candidate.config?.variant ?? null) === (filter.config?.variant ?? null)
     }
 
     return candidate.id === filter.id
@@ -169,7 +170,7 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
     const isClassificationStore = filter.type === 'dataobject.classificationstore'
 
     if (isClassificationStore) {
-      key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId })}`
+      key = `${filter.id}-${JSON.stringify({ keyId: filter.config.keyId, groupId: filter.config?.groupId, variant: filter.config?.variant ?? null })}`
     }
 
     return {

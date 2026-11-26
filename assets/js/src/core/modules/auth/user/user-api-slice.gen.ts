@@ -115,6 +115,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
+            userSendInvitation: build.mutation<UserSendInvitationApiResponse, UserSendInvitationApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/invitation/${queryArg.id}`, method: "POST" }),
+                invalidatesTags: ["User Management"],
+            }),
             userTokenLinkGet: build.query<UserTokenLinkGetApiResponse, UserTokenLinkGetApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/user/token-link/${queryArg.id}`, method: "POST" }),
                 providesTags: ["User Management"],
@@ -294,6 +298,11 @@ export type PimcoreStudioApiUserSearchApiResponse = /** status 200 List of users
 export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or ID. */
     searchQuery?: string;
+};
+export type UserSendInvitationApiResponse = unknown;
+export type UserSendInvitationApiArg = {
+    /** Id of the user */
+    id: number;
 };
 export type UserTokenLinkGetApiResponse = /** status 200 Token login link for the user */ {
     /** Token link URL including the generated token as parameter. */
@@ -475,6 +484,8 @@ export type UserInformation = {
     activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Welcome screen opened after login, as `<provider>:<id>` */
+    welcomeScreenTarget: string | null;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -601,6 +612,8 @@ export type User = {
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Welcome screen opened after login, as `<provider>:<id>` */
+    welcomeScreenTarget: string | null;
 };
 export type User2 = {
     /** Email of the User */
@@ -655,6 +668,8 @@ export type User2 = {
     perspectives: string[];
     /** Theme of the User */
     theme?: string;
+    /** Welcome screen opened after login, as `<provider>:<id>`. Omitted or null keeps the stored target, an empty string clears it */
+    welcomeScreenTarget?: string | null;
 };
 export type UserPermission = {
     /** AdditionalAttributes */
@@ -719,6 +734,8 @@ export type UserProfile = {
     keyBindings: KeyBindingForAUser[];
     /** Theme of the User */
     theme?: string;
+    /** Welcome screen opened after login, as `<provider>:<id>`. Omitted or null keeps the stored target, an empty string clears it */
+    welcomeScreenTarget?: string | null;
 };
 export const {
     useUserCloneByIdMutation,
@@ -738,6 +755,7 @@ export const {
     useUserListWithPermissionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
+    useUserSendInvitationMutation,
     useUserTokenLinkGetQuery,
     useUserTwoFactorConfirmMutation,
     useUserTwoFactorDisableMutation,

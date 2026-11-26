@@ -14,6 +14,7 @@ import {
   isAuthorizationValid,
   renewMercureAuthorization
 } from '@Pimcore/modules/app/mercure/mercure-authorization'
+import { buildMercureSubscriptionUrl } from '@Pimcore/modules/app/mercure/mercure-subscription-url'
 import { AbstractBackgroundProcess, type AbstractMessage } from './abstract-background-process'
 import { ExponentialBackoff } from '@Pimcore/utils/exponential-backoff'
 
@@ -31,6 +32,13 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
    * be able to tell that it has been superseded instead of opening a second EventSource.
    */
   private connectionGeneration = 0
+  /**
+   * Set when a stream failed before it opened. The hub may have been switched to the other
+   * protocol and rejected our parameters, so the next connect renews the authorization even while
+   * the cookie is fresh, which also refreshes the protocol. Cleared once a stream opens; the
+   * backoff spaces the attempts.
+   */
+  private renewBeforeConnect = false
 
   constructor () {
     super()
@@ -70,7 +78,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
    * to connect with, the backoff retries the authorization instead.
    */
   private async connect (generation: number): Promise<void> {
-    if (!isAuthorizationFresh()) {
+    if (this.renewBeforeConnect || !isAuthorizationFresh()) {
       try {
         await renewMercureAuthorization()
       } catch {
@@ -92,19 +100,14 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
   }
 
   private openStream (generation: number): void {
-    const url = new URL(appConfig.mercureUrl)
-
-    this.getTopics().forEach(topic => {
-      url.searchParams.append('topic', topic)
-    })
-
-    if (this.lastEventId !== undefined) {
-      url.searchParams.append('lastEventID', this.lastEventId)
-    }
+    const url = buildMercureSubscriptionUrl(appConfig.mercureUrl, this.getTopics(), this.lastEventId)
 
     this.eventSource = new EventSource(url.toString(), { withCredentials: true })
+    let opened = false
 
     this.eventSource.onopen = () => {
+      opened = true
+      this.renewBeforeConnect = false
       this.reconnectBackoff.reset()
     }
 
@@ -123,6 +126,10 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
     }
 
     this.eventSource.onerror = (error: Event) => {
+      if (!opened) {
+        this.renewBeforeConnect = true
+      }
+
       this.handleConnectionLoss(error, generation)
     }
   }
@@ -131,7 +138,7 @@ export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
    * Reconnect under our own control, with a freshly issued authorization cookie.
    *
    * The browser reconnects a dropped EventSource on its own, reusing whatever cookie exists at
-   * that moment. Once `mercureAuthorization` has expired that reconnect is anonymous, and a hub
+   * that moment. Once the authorization cookie has expired that reconnect is anonymous, and a hub
    * that allows anonymous subscribers answers it with `200 OK` and then silently drops every
    * private update - no error, no `onerror`, and `isConnected()` keeps reporting a healthy
    * stream. Closing the source here and reconnecting through `connect()` is what keeps the

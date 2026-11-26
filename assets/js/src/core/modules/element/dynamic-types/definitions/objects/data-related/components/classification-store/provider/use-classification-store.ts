@@ -10,7 +10,7 @@
 
 import { useContext } from 'react'
 import { ClassificationStoreContext } from './classification-store-provider'
-import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
 export interface UseClassificationStoreReturn {
   isOpenModal: boolean
@@ -22,6 +22,8 @@ export interface UseClassificationStoreReturn {
   updateCurrentLayoutData: (layoutData: ClassificationStoreGroupLayout2[]) => void
   markGroupsAsNew: (groupIds: string[]) => void
   isNewGroup: (groupId: string) => boolean
+  markKeysAsNew: (groupId: string, keyIds: string[]) => void
+  isNewKey: (groupId: string, keyId: string) => boolean
 }
 
 const useClassificationStore = (): UseClassificationStoreReturn => {
@@ -40,7 +42,9 @@ const useClassificationStore = (): UseClassificationStoreReturn => {
     currentLayoutData: context.currentLayoutData,
     updateCurrentLayoutData: context.setCurrentLayoutData,
     markGroupsAsNew: context.markGroupsAsNew,
-    isNewGroup: context.isNewGroup
+    isNewGroup: context.isNewGroup,
+    markKeysAsNew: context.markKeysAsNew,
+    isNewKey: context.isNewKey
   }
 }
 

@@ -12,13 +12,15 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { GridConfig } from '../tabs/grid-config/grid-config'
+import { GridConfig, type GridConfigProps } from '../tabs/grid-config/grid-config'
 
 export interface Settings {
   saveEnabled?: boolean
+  /** the columns are shown, not changed: no add, remove, reorder or apply */
+  readOnly?: boolean
 }
 
-export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions'], settings: Settings = { saveEnabled: true }): AbstractDecoratorProps['useSidebarOptions'] => {
+export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions'], settings: Settings = { saveEnabled: true }, GridConfigComponent: React.ComponentType<GridConfigProps> = GridConfig): AbstractDecoratorProps['useSidebarOptions'] => {
   const useSidebarEntry: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
     const { t } = useTranslation()
@@ -31,7 +33,7 @@ export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProp
         entries: [
           ...baseProps.entries,
           {
-            component: <GridConfig settings={ settings } />,
+            component: <GridConfigComponent settings={ settings } />,
             key: 'configuration',
             icon: <Icon value="settings" />,
             tooltip: t('sidebar.grid_config')

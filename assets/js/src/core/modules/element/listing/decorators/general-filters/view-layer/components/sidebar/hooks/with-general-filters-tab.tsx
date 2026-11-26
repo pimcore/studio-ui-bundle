@@ -18,7 +18,7 @@ import { readElementFilterValues } from '../../../../element-filters/use-element
 
 export const generalFiltersTabKey = 'general-filters'
 
-export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSidebarOptions']): AbstractDecoratorProps['useSidebarOptions'] => {
+export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSidebarOptions'], readOnly = false): AbstractDecoratorProps['useSidebarOptions'] => {
   const useSidebarGeneralFiltersExtension: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
     const { t } = useTranslation()
@@ -50,7 +50,7 @@ export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSi
         highlights: sidebarHighlights,
         entries: [
           {
-            component: <FilterContainer />,
+            component: <FilterContainer readOnly={ readOnly } />,
             key: generalFiltersTabKey,
             icon: <Icon value="filter" />,
             tooltip: t('sidebar.search_filter')

@@ -25,9 +25,11 @@ import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import {
+  useLazyClassificationStoreGetLayoutByGroupQuery,
   useLazyClassificationStoreGetLayoutByKeyQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import type { ClassificationStoreCollection2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import type { ClassificationStoreCollection2, ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import trackError, { ApiError, GeneralError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 import { useClassificationStoreModal } from '../../../../provider/classifcation-store-modal-provider'
 
 interface ClassificationStoreCallbackTabProps<T> {
@@ -64,12 +66,21 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
   )
 
   const [fetchLayoutByKey] = useLazyClassificationStoreGetLayoutByKeyQuery()
+  const [fetchLayoutByGroup] = useLazyClassificationStoreGetLayoutByGroupQuery()
 
   const fetchLayoutDataByKey = async (keyId: string, groupId: number): Promise<ClassificationStoreCollection2> => {
     return await fetchLayoutByKey({
       fieldName: queryArgs.fieldName,
-      keyId: parseInt(keyId),
+      keyId: Number.parseInt(keyId),
       groupId
+    }).unwrap()
+  }
+
+  // No objectId: the surfaces that open the modal through a callback have no object in context
+  const fetchLayoutDataByGroup = async (groupId: string): Promise<ClassificationStoreGroupLayout2> => {
+    return await fetchLayoutByGroup({
+      fieldName: queryArgs.fieldName,
+      groupId: Number.parseInt(groupId)
     }).unwrap()
   }
 
@@ -88,12 +99,12 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
       }
 
       if (tabId === TabId.Group) {
-        throw new Error('Groups are not supported in callback version')
+        promisesList.push(fetchLayoutDataByGroup(key))
       }
 
       if (tabId === TabId.GroupByKey) {
         const itemId = key.split('-')[1]
-        const groupId = parseInt(key.split('-')[0])
+        const groupId = Number.parseInt(key.split('-')[0])
 
         const promise = fetchLayoutDataByKey(itemId, groupId).then((itemData) => {
           return {
@@ -106,7 +117,19 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
       }
     }
 
-    const data = await Promise.all(promisesList)
+    let data: Array<Record<string, any>>
+
+    try {
+      data = await Promise.all(promisesList)
+    } catch (error: any) {
+      // A failed layout request must not fire a partial update or close the modal with no
+      // feedback: report it and leave the selection in place so it can be retried.
+      setIsApplyingSelection(false)
+      trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError(error?.message as string))
+
+      return
+    }
+
     fireUpdateEvent({
       type: tabId,
       data

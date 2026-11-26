@@ -6,6 +6,13 @@ common.clear: Rensa
 cache.clear-cache-success: Cachen har rensats
 cache.clear-full-page-cache-success: Helsidescachen har rensats
 cache.clear-temporary-files-success: Temporära filer har tagits bort
+index-sync.confirmation.title: Synkronisera sökindex
+index-sync.confirmation.text: "Alla dataobjekt, resurser och dokument är köade för omindexering i bakgrunden. Befintliga index uppdateras på plats; ett index vars ändrade mappning inte kan tillämpas på dess dokument (till exempel efter en fälttypsändring) återskapas och fylls på. Beroende på datamängden kan detta ta ett tag och belasta sökservern. Vill du fortsätta?"
+index-sync.confirmation.ok: Synkronisera
+index-sync.job.title: Synkroniserar sökindex
+index-sync.start-failed: Det gick inte att starta synkroniseringen av sökindex
+deep-link.unknown-link: Ingen hanterare är registrerad för denna länk
+deep-link.open-failed: Ett fel uppstod när länken skulle öppnas
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
@@ -27,6 +34,9 @@ error.error_recycle_bin_restore: Kan inte återställa elementet från pappersko
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
 error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
+error.error_invitation_as_admin_non_admin_user: Endast admin-användare kan skicka en inbjudan till en admin-användare
+error.error_invitation_no_email: En inbjudan kan inte skickas eftersom användaren saknar en giltig e-postadress
+error.error_invitation_user_inactive: En inbjudan kan inte skickas till en inaktiv användare
 error.syntax_error: Syntaxfel
 validation.mandatory: "{{field}} är obligatoriskt"
 validation.regex_mismatch: "{{field}} matchar inte det obligatoriska mönstret {{regex}}"
@@ -144,6 +154,7 @@ areablock.paste: Klistra in
 areablock.cut: Klipp ut
 areablock.settings: Inställningar
 areablock.delete: Ta bort
+areablock.type-limit-reached: Det maximala antalet block av den här typen har uppnåtts.
 document.highlight-editables: Markera redigerbara
 document.link.target: Länkmål
 document.hardlink.source: Källdokument
@@ -1421,6 +1432,7 @@ element.delete.batch.show-paths: Visa element
 element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
+element.open-multiple: 'Öppna {{count}} element'
 element.state: Status
 element.state.unpublished: Opublicerad
 element.toolbar.copy-id: Kopiera ID
@@ -1433,6 +1445,7 @@ element.publish: Publicera
 element.locate-in-tree: Hitta i träd
 element.sidebar.filter.only-direct-children: Bara direkta barn
 element.sidebar.filter.only-unreferenced: Bara utan referenser
+element.sidebar.filter.only-untagged: Bara utan taggar
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID
@@ -1651,6 +1664,8 @@ user-management.email: E-post
 user-management.language: Språk
 user-management.dateTime: Datum- och tidslokal
 user-management.welcomeScreen: Visa välkomstskärm vid start
+user-management.welcomeScreenDashboard: Instrumentpanel för välkomstskärmen
+user-management.welcomeScreenDashboard.placeholder: Välj en instrumentpanel
 user-management.memorizeTabs: Kom ihåg öppna flikar
 user-management.allowDirtyClose: Inaktivera varning för osparat innehåll
 user-management.closeWarning: Visa stängningsvarning
@@ -1723,6 +1738,11 @@ user-management.add-folder: Ny mapp
 user-management.add-folder.label: Ange namnet på den nya mappen
 user-management.add-user: Ny användare
 user-management.add-user.label: Ange namnet på den nya användaren
+user-management.send-invitation: Skicka inbjudningslänk
+user-management.send-invitation.success: "Inbjudan skickad till {{email}}"
+user-management.send-invitation.no-email: Användaren har ingen e-postadress
+user-management.send-invitation.inactive: Användaren är inaktiv
+user-management.send-invitation.unsaved-changes: Spara användaren innan du skickar en inbjudan
 user-management.last-login: Senaste inloggning
 user-management.search.id: ID
 roles.tree.all: Alla roller
@@ -1773,6 +1793,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Rensa cache
 navigation.cache.clear-full-page-cache: Rensa helsidescache
 navigation.cache.clear-temporary-files: Ta bort temporära filer
+navigation.index-sync: Synkronisera sökindex
 navigation.clear-cache: Rensa helsidescache
 navigation.reports: Alla rapporter
 navigation.custom-reports: Konfiguration av anpassade rapporter
@@ -2227,12 +2248,25 @@ classification-store.rename-collection: Byt namn på samling
 classification-store.delete-collection: "Ta bort samling \"{{collectionName}}\"?"
 classification-store.add-key: Lägg till nyckel
 classification-store.rename-key: Byt namn på nyckel
-classification-store.delete-key: "Ta bort nyckel \"{{keyName}}\"?"
+classification-store.delete-key: "Ta bort nyckel \"{{keyName}}\" från alla grupper?"
 classification-store.delete-key-relation: "Ta bort nyckel \"{{keyName}}\" från den här gruppen?"
 classification-store.delete-group-relation: "Ta bort grupp \"{{groupName}}\" från den här samlingen?"
+classification-store.delete-group-consequence: "När du tar bort den här gruppen tas även de värden bort som varje objekt har under den. Det går inte att ångra."
+classification-store.delete-collection-consequence: "Samlingen och dess grupplista tas bort. Grupperna och deras nycklar finns kvar i store och inga objektvärden tas bort."
+classification-store.delete-key-relation-consequence: "Nyckeln tas bara bort från den här gruppen. Själva nyckeln finns kvar i store och inget som ett objekt har sparat tas bort."
+classification-store.delete-key-consequence: "Nyckeln tas bort från varje grupp den tillhör och erbjuds inte längre någonstans. Inget som ett objekt har sparat tas bort, men dessa värden förblir onåbara tills nyckeln har återställts och tilldelats en grupp igen. Dess gruppkopplingar, deras ordning, deras obligatoriska flaggor och deras åsidosättanden per grupp kommer inte tillbaka med den."
+classification-store.keys-view.active: Aktiva
+classification-store.keys-view.deleted: Borttagna
+classification-store.restore-key: Återställ
+classification-store.restore-key-question: "Återställa nyckel \"{{keyName}}\"?"
+classification-store.restore-key-consequence: "Nyckeln kommer tillbaka utan att tillhöra någon grupp. Dess gruppkopplingar, deras ordning, deras obligatoriska flaggor och deras åsidosättanden per grupp är borta och kan inte återställas. Tilldela nyckeln till en grupp igen för att göra dess värden åtkomliga igen."
+classification-store.keys-deleted-empty: Inga borttagna nycklar.
+classification-store.keys-deleted-no-results: "Inga borttagna nycklar matchar sökningen."
+classification-store.delete-group-relation-consequence: "Gruppen tas bara bort från den här samlingen. Gruppen, dess nycklar och värdena som objekt har under den påverkas inte."
 classification-store.edit-definition: Redigera definition
 classification-store.edit-key-definition: "Redigera nyckeldefinition: {{keyName}}"
 classification-store.columns.id: ID
+classification-store.columns.matching-id: "Matchnings-ID"
 classification-store.columns.name: Namn
 classification-store.columns.title: Titel
 classification-store.columns.type: Typ
@@ -2251,6 +2285,112 @@ classification-store.select-group: Välj grupp
 classification-store.search-groups: Sök grupper…
 classification-store.store-id: "ID: {{id}}"
 classification-store.store-tab-label: "{{name}} (ID: {{id}})"
+classification-store.tabs.sub-groups: Undergrupper
+classification-store.engine.label: "Motor: {{engine}}"
+classification-store.engine.eav: "EAV"
+classification-store.engine.document: "Dokument"
+classification-store.key-type-needs-document-engine: "Den här storens motor kan inte lagra den här nyckeltypen. Den kräver dokumentmotorn."
+classification-store.keys-without-field-filter: "Inget fältfilter är tillgängligt för dessa nycklar, så de lades inte till: {{keyNames}}"
+classification-store.add-sub-group: Lägg till undergrupp
+classification-store.delete-sub-group: "Ta bort undergruppen \"{{subGroupName}}\"?"
+classification-store.add-sub-group-store-hint: En undergrupp hör till lagret, så en ny blir tillgänglig för alla grupper i detta lager.
+classification-store.key-indexed: Inkludera i Classification Store-sökindexet
+classification-store.key-indexed-hint: Så länge det här är avstängt kan den här nyckeln inte sorteras, filtreras eller sökas på, och värdet tas bort från det lagrade sökdokumentet. Indexet uppdateras via kön, så ändringar sker inte omedelbart.
+classification-store.delete-sub-group-in-use-hint: Ta först bort kopplingen mellan nycklarna och denna undergrupp i grupperna som nämns ovan, och ta sedan bort den.
+classification-store.no-sub-groups: Detta lager har inga undergrupper än
+classification-store.select-sub-group: Välj undergrupp
+classification-store.search-sub-groups: Sök undergrupper…
+classification-store.assign-sub-group: Koppla undergrupp
+classification-store.unassign-sub-group: Ta bort koppling
+classification-store.select-keys-hint: Välj minst en nyckel först
+classification-store.no-sub-group: Ingen undergrupp
+classification-store.sub-group-with-count: "{{name}} ({{keyCount}})"
+classification-store.unassigned-with-count: "Okopplade ({{keyCount}})"
+classification-store.unassign-sub-group-keys: Ta bort kopplingen för nycklarna som visas här
+classification-store.aria.unassign-sub-group-keys: "Ta bort kopplingen för nycklarna som visas här till undergruppen \"{{name}}\""
+classification-store.aria.edit-key-override: "Redigera alternativ och enhet för nyckeln \"{{name}}\" i den här gruppen"
+classification-store.override.edit: "Redigera alternativ och enhet i den här gruppen"
+classification-store.override.title: "Redigera alternativ och enhet för {{keyName}} i {{groupName}}"
+classification-store.override.options-heading: "Alternativ i den här gruppen"
+classification-store.override.unit-heading: "Enhet i den här gruppen"
+classification-store.override.default-unit: "Standardenhet"
+classification-store.override.last-one: "det sista"
+classification-store.override.no-longer-offered: "erbjuds inte längre av nyckeln"
+classification-store.override.use-all-options: "Använd alla alternativ"
+classification-store.override.use-key-units: "Använd nyckelns enheter"
+classification-store.override.use-key-default: "Använd nyckelns standard"
+classification-store.override.options-count: "{{count}} av {{total}} valda"
+classification-store.override.units-count: "{{count}} av {{total}} valda"
+classification-store.override.options-help: "Använd alla alternativ tar bort begränsningen. Att avmarkera alla alternativ är något annat, så det sista alternativet kan inte avmarkeras."
+classification-store.override.no-options-title: "Inga alternativ är tillgängliga för den här nyckeln i den här gruppen"
+classification-store.override.key-offers-no-options: "Den här nyckeln erbjuder inga alternativ att begränsa."
+classification-store.override.options-empty: "Kopplingen begränsar nyckeln till en tom lista."
+classification-store.override.options-stale-only: "Den sparade delmängden nämner bara värden som nyckeln inte längre erbjuder."
+classification-store.override.stored-unreadable: "Det sparade värdet kan inte läsas som en lista."
+classification-store.override.options-unavailable: "Nyckelns alternativ kunde inte läsas in"
+classification-store.override.tag-options-unavailable: "alternativ okända"
+classification-store.override.options-stored-unlisted: "Nyckeln publicerar inga alternativ att jämföra den sparade delmängden med. Den behålls som den är; använd alla alternativ för att ta bort den."
+classification-store.override.units-no-vocabulary: "Den här nyckeln anger inget enhetsvokabulär, så inget kan begränsas här."
+classification-store.override.no-units-title: "Inga enheter är tillgängliga för den här nyckeln i den här gruppen"
+classification-store.override.units-empty: "Kopplingen begränsar de giltiga enheterna till en tom lista."
+classification-store.override.units-loading: "Installationens enheter läses in."
+classification-store.override.units-unavailable: "Installationens enheter kunde inte läsas in, så de giltiga enheterna kan varken visas eller ändras."
+classification-store.override.units-key-permits-none: "Den här nyckeln tillåter ingen enhet, så inget kan begränsas här."
+classification-store.override.units-installation-empty: "Installationen definierar inga enheter, så inget kan begränsas här."
+classification-store.override.units-stale-only: "De sparade giltiga enheterna nämner bara enheter som nyckeln inte längre tillåter."
+classification-store.override.default-outside: "Den sparade standardenheten {{unit}} finns inte bland enheterna som den här gruppen tillåter."
+classification-store.override.nothing-to-narrow: "Den här nyckeln har varken alternativ eller enheter, så det finns inget att begränsa."
+classification-store.override.tag-no-options: "inga alternativ"
+classification-store.override.tag-options: "{{count}} av {{total}}"
+classification-store.override.tag-no-units: "inga enheter"
+classification-store.override.tag-units: "{{count}} av {{total}} enheter"
+classification-store.override.tag-unreadable: "oläsligt"
+classification-store.aria.delete-sub-group: "Ta bort undergruppen \"{{name}}\""
+classification-store.aria.edit-metadata: "Redigera metadata för \"{{name}}\""
+classification-store.aria.edit-titles: "Redigera interna titlar för \"{{name}}\""
+classification-store.aria.remove-pair: "Ta bort paret \"{{name}}\""
+classification-store.aria.remove-pair-at: "Ta bort par {{position}}"
+classification-store.edit-metadata: "Redigera metadata: {{name}}"
+classification-store.edit-titles: "Redigera interna titlar: {{name}}"
+classification-store.action-edit-metadata: "Redigera metadata"
+classification-store.action-edit-titles: "Redigera interna titlar"
+classification-store.add-pair: "Lägg till par"
+classification-store.pair-key: "Nyckel"
+classification-store.pair-value: "Värde"
+classification-store.pair-locale: "Språk"
+classification-store.pair-title: "Intern titel"
+classification-store.pair-no-content: "Inga par ännu"
+classification-store.pair-key-duplicate: "Den här nyckeln används redan av ett annat par"
+classification-store.pair-key-reserved: "Det här prefixet är reserverat för interna titlar. Använd dialogen \"Redigera interna titlar\" eller en annan nyckel"
+classification-store.pair-locale-duplicate: "Det här språket används redan av en annan titel"
+classification-store.pair-key-list: "Dessa nycklar skulle sparas som en lista. Använd en nyckel som inte är ett tal"
+classification-store.pair-type.object: "Objekt"
+classification-store.pair-type.array: "Matris"
+classification-store.pair-type.number: "Tal"
+classification-store.pair-type.boolean: "Boolesk"
+classification-store.pair-type.null: "Null"
+classification-store.titles-locale-hint: "Språk är fritext och kontrolleras inte mot de språk som är konfigurerade i systemet."
+classification-store.metadata-saved: "Metadata sparade"
+classification-store.titles-saved: "Titlar sparade"
+classification-store.unassign-sub-group-confirm_one: "Ta bort kopplingen mellan 1 nyckel som visas här och undergruppen \"{{name}}\"? Nycklar i denna grupp på andra sidor behåller den."
+classification-store.unassign-sub-group-confirm_other: "Ta bort kopplingen mellan {{count}} nycklar som visas här och undergruppen \"{{name}}\"? Nycklar i denna grupp på andra sidor behåller den."
+classification-store.sub-groups-strip-hint: Detta är de undergrupper som nycklarna i denna grupp använder. Vokabulären tillhör lagret.
+classification-store.manage-sub-groups: Hantera undergrupper
+classification-store.sub-group-unused: "Ingen nyckel i denna grupp använder undergruppen \"{{name}}\" längre. Den finns fortfarande i lagret."
+classification-store.assign-sub-group-progress: "Kopplar undergruppen till {{done}} av {{total}} nycklar…"
+classification-store.assign-sub-group-failed: "Undergruppen kunde inte kopplas till: {{keyNames}}"
+classification-store.assign-sub-group-running: Vänta tills undergruppstilldelningen är klar
+classification-store.key-localization: "Lokalisering"
+classification-store.key-localization.inherit: "Ärv"
+classification-store.key-localization.localized: "Lokaliserad"
+classification-store.key-localization.not-localized: "Inte lokaliserad"
+classification-store.key-localization-confirm: "Värden som denna nyckel har på andra språk kan sluta visas eller sparas. Spara ändå?"
+classification-store.key-localized: "Lokaliserad nyckel"
+classification-store.key-localized-tooltip: "Denna nyckel har ett eget värde per språk."
+classification-store.import: Importera store-konfiguration
+classification-store.import-success: Store-konfigurationen har importerats
+classification-store.import-replace.title: "Ersätta store-konfigurationen?"
+classification-store.import-replace.warning: "Denna butik är inte tom. En fil som beskriver en annan butik ersätter konfigurationen för denna butik och tar bort de värden som varje objekt har i den. Det går inte att ångra."
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator
@@ -3216,3 +3356,24 @@ maintenance-mode.logout.deactivate-and-log-out: Stäng av och logga ut
 maintenance-mode.locked-out.title: Underhåll
 maintenance-mode.locked-out.text: 'Systemet är i underhållsläge eller tillfälligt otillgängligt. Din senaste åtgärd sparades kanske inte. Det här meddelandet stängs automatiskt så snart systemet är tillgängligt igen.'
 maintenance-mode.locked-out.reload: Ladda om
+field-definition.multi-value: "Flervärde"
+classification-store.multi-value.delegate: "ett multiValue av"
+classification-store.multi-value.delegate-required: "Välj typen som detta multiValue innehåller innan du sparar."
+classification-store.multi-value.variants: "Varianter"
+classification-store.multi-value.variant-name: "Namn"
+classification-store.multi-value.variant-label: "Etikett"
+classification-store.multi-value.variant-add: "Lägg till variant"
+classification-store.multi-value.variant-name-empty: "En variant måste ha ett namn."
+classification-store.multi-value.variant-name-duplicate: "Två varianter kan inte ha samma namn \"{{name}}\"."
+classification-store.multi-value.move-up: "Flytta upp"
+classification-store.multi-value.move-down: "Flytta ned"
+classification-store.multi-value.narrowing-confirm: "Varianterna har begränsats. Redan sparade värden raderas inte och förblir synliga, men inga fler värden utöver den nya deklarationen kan läggas till."
+classification-store.multi-value.default-variant: "Standard"
+classification-store.multi-value.not-declared: "inte deklarerad"
+classification-store.multi-value.no-delegate: "Den här nyckeln har ingen typ att redigera värdena med."
+classification-store.multi-value.unknown-delegate: "Editorn har inget inmatningsfält för typen {{type}}."
+classification-store.multi-value.unreadable-value: "Den här nyckeln har ett värde som editorn inte kan läsa; det lämnas som det är."
+classification-store.multi-value.default-variant-permitted: "Tillåt värden utan variant"
+classification-store.multi-value.default-variant-label: "Etikett för standardvärdet"
+classification-store.multi-value.no-writable-slot: "Den här nyckeln deklarerar ingen variant och tillåter inga värden utan variant, så det finns ingen plats att ange ett värde. Deklarera en variant eller tillåt värden utan variant."
+classification-store.multi-value.unreadable-entry: "Det här värdet är inget tal som fältet kan visa; det behålls som sparat tills det rensas."

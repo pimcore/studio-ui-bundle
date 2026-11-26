@@ -40,6 +40,7 @@ import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/
 import { prepareGridConfigColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/prepare-grid-config-column'
 import { Form } from '@sdk/components'
 import { applyColumnConfigurationDraft, buildColumnConfigurationDraft, withoutSearchModeDraftColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
+import { type ClassificationStoreColumnUpdate, classificationStoreColumnsToAdd } from './classification-store-group-columns'
 
 enum ViewState {
   Edit = 'edit',
@@ -162,7 +163,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     })))
   }, [visibleColumns])
 
-  function onClassificationStoreUpdate (data): void {
+  function onClassificationStoreUpdate (data: ClassificationStoreColumnUpdate & { modalContext: ClassificationStoreModalProps }): void {
     const fieldDefinition = data.modalContext
     const baseColumn = availableColumns.find(col => col.key === fieldDefinition.name && col.type === 'dataobject.classificationstore')
 
@@ -170,24 +171,10 @@ export const GridConfigInner = (): React.JSX.Element => {
       throw new Error('Could not find base column for classification store field ' + fieldDefinition.name)
     }
 
-    const columnsToAdd: AvailableColumn[] = []
+    const columnsToAdd = classificationStoreColumnsToAdd(data, baseColumn, columns)
 
-    if (data.type === 'group-by-key') {
-      data.data.forEach((item) => {
-        const itemDefinition = item.definition
-
-        columnsToAdd.push({
-          ...baseColumn,
-          key: `${baseColumn.key}`,
-          frontendType: itemDefinition?.fieldtype,
-          locale: baseColumn.localizable ? 'default' : undefined,
-          config: {
-            keyId: item.id,
-            groupId: item.groupId,
-            fieldDefinition: itemDefinition
-          }
-        })
-      })
+    if (isEmpty(columnsToAdd)) {
+      return
     }
 
     addColumns(columnsToAdd)
@@ -204,7 +191,7 @@ export const GridConfigInner = (): React.JSX.Element => {
       openModal({
         ...fieldDefinition,
         fieldName: fieldDefinition.name,
-        allowedTabs: [TabId.GroupByKey]
+        allowedTabs: [TabId.Group, TabId.GroupByKey]
       })
     } else {
       addColumn(column)

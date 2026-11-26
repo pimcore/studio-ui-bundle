@@ -36,6 +36,9 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
     lockIcon: css`
       color: ${token.colorTextTreeElement};
+    `,
+    workflowStates: css`
+      padding-inline: ${token.paddingXXS}px;
     `
   }
 })

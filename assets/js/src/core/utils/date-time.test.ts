@@ -36,8 +36,13 @@ jest.mock('i18next', () => ({
   }
 }))
 
-// eslint-disable-next-line import/first
-import { formatDate, formatDateTime, formatTime, resolveDateTimeLocale } from './date-time'
+/* eslint-disable import/first */
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import { formatDate, formatDateTime, formatTime, pickerValueToUnix, resolveDateTimeLocale } from './date-time'
+/* eslint-enable import/first */
+
+dayjs.extend(utc)
 
 const TS_SECONDS = 1705320000 // 2024-01-15T12:00:00Z
 
@@ -122,5 +127,23 @@ describe('formatDateTime locale wiring', () => {
   it('lets an explicit lng arg override the user setting', () => {
     setUserLocale('de-DE')
     expect(parse(formatDateTime({ timestamp: TS_SECONDS, lng: 'fr-FR', dateStyle: 'short' })).lng).toBe('fr-FR')
+  })
+})
+
+describe('pickerValueToUnix', () => {
+  const WALL_CLOCK = '2027-07-15T10:00:00'
+
+  // The antd picker seeds a fresh value from `dayjs().tz()` (rc-picker getNow), which carries the UTC offset of
+  // *today*. Whatever offset it carries, the picked wall-clock time has to be read in the browser timezone,
+  // the same way FormattedDateTime renders it.
+  it.each([-300, 0, 60, 120])('reads the picked wall-clock time in the browser timezone for a value pinned to UTC%i min', (offset) => {
+    const picked = dayjs(WALL_CLOCK).utcOffset(offset, true)
+
+    expect(picked.format('YYYY-MM-DDTHH:mm:ss')).toBe(WALL_CLOCK)
+    expect(pickerValueToUnix(picked)).toBe(dayjs(WALL_CLOCK).unix())
+  })
+
+  it('returns 0 when the value was cleared', () => {
+    expect(pickerValueToUnix(null)).toBe(0)
   })
 })

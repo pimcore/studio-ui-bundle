@@ -18,9 +18,9 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
-
-  useLazyMetadataGetCollectionQuery
+  useLazyMetadataAssetGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
+import { useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
@@ -38,6 +38,9 @@ import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynam
 import { uuid } from '@Pimcore/utils/uuid'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import {
+  selectPredefinedMetadataToAdd
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/utils/select-predefined-metadata-to-add'
 
 export interface CustomMetadataTabContainerProps {
   disableHeaderTitle?: boolean
@@ -50,7 +53,11 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { asset, addCustomMetadata, customMetadata } = useAssetDraft(id)
-  const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataGetCollectionQuery()
+  const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataAssetGetCollectionQuery()
+
+  // The table hydrates the draft from this (shared) query; adding before that would hide the persisted rows.
+  const { isSuccess: isPersistedMetadataLoaded } = useAssetCustomMetadataGetByIdQuery({ id })
+  const isDraftHydrated = isPersistedMetadataLoaded || asset?.changes.customMetadata !== undefined
 
   const {
     showModal: showDuplicateEntryModal,
@@ -123,26 +130,13 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   }
 
   const addPredefinedMetadata = async (): Promise<void> => {
-    const predefinedMetadataTask = predefinedMetadata({
-      body: {}
+    const response = await predefinedMetadata({
+      subType: asset?.type
     })
 
-    const response = await predefinedMetadataTask
+    const definitions = response.data?.items ?? []
 
-    const data = response.data!
-
-    data.items.forEach((predefinedDefinition) => {
-      if (customMetadata?.find((cm) => cm.name === predefinedDefinition.name && cm.language === (predefinedDefinition.language ?? '')) !== undefined) {
-        return
-      }
-
-      addCustomMetadata({
-        ...predefinedDefinition,
-        rowId: predefinedDefinition.id,
-        language: predefinedDefinition.language ?? '',
-        data: predefinedDefinition.data ?? null
-      })
-    })
+    selectPredefinedMetadataToAdd(definitions, customMetadata ?? []).forEach((entry) => { addCustomMetadata(entry) })
   }
 
   useEffect(() => {
@@ -160,7 +154,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
     if (!disableAddPredefinedMetadata) {
       buttons.push((
         <IconTextButton
-          disabled={ isFetching }
+          disabled={ isFetching || !isDraftHydrated }
           icon={ { value: 'add-something' } }
           key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
           loading={ isFetching }

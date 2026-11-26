@@ -84,4 +84,16 @@ describe('transformApiDataToNode (data object)', () => {
     expect(node.label).toBe('custom-key')
     expect(node.realKey).toBe('original-key')
   })
+
+  it('keeps title, label and color of the workflow states for the tree dots', () => {
+    const node = transformApiDataToNode(buildDataObjectNode({ workflowStates: [{ color: '#3572b0', colorInverted: true, title: 'todo', label: 'ToDo', layoutId: null, visibleInDetail: true }] }), { id: '0', internalKey: 'root' })
+
+    expect(node.workflowStates).toEqual([{ title: 'todo', label: 'ToDo', color: '#3572b0' }])
+  })
+
+  it('leaves the workflow states unset when the API sends none', () => {
+    const node = transformApiDataToNode(buildDataObjectNode({ workflowStates: null }), { id: '0', internalKey: 'root' })
+
+    expect(node.workflowStates).toBeUndefined()
+  })
 })

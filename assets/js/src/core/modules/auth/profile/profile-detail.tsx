@@ -32,6 +32,7 @@ import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-langu
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useMergedKeyBindings } from '@Pimcore/modules/user/hooks/use-merged-keybindings'
 import { TwoFactorAccordion } from '@Pimcore/modules/auth/profile/two-factor-accordion/two-factor-accordion'
+import { WelcomeScreenFields } from '@Pimcore/modules/auth/profile/welcome-screen-fields/welcome-screen-fields'
 
 interface IProfileDetail {
   id: number
@@ -66,6 +67,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
         dateTimeLocale: user?.dateTimeLocale ?? '',
         memorizeTabs: user?.memorizeTabs,
         welcomeScreen: user?.welcomeScreen,
+        welcomeScreenTarget: user?.welcomeScreenTarget,
         keyBindings: user?.keyBindings,
         contentLanguages: user?.contentLanguages,
         theme: user?.theme,
@@ -171,11 +173,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
                     />
                   </Form.Item>
 
-                  <Form.Item
-                    name="welcomeScreen"
-                  >
-                    <Switch labelRight={ t('user-management.welcomeScreen') } />
-                  </Form.Item>
+                  <WelcomeScreenFields />
 
                   <Form.Item
                     name="memorizeTabs"

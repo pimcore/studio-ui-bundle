@@ -35,7 +35,8 @@ An individual user has a few more general settings than the role.
 ### System Permissions
 
 * Admin - if checked, all permissions on all system components are granted to that user
-* Show welcome screen on startup
+* Show welcome screen on startup - opens the dashboard the user selects in the own profile (`My profile`) after login;
+  nothing opens while the user has not selected one
 * Show close warning
 * Roles - Select all roles incorporated by the user
 * Perspectives - Which [perspectives](../03_Perspectives/02_Perspectives.md) are available for this user
