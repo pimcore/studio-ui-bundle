@@ -345,8 +345,6 @@ select-option.general-settings.usages.field: Felt
 select-option.create.success: Select Option opprettet
 select-option.update.success: Select Option oppdatert
 select-option.delete.success: Select Option slettet
-select-option.import.title: Importer valgalternativ
-select-option.import.success: Valgalternativ importert
 select-option.tree.all: Alle
 select-option.tree.search: Søk i Select Options
 select-option.tree.actions.select-option: Select Option

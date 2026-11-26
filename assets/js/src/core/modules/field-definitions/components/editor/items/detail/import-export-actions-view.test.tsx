@@ -114,6 +114,7 @@ jest.mock('@sdk/components', () => ({
       {children}
     </button>
   ),
+  Tooltip: ({ children, title }: any) => <span data-tooltip={ title }>{children}</span>,
   useMessage: () => ({ success })
 }))
 
@@ -341,6 +342,23 @@ describe('import export actions view', () => {
 
     expect(screen.getByText(IMPORT_LABEL)).toBeDisabled()
     expect(screen.getByText(EXPORT_LABEL)).toBeEnabled()
+    expect(screen.getByText(IMPORT_LABEL).closest('[data-tooltip]')).toBeNull()
+  })
+
+  it('tells why the import is unavailable when the surface gives a reason', () => {
+    render(
+      <ImportExportActionsView
+        config={ config }
+        importDisabled
+        importDisabledReason="config_not_writeable"
+        inline
+        itemId={ ITEM_ID }
+      />
+    )
+
+    expect(screen.getByText(IMPORT_LABEL)).toBeDisabled()
+    expect(screen.getByText(IMPORT_LABEL).closest('[data-tooltip]')).toHaveAttribute('data-tooltip', 'config_not_writeable')
+    expect(screen.getByText(EXPORT_LABEL).closest('[data-tooltip]')).toBeNull()
   })
 
   it('shows a refused export through the shared error surface and downloads nothing', async () => {

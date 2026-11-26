@@ -17,6 +17,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import type { SelectOptionDetail, SchemaUsedToUpdateSelectOptionConfigurations } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { isUndefined } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelectOptionEditorContext } from '../../context/hooks/use-select-option-editor-context'
@@ -40,7 +41,7 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
 
   const reload = async (): Promise<void> => {
     const fresh = await getSelectOptionById(selectOption.id)
-    if (fresh !== undefined) {
+    if (!isUndefined(fresh)) {
       setSelectOptions((prev) =>
         prev.map((s) => s.id === fresh.id ? fresh : s)
       )
@@ -62,15 +63,7 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
             selectOptions: values.selectOptions ?? []
           }
 
-          await updateSelectOption(selectOption.id, config, async () => {
-            const fresh = await getSelectOptionById(selectOption.id)
-            if (fresh !== undefined) {
-              setSelectOptions((prev) =>
-                prev.map((s) => s.id === fresh.id ? fresh : s)
-              )
-              form.setFieldsValue(fresh)
-            }
-          })
+          await updateSelectOption(selectOption.id, config, () => { void reload() })
         }
       } }
     >
@@ -103,7 +96,7 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
               disabled={ isLoading }
               id={ selectOption.id }
               isWriteable={ isWriteable }
-              onImportSuccess={ reload }
+              onImported={ () => { void reload() } }
             />
 
             <Tooltip

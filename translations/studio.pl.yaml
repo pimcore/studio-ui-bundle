@@ -345,8 +345,6 @@ select-option.general-settings.usages.field: Pole
 select-option.create.success: Opcja wyboru utworzona pomyślnie
 select-option.update.success: Opcja wyboru zaktualizowana pomyślnie
 select-option.delete.success: Opcja wyboru usunięta pomyślnie
-select-option.import.title: Importuj opcję wyboru
-select-option.import.success: Opcja wyboru zaimportowana pomyślnie
 select-option.tree.all: Wszystkie
 select-option.tree.search: Szukaj opcji wyboru
 select-option.tree.actions.select-option: Opcja wyboru

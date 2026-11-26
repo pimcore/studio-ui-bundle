@@ -345,8 +345,6 @@ select-option.general-settings.usages.field: Campo
 select-option.create.success: Select option creata con successo
 select-option.update.success: Select option aggiornata con successo
 select-option.delete.success: Select option eliminata con successo
-select-option.import.title: Importa opzione di selezione
-select-option.import.success: Opzione di selezione importata con successo
 select-option.tree.all: Tutte
 select-option.tree.search: Cerca select options
 select-option.tree.actions.select-option: Select Option

@@ -11,7 +11,7 @@
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useRefresh } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { type ImportExportConfig, useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { ButtonGroup, Dropdown, type DropdownMenuProps, Icon, IconTextButton, useMessage } from '@sdk/components'
+import { ButtonGroup, Dropdown, type DropdownMenuProps, Icon, IconTextButton, Tooltip, useMessage } from '@sdk/components'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { downloadFile } from '@Pimcore/modules/app/utils/download'
 import { parseContentDispositionFilename } from '@Pimcore/modules/app/utils/content-disposition'
@@ -66,6 +66,7 @@ export interface ImportExportExtraAction {
   label: string
   inFlight?: boolean
   disabled?: boolean
+  disabledReason?: string
   onClick: () => void
 }
 
@@ -82,7 +83,17 @@ export interface ImportExportActionsViewProps {
   confirmImport?: (files: File[]) => Promise<boolean>
   /** keeps the import listed but unavailable, e.g. for a configuration that cannot be saved */
   importDisabled?: boolean
+  /** shown as a tooltip on the import, e.g. why it is unavailable */
+  importDisabledReason?: string
 }
+
+const withDisabledReason = <T extends React.ReactNode>(content: T, reason: string | undefined): T | React.JSX.Element => isNil(reason)
+  ? content
+  : (
+    <Tooltip title={ reason }>
+      <span>{content}</span>
+    </Tooltip>
+    )
 
 /**
  * The export and import actions themselves, free of the field-definitions Editor contexts so
@@ -95,7 +106,8 @@ export const ImportExportActionsView = ({
   inline = false,
   extraActions = [],
   confirmImport,
-  importDisabled = false
+  importDisabled = false,
+  importDisabledReason
 }: ImportExportActionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const messageApi = useMessage()
@@ -170,16 +182,17 @@ export const ImportExportActionsView = ({
       label: t(IMPORT_ACTION),
       inFlight: false,
       disabled: importDisabled,
+      disabledReason: importDisabledReason,
       onClick: () => { setIsImportModalOpen(true) }
     },
     ...extraActions
   ]
 
-  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, label, inFlight, disabled, onClick }) => ({
+  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, label, inFlight, disabled, disabledReason, onClick }) => ({
     key,
     disabled: inFlight === true || disabled === true,
     icon: <Icon value={ icon } />,
-    label,
+    label: withDisabledReason(label, disabledReason),
     onClick
   }))
 
@@ -188,7 +201,7 @@ export const ImportExportActionsView = ({
       {inline
         ? (
           <ButtonGroup
-            items={ actions.map(({ key, icon, label, inFlight, disabled, onClick }) => (
+            items={ actions.map(({ key, icon, label, inFlight, disabled, disabledReason, onClick }) => withDisabledReason(
               <IconTextButton
                 disabled={ inFlight === true || disabled === true }
                 icon={ { value: icon } }
@@ -198,7 +211,8 @@ export const ImportExportActionsView = ({
                 type="link"
               >
                 {label}
-              </IconTextButton>
+              </IconTextButton>,
+              disabledReason
             )) }
           />
           )
