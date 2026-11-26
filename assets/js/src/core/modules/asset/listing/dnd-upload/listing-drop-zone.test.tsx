@@ -132,4 +132,12 @@ describe('ListingDropZone', () => {
     expect(screen.getByTestId('zone')).toContainElement(screen.getByTestId('grid'))
     expect(mockZone).toHaveBeenCalledWith(expect.objectContaining({ targetFolderId: 42 }))
   })
+
+  it('AC4: non-file drags show no overlay and no drag marker', () => {
+    renderZone()
+    const area = screen.getByTestId('listing-drop-area')
+    fireEvent.dragEnter(area, { dataTransfer: { types: ['text/plain'] } })
+    expect(screen.queryByTestId('listing-drop-overlay')).not.toBeInTheDocument()
+    expect(area).not.toHaveAttribute('data-file-drag')
+  })
 })
