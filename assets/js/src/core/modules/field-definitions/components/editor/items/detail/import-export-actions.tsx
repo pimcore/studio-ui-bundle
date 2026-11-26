@@ -65,6 +65,7 @@ export interface ImportExportExtraAction {
   icon: string
   label: string
   inFlight?: boolean
+  disabled?: boolean
   onClick: () => void
 }
 
@@ -79,6 +80,8 @@ export interface ImportExportActionsViewProps {
   extraActions?: ImportExportExtraAction[]
   /** asked with the chosen file before the import is posted; answering false calls it off */
   confirmImport?: (files: File[]) => Promise<boolean>
+  /** keeps the import listed but unavailable, e.g. for a configuration that cannot be saved */
+  importDisabled?: boolean
 }
 
 /**
@@ -91,7 +94,8 @@ export const ImportExportActionsView = ({
   onImported,
   inline = false,
   extraActions = [],
-  confirmImport
+  confirmImport,
+  importDisabled = false
 }: ImportExportActionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const messageApi = useMessage()
@@ -165,14 +169,15 @@ export const ImportExportActionsView = ({
       icon: 'upload-import',
       label: t(IMPORT_ACTION),
       inFlight: false,
+      disabled: importDisabled,
       onClick: () => { setIsImportModalOpen(true) }
     },
     ...extraActions
   ]
 
-  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, label, inFlight, onClick }) => ({
+  const menuItems: DropdownMenuProps['items'] = actions.map(({ key, icon, label, inFlight, disabled, onClick }) => ({
     key,
-    disabled: inFlight === true,
+    disabled: inFlight === true || disabled === true,
     icon: <Icon value={ icon } />,
     label,
     onClick
@@ -183,9 +188,9 @@ export const ImportExportActionsView = ({
       {inline
         ? (
           <ButtonGroup
-            items={ actions.map(({ key, icon, label, inFlight, onClick }) => (
+            items={ actions.map(({ key, icon, label, inFlight, disabled, onClick }) => (
               <IconTextButton
-                disabled={ inFlight === true }
+                disabled={ inFlight === true || disabled === true }
                 icon={ { value: icon } }
                 key={ key }
                 loading={ inFlight === true }

@@ -10,13 +10,10 @@
 
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
-import { useMessage } from '@Pimcore/components/message/useMessage'
 import { api } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { ImportExportActionsView } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
+import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import React from 'react'
 
 export interface SelectOptionImportExportActionsProps {
   id: string
@@ -25,69 +22,27 @@ export interface SelectOptionImportExportActionsProps {
   onImportSuccess: () => Promise<void>
 }
 
-const getExportUrl = (id: string): string => `${getPrefix()}/class/select-option/${encodeURIComponent(id)}/export`
+const getSelectOptionUrl = (id: number | string, action: string): string =>
+  `${getPrefix()}/class/select-option/${encodeURIComponent(String(id))}/${action}`
 
-const getImportUrl = (id: string): string => `${getPrefix()}/class/select-option/${encodeURIComponent(id)}/import`
-
-const isJsonFile = (file: File): boolean => file.type === 'application/json' || file.name.endsWith('.json')
+const selectOptionImportExportConfig: ImportExportConfig = {
+  getExportUrl: (id) => getSelectOptionUrl(id, 'export'),
+  getImportUrl: (id) => getSelectOptionUrl(id, 'import'),
+  importModalTitleKey: 'select-option.import.title',
+  successMessageKey: 'select-option.import.success',
+  getImportInvalidation: () => api.util.invalidateTags(invalidatingTags.SELECT_OPTION_COLLECTION())
+}
 
 export const SelectOptionImportExportActions = ({
   id,
   isWriteable,
   disabled = false,
   onImportSuccess
-}: SelectOptionImportExportActionsProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const messageApi = useMessage()
-  const dispatch = useAppDispatch()
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
-
-  const handleExport = (): void => {
-    const link = document.createElement('a')
-    link.href = getExportUrl(id)
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
-  }
-
-  const handleImportSuccess = (): void => {
-    void messageApi.success(t('select-option.import.success'))
-    setIsImportModalOpen(false)
-    // the upload bypasses RTK Query, so invalidate what a save invalidates
-    dispatch(api.util.invalidateTags(invalidatingTags.SELECT_OPTION_COLLECTION()))
-    void onImportSuccess()
-  }
-
-  return (
-    <>
-      <IconButton
-        aria-label={ t('export') }
-        icon={ { value: 'export' } }
-        onClick={ handleExport }
-        tooltip={ { title: t('export') } }
-      />
-
-      <IconButton
-        aria-label={ t('import') }
-        disabled={ disabled || !isWriteable }
-        icon={ { value: 'upload-import' } }
-        onClick={ () => { setIsImportModalOpen(true) } }
-        tooltip={ { title: isWriteable ? t('import') : t('config_not_writeable') } }
-      />
-
-      <ImportModal
-        accept=".json,application/json"
-        acceptMimeTypes={ ['application/json'] }
-        action={ getImportUrl(id) }
-        onOpenChange={ setIsImportModalOpen }
-        onUploadSuccess={ handleImportSuccess }
-        open={ isImportModalOpen }
-        showSuccessMessage={ false }
-        title={ t('select-option.import.title') }
-        uploadButtonLabel={ t('import') }
-        validateFile={ isJsonFile }
-      />
-    </>
-  )
-}
+}: SelectOptionImportExportActionsProps): React.JSX.Element => (
+  <ImportExportActionsView
+    config={ selectOptionImportExportConfig }
+    importDisabled={ disabled || !isWriteable }
+    itemId={ id }
+    onImported={ () => { void onImportSuccess() } }
+  />
+)

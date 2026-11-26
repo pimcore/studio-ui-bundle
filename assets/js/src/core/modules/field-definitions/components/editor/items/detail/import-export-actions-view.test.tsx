@@ -329,6 +329,20 @@ describe('import export actions view', () => {
     expect(screen.getByText(IMPORT_LABEL)).toBeInTheDocument()
   })
 
+  it('keeps the import listed but unavailable when the surface disables it', () => {
+    render(
+      <ImportExportActionsView
+        config={ config }
+        importDisabled
+        inline
+        itemId={ ITEM_ID }
+      />
+    )
+
+    expect(screen.getByText(IMPORT_LABEL)).toBeDisabled()
+    expect(screen.getByText(EXPORT_LABEL)).toBeEnabled()
+  })
+
   it('shows a refused export through the shared error surface and downloads nothing', async () => {
     respondWith(JSON.stringify({ message: REFUSAL }), {
       status: 409,

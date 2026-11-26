@@ -9,45 +9,89 @@
  */
 
 import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 const SELECT_OPTION_ID = 'Colors'
+const SELECT_OPTION_PATH = `/pimcore-studio/api/class/select-option/${SELECT_OPTION_ID}`
+const EXPORT = 'export'
+const IMPORT = 'import'
+const IMPORT_MODAL = 'import-modal'
 
 const dispatch = jest.fn()
 const success = jest.fn()
 
-jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+// antd-style ships untranspiled ESM, which jest does not transform.
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
+  createStyles: () => () => ({ styles: {}, cx: () => '', theme: {} }),
+  css: () => '',
+  cx: () => '',
+  keyframes: () => ''
+}))
+
 jest.mock('@Pimcore/app/api/pimcore/route', () => ({ getPrefix: () => '/pimcore-studio/api' }))
-jest.mock('@Pimcore/app/store', () => ({ useAppDispatch: () => dispatch }))
-jest.mock('@Pimcore/components/message/useMessage', () => ({ useMessage: () => ({ success }) }))
+
+jest.mock('@Pimcore/app/store', () => ({
+  useAppDispatch: () => dispatch,
+  injectSliceWithState: jest.fn()
+}))
+
 jest.mock('@Pimcore/modules/class-definition/class-definition-slice-enhanced', () => ({
   api: { util: { invalidateTags: (tags: unknown) => ({ type: 'api/invalidateTags', payload: tags }) } }
 }))
-jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: ({ disabled, onClick, tooltip, 'aria-label': ariaLabel }: any) => (
-    <button
-      aria-label={ ariaLabel }
-      disabled={ disabled }
-      onClick={ onClick }
-      title={ tooltip?.title }
-    />
-  )
+
+// The Editor contexts the shared module also reads; their providers drag the whole app in.
+jest.mock('@Pimcore/modules/field-definitions/components/editor/settings-provider', () => ({
+  useSettings: () => ({})
 }))
 
-// The real modal pulls antd's untranspiled ESM and an axios upload; the stand-in shows where it
-// would post and fires the success callback.
+jest.mock('@Pimcore/modules/field-definitions/components/editor/items/provider', () => ({
+  useItems: () => ({})
+}))
+
+jest.mock('@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider', () => ({
+  useRefresh: () => ({ refreshLayout: jest.fn() })
+}))
+
+jest.mock('@Pimcore/modules/app/utils/download', () => ({
+  downloadFile: jest.fn()
+}))
+
+// The real modal pulls antd's untranspiled ESM and an axios upload.
 jest.mock('@Pimcore/components/import-modal/import-modal', () => ({
-  ImportModal: ({ action, onUploadSuccess, open }: any) => (
+  ImportModal: ({ action, onUploadSuccess, title }: any) => (
     <button
       data-action={ action }
-      data-open={ String(open) }
-      data-testid="upload-success"
-      onClick={ onUploadSuccess }
+      data-testid="import-modal"
+      data-title={ title }
+      onClick={ () => { onUploadSuccess({}) } }
     >
       upload
     </button>
   )
 }))
+
+jest.mock('@sdk/components', () => ({
+  ButtonGroup: ({ items }: any) => <div>{items}</div>,
+  Dropdown: ({ children, menu }: any) => (
+    <div>
+      {children}
+      {menu.items.map(({ key, label, disabled, onClick }: any) => (
+        <button
+          disabled={ disabled }
+          key={ key }
+          onClick={ onClick }
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  ),
+  Icon: ({ value }: any) => <i>{value}</i>,
+  IconTextButton: ({ children, onClick }: any) => <button onClick={ onClick }>{children}</button>,
+  useMessage: () => ({ success })
+}))
+
+jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
 const { SelectOptionImportExportActions } = jest.requireActual('./select-option-import-export-actions')
 
@@ -67,56 +111,61 @@ const renderActions = (props: Record<string, unknown> = {}): { onImportSuccess: 
 }
 
 describe('SelectOptionImportExportActions', () => {
+  const originalFetch = globalThis.fetch
+
   beforeEach(() => {
     dispatch.mockClear()
     success.mockClear()
+    globalThis.fetch = jest.fn(async () => new Response('{}', { status: 200 })) as unknown as typeof fetch
   })
 
-  it('downloads the export of the open select option', () => {
-    const click = jest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
-      expect(this.getAttribute('href')).toBe(`/pimcore-studio/api/class/select-option/${SELECT_OPTION_ID}/export`)
-    })
-
-    renderActions()
-    fireEvent.click(screen.getByRole('button', { name: 'export' }))
-
-    expect(click).toHaveBeenCalledTimes(1)
-    click.mockRestore()
+  afterEach(() => {
+    globalThis.fetch = originalFetch
   })
 
-  it('uploads the import to the open select option', () => {
+  it('puts export and import behind the More menu, as the class definition editor does', () => {
     renderActions()
 
-    expect(screen.getByTestId('upload-success').getAttribute('data-action'))
-      .toBe(`/pimcore-studio/api/class/select-option/${SELECT_OPTION_ID}/import`)
-
-    fireEvent.click(screen.getByRole('button', { name: 'import' }))
-
-    expect(screen.getByTestId('upload-success').getAttribute('data-open')).toBe('true')
+    expect(screen.getByText('toolbar.more')).toBeInTheDocument()
+    expect(screen.getByText(EXPORT)).toBeInTheDocument()
+    expect(screen.getByText(IMPORT)).toBeInTheDocument()
   })
 
-  it('does not offer the import where saving is not allowed', () => {
+  it('exports the open select option through its export endpoint', async () => {
+    renderActions()
+
+    fireEvent.click(screen.getByText(EXPORT))
+
+    await waitFor(() => { expect(globalThis.fetch).toHaveBeenCalledWith(`${SELECT_OPTION_PATH}/export`) })
+  })
+
+  it('uploads the import to the open select option under the select option title', () => {
+    renderActions()
+
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-action', `${SELECT_OPTION_PATH}/import`)
+    expect(screen.getByTestId(IMPORT_MODAL)).toHaveAttribute('data-title', 'select-option.import.title')
+  })
+
+  it('keeps the import unavailable where saving is not allowed, but not the export', () => {
     renderActions({ isWriteable: false })
 
-    const importButton = screen.getByRole('button', { name: 'import' })
-    expect(importButton).toBeDisabled()
-    expect(importButton.getAttribute('title')).toBe('config_not_writeable')
-    expect(screen.getByRole('button', { name: 'export' })).toBeEnabled()
+    expect(screen.getByText(IMPORT)).toBeDisabled()
+    expect(screen.getByText(EXPORT)).toBeEnabled()
   })
 
-  it('does not offer the import while the editor is busy', () => {
+  it('keeps the import unavailable while the editor is busy', () => {
     renderActions({ disabled: true })
 
-    expect(screen.getByRole('button', { name: 'import' })).toBeDisabled()
+    expect(screen.getByText(IMPORT)).toBeDisabled()
   })
 
   it('refreshes the tree and the editor after an import', () => {
     const { onImportSuccess } = renderActions()
 
-    fireEvent.click(screen.getByTestId('upload-success'))
+    fireEvent.click(screen.getByTestId(IMPORT_MODAL))
 
-    expect(dispatch).toHaveBeenCalledWith({ type: 'api/invalidateTags', payload: ['SELECT_OPTION_COLLECTION'] })
-    expect(onImportSuccess).toHaveBeenCalledTimes(1)
     expect(success).toHaveBeenCalledWith('select-option.import.success')
+    expect(onImportSuccess).toHaveBeenCalledTimes(1)
+    expect(dispatch).toHaveBeenCalledWith({ type: 'api/invalidateTags', payload: ['SELECT_OPTION_COLLECTION'] })
   })
 })
