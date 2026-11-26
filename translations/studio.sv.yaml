@@ -345,6 +345,8 @@ select-option.general-settings.usages.field: Fält
 select-option.create.success: Valalternativet har skapats
 select-option.update.success: Valalternativet har uppdaterats
 select-option.delete.success: Valalternativet har tagits bort
+select-option.import.title: Importera valalternativ
+select-option.import.success: Valalternativet har importerats
 select-option.tree.all: Alla
 select-option.tree.search: Sök valalternativ
 select-option.tree.actions.select-option: Valalternativ
