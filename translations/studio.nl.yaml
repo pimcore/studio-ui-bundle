@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Alle gegevensobjecten, assets en documenten staan
 index-sync.confirmation.ok: Synchroniseren
 index-sync.job.title: Zoekindex wordt gesynchroniseerd
 index-sync.start-failed: Kon de zoekindexsynchronisatie niet starten
+deep-link.unknown-link: Er is geen handler geregistreerd voor deze link
+deep-link.open-failed: Er is een fout opgetreden bij het openen van de link
 dont-ask-again: Niet meer vragen
 widget.missing-context.title: Ontbrekende context
 widget.missing-context.description: Geen gerelateerd element gevonden

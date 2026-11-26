@@ -14,11 +14,12 @@ import { useWelcomeScreen } from './use-welcome-screen'
 const state = { restored: true }
 let mockUser: { id: number, welcomeScreen: boolean, welcomeScreenTarget: string | null }
 let mockLocationState: Record<string, unknown> | null = null
+let mockLocationSearch = ''
 const open = jest.fn((_target: string) => true)
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useLocation: () => ({ pathname: '/pimcore-studio/', search: '', hash: '', key: 'default', state: mockLocationState })
+  useLocation: () => ({ pathname: '/pimcore-studio/', search: mockLocationSearch, hash: '', key: 'default', state: mockLocationState })
 }))
 // Factories, so the real store, container and SDK barrel are never loaded
 jest.mock('@sdk/app', () => ({ useAppSelector: (selector: (s: typeof state) => unknown) => selector(state) }))
@@ -39,6 +40,7 @@ describe('useWelcomeScreen', () => {
     state.restored = true
     mockUser = { id: 7, welcomeScreen: true, welcomeScreenTarget: TARGET }
     mockLocationState = null
+    mockLocationSearch = ''
     sessionStorage.clear()
   })
 
@@ -94,6 +96,20 @@ describe('useWelcomeScreen', () => {
 
   it('opens the chosen target when the route state names no link', () => {
     mockLocationState = { isDeeplink: false, resetPassword: false }
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(open).toHaveBeenCalledTimes(1)
+  })
+
+  it('opens nothing when the address is a named deep link', () => {
+    mockLocationSearch = '?deeplink=alternative-element-tree&path=%2FA%2F'
+    renderHook(() => { useWelcomeScreen() })
+
+    expect(open).not.toHaveBeenCalled()
+  })
+
+  it('opens the chosen target when the query names no deep link', () => {
+    mockLocationSearch = '?path=%2FA%2F'
     renderHook(() => { useWelcomeScreen() })
 
     expect(open).toHaveBeenCalledTimes(1)
