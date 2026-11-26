@@ -35,6 +35,7 @@ jest.mock('@Pimcore/components/content/content', () => ({ Content: ({ children }
 jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: () => null }))
 jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: ({ children }: any) => <div>{children}</div> }))
 jest.mock('@Pimcore/components/segmented/segmented', () => ({ Segmented: () => null }))
+jest.mock('@Pimcore/components/preview-card/preview-card', () => ({ SizeTypes: { SMALL: 'small', LARGE: 'large' } }))
 jest.mock('@Pimcore/components/text/text', () => ({ Text: () => null }))
 jest.mock('@sdk/components', () => ({ IconButton: () => null, Split: ({ children }: any) => <div>{children}</div> }))
 jest.mock('@Pimcore/modules/asset/listing/dnd-upload/listing-drop-zone', () => ({
