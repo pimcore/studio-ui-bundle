@@ -3375,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Waarden zonder vari
 classification-store.multi-value.default-variant-label: "Label van de standaardwaarde"
 classification-store.multi-value.no-writable-slot: "Deze sleutel declareert geen variant en staat geen waarden zonder variant toe, dus er is geen plek om een waarde in te voeren. Declareer een variant of sta waarden zonder variant toe."
 classification-store.multi-value.unreadable-entry: "Deze waarde is geen getal dat het invoerveld kan tonen; ze blijft ongewijzigd opgeslagen tot ze wordt gewist."
+focus-view.open-in-studio: "Openen in Pimcore Studio"
+focus-view.nothing-to-show: "Hier is niets te tonen. Open de link opnieuw of ga verder in Pimcore Studio."

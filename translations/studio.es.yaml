@@ -3375,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Permitir valores si
 classification-store.multi-value.default-variant-label: "Etiqueta del valor predeterminado"
 classification-store.multi-value.no-writable-slot: "Esta clave no declara ninguna variante y no permite valores sin variante, por lo que no hay dónde introducir un valor. Declare una variante o permita valores sin variante."
 classification-store.multi-value.unreadable-entry: "Este valor no es un número que el campo pueda mostrar; se conserva tal cual hasta que se borre."
+focus-view.open-in-studio: "Abrir en Pimcore Studio"
+focus-view.nothing-to-show: "No hay nada que mostrar. Abra el enlace de nuevo o continúe en Pimcore Studio."

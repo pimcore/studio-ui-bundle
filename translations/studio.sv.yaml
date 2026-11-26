@@ -3375,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Tillåt värden uta
 classification-store.multi-value.default-variant-label: "Etikett för standardvärdet"
 classification-store.multi-value.no-writable-slot: "Den här nyckeln deklarerar ingen variant och tillåter inga värden utan variant, så det finns ingen plats att ange ett värde. Deklarera en variant eller tillåt värden utan variant."
 classification-store.multi-value.unreadable-entry: "Det här värdet är inget tal som fältet kan visa; det behålls som sparat tills det rensas."
+focus-view.open-in-studio: "Öppna i Pimcore Studio"
+focus-view.nothing-to-show: "Det finns inget att visa här. Öppna länken igen eller fortsätt i Pimcore Studio."

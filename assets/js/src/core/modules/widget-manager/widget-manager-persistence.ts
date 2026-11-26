@@ -18,6 +18,7 @@ import { type WidgetRestorerRegistry } from './services/widget-restorer-registry
 import { Model, Actions, type TabNode } from 'flexlayout-react'
 import { type Reducer, type UnknownAction } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
+import { isFocusMode } from '@Pimcore/modules/app/focus-mode/focus-mode'
 
 export const WIDGET_MANAGER_STORAGE_KEY = 'widget_manager_inner_model'
 
@@ -65,6 +66,8 @@ export const createWidgetManagerPersistedReducer = (reducer: Reducer<WidgetManag
       })
 
       return model.toJson()
-    }
+    },
+    // the focus view must not replace the layout the user left in the full Studio
+    () => !isFocusMode()
   )
 }

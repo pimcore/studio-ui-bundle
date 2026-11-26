@@ -3375,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Werte ohne Variante
 classification-store.multi-value.default-variant-label: "Bezeichnung des Standardwerts"
 classification-store.multi-value.no-writable-slot: "Dieser Schlüssel deklariert keine Variante und erlaubt keine Werte ohne Variante, daher gibt es keinen Platz für einen Wert. Deklarieren Sie eine Variante oder erlauben Sie Werte ohne Variante."
 classification-store.multi-value.unreadable-entry: "Dieser Wert ist keine Zahl, die das Eingabefeld anzeigen kann; er bleibt unverändert gespeichert, bis er gelöscht wird."
+focus-view.open-in-studio: "In Pimcore Studio öffnen"
+focus-view.nothing-to-show: "Hier gibt es nichts anzuzeigen. Öffnen Sie den Link erneut oder arbeiten Sie in Pimcore Studio weiter."
