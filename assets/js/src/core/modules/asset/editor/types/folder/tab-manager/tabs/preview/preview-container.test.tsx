@@ -80,7 +80,7 @@ jest.mock('@Pimcore/modules/asset/listing/dnd-upload/listing-drop-zone', () => (
   ListingDropZone: (props: any) => {
     if (mockUseRealZone) {
       const Real = jest.requireActual('@Pimcore/modules/asset/listing/dnd-upload/listing-drop-zone').ListingDropZone
-      return <Real {...props} />
+      return <Real { ...props } />
     }
     mockZone(props)
     return <div data-testid="drop-zone">{props.children}</div>
