@@ -57,6 +57,36 @@ export const useStyles = createStyles(({ token, css }) => {
           flex-basis: 100%;
         }
       }
+    `,
+
+    // Field addons, see field-addon/field-addon-control. The control itself is the flex item of the
+    // row, so a `width: 100%` resolves against the row and its own max-width still caps it; the
+    // `after` addon follows it and wraps to the next line when the two do not fit side by side.
+    // An addon whose components all render nothing leaves the field laid out as without addons.
+    addonRow: css`
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: ${token.marginXXS}px ${token.marginXS}px;
+
+      &:has(> .pimcore-field-addon__after:empty) {
+        display: block;
+      }
+
+      > .pimcore-field-addon__after {
+        flex: 0 1 auto;
+        min-width: 0;
+      }
+    `,
+
+    addonBelow: css`
+      margin-top: ${token.marginXXS}px;
+    `,
+
+    addonEmpty: css`
+      &:empty {
+        display: none;
+      }
     `
   }
 })

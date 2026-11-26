@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { Children, cloneElement, isValidElement } from 'react'
 import { HIDE_BOUNDARY_SELECTOR } from '@Pimcore/modules/app/utils/auto-hide-empty-content/hide-boundary'
 import { render, screen } from '@testing-library/react'
 import {
@@ -16,21 +16,42 @@ import {
   type DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
+import { LabelExtra } from '@Pimcore/components/form/item/provider/label-extra/label-extra-provider'
+import { type FieldAddons } from './field-addon/use-field-addons'
 import DataComponentFormItem from './form-item'
 
 // The real Form, providers and styles pull in antd-style (untranspiled ESM), which jest cannot
-// load; the item only needs to show the class and label it is given.
+// load; the item only needs to show the class and label it is given, end the label row with the
+// label extra (as AntD does for an item that has a label) and bind its child the way AntD does, by handing it value and onChange.
+const mockOnChange = jest.fn()
 jest.mock('@Pimcore/components/form/form', () => ({
   Form: {
-    Item: ({ className, label, children }: { className?: string, label?: React.ReactNode, children?: React.ReactNode }) => (
-      <div
-        className={ className }
-        data-testid="form-item"
-      >
-        { label }
-        { children }
-      </div>
-    )
+    Item: ({ className, label, children }: { className?: string, label?: React.ReactNode, children?: React.ReactNode }) => {
+      const child = Children.only(children)
+
+      return (
+        <div
+          className={ className }
+          data-testid="form-item"
+        >
+          { label !== null && label !== undefined && (
+            <div data-testid="label-row">
+              { label }
+              <LabelExtra />
+            </div>
+          ) }
+          { isValidElement(child) ? cloneElement(child as React.ReactElement<Record<string, unknown>>, { value: 'bound', onChange: mockOnChange }) : child }
+        </div>
+      )
+    }
+  }
+}))
+let mockFieldAddons: FieldAddons = {}
+const fieldAddonCalls: unknown[][] = []
+jest.mock('./field-addon/use-field-addons', () => ({
+  useFieldAddons: (...args: unknown[]) => {
+    fieldAddonCalls.push(args)
+    return mockFieldAddons
   }
 }))
 jest.mock('@Pimcore/modules/app/error-boundary/error-boundary', () => ({
@@ -46,9 +67,16 @@ jest.mock('@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-co
     return <>{ children }</>
   }
 }))
-jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-label-extra', () => ({
-  RestoreInheritanceLabelExtraProvider: ({ children }: { children?: React.ReactNode }) => <>{ children }</>
-}))
+// the restore action is the label extra the field already has; addons go after it
+jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-label-extra', () => {
+  const { LabelExtraProvider } = jest.requireActual('@Pimcore/components/form/item/provider/label-extra/label-extra-provider')
+
+  return {
+    RestoreInheritanceLabelExtraProvider: ({ children }: { children?: React.ReactNode }) => (
+      <LabelExtraProvider extra={ <span>restore</span> }>{ children }</LabelExtraProvider>
+    )
+  }
+})
 jest.mock('@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style', () => ({
   useInheritanceOverlayStyle: () => undefined
 }))
@@ -93,14 +121,22 @@ const objectDataType = (labelAfterControl: boolean): DynamicTypeObjectDataAbstra
       />
     )
   }),
-  getObjectDataComponent: () => <input type="checkbox" />,
+  getObjectDataComponent: () => (
+    <input
+      data-testid="control"
+      disabled
+      readOnly
+      type="text"
+    />
+  ),
   getEmptyValue: () => null
 }) as unknown as DynamicTypeObjectDataAbstract
 
-const renderItem = (labelAfterControl: boolean, title: React.ReactNode = 'Active'): HTMLElement => {
+const renderItem = (labelAfterControl: boolean, title: React.ReactNode = 'Active', fieldPath?: Array<string | number>): HTMLElement => {
   render(
     <DataComponentFormItem
       _props={ { name: 'active', title } as unknown as AbstractObjectDataDefinition }
+      fieldPath={ fieldPath }
       formFieldName={ ['active'] }
       objectDataType={ objectDataType(labelAfterControl) }
       technicalName="active"
@@ -113,6 +149,9 @@ const renderItem = (labelAfterControl: boolean, title: React.ReactNode = 'Active
 describe('DataComponentFormItem', () => {
   beforeEach(() => {
     mockSuppressEmptyLabel = false
+    mockFieldAddons = {}
+    fieldAddonCalls.length = 0
+    mockOnChange.mockClear()
   })
 
   it('lays the label out after the control for a type that asks for it', () => {
@@ -163,5 +202,48 @@ describe('DataComponentFormItem', () => {
 
     expect(screen.queryByText('Active')).not.toBeInTheDocument()
     expect(screen.getByTestId('form-item').querySelector('span')).toBeNull()
+  })
+
+  describe('field addons', () => {
+    it('hands the control to the form item as is when no addon is registered', () => {
+      const item = renderItem(false)
+
+      expect(item.querySelector('.pimcore-field-addon')).toBeNull()
+      expect(screen.getByTestId('control')).toHaveValue('bound')
+    })
+
+    it('asks for the addons of the field by its full path', () => {
+      renderItem(false, 'Height', ['attributes', 'Dimensions', 'height'])
+
+      expect(fieldAddonCalls[0][1]).toEqual(['attributes', 'Dimensions', 'height'])
+    })
+
+    // e.g. a wrapped field's delegate in the version detail view, which mounts it outside a form
+    it('asks for no addons for a field rendered without a path', () => {
+      renderItem(false)
+
+      expect(fieldAddonCalls[0][1]).toBeUndefined()
+    })
+
+    it('renders after and below addons around the control, which stays bound to the form item', () => {
+      mockFieldAddons = { after: <span>Manufacturer</span>, below: <span>ERP: 4</span> }
+
+      renderItem(false, 'Active', ['active'])
+
+      const control = screen.getByTestId('control')
+      expect(screen.getByText('Manufacturer').closest('.pimcore-field-addon__row')).toContainElement(control)
+      expect(screen.getByText('ERP: 4').closest('.pimcore-field-addon__below')).not.toBeNull()
+      expect(control).toHaveValue('bound')
+      expect(control).toBeDisabled()
+    })
+
+    it('ends the label row with the label addon, after the restore action', () => {
+      mockFieldAddons = { label: <span>from series</span> }
+
+      renderItem(false, 'Active', ['active'])
+
+      expect(screen.getByTestId('label-row')).toHaveTextContent(/Active.*restore.*from series/)
+      expect(screen.getByTestId('control').closest('.pimcore-field-addon')).toBeNull()
+    })
   })
 })

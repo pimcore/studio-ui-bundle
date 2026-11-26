@@ -114,6 +114,10 @@ jest.mock('@Pimcore/lib/event-bus/event-types', () => ({ eventTypes: {} }))
 jest.mock('@Pimcore/modules/element/services/edit-lock-gate', () => ({ awaitEditLockPersistAllowed: async () => true }))
 jest.mock('@Pimcore/components/message/useMessage', () => ({ useMessage: () => ({ error: jest.fn() }) }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+// no bundle registers field addons here
+jest.mock('@Pimcore/modules/app/component-registry/use-component-registry', () => ({
+  useComponentRegistry: () => ({ getSlotComponents: () => [] })
+}))
 jest.mock('@Pimcore/app/depency-injection', () => ({
   container: {
     get: () => ({ hasDynamicType: () => false, getDynamicType: () => undefined, executeProcessors: jest.fn() })

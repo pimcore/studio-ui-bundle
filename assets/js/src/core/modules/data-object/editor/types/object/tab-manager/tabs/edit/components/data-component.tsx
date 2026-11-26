@@ -127,6 +127,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     return (
       <DataComponentFormItem
         _props={ _props }
+        fieldPath={ isNil(form) ? undefined : combinedFieldName }
         formFieldName={ formFieldName }
         objectDataType={ objectDataType }
         technicalName={ technicalName ?? name }

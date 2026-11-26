@@ -28,6 +28,7 @@ Each example covers a specific feature or integration pattern:
 - [Extend the Workflow Transition Modal](./19_Extend_Workflow_Transition_Modal.md)
 - [Run a Background Job](./20_Run_a_Background_Job.md)
 - [Add Preview Mode to a Modal](./21_Add_Preview_Mode_to_a_Modal.md)
+- [Add Content Next to a Data Object Field](./22_Add_Content_Next_to_a_Data_Object_Field.md)
 
-Unless a page links elsewhere, the examples are part of the
+Unless a page links elsewhere or shows its code inline, the examples are part of the
 [Pimcore Studio Example Bundle](https://github.com/pimcore/studio-example-bundle/) on GitHub.

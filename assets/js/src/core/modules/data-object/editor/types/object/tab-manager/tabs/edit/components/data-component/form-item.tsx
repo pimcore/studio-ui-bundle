@@ -24,18 +24,28 @@ import { FieldLabelTechnicalNameProvider } from '@Pimcore/modules/element/dynami
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { RestoreInheritanceLabelExtraProvider } from '@Pimcore/modules/data-object/components/restore-inheritance-label-extra'
 import { isNonEmptyString } from '@sdk/utils'
+import { LabelExtraProvider } from '@Pimcore/components/form/item/provider/label-extra/label-extra-provider'
 import { useStyles } from './form-item.styles'
+import { useFieldAddons } from './field-addon/use-field-addons'
+import { withFieldAddons } from './field-addon/field-addon-control'
 
 interface DataComponentFormItemProps {
   objectDataType: DynamicTypeObjectDataAbstract
   _props: AbstractObjectDataDefinition
   formFieldName: Array<number | string>
   technicalName: string
+  /**
+   * Path from the object down to the field, see DataObjectFieldAddonProps.fieldPath. Only a field
+   * of the edit form passes it and gets the field addons; outside a form (e.g. a wrapped field's
+   * delegate in the version detail view) the field renders without them.
+   */
+  fieldPath?: Array<string | number>
 }
 
-const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDataType, _props, formFieldName, technicalName }: DataComponentFormItemProps) => {
+const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDataType, _props, formFieldName, technicalName, fieldPath }: DataComponentFormItemProps) => {
   const formItemProps = objectDataType.getObjectDataFormItemProps(_props)
-  const objectDataComponent = objectDataType.getObjectDataComponent(_props)
+  const addons = useFieldAddons(_props, fieldPath)
+  const objectDataComponent = withFieldAddons(objectDataType.getObjectDataComponent(_props), addons.after, addons.below)
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
   const { styles } = useStyles()
 
@@ -63,18 +73,23 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
           readOnly={ _props.noteditable === true }
         >
           <FieldLabelTechnicalNameProvider technicalName={ technicalName }>
-            <Form.Item
-              { ...effectiveFormItemProps }
-              className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle, { [styles.labelAfterControl]: objectDataType.labelAfterControl }) }
-              name={ formFieldName }
+            <LabelExtraProvider
+              append
+              extra={ addons.label }
             >
-              { objectDataComponent }
-            </Form.Item>
+              <Form.Item
+                { ...effectiveFormItemProps }
+                className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle, { [styles.labelAfterControl]: objectDataType.labelAfterControl }) }
+                name={ formFieldName }
+              >
+                { objectDataComponent }
+              </Form.Item>
+            </LabelExtraProvider>
           </FieldLabelTechnicalNameProvider>
         </RestoreInheritanceLabelExtraProvider>
       </AutoHideEmptyContent>
     </ErrorBoundary>
-  ), [effectiveFormItemProps, inheritanceOverlayStyle, objectDataComponent, technicalName])
+  ), [effectiveFormItemProps, inheritanceOverlayStyle, objectDataComponent, technicalName, addons.label])
 }
 
 export default DataComponentFormItem
