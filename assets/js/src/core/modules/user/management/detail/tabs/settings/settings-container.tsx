@@ -203,17 +203,17 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           <AppearanceBrandingAccordion user={ openedUser } />
         </Col>
         <Col span={ 16 }>
-          <CustomisationAccordion isAdmin={ openedUser?.admin } />
-        </Col>
-        <Col span={ 16 }>
-          <AdminAccordion
+          <CustomisationAccordion
             active={ openedUser?.active }
             email={ openedUser?.email }
             hasUnsavedChanges={ openedUser?.modified === true }
-            isDisabled={ user?.id === openedUser?.id }
+            isAdmin={ openedUser?.admin }
             lastLogin={ openedUser?.lastLogin }
             userId={ id }
           />
+        </Col>
+        <Col span={ 16 }>
+          <AdminAccordion isDisabled={ user?.id === openedUser?.id } />
         </Col>
 
         {openedUser?.admin === false
