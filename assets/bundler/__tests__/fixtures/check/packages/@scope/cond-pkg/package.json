@@ -1,0 +1,1 @@
+{ "name": "@scope/cond-pkg", "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.mjs" }, "./dist/query/*": { "types": "./dist/query/*.d.ts", "import": "./dist/query/*.mjs" }, "./dist/hidden": { "types": null, "import": null } } }

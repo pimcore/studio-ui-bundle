@@ -1,0 +1,1 @@
+{ "name": "exact-pkg", "exports": { ".": "./dist/index.js", "./dist/types": "./dist/types.d.ts", "./dist/gone": null } }
