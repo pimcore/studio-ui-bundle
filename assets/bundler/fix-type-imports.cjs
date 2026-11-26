@@ -32,19 +32,29 @@ const REWRITE = {
   members: ['UseQueryStateDefaultResult']
 };
 
-const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\/]/g, String.raw`\$&`);
 
 const FROM = escapeRegExp(REWRITE.from);
 // import("<from>").Member
-const IMPORT_TYPE = new RegExp(`import\\((["'])${FROM}\\1\\)\\.([A-Za-z_$][\\w$]*)`, 'g');
+const IMPORT_TYPE = new RegExp(String.raw`import\((["'])${FROM}\1\)\.([A-Za-z_$][\w$]*)`, 'g');
 // import { A, type B as C } from "<from>" / export { … } from "<from>"
-const FROM_CLAUSE = new RegExp(`(\\b(?:import|export)\\s+(?:type\\s+)?\\{([^}]*)\\}\\s*from\\s*)(["'])${FROM}\\3`, 'g');
+const FROM_CLAUSE = new RegExp(String.raw`(\b(?:import|export)\s+(?:type\s+)?\{([^}]*)\}\s*from\s*)(["'])${FROM}\3`, 'g');
 
+/** The names a `{ … }` clause imports (`type A as B` → `A`); read word by word, no regex that can backtrack. */
 function importedNames (bindings) {
   return bindings
     .split(',')
-    .map((binding) => binding.trim().replace(/^type\s+/, '').split(/\s+as\s+/)[0].trim())
+    .map(bindingName)
     .filter((name) => name !== '');
+}
+
+function bindingName (binding) {
+  const words = [...binding.matchAll(/\S+/g)];
+  if (words.length > 1 && words[0][0] === 'type') words.shift();
+  if (words.length === 0) return '';
+  const as = words.findIndex((word, index) => index > 0 && index < words.length - 1 && word[0] === 'as');
+  const last = words[as === -1 ? words.length - 1 : as - 1];
+  return binding.slice(words[0].index, last.index + last[0].length);
 }
 
 function fixContent (text) {
