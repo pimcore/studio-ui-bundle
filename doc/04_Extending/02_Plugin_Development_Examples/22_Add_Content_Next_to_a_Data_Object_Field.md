@@ -46,7 +46,7 @@ Each registered component receives the `DataObjectFieldAddonProps` of the field 
 | `objectId` | ID of the object being edited. |
 | `className` | Name of the object's class. |
 | `fieldDefinition` | Definition of the field, e.g. `name`, `title` and `fieldtype`. |
-| `fieldPath` | Path from the object down to the field, e.g. `['attributes', 'Dimensions', 'height']` for a field of an object brick, `['localizedfields', 'name']` for a localized field or `['features', 0, 'Color', 'hue']` for a field of a field collection item. |
+| `fieldPath` | Path from the object down to the field, e.g. `['attributes', 'Dimensions', 'height']` for a field of an object brick, `['localizedfields', 'name']` for a localized field `['features', 0, 'Color', 'hue']` for a field of the first field collection item or `['contentBlock', 1, 'headline']` for a field of the second block item. |
 | `locale` | Locale of the value, set for a field inside localized fields. |
 
 The same component is rendered for every field, so it decides from these props whether it applies and

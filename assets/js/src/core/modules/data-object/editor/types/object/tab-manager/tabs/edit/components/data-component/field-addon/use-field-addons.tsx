@@ -38,7 +38,8 @@ export interface DataObjectFieldAddonProps {
   /**
    * Path from the object down to the field, e.g. `['attributes', 'Dimensions', 'height']` for a
    * field of an object brick, `['localizedfields', 'name']` for a localized field (the locale is
-   * in `locale`) or `['features', 0, 'Color', 'hue']` for a field of a field collection item.
+   * in `locale`), `['features', 0, 'Color', 'hue']` for a field of the first field collection item or
+   * `['contentBlock', 1, 'headline']` for a field of the second block item.
    */
   fieldPath: Array<string | number>
   /** Locale of the value, set for a field inside localized fields */

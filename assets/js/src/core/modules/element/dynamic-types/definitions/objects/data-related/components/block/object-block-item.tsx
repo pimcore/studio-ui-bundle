@@ -58,6 +58,7 @@ export const ObjectBlockItem = (props: ObjectBlockItemProps): React.JSX.Element 
                   return (
                     <CombinedFieldNameProvider
                       combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }
+                      fieldPathParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), field] }
                       key={ index }
                     >
                       <Form.Group

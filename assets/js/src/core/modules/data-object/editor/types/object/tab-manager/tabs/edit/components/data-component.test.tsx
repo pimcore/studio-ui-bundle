@@ -15,6 +15,7 @@ import { DataComponent, type DataComponentProps } from './data-component'
 let mockFormList: { getComputedFieldName: () => Array<string | number> } | undefined
 let mockGroup: { name: string } | undefined
 let mockLocalizedFields: { locales: string[] } | undefined
+let mockCombinedFieldName: { combinedFieldNameParent: string[], fieldPathParent: Array<string | number> } | undefined
 
 jest.mock('@Pimcore/components/form/form', () => ({ Form: { useFormInstance: () => ({}) } }))
 jest.mock('@Pimcore/app/depency-injection', () => ({
@@ -42,14 +43,16 @@ jest.mock('@Pimcore/components/form/localisation/localized-fields/provider/local
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width', () => ({
   useFieldWidth: () => ({})
 }))
-jest.mock('../providers/combined-field-name-provider/use-combined-field-name', () => ({ useCombinedFieldName: () => undefined }))
+jest.mock('../providers/combined-field-name-provider/use-combined-field-name', () => ({ useCombinedFieldName: () => mockCombinedFieldName }))
 jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-optional', () => ({
   useKeyedListOptional: () => undefined
 }))
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component/form-item', () => ({
   __esModule: true,
-  default: ({ _props, formFieldName, technicalName }: { _props: Record<string, unknown>, formFieldName: unknown[], technicalName: string }) => (
+  default: ({ _props, formFieldName, technicalName, fieldPath }: { _props: Record<string, unknown>, formFieldName: unknown[], technicalName: string, fieldPath?: unknown[] }) => (
     <span
+      data-combined-field-name={ String(_props.combinedFieldName) }
+      data-field-path={ JSON.stringify(fieldPath) }
       data-form-field-name={ JSON.stringify(formFieldName) }
       data-passes-technical-name-on={ String('technicalName' in _props) }
       data-technical-name={ technicalName }
@@ -76,6 +79,21 @@ describe('DataComponent', () => {
     mockFormList = undefined
     mockGroup = undefined
     mockLocalizedFields = undefined
+    mockCombinedFieldName = undefined
+  })
+
+  // the combined field name addresses the field definition; only the field path tells the
+  // items of a field collection (or block) apart
+  it('hands the item index to the field addons, but not into the combined field name', () => {
+    mockCombinedFieldName = { combinedFieldNameParent: ['features', 'Color'], fieldPathParent: ['features', 2, 'Color'] }
+    const item = renderField({ name: 'hue' })
+
+    expect(item).toHaveAttribute('data-field-path', JSON.stringify(['features', 2, 'Color', 'hue']))
+    expect(item).toHaveAttribute('data-combined-field-name', 'features.Color.hue')
+  })
+
+  it('uses the field name as path of a top level field', () => {
+    expect(renderField({})).toHaveAttribute('data-field-path', JSON.stringify(['description']))
   })
 
   it('names a field in a block item by its plain key, not by its form path', () => {
