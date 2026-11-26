@@ -34,6 +34,9 @@ error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la 
 error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
 error.error_login_token_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent générer un lien de connexion pour un utilisateur administrateur
 error.error_login_token_no_user_password: "Impossible de générer un lien de connexion pour cet utilisateur car aucun mot de passe n'est défini"
+error.error_invitation_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent envoyer une invitation à un utilisateur administrateur
+error.error_invitation_no_email: Impossible d'envoyer une invitation car l'utilisateur n'a pas d'adresse e-mail valide
+error.error_invitation_user_inactive: Impossible d'envoyer une invitation à un utilisateur inactif
 error.syntax_error: Erreur de syntaxe
 validation.mandatory: "{{field}} est obligatoire"
 validation.regex_mismatch: "{{field}} ne correspond pas au modèle requis {{regex}}"
@@ -1733,6 +1736,11 @@ user-management.add-folder: Nouveau dossier
 user-management.add-folder.label: Entrez le nom du nouveau dossier
 user-management.add-user: Nouvel utilisateur
 user-management.add-user.label: Entrez le nom du nouvel utilisateur
+user-management.send-invitation: Envoyer le lien d'invitation
+user-management.send-invitation.success: "Invitation envoyée à {{email}}"
+user-management.send-invitation.no-email: L'utilisateur n'a pas d'adresse e-mail
+user-management.send-invitation.inactive: L'utilisateur est inactif
+user-management.send-invitation.unsaved-changes: Enregistrez l'utilisateur avant d'envoyer une invitation
 user-management.last-login: Dernière connexion
 user-management.search.id: ID
 roles.tree.all: Tous les rôles

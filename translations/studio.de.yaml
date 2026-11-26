@@ -34,6 +34,9 @@ error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederher
 error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
 error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
 error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
+error.error_invitation_as_admin_non_admin_user: Nur Admin-Benutzer können eine Einladung an einen Admin-Benutzer senden
+error.error_invitation_no_email: Eine Einladung kann nicht gesendet werden, da der Benutzer keine gültige E-Mail-Adresse hat
+error.error_invitation_user_inactive: An einen inaktiven Benutzer kann keine Einladung gesendet werden
 error.syntax_error: Syntaxfehler
 validation.mandatory: "{{field}} ist ein Pflichtfeld"
 validation.regex_mismatch: "{{field}} entspricht nicht dem erforderlichen Muster {{regex}}"
@@ -1733,6 +1736,11 @@ user-management.add-folder: Neuer Ordner
 user-management.add-folder.label: Geben Sie den Namen des neuen Ordners ein
 user-management.add-user: Neuer Benutzer
 user-management.add-user.label: Geben Sie den Namen des neuen Benutzers ein
+user-management.send-invitation: Einladungslink senden
+user-management.send-invitation.success: "Einladung an {{email}} gesendet"
+user-management.send-invitation.no-email: Der Benutzer hat keine E-Mail-Adresse
+user-management.send-invitation.inactive: Der Benutzer ist inaktiv
+user-management.send-invitation.unsaved-changes: Speichern Sie den Benutzer, bevor Sie eine Einladung senden
 user-management.last-login: Letzte Anmeldung
 user-management.search.id: ID
 roles.tree.all: Alle Rollen

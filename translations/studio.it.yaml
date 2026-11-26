@@ -34,6 +34,9 @@ error.error_recycle_bin_restore: "Impossibile ripristinare l'elemento dal cestin
 error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elemento dal cestino, l'elemento padre è mancante"
 error.error_login_token_as_admin_non_admin_user: Solo gli utenti amministratori possono generare un link di accesso per un utente amministratore
 error.error_login_token_no_user_password: "Impossibile generare un link di accesso per questo utente perché non è impostata alcuna password"
+error.error_invitation_as_admin_non_admin_user: Solo gli utenti amministratori possono inviare un invito a un utente amministratore
+error.error_invitation_no_email: Impossibile inviare un invito perché l'utente non ha un indirizzo email valido
+error.error_invitation_user_inactive: Impossibile inviare un invito a un utente inattivo
 error.syntax_error: Errore di sintassi
 validation.mandatory: "{{field}} è obbligatorio"
 validation.regex_mismatch: "{{field}} non corrisponde al modello richiesto {{regex}}"
@@ -1733,6 +1736,11 @@ user-management.add-folder: Nuova cartella
 user-management.add-folder.label: Inserire il nome della nuova cartella
 user-management.add-user: Nuovo utente
 user-management.add-user.label: Inserire il nome del nuovo utente
+user-management.send-invitation: Invia link di invito
+user-management.send-invitation.success: "Invito inviato a {{email}}"
+user-management.send-invitation.no-email: L'utente non ha un indirizzo email
+user-management.send-invitation.inactive: L'utente è inattivo
+user-management.send-invitation.unsaved-changes: Salvare l'utente prima di inviare un invito
 user-management.last-login: Ultimo accesso
 user-management.search.id: ID
 roles.tree.all: Tutti i ruoli

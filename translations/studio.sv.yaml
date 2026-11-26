@@ -34,6 +34,9 @@ error.error_recycle_bin_restore: Kan inte återställa elementet från pappersko
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
 error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
+error.error_invitation_as_admin_non_admin_user: Endast admin-användare kan skicka en inbjudan till en admin-användare
+error.error_invitation_no_email: En inbjudan kan inte skickas eftersom användaren saknar en giltig e-postadress
+error.error_invitation_user_inactive: En inbjudan kan inte skickas till en inaktiv användare
 error.syntax_error: Syntaxfel
 validation.mandatory: "{{field}} är obligatoriskt"
 validation.regex_mismatch: "{{field}} matchar inte det obligatoriska mönstret {{regex}}"
@@ -1733,6 +1736,11 @@ user-management.add-folder: Ny mapp
 user-management.add-folder.label: Ange namnet på den nya mappen
 user-management.add-user: Ny användare
 user-management.add-user.label: Ange namnet på den nya användaren
+user-management.send-invitation: Skicka inbjudningslänk
+user-management.send-invitation.success: "Inbjudan skickad till {{email}}"
+user-management.send-invitation.no-email: Användaren har ingen e-postadress
+user-management.send-invitation.inactive: Användaren är inaktiv
+user-management.send-invitation.unsaved-changes: Spara användaren innan du skickar en inbjudan
 user-management.last-login: Senaste inloggning
 user-management.search.id: ID
 roles.tree.all: Alla roller
