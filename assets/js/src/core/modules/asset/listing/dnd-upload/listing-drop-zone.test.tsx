@@ -107,4 +107,29 @@ describe('ListingDropZone', () => {
     expect(screen.getByTestId('listing-drop-area')).toBeInTheDocument()
     expect(mockZone).toHaveBeenCalledWith(expect.objectContaining({ targetFolderId: 42, targetPath: '/New' }))
   })
+
+  it('AC1: draws the overlay inside the drop zone, next to the content', () => {
+    renderZone()
+    fireEvent.dragEnter(screen.getByTestId('listing-drop-area'), { dataTransfer: { types: ['Files'] } })
+    const overlay = screen.getByTestId('listing-drop-overlay')
+    expect(screen.getByTestId('zone')).toContainElement(overlay)
+    expect(overlay.parentElement).toBe(screen.getByTestId('grid').parentElement)
+  })
+
+  it('AC3: shows the overlay only while files are dragged, and removes it on drop', () => {
+    renderZone()
+    const area = screen.getByTestId('listing-drop-area')
+    fireEvent.dragEnter(area, { dataTransfer: { types: ['text/plain'] } })
+    expect(screen.queryByTestId('listing-drop-overlay')).not.toBeInTheDocument()
+    fireEvent.dragEnter(area, { dataTransfer: { types: ['Files'] } })
+    expect(screen.getByTestId('listing-drop-overlay')).toBeInTheDocument()
+    fireEvent.drop(area, { dataTransfer: { types: ['Files'] } })
+    expect(screen.queryByTestId('listing-drop-overlay')).not.toBeInTheDocument()
+  })
+
+  it('AC2: the whole content is inside the zone that uploads into the folder', () => {
+    renderZone()
+    expect(screen.getByTestId('zone')).toContainElement(screen.getByTestId('grid'))
+    expect(mockZone).toHaveBeenCalledWith(expect.objectContaining({ targetFolderId: 42 }))
+  })
 })

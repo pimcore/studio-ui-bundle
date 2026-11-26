@@ -69,7 +69,15 @@ export const ListingDropZone = ({ children, onUploaded }: ListingDropZoneProps):
         targetFolderId={ id }
         targetPath={ data.fullPath ?? '' }
       >
-        {children}
+        <div className='listing-drop-inner'>
+          {fileDrag && (
+            <div
+              className='listing-drop-overlay'
+              data-testid="listing-drop-overlay"
+            />
+          )}
+          {children}
+        </div>
       </DndUploadZone>
     </div>
   )
