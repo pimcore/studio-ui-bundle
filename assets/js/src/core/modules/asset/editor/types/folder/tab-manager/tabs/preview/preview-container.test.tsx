@@ -69,7 +69,7 @@ describe('Folder PreviewContainer drop upload', () => {
 
   it('AC4: adds no drag handling of its own, so tree-asset drags behave as before', () => {
     render(<PreviewContainer />)
-    const keys = Object.keys(mockZone.mock.calls[0][0]).sort()
+    const keys = Object.keys(mockZone.mock.calls[0][0] as Record<string, unknown>).sort()
     expect(keys).toEqual(['children', 'onUploaded'])
   })
 })

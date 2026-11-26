@@ -65,8 +65,8 @@ export const ListingDropZone = ({ children, onUploaded }: ListingDropZoneProps):
       onDropCapture={ reset }
     >
       <DndUploadZone
-        targetFolderId={ id }
         onUploaded={ onUploaded }
+        targetFolderId={ id }
         targetPath={ data.fullPath ?? '' }
       >
         {children}
