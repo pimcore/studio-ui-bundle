@@ -22,7 +22,7 @@ import {
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import { isEmpty, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
@@ -48,14 +48,16 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
   const dispatch = useAppDispatch()
   const { openDataObject } = useDataObjectHelper()
   const { isTreeActionAllowed } = useTreePermission()
-  const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
+  const { getByName } = useClassDefinitions()
 
+  // A variant always has the class of its parent. Like the classic admin UI, creating it depends on the
+  // create permission on the parent only, not on the classes the user is allowed to create objects of.
   const findClassDefinitionByName = (name?: string): ClassDefinitionListItem | undefined => {
     if (isNil(name)) {
       return undefined
     }
 
-    return getClassDefinitionsForCurrentUser().find((classDefinition) => classDefinition.name === name)
+    return getByName(name)
   }
 
   const createDataObjectVariantFromListItem = (
@@ -129,7 +131,7 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
   const isAddObjectHidden = (node: TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.AddVariant) ||
       !checkElementPermission(node.permissions, 'create') ||
-      isEmpty(getClassDefinitionsForCurrentUser())
+      isNil(findClassDefinitionByName(node.metaData.dataObject.className as string | undefined))
   }
 
   const addVariantTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
@@ -139,10 +141,13 @@ export const useAddVariant = (): UseAddVariantHookReturn => {
       icon: <Icon value={ 'data-object-variant' } />,
       hidden: isAddObjectHidden(node),
       onClick: () => {
-        createDataObjectVariantFromListItem(
-          findClassDefinitionByName(node.metaData.dataObject.className as string)!,
-          parseInt(node.id)
-        )
+        const classDefinition = findClassDefinitionByName(node.metaData.dataObject.className as string | undefined)
+
+        if (isNil(classDefinition)) {
+          return
+        }
+
+        createDataObjectVariantFromListItem(classDefinition, Number.parseInt(node.id))
       }
     }
   }
