@@ -9,9 +9,9 @@
  */
 
 import React from 'react'
-import { renderHook } from '@testing-library/react'
+import { fireEvent, render, renderHook, screen } from '@testing-library/react'
 import { ClassificationStoreFieldPickerProvider } from './classification-store-field-picker-provider'
-import { useClassificationStoreFieldActions } from './classification-store-value-control'
+import { ClassificationStoreValueControl, useClassificationStoreFieldActions } from './classification-store-value-control'
 
 const mockOpenModal = jest.fn()
 const mockUpdate = jest.fn()
@@ -35,13 +35,21 @@ jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-
   useKeyedList: () => ({ operations: { update: mockUpdate } })
 }))
 
+// Form values the control watches, keyed by the last segment of the watched name path.
+const mockWatchedValues: Record<string, unknown> = {}
+
 // Presentational imports of the value control pull in antd-style's ESM build and the app shell,
-// which jest cannot load; only the hook is exercised here.
-jest.mock('@Pimcore/components/box/box', () => ({ Box: () => null }))
-jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: () => null }))
-jest.mock('@Pimcore/components/form/form', () => ({ Form: { useWatch: () => undefined } }))
-jest.mock('@Pimcore/components/icon-button/icon-button', () => ({ IconButton: () => null }))
-jest.mock('@Pimcore/components/text/text', () => ({ Text: () => null }))
+// which jest cannot load; stub them down to plain elements so the control's output can be asserted.
+jest.mock('@Pimcore/components/box/box', () => ({ Box: ({ children }: { children: React.ReactNode }) => children }))
+jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: ({ children }: { children: React.ReactNode }) => children }))
+jest.mock('@Pimcore/components/form/form', () => ({
+  Form: { useWatch: (path: Array<string | number>) => mockWatchedValues[String(path[path.length - 1])] }
+}))
+jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
+  IconButton: ({ onClick }: { onClick: () => void }) => <button onClick={ onClick }>edit</button>
+}))
+jest.mock('@Pimcore/components/text/text', () => ({ Text: ({ children }: { children: React.ReactNode }) => <span>{ children }</span> }))
+jest.mock('antd', () => ({ Tag: ({ children }: { children: React.ReactNode }) => <span>{ children }</span> }))
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -49,6 +57,10 @@ jest.mock('react-i18next', () => ({
 
 const resolveField = (fieldKey: string): { storeId: number } | undefined =>
   fieldKey === 'cs' ? { storeId: 1 } : undefined
+
+const PickerProvider = ({ children }: { children: React.ReactNode }): React.JSX.Element => (
+  <ClassificationStoreFieldPickerProvider defaultClassId="CAR">{children}</ClassificationStoreFieldPickerProvider>
+)
 
 describe('useClassificationStoreFieldActions', () => {
   beforeEach(() => {
@@ -70,16 +82,51 @@ describe('useClassificationStoreFieldActions', () => {
   })
 
   it('opens the picker for a classification store field when the provider is present', () => {
-    const wrapper = ({ children }: { children: React.ReactNode }): React.JSX.Element => (
-      <ClassificationStoreFieldPickerProvider defaultClassId="CAR">{children}</ClassificationStoreFieldPickerProvider>
-    )
-
-    const { result } = renderHook(() => useClassificationStoreFieldActions({ resolveField }), { wrapper })
+    const { result } = renderHook(() => useClassificationStoreFieldActions({ resolveField }), { wrapper: PickerProvider })
 
     expect(result.current.isPickerAvailable).toBe(true)
 
     result.current.openFor('cs')
 
     expect(mockOpenModal).toHaveBeenCalledWith(expect.objectContaining({ storeId: 1, classId: 'CAR', fieldName: 'cs' }))
+  })
+})
+
+describe('ClassificationStoreValueControl', () => {
+  beforeEach(() => {
+    mockOpenModal.mockReset()
+    for (const key of Object.keys(mockWatchedValues)) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete mockWatchedValues[key]
+    }
+    mockWatchedValues.field = 'cs'
+  })
+
+  // pimcore/platform-version#830: without a provider there is nothing the edit affordance could open.
+  it('renders nothing for a classification store field when no provider is mounted', () => {
+    const { container } = render(<ClassificationStoreValueControl resolveField={ resolveField } />)
+
+    expect(container).toBeEmptyDOMElement()
+  })
+
+  it('renders the edit affordance for a classification store field and opens the picker when the provider is present', () => {
+    mockWatchedValues.keyId = 7
+    mockWatchedValues.keyName = 'weight'
+
+    render(<ClassificationStoreValueControl resolveField={ resolveField } />, { wrapper: PickerProvider })
+
+    expect(screen.getByText('weight')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'edit' }))
+
+    expect(mockOpenModal).toHaveBeenCalledWith(expect.objectContaining({ storeId: 1, classId: 'CAR', fieldName: 'cs' }))
+  })
+
+  it('renders nothing for a field that is not a classification store field', () => {
+    mockWatchedValues.field = 'name'
+
+    const { container } = render(<ClassificationStoreValueControl resolveField={ resolveField } />, { wrapper: PickerProvider })
+
+    expect(container).toBeEmptyDOMElement()
   })
 })
