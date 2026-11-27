@@ -43,6 +43,8 @@ export interface ManyToOneRelationValue {
   fullPath?: string
   subtype?: string
   isPublished?: boolean | null
+  // optional: values set client-side carry no flag and are treated as viewable
+  hasViewAccess?: boolean
   textInput?: false
 }
 

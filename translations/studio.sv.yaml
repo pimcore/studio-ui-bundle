@@ -440,6 +440,7 @@ version.label: Versioner
 version.versions: Versioner
 version.version: Version
 version.publish: Publicera
+version.deleted-relation: 'Borttaget element ({{type}} ID {{id}})'
 version.published: Publicerad
 version.autosaved: Automatiskt sparad
 version.schedule-for: Schemalagd för

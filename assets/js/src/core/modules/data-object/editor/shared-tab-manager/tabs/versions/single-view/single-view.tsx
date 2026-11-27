@@ -10,6 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { isEmpty, isUndefined } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@sdk/app'
 import {
   api,
@@ -45,6 +46,8 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
+  // the formatted data contains translated labels, format it again when the language changes
+  const { i18n } = useTranslation()
 
   useEffect(() => {
     if (versionId.id !== vId.id) {
@@ -78,7 +81,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
         }
       })
       .catch(err => { console.log(err) })
-  }, [vId, layoutData])
+  }, [vId, layoutData, i18n.language])
 
   if (isEmpty(versionData)) {
     return (
