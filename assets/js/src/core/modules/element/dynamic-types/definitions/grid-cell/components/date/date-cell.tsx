@@ -17,6 +17,7 @@ import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
 import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { pickerValueToUnix } from '@Pimcore/utils/date-time'
 
 export interface DateCellConfig {
   showTime: boolean
@@ -64,7 +65,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
       <DatePicker
         needConfirm
         onChange={ (date: Dayjs) => {
-          saveValue(date === null ? 0 : date.unix())
+          saveValue(pickerValueToUnix(date))
         } }
         onKeyDown={ onKeyDown }
         onOk={ disableEditMode }

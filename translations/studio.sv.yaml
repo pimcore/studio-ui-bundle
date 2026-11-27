@@ -343,6 +343,8 @@ aria.notification.action-list.toggle-collapse: Växla lista med åtgärder
 aria.notification.action-list.cancel-all: Avbryt alla pågående åtgärder
 aria.notification.action-list.cancel: Avbryt åtgärd
 aria.stack-list.drag-handle: Dra för att sortera om
+aria.horizontal-scroll.scroll-left: Rulla åt vänster
+aria.horizontal-scroll.scroll-right: Rulla åt höger
 asset.image.editor.zoom.reset: Återställ
 aria.asset.image.editor.zoom.reset: Återställ zoom
 aria.asset.image.editor.zoom.zoom-in: Zooma in

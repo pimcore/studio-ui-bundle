@@ -71,7 +71,7 @@ export const useSaveSchedules = (elementType: ElementType, id: number, showNotif
           id: schedule.id > 0 ? schedule.id : null,
           date: schedule.date,
           action: schedule.action,
-          version: schedule.version,
+          version: schedule.version ?? null,
           active: schedule.active
         }))
       }

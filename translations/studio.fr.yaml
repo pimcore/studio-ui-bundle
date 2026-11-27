@@ -343,6 +343,8 @@ aria.notification.action-list.toggle-collapse: Basculer la liste des actions
 aria.notification.action-list.cancel-all: Annuler toutes les actions en cours
 aria.notification.action-list.cancel: Annuler l'action
 aria.stack-list.drag-handle: Glisser pour réorganiser
+aria.horizontal-scroll.scroll-left: Faire défiler vers la gauche
+aria.horizontal-scroll.scroll-right: Faire défiler vers la droite
 asset.image.editor.zoom.reset: Réinitialiser
 aria.asset.image.editor.zoom.reset: Réinitialiser le zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom avant

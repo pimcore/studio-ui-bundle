@@ -12,6 +12,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useStyles } from './horizontal-scroll.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 export interface HorizontalScrollProps {
   children: React.ReactNode
@@ -28,6 +29,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
   const [scrollRequired, setScrollRequired] = useState(false)
   const [hideElement, setHideElement] = useState(false)
   const { styles } = useStyles({ scrollWidth, hideElement })
+  const { t } = useTranslation()
 
   const updateScrollState = (): void => {
     if (scrollContainerRef.current !== null) {
@@ -113,6 +115,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
     >
       {scrollRequired && (
         <IconButton
+          aria-label={ t('aria.horizontal-scroll.scroll-left') }
           disabled={ isAtStart }
           icon={ {
             value: 'chevron-left',
@@ -138,6 +141,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
       {
                 scrollRequired && (
                 <IconButton
+                  aria-label={ t('aria.horizontal-scroll.scroll-right') }
                   disabled={ isAtEnd }
                   icon={ {
                     value: 'chevron-right',
