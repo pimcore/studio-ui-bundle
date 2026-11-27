@@ -24,6 +24,7 @@ import { IconButton, Split } from '@sdk/components'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { SizeTypes } from '@Pimcore/components/preview-card/preview-card'
 import { Text } from '@Pimcore/components/text/text'
+import { ListingDropZone } from '@Pimcore/modules/asset/listing/dnd-upload/listing-drop-zone'
 import { useFolderPreviewImageSize } from './hooks/use-folder-preview-image-size'
 
 const PreviewContainer = (): React.JSX.Element => {
@@ -87,27 +88,29 @@ const PreviewContainer = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content
-        loading={ isFetching }
-        padded
-      >
-        {data?.items !== undefined && data.items.length > 0 && (
-          <Flex
-            gap={ 'extra-small' }
-            wrap
-          >
-            {data.items.map((asset, index) => (
-              <PreviewCardContainer
-                asset={ asset }
-                key={ `${asset.id}-${index}` }
-                size={ cardSize }
-              />
-            ))}
-          </Flex>
-        )}
-      </Content>
+      <ListingDropZone onUploaded={ () => { void refetch() } }>
+        <Content
+          loading={ isFetching }
+          padded
+        >
+          {data?.items !== undefined && data.items.length > 0 && (
+            <Flex
+              gap={ 'extra-small' }
+              wrap
+            >
+              {data.items.map((asset, index) => (
+                <PreviewCardContainer
+                  asset={ asset }
+                  key={ `${asset.id}-${index}` }
+                  size={ cardSize }
+                />
+              ))}
+            </Flex>
+          )}
+        </Content>
+      </ListingDropZone>
     </ContentLayout >
-  ), [currentPage, pageSize, data, isFetching, cardSize, setCardSize])
+  ), [currentPage, pageSize, data, isFetching, cardSize, setCardSize, refetch])
 }
 
 export { PreviewContainer }

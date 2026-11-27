@@ -12,6 +12,7 @@ import React from 'react'
 import { isString, isUndefined } from 'lodash'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
 import { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler/index'
+import TrackedError from '@Pimcore/modules/app/error-handler/classes/tracked-error'
 import { ApiErrorViewUI } from '@Pimcore/modules/app/error-handler/components/api-error-view-ui'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 import { store } from '@Pimcore/app/store'
@@ -76,7 +77,7 @@ const trackError = (data: IErrorContentProvider, handler?: ErrorHandler): never 
   }
 
   if (isGeneralError(data)) {
-    throw new Error(errorContent as string)
+    throw new TrackedError(errorContent as string)
   }
 }
 

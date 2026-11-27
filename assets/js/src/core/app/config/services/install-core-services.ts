@@ -14,6 +14,7 @@ import { type Container } from 'inversify'
 import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
+import { DeepLinkRegistry } from '@Pimcore/modules/app/deep-link-registry/deep-link-registry'
 import { DebouncedFormRegistry } from '@Pimcore/components/form/services/debounced-form-registry'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
@@ -405,6 +406,9 @@ export function installCoreServices (container: Container): void {
 
   // Context menu registry
   container.bind(serviceIds['App/ContextMenuRegistry/ContextMenuRegistry']).to(ContextMenuRegistry).inSingletonScope()
+
+  // Deep link registry
+  container.bind(serviceIds['App/DeepLinkRegistry/DeepLinkRegistry']).to(DeepLinkRegistry).inSingletonScope()
 
   // Main nav
   container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()

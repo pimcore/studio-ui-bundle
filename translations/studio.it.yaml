@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Tutti gli oggetti dati, gli asset e i documenti s
 index-sync.confirmation.ok: Sincronizza
 index-sync.job.title: Sincronizzazione dell'indice di ricerca in corso
 index-sync.start-failed: Impossibile avviare la sincronizzazione dell'indice di ricerca
+deep-link.unknown-link: Nessun handler è registrato per questo collegamento
+deep-link.open-failed: Si è verificato un errore durante l'apertura del collegamento
 dont-ask-again: Non chiedere più
 widget.missing-context.title: Contesto mancante
 widget.missing-context.description: Nessun elemento correlato trovato
@@ -32,6 +34,9 @@ error.error_recycle_bin_restore: "Impossibile ripristinare l'elemento dal cestin
 error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elemento dal cestino, l'elemento padre è mancante"
 error.error_login_token_as_admin_non_admin_user: Solo gli utenti amministratori possono generare un link di accesso per un utente amministratore
 error.error_login_token_no_user_password: "Impossibile generare un link di accesso per questo utente perché non è impostata alcuna password"
+error.error_invitation_as_admin_non_admin_user: Solo gli utenti amministratori possono inviare un invito a un utente amministratore
+error.error_invitation_no_email: Impossibile inviare un invito perché l'utente non ha un indirizzo email valido
+error.error_invitation_user_inactive: Impossibile inviare un invito a un utente inattivo
 error.syntax_error: Errore di sintassi
 validation.mandatory: "{{field}} è obbligatorio"
 validation.regex_mismatch: "{{field}} non corrisponde al modello richiesto {{regex}}"
@@ -1731,6 +1736,11 @@ user-management.add-folder: Nuova cartella
 user-management.add-folder.label: Inserire il nome della nuova cartella
 user-management.add-user: Nuovo utente
 user-management.add-user.label: Inserire il nome del nuovo utente
+user-management.send-invitation: Invia link di invito
+user-management.send-invitation.success: "Invito inviato a {{email}}"
+user-management.send-invitation.no-email: L'utente non ha un indirizzo email
+user-management.send-invitation.inactive: L'utente è inattivo
+user-management.send-invitation.unsaved-changes: Salvare l'utente prima di inviare un invito
 user-management.last-login: Ultimo accesso
 user-management.search.id: ID
 roles.tree.all: Tutti i ruoli
@@ -3365,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Consenti valori sen
 classification-store.multi-value.default-variant-label: "Etichetta del valore predefinito"
 classification-store.multi-value.no-writable-slot: "Questa chiave non dichiara alcuna variante e non consente valori senza variante, quindi non c'è dove inserire un valore. Dichiara una variante o consenti valori senza variante."
 classification-store.multi-value.unreadable-entry: "Questo valore non è un numero che il campo può mostrare; resta così com'è finché non viene cancellato."
+focus-view.open-in-studio: "Apri in Pimcore Studio"
+focus-view.nothing-to-show: "Niente da mostrare qui. Apri di nuovo il link o continua in Pimcore Studio."

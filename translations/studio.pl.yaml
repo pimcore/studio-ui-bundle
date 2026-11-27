@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Wszystkie obiekty danych, zasoby i dokumenty są 
 index-sync.confirmation.ok: Synchronizuj
 index-sync.job.title: Synchronizowanie indeksu wyszukiwania
 index-sync.start-failed: Nie można rozpocząć synchronizacji indeksu wyszukiwania
+deep-link.unknown-link: Żaden handler nie jest zarejestrowany dla tego linku
+deep-link.open-failed: Podczas otwierania linku wystąpił błąd
 dont-ask-again: Nie pytaj ponownie
 widget.missing-context.title: Brakujący kontekst
 widget.missing-context.description: Nie znaleziono powiązanego elementu
@@ -32,6 +34,9 @@ error.error_recycle_bin_restore: Nie można przywrócić elementu z kosza
 error.error_recycle_bin_restore_missing_parent: Nie można przywrócić elementu z kosza, brak elementu nadrzędnego
 error.error_login_token_as_admin_non_admin_user: Tylko administratorzy mogą wygenerować link logowania dla użytkownika administracyjnego
 error.error_login_token_no_user_password: Nie można wygenerować linku logowania dla tego użytkownika, ponieważ nie ustawiono hasła
+error.error_invitation_as_admin_non_admin_user: Tylko administratorzy mogą wysłać zaproszenie do użytkownika administracyjnego
+error.error_invitation_no_email: Nie można wysłać zaproszenia, ponieważ użytkownik nie ma prawidłowego adresu e-mail
+error.error_invitation_user_inactive: Nie można wysłać zaproszenia do nieaktywnego użytkownika
 error.syntax_error: Błąd składni
 validation.mandatory: "{{field}} jest wymagane"
 validation.regex_mismatch: "{{field}} nie pasuje do wymaganego wzorca {{regex}}"
@@ -1731,6 +1736,11 @@ user-management.add-folder: Nowy folder
 user-management.add-folder.label: Wprowadź nazwę nowego folderu
 user-management.add-user: Nowy użytkownik
 user-management.add-user.label: Wprowadź nazwę nowego użytkownika
+user-management.send-invitation: Wyślij link z zaproszeniem
+user-management.send-invitation.success: "Wysłano zaproszenie do {{email}}"
+user-management.send-invitation.no-email: Użytkownik nie ma adresu e-mail
+user-management.send-invitation.inactive: Użytkownik jest nieaktywny
+user-management.send-invitation.unsaved-changes: Zapisz użytkownika przed wysłaniem zaproszenia
 user-management.last-login: Ostatnie logowanie
 user-management.search.id: ID
 roles.tree.all: Wszystkie role
@@ -3365,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Zezwalaj na wartoś
 classification-store.multi-value.default-variant-label: "Etykieta wartości domyślnej"
 classification-store.multi-value.no-writable-slot: "Ten klucz nie deklaruje żadnego wariantu i nie zezwala na wartości bez wariantu, więc nie ma miejsca na wpisanie wartości. Zadeklaruj wariant lub zezwól na wartości bez wariantu."
 classification-store.multi-value.unreadable-entry: "Ta wartość nie jest liczbą, którą pole może wyświetlić; pozostaje zapisana bez zmian, dopóki nie zostanie wyczyszczona."
+focus-view.open-in-studio: "Otwórz w Pimcore Studio"
+focus-view.nothing-to-show: "Nie ma tu nic do wyświetlenia. Otwórz link ponownie lub kontynuuj w Pimcore Studio."

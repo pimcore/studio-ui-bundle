@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Alle gegevensobjecten, assets en documenten staan
 index-sync.confirmation.ok: Synchroniseren
 index-sync.job.title: Zoekindex wordt gesynchroniseerd
 index-sync.start-failed: Kon de zoekindexsynchronisatie niet starten
+deep-link.unknown-link: Er is geen handler geregistreerd voor deze link
+deep-link.open-failed: Er is een fout opgetreden bij het openen van de link
 dont-ask-again: Niet meer vragen
 widget.missing-context.title: Ontbrekende context
 widget.missing-context.description: Geen gerelateerd element gevonden
@@ -32,6 +34,9 @@ error.error_recycle_bin_restore: Kan element niet herstellen uit de prullenbak
 error.error_recycle_bin_restore_missing_parent: Kan element niet herstellen uit de prullenbak, bovenliggend element ontbreekt
 error.error_login_token_as_admin_non_admin_user: Alleen administratieve gebruikers kunnen een inloglink voor een administratieve gebruiker genereren
 error.error_login_token_no_user_password: Er kan geen inloglink voor deze gebruiker worden gegenereerd omdat er geen wachtwoord is ingesteld
+error.error_invitation_as_admin_non_admin_user: Alleen administratieve gebruikers kunnen een uitnodiging naar een administratieve gebruiker sturen
+error.error_invitation_no_email: Er kan geen uitnodiging worden verstuurd omdat de gebruiker geen geldig e-mailadres heeft
+error.error_invitation_user_inactive: Er kan geen uitnodiging naar een inactieve gebruiker worden verstuurd
 error.syntax_error: Syntaxisfout
 validation.mandatory: "{{field}} is verplicht"
 validation.regex_mismatch: "{{field}} komt niet overeen met het vereiste patroon {{regex}}"
@@ -1731,6 +1736,11 @@ user-management.add-folder: Nieuwe map
 user-management.add-folder.label: Voer de naam in van de nieuwe map
 user-management.add-user: Nieuwe gebruiker
 user-management.add-user.label: Voer de naam in van de nieuwe gebruiker
+user-management.send-invitation: Uitnodigingslink versturen
+user-management.send-invitation.success: "Uitnodiging verstuurd naar {{email}}"
+user-management.send-invitation.no-email: De gebruiker heeft geen e-mailadres
+user-management.send-invitation.inactive: De gebruiker is inactief
+user-management.send-invitation.unsaved-changes: Sla de gebruiker op voordat je een uitnodiging verstuurt
 user-management.last-login: Laatste aanmelding
 user-management.search.id: ID
 roles.tree.all: Alle rollen
@@ -3365,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Waarden zonder vari
 classification-store.multi-value.default-variant-label: "Label van de standaardwaarde"
 classification-store.multi-value.no-writable-slot: "Deze sleutel declareert geen variant en staat geen waarden zonder variant toe, dus er is geen plek om een waarde in te voeren. Declareer een variant of sta waarden zonder variant toe."
 classification-store.multi-value.unreadable-entry: "Deze waarde is geen getal dat het invoerveld kan tonen; ze blijft ongewijzigd opgeslagen tot ze wordt gewist."
+focus-view.open-in-studio: "Openen in Pimcore Studio"
+focus-view.nothing-to-show: "Hier is niets te tonen. Open de link opnieuw of ga verder in Pimcore Studio."

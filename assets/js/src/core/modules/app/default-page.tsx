@@ -17,6 +17,8 @@ import { useWelcomeScreen } from './welcome-screen/hooks/use-welcome-screen'
 import { SlotRenderer } from './component-registry/slot-renderer'
 import { SessionPinger } from './app-loader/loader/session/session-pinger'
 import { WidgetRestorer } from '../widget-manager/components/widget-restorer'
+import { isFocusMode } from './focus-mode/focus-mode'
+import { FocusLayoutView } from './focus-mode/focus-layout-view'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
@@ -34,7 +36,7 @@ export const DefaultPage = (): React.JSX.Element => {
       <WidgetRestorer>
         <ClassDefinitionsProvider showLoadingIndicator={ false }>
           <ElementSelectorProvider>
-            <BaseLayoutView />
+            {isFocusMode() ? <FocusLayoutView /> : <BaseLayoutView />}
           </ElementSelectorProvider>
         </ClassDefinitionsProvider>
 

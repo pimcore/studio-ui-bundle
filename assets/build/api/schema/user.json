@@ -2180,6 +2180,49 @@
         ]
       }
     },
+    "/pimcore-studio/api/user/invitation/{id}": {
+      "post": {
+        "description": "Send an invitation mail to the user identified by <strong>{id}</strong>. <br>\nThe mail carries a one time login link to the Studio reset password route, valid for 24 hours, that\nlets the user set their own password. The link is built from the configured origin. <br>\nThe user must be active and must have a valid email address. A user without a password is given a\nthrowaway one, so the login token is accepted.\n",
+        "operationId": "user_send_invitation",
+        "parameters": [
+          {
+            "description": "Id of the user",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Send an invitation link to a user by ID",
+        "tags": [
+          "User Management"
+        ]
+      }
+    },
     "/pimcore-studio/api/user/token-link/{id}": {
       "post": {
         "description": "Generate a login link with a token for a user based on the provided user <strong>{id}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of existing user.\n",

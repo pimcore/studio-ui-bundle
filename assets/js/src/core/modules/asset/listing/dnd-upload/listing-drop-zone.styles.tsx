@@ -49,8 +49,24 @@ export const useStyles = createStyles(({ token, css }) => {
         display: none;
       }
 
-      &[data-file-drag]::before {
-        content: '';
+      /* the zone's own box: sits inside the element that takes the drop and fills it, so the overlay
+         and the drop target are the same rectangle (also below the last item) */
+      && .listing-drop-inner {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        min-width: 0;
+        width: 100%;
+      }
+
+      && .listing-drop-inner > :not(.listing-drop-overlay) {
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      && .listing-drop-overlay {
         position: absolute;
         inset: 0;
         background: ${token.colorPrimaryBg};

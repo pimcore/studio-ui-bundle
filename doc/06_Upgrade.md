@@ -8,6 +8,10 @@ The following steps are necessary when updating to newer versions.
 
 ## Upgrade to 2026.4.0
 
+- [Mercure] Changed: subscriptions follow the hub's protocol, `match`/`last_event_id` for 1.x and `topic`/`lastEventID`
+  for 0.x hubs, as reported in `protocolVersion` by `POST /pimcore-studio/api/mercure/auth` (without it, from an older
+  backend, the UI keeps `topic`/`lastEventID`). See the Mercure Setup page of the Studio Backend.
+
 - [Classification Store] Changed: the `multiValue` key type is offered but disabled in the key-type picker of a store whose engine does not report the `MultiValue` capability, with the existing "needs the document engine" tooltip, because core refuses such a key at definition time. Keys already defined that way keep working and stay editable. The engine indicator beside Export/Import also names the EAV engine now where it previously showed nothing: the store response reports the resolved engine, and a store that stores none is on EAV.
 
 - [Classification Store] Added: sub groups, the per-store vocabulary a key's assignment to a group can be tagged with.

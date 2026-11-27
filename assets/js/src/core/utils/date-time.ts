@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import dayjs, { type Dayjs } from 'dayjs'
 import i18n from 'i18next'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { isNumber } from 'lodash'
@@ -94,4 +95,20 @@ export function formatDate (timestamp: number | string, timeZone?: string): stri
 
 export function formatTime (timestamp: number | string, timeZone?: string): string {
   return formatDateTime({ timestamp, timeStyle: 'short', timeZone })
+}
+
+/**
+ * Unix timestamp (seconds) of a value picked in an antd date picker; 0 when the picker was cleared.
+ *
+ * A fresh picker value is seeded from `dayjs().tz()` (rc-picker's getNow while the dayjs timezone plugin is loaded),
+ * which pins it to the UTC offset of today. Picking a date on the other side of a DST change would then be
+ * resolved with today's offset and be off by the difference. Re-reading the picked wall-clock time in the browser
+ * timezone matches how it is displayed (FormattedDateTime) and is independent of the offset the value carries.
+ */
+export function pickerValueToUnix (value: Dayjs | null): number {
+  if (value === null) {
+    return 0
+  }
+
+  return dayjs(value.format('YYYY-MM-DDTHH:mm:ss')).unix()
 }

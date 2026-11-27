@@ -52,6 +52,26 @@ The hook returns the following methods:
 | `hasOuterWidget` | `(id: string) => boolean` | Checks if a widget exists in the outer layout (sidebars/bottom) |
 | `getOpenedMainWidget` | `() => TabNode \| undefined` | Returns the currently active main widget node |
 
+## Focus View
+
+Add `focus=1` to a Studio link to show only the main widget that link opens, full width, without the trees,
+sidebars and other tabs. A small header shows the widget's title and links to the same address without the
+flag, which opens it in the full Studio.
+
+```
+/pimcore-studio/data-object/12?focus=1
+/pimcore-studio/?changeRequest=<uuid>&focus=1
+```
+
+- Works with any link that opens a main widget, also one a bundle answers: open it with `openMainWidget` once
+  `selectWidgetManagerRestored` is `true`, as for a link without the flag.
+- The saved layout is neither restored nor saved while the focus view is open, so the user's tabs in the full
+  Studio stay as they were.
+- The flag is read once when Studio starts, before plugins are initialized, so a bundle may remove its own
+  parameter from the address; the header link still carries it. Without a widget to show, the focus view
+  says so and offers the same link.
+- The focus view sets a `width=device-width` viewport so it can be used on a phone; the full Studio does not.
+
 ## Transform Configuration
 
 Use `transformConfig` to dynamically modify widget configuration when widgets are created:

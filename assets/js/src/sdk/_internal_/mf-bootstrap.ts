@@ -13,6 +13,7 @@ import { runApp } from '@Pimcore/modules/app/utils/app-runner'
 import { pluginSystem } from '@Pimcore/app/plugin-system/plugin-system'
 import { type Pimcore, PimcoreStudio, type PimcoreStudioApi } from '@Pimcore/app/public-api'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { initFocusMode } from '@Pimcore/modules/app/focus-mode/focus-mode'
 
 if (module.hot !== undefined) {
   module.hot.accept()
@@ -31,6 +32,8 @@ window.Pimcore = (await import('@Pimcore/app/public-api')).Pimcore
 window.PimcoreStudio = PimcoreStudio
 
 window.addEventListener('load', async () => {
+  // before plugins start: they strip their deep link parameters from the address
+  initFocusMode()
   await pluginSystem.loadPlugins()
   pluginSystem.initPlugins()
   pluginSystem.startupPlugins()

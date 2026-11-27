@@ -107,6 +107,7 @@ export const {
   useUserUploadImageMutation,
   useUserGetImageQuery,
   useUserGetTreeQuery,
+  useUserSendInvitationMutation,
   useUserTokenLinkGetQuery,
   useLazyUserTokenLinkGetQuery,
   useUserGetShareCollectionQuery,

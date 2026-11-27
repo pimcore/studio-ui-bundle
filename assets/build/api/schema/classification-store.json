@@ -1671,6 +1671,13 @@
               "string",
               "null"
             ]
+          },
+          "keyTitle": {
+            "description": "Resolved label of the key in the label language, falling back to its name; null where the key configuration is gone",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "required": [

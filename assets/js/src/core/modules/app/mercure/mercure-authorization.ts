@@ -12,7 +12,7 @@ import { store } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/app/mercure-api-slice.gen'
 
 /**
- * Keeps the `mercureAuthorization` cookie alive for as long as the tab is open.
+ * Keeps the Mercure authorization cookie alive for as long as the tab is open.
  *
  * The hub authorises a subscription exactly once, when the EventSource connects, from the
  * cookie sent with that request. The cookie lives for `cookie_lifetime` seconds (one hour by
@@ -28,6 +28,14 @@ import { api } from '@Pimcore/modules/app/mercure-api-slice.gen'
  * without a write timeout, where a single connection can outlive the cookie.
  */
 
+/**
+ * Mercure protocol the hub speaks, as told by the auth response. A backend that does not send it
+ * yet only serves 0.x hubs, so that is the assumption until the server has told us otherwise.
+ */
+export type MercureProtocolVersion = '0.x' | '1.0'
+
+const FALLBACK_PROTOCOL_VERSION: MercureProtocolVersion = '0.x'
+
 /** Assumed cookie lifetime until the server has told us the real one. */
 const FALLBACK_LIFETIME_MS = 3_600_000
 
@@ -38,6 +46,7 @@ const FALLBACK_LIFETIME_MS = 3_600_000
 const RENEWAL_RATIO = 0.8
 
 let lifetimeMs = FALLBACK_LIFETIME_MS
+let protocolVersion: MercureProtocolVersion = FALLBACK_PROTOCOL_VERSION
 /** Wall clock at which the current cookie stops being accepted; 0 before the first renewal. */
 let authorizedUntil = 0
 let renewalTimeout: ReturnType<typeof setTimeout> | undefined
@@ -64,6 +73,22 @@ const readLifetimeMs = (response: unknown): number | null => {
     : null
 }
 
+const readProtocolVersion = (response: unknown): MercureProtocolVersion | null => {
+  if (typeof response !== 'object' || response === null) {
+    return null
+  }
+
+  const version = (response as Record<string, unknown>).protocolVersion
+
+  return version === '0.x' || version === '1.0' ? version : null
+}
+
+/**
+ * Protocol to subscribe with. Renewed with every authorization, so a hub upgrade reaches open
+ * tabs with their next reconnect.
+ */
+export const getMercureProtocolVersion = (): MercureProtocolVersion => protocolVersion
+
 /** Lifetime of the most recently issued cookie, in milliseconds. */
 export const getAuthorizationLifetimeMs = (): number => lifetimeMs
 
@@ -84,6 +109,7 @@ const requestAuthorization = async (): Promise<void> => {
   const response = await store.dispatch(api.endpoints.mercureCreateCookie.initiate()).unwrap()
 
   lifetimeMs = readLifetimeMs(response) ?? lifetimeMs
+  protocolVersion = readProtocolVersion(response) ?? protocolVersion
   authorizedUntil = Date.now() + lifetimeMs
 }
 

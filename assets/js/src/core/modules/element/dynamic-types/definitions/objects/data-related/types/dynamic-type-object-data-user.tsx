@@ -8,8 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
-  DynamicTypeObjectDataAbstractSelect
+  DynamicTypeObjectDataAbstractSelect,
+  type SelectProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
 import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
@@ -19,4 +21,12 @@ export class DynamicTypeObjectDataUser extends DynamicTypeObjectDataAbstractSele
   id: string = 'user'
 
   dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
+
+  getObjectDataFormItemProps (props: SelectProps): FormItemProps {
+    return {
+      ...super.getObjectDataFormItemProps(props),
+      // The Form.Item injects the stored user id (a number), the option values are strings.
+      getValueProps: (value: unknown) => ({ value: this.normalizeValue(value) })
+    }
+  }
 }

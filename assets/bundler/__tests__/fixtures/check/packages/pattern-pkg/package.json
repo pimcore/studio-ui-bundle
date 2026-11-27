@@ -1,0 +1,1 @@
+{ "name": "pattern-pkg", "exports": { ".": "./index.js", "./dist/public/*": "./dist/public/*.d.ts", "./dist/public/private/*": null } }

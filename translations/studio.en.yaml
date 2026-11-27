@@ -11,6 +11,8 @@ index-sync.confirmation.text: All data objects, assets and documents are queued 
 index-sync.confirmation.ok: Synchronize
 index-sync.job.title: Synchronizing search index
 index-sync.start-failed: Failed to start the search index synchronization
+deep-link.unknown-link: No handler is registered for this link
+deep-link.open-failed: An error occurred while opening the link
 dont-ask-again: "Don't ask again"
 widget.missing-context.title: Missing context
 widget.missing-context.description: No related element found
@@ -34,6 +36,9 @@ error.error_recycle_bin_restore: Cannot restore element from recycle bin
 error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
 error.error_login_token_as_admin_non_admin_user: Only admin users can generate a login link for an admin user
 error.error_login_token_no_user_password: A login link cannot be generated for this user because no password is set
+error.error_invitation_as_admin_non_admin_user: Only admin users can send an invitation to an admin user
+error.error_invitation_no_email: An invitation cannot be sent because the user has no valid email address
+error.error_invitation_user_inactive: An invitation cannot be sent to an inactive user
 error.syntax_error: Syntax error
 validation.mandatory: "{{field}} is mandatory"
 validation.regex_mismatch: "{{field}} does not match the required pattern {{regex}}"
@@ -1735,6 +1740,11 @@ user-management.add-folder: New folder
 user-management.add-folder.label: Enter the name of the new folder
 user-management.add-user: New user
 user-management.add-user.label: Enter the name of the new user
+user-management.send-invitation: Send invitation link
+user-management.send-invitation.success: "Invitation sent to {{email}}"
+user-management.send-invitation.no-email: The user has no email address
+user-management.send-invitation.inactive: The user is inactive
+user-management.send-invitation.unsaved-changes: Save the user before sending an invitation
 user-management.last-login: Last Login
 user-management.search.id: ID
 roles.tree.all: All Roles
@@ -3369,3 +3379,5 @@ classification-store.multi-value.default-variant-permitted: "Allow values withou
 classification-store.multi-value.default-variant-label: "Label of the default value"
 classification-store.multi-value.no-writable-slot: "This key declares no variant and does not allow values without one, so there is nowhere to enter a value. Declare a variant or allow values without a variant."
 classification-store.multi-value.unreadable-entry: "This value is not a number the input can show; it is kept as stored until it is cleared."
+focus-view.open-in-studio: "Open in Pimcore Studio"
+focus-view.nothing-to-show: "Nothing to show here. Open the link again or continue in Pimcore Studio."
