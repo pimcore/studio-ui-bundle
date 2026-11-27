@@ -31,6 +31,7 @@ import { isArray } from 'lodash'
 import { useFieldWidth } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { useCombinedFieldName } from '../providers/combined-field-name-provider/use-combined-field-name'
 import { useKeyedListOptional } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-optional'
+import { useNumberedListOptional } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-optional'
 import { type NamePath } from 'antd/es/form/interface'
 
 export interface DataComponentProps extends ObjectComponentProps {
@@ -84,6 +85,9 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
   const inheritanceStateValue = inheritanceState?.getInheritanceState(virtualFieldName)
   const keyedList = useKeyedListOptional()
+  const numberedList = useNumberedListOptional()
+  // KeyedList and NumberedList providers reset each other's context, so at most one is set: the innermost list
+  const listOperations = (keyedList ?? numberedList)?.operations
 
   const _props = {
     ...props,
@@ -95,22 +99,23 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     noteditable: props.noteditable === true || disabled
   }
 
-  // Inside a Form.KeyedList (e.g. the classification-store editor) Form.Items
-  // read/write via KeyedList state through KeyedFormItemControl, so writes to
-  // the Ant Form store via form.setFieldValue are invisible to them. Route
-  // handleDefaultValue's reads/writes through KeyedList operations instead.
+  // Inside a Form.KeyedList (e.g. the classification-store editor) or a
+  // Form.NumberedList (e.g. field collections and blocks) Form.Items read/write
+  // via the list state through KeyedFormItemControl / NumberedFormItemControl,
+  // so writes to the Ant Form store via form.setFieldValue are invisible to them.
+  // Route handleDefaultValue's reads/writes through the list operations instead.
   const defaultValueForm = useMemo<FormInstance>(() => {
-    if (keyedList === undefined) {
+    if (listOperations === undefined) {
       return form
     }
     const toPath = (path: NamePath): Array<string | number> => (isArray(path) ? path : [path as string | number])
     return Object.assign(Object.create(form) as FormInstance, {
-      getFieldValue: (path: NamePath) => keyedList.operations.getValue(toPath(path)),
+      getFieldValue: (path: NamePath) => listOperations.getValue(toPath(path)),
       setFieldValue: (path: NamePath, value: unknown) => {
-        keyedList.operations.update(toPath(path), value, true)
+        listOperations.update(toPath(path), value, true)
       }
     })
-  }, [form, keyedList])
+  }, [form, listOperations])
 
   useEffect(() => {
     if (!objectDataType.isCollectionType) {
