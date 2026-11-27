@@ -10,6 +10,7 @@
 
 const mockLogin = jest.fn()
 const mockSendStatistics = jest.fn()
+const mockSlotRenderer = jest.fn()
 
 jest.mock('@Pimcore/modules/auth/authorization-api-slice.gen', () => ({
   useLoginMutation: () => [mockLogin]
@@ -28,7 +29,12 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
   ApiError: class ApiError extends Error {}
 }))
 jest.mock('@Pimcore/modules/app/component-registry/component-config', () => ({ componentConfig: { form: { login: { name: 'form.login' } } } }))
-jest.mock('@Pimcore/modules/app/component-registry/slot-renderer', () => ({ SlotRenderer: () => null }))
+jest.mock('@Pimcore/modules/app/component-registry/slot-renderer', () => ({
+  SlotRenderer: (props: unknown) => {
+    mockSlotRenderer(props)
+    return null
+  }
+}))
 jest.mock('@Pimcore/components/icon/icon', () => ({ Icon: () => null }))
 jest.mock('../../../../components/icon/icon', () => ({ Icon: () => null }))
 // The real button pulls in antd-style, which jest does not transpile
@@ -55,6 +61,7 @@ describe('LoginForm', () => {
   beforeEach(() => {
     mockLogin.mockReset()
     mockSendStatistics.mockReset()
+    mockSlotRenderer.mockReset()
   })
 
   it('does not offer a "Remember me" option, because the login has no remember-me support', () => {
@@ -83,5 +90,22 @@ describe('LoginForm', () => {
 
     await waitFor(() => { expect(mockLogin).toHaveBeenCalled() })
     expect(mockLogin).toHaveBeenCalledWith({ credentials: { username: 'admin', password: 'secret' } })
+  })
+
+  it('tells the login slot that it stands in for a guarded route', () => {
+    render(<LoginForm inPlace />)
+
+    expect(mockSlotRenderer).toHaveBeenLastCalledWith(expect.objectContaining({
+      slot: 'form.login',
+      props: expect.objectContaining({ inPlace: true })
+    }))
+  })
+
+  it('tells the login slot that it is on the login route', () => {
+    render(<LoginForm />)
+
+    expect(mockSlotRenderer).toHaveBeenLastCalledWith(expect.objectContaining({
+      props: expect.objectContaining({ inPlace: false })
+    }))
   })
 })

@@ -25,11 +25,12 @@ import { useTranslation } from 'react-i18next'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
+  inPlace?: boolean
   onPasswordForgotten?: () => void
   onTwoFactorRequired?: (challenge: TwoFactorChallenge) => void
 }
 
-export const LoginForm = ({ onPasswordForgotten, onTwoFactorRequired }: ILoginFormProps): React.JSX.Element => {
+export const LoginForm = ({ inPlace = false, onPasswordForgotten, onTwoFactorRequired }: ILoginFormProps): React.JSX.Element => {
   const user = useUser()
   const { styles } = useStyle()
   const messageApi = useMessage()
@@ -142,7 +143,7 @@ export const LoginForm = ({ onPasswordForgotten, onTwoFactorRequired }: ILoginFo
       )}
 
       <SlotRenderer
-        props={ { hideCredentialsForm, onHideCredentialsForm: setHideCredentialsForm } }
+        props={ { hideCredentialsForm, onHideCredentialsForm: setHideCredentialsForm, inPlace } }
         slot={ componentConfig.form.login.name }
       />
     </div>

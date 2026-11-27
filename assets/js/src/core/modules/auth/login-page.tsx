@@ -116,7 +116,10 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
           data-testid="login-page-logo"
           src={ customLogoSmall }
         />
-        <LoginFormContainer pendingTwoFactor={ twoFactor } />
+        <LoginFormContainer
+          inPlace={ inPlace }
+          pendingTwoFactor={ twoFactor }
+        />
       </div>
     </div>
   )
