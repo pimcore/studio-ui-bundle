@@ -1,0 +1,12 @@
+[
+  {
+    "specifier": "@reduxjs/toolkit/dist/query/react",
+    "member": "reactHooksModuleName",
+    "why": "on every slice's api object since 2026.2; kept so api.endpoints.* stay as typed as partners know them"
+  },
+  {
+    "specifier": "@reduxjs/toolkit/dist/query/react",
+    "member": "TypedUseQueryHookResult",
+    "why": "imported in js/src/core/modules/data-object/utils/provider/class-defintions/class-definitions-provider.tsx since 2025-02"
+  }
+]
