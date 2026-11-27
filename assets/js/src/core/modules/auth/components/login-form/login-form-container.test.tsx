@@ -42,9 +42,9 @@ jest.mock('../two-factor-setup-form/two-factor-setup-form', () => ({
   )
 }))
 jest.mock('./login-form', () => ({
-  LoginForm: ({ inPlace, onTwoFactorRequired }: { inPlace: boolean, onTwoFactorRequired: (challenge: { step: string, digits: number }) => void }) => (
+  LoginForm: ({ isLoginRoute, onTwoFactorRequired }: { isLoginRoute?: boolean, onTwoFactorRequired: (challenge: { step: string, digits: number }) => void }) => (
     <>
-      <span>{ `in-place ${String(inPlace)}` }</span>
+      <span>{ `is-login-route ${String(isLoginRoute)}` }</span>
       <button onClick={ () => { onTwoFactorRequired({ step: 'verify', digits: 8 }) } }>login-verify</button>
       <button onClick={ () => { onTwoFactorRequired({ step: 'setup', digits: 6 }) } }>login-setup</button>
     </>
@@ -143,15 +143,9 @@ describe('LoginFormContainer two-factor steps', () => {
     expect(mockTrackError).toHaveBeenCalledTimes(1)
   })
 
-  it('passes inPlace on to the login form', () => {
-    render(<LoginFormContainer inPlace />)
+  it.each([true, false])('passes isLoginRoute=%s on to the login form', (isLoginRoute) => {
+    render(<LoginFormContainer isLoginRoute={ isLoginRoute } />)
 
-    expect(screen.getByText('in-place true')).toBeTruthy()
-  })
-
-  it('tells the login form it is on the login route by default', () => {
-    render(<LoginFormContainer />)
-
-    expect(screen.getByText('in-place false')).toBeTruthy()
+    expect(screen.getByText(`is-login-route ${String(isLoginRoute)}`)).toBeTruthy()
   })
 })

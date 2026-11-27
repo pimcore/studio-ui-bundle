@@ -117,7 +117,7 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
           src={ customLogoSmall }
         />
         <LoginFormContainer
-          inPlace={ inPlace }
+          isLoginRoute={ !inPlace }
           pendingTwoFactor={ twoFactor }
         />
       </div>

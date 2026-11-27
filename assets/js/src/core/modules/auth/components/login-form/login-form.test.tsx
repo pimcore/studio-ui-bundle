@@ -92,20 +92,12 @@ describe('LoginForm', () => {
     expect(mockLogin).toHaveBeenCalledWith({ credentials: { username: 'admin', password: 'secret' } })
   })
 
-  it('tells the login slot that it stands in for a guarded route', () => {
-    render(<LoginForm inPlace />)
+  it.each([true, false])('passes isLoginRoute=%s on to the login slot', (isLoginRoute) => {
+    render(<LoginForm isLoginRoute={ isLoginRoute } />)
 
     expect(mockSlotRenderer).toHaveBeenLastCalledWith(expect.objectContaining({
       slot: 'form.login',
-      props: expect.objectContaining({ inPlace: true })
-    }))
-  })
-
-  it('tells the login slot that it is on the login route', () => {
-    render(<LoginForm />)
-
-    expect(mockSlotRenderer).toHaveBeenLastCalledWith(expect.objectContaining({
-      props: expect.objectContaining({ inPlace: false })
+      props: expect.objectContaining({ isLoginRoute })
     }))
   })
 })
