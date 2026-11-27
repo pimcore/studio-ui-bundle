@@ -29,8 +29,7 @@ import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/mo
 import { StaticColumnConfigurationDecorator } from '@Pimcore/modules/search/modal/tabs/asset/listing/decorator/static-column-configuration/static-column-configuration-decorator'
 import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
-import { type FilterValues } from '@Pimcore/components/filters'
-import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { buildSearchPathFilters } from './search-path-filter'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -50,21 +49,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
   // Seed the applied filters with a fullpath filter when a search path is configured
   // on the field. It is a soft default: the filter is visible in the sidebar and can
   // be modified or cleared by the user.
-  const initialFilters = useMemo((): FilterValues | undefined => {
-    if (searchPath === '') {
-      return undefined
-    }
-
-    const searchPathFilter: FieldFilter = {
-      key: 'fullpath',
-      type: 'system.string',
-      filterValue: searchPath,
-      locale: null,
-      meta: { translationKey: t('fullpath') }
-    }
-
-    return { fieldFilters: [searchPathFilter] }
-  }, [searchPath, t])
+  const initialFilters = useMemo(() => buildSearchPathFilters(searchPath, t('fullpath')), [searchPath, t])
 
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(
