@@ -26,6 +26,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     <Menu
       dataTestId={ createContextMenuContainerTestId('data-object', node.id) }
       items={ items }
+      subMenuCloseDelay={ 0.3 }
     />
   )
 }
