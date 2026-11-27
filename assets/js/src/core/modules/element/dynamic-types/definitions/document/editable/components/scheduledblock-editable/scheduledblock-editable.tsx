@@ -23,6 +23,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
+import { pickerValueToUnix } from '@Pimcore/utils/date-time'
 
 export interface ScheduledblockEntry {
   key: string
@@ -142,7 +143,7 @@ export const ScheduledblockEditable = ({
       const entry = validEntries.find(e => e.key === entryKey)
 
       if (!isNil(entry)) {
-        const newTimestamp = newDateTime.unix()
+        const newTimestamp = pickerValueToUnix(newDateTime)
         const oldTimestamp = entry.date
         const entryDate = dayjs.unix(oldTimestamp)
         const dayChanged = !entryDate.isSame(newDateTime, 'day')

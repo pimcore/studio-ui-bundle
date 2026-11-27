@@ -1,0 +1,3 @@
+export declare const useAssetGetTreeQuery: <R extends Record<string, any> = import("@reduxjs/toolkit/query/react").UseQueryStateDefaultResult<import("@reduxjs/toolkit/query").QueryDefinition<AssetGetTreeApiArg, any, never, AssetGetTreeApiResponse, "api", unknown>>>(arg: AssetGetTreeApiArg) => R;
+export declare const useAssetGetByIdQuery: <R = import('@reduxjs/toolkit/query/react').UseQueryStateDefaultResult<unknown>>(arg: number) => R;
+export declare const api: import("@reduxjs/toolkit/query").Api<any, {}, "api", never, typeof import("@reduxjs/toolkit/query").coreModuleName | typeof import("@reduxjs/toolkit/dist/query/react").reactHooksModuleName>;

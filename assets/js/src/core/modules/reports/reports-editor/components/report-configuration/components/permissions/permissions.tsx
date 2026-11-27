@@ -40,13 +40,13 @@ const PermissionsComponent = ({ currentData, updateFormData }: IReportConfigurat
     return currentData.sharedUserNames
       .map(item => userList?.items?.find(user => user.username === item)?.id)
       .filter(id => !isUndefined(id))
-  }, [currentData.sharedUserNames])
+  }, [currentData.sharedUserNames, userList])
 
   const initialRoleList = useMemo(() => {
     return currentData.sharedRoleNames
       .map(item => roleList?.items?.find(role => role.name === item)?.id)
       .filter(id => !isUndefined(id))
-  }, [currentData.sharedRoleNames])
+  }, [currentData.sharedRoleNames, roleList])
 
   const handleClose = (): void => { setIsOpenDropdown(false) }
 
@@ -58,9 +58,23 @@ const PermissionsComponent = ({ currentData, updateFormData }: IReportConfigurat
       .map(id => roleList?.items?.find(role => role.id === id)?.name)
       .filter(name => !isUndefined(name))
 
+    // Names without an entry in the lists (e.g. deleted users, imported configurations) cannot be
+    // selected in the dropdown, so changing the selection must not remove them
+    const unlistedUsers = currentData.sharedUserNames
+      .filter(name => userList?.items?.every(user => user.username !== name))
+    const unlistedRoles = currentData.sharedRoleNames
+      .filter(name => roleList?.items?.every(role => role.name !== name))
+
     updateFormData?.({
-      sharedUserNames: updatedSharedUsers,
-      sharedRoleNames: updatedSharedRoles
+      sharedUserNames: [...updatedSharedUsers, ...unlistedUsers],
+      sharedRoleNames: [...updatedSharedRoles, ...unlistedRoles]
+    })
+  }
+
+  const handleClear = (): void => {
+    updateFormData?.({
+      sharedUserNames: [],
+      sharedRoleNames: []
     })
   }
 
@@ -120,11 +134,13 @@ const PermissionsComponent = ({ currentData, updateFormData }: IReportConfigurat
             <Text className={ styles.permissionUpdateButtonText }>{t('button.add-edit')}</Text>
           </Flex>
         </Flex>
-        {isOpenDropdown && (
+        {/* The dropdown takes the initial selection only on mount, so it needs both lists by then */}
+        {isOpenDropdown && !isUndefined(userList) && !isUndefined(roleList) && (
           <UsersRolesDropdown
             initialSharedRoles={ initialRoleList }
             initialSharedUsers={ initialUserList }
             onChange={ handleUsersRolesChange }
+            onClear={ handleClear }
             onClose={ handleClose }
             placement="top"
             renderAsPopup

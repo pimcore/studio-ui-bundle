@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Tous les objets de données, les assets et les do
 index-sync.confirmation.ok: Synchroniser
 index-sync.job.title: Synchronisation de l'index de recherche en cours
 index-sync.start-failed: Impossible de démarrer la synchronisation de l'index de recherche
+deep-link.unknown-link: Aucun gestionnaire n'est enregistré pour ce lien
+deep-link.open-failed: Une erreur s'est produite lors de l'ouverture du lien
 dont-ask-again: Ne plus demander
 widget.missing-context.title: Contexte manquant
 widget.missing-context.description: Aucun élément associé trouvé
@@ -32,6 +34,9 @@ error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la 
 error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
 error.error_login_token_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent générer un lien de connexion pour un utilisateur administrateur
 error.error_login_token_no_user_password: "Impossible de générer un lien de connexion pour cet utilisateur car aucun mot de passe n'est défini"
+error.error_invitation_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent envoyer une invitation à un utilisateur administrateur
+error.error_invitation_no_email: Impossible d'envoyer une invitation car l'utilisateur n'a pas d'adresse e-mail valide
+error.error_invitation_user_inactive: Impossible d'envoyer une invitation à un utilisateur inactif
 error.syntax_error: Erreur de syntaxe
 validation.mandatory: "{{field}} est obligatoire"
 validation.regex_mismatch: "{{field}} ne correspond pas au modèle requis {{regex}}"
@@ -1731,6 +1736,11 @@ user-management.add-folder: Nouveau dossier
 user-management.add-folder.label: Entrez le nom du nouveau dossier
 user-management.add-user: Nouvel utilisateur
 user-management.add-user.label: Entrez le nom du nouvel utilisateur
+user-management.send-invitation: Envoyer le lien d'invitation
+user-management.send-invitation.success: "Invitation envoyée à {{email}}"
+user-management.send-invitation.no-email: L'utilisateur n'a pas d'adresse e-mail
+user-management.send-invitation.inactive: L'utilisateur est inactif
+user-management.send-invitation.unsaved-changes: Enregistrez l'utilisateur avant d'envoyer une invitation
 user-management.last-login: Dernière connexion
 user-management.search.id: ID
 roles.tree.all: Tous les rôles
@@ -3365,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Autoriser les valeu
 classification-store.multi-value.default-variant-label: "Libellé de la valeur par défaut"
 classification-store.multi-value.no-writable-slot: "Cette clé ne déclare aucune variante et n'autorise pas les valeurs sans variante : il n'y a donc aucun emplacement où saisir une valeur. Déclarez une variante ou autorisez les valeurs sans variante."
 classification-store.multi-value.unreadable-entry: "Cette valeur n'est pas un nombre que le champ peut afficher ; elle reste telle quelle jusqu'à son effacement."
+focus-view.open-in-studio: "Ouvrir dans Pimcore Studio"
+focus-view.nothing-to-show: "Rien à afficher ici. Rouvrez le lien ou continuez dans Pimcore Studio."

@@ -19,11 +19,12 @@ import { useStyles } from './listing-drop-zone.styles'
 
 export interface ListingDropZoneProps {
   children: React.ReactNode
+  onUploaded?: () => void
 }
 
 const carriesFiles = (e: React.DragEvent): boolean => Array.from(e.dataTransfer?.types ?? []).includes('Files')
 
-export const ListingDropZone = ({ children }: ListingDropZoneProps): React.JSX.Element => {
+export const ListingDropZone = ({ children, onUploaded }: ListingDropZoneProps): React.JSX.Element => {
   const { id } = useElementContext()
   const { currentData: data } = useAssetGetByIdQuery({ id })
   const { isTreeActionAllowed } = useTreePermission()
@@ -64,10 +65,19 @@ export const ListingDropZone = ({ children }: ListingDropZoneProps): React.JSX.E
       onDropCapture={ reset }
     >
       <DndUploadZone
+        onUploaded={ onUploaded }
         targetFolderId={ id }
         targetPath={ data.fullPath ?? '' }
       >
-        {children}
+        <div className='listing-drop-inner'>
+          {fileDrag && (
+            <div
+              className='listing-drop-overlay'
+              data-testid="listing-drop-overlay"
+            />
+          )}
+          {children}
+        </div>
       </DndUploadZone>
     </div>
   )

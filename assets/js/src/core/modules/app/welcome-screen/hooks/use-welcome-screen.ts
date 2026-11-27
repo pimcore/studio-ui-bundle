@@ -16,6 +16,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { selectWidgetManagerRestored } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { DEEP_LINK_HANDLER_PARAM } from '@Pimcore/modules/app/deep-link-registry/deep-link-param'
 import { type WelcomeScreenRegistry } from '../services/welcome-screen-registry'
 import { isWelcomeScreenHandled, markWelcomeScreenHandled } from '../utils/welcome-screen-session'
 
@@ -32,8 +33,10 @@ export const useWelcomeScreen = (): void => {
 
     markWelcomeScreenHandled(user.id)
 
-    // useHandleDeepLink opens the target of an element or reset-password link instead
-    const isLinkLogin = location?.state?.isDeeplink === true || location?.state?.resetPassword === true
+    // useHandleDeepLink opens the target of an element, reset-password or named deep link instead
+    const isLinkLogin = location?.state?.isDeeplink === true ||
+      location?.state?.resetPassword === true ||
+      new URLSearchParams(location?.search).has(DEEP_LINK_HANDLER_PARAM)
 
     if (user.welcomeScreen && !isLinkLogin && isNonEmptyString(user.welcomeScreenTarget)) {
       container.get<WelcomeScreenRegistry>(serviceIds['WelcomeScreen/Registry']).open(user.welcomeScreenTarget)

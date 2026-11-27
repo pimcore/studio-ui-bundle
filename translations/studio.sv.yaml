@@ -11,6 +11,8 @@ index-sync.confirmation.text: "Alla dataobjekt, resurser och dokument är köade
 index-sync.confirmation.ok: Synkronisera
 index-sync.job.title: Synkroniserar sökindex
 index-sync.start-failed: Det gick inte att starta synkroniseringen av sökindex
+deep-link.unknown-link: Ingen hanterare är registrerad för denna länk
+deep-link.open-failed: Ett fel uppstod när länken skulle öppnas
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
@@ -32,6 +34,9 @@ error.error_recycle_bin_restore: Kan inte återställa elementet från pappersko
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
 error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
+error.error_invitation_as_admin_non_admin_user: Endast admin-användare kan skicka en inbjudan till en admin-användare
+error.error_invitation_no_email: En inbjudan kan inte skickas eftersom användaren saknar en giltig e-postadress
+error.error_invitation_user_inactive: En inbjudan kan inte skickas till en inaktiv användare
 error.syntax_error: Syntaxfel
 validation.mandatory: "{{field}} är obligatoriskt"
 validation.regex_mismatch: "{{field}} matchar inte det obligatoriska mönstret {{regex}}"
@@ -1731,6 +1736,11 @@ user-management.add-folder: Ny mapp
 user-management.add-folder.label: Ange namnet på den nya mappen
 user-management.add-user: Ny användare
 user-management.add-user.label: Ange namnet på den nya användaren
+user-management.send-invitation: Skicka inbjudningslänk
+user-management.send-invitation.success: "Inbjudan skickad till {{email}}"
+user-management.send-invitation.no-email: Användaren har ingen e-postadress
+user-management.send-invitation.inactive: Användaren är inaktiv
+user-management.send-invitation.unsaved-changes: Spara användaren innan du skickar en inbjudan
 user-management.last-login: Senaste inloggning
 user-management.search.id: ID
 roles.tree.all: Alla roller
@@ -3365,3 +3375,5 @@ classification-store.multi-value.default-variant-permitted: "Tillåt värden uta
 classification-store.multi-value.default-variant-label: "Etikett för standardvärdet"
 classification-store.multi-value.no-writable-slot: "Den här nyckeln deklarerar ingen variant och tillåter inga värden utan variant, så det finns ingen plats att ange ett värde. Deklarera en variant eller tillåt värden utan variant."
 classification-store.multi-value.unreadable-entry: "Det här värdet är inget tal som fältet kan visa; det behålls som sparat tills det rensas."
+focus-view.open-in-studio: "Öppna i Pimcore Studio"
+focus-view.nothing-to-show: "Det finns inget att visa här. Öppna länken igen eller fortsätt i Pimcore Studio."

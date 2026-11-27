@@ -11,6 +11,7 @@
 import trackError from './error-handler'
 import ApiError from './classes/api-error'
 import GeneralError from './classes/general-error'
+import TrackedError from './classes/tracked-error'
 import type { ApiErrorData } from './types'
 
 const mockLockedOut = { value: false }
@@ -84,6 +85,10 @@ describe('trackError', () => {
 
   it('keeps throwing for a general error', () => {
     expect(() => { trackError(new GeneralError('boom'), jest.fn()) }).toThrow('boom')
+  })
+
+  it('marks the thrown error as already shown, so a caller does not show a second one', () => {
+    expect(() => { trackError(new GeneralError('boom'), jest.fn()) }).toThrow(TrackedError)
   })
 
   describe('while the maintenance notice is open', () => {
