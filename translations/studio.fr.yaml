@@ -485,6 +485,7 @@ version.versions: Versions
 version.version: Version
 version.publish: Publier
 version.coauthored-by: 'Co-rédigé par {{type}} {{name}}'
+version.deleted-relation: 'Élément supprimé ({{type}} ID {{id}})'
 version.published: Publié
 version.autosaved: Enregistré automatiquement
 version.schedule-for: Planifié pour

@@ -19,6 +19,7 @@ import {
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { VersionObjectLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/versions/version-object-localized-fields'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { labelDeletedRelations } from '../helpers/relations/utils/label-deleted-relations'
 import { getLocalizedDataFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/versions/get-localized-data-fields'
 
 export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataAbstract {
@@ -76,7 +77,7 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
         versionId,
         versionCount,
         fieldData,
-        fieldValue,
+        fieldValue: labelDeletedRelations(String(fieldData?.fieldtype), fieldValue),
         fieldPath: fieldPathValue
       }
     }
