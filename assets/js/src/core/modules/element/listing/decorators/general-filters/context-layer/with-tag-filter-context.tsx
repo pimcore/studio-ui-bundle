@@ -18,7 +18,10 @@ export const withGeneralFiltersContext = (Component: AbstractDecoratorProps['Con
   const GeneralFiltersContextComponent = (): React.JSX.Element => {
     return (
       <GeneralFiltersConfigProvider config={ config }>
-        <AppliedFiltersProvider descriptors={ elementFilterDefinitions }>
+        <AppliedFiltersProvider
+          descriptors={ elementFilterDefinitions }
+          initialValues={ config?.initialFilters }
+        >
           <Component />
         </AppliedFiltersProvider>
       </GeneralFiltersConfigProvider>

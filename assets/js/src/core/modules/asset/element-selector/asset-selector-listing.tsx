@@ -9,6 +9,7 @@
  */
 
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDataQueryHelper } from '../listing/data-layer/use-data-query-helper'
 import { ListingContainer, defaultProps as listingDefaultProps } from '@Pimcore/modules/element/listing/abstract/listing-container'
 import { compose } from '@Pimcore/utils/compose'
@@ -28,6 +29,7 @@ import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/mo
 import { StaticColumnConfigurationDecorator } from '@Pimcore/modules/search/modal/tabs/asset/listing/decorator/static-column-configuration/static-column-configuration-decorator'
 import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { buildSearchPathFilters } from './search-path-filter'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -39,8 +41,15 @@ const defaultProps = {
 
 export const AssetSelectorListing = (): React.JSX.Element => {
   const { config } = useElementSelectorHelper()
+  const { t } = useTranslation()
 
   const allowedTypes: string[] = config.config?.assets?.allowedTypes ?? []
+  const searchPath = config.config?.assets?.searchPath ?? ''
+
+  // Seed the applied filters with a fullpath filter when a search path is configured
+  // on the field. It is a soft default: the filter is visible in the sidebar and can
+  // be modified or cleared by the user.
+  const initialFilters = useMemo(() => buildSearchPathFilters(searchPath, t('fullpath')), [searchPath, t])
 
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(
@@ -48,7 +57,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
     StaticColumnConfigurationDecorator,
     [RowSelectionDecorator, { rowSelectionMode: config?.selectionType } as IRowSelectionDecoratorConfig],
     TagFilterDecorator,
-    [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
+    [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, initialFilters } as GeneralFiltersDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'asset' } as IGlobalRowSelectionConfig],
     [SelectionInteractionDecorator, { elementType: elementTypes.asset } as ISelectionInteractionConfig],
@@ -59,7 +68,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
         elementType: elementTypes.asset
       } as TypeFilterDecoratorConfig
     ]
-  )(defaultProps), [config])
+  )(defaultProps), [config, initialFilters])
   /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
   return useMemo(() => (

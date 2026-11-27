@@ -62,6 +62,7 @@ export interface ElementSelectorConfig {
   config?: {
     assets?: {
       allowedTypes?: IRelationAllowedTypesDataComponent['allowedAssetTypes']
+      searchPath?: string
     }
 
     documents?: {
@@ -85,7 +86,8 @@ export const defaultElementSelectorConfig: ElementSelectorConfig = {
   },
   config: {
     assets: {
-      allowedTypes: undefined
+      allowedTypes: undefined,
+      searchPath: undefined
     },
     documents: {
       allowedTypes: undefined
