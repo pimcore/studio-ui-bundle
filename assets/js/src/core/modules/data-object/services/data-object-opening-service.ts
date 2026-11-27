@@ -69,7 +69,10 @@ export class DataObjectOpeningService {
 
   async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
     store.dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
-    const { data, isError, error } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }, { subscribe: false }))
+    // subscribed until read: RTK delays the invalidation while other requests run and then drops an unsubscribed result
+    const request = store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
+    const { data, isError, error } = await request
+    request.unsubscribe()
 
     if (isError && !silent) {
       trackError(new ApiError(error))
