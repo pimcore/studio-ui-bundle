@@ -440,6 +440,7 @@ version.label: Versjoner
 version.versions: Versjoner
 version.version: Versjon
 version.publish: Publiser
+version.deleted-relation: 'Slettet element ({{type}} ID {{id}})'
 version.published: Publisert
 version.autosaved: Automatisk lagret
 version.schedule-for: Planlagt for

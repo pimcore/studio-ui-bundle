@@ -440,6 +440,7 @@ version.label: Versionen
 version.versions: Versionen
 version.version: Version
 version.publish: Veröffentlichen
+version.deleted-relation: 'Gelöschtes Element ({{type}} ID {{id}})'
 version.published: Veröffentlicht
 version.autosaved: Automatisch gespeichert
 version.schedule-for: Geplant für

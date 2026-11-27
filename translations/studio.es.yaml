@@ -440,6 +440,7 @@ version.label: Versiones
 version.versions: Versiones
 version.version: Versión
 version.publish: Publicar
+version.deleted-relation: 'Elemento eliminado ({{type}} ID {{id}})'
 version.published: Publicado
 version.autosaved: Guardado automáticamente
 version.schedule-for: Programado para
