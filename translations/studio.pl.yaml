@@ -533,6 +533,7 @@ version.versions: Wersje
 version.version: Wersja
 version.publish: Opublikuj
 version.coauthored-by: "Współtworzone przez {{type}} {{name}}"
+version.deleted-relation: 'Usunięty element ({{type}} ID {{id}})'
 version.published: Opublikowane
 version.autosaved: Zapisano automatycznie
 version.schedule-for: Zaplanowano na

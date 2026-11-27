@@ -533,6 +533,7 @@ version.versions: Versjoner
 version.version: Versjon
 version.publish: Publiser
 version.coauthored-by: 'Medforfattet av {{type}} {{name}}'
+version.deleted-relation: 'Slettet element ({{type}} ID {{id}})'
 version.published: Publisert
 version.autosaved: Automatisk lagret
 version.schedule-for: Planlagt for

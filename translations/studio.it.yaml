@@ -533,6 +533,7 @@ version.versions: Versioni
 version.version: Versione
 version.publish: Pubblica
 version.coauthored-by: 'Co-redatto da {{type}} {{name}}'
+version.deleted-relation: 'Elemento eliminato ({{type}} ID {{id}})'
 version.published: Pubblicato
 version.autosaved: Salvato automaticamente
 version.schedule-for: Programmato per

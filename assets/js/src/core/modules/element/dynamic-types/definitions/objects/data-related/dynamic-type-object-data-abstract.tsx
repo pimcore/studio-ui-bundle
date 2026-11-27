@@ -35,6 +35,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { isNonEmptyString } from '@sdk/utils'
 import { t } from 'i18next'
+import { labelDeletedRelations } from './helpers/relations/utils/label-deleted-relations'
 
 export type EditMode = 'default' | 'edit-modal' | 'column-meta'
 export interface EditModalSettings {
@@ -123,7 +124,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { fieldBreadcrumbTitle, item, fieldValueByName, fieldPath, versionId, versionCount } = props
 
-    return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, fieldPath, versionId, versionCount }]
+    return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: labelDeletedRelations(String(item?.fieldtype), fieldValueByName), fieldPath, versionId, versionCount }]
   }
 
 
