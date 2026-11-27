@@ -14,6 +14,9 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
+export { UnpublishedLabel } from '@Pimcore/modules/element/editor/shared-components/unpublished-label/unpublished-label'
+export type { UnpublishedLabelProps } from '@Pimcore/modules/element/editor/shared-components/unpublished-label/unpublished-label'
+
 export * from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 export * from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 export * from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
