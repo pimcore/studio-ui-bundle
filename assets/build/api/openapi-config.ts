@@ -22,8 +22,10 @@ const pathMatcher = (pattern: RegExp) => {
 
 const config: ConfigFile = {
   // Required by the ConfigFile type, but never read: every output file below
-  // carries its own per-slice schemaFile. Regenerate a slice's snapshot and
-  // client with `npm run api:sync -- <slice>`.
+  // carries its own per-slice schemaFile. Resync a slice's snapshot and client
+  // from a backend export with `npm run api:sync -- --schema <file|url> <slice>`,
+  // or regenerate the client from its committed snapshot with
+  // `npm run api:check -- --fix <slice>`.
   schemaFile: './schema/__per-slice__.json',
   apiFile: '@sdk/api',
   apiImport: 'api',

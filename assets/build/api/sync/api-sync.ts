@@ -28,7 +28,7 @@
  *                                                      listed in <file> (one per line); prints '*' when
  *                                                      generator, config or lockfile changed
  *
- * Further flags: --diff (print a unified diff per failing slice), --fix (with --check and
+ * Further flags: --diff (print the differing lines per failing slice, capped), --fix (with --check and
  * no --schema: overwrite a drifted .gen.ts with codegen(snapshot)), --summary-json <file>.
  * Exit codes: 0 ok, 1 drift, 2 usage error (e.g. an unknown slice name).
  */
