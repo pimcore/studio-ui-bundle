@@ -23,6 +23,14 @@ on:
 permissions:
   contents: read
 
+# The reusable publisher force-pushes the api-sync/<branch>/<slice> branches,
+# so a scheduled run and a manual dispatch must never publish concurrently — a
+# slower run could overwrite a newer one's result. One shared group queues them
+# instead.
+concurrency:
+  group: studio-api-drift-sync
+  cancel-in-progress: false
+
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -35,10 +43,10 @@ jobs:
           BRANCH: ${{ github.event.inputs.branch || 'all' }}
         run: |
           set -euo pipefail
-          # Only release lines that already carry the per-slice snapshot setup
+          # Only release lines that carry the per-slice snapshot setup
           # (assets/build/api/schema) belong here — on a line without it the
-          # check would report every slice as drifted. 2026.3 joins once the
-          # setup lands there.
+          # check would report every slice as drifted. 2026.3 stays on the old
+          # setup by decision (see service-operations#1713).
           all='[{"ui-branch":"2026.x","backend-branch":"2026.x"}]'
           if [[ "${BRANCH}" == "all" ]]; then
             matrix="${all}"
