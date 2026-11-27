@@ -42,8 +42,9 @@ jest.mock('../two-factor-setup-form/two-factor-setup-form', () => ({
   )
 }))
 jest.mock('./login-form', () => ({
-  LoginForm: ({ onTwoFactorRequired }: { onTwoFactorRequired: (challenge: { step: string, digits: number }) => void }) => (
+  LoginForm: ({ inPlace, onTwoFactorRequired }: { inPlace: boolean, onTwoFactorRequired: (challenge: { step: string, digits: number }) => void }) => (
     <>
+      <span>{ `in-place ${String(inPlace)}` }</span>
       <button onClick={ () => { onTwoFactorRequired({ step: 'verify', digits: 8 }) } }>login-verify</button>
       <button onClick={ () => { onTwoFactorRequired({ step: 'setup', digits: 6 }) } }>login-setup</button>
     </>
@@ -140,5 +141,17 @@ describe('LoginFormContainer two-factor steps', () => {
 
     await waitFor(() => { expect(screen.getByText('login-verify')).toBeTruthy() })
     expect(mockTrackError).toHaveBeenCalledTimes(1)
+  })
+
+  it('passes inPlace on to the login form', () => {
+    render(<LoginFormContainer inPlace />)
+
+    expect(screen.getByText('in-place true')).toBeTruthy()
+  })
+
+  it('tells the login form it is on the login route by default', () => {
+    render(<LoginFormContainer />)
+
+    expect(screen.getByText('in-place false')).toBeTruthy()
   })
 })
