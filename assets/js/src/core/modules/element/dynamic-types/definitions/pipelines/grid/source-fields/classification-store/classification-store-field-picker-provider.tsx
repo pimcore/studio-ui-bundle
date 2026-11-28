@@ -31,8 +31,16 @@ export interface ClassificationStoreFieldPickerContextValue {
 
 const ClassificationStoreFieldPickerContext = createContext<ClassificationStoreFieldPickerContextValue | undefined>(undefined)
 
+/**
+ * Returns the picker, or `undefined` when no {@link ClassificationStoreFieldPickerProvider} is mounted
+ * (e.g. a column editor rendered by a bundle). Source fields use it to degrade to plain field selection.
+ */
+export const useOptionalClassificationStoreFieldPicker = (): ClassificationStoreFieldPickerContextValue | undefined => {
+  return useContext(ClassificationStoreFieldPickerContext)
+}
+
 export const useClassificationStoreFieldPicker = (): ClassificationStoreFieldPickerContextValue => {
-  const context = useContext(ClassificationStoreFieldPickerContext)
+  const context = useOptionalClassificationStoreFieldPicker()
 
   if (context === undefined) {
     throw new Error('useClassificationStoreFieldPicker must be used within a ClassificationStoreFieldPickerProvider')

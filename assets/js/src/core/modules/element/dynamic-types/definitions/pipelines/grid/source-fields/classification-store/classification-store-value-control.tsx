@@ -18,7 +18,7 @@ import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provi
 import { Tag } from 'antd'
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useClassificationStoreFieldPicker } from './classification-store-field-picker-provider'
+import { useOptionalClassificationStoreFieldPicker } from './classification-store-field-picker-provider'
 
 export interface ResolvedClassificationStoreField {
   storeId: number
@@ -41,6 +41,8 @@ export interface ClassificationStoreFieldActions {
   openFor: (fieldKey: string) => void
   /** Handler for the field select: clears the group/key picked for the previously selected field. */
   onFieldSelect: () => void
+  /** Whether a {@link ClassificationStoreFieldPickerProvider} is mounted, i.e. `openFor` can open a picker. */
+  isPickerAvailable: boolean
 }
 
 /**
@@ -51,7 +53,7 @@ export interface ClassificationStoreFieldActions {
 export const useClassificationStoreFieldActions = ({ resolveField }: ClassificationStoreFieldActionsConfig): ClassificationStoreFieldActions => {
   const { name } = useItem()
   const { operations } = useKeyedList()
-  const { openPicker } = useClassificationStoreFieldPicker()
+  const picker = useOptionalClassificationStoreFieldPicker()
 
   const namePath = useMemo(() => (Array.isArray(name) ? name : [name]), [name])
 
@@ -63,11 +65,11 @@ export const useClassificationStoreFieldActions = ({ resolveField }: Classificat
 
   const openFor = useCallback((fieldKey: string): void => {
     const resolved = resolveField(fieldKey)
-    if (resolved === undefined) {
+    if (resolved === undefined || picker === undefined) {
       return
     }
 
-    openPicker({
+    picker.openPicker({
       storeId: resolved.storeId,
       classId: resolved.classId,
       fieldName: fieldKey,
@@ -77,7 +79,7 @@ export const useClassificationStoreFieldActions = ({ resolveField }: Classificat
         operations.update([...namePath, 'keyName'], value.keyName, false)
       }
     })
-  }, [resolveField, openPicker, operations, namePath])
+  }, [resolveField, picker, operations, namePath])
 
   const onFieldSelect = useCallback((): void => {
     // A different field was picked: drop any group/key picked for the previous field. The value for
@@ -85,7 +87,7 @@ export const useClassificationStoreFieldActions = ({ resolveField }: Classificat
     clearValue()
   }, [clearValue])
 
-  return { clearValue, openFor, onFieldSelect }
+  return { clearValue, openFor, onFieldSelect, isPickerAvailable: picker !== undefined }
 }
 
 export interface ClassificationStoreValueControlProps extends ClassificationStoreFieldActionsConfig {}
@@ -93,11 +95,11 @@ export interface ClassificationStoreValueControlProps extends ClassificationStor
 /**
  * Renders the picked classification store value for a single advanced column source field as a chip
  * with an edit affordance. Renders nothing while the selected field is not a classification store
- * field.
+ * field, or when no {@link ClassificationStoreFieldPickerProvider} is mounted.
  */
 export const ClassificationStoreValueControl = ({ resolveField }: ClassificationStoreValueControlProps): React.JSX.Element | null => {
   const { name } = useItem()
-  const { openFor } = useClassificationStoreFieldActions({ resolveField })
+  const { openFor, isPickerAvailable } = useClassificationStoreFieldActions({ resolveField })
   const { t } = useTranslation()
 
   const namePath = useMemo(() => (Array.isArray(name) ? name : [name]), [name])
@@ -108,7 +110,8 @@ export const ClassificationStoreValueControl = ({ resolveField }: Classification
 
   const isClassificationStoreField = currentField !== undefined && resolveField(currentField) !== undefined
 
-  if (!isClassificationStoreField) {
+  // Without a picker provider (e.g. a bundle's own column editor) there is nothing the edit affordance could open.
+  if (!isClassificationStoreField || !isPickerAvailable) {
     return null
   }
 
