@@ -1,0 +1,77 @@
+name: "Studio API Drift Sync"
+
+# Nightly per-slice schema sync (pimcore/service-operations#1713, P3): exports
+# the backend spec per release line straight from the matching
+# studio-backend-bundle branch and opens one small PR per drifted slice.
+# Scheduled workflows only run from the default branch; the reusable workflow
+# checks out each mapped release line itself, so this one copy covers them all.
+
+on:
+  schedule:
+    - cron: "17 4 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Release line to sync"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - "2026.x"
+
+permissions:
+  contents: read
+
+# The reusable publisher force-pushes the api-sync/<branch>/<slice> branches,
+# so a scheduled run and a manual dispatch must never publish concurrently — a
+# slower run could overwrite a newer one's result. One shared group queues them
+# instead.
+concurrency:
+  group: studio-api-drift-sync
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - name: Select release lines
+        id: plan
+        env:
+          BRANCH: ${{ github.event.inputs.branch || 'all' }}
+        run: |
+          set -euo pipefail
+          # Only release lines that carry the per-slice snapshot setup
+          # (assets/build/api/schema) belong here — on a line without it the
+          # check would report every slice as drifted. 2026.3 stays on the old
+          # setup by decision (see service-operations#1713).
+          all='[{"ui-branch":"2026.x","backend-branch":"2026.x"}]'
+          if [[ "${BRANCH}" == "all" ]]; then
+            matrix="${all}"
+          else
+            matrix="$(echo "${all}" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>console.log(JSON.stringify(JSON.parse(d).filter(l=>l["ui-branch"]===process.env.BRANCH))))')"
+          fi
+          echo "matrix=${matrix}" >> "$GITHUB_OUTPUT"
+          echo "Release lines: ${matrix}"
+
+  drift:
+    needs: plan
+    if: ${{ needs.plan.outputs.matrix != '[]' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-studio-api-drift.yaml@main
+    with:
+      ui-branch: ${{ matrix.ui-branch }}
+      backend-branch: ${{ matrix.backend-branch }}
+      working-directory: ./assets
+      node-version: "24"
+    secrets:
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
