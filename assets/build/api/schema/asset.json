@@ -1,0 +1,5978 @@
+{
+  "components": {
+    "schemas": {
+      "AdvancedColumnConfig": {
+        "properties": {
+          "advancedColumns": {
+            "description": "advancedColumns",
+            "items": {
+              "properties": {
+                "key": {
+                  "description": "Type of the column, e.g. \"simpleField\", \"relationField\", \"staticText\"",
+                  "type": "string"
+                },
+                "config": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/RelationFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/SimpleFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/StaticTextConfig"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "key",
+                "config"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "transformers": {
+            "description": "List if Transformers that should be applied",
+            "items": {
+              "$ref": "#/components/schemas/Transformer"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "advancedColumns"
+        ],
+        "title": "Advanced Column Config",
+        "type": "object"
+      },
+      "Archive": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          }
+        ],
+        "title": "Archive",
+        "type": "object"
+      },
+      "Asset": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Element"
+          },
+          {
+            "properties": {
+              "additionalAttributes": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                },
+                "description": "AdditionalAttributes",
+                "type": "object"
+              },
+              "customAttributes": {
+                "$ref": "#/components/schemas/CustomAttributes",
+                "description": "Custom attributes for the tree"
+              },
+              "score": {
+                "description": "Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search",
+                "format": "float",
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "hasWorkflowAvailable": {
+                "description": "Has workflow available",
+                "type": "boolean"
+              },
+              "workflowStates": {
+                "description": "Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders",
+                "items": {
+                  "$ref": "#/components/schemas/WorkflowStatus"
+                },
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "hasChildren": {
+                "description": "Has children",
+                "required": [
+                  "hasChildren"
+                ],
+                "type": "boolean"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string"
+              },
+              "filename": {
+                "description": "Filename",
+                "type": "string"
+              },
+              "mimeType": {
+                "description": "Mimetype",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "hasMetadata": {
+                "description": "Has metadata",
+                "type": "boolean"
+              },
+              "hasWorkflowWithPermissions": {
+                "description": "Workflow permissions",
+                "type": "boolean"
+              },
+              "fullPath": {
+                "description": "Full path",
+                "type": "string"
+              },
+              "permissions": {
+                "$ref": "#/components/schemas/AssetPermissions"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "hasChildren",
+          "type",
+          "filename",
+          "mimeType",
+          "hasMetadata",
+          "hasWorkflowWithPermissions",
+          "fullPath",
+          "customAttributes",
+          "permissions",
+          "hasWorkflowAvailable"
+        ],
+        "title": "Asset",
+        "type": "object"
+      },
+      "AssetDocument": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          },
+          {
+            "properties": {
+              "pageCount": {
+                "description": "Page count",
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "imageThumbnailPath": {
+                "description": "Path to image thumbnail",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "pageCount",
+          "imageThumbnailPath"
+        ],
+        "title": "Asset Document",
+        "type": "object"
+      },
+      "AssetFolder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          }
+        ],
+        "title": "Asset Folder",
+        "type": "object"
+      },
+      "AssetPermissions": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Permissions"
+          }
+        ],
+        "title": "Asset Permissions",
+        "type": "object"
+      },
+      "AssetType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Asset Type",
+        "type": "object"
+      },
+      "AssetUploadBatchInfo": {
+        "properties": {
+          "fileName": {
+            "description": "Name of the checked file",
+            "type": "string"
+          },
+          "exists": {
+            "description": "True if asset exists",
+            "type": "boolean"
+          },
+          "assetId": {
+            "description": "Id of existing asset",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "accessDenied": {
+            "description": "True if an asset with that name exists but the current user may not view it",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "fileName",
+          "exists",
+          "assetId",
+          "accessDenied"
+        ],
+        "title": "Asset Upload Batch Info",
+        "type": "object"
+      },
+      "AssetUploadInfo": {
+        "properties": {
+          "exists": {
+            "description": "True if asset exists",
+            "type": "boolean"
+          },
+          "assetId": {
+            "description": "Id of existing asset",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "exists",
+          "assetId"
+        ],
+        "title": "Asset Upload Info",
+        "type": "object"
+      },
+      "Audio": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          }
+        ],
+        "title": "Audio",
+        "type": "object"
+      },
+      "Column": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "Config; a classification store column names its key by ID or identifier and may name a variant",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/AdvancedColumnConfig"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "width": {
+            "description": "Width of the Column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "Grid Column Request",
+        "type": "object"
+      },
+      "ColumnConfiguration": {
+        "description": "Contains all data to configure a grid column",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "group": {
+            "description": "Define the group structure",
+            "type": "object"
+          },
+          "sortable": {
+            "description": "Sortable",
+            "type": "boolean"
+          },
+          "editable": {
+            "description": "Editable",
+            "type": "boolean"
+          },
+          "exportable": {
+            "description": "Exportable",
+            "type": "boolean"
+          },
+          "filterable": {
+            "description": "Filterable",
+            "type": "boolean"
+          },
+          "localizable": {
+            "description": "Localizable",
+            "type": "boolean"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "frontendType": {
+            "description": "Frontend Type",
+            "type": "string"
+          },
+          "config": {
+            "description": "Config",
+            "type": "object"
+          }
+        },
+        "required": [
+          "key",
+          "group",
+          "sortable",
+          "editable",
+          "localizable",
+          "type",
+          "config"
+        ],
+        "title": "GridColumnConfiguration",
+        "type": "object"
+      },
+      "ColumnData": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "description": "Value",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "fieldType": {
+            "description": "Field Type of the column",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "inheritance": {
+            "description": "inheritance",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "title": "GridColumnData",
+        "type": "object"
+      },
+      "ColumnSchema": {
+        "properties": {
+          "key": {
+            "description": "Key of the Column",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale of the Column",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Define the group structure",
+            "type": "object"
+          },
+          "width": {
+            "description": "Width of the Column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "locale",
+          "group"
+        ],
+        "title": "Column",
+        "type": "object"
+      },
+      "Configuration": {
+        "description": "Contains all data to configure a grid column",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "GridConfiguration",
+        "type": "object"
+      },
+      "CustomAttributes": {
+        "description": "Custom attributes used mainly for the tree",
+        "properties": {
+          "icon": {
+            "description": "Custom Icon",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElementIcon",
+                "description": "Custom Icon"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tooltip": {
+            "description": "Custom Tooltip",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalIcons": {
+            "description": "AdditionalIcons",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "key": {
+            "description": "Custom Key/Filename",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalCssClasses": {
+            "description": "Additional Css Classes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "icon",
+          "tooltip",
+          "additionalIcons",
+          "key",
+          "additionalCssClasses"
+        ],
+        "title": "CustomAttributes",
+        "type": "object"
+      },
+      "CustomMetadata": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "language": {
+            "description": "Language",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "language",
+          "type",
+          "data"
+        ],
+        "title": "CustomMetadata",
+        "type": "object"
+      },
+      "CustomSettings": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "fixedCustomSettings": {
+            "description": "fixed custom settings",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FixedCustomSettings",
+                "description": "fixed custom settings"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dynamicCustomSettings": {
+            "description": "dynamic custom settings - can be any key-value pair",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "title": "CustomSettings",
+        "type": "object"
+      },
+      "DetailedConfiguration": {
+        "description": "Contains all data to configure a grid column",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shareGlobal": {
+            "description": "shareGlobal",
+            "type": "boolean"
+          },
+          "saveFilter": {
+            "description": "saveFilter",
+            "type": "boolean"
+          },
+          "setAsFavorite": {
+            "description": "setAsFavorite",
+            "type": "boolean"
+          },
+          "sharedUsers": {
+            "description": "sharedUsers",
+            "type": "object"
+          },
+          "sharedRoles": {
+            "description": "sharedRoles",
+            "type": "object"
+          },
+          "columns": {
+            "description": "columns",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/Column"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "filter": {
+            "description": "filter",
+            "items": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "type": "array"
+          },
+          "pageSize": {
+            "description": "Page Size",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "Modification Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ownerId": {
+            "description": "ID of the owner",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "id": {
+            "description": "ID of the configuration",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "shareGlobal",
+          "saveFilter",
+          "setAsFavorite",
+          "sharedUsers",
+          "sharedRoles",
+          "columns",
+          "filter",
+          "pageSize"
+        ],
+        "title": "GridDetailedConfiguration",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "DownloadAvailability": {
+        "properties": {
+          "available": {
+            "description": "Whether the exported file is still available for download",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "title": "Download Availability",
+        "type": "object"
+      },
+      "Element": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "ID of parent",
+            "type": "integer"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "icon"
+          },
+          "userOwner": {
+            "description": "ID of owner",
+            "type": "integer"
+          },
+          "userModification": {
+            "description": "User that modified the element",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "locked": {
+            "description": "Locked",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isLocked": {
+            "description": "Is locked",
+            "type": "boolean"
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "elementType": {
+            "description": "elementType",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "parentId",
+          "path",
+          "icon",
+          "userOwner",
+          "userModification",
+          "locked",
+          "isLocked",
+          "creationDate",
+          "modificationDate",
+          "elementType"
+        ],
+        "title": "Element",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "ExportAllFilter": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "columnFilters": {
+            "description": "Column Filter",
+            "type": "object"
+          },
+          "sortFilter": {
+            "description": "Sort Filter",
+            "type": "object"
+          },
+          "additionalSortFilters": {
+            "description": "Additional Sort Filters for multi-column sorting",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columnFilters",
+          "sortFilter"
+        ],
+        "title": "Export All Filter",
+        "type": "object"
+      },
+      "Filter": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "page": {
+            "description": "Page",
+            "type": "integer"
+          },
+          "pageSize": {
+            "description": "Page Size",
+            "type": "integer"
+          },
+          "includeDescendants": {
+            "description": "Include Descendant Items",
+            "type": "boolean"
+          },
+          "columnFilters": {
+            "description": "Column Filter",
+            "type": "object"
+          },
+          "sortFilter": {
+            "description": "Sort Filter",
+            "type": "object"
+          },
+          "additionalSortFilters": {
+            "description": "Additional Sort Filters for multi-column sorting",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "page",
+          "pageSize",
+          "includeDescendants"
+        ],
+        "title": "Grid Filter",
+        "type": "object"
+      },
+      "FixedCustomSettings": {
+        "properties": {
+          "embeddedMetadata": {
+            "description": "embedded meta data of the asset - array of any key-value pairs",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "embeddedMetadataExtracted": {
+            "description": "flag to indicate if the embedded meta data has been extracted from the asset",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "embeddedMetadata",
+          "embeddedMetadataExtracted"
+        ],
+        "title": "FixedCustomSettings",
+        "type": "object"
+      },
+      "FocalPoint": {
+        "properties": {
+          "x": {
+            "description": "x Coordinate of FocalPoint",
+            "type": "integer"
+          },
+          "y": {
+            "description": "y Coordinate of FocalPoint",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "FocalPoint",
+        "type": "object"
+      },
+      "Image": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          },
+          {
+            "properties": {
+              "width": {
+                "description": "width",
+                "type": "integer"
+              },
+              "height": {
+                "description": "height",
+                "type": "integer"
+              },
+              "imageThumbnailPath": {
+                "description": "path to thumbnail",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "width",
+          "height",
+          "imageThumbnailPath"
+        ],
+        "title": "Image",
+        "type": "object"
+      },
+      "ImageData": {
+        "properties": {
+          "focalPoint": {
+            "$ref": "#/components/schemas/FocalPoint",
+            "description": "focalPoint"
+          }
+        },
+        "title": "ImageData",
+        "type": "object"
+      },
+      "PatchCustomMetadata": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "language": {
+            "description": "Language",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "language",
+          "type",
+          "data"
+        ],
+        "title": "PatchCustomMetadata",
+        "type": "object"
+      },
+      "Permissions": {
+        "properties": {
+          "list": {
+            "description": "List",
+            "type": "boolean"
+          },
+          "view": {
+            "description": "View",
+            "type": "boolean"
+          },
+          "publish": {
+            "description": "Publish",
+            "type": "boolean"
+          },
+          "delete": {
+            "description": "Delete",
+            "type": "boolean"
+          },
+          "rename": {
+            "description": "Rename",
+            "type": "boolean"
+          },
+          "create": {
+            "description": "Create",
+            "type": "boolean"
+          },
+          "settings": {
+            "description": "Settings",
+            "type": "boolean"
+          },
+          "versions": {
+            "description": "Versions",
+            "type": "boolean"
+          },
+          "properties": {
+            "description": "Properties",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "list",
+          "view",
+          "publish",
+          "delete",
+          "rename",
+          "create",
+          "settings",
+          "versions",
+          "properties"
+        ],
+        "title": "Permissions",
+        "type": "object"
+      },
+      "RelationFieldConfig": {
+        "properties": {
+          "relation": {
+            "description": "Relation Getter",
+            "type": "string"
+          },
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "relation",
+          "field"
+        ],
+        "title": "Relation Field Config",
+        "type": "object"
+      },
+      "SimpleFieldConfig": {
+        "properties": {
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field"
+        ],
+        "title": "Simple Field Config",
+        "type": "object"
+      },
+      "StaticTextConfig": {
+        "properties": {
+          "text": {
+            "description": "Static Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "Static Text Config",
+        "type": "object"
+      },
+      "Text": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          }
+        ],
+        "title": "Text",
+        "type": "object"
+      },
+      "Transformer": {
+        "properties": {
+          "key": {
+            "description": "Key of the Transformer",
+            "type": "string"
+          },
+          "config": {
+            "description": "Configuration for the transformer",
+            "type": "object"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Transformer",
+        "type": "object"
+      },
+      "Unknown": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          }
+        ],
+        "title": "Unknown",
+        "type": "object"
+      },
+      "UpdateCustomMetadata": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "language": {
+            "description": "Language",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "data": {
+            "description": "Data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "language",
+          "type",
+          "data"
+        ],
+        "title": "UpdateCustomMetadata",
+        "type": "object"
+      },
+      "UpdateCustomSettings": {
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "UpdateCustomSettings",
+        "type": "object"
+      },
+      "UpdateElementProperty": {
+        "properties": {
+          "key": {
+            "description": "key",
+            "type": "string"
+          },
+          "data": {
+            "description": "data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "inheritable": {
+            "description": "inheritable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "data",
+          "type",
+          "inheritable"
+        ],
+        "title": "UpdateDataProperty",
+        "type": "object"
+      },
+      "ValidationError": {
+        "description": "A single validation error of an element, with the data needed to translate it",
+        "properties": {
+          "field": {
+            "description": "Name of the field that failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fieldTitle": {
+            "description": "Raw, untranslated field title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "path": {
+            "description": "Location of the field, innermost level first",
+            "items": {
+              "$ref": "#/components/schemas/ValidationErrorPath"
+            },
+            "type": "array"
+          },
+          "message": {
+            "description": "Untranslated message, untrusted: escape it before rendering it as HTML",
+            "type": "string"
+          },
+          "messageKey": {
+            "description": "Translation key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "description": "Translation parameters",
+            "type": "object"
+          }
+        },
+        "required": [
+          "field",
+          "fieldTitle",
+          "path",
+          "message",
+          "messageKey",
+          "parameters"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "ValidationErrorPath": {
+        "description": "One level of the location of a validation error, e.g. a localized field or an object brick",
+        "properties": {
+          "field": {
+            "description": "Field name of this level",
+            "type": "string"
+          },
+          "title": {
+            "description": "Raw, untranslated title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Language of this level",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "index": {
+            "description": "Row index within a block or field collection",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Object brick key or field collection type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "typeTitle": {
+            "description": "Raw, untranslated title of the object brick or field collection",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field",
+          "title",
+          "language",
+          "index",
+          "type",
+          "typeTitle"
+        ],
+        "title": "ValidationErrorPath",
+        "type": "object"
+      },
+      "ValidationFailedError": {
+        "description": "Error response of a failed element validation",
+        "properties": {
+          "message": {
+            "description": "Failure message in English. Untrusted, may contain markup: escape before rendering",
+            "type": "string"
+          },
+          "errorKey": {
+            "description": "Error key, not present when the request failed before the element was validated",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "validationErrors": {
+            "description": "Individual validation errors, present when the failure came from the element validation",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "ValidationFailedError",
+        "type": "object"
+      },
+      "Video": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Asset"
+          },
+          {
+            "properties": {
+              "duration": {
+                "description": "Duration",
+                "format": "float",
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "width": {
+                "description": "Width",
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "height": {
+                "description": "Height",
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "imageThumbnailPath": {
+                "description": "Path to Image Thumbnail",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "title": "Video",
+        "type": "object"
+      },
+      "VideoThumbnailStatus": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "status": {
+            "description": "Conversion status of the requested video thumbnail.",
+            "enum": [
+              "finished",
+              "inprogress",
+              "error",
+              "not_started"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "Video Thumbnail Status",
+        "type": "object"
+      },
+      "VideoType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Video Type",
+        "type": "object"
+      },
+      "WorkflowStatus": {
+        "properties": {
+          "color": {
+            "description": "color",
+            "type": "string"
+          },
+          "colorInverted": {
+            "description": "colorInverted",
+            "type": "boolean"
+          },
+          "title": {
+            "description": "borderColor",
+            "type": "string"
+          },
+          "label": {
+            "description": "label",
+            "type": "string"
+          },
+          "layoutId": {
+            "description": "layoutId",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "visibleInDetail": {
+            "description": "visibleInDetail",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "color",
+          "colorInverted",
+          "title",
+          "label",
+          "layoutId",
+          "visibleInDetail"
+        ],
+        "title": "WorkflowStatus",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: asset)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/assets/types": {
+      "get": {
+        "description": "Retrieves all available asset types in the system.\n",
+        "operationId": "asset_get_types",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/AssetType"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved all available asset types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all asset types",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/batch-delete": {
+      "delete": {
+        "description": "Batch delete assets based on the given <strong>{ids}</strong>. <br> The <strong>{ids}</strong> must be a list of IDs of existing assets. <br>\nDeletion is done asynchronously and the jobRun ID is returned in the response\n",
+        "operationId": "asset_batch_delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "ids": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for batch delete"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Batch delete assets by IDs",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/clone/{parentId}": {
+      "post": {
+        "description": "Clones a specific asset with the given <strong>{id}</strong>. <br> The <strong>{parentId}</strong> must be a folder\n",
+        "operationId": "asset_clone",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "ParentId of the asset",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully copied asset"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Clone a specific asset",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/custom-settings": {
+      "get": {
+        "description": "Retrieves custom settings based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing asset\n",
+        "operationId": "asset_custom_settings_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "$ref": "#/components/schemas/CustomSettings"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved custom settings as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get custom settings of an asset by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/text": {
+      "get": {
+        "description": "Retrieves the text data in UTF8 representation of the asset based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing asset.\n",
+        "operationId": "asset_get_text_data_by_id",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "description": "UTF 8 encoded text data",
+                      "title": "data",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved UTF8 encoded text data of asset"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get asset data in text UTF8 representation by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/document/download/custom": {
+      "get": {
+        "description": "Download the custom document image based on the provided <strong>{id}</strong> and configuration parameters. <br> \nThe <strong>{id}</strong> must be an ID of existing asset document\n",
+        "operationId": "asset_document_download_custom",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Mime type of downloaded image.",
+            "in": "query",
+            "name": "mimeType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JPEG",
+                "PNG"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page of the document",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Resize mode of downloaded image.",
+            "in": "query",
+            "name": "resizeMode",
+            "required": false,
+            "schema": {
+              "enum": [
+                "resize",
+                "scaleByWidth",
+                "scaleByHeight"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Width of downloaded image",
+            "in": "query",
+            "name": "width",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Height of downloaded image",
+            "in": "query",
+            "name": "height",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Quality of downloaded image",
+            "in": "query",
+            "name": "quality",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Dpi of downloaded image",
+            "in": "query",
+            "name": "dpi",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Custom document image binary file",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download custom document image by ID and configuration",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/document/stream/custom": {
+      "get": {
+        "description": "Stream the custom document image based on the provided <strong>{id}</strong> and configuration parameters. <br> \nThe <strong>{id}</strong> must be an ID of existing asset document\n",
+        "operationId": "asset_document_stream_custom",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Mime type of downloaded image.",
+            "in": "query",
+            "name": "mimeType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JPEG",
+                "PNG"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page of the document",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Resize mode of downloaded image.",
+            "in": "query",
+            "name": "resizeMode",
+            "required": false,
+            "schema": {
+              "enum": [
+                "resize",
+                "scaleByWidth",
+                "scaleByHeight"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Width of downloaded image",
+            "in": "query",
+            "name": "width",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Height of downloaded image",
+            "in": "query",
+            "name": "height",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Quality of downloaded image",
+            "in": "query",
+            "name": "quality",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Dpi of downloaded image",
+            "in": "query",
+            "name": "dpi",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "",
+            "in": "query",
+            "name": "cropPercent",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "CropWidth of image thumbnail",
+            "in": "query",
+            "name": "cropWidth",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropHeight of image thumbnail",
+            "in": "query",
+            "name": "cropHeight",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropTop of image thumbnail",
+            "in": "query",
+            "name": "cropTop",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropLeft of image thumbnail",
+            "in": "query",
+            "name": "cropLeft",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Custom document image stream",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream custom document image by ID and configuration",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/document/stream/dynamic": {
+      "get": {
+        "description": "Stream the custom image based on the provided <strong>{id}</strong> and dynamic config data. <br> \nThe <strong>{id}</strong> must be an ID of existing asset document\n",
+        "operationId": "asset_document_stream_dynamic",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "A JSON encoded thumbnail configuration.",
+            "in": "query",
+            "name": "config",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Document image stream based on dynamic thumbnail configuration",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream document image by ID and dynamic configuration",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/document/stream/pdf-preview": {
+      "get": {
+        "description": "Stream asset document PDF preview based on the provided <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing asset document\n",
+        "operationId": "asset_document_stream_preview",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Asset PDF preview stream",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "202 - Not Completed<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Stream asset document PDF preview by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/document/download/thumbnail/{thumbnailName}": {
+      "get": {
+        "description": "Download the asset document based on the provided <strong>{id}</strong> and <strong>{thumbnailName}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset document <br>\nList of downloadable <b>thumbnail names</b> can be obtained via the thumbnail image collection endpoint\n",
+        "operationId": "asset_document_download_by_thumbnail",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page of the document",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching thumbnail name.",
+            "in": "path",
+            "name": "thumbnailName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Document image binary file",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download document image by ID and thumbnail name",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/document/stream/thumbnail/{thumbnailName}": {
+      "get": {
+        "description": "Stream the asset document based on the provided <strong>{id}</strong> and <strong>{thumbnailName}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset document\n",
+        "operationId": "asset_document_stream_by_thumbnail",
+        "parameters": [
+          {
+            "description": "Id of the document",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page of the document",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching thumbnail name.",
+            "in": "path",
+            "name": "thumbnailName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "",
+            "in": "query",
+            "name": "cropPercent",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "CropWidth of image thumbnail",
+            "in": "query",
+            "name": "cropWidth",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropHeight of image thumbnail",
+            "in": "query",
+            "name": "cropHeight",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropTop of image thumbnail",
+            "in": "query",
+            "name": "cropTop",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropLeft of image thumbnail",
+            "in": "query",
+            "name": "cropLeft",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Stream of document image",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream document image by ID and thumbnail name",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/download/zip/{jobRunId}": {
+      "get": {
+        "description": "Download the ZIP archive with assets based on the given <strong>{jobRunId}</strong> returned in the response of the create zip endpoint\n",
+        "operationId": "asset_download_zip",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ZIP archive as attachment",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download ZIP archive for assets",
+        "tags": [
+          "Assets"
+        ]
+      },
+      "delete": {
+        "description": "Delete the ZIP file with given <strong>{jobRunId}</strong> returned in the response of the create zip endpoint\n",
+        "operationId": "asset_delete_zip",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete asset ZIP file based on jobRunId",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/download/zip/{jobRunId}/available": {
+      "get": {
+        "description": "Checks whether the ZIP archive for the given job run id is still available for download.\n",
+        "operationId": "asset_download_zip_available",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadAvailability"
+                }
+              }
+            },
+            "description": "Availability flag for the ZIP archive"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Check ZIP archive availability for job run id",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/download": {
+      "get": {
+        "description": "Download the original asset stream based on the provided <strong>{id}</strong>\n",
+        "operationId": "asset_download_by_id",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Original asset binary file",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download asset by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/export/zip/asset": {
+      "post": {
+        "description": "Creating a ZIP file for assets based on the provided asset IDs in <strong>{assets}</strong> parameter. <br>\nDownload has to be triggered separately via the zip download route with the <strong>{jobRunId}</strong> returned in the response\n",
+        "operationId": "asset_export_zip_asset",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "assets": {
+                    "description": "Asset IDs to include in the zip",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  },
+                  "parentId": {
+                    "description": "ID of the parent folder. Defaults to root (1).",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for zip export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>413 - Max File Size Exceeded<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Creating ZIP file for assets",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/export/zip/folder": {
+      "post": {
+        "description": "Creating a ZIP file for assets based on the provided folder IDs in <strong>{folders}</strong> parameter. <br>\nFilter assets from folder based on the grid filter schema. <br>\nDownload has to be triggered separately via the zip download route with the <strong>{jobRunId}</strong> returned in the response\n",
+        "operationId": "asset_export_zip_folder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "folders": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/ExportAllFilter"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for zip export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>413 - Max File Size Exceeded<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Creating ZIP file assets based on folder",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}": {
+      "get": {
+        "description": "Retrieves a specific asset data based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing asset.\n",
+        "operationId": "asset_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Image"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AssetDocument"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Audio"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Video"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Archive"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Text"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AssetFolder"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Unknown"
+                    }
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved one of asset type data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get asset by ID",
+        "tags": [
+          "Assets"
+        ]
+      },
+      "put": {
+        "description": "Update needs to have the complete data present. <br> You can create/update/delete list entries like metadata, custom settings and properties. <br>  E.g. if you want to remove an entry from metadata simply do not include this entry in the update. <br>  If you want to update only a single field, use the PATCH method.\n",
+        "operationId": "asset_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "properties": {
+                      "parentId": {
+                        "minimum": 1,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "locked": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "coauthorType": {
+                        "deprecated": true,
+                        "description": "Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                        "maxLength": 50,
+                        "type": "string"
+                      },
+                      "coauthor": {
+                        "deprecated": true,
+                        "description": "Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                        "maxLength": 255,
+                        "type": "string"
+                      },
+                      "data": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "dataUri": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "metadata": {
+                        "items": {
+                          "$ref": "#/components/schemas/UpdateCustomMetadata"
+                        },
+                        "type": [
+                          "array",
+                          "null"
+                        ]
+                      },
+                      "customSettings": {
+                        "items": {
+                          "$ref": "#/components/schemas/UpdateCustomSettings"
+                        },
+                        "type": [
+                          "array",
+                          "null"
+                        ]
+                      },
+                      "properties": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/components/schemas/UpdateElementProperty"
+                        }
+                      },
+                      "image": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/components/schemas/ImageData"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Image"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AssetDocument"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Audio"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Video"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Archive"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Text"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AssetFolder"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Unknown"
+                    }
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "One of asset types"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailedError"
+                }
+              }
+            },
+            "description": "Element validation failed. The optional validationErrors list the individual errors."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update an asset by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/configuration/{configurationId}/delete": {
+      "delete": {
+        "description": "Delete grid configuration for a specific folder and given configuration ID <strong>{configurationId}</strong>\n",
+        "operationId": "asset_delete_grid_configuration_by_configurationId",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the element",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedConfiguration"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete grid configuration for a specific folder and given configuration ID",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/available-columns": {
+      "get": {
+        "description": "Get all available grid columns for assets\n",
+        "operationId": "asset_get_available_grid_columns",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "columns": {
+                      "items": {
+                        "$ref": "#/components/schemas/ColumnConfiguration"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "All available grid column configurations for assets"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get available grid column configurations",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/configuration/{folderId}": {
+      "get": {
+        "description": "Get asset saved grid configuration by <strong>{folderId}</strong> if a configuration-id is set, otherwise get the default configuration will be returned.\n",
+        "operationId": "asset_get_grid_configuration_by_folderId",
+        "parameters": [
+          {
+            "description": "FolderId of the element",
+            "in": "path",
+            "name": "folderId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Configuration ID",
+            "in": "query",
+            "name": "configurationId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedConfiguration"
+                }
+              }
+            },
+            "description": "Asset grid configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get asset grid configuration for a specific folder",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/configurations": {
+      "get": {
+        "description": "Get all saved grid configurations for assets of the given folder for the current user and shared configurations for this user\n",
+        "operationId": "asset_get_saved_grid_configurations",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Configuration"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of saved grid configurations for the given folder"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all saved grid configurations for assets of the given folder",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/configuration/remove-favorite/{configurationId}/{folderId}": {
+      "delete": {
+        "description": "Remove asset grid configuration as favorite for the current user for a specific folder\n",
+        "operationId": "asset_remove_grid_configuration_as_favorite",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the configurationId",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "FolderId of the folderId",
+            "in": "path",
+            "name": "folderId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Asset grid configuration removed as favorite successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Remove asset grid configuration as favorite for a specific folder",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/configuration/save": {
+      "post": {
+        "description": "Save asset grid configuration for a specific folder\n",
+        "operationId": "asset_save_grid_configuration",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "folderId": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "shareGlobal": {
+                    "type": "boolean"
+                  },
+                  "setAsFavorite": {
+                    "type": "boolean"
+                  },
+                  "saveFilter": {
+                    "type": "boolean"
+                  },
+                  "sharedUsers": {
+                    "type": "object"
+                  },
+                  "sharedRoles": {
+                    "type": "object"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/ColumnSchema"
+                    },
+                    "type": "array"
+                  },
+                  "filter": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/Filter"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "folderId",
+                  "pageSize",
+                  "name",
+                  "description",
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Configuration"
+                }
+              }
+            },
+            "description": "Asset grid configuration saved successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Save asset grid configuration for a specific folder\n",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/configuration/set-as-favorite/{configurationId}/{folderId}": {
+      "post": {
+        "description": "Set asset grid configuration as favorite for the current user for a specific folder\n",
+        "operationId": "asset_set_grid_configuration_as_favorite",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the configurationId",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "FolderId of the folderId",
+            "in": "path",
+            "name": "folderId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Asset grid configuration set as favorite successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Set asset grid configuration as favorite for a specific folder",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid/configuration/update/{configurationId}": {
+      "put": {
+        "description": "Update asset grid configuration for a specific folder and given configuration ID <strong>{configurationId}</strong>\n",
+        "operationId": "asset_update_grid_configuration",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the configurationId",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "folderId": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "shareGlobal": {
+                    "type": "boolean"
+                  },
+                  "setAsFavorite": {
+                    "type": "boolean"
+                  },
+                  "saveFilter": {
+                    "type": "boolean"
+                  },
+                  "sharedUsers": {
+                    "type": "object"
+                  },
+                  "sharedRoles": {
+                    "type": "object"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/ColumnSchema"
+                    },
+                    "type": "array"
+                  },
+                  "filter": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/Filter"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "folderId",
+                  "pageSize",
+                  "name",
+                  "description",
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Asset grid configuration updated successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update asset grid configuration for a specific folder",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/grid": {
+      "post": {
+        "description": "Retrieve assets data for grid. <br>\nYou can use different query parameters to filter the asset data: <br>\n<ul>\n<li><strong>folderId</strong>: ID of parent folder</li>\n<li><strong>columns</strong>: To see the full description of request fields see the schema <strong>Grid Column Request</strong></li>\n<li><strong>filters</strong>: To see the full description of request fields see the schema <strong>Grid Filter</strong></li>\n</ul>\n",
+        "operationId": "asset_get_grid",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "folderId": {
+                    "type": "integer"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/Filter"
+                  }
+                },
+                "required": [
+                  "folderId"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "columns": {
+                            "items": {
+                              "$ref": "#/components/schemas/ColumnData"
+                            },
+                            "type": "array"
+                          },
+                          "isLocked": {
+                            "type": "boolean"
+                          },
+                          "permissions": {
+                            "$ref": "#/components/schemas/Permissions"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "required": [
+                        "id",
+                        "columns",
+                        "isLocked",
+                        "permissions"
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Asset grid data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get asset data for grid",
+        "tags": [
+          "Asset Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/download/custom": {
+      "get": {
+        "description": "Download the custom image based on the provided <strong>{id}</strong> and configuration parameters. <br> \nThe <strong>{id}</strong> must be an ID of existing asset image\n",
+        "operationId": "asset_image_download_custom",
+        "parameters": [
+          {
+            "description": "Id of the image",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Mime type of downloaded image.",
+            "in": "query",
+            "name": "mimeType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JPEG",
+                "PNG"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Resize mode of downloaded image.",
+            "in": "query",
+            "name": "resizeMode",
+            "required": true,
+            "schema": {
+              "enum": [
+                "resize",
+                "scaleByWidth",
+                "scaleByHeight"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Width of downloaded image",
+            "in": "query",
+            "name": "width",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Height of downloaded image",
+            "in": "query",
+            "name": "height",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Quality of downloaded image",
+            "in": "query",
+            "name": "quality",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Dpi of downloaded image",
+            "in": "query",
+            "name": "dpi",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Custom image binary file",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download custom image by ID and configuration",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/stream/custom": {
+      "get": {
+        "description": "Stream image asset thumbnail based on the provided <strong>{id}</strong> and configuration parameters. <br> \nThe <strong>{id}</strong> must be an ID of existing asset image\n",
+        "operationId": "asset_image_stream_custom",
+        "parameters": [
+          {
+            "description": "Id of the image",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Mime type of downloaded image.",
+            "in": "query",
+            "name": "mimeType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JPEG",
+                "PNG"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Resize mode of downloaded image.",
+            "in": "query",
+            "name": "resizeMode",
+            "required": true,
+            "schema": {
+              "enum": [
+                "scaleByHeight",
+                "scaleByWidth",
+                "resize",
+                "none"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Width of downloaded image",
+            "in": "query",
+            "name": "width",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Height of downloaded image",
+            "in": "query",
+            "name": "height",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Quality of downloaded image",
+            "in": "query",
+            "name": "quality",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Dpi of downloaded image",
+            "in": "query",
+            "name": "dpi",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Contain",
+            "in": "query",
+            "name": "contain",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Frame",
+            "in": "query",
+            "name": "frame",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Cover",
+            "in": "query",
+            "name": "cover",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Force resize",
+            "in": "query",
+            "name": "forceResize",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "",
+            "in": "query",
+            "name": "cropPercent",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "CropWidth of image thumbnail",
+            "in": "query",
+            "name": "cropWidth",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropHeight of image thumbnail",
+            "in": "query",
+            "name": "cropHeight",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropTop of image thumbnail",
+            "in": "query",
+            "name": "cropTop",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropLeft of image thumbnail",
+            "in": "query",
+            "name": "cropLeft",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Image asset stream based on custom thumbnail configuration",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream custom image thumbnail by ID and configuration",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/stream/dynamic": {
+      "get": {
+        "description": "Stream image asset thumbnail based on the provided <strong>{id}</strong> and dynamic config data. <br> \nThe <strong>{id}</strong> must be an ID of existing asset image\n",
+        "operationId": "asset_image_stream_dynamic",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "A JSON encoded thumbnail configuration.",
+            "in": "query",
+            "name": "config",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Image asset stream based on dynamic thumbnail configuration",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream image thumbnail by ID and dynamic configuration",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/download/format/{format}": {
+      "get": {
+        "description": "Download image asset by ID and format. <br> The <strong>{id}</strong> must be an ID of existing asset image. <br> List of available formats can be obtained via the thumbnail image collection endpoint",
+        "operationId": "asset_image_download_by_format",
+        "parameters": [
+          {
+            "description": "Id of the image",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching format type.",
+            "in": "path",
+            "name": "format",
+            "required": true,
+            "schema": {
+              "enum": [
+                "office",
+                "print",
+                "web"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Image asset binary file based on format",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download image asset by ID and format",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/stream/preview": {
+      "get": {
+        "description": "Stream image asset preview based on the provided <strong>{id}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset image\n",
+        "operationId": "asset_image_stream_preview",
+        "parameters": [
+          {
+            "description": "Id of the image",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Image preview stream",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream image asset preview by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/stream": {
+      "get": {
+        "description": "Stream original image asset based on the provided <strong>{id}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset image\n",
+        "operationId": "asset_image_stream",
+        "parameters": [
+          {
+            "description": "Id of the image",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Stream of an original image asset",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream original image asset by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/download/thumbnail/{thumbnailName}": {
+      "get": {
+        "description": "Download the image asset based on the provided <strong>{id}</strong> and <strong>{thumbnailName}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset image <br>\nList of downloadable <b>thumbnail names</b> can be obtained via the thumbnail image collection endpoint\n",
+        "operationId": "asset_image_download_by_thumbnail",
+        "parameters": [
+          {
+            "description": "Id of the image",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching thumbnail name.",
+            "in": "path",
+            "name": "thumbnailName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Image asset binary file based on thumbnail name",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download image asset by ID and thumbnail name",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/image/stream/thumbnail/{thumbnailName}": {
+      "get": {
+        "description": "Stream the image asset based on the provided <strong>{id}</strong> and <strong>{thumbnailName}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset image\n",
+        "operationId": "asset_image_stream_by_thumbnail",
+        "parameters": [
+          {
+            "description": "Id of the image",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching thumbnail name.",
+            "in": "path",
+            "name": "thumbnailName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "",
+            "in": "query",
+            "name": "cropPercent",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "CropWidth of image thumbnail",
+            "in": "query",
+            "name": "cropWidth",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropHeight of image thumbnail",
+            "in": "query",
+            "name": "cropHeight",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropTop of image thumbnail",
+            "in": "query",
+            "name": "cropTop",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "CropLeft of image thumbnail",
+            "in": "query",
+            "name": "cropLeft",
+            "schema": {
+              "format": "float",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Mime type of steamed image.",
+            "in": "query",
+            "name": "mimeType",
+            "required": false,
+            "schema": {
+              "enum": [
+                "JPEG",
+                "PNG",
+                "source",
+                "original",
+                "print"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Stream of image asset based on thumbnail name",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream image asset by ID and thumbnail name",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets": {
+      "patch": {
+        "description": "Patching assets based on the given ID and data. <br> Patching can be used for updating single or multiple fields. <br> If single element is being patched, operation is executed synchronously. Multiple elements are patched asynchronously.\n",
+        "operationId": "asset_patch_by_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "items": {
+                      "properties": {
+                        "id": {
+                          "description": "Asset ID",
+                          "type": "integer"
+                        },
+                        "parentId": {
+                          "minimum": 1,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "key": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "locked": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "coauthorType": {
+                          "deprecated": true,
+                          "description": "Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                          "maxLength": 50,
+                          "type": "string"
+                        },
+                        "coauthor": {
+                          "deprecated": true,
+                          "description": "Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                          "maxLength": 255,
+                          "type": "string"
+                        },
+                        "metadata": {
+                          "items": {
+                            "$ref": "#/components/schemas/PatchCustomMetadata"
+                          },
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully patched asset"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created jobRun for patching multiple assets"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Patch assets by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/folder/{id}": {
+      "patch": {
+        "description": "Patching assets based on the given folder ID and data. <br> Patching on folder will be done asynchronously. <br>\nYou can also use filters and sorting. Filter assets from folder based on the grid filter schema\n",
+        "operationId": "asset_patch_folder_by_id",
+        "parameters": [
+          {
+            "description": "Id of the folder",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "properties": {
+                      "parentId": {
+                        "minimum": 1,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "locked": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "metadata": {
+                        "items": {
+                          "$ref": "#/components/schemas/PatchCustomMetadata"
+                        },
+                        "type": [
+                          "array",
+                          "null"
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/ExportAllFilter"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created jobRun for patching multiple assets"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Patch all assets based on folder ID and filters",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/thumbnail/clear": {
+      "delete": {
+        "description": "Clear the image thumbnail based on the provided <strong>{id}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of an existing asset image, video or pdf\n",
+        "operationId": "asset_clear_thumbnail",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Clear image thumbnail by ID",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/tree": {
+      "get": {
+        "description": "Listing of all assets and asset folders in the system. <br>\nReturns only data which are relevant for the tree <br>\nYou can use different query parameters to filter the assets and it is possible to exclude folders from the result completely\n",
+        "operationId": "asset_get_tree",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter assets by parent id.",
+            "in": "query",
+            "name": "parentId",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter assets/data-objects by matching ids. As a wildcard * can be used",
+            "in": "query",
+            "name": "idSearchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Pql query filter",
+            "in": "query",
+            "name": "pqlQuery",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter folders from result.",
+            "in": "query",
+            "name": "excludeFolders",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by path.",
+            "in": "query",
+            "name": "path",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Include the parent item in the result.",
+            "in": "query",
+            "name": "pathIncludeParent",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include all descendants in the result.",
+            "in": "query",
+            "name": "pathIncludeDescendants",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/Image"
+                          },
+                          {
+                            "$ref": "#/components/schemas/AssetDocument"
+                          },
+                          {
+                            "$ref": "#/components/schemas/Audio"
+                          },
+                          {
+                            "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/Archive"
+                          },
+                          {
+                            "$ref": "#/components/schemas/Text"
+                          },
+                          {
+                            "$ref": "#/components/schemas/AssetFolder"
+                          },
+                          {
+                            "$ref": "#/components/schemas/Unknown"
+                          }
+                        ]
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "asset_get_tree_success_description"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all asset data for the tree",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/add/{parentId}": {
+      "post": {
+        "description": "Add a new asset based on the binary <strong>{file}</strong> to the given <strong>{parentId}</strong>. <br> \nThe <strong>{parentId}</strong> must be an ID of existing folder.\n",
+        "operationId": "asset_add",
+        "parameters": [
+          {
+            "description": "ParentId of the asset",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "File to upload",
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "assetType": {
+                    "description": "Type of the asset to create",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "ID of created asset",
+                      "title": "id",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ID of successfully uploaded new asset"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailedError"
+                }
+              }
+            },
+            "description": "Element validation failed. The optional validationErrors list the individual errors."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Add a new asset",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/exists/{parentId}": {
+      "get": {
+        "description": "Get information if asset already exists based on the given <strong>{parentId}</strong> and <strong>{fileName}</strong> query parameter.\n",
+        "operationId": "asset_upload_info",
+        "parameters": [
+          {
+            "description": "ParentId of the asset",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Name of the file to upload",
+            "in": "query",
+            "name": "fileName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetUploadInfo"
+                }
+              }
+            },
+            "description": "Returns true and existing asset ID, if asset with the same name and in the same path already exists, false otherwise"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get information if asset already exists",
+        "tags": [
+          "Assets"
+        ]
+      },
+      "post": {
+        "description": "Get information which of the given file names already exist in the folder <strong>{parentId}</strong>. <br> Send the names in the <strong>fileNames</strong> body property; at most 100 per request.\n",
+        "operationId": "asset_upload_batch_info",
+        "parameters": [
+          {
+            "description": "ParentId of the asset",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "fileNames": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "fileNames"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/AssetUploadBatchInfo"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Returns one entry per requested file name, in the order they were sent, each with the existing asset ID if a file with that name already exists in the same path. <br> Names that exist but are not viewable by the current user are reported as not existing with <strong>accessDenied</strong> set, so a single denied file does not fail the whole batch"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get information which assets already exist",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/replace": {
+      "post": {
+        "description": "Replace the existing asset binary based on the given <strong>{id}</strong> with the provided {file} binary. <br> \nThe new asset binary mime type must be the same as the existing asset binary mime type.\n",
+        "operationId": "asset_replace",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "File to upload",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "description": "new file name of the asset",
+                      "title": "data",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "File name of the successfully replaced asset"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailedError"
+                }
+              }
+            },
+            "description": "Element validation failed. The optional validationErrors list the individual errors."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Replace existing asset binary",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/add-zip/{parentId}": {
+      "post": {
+        "description": "Upload a ZIP archive with assets to the given <strong>{parentId}</strong>. <br> The <strong>{parentId}</strong> must be an ID of existing folder.\nZip archive is extracted and assets are uploaded on the background. <br> The jobRun ID is returned in the response\n",
+        "operationId": "asset_upload_zip",
+        "parameters": [
+          {
+            "description": "ParentId of the asset",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "zipFile": {
+                    "description": "Zip file to upload",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "zipFile"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created jobRun ID to upload multiple assets"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Add new assets via ZIP archive",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/video/stream/image-thumbnail": {
+      "get": {
+        "description": "Stream the video image thumbnail based on the provided <strong>{id}</strong> and configuration parameters. <br> \nThe <strong>{id}</strong> must be an ID of existing asset video <br>\n",
+        "operationId": "asset_video_image_thumbnail_stream",
+        "parameters": [
+          {
+            "description": "Id of the video",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Width of the video image thumbnail",
+            "in": "query",
+            "name": "width",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Height of the video image thumbnail",
+            "in": "query",
+            "name": "height",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Aspect ratio of the video image thumbnail",
+            "in": "query",
+            "name": "aspectRatio",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Frame of the video image thumbnail",
+            "in": "query",
+            "name": "frame",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Generate the asset asynchronously",
+            "in": "query",
+            "name": "async",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Video image thumbnail stream",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream video image thumbnail by ID and configuration",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/video/download/{thumbnailName}": {
+      "get": {
+        "description": "Download the video asset based on the provided <strong>{id}</strong> and <strong>{thumbnailName}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset video <br>\nList of <b>thumbnail names</b> can be obtained via the thumbnail video collection endpoint\n",
+        "operationId": "asset_video_download_by_thumbnail",
+        "parameters": [
+          {
+            "description": "Id of the video",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching thumbnail name.",
+            "in": "path",
+            "name": "thumbnailName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Video binary file based on thumbnail name",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download video asset by ID and thumbnail name",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/video/thumbnail/{thumbnailName}/status": {
+      "get": {
+        "description": "Get the conversion status of a video thumbnail based on the provided <strong>{id}</strong> and <strong>{thumbnailName}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of existing asset video <br>\nList of <b>thumbnail names</b> can be obtained via the thumbnail video collection endpoint\n",
+        "operationId": "asset_video_thumbnail_status",
+        "parameters": [
+          {
+            "description": "Id of the video",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching thumbnail name.",
+            "in": "path",
+            "name": "thumbnailName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoThumbnailStatus"
+                }
+              }
+            },
+            "description": "Conversion status of the video thumbnail"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get video thumbnail conversion status by asset ID and thumbnail name",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/video/stream/{thumbnailName}": {
+      "get": {
+        "description": "Stream the video asset based on the provided <strong>{id}</strong> and <strong>{thumbnailName}</strong>. <br> \nThe <strong>{id}</strong> must be an ID of existing asset video <br>\nList of <b>thumbnail names</b> can be obtained via the thumbnail video collection endpoint\n",
+        "operationId": "asset_video_stream_by_thumbnail",
+        "parameters": [
+          {
+            "description": "Id of the video",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Find asset by matching thumbnail name.",
+            "in": "path",
+            "name": "thumbnailName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Video stream based on thumbnail name",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Stream video asset by ID and thumbnail name",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/video/types": {
+      "get": {
+        "description": "Retrieves all available video types in the system.\n",
+        "operationId": "asset_get_video_types",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/VideoType"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved all available video types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all video types",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/pimcore-studio/api/assets/{id}/custom-metadata": {
+      "get": {
+        "description": "Retrieves custom metadata based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing asset\n",
+        "operationId": "asset_custom_metadata_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the asset",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/CustomMetadata"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved custom metadata as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get custom metadata of an asset by ID",
+        "tags": [
+          "Metadata"
+        ]
+      }
+    }
+  }
+}

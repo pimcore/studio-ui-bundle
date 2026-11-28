@@ -1,0 +1,534 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "Schedule": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "integer"
+          },
+          "ctype": {
+            "description": "ctype",
+            "type": "string"
+          },
+          "date": {
+            "description": "Date of schedule",
+            "type": "integer"
+          },
+          "action": {
+            "description": "Action",
+            "enum": [
+              "publish-version",
+              "publish",
+              "unpublish",
+              "delete"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "description": "Version ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "active": {
+            "description": "Active",
+            "type": "boolean"
+          },
+          "userId": {
+            "description": "User ID",
+            "type": "integer"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ctype",
+          "date",
+          "active",
+          "userId",
+          "username"
+        ],
+        "title": "Schedule",
+        "type": "object"
+      },
+      "ScheduleAction": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Action key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Schedule Action",
+        "type": "object"
+      },
+      "UpdateSchedule": {
+        "properties": {
+          "id": {
+            "description": "Id of schedule, if null a new one will be created",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "date": {
+            "description": "Date of schedule",
+            "type": "integer"
+          },
+          "action": {
+            "description": "Action",
+            "enum": [
+              "publish-version",
+              "publish",
+              "unpublish",
+              "delete"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "description": "Version ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "active": {
+            "description": "Active",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "active"
+        ],
+        "title": "UpdateSchedule",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: schedule)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/schedules/{id}": {
+      "delete": {
+        "description": "Deletes a specific schedule based on the given <strong>{id}</strong>.\n",
+        "operationId": "schedule_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the schedule",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted schedule"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete schedule with given id",
+        "tags": [
+          "Schedule"
+        ]
+      }
+    },
+    "/pimcore-studio/api/schedules/{elementType}/{id}": {
+      "get": {
+        "description": "Get all schedules for a specific element based on the given <strong>{elementType}</strong> and <strong>{id}</strong>. <br>\n",
+        "operationId": "schedule_get_collection_for_element_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Schedule"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of schedules for element"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get schedules for an element",
+        "tags": [
+          "Schedule"
+        ]
+      },
+      "put": {
+        "description": "Update schedules for a specific element based on the given <strong>{elementType}</strong> and <strong>{id}</strong>. <br>\nSee the full description of updatable fields with the schema <strong>UpdateSchedule</strong>\n",
+        "operationId": "schedule_update_for_element_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "items": {
+                    "items": {
+                      "$ref": "#/components/schemas/UpdateSchedule"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Schedule"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of updated schedules"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update schedules for an element",
+        "tags": [
+          "Schedule"
+        ]
+      },
+      "post": {
+        "description": "Create a new schedule with default values for the element with the given type <strong>{elementType}</strong> and <strong>{id}</strong>. <br>\nThe schedule will be created for the current user.\n",
+        "operationId": "schedule_create_for_element_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schedule"
+                }
+              }
+            },
+            "description": "Created schedule for element"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Create a schedule for element",
+        "tags": [
+          "Schedule"
+        ]
+      }
+    },
+    "/pimcore-studio/api/schedules/actions/{elementType}": {
+      "get": {
+        "description": "Get available schedule actions for the given element type <strong>{elementType}</strong>.\n",
+        "operationId": "schedule_list_actions_for_element_type",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ScheduleAction"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available schedule actions"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List available schedule actions for element type",
+        "tags": [
+          "Schedule"
+        ]
+      }
+    }
+  }
+}

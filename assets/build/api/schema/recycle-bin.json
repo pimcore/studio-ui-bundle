@@ -1,0 +1,429 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "RecycleBin": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "amount": {
+            "description": "Amount",
+            "type": "integer"
+          },
+          "date": {
+            "description": "Date",
+            "type": "integer"
+          },
+          "deletedBy": {
+            "description": "Deleted By",
+            "type": "string"
+          },
+          "path": {
+            "description": "Path",
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Subtype",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "amount",
+          "date",
+          "deletedBy",
+          "path",
+          "subtype",
+          "type"
+        ],
+        "title": "Recycle Bin",
+        "type": "object"
+      },
+      "RecycleBinRelocatedItem": {
+        "description": "Element restored into the fallback folder because its parent is missing",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the restored element",
+            "type": "integer"
+          },
+          "elementType": {
+            "description": "Element type",
+            "type": "string"
+          },
+          "path": {
+            "description": "New full path of the element",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "elementType",
+          "path"
+        ],
+        "title": "Recycle Bin Relocated Item",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: recycle-bin)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/recycle-bin/items": {
+      "post": {
+        "description": "Get all paginated recycle bin items. <br> You can specify different filters in your request body. Example filters are: <br>\n<ul>\n  <li><strong>page</strong>: Used for offset calculation in pagination. To be used, needs to be defined together with the page.size</li>\n  <li><strong>pageSize</strong>: Used for limiting the result numbers per page. To be used, needs to be defined together with the page</li>\n  <li><strong>date</strong>: Filter by deletion date (on, from, to)</li>\n  <li><strong>path</strong>: Filter by element path</li>\n  <li><strong>type</strong>: Filter by element type (asset, document, object)</li>\n</ul>\n",
+        "operationId": "recycle_bin_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/RecycleBin"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated recycle bin items with total count"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated recycle bin items",
+        "tags": [
+          "Recycle Bin"
+        ]
+      }
+    },
+    "/pimcore-studio/api/recycle-bin/delete": {
+      "delete": {
+        "description": "Delete items from the recycle bin based on the given <strong>{items}</strong> array. <br> \nThe <strong>{items}</strong> array must contain IDs of existing recycle bin items. <br> \nIf multiple items are being deleted, the operation is executed asynchronously.\n",
+        "operationId": "recycle_bin_delete_items",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "items": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully deleted recycle bin item"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> to delete recycle bin items"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete items from the recycle bin",
+        "tags": [
+          "Recycle Bin"
+        ]
+      }
+    },
+    "/pimcore-studio/api/recycle-bin/flush": {
+      "delete": {
+        "description": "Flush the recycle bin. <br> This will delete all items in the recycle bin.\n",
+        "operationId": "recycle_bin_flush",
+        "responses": {
+          "200": {
+            "description": "Successfully flushed recycle bin"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Flush the recycle bin",
+        "tags": [
+          "Recycle Bin"
+        ]
+      }
+    },
+    "/pimcore-studio/api/recycle-bin/restore": {
+      "post": {
+        "description": "Restores items from the recycle bin based on the given <strong>{items}</strong> array. <br> \nThe <strong>{items}</strong> array must contain IDs of existing recycle bin items. <br> \nIf multiple items are being restored, the operation is executed asynchronously. <br>\nElements whose parent no longer exists are restored into the <strong>/__restored</strong> folder of their\nelement type, which requires the publish permission on that folder.\n",
+        "operationId": "recycle_bin_restore_items",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "items": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/RecycleBinRelocatedItem"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully restored recycle bin item. <strong>items</strong> lists the elements that were restored into the\n<strong>/__restored</strong> folder because their parent no longer exists.\n"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> to restore recycle bin items"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Restore items from the recycle bin",
+        "tags": [
+          "Recycle Bin"
+        ]
+      }
+    }
+  }
+}

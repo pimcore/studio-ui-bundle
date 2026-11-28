@@ -1,0 +1,162 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: cache)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/cache": {
+      "delete": {
+        "description": "Clear the Pimcore and/or Symfony application cache.\nUse query parameters to selectively clear only one cache type.\n",
+        "operationId": "cache_clear",
+        "parameters": [
+          {
+            "description": "Only clear the Pimcore cache",
+            "in": "query",
+            "name": "onlyPimcoreCache",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Only clear the Symfony cache",
+            "in": "query",
+            "name": "onlySymfonyCache",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cache cleared successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Clear application cache",
+        "tags": [
+          "Cache"
+        ]
+      }
+    },
+    "/pimcore-studio/api/cache/output": {
+      "delete": {
+        "description": "Clear the full-page output cache including output lifetime cache entries.\n",
+        "operationId": "cache_clear_output",
+        "responses": {
+          "200": {
+            "description": "Output cache cleared successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Clear output cache",
+        "tags": [
+          "Cache"
+        ]
+      }
+    },
+    "/pimcore-studio/api/cache/temporary-files": {
+      "delete": {
+        "description": "Clear all temporary files including thumbnails, asset cache, and system temp files.\n",
+        "operationId": "cache_clear_temporary_files",
+        "responses": {
+          "200": {
+            "description": "Temporary files cleared successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Clear temporary files",
+        "tags": [
+          "Cache"
+        ]
+      }
+    }
+  }
+}

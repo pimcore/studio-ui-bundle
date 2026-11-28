@@ -1,0 +1,758 @@
+{
+  "components": {
+    "schemas": {
+      "CreateTagParameters": {
+        "description": "Parameters for creating a new tag",
+        "properties": {
+          "parentId": {
+            "description": "Parent id",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Tag name",
+            "type": "string"
+          }
+        },
+        "title": "Create Tag Parameters",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "Tag": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "tag ID",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "parent tag ID",
+            "type": "integer"
+          },
+          "text": {
+            "description": "tag text",
+            "type": "string"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          },
+          "hasChildren": {
+            "description": "has children",
+            "type": "boolean"
+          },
+          "iconName": {
+            "description": "IconName",
+            "type": "string"
+          },
+          "children": {
+            "description": "children",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "parentId",
+          "text",
+          "path",
+          "hasChildren",
+          "iconName"
+        ],
+        "title": "Tag",
+        "type": "object"
+      },
+      "UpdateTagParameters": {
+        "description": "Parameters for changing a tag",
+        "properties": {
+          "parentId": {
+            "description": "Parent id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "Tag name",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "title": "Change Tag Parameters",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: tags)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/tags": {
+      "get": {
+        "description": "Get all tags for a <strong>{parentId}</strong>. <br>\nYou can use different query parameters to filter the tags\n",
+        "operationId": "tag_get_collection",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "query",
+            "name": "elementType",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for properties",
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter tags by parent id.",
+            "in": "query",
+            "name": "parentId",
+            "required": false,
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Tag"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "All tags for a parent filtered based on type and query parameters"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all tags for a parent",
+        "tags": [
+          "Tags"
+        ]
+      }
+    },
+    "/pimcore-studio/api/tag": {
+      "post": {
+        "description": "Create a new tag. <br> See the full description of request fields with the schema <strong>Create Tag Parameters</strong>\n",
+        "operationId": "tag_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTagParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            },
+            "description": "tag_create_success_description"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Create a new tag",
+        "tags": [
+          "Tags"
+        ]
+      }
+    },
+    "/pimcore-studio/api/tags/{id}": {
+      "get": {
+        "description": "Retrieves a specific tag data based on the given <strong>{id}</strong>\n",
+        "operationId": "tag_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the tag",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            },
+            "description": "Successfully retrieved tag data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get a tag by ID",
+        "tags": [
+          "Tags"
+        ]
+      },
+      "put": {
+        "description": "Update a specific tag based on the given <strong>{id}</strong>. <br>\nSee the full description of updatable fields with the schema <strong>Change Tag Parameters</strong>\n",
+        "operationId": "tag_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the tag",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTagParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            },
+            "description": "Successfully updated tag data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a tag by ID",
+        "tags": [
+          "Tags"
+        ]
+      },
+      "delete": {
+        "description": "Delete a specific tag based on the given <strong>{id}</strong>\n",
+        "operationId": "tag_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the tag",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "ID of deleted tag",
+                      "title": "id",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ID of successfully deleted tag"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a specific tag",
+        "tags": [
+          "Tags"
+        ]
+      }
+    },
+    "/pimcore-studio/api/tags/assign/{elementType}/{id}/{tagId}": {
+      "post": {
+        "description": "Assign a specific tag based on the given <strong>{tagId}</strong> to an element based on <strong>{elementType}</strong> and <strong>{id}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of an existing element of the provided <strong>{elementType}</strong>.\n",
+        "operationId": "tag_assign_to_element",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "TagId of the tag",
+            "in": "path",
+            "name": "tagId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Assign a tag to an element",
+        "tags": [
+          "Tags for Element"
+        ]
+      }
+    },
+    "/pimcore-studio/api/tags/batch/{operation}/{elementType}/{id}": {
+      "post": {
+        "description": "Batch assign/replace multiple tags of the given parent based on the <strong>{elementId}</strong> and <strong>{elementType}</strong> to the children. <br>\nOperation parameter <strong>{operation}</strong> must be one of the <strong>assign</strong or <strong>replace</strong>.\n",
+        "operationId": "tag_batch_operation_to_elements_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Execute operation based on provided type.",
+            "in": "path",
+            "name": "operation",
+            "required": true,
+            "schema": {
+              "enum": [
+                "assign",
+                "replace"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created jobRun for batch tag assignment/replacement"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Batch assign/replace tags for children elements",
+        "tags": [
+          "Tags for Element"
+        ]
+      }
+    },
+    "/pimcore-studio/api/tags/{elementType}/{id}": {
+      "get": {
+        "description": "Get paginated tag collection for a specific element based on the given <strong>{elementType}</strong> and <strong>{id}</strong>\n",
+        "operationId": "tag_get_collection_for_element_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Tag"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated tags for element"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get tags for an element",
+        "tags": [
+          "Tags for Element"
+        ]
+      }
+    },
+    "/pimcore-studio/api/tags/{elementType}/{id}/{tagId}": {
+      "delete": {
+        "description": "Unassign a specific tag based on the given <strong>{tagId}</strong> from an element based on <strong>{elementType}</strong> and <strong>{id}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of an existing element of the provided <strong>{elementType}</strong>.\n",
+        "operationId": "tag_unassign_from_element",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "TagId of the tag",
+            "in": "path",
+            "name": "tagId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Unassign a tag from an element",
+        "tags": [
+          "Tags for Element"
+        ]
+      }
+    }
+  }
+}

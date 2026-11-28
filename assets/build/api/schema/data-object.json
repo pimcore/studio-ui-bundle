@@ -1,0 +1,3935 @@
+{
+  "components": {
+    "schemas": {
+      "AdvancedColumnConfig": {
+        "properties": {
+          "advancedColumns": {
+            "description": "advancedColumns",
+            "items": {
+              "properties": {
+                "key": {
+                  "description": "Type of the column, e.g. \"simpleField\", \"relationField\", \"staticText\"",
+                  "type": "string"
+                },
+                "config": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/RelationFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/SimpleFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/StaticTextConfig"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "key",
+                "config"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "transformers": {
+            "description": "List if Transformers that should be applied",
+            "items": {
+              "$ref": "#/components/schemas/Transformer"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "advancedColumns"
+        ],
+        "title": "Advanced Column Config",
+        "type": "object"
+      },
+      "CloneParameters": {
+        "properties": {
+          "recursive": {
+            "description": "Recursive",
+            "type": "boolean"
+          },
+          "updateReferences": {
+            "description": "Update References",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "recursive",
+          "updateReferences"
+        ],
+        "title": "Data Object Clone Parameters",
+        "type": "object"
+      },
+      "Column": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "Config; a classification store column names its key by ID or identifier and may name a variant",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/AdvancedColumnConfig"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "width": {
+            "description": "Width of the Column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "Grid Column Request",
+        "type": "object"
+      },
+      "ColumnConfiguration": {
+        "description": "Contains all data to configure a grid column",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "group": {
+            "description": "Define the group structure",
+            "type": "object"
+          },
+          "sortable": {
+            "description": "Sortable",
+            "type": "boolean"
+          },
+          "editable": {
+            "description": "Editable",
+            "type": "boolean"
+          },
+          "exportable": {
+            "description": "Exportable",
+            "type": "boolean"
+          },
+          "filterable": {
+            "description": "Filterable",
+            "type": "boolean"
+          },
+          "localizable": {
+            "description": "Localizable",
+            "type": "boolean"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "frontendType": {
+            "description": "Frontend Type",
+            "type": "string"
+          },
+          "config": {
+            "description": "Config",
+            "type": "object"
+          }
+        },
+        "required": [
+          "key",
+          "group",
+          "sortable",
+          "editable",
+          "localizable",
+          "type",
+          "config"
+        ],
+        "title": "GridColumnConfiguration",
+        "type": "object"
+      },
+      "ColumnData": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "description": "Value",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "fieldType": {
+            "description": "Field Type of the column",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "inheritance": {
+            "description": "inheritance",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "title": "GridColumnData",
+        "type": "object"
+      },
+      "ColumnSchema": {
+        "properties": {
+          "key": {
+            "description": "Key of the Column",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale of the Column",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Define the group structure",
+            "type": "object"
+          },
+          "width": {
+            "description": "Width of the Column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "locale",
+          "group"
+        ],
+        "title": "Column",
+        "type": "object"
+      },
+      "Configuration": {
+        "description": "Contains all data to configure a grid column",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "GridConfiguration",
+        "type": "object"
+      },
+      "CustomAttributes": {
+        "description": "Custom attributes used mainly for the tree",
+        "properties": {
+          "icon": {
+            "description": "Custom Icon",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElementIcon",
+                "description": "Custom Icon"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tooltip": {
+            "description": "Custom Tooltip",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalIcons": {
+            "description": "AdditionalIcons",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "key": {
+            "description": "Custom Key/Filename",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalCssClasses": {
+            "description": "Additional Css Classes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "icon",
+          "tooltip",
+          "additionalIcons",
+          "key",
+          "additionalCssClasses"
+        ],
+        "title": "CustomAttributes",
+        "type": "object"
+      },
+      "DataObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Element"
+          },
+          {
+            "properties": {
+              "additionalAttributes": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                },
+                "description": "AdditionalAttributes",
+                "type": "object"
+              },
+              "customAttributes": {
+                "$ref": "#/components/schemas/CustomAttributes",
+                "description": "Custom attributes for the tree"
+              },
+              "score": {
+                "description": "Search relevance score of the hit in the search engine's own score space; null unless the request ran a scored search",
+                "format": "float",
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "workflowStates": {
+                "description": "Workflow states visible in the header; null outside tree listings, for elements the user may not view and for asset folders",
+                "items": {
+                  "$ref": "#/components/schemas/WorkflowStatus"
+                },
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "key": {
+                "description": "Key",
+                "type": "string"
+              },
+              "className": {
+                "description": "Class name",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string"
+              },
+              "published": {
+                "description": "Published",
+                "type": "boolean"
+              },
+              "hasChildren": {
+                "description": "Has children",
+                "type": "boolean"
+              },
+              "hasWorkflowWithPermissions": {
+                "description": "Workflow permissions",
+                "type": "boolean"
+              },
+              "fullPath": {
+                "description": "Full path",
+                "type": "string"
+              },
+              "permissions": {
+                "$ref": "#/components/schemas/DataObjectPermissions"
+              },
+              "index": {
+                "description": "Custom index",
+                "type": "integer"
+              },
+              "childrenSortBy": {
+                "description": "Sort mode of children",
+                "type": "string"
+              },
+              "childrenSortOrder": {
+                "description": "Sort order of children",
+                "type": "string"
+              },
+              "allowVariants": {
+                "description": "Allow variants",
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "key",
+          "className",
+          "type",
+          "published",
+          "hasChildren",
+          "hasWorkflowWithPermissions",
+          "fullPath",
+          "customAttributes",
+          "permissions",
+          "index",
+          "childrenSortBy",
+          "childrenSortOrder",
+          "allowVariants"
+        ],
+        "title": "DataObject",
+        "type": "object"
+      },
+      "DataObjectAddParameters": {
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "classId": {
+            "description": "Class Id",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "enum": [
+              "object",
+              "variant"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "classId",
+          "type"
+        ],
+        "title": "DataObjectAdd",
+        "type": "object"
+      },
+      "DataObjectDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataObject"
+          },
+          {
+            "properties": {
+              "showVariants": {
+                "description": "Show variants",
+                "type": "boolean"
+              },
+              "allowInheritance": {
+                "description": "Inheritance allowed",
+                "type": "boolean"
+              },
+              "hasPreview": {
+                "description": "Has preview",
+                "type": "boolean"
+              },
+              "showAppLoggerTab": {
+                "description": "Show application logger tab",
+                "type": "boolean"
+              },
+              "hasWorkflowAvailable": {
+                "description": "Has workflow available",
+                "type": "boolean"
+              },
+              "objectData": {
+                "description": "Detail object data",
+                "type": "object"
+              },
+              "inheritanceData": {
+                "description": "Inheritance object data",
+                "type": "object"
+              },
+              "draftData": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/DataObjectDraftData"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "objectData",
+          "inheritanceData",
+          "draftData",
+          "allowInheritance",
+          "showVariants",
+          "hasPreview",
+          "showAppLoggerTab",
+          "hasWorkflowAvailable"
+        ],
+        "title": "Data object with detail data",
+        "type": "object"
+      },
+      "DataObjectDraftData": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": "integer"
+          },
+          "isAutoSave": {
+            "description": "Is auto save",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "modificationDate",
+          "isAutoSave"
+        ],
+        "title": "DataObjectDraftData",
+        "type": "object"
+      },
+      "DataObjectFolder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataObject"
+          },
+          {
+            "properties": {
+              "hasWorkflowAvailable": {
+                "description": "Has workflow available",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "hasWorkflowAvailable"
+        ],
+        "title": "Data Object Folder",
+        "type": "object"
+      },
+      "DataObjectPermissions": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Permissions"
+          },
+          {
+            "properties": {
+              "save": {
+                "description": "Save",
+                "type": "boolean"
+              },
+              "unpublish": {
+                "description": "Unpublish",
+                "type": "boolean"
+              },
+              "localizedEdit": {
+                "description": "Localized Edit",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "localizedView": {
+                "description": "Localized View",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "save",
+          "unpublish",
+          "localizedEdit",
+          "localizedView"
+        ],
+        "title": "Data Object Permissions",
+        "type": "object"
+      },
+      "DetailedConfiguration": {
+        "description": "Contains all data to configure a grid column",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shareGlobal": {
+            "description": "shareGlobal",
+            "type": "boolean"
+          },
+          "saveFilter": {
+            "description": "saveFilter",
+            "type": "boolean"
+          },
+          "setAsFavorite": {
+            "description": "setAsFavorite",
+            "type": "boolean"
+          },
+          "sharedUsers": {
+            "description": "sharedUsers",
+            "type": "object"
+          },
+          "sharedRoles": {
+            "description": "sharedRoles",
+            "type": "object"
+          },
+          "columns": {
+            "description": "columns",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/Column"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "filter": {
+            "description": "filter",
+            "items": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "type": "array"
+          },
+          "pageSize": {
+            "description": "Page Size",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "Modification Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ownerId": {
+            "description": "ID of the owner",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "id": {
+            "description": "ID of the configuration",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "shareGlobal",
+          "saveFilter",
+          "setAsFavorite",
+          "sharedUsers",
+          "sharedRoles",
+          "columns",
+          "filter",
+          "pageSize"
+        ],
+        "title": "GridDetailedConfiguration",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Element": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "ID of parent",
+            "type": "integer"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "icon"
+          },
+          "userOwner": {
+            "description": "ID of owner",
+            "type": "integer"
+          },
+          "userModification": {
+            "description": "User that modified the element",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "locked": {
+            "description": "Locked",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isLocked": {
+            "description": "Is locked",
+            "type": "boolean"
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "elementType": {
+            "description": "elementType",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "parentId",
+          "path",
+          "icon",
+          "userOwner",
+          "userModification",
+          "locked",
+          "isLocked",
+          "creationDate",
+          "modificationDate",
+          "elementType"
+        ],
+        "title": "Element",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "ExportAllFilter": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "columnFilters": {
+            "description": "Column Filter",
+            "type": "object"
+          },
+          "sortFilter": {
+            "description": "Sort Filter",
+            "type": "object"
+          },
+          "additionalSortFilters": {
+            "description": "Additional Sort Filters for multi-column sorting",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columnFilters",
+          "sortFilter"
+        ],
+        "title": "Export All Filter",
+        "type": "object"
+      },
+      "Filter": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "page": {
+            "description": "Page",
+            "type": "integer"
+          },
+          "pageSize": {
+            "description": "Page Size",
+            "type": "integer"
+          },
+          "includeDescendants": {
+            "description": "Include Descendant Items",
+            "type": "boolean"
+          },
+          "columnFilters": {
+            "description": "Column Filter",
+            "type": "object"
+          },
+          "sortFilter": {
+            "description": "Sort Filter",
+            "type": "object"
+          },
+          "additionalSortFilters": {
+            "description": "Additional Sort Filters for multi-column sorting",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "page",
+          "pageSize",
+          "includeDescendants"
+        ],
+        "title": "Grid Filter",
+        "type": "object"
+      },
+      "FormatedPath": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "objectReference": {
+            "description": "Object Reference",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "formatedPath": {
+            "description": "Formated Path",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        },
+        "required": [
+          "objectReference",
+          "formatedPath"
+        ],
+        "title": "Select Option",
+        "type": "object"
+      },
+      "Layout": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "datatype": {
+            "description": "Data Type",
+            "type": "string"
+          },
+          "fieldtype": {
+            "description": "Field Type",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "layout": {
+            "description": "Layout",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "region": {
+            "description": "Region",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "description": "Title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "width": {
+            "description": "Width",
+            "type": "integer"
+          },
+          "height": {
+            "description": "Height",
+            "type": "integer"
+          },
+          "collapsible": {
+            "description": "Collapsible",
+            "type": "boolean"
+          },
+          "collapsed": {
+            "description": "Collapsed",
+            "type": "boolean"
+          },
+          "bodyStyle": {
+            "description": "Body Style",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "locked": {
+            "description": "Locked",
+            "type": "boolean"
+          },
+          "children": {
+            "description": "Children",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "icon": {
+            "description": "Icon",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElementIcon",
+                "description": "Icon"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "labelAlign": {
+            "description": "Label Align",
+            "type": "string"
+          },
+          "labelWidth": {
+            "description": "Label Width",
+            "type": "integer"
+          },
+          "border": {
+            "description": "Border",
+            "type": "boolean"
+          },
+          "previewConfig": {
+            "description": "Preview configuration for locale/site selectors",
+            "items": {
+              "$ref": "#/components/schemas/PreviewConfigEntry"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "datatype",
+          "fieldtype",
+          "type",
+          "layout",
+          "region",
+          "title",
+          "width",
+          "height",
+          "collapsible",
+          "collapsed",
+          "bodyStyle",
+          "locked",
+          "children",
+          "icon",
+          "labelAlign",
+          "labelWidth",
+          "border"
+        ],
+        "title": "Layout",
+        "type": "object"
+      },
+      "Permissions": {
+        "properties": {
+          "list": {
+            "description": "List",
+            "type": "boolean"
+          },
+          "view": {
+            "description": "View",
+            "type": "boolean"
+          },
+          "publish": {
+            "description": "Publish",
+            "type": "boolean"
+          },
+          "delete": {
+            "description": "Delete",
+            "type": "boolean"
+          },
+          "rename": {
+            "description": "Rename",
+            "type": "boolean"
+          },
+          "create": {
+            "description": "Create",
+            "type": "boolean"
+          },
+          "settings": {
+            "description": "Settings",
+            "type": "boolean"
+          },
+          "versions": {
+            "description": "Versions",
+            "type": "boolean"
+          },
+          "properties": {
+            "description": "Properties",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "list",
+          "view",
+          "publish",
+          "delete",
+          "rename",
+          "create",
+          "settings",
+          "versions",
+          "properties"
+        ],
+        "title": "Permissions",
+        "type": "object"
+      },
+      "PhpCodeTransformer": {
+        "description": "A PHP code transformer service with basic information",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Unique key of the transformer",
+            "type": "string"
+          },
+          "label": {
+            "description": "Label of the transformer",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "Simple PHP Code Transformer",
+        "type": "object"
+      },
+      "PreviewConfigEntry": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Parameter name",
+            "type": "string"
+          },
+          "label": {
+            "description": "Display label",
+            "type": "string"
+          },
+          "values": {
+            "description": "Available values as key-value pairs",
+            "items": {
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "defaultValue": {
+            "description": "Default selected value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "label",
+          "values",
+          "defaultValue"
+        ],
+        "title": "Preview Config Entry",
+        "type": "object"
+      },
+      "RelationFieldConfig": {
+        "properties": {
+          "relation": {
+            "description": "Relation Getter",
+            "type": "string"
+          },
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "relation",
+          "field"
+        ],
+        "title": "Relation Field Config",
+        "type": "object"
+      },
+      "SelectOption": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "Select Option",
+        "type": "object"
+      },
+      "SimpleFieldConfig": {
+        "properties": {
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field"
+        ],
+        "title": "Simple Field Config",
+        "type": "object"
+      },
+      "StaticTextConfig": {
+        "properties": {
+          "text": {
+            "description": "Static Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "Static Text Config",
+        "type": "object"
+      },
+      "Transformer": {
+        "properties": {
+          "key": {
+            "description": "Key of the Transformer",
+            "type": "string"
+          },
+          "config": {
+            "description": "Configuration for the transformer",
+            "type": "object"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Transformer",
+        "type": "object"
+      },
+      "UpdateElementProperty": {
+        "properties": {
+          "key": {
+            "description": "key",
+            "type": "string"
+          },
+          "data": {
+            "description": "data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "inheritable": {
+            "description": "inheritable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "data",
+          "type",
+          "inheritable"
+        ],
+        "title": "UpdateDataProperty",
+        "type": "object"
+      },
+      "ValidationError": {
+        "description": "A single validation error of an element, with the data needed to translate it",
+        "properties": {
+          "field": {
+            "description": "Name of the field that failed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fieldTitle": {
+            "description": "Raw, untranslated field title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "path": {
+            "description": "Location of the field, innermost level first",
+            "items": {
+              "$ref": "#/components/schemas/ValidationErrorPath"
+            },
+            "type": "array"
+          },
+          "message": {
+            "description": "Untranslated message, untrusted: escape it before rendering it as HTML",
+            "type": "string"
+          },
+          "messageKey": {
+            "description": "Translation key",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "description": "Translation parameters",
+            "type": "object"
+          }
+        },
+        "required": [
+          "field",
+          "fieldTitle",
+          "path",
+          "message",
+          "messageKey",
+          "parameters"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "ValidationErrorPath": {
+        "description": "One level of the location of a validation error, e.g. a localized field or an object brick",
+        "properties": {
+          "field": {
+            "description": "Field name of this level",
+            "type": "string"
+          },
+          "title": {
+            "description": "Raw, untranslated title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "description": "Language of this level",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "index": {
+            "description": "Row index within a block or field collection",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Object brick key or field collection type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "typeTitle": {
+            "description": "Raw, untranslated title of the object brick or field collection",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field",
+          "title",
+          "language",
+          "index",
+          "type",
+          "typeTitle"
+        ],
+        "title": "ValidationErrorPath",
+        "type": "object"
+      },
+      "ValidationFailedError": {
+        "description": "Error response of a failed element validation",
+        "properties": {
+          "message": {
+            "description": "Failure message in English. Untrusted, may contain markup: escape before rendering",
+            "type": "string"
+          },
+          "errorKey": {
+            "description": "Error key, not present when the request failed before the element was validated",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "validationErrors": {
+            "description": "Individual validation errors, present when the failure came from the element validation",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "ValidationFailedError",
+        "type": "object"
+      },
+      "WorkflowStatus": {
+        "properties": {
+          "color": {
+            "description": "color",
+            "type": "string"
+          },
+          "colorInverted": {
+            "description": "colorInverted",
+            "type": "boolean"
+          },
+          "title": {
+            "description": "borderColor",
+            "type": "string"
+          },
+          "label": {
+            "description": "label",
+            "type": "string"
+          },
+          "layoutId": {
+            "description": "layoutId",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "visibleInDetail": {
+            "description": "visibleInDetail",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "color",
+          "colorInverted",
+          "title",
+          "label",
+          "layoutId",
+          "visibleInDetail"
+        ],
+        "title": "WorkflowStatus",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: data-object)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/data-objects/add/{parentId}": {
+      "post": {
+        "description": "Add a new data object to the given <strong>{parentId}</strong>. <br> The <strong>{parentId}</strong> must be an ID of a folder or another data object. See the full description of request fields with the schema <strong>DataObjectAdd</strong>\n",
+        "operationId": "data_object_add",
+        "parameters": [
+          {
+            "description": "ParentId of the data-object",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataObjectAddParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "ID of created data object",
+                      "title": "id",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ID of added data object"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Successfully added a new data object",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/batch-delete": {
+      "delete": {
+        "description": "Batch delete data objects based on the given <strong>{ids}</strong>. <br> The <strong>{ids}</strong> must be a list of IDs of existing data objects. <br>\nDeletion is done asynchronously and the jobRun ID is returned in the response\n",
+        "operationId": "data_object_batch_delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "ids": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for batch delete"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Batch delete data objects by IDs",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/{id}/clone/{parentId}": {
+      "post": {
+        "description": "Clones a specific data object with the given <strong>{id}</strong>. <br> The <strong>{parentId}</strong> must be a folder or another data object\n",
+        "operationId": "data_object_clone",
+        "parameters": [
+          {
+            "description": "Id of the data-object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "ParentId of the data-object",
+            "in": "path",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloneParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully copied data object"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Clone a specific data object",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/{id}": {
+      "get": {
+        "description": "Retrieves a specific data object based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing data object or folder.\n",
+        "operationId": "data_object_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the data-object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/DataObjectDetail"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DataObjectFolder"
+                    }
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved data object data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get a specific data object by ID",
+        "tags": [
+          "Data Objects"
+        ]
+      },
+      "put": {
+        "description": "You can create/update/delete list entries like properties or data object editable fields. <br>  If you want to update (add/remove) only some data of a field (e.g data of multi-relation fields), use the PATCH method.\n",
+        "operationId": "data_object_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the data-object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "properties": {
+                      "parentId": {
+                        "minimum": 1,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "index": {
+                        "minimum": 0,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "useDraftData": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      "task": {
+                        "enum": [
+                          "autoSave",
+                          "publish",
+                          "save",
+                          "unpublish",
+                          "version"
+                        ],
+                        "type": "string"
+                      },
+                      "coauthorType": {
+                        "deprecated": true,
+                        "description": "Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                        "maxLength": 50,
+                        "type": "string"
+                      },
+                      "coauthor": {
+                        "deprecated": true,
+                        "description": "Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                        "maxLength": 255,
+                        "type": "string"
+                      },
+                      "locked": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "childrenSortBy": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "childrenSortOrder": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "published": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      "editableData": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "properties": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/components/schemas/UpdateElementProperty"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/DataObjectDetail"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DataObjectFolder"
+                    }
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully updated data object"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailedError"
+                }
+              }
+            },
+            "description": "Element validation failed. The optional validationErrors list the individual errors."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update a data object by ID",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/grid/preview": {
+      "post": {
+        "description": "Gives you a preview of an Advanced Column Grid for a given Data Object.",
+        "operationId": "data_object_get_grid_preview",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "objectId": {
+                    "type": "integer"
+                  },
+                  "column": {
+                    "$ref": "#/components/schemas/Column"
+                  }
+                },
+                "required": [
+                  "objectId",
+                  "column"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnData"
+                }
+              }
+            },
+            "description": "Preview of an Advanced Column Grid for a given Data Object."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get a preview of an Advanced Column Grid for a given Data Object.",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configuration/{configurationId}": {
+      "delete": {
+        "description": "Delete grid configuration for a given configuration ID <strong>{configurationId}</strong>\n",
+        "operationId": "data_object_delete_grid_configuration_by_configurationId",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the element",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedConfiguration"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete grid configuration for a given configuration ID",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configuration/{folderId}/{classId}": {
+      "get": {
+        "description": "Get data object saved grid configuration by <strong>{folderId}</strong> <strong>{classId}</strong> if a configuration-id is set, otherwise get the default configuration will be returned.\n",
+        "operationId": "data_object_get_grid_configuration",
+        "parameters": [
+          {
+            "description": "FolderId of the element",
+            "in": "path",
+            "name": "folderId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Class Id of the data object",
+            "in": "path",
+            "name": "classId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Configuration ID",
+            "in": "query",
+            "name": "configurationId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedConfiguration"
+                }
+              }
+            },
+            "description": "Data Object grid configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get data object grid configuration for a specific folder and class-id",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configurations-global/{classId}": {
+      "get": {
+        "description": "List all globally-shared grid configurations for data objects for given class ID\n",
+        "operationId": "data_object_list_global_grid_configurations",
+        "parameters": [
+          {
+            "description": "Class Id of the data object",
+            "in": "path",
+            "name": "classId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Configuration"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of globally-shared grid configurations for data objects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List all globally-shared grid configurations for data objects",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configurations/{classId}": {
+      "get": {
+        "description": "List all saved grid configurations for data objects for given class ID\n",
+        "operationId": "data_object_list_saved_grid_configurations",
+        "parameters": [
+          {
+            "description": "Class Id of the data object",
+            "in": "path",
+            "name": "classId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Configuration"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of saved grid configurations for data objects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List all saved grid configurations for data objects",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configuration/remove-favorite/{configurationId}/{folderId}": {
+      "delete": {
+        "description": "Remove data object grid configuration as favorite for the current user for a specific folder\n",
+        "operationId": "data_object_remove_grid_configuration_as_favorite",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the configurationId",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "FolderId of the folderId",
+            "in": "path",
+            "name": "folderId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Object grid configuration removed as favorite successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Remove data object grid configuration as favorite for a specific folder",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configuration/save/{classId}": {
+      "post": {
+        "description": "Save Data Object grid configuration for a specific Class ID <strong>{classId}</strong>\n",
+        "operationId": "data_object_save_grid_configuration",
+        "parameters": [
+          {
+            "description": "Class Id of the data object",
+            "in": "path",
+            "name": "classId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "folderId": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "shareGlobal": {
+                    "type": "boolean"
+                  },
+                  "setAsFavorite": {
+                    "type": "boolean"
+                  },
+                  "saveFilter": {
+                    "type": "boolean"
+                  },
+                  "sharedUsers": {
+                    "type": "object"
+                  },
+                  "sharedRoles": {
+                    "type": "object"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filter": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/Filter"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "folderId",
+                  "pageSize",
+                  "name",
+                  "description",
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Configuration"
+                }
+              }
+            },
+            "description": "Data Object grid configuration saved successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Save Data Object grid configuration for a specific folder",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configuration/set-as-favorite/{configurationId}/{folderId}": {
+      "post": {
+        "description": "Set data object grid configuration as favorite for the current user for a specific folder\n",
+        "operationId": "data_object_set_grid_configuration_as_favorite",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the configurationId",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "FolderId of the folderId",
+            "in": "path",
+            "name": "folderId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Object grid configuration set as favorite successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Set data object grid configuration as favorite for a specific folder",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/configuration/update/{configurationId}": {
+      "put": {
+        "description": "Update data object grid configuration for a specific folder and given configuration ID <strong>{configurationId}</strong>\n",
+        "operationId": "data_object_update_grid_configuration",
+        "parameters": [
+          {
+            "description": "ConfigurationId of the configurationId",
+            "in": "path",
+            "name": "configurationId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "folderId": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "shareGlobal": {
+                    "type": "boolean"
+                  },
+                  "setAsFavorite": {
+                    "type": "boolean"
+                  },
+                  "saveFilter": {
+                    "type": "boolean"
+                  },
+                  "sharedUsers": {
+                    "type": "object"
+                  },
+                  "sharedRoles": {
+                    "type": "object"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filter": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/Filter"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "folderId",
+                  "pageSize",
+                  "name",
+                  "description",
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Data Object grid configuration updated successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update data object grid configuration for a specific folder",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/available-columns": {
+      "get": {
+        "description": "Get all available grid columns for data objects\n",
+        "operationId": "data_object_get_available_grid_columns",
+        "parameters": [
+          {
+            "description": "Identifies the class name for which the columns should be retrieved.",
+            "in": "query",
+            "name": "classId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "folderId",
+            "in": "query",
+            "name": "folderId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "columns": {
+                      "items": {
+                        "$ref": "#/components/schemas/ColumnConfiguration"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available grid columns for data objects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available grid columns for data objects",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-object/grid/available-columns-for-relation": {
+      "get": {
+        "description": "Get all available grid columns for data objects Many to many relation field (defined in the visible columns)",
+        "operationId": "data_object_get_available_grid_columns_for_relation",
+        "parameters": [
+          {
+            "description": "Identifies the class name for which the columns should be retrieved.",
+            "in": "query",
+            "name": "classId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "relationField as dot notation, e.g. \"myBlock.mySubRelationField\"",
+            "in": "query",
+            "name": "relationField",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "columns": {
+                      "items": {
+                        "$ref": "#/components/schemas/ColumnConfiguration"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available grid columns for data objects Many to many relation field"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available grid columns for data objects Many to many relation field",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/grid/{classId}": {
+      "post": {
+        "description": "Retrieve data objects data for grid. <br>\nYou can use different query parameters to filter the data objects data: <br>\n<ul>\n<li><strong>folderId</strong>: ID of parent folder</li>\n<li><strong>columns</strong>: To see the full description of request fields see the schema <strong>Grid Column Request</strong></li>\n<li><strong>filters</strong>: To see the full description of request fields see the schema <strong>Grid Filter</strong></li>\n</ul>\n",
+        "operationId": "data_object_get_grid",
+        "parameters": [
+          {
+            "description": "Identifies the class name for which the the grid should be build.",
+            "in": "path",
+            "name": "classId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "folderId": {
+                    "type": "integer"
+                  },
+                  "applyFallbackLanguages": {
+                    "default": false,
+                    "description": "When true, empty localized values fall back to configured fallback languages",
+                    "type": "boolean"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/Filter"
+                  }
+                },
+                "required": [
+                  "folderId"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "columns": {
+                            "items": {
+                              "$ref": "#/components/schemas/ColumnData"
+                            },
+                            "type": "array"
+                          },
+                          "isLocked": {
+                            "type": "boolean"
+                          },
+                          "permissions": {
+                            "$ref": "#/components/schemas/Permissions"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "required": [
+                        "id",
+                        "columns",
+                        "isLocked",
+                        "permissions"
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Data object grid data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get data object data for grid",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/grid/transformers/services/phpcode": {
+      "get": {
+        "description": "Returns a list of available PHPCode transformers used in grid rendering.  \nThese transformers can be applied to grid columns to dynamically modify or format values using PHP logic.\n",
+        "operationId": "data_object_get_phpcode_transformers",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/PhpCodeTransformer"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available PHPCode transformers"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List PHPCode transformers",
+        "tags": [
+          "Data Object Grid"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/{id}/layout": {
+      "get": {
+        "description": "Retrieves the layout of a specific data object based on the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing data object.\n",
+        "operationId": "data_object_get_layout_by_id",
+        "parameters": [
+          {
+            "description": "Id of the data-object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "ID to get specific layout",
+            "in": "query",
+            "name": "layoutId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Layout"
+                }
+              }
+            },
+            "description": "Successfully retrieved data object layout data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get layout of a data object by ID",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects": {
+      "patch": {
+        "description": "Patching data objects based on the given ID and data. <br> Patching can be used for updating single or multiple fields. <br> If single element is being patched, operation is executed synchronously. Multiple elements are patched asynchronously.\n",
+        "operationId": "data_object_patch_by_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "items": {
+                      "properties": {
+                        "id": {
+                          "description": "Data Object ID",
+                          "type": "integer"
+                        },
+                        "parentId": {
+                          "minimum": 1,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "index": {
+                          "minimum": 0,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "key": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "task": {
+                          "enum": [
+                            "autoSave",
+                            "publish",
+                            "save",
+                            "unpublish",
+                            "version"
+                          ],
+                          "type": "string"
+                        },
+                        "coauthorType": {
+                          "deprecated": true,
+                          "description": "Optional coauthor type stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                          "maxLength": 50,
+                          "type": "string"
+                        },
+                        "coauthor": {
+                          "deprecated": true,
+                          "description": "Optional coauthor identifier stored on versions created by this save. Deprecated: the server sets the coauthor, removed in 2027.1 (pimcore/platform-version#814)",
+                          "maxLength": 255,
+                          "type": "string"
+                        },
+                        "locked": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "childrenSortBy": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "childrenSortOrder": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "published": {
+                          "type": [
+                            "boolean",
+                            "null"
+                          ]
+                        },
+                        "editableData": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully patched data object"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created jobRun for patching multiple data objects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Patch data objects by ID",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/folder/{id}": {
+      "patch": {
+        "description": "Patching data objects based on the given folder ID, filters and data. <br> Patching on folder will be done asynchronously. <br>\nYou can also use filters and sorting. Filter data objects from folder based on the grid filter schema\n",
+        "operationId": "data_object_patch_folder_by_id",
+        "parameters": [
+          {
+            "description": "Id of the folder",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "data": {
+                    "properties": {
+                      "parentId": {
+                        "minimum": 1,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "index": {
+                        "minimum": 0,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "locked": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "childrenSortBy": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "childrenSortOrder": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "published": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      "editableData": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/ExportAllFilter"
+                  },
+                  "classId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "data",
+                  "classId"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created jobRun for patching multiple data objects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Patch all data objects based on folder ID and filters",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/format-path": {
+      "post": {
+        "description": "Format the path of the data given by the <strong>{targets}</strong> option.\n",
+        "operationId": "data_object_format_path",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "objectId": {
+                    "type": "integer"
+                  },
+                  "targets": {
+                    "type": "object"
+                  },
+                  "fieldName": {
+                    "description": "Fieldname for the PathFormatter. Given as Dot Notation",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "objectId",
+                  "targets"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/FormatedPath"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Formatted path of the objects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Format the path of the data",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/preview/{id}": {
+      "get": {
+        "description": "Preview data object by ID. Any additional query parameters (e.g. locale, site) are forwarded to the preview generator configured on the data object class. <br>\nAvailable parameters depend on the preview generator implementation and can be retrieved from the layout endpoint's previewConfig.\n",
+        "operationId": "data_object_preview_by_id",
+        "parameters": [
+          {
+            "description": "Id of the data object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Site ID for multi-site setups",
+            "in": "query",
+            "name": "site",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to preview URL",
+            "headers": {
+              "Location": {
+                "description": "Redirect location",
+                "required": true,
+                "schema": {
+                  "format": "uri",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "302 - Redirect<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Preview data object by ID",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/{sourceId}/replace/{targetId}": {
+      "post": {
+        "description": "Replace the content of the data object with the given <strong>{targetId}</strong> with the content of the data object matching the <strong>{sourceId}</strong>. <br> The <strong>{targetId}</strong> and <strong>{sourceId}</strong> must be an ID of existing data objects\n",
+        "operationId": "data_object_replace_content",
+        "parameters": [
+          {
+            "description": "SourceId of the data-object",
+            "in": "path",
+            "name": "sourceId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "TargetId of the data-object",
+            "in": "path",
+            "name": "targetId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully replaced content of data object"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Replace content of a data object",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/select-options": {
+      "post": {
+        "description": "Get all dynamic select options for data objects for given field\n",
+        "operationId": "data_object_get_select_options",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "objectId": {
+                    "type": "integer"
+                  },
+                  "fieldName": {
+                    "type": "string"
+                  },
+                  "changedData": {
+                    "type": "object"
+                  },
+                  "context": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "objectId",
+                  "fieldName",
+                  "context"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SelectOption"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of dynamic select options"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all dynamic select options for data objects",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    },
+    "/pimcore-studio/api/data-objects/tree": {
+      "get": {
+        "description": "Listing of all data objects and data object folders in the system. <br>\nReturns only data which are relevant for the tree <br>\nYou can use different query parameters to filter the data objects and it is possible to exclude folders from the result completely\n",
+        "operationId": "data_object_get_tree",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter data objects by parent id.",
+            "in": "query",
+            "name": "parentId",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter assets/data-objects by matching ids. As a wildcard * can be used",
+            "in": "query",
+            "name": "idSearchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Pql query filter",
+            "in": "query",
+            "name": "pqlQuery",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter folders from result.",
+            "in": "query",
+            "name": "excludeFolders",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by path.",
+            "in": "query",
+            "name": "path",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Include the parent item in the result.",
+            "in": "query",
+            "name": "pathIncludeParent",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include all descendants in the result.",
+            "in": "query",
+            "name": "pathIncludeDescendants",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "When provided, the search is executed on the specific data object class index.",
+            "in": "query",
+            "name": "className",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter results based on the provided class IDs.",
+            "in": "query",
+            "name": "classIds",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/DataObject"
+                          },
+                          {
+                            "$ref": "#/components/schemas/DataObjectFolder"
+                          }
+                        ]
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated data objects with total count as header param as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all data object data for the tree",
+        "tags": [
+          "Data Objects"
+        ]
+      }
+    }
+  }
+}

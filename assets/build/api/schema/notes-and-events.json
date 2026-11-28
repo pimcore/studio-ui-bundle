@@ -1,0 +1,652 @@
+{
+  "components": {
+    "schemas": {
+      "CreateNote": {
+        "properties": {
+          "title": {
+            "description": "title",
+            "type": "string"
+          },
+          "description": {
+            "description": "description",
+            "type": "string"
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "type"
+        ],
+        "title": "CreateNote",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "Note": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "integer"
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "cId": {
+            "description": "Id of element",
+            "type": "integer"
+          },
+          "cType": {
+            "description": "Type of element",
+            "type": "string"
+          },
+          "cPath": {
+            "description": "Path of element",
+            "type": "string"
+          },
+          "date": {
+            "description": "Creation date of note",
+            "type": "integer"
+          },
+          "title": {
+            "description": "title",
+            "type": "string"
+          },
+          "description": {
+            "description": "description",
+            "type": "string"
+          },
+          "locked": {
+            "description": "Locked",
+            "type": "boolean"
+          },
+          "data": {
+            "description": "Data of note",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "userId": {
+            "description": "User ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "userName": {
+            "description": "Username",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "cId",
+          "cType",
+          "cPath",
+          "date",
+          "title",
+          "description",
+          "locked",
+          "data"
+        ],
+        "title": "Note",
+        "type": "object"
+      },
+      "NoteType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "NoteType",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: notes-and-events)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/notes": {
+      "post": {
+        "description": "Get paginated notes. <br>\nYou can use different query parameters to filter the notes\n",
+        "operationId": "note_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "page": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  },
+                  "sortOrder": {
+                    "description": "Sort order (asc or desc).",
+                    "enum": [
+                      "ASC",
+                      "DESC"
+                    ],
+                    "type": "string"
+                  },
+                  "sortBy": {
+                    "description": "Sort by field. Only works in combination with sortOrder.",
+                    "enum": [
+                      "id",
+                      "type",
+                      "cId",
+                      "cType",
+                      "cPath",
+                      "date",
+                      "title",
+                      "description",
+                      "locked"
+                    ],
+                    "type": "string"
+                  },
+                  "filter": {
+                    "description": "Filter for notes",
+                    "type": "string"
+                  },
+                  "fieldFilters": {
+                    "description": "JSON array of field filters. \"userName\" also accepts a list of names, matched exactly.",
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "page",
+                  "pageSize"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Note"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated notes with total count"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated notes",
+        "tags": [
+          "Notes"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notes/{id}": {
+      "delete": {
+        "description": "Delete the note with the given <strong>{id}</strong>\n",
+        "operationId": "note_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "note_delete_by_id_success_description"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete note with given id",
+        "tags": [
+          "Notes"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notes/{elementType}/{id}": {
+      "get": {
+        "description": "Get paginated notes for a specific element by its <strong>{id}</strong>. <br>\nYou can use different query parameters to filter the notes\n",
+        "operationId": "note_element_get_collection",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Sort by field. Only works in combination with sortOrder.",
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "enum": [
+                "id",
+                "type",
+                "cId",
+                "cType",
+                "cPath",
+                "date",
+                "title",
+                "description",
+                "locked"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort order (asc or desc).",
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for notes",
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "JSON array of field filters. \"userName\" also accepts a list of names, matched exactly.",
+            "in": "query",
+            "name": "fieldFilters",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Note"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated notes with total count"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated notes for an element by id",
+        "tags": [
+          "Notes"
+        ]
+      },
+      "post": {
+        "description": "Create a new note for the element with the given <strong>{id}</strong>. <br>\nThe note will be created for the current user.\n",
+        "operationId": "note_element_create",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNote"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            },
+            "description": "Created note for element"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Create a new note for element with given id",
+        "tags": [
+          "Notes"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notes/type/{elementType}": {
+      "get": {
+        "description": "Get note types collection by <strong>{elementType}</strong>",
+        "operationId": "note_element_get_type_collection",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/NoteType"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Note types collection"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get note types",
+        "tags": [
+          "Notes"
+        ]
+      }
+    }
+  }
+}

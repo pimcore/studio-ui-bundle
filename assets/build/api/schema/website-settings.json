@@ -1,0 +1,541 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "WebsiteSetting": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "language": {
+            "description": "Language",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/WebsiteSettingsObjectData"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Data"
+          },
+          "siteId": {
+            "description": "Site ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "data"
+        ],
+        "title": "Website Setting",
+        "type": "object"
+      },
+      "WebsiteSettingsAdd": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "title": "Website Settings Add",
+        "type": "object"
+      },
+      "WebsiteSettingsObjectData": {
+        "properties": {
+          "id": {
+            "description": "element id",
+            "type": "integer"
+          },
+          "fullPath": {
+            "description": "element fullPath",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "fullPath"
+        ],
+        "title": "Website Settings Object Data",
+        "type": "object"
+      },
+      "WebsiteSettingsType": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "title": {
+            "description": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "title"
+        ],
+        "title": "Website Settings Type",
+        "type": "object"
+      },
+      "WebsiteSettingsUpdate": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "language": {
+            "description": "Language",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/WebsiteSettingsObjectData"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Data"
+          },
+          "siteId": {
+            "description": "Site ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "language",
+          "data",
+          "siteId"
+        ],
+        "title": "Website Settings Update",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: website-settings)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/website-settings/add": {
+      "post": {
+        "description": "Add a new website setting with the provided name and type.\nThe following types are supported: <strong>text</strong>, <strong>document</strong>, <strong>asset</strong>, <strong>object</strong>, <strong>bool</strong>. <br>\n",
+        "operationId": "website_settings_add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebsiteSettingsAdd"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebsiteSetting"
+                }
+              }
+            },
+            "description": "Successfully added website setting"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Add a new website setting",
+        "tags": [
+          "Website Settings"
+        ]
+      }
+    },
+    "/pimcore-studio/api/website-settings": {
+      "post": {
+        "description": "Get all paginated website settings. <br> You can specify different filters in your request body. Example filters are: <br>\n<ul>\n  <li><strong>page</strong>: Used for offset calculation in pagination. To be used, needs to be defined together with the page.size</li>\n  <li><strong>pageSize</strong>: Used for limiting the result numbers per page. To be used, needs to be defined together with the page</li>\n  <li><strong>name</strong>: Filter by settings name</li>\n  <li><strong>type</strong>: Filter by settings type (text, document, asset, object, bool)</li>\n  <li><strong>creationDate</strong>: Filter by creation date (on, from, to)</li>\n</ul>\n",
+        "operationId": "website_settings_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WebsiteSetting"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated website settings with total count"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated website settings",
+        "tags": [
+          "Website Settings"
+        ]
+      }
+    },
+    "/pimcore-studio/api/website-settings/{id}": {
+      "put": {
+        "description": "Update a website setting with the given <strong>{id}</strong>.\nThe <strong>{id}</strong> must be an ID of an existing website setting. <br>\nPlease note that <strong>all fields<strong> have to be provided.\n",
+        "operationId": "website_settings_update",
+        "parameters": [
+          {
+            "description": "Id of the website setting",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebsiteSettingsUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebsiteSetting"
+                }
+              }
+            },
+            "description": "Successfully updated website setting"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a website setting",
+        "tags": [
+          "Website Settings"
+        ]
+      },
+      "delete": {
+        "description": "Delete a website setting with the given <strong>{id}</strong>.\nThe <strong>{id}</strong> must be an ID of an existing DocType. <br>\n",
+        "operationId": "website_settings_delete",
+        "parameters": [
+          {
+            "description": "Id of the website setting",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted website setting"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a website setting",
+        "tags": [
+          "Website Settings"
+        ]
+      }
+    },
+    "/pimcore-studio/api/website-settings/types": {
+      "get": {
+        "description": "List all available website setting types.\nReturns an array of website setting types with their keys and titles.\n",
+        "operationId": "website_settings_list_types",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WebsiteSettingsType"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of all available website setting types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List all website setting types",
+        "tags": [
+          "Website Settings"
+        ]
+      }
+    }
+  }
+}

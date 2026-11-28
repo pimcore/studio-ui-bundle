@@ -1,0 +1,1145 @@
+{
+  "components": {
+    "schemas": {
+      "DetailedRole": {
+        "description": "Contains all information about a role",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the User",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of Folder or Role",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "classes": {
+            "description": "Classes the user is allows to see",
+            "type": "object"
+          },
+          "parentId": {
+            "description": "Parent ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "permissions": {
+            "description": "List of permissions for the user",
+            "type": "object"
+          },
+          "docTypes": {
+            "description": "List of document types for the role",
+            "type": "object"
+          },
+          "websiteTranslationLanguagesEdit": {
+            "type": "object"
+          },
+          "websiteTranslationLanguagesView": {
+            "type": "object"
+          },
+          "assetWorkspaces": {
+            "description": "Asset Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "dataObjectWorkspaces": {
+            "description": "Data Object Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "documentWorkspaces": {
+            "description": "Document Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "perspectives": {
+            "description": "Allowed studio perspectives",
+            "items": {
+              "$ref": "#/components/schemas/PerspectiveConfig"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "classes",
+          "parentId",
+          "permissions",
+          "docTypes",
+          "websiteTranslationLanguagesEdit",
+          "websiteTranslationLanguagesView",
+          "assetWorkspaces",
+          "dataObjectWorkspaces",
+          "documentWorkspaces",
+          "perspectives"
+        ],
+        "title": "Detailed User Role",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "PerspectiveConfig": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Perspective ID",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "Icon"
+          },
+          "isWriteable": {
+            "description": "Is Writeable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "icon",
+          "isWriteable"
+        ],
+        "title": "Perspective Config",
+        "type": "object"
+      },
+      "SimpleRole": {
+        "description": "A user role which is a combination of permissions and settings.",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the Role",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "Simple User Role",
+        "type": "object"
+      },
+      "TreeNode": {
+        "description": "One node in the a tree",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Unique Identifier",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the tree node",
+            "type": "string"
+          },
+          "type": {
+            "description": "Is ether folder or a specific item in the folder",
+            "type": "string"
+          },
+          "hasChildren": {
+            "description": "If a folder has sub items",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "hasChildren"
+        ],
+        "title": "Tree Node",
+        "type": "object"
+      },
+      "UpdateRole": {
+        "description": "Contains all information about a role that can be updated.",
+        "properties": {
+          "name": {
+            "description": "Name of Folder or Role",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "classes": {
+            "description": "Classes the user is allows to see",
+            "type": "object"
+          },
+          "parentId": {
+            "description": "Parent ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "permissions": {
+            "description": "List of permissions for the user",
+            "type": "object"
+          },
+          "docTypes": {
+            "description": "List of document types for the role",
+            "type": "object"
+          },
+          "websiteTranslationLanguagesEdit": {
+            "type": "object"
+          },
+          "websiteTranslationLanguagesView": {
+            "type": "object"
+          },
+          "assetWorkspaces": {
+            "description": "Asset Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "dataObjectWorkspaces": {
+            "description": "Data Object Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "documentWorkspaces": {
+            "description": "Document Workspace",
+            "items": {
+              "$ref": "#/components/schemas/UserWorkspace"
+            },
+            "type": "array"
+          },
+          "perspectives": {
+            "description": "Allowed studio perspectives",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "classes",
+          "parentId",
+          "permissions",
+          "docTypes",
+          "websiteTranslationLanguagesEdit",
+          "websiteTranslationLanguagesView",
+          "assetWorkspaces",
+          "dataObjectWorkspaces",
+          "documentWorkspaces",
+          "perspectives"
+        ],
+        "title": "Update User Role",
+        "type": "object"
+      },
+      "UserWorkspace": {
+        "description": "Workspace of a user",
+        "properties": {
+          "cid": {
+            "description": "ID of the element",
+            "type": "integer"
+          },
+          "cpath": {
+            "description": "Path of the element",
+            "type": "string"
+          },
+          "list": {
+            "description": "List Permission",
+            "type": "boolean"
+          },
+          "view": {
+            "description": "View Permission",
+            "type": "boolean"
+          },
+          "publish": {
+            "description": "Publish Permission",
+            "type": "boolean"
+          },
+          "delete": {
+            "description": "Delete Permission",
+            "type": "boolean"
+          },
+          "rename": {
+            "description": "Rename Permission",
+            "type": "boolean"
+          },
+          "create": {
+            "description": "Create Permission",
+            "type": "boolean"
+          },
+          "settings": {
+            "description": "Settings Permission",
+            "type": "boolean"
+          },
+          "versions": {
+            "description": "Versions Permission",
+            "type": "boolean"
+          },
+          "properties": {
+            "description": "Properties Permission",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "cid",
+          "cpath",
+          "list",
+          "view",
+          "publish",
+          "delete",
+          "rename",
+          "create",
+          "settings",
+          "versions",
+          "properties"
+        ],
+        "title": "User Workspace",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: roles)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/role/clone/{id}": {
+      "post": {
+        "operationId": "role_clone_by_id",
+        "parameters": [
+          {
+            "description": "Id of the role",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeNode"
+                }
+              }
+            },
+            "description": "Node of the cloned Role."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Clone a specific Role.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/role/folder": {
+      "post": {
+        "operationId": "role_folder_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "parentId": {
+                    "minimum": 1,
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "parentId",
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeNode"
+                }
+              }
+            },
+            "description": "Node of the new created Folder"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new role folder.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/role": {
+      "post": {
+        "operationId": "role_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "parentId": {
+                    "minimum": 1,
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "parentId",
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeNode"
+                }
+              }
+            },
+            "description": "Node of the new created Role."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new role.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/role/folder/{id}": {
+      "delete": {
+        "operationId": "role_folder_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the folder",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete a specific folder with all sub roles.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/role/{id}": {
+      "get": {
+        "operationId": "role_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the role",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedRole"
+                }
+              }
+            },
+            "description": "List of available user roles."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all available user roles.",
+        "tags": [
+          "Role Management"
+        ]
+      },
+      "put": {
+        "operationId": "role_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the Role",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRole"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedRole"
+                }
+              }
+            },
+            "description": "Updated data."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update role by id.",
+        "tags": [
+          "Role Management"
+        ]
+      },
+      "delete": {
+        "operationId": "role_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the role",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete a specific role.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/roles": {
+      "get": {
+        "description": "Get all available roles with basic information",
+        "operationId": "role_get_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleRole"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available roles."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available roles.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/roles/with-permission": {
+      "get": {
+        "description": "Get all roles with the given permission <strong>{permission}</strong>. <br>\nThe <strong>{permission}</strong> must be an existing user permission.\n",
+        "operationId": "role_list_with_permission",
+        "parameters": [
+          {
+            "description": "List roles with this permission",
+            "in": "query",
+            "name": "permission",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleRole"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of roles with the given permission"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all roles with a specific permission",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/roles/tree": {
+      "get": {
+        "operationId": "role_get_tree",
+        "parameters": [
+          {
+            "description": "Filter roles by parent id.",
+            "in": "query",
+            "name": "parentId",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/TreeNode"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Collection of roles including folders for the given parent id."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get collection of roles for tree view.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/roles-share-list": {
+      "get": {
+        "description": "Get all available roles with basic information for sharing configurations",
+        "operationId": "role_get_share_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleRole"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of roles for sharing"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all roles for sharing configurations",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    },
+    "/pimcore-studio/api/role/search": {
+      "get": {
+        "description": "Search for roles by query. The query can be a part of the role name or ID.",
+        "operationId": "role_search",
+        "parameters": [
+          {
+            "description": "Query to search for a role. This can be a part of role name or ID.",
+            "in": "query",
+            "name": "searchQuery",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleRole"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of roles"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Search for roles by query.",
+        "tags": [
+          "Role Management"
+        ]
+      }
+    }
+  }
+}

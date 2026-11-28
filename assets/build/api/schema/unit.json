@@ -1,0 +1,890 @@
+{
+  "components": {
+    "schemas": {
+      "ConvertedQuantityValue": {
+        "properties": {
+          "unitAbbreviation": {
+            "description": "Unit Abbreviation",
+            "type": "string"
+          },
+          "unitLongName": {
+            "description": "Unit Long Name",
+            "type": "string"
+          },
+          "convertedValue": {
+            "description": "Converted Values",
+            "format": "float",
+            "type": "number"
+          }
+        },
+        "required": [
+          "unitAbbreviation",
+          "unitLongName",
+          "convertedValue"
+        ],
+        "title": "Converted quantity values",
+        "type": "object"
+      },
+      "ConvertedQuantityValues": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "originalValue": {
+            "anyOf": [
+              {
+                "type": "float"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "description": "Original Value"
+          },
+          "fromUnitId": {
+            "description": "From Unit Id",
+            "type": "string"
+          },
+          "convertedValues": {
+            "description": "Converted Values",
+            "items": {
+              "$ref": "#/components/schemas/ConvertedQuantityValue"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "originalValue",
+          "fromUnitId",
+          "convertedValues"
+        ],
+        "title": "Converted quantity values",
+        "type": "object"
+      },
+      "CreateUnitParameters": {
+        "properties": {
+          "id": {
+            "description": "Unique unit ID",
+            "type": "string"
+          },
+          "abbreviation": {
+            "description": "Abbreviation",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "longname": {
+            "description": "Long name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "baseunit": {
+            "description": "Base unit ID",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "factor": {
+            "description": "Conversion factor",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "conversionOffset": {
+            "description": "Conversion offset",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "converter": {
+            "description": "Converter service class",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reference": {
+            "description": "Reference",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "Create Unit Parameters",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "QuantityValueUnit": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "abbreviation": {
+            "description": "Abbreviation",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "longName": {
+            "description": "Long Name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "baseUnit": {
+            "description": "Base Unit",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reference": {
+            "description": "Reference",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "factor": {
+            "description": "Factor",
+            "format": "float",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "conversionOffset": {
+            "description": "Conversion Offset",
+            "format": "float",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "converter": {
+            "description": "Converter",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "abbreviation",
+          "group",
+          "longName",
+          "baseUnit",
+          "reference",
+          "factor",
+          "conversionOffset",
+          "converter"
+        ],
+        "title": "QuantityValueUnit",
+        "type": "object"
+      },
+      "UpdateUnitParameters": {
+        "properties": {
+          "abbreviation": {
+            "description": "Abbreviation",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "longname": {
+            "description": "Long name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "baseunit": {
+            "description": "Base unit ID",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "factor": {
+            "description": "Conversion factor",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "conversionOffset": {
+            "description": "Conversion offset",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "converter": {
+            "description": "Converter service class",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reference": {
+            "description": "Reference",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "title": "Update Unit Parameters",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: unit)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/unit/quantity-value/units/collection": {
+      "post": {
+        "description": "Get a paginated and filterable collection of quantity value units.\n",
+        "operationId": "unit_quantity_value_units_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/QuantityValueUnit"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated collection of quantity value units"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get quantity value unit collection",
+        "tags": [
+          "Units"
+        ]
+      }
+    },
+    "/pimcore-studio/api/unit/quantity-value/convert-all": {
+      "get": {
+        "description": "Convert quantity <strong>{value}</strong> from one unit to all other available units based on the given <strong>{fromUnitId}</strong>. <br>\nUnits have to have <strong>{fromUnitId}</strong> defined as base unit to be considered for conversion.\n",
+        "operationId": "unit_quantity_value_convert_all",
+        "parameters": [
+          {
+            "description": "Id of the unit to convert from",
+            "in": "query",
+            "name": "fromUnitId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Value to convert.",
+            "in": "query",
+            "name": "value",
+            "required": true,
+            "schema": {
+              "format": "number",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConvertedQuantityValues"
+                }
+              }
+            },
+            "description": "Converted quantity value"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Convert quantity value from one unit to all other related units",
+        "tags": [
+          "Units"
+        ]
+      }
+    },
+    "/pimcore-studio/api/unit/quantity-value/convert": {
+      "get": {
+        "description": "Convert quantity <strong>{value}</strong> from one unit to another based on the given <strong>{fromUnitId}</strong> and <strong>{toUnitId}</strong>\n",
+        "operationId": "unit_quantity_value_convert",
+        "parameters": [
+          {
+            "description": "Id of the unit to convert from",
+            "in": "query",
+            "name": "fromUnitId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the unit to convert to",
+            "in": "query",
+            "name": "toUnitId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Value to convert.",
+            "in": "query",
+            "name": "value",
+            "required": true,
+            "schema": {
+              "format": "number",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ],
+                      "description": "Converted value",
+                      "title": "data"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Converted quantity value"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Convert quantity value from one unit to another",
+        "tags": [
+          "Units"
+        ]
+      }
+    },
+    "/pimcore-studio/api/unit/quantity-value/units": {
+      "post": {
+        "description": "Create a new quantity value unit. The unit ID must be unique and not exceed 50 characters.\n",
+        "operationId": "unit_quantity_value_units_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUnitParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuantityValueUnit"
+                }
+              }
+            },
+            "description": "Created quantity value unit"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Create a new quantity value unit",
+        "tags": [
+          "Units"
+        ]
+      }
+    },
+    "/pimcore-studio/api/unit/quantity-value/units/{id}": {
+      "put": {
+        "description": "Update an existing quantity value unit by its ID. <br>\nThe unit with the given ID must already exist. <br>\nPlease note that <strong>all fields<strong> have to be provided.\n",
+        "operationId": "unit_quantity_value_units_update",
+        "parameters": [
+          {
+            "description": "ID of the unit to update",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUnitParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuantityValueUnit"
+                }
+              }
+            },
+            "description": "Updated quantity value unit"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a quantity value unit",
+        "tags": [
+          "Units"
+        ]
+      },
+      "delete": {
+        "description": "Delete a quantity value unit by its ID.\n",
+        "operationId": "unit_quantity_value_units_delete",
+        "parameters": [
+          {
+            "description": "ID of the unit to delete",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted quantity value unit"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a quantity value unit",
+        "tags": [
+          "Units"
+        ]
+      }
+    },
+    "/pimcore-studio/api/unit/quantity-value/units/export": {
+      "get": {
+        "description": "Export all quantity value unit definitions as JSON.\n",
+        "operationId": "unit_quantity_value_units_export",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "JSON export of quantity value units",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Export quantity value units as JSON",
+        "tags": [
+          "Units"
+        ]
+      }
+    },
+    "/pimcore-studio/api/unit/quantity-value/units/import": {
+      "post": {
+        "description": "Import quantity value unit definitions from a JSON file. Existing units with the same ID will be skipped.\n",
+        "operationId": "unit_quantity_value_units_import",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "JSON file containing quantity value unit definitions",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully imported quantity value units"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Import quantity value units from JSON",
+        "tags": [
+          "Units"
+        ]
+      }
+    },
+    "/pimcore-studio/api/unit/quantity-value/unit-list": {
+      "get": {
+        "description": "List of available quantity value units\n",
+        "operationId": "unit_quantity_value_list",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/QuantityValueUnit"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of quantity value units"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List of available quantity value units",
+        "tags": [
+          "Units"
+        ]
+      }
+    }
+  }
+}
