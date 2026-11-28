@@ -23,10 +23,11 @@ import { LoginForm } from './login-form'
 type LoginStep = 'login' | 'forgot-password' | TwoFactorStep
 
 export interface LoginFormContainerProps {
+  isLoginRoute?: boolean
   pendingTwoFactor?: TwoFactorChallenge
 }
 
-export const LoginFormContainer = ({ pendingTwoFactor }: LoginFormContainerProps): React.JSX.Element => {
+export const LoginFormContainer = ({ isLoginRoute, pendingTwoFactor }: LoginFormContainerProps): React.JSX.Element => {
   const { styles } = useStyle()
   const user = useUser()
   const [step, setStep] = useState<LoginStep>(pendingTwoFactor?.step ?? 'login')
@@ -94,6 +95,7 @@ export const LoginFormContainer = ({ pendingTwoFactor }: LoginFormContainerProps
 
       {step === 'login' && (
         <LoginForm
+          isLoginRoute={ isLoginRoute }
           onPasswordForgotten={ () => { setStep('forgot-password') } }
           onTwoFactorRequired={ openTwoFactorStep }
         />

@@ -37,7 +37,13 @@ jest.mock('@Pimcore/modules/app/branding/hooks/use-admin-thumbnails', () => ({
 }))
 jest.mock('./login-page.styles', () => ({ useStyle: () => ({ styles: {} }) }))
 jest.mock('@Pimcore/app/store', () => ({ useAppDispatch: () => jest.fn() }))
-jest.mock('./components/login-form/login-form-container', () => ({ LoginFormContainer: () => null }))
+const mockLoginFormContainer = jest.fn()
+jest.mock('./components/login-form/login-form-container', () => ({
+  LoginFormContainer: (props: unknown) => {
+    mockLoginFormContainer(props)
+    return null
+  }
+}))
 jest.mock('./services/statisticsService', () => ({ sendStatistics: jest.fn() }))
 
 // eslint-disable-next-line import/first
@@ -99,6 +105,17 @@ describe('LoginPage token login', () => {
 
     expect(mockNavigate).not.toHaveBeenCalled()
     mockUseIsAuthenticated.mockReturnValue({ isAuthenticated: false })
+  })
+})
+
+describe('LoginPage login form', () => {
+  it.each([
+    ['a guarded route', true, false],
+    ['the login route', false, true]
+  ])('tells the login form whether it is on the login route for %s', (_, inPlace, isLoginRoute) => {
+    renderAt('/pimcore-studio/asset/1234', inPlace)
+
+    expect(mockLoginFormContainer).toHaveBeenLastCalledWith(expect.objectContaining({ isLoginRoute }))
   })
 })
 
