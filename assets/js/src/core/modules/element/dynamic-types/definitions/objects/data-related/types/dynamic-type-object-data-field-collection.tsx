@@ -27,6 +27,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'
   isCollectionType: boolean = false
+  rendersFieldAddons: boolean = false
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'XL',

@@ -38,4 +38,45 @@ describe('LabelExtra', () => {
 
     expect(container).toBeEmptyDOMElement()
   })
+
+  it('replaces the extra of an outer provider by default', () => {
+    render(
+      <LabelExtraProvider extra={ <span>outer</span> }>
+        <LabelExtraProvider extra={ <span>inner</span> }>
+          <LabelExtra />
+        </LabelExtraProvider>
+      </LabelExtraProvider>
+    )
+
+    expect(screen.queryByText('outer')).not.toBeInTheDocument()
+    expect(screen.getByText('inner')).toBeInTheDocument()
+  })
+
+  it('renders its extra after the one of an outer provider when appending', () => {
+    const { container } = render(
+      <LabelExtraProvider extra={ <span>outer</span> }>
+        <LabelExtraProvider
+          append
+          extra={ <span>inner</span> }
+        >
+          <LabelExtra />
+        </LabelExtraProvider>
+      </LabelExtraProvider>
+    )
+
+    expect(container).toHaveTextContent('outerinner')
+  })
+
+  it('renders only its own extra when appending without an outer provider', () => {
+    const { container } = render(
+      <LabelExtraProvider
+        append
+        extra={ <span>inner</span> }
+      >
+        <LabelExtra />
+      </LabelExtraProvider>
+    )
+
+    expect(container).toHaveTextContent(/^inner$/)
+  })
 })

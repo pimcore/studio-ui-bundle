@@ -87,6 +87,7 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
             return (
               <CombinedFieldNameProvider
                 combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] }
+                fieldPathParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), field, type] }
                 key={ index }
               >
                 <ObjectComponent

@@ -130,6 +130,12 @@ const defaultComponentConfig = {
           }
         }
       },
+      // Addons of a single data field in the edit form, see DataObjectFieldAddonProps
+      field: {
+        after: { type: ComponentType.SLOT, name: 'dataObject.editor.field.after' },
+        below: { type: ComponentType.SLOT, name: 'dataObject.editor.field.below' },
+        label: { type: ComponentType.SLOT, name: 'dataObject.editor.field.label' }
+      },
       tab: {
         listing: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.listing' },
         edit: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.edit' },

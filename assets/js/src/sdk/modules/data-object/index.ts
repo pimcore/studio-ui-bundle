@@ -33,6 +33,7 @@ export * from '@Pimcore/types/enums/element/element-type'
 
 export * from '@Pimcore/modules/data-object/editor/types/folder/tab-manager/folder-tab-manager'
 export * from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
+export type { DataObjectFieldAddonProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component/field-addon/use-field-addons'
 
 export * from '@Pimcore/modules/data-object/editor/toolbar/language-selection/language-selection'
 export * from '@Pimcore/components/language-selection/language-selection-with-provider'

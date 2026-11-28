@@ -57,6 +57,44 @@ export const useStyles = createStyles(({ token, css }) => {
           flex-basis: 100%;
         }
       }
+    `,
+
+    // Field addons, see field-addon/field-addon-control. The control keeps the width it has without
+    // addons: it is itself the flex item of the row (so a `width: 100%` resolves against the row
+    // and pushes the `after` addon to the next line) and grows into the free space, so a control
+    // whose root has no width of its own (e.g. a wrapper around a select) is not shrunk to its
+    // content. A control that caps its own width has the addon right after it; one capped further
+    // inside has it at the end of the row. An addon whose components all render nothing leaves the
+    // field laid out as without addons.
+    addonRow: css`
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: ${token.marginXXS}px ${token.marginXS}px;
+
+      &:has(> .pimcore-field-addon__after:empty) {
+        display: block;
+      }
+
+      > :not(.pimcore-field-addon__after) {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      > .pimcore-field-addon__after {
+        flex: 0 1 auto;
+        min-width: 0;
+      }
+    `,
+
+    addonBelow: css`
+      margin-top: ${token.marginXXS}px;
+    `,
+
+    addonEmpty: css`
+      &:empty {
+        display: none;
+      }
     `
   }
 })

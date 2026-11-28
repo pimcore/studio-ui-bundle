@@ -35,6 +35,7 @@ export const CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE = 'language
 
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
+  rendersFieldAddons: boolean = false
 
   getObjectDataComponent (props: ClassificationStoreProps): React.ReactElement<ClassificationStoreProps> {
     return <ClassificationStore { ...props } />

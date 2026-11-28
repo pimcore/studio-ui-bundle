@@ -8,13 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, type ReactNode } from 'react'
+import React, { createContext, useContext, useMemo, type ReactNode } from 'react'
 import { isNil } from 'lodash'
 
 const LabelExtraContext = createContext<ReactNode | undefined>(undefined)
 
 export interface LabelExtraProviderProps {
   extra: ReactNode
+  /**
+   * Render the extra after the one of an outer provider instead of replacing it,
+   * so independent features can each add to the same label row.
+   */
+  append?: boolean
   children: ReactNode
 }
 
@@ -26,12 +31,21 @@ export interface LabelExtraProviderProps {
  *
  * The same node is rendered into every label, so it has to decide itself whether it
  * applies to the item at hand, e.g. by the item context.
+ *
+ * A nested provider replaces the extra of an outer one, unless it appends to it.
  */
-export const LabelExtraProvider = ({ extra, children }: LabelExtraProviderProps): React.JSX.Element => (
-  <LabelExtraContext.Provider value={ extra }>
-    {children}
-  </LabelExtraContext.Provider>
-)
+export const LabelExtraProvider = ({ extra, append = false, children }: LabelExtraProviderProps): React.JSX.Element => {
+  const outerExtra = useContext(LabelExtraContext)
+  const value = useMemo(() => append && !isNil(outerExtra)
+    ? <>{outerExtra}{extra}</>
+    : extra, [append, outerExtra, extra])
+
+  return (
+    <LabelExtraContext.Provider value={ value }>
+      {children}
+    </LabelExtraContext.Provider>
+  )
+}
 
 /** End-of-label slot, see LabelExtraProvider. Renders nothing outside a provider. */
 export const LabelExtra = (): React.JSX.Element | null => {

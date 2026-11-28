@@ -55,7 +55,10 @@ jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-relat
 
 // what the real EditFormProvider reaches for: the provider itself stays real, because what matters
 // about it is that it publishes its form in its own context and in no FormInstanceProvider
-jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({ useElementContext: () => ({ id: 1 }) }))
+jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
+  useElementContext: () => ({ id: 1 }),
+  useOptionalElementContext: () => ({ id: 1, elementType: 'data-object' })
+}))
 jest.mock('@Pimcore/modules/data-object/hooks/use-data-object-draft', () => ({
   useDataObjectDraft: () => ({ dataObject: { permissions: { save: true, publish: true } }, markObjectDataAsModified: () => {} })
 }))
@@ -101,6 +104,10 @@ const objectDataRegistry = {
 
 const types: Record<string, unknown> = {}
 
+// no bundle registers field addons here
+jest.mock('@Pimcore/modules/app/component-registry/use-component-registry', () => ({
+  useComponentRegistry: () => ({ getSlotComponents: () => [] })
+}))
 jest.mock('@Pimcore/app/depency-injection', () => ({
   container: { get: () => objectDataRegistry },
   useInjection: () => objectDataRegistry

@@ -57,6 +57,8 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const localizedContext = useLocalizedFields()
   const combinedParentName = useCombinedFieldName()
   const combinedFieldName: string[] = combinedParentName !== undefined ? [...combinedParentName.combinedFieldNameParent, name] : [name]
+  // the same path with the index of each block or field collection item, so field addons can tell items apart
+  const fieldPath: Array<string | number> = combinedParentName !== undefined ? [...combinedParentName.fieldPathParent, name] : [name]
 
   if (groupContext !== undefined) {
     virtualFieldName = [...(isArray(groupContext.name) ? groupContext.name : [groupContext.name]), ...virtualFieldName]
@@ -127,6 +129,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     return (
       <DataComponentFormItem
         _props={ _props }
+        fieldPath={ isNil(form) ? undefined : fieldPath }
         formFieldName={ formFieldName }
         objectDataType={ objectDataType }
         technicalName={ technicalName ?? name }
