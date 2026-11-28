@@ -17,11 +17,13 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import type { SelectOptionDetail, SchemaUsedToUpdateSelectOptionConfigurations } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { isUndefined } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelectOptionEditorContext } from '../../context/hooks/use-select-option-editor-context'
 import { useSelectOptionEditor } from '../../hooks/use-select-option-editor'
 import { SelectOptionGeneralSettingsFormFields } from '../select-option-editor/general-settings-form-fields'
+import { SelectOptionImportExportActions } from './select-option-import-export-actions'
 
 export interface SelectOptionFormProps {
   selectOption: SelectOptionDetail
@@ -37,6 +39,16 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
   }
   const isWriteable = selectOption.isWriteable
 
+  const reload = async (): Promise<void> => {
+    const fresh = await getSelectOptionById(selectOption.id)
+    if (!isUndefined(fresh)) {
+      setSelectOptions((prev) =>
+        prev.map((s) => s.id === fresh.id ? fresh : s)
+      )
+      form.setFieldsValue(fresh)
+    }
+  }
+
   return (
     <FormKit
       formProps={ {
@@ -51,15 +63,7 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
             selectOptions: values.selectOptions ?? []
           }
 
-          await updateSelectOption(selectOption.id, config, async () => {
-            const fresh = await getSelectOptionById(selectOption.id)
-            if (fresh !== undefined) {
-              setSelectOptions((prev) =>
-                prev.map((s) => s.id === fresh.id ? fresh : s)
-              )
-              form.setFieldsValue(fresh)
-            }
-          })
+          await updateSelectOption(selectOption.id, config, () => { void reload() })
         }
       } }
     >
@@ -84,16 +88,13 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
               aria-label={ t('toolbar.reload') }
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
-              onClick={ async () => {
-                const fresh = await getSelectOptionById(selectOption.id)
-                if (fresh !== undefined) {
-                  setSelectOptions((prev) =>
-                    prev.map((s) => s.id === fresh.id ? fresh : s)
-                  )
-                  form.setFieldsValue(fresh)
-                }
-              } }
+              onClick={ reload }
               tooltip={ { title: t('toolbar.reload') } }
+            />
+
+            <SelectOptionImportExportActions
+              id={ selectOption.id }
+              onImported={ () => { void reload() } }
             />
 
             <Tooltip
