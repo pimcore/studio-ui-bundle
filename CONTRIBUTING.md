@@ -15,6 +15,29 @@ There are a few necessary steps before we can accept a pull request:
 * [Send a pull request](https://help.github.com/articles/using-pull-requests/) from your fork’s branch to our repo branch.
 * [Sign the CLA](https://cla-assistant.io/pimcore/pimcore) - see also below.
 
+### Translations pre-commit hook
+
+`translations/studio.en.yaml` is the source of truth for the Studio UI strings, and the other
+`translations/studio.{locale}.yaml` files must stay in sync with it. A pre-commit hook checks this
+locally, so translating happens in your IDE instead of in CI. Enable it once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+The hook runs the check from the `pimcore-studio` Claude Code plugin (needs `python3` with PyYAML):
+
+```bash
+claude plugin marketplace add pimcore/claude-code
+claude plugin install pimcore-studio@pimcore
+claude plugin update pimcore-studio@pimcore      # later, to pick up skill updates
+```
+
+When a commit is refused, run `/translate studio-ui-bundle` in Claude Code (the output names the
+exact command, e.g. `/translate all studio-ui-bundle <locales>` when language files are missing), stage
+the `studio.{locale}.yaml` files and commit again. `git commit --no-verify` skips the hook. Without
+the plugin the hook only prints a warning; the same checks still run in CI on the pull request.
+
 
 ## Bug Reports
 **Please provide a fix for the bug as a pull request (PR) whenever possible!**  
