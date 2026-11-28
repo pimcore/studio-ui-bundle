@@ -39,7 +39,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
     return {
       key: index,
       label: fieldCollection?.data?.items?.find(item => item.key === type)?.title === '' ? type : t(fieldCollection?.data?.items?.find(item => item.key === type)?.title as string),
-      onClick: (e) => { e.domEvent.stopPropagation(); operations.add({ type }) }
+      onClick: (e) => { e.domEvent.stopPropagation(); operations.add({ type }, field + 1) }
     }
   })
 
@@ -60,7 +60,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
                 icon={ { value: 'new' } }
                 onClick={ (e) => {
                   e.stopPropagation()
-                  operations.add({ type: allowedTypes[0] })
+                  operations.add({ type: allowedTypes[0] }, field + 1)
                 } }
                 size='small'
                 tooltip={ { title: t('add') } }
