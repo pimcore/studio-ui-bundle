@@ -1513,6 +1513,10 @@ relations.create-object.class: Class
 relations.visible-fields.loading: Loading visible fields…
 relations.visible-fields.loading-progress: 'Loading visible fields… ({{loaded}} of {{total}})'
 relations.visible-fields.error: The visible fields could not be loaded.
+relations.visible-fields.tooltip: The fields on offer follow the allowed element types, classes and asset types. A column stays empty for rows of an element type or class the field does not come from.
+relations.visible-fields.source.object: All objects
+relations.visible-fields.source.asset: Assets
+relations.visible-fields.source.document: Documents
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.

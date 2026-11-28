@@ -64,6 +64,11 @@ export interface AdvancedManyToManyRelationProps extends IRelationAllowedTypesDa
   onChange?: (value?: AdvancedManyToManyRelationValue | null) => void
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
   className?: string
+  /** Read-only columns shown right after the metadata columns, e.g. the visible fields. */
+  additionalColumns?: Array<ColumnDef<any>>
+  visibleFieldsValue?: Array<Record<string, any> | undefined>
+  hint?: React.ReactNode | null
+  isLoading?: boolean
 }
 
 export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProps): React.JSX.Element => {
@@ -103,6 +108,7 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
         ...(isNonEmptyString(props.pathFormatterClass) ? { cell: renderFullPathCell } : {})
       }),
       ...columnDefinition,
+      ...(props.additionalColumns ?? []),
       columnHelper.accessor('type', {
         header: t('relations.type'),
         meta: {

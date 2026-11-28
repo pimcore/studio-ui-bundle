@@ -173,6 +173,17 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/data-objects/grid/transformers/services/phpcode` }),
                 providesTags: ["Data Object Grid"],
             }),
+            dataObjectGetVisibleFieldValuesForRelation: build.query<
+                DataObjectGetVisibleFieldValuesForRelationApiResponse,
+                DataObjectGetVisibleFieldValuesForRelationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/visible-field-values-for-relation`,
+                    method: "POST",
+                    body: queryArg.relationVisibleFieldValuesRequest,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
             dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout`,
@@ -464,6 +475,13 @@ export type DataObjectGetPhpcodeTransformersApiResponse = /** status 200 List of
     items: SimplePhpCodeTransformer[];
 };
 export type DataObjectGetPhpcodeTransformersApiArg = void;
+export type DataObjectGetVisibleFieldValuesForRelationApiResponse =
+    /** status 200 Visible field values per related element */ {
+        items: RelationVisibleFieldValues[];
+    };
+export type DataObjectGetVisibleFieldValuesForRelationApiArg = {
+    relationVisibleFieldValuesRequest: RelationVisibleFieldValuesRequest;
+};
 export type DataObjectGetLayoutByIdApiResponse =
     /** status 200 Successfully retrieved data object layout data as JSON */ Layout;
 export type DataObjectGetLayoutByIdApiArg = {
@@ -994,6 +1012,31 @@ export type SimplePhpCodeTransformer = {
     /** Label of the transformer */
     label: string;
 };
+export type RelationVisibleFieldValues = {
+    /** Element type of the related element */
+    type: string;
+    /** Id of the related element */
+    id: number;
+    /** One entry per visible field; the value is null where the field does not apply */
+    columns: GridColumnData[];
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+};
+export type RelationVisibleFieldValuesRequest = {
+    /** Class id of the object holding the relation */
+    classId: string;
+    /** Relation field as dot notation, e.g. "myBlock.mySubRelationField" */
+    relationField: string;
+    /** Language of localized fields and language-specific metadata */
+    locale?: string | null;
+    /** The related elements of the rows to load the values for (at most 200) */
+    elements: {
+        type: string;
+        id: number;
+    }[];
+};
 export type PreviewConfigEntry = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1102,6 +1145,7 @@ export const {
     useDataObjectGetAvailableGridColumnsForRelationQuery,
     useDataObjectGetGridQuery,
     useDataObjectGetPhpcodeTransformersQuery,
+    useDataObjectGetVisibleFieldValuesForRelationQuery,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectPatchFolderByIdMutation,

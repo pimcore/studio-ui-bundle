@@ -39,6 +39,15 @@ const config: ConfigFile = {
       pattern: 'dataObjectGetGrid',
       type: 'query',
     },
+    // POST only because the unsaved field settings / the row references do not fit in a query string; both are reads.
+    {
+      pattern: 'classGetAvailableVisibleFieldsForRelation',
+      type: 'query',
+    },
+    {
+      pattern: 'dataObjectGetVisibleFieldValuesForRelation',
+      type: 'query',
+    },
     {
       pattern: 'dataObjectFormatPath',
       type: 'query',
