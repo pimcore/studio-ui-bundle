@@ -1,0 +1,430 @@
+{
+  "components": {
+    "schemas": {
+      "BundleApplicationLoggerLogEntry": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "priority": {
+            "description": "Log priority level",
+            "type": "integer"
+          },
+          "date": {
+            "description": "Date",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pid": {
+            "description": "PID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "message": {
+            "description": "Message",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fileObject": {
+            "description": "File object path",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "relatedElementData": {
+            "description": "Data of related element",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RelatedElementData",
+                "description": "Data of related element"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "type": "object"
+          },
+          "component": {
+            "description": "Component",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "description": "Source",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "priority",
+          "date",
+          "pid",
+          "message",
+          "fileObject",
+          "relatedElementData",
+          "component",
+          "source"
+        ],
+        "title": "Bundle Application Logger Log Entry",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "RelatedElementData": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "type": {
+            "description": "Type of the element",
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Subtype of the element",
+            "type": "string"
+          },
+          "fullPath": {
+            "description": "Full path of the element",
+            "type": "string"
+          },
+          "isPublished": {
+            "description": "Is the element published",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasViewAccess": {
+            "description": "Whether the current user is allowed to view the element",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "subtype",
+          "fullPath",
+          "isPublished",
+          "hasViewAccess"
+        ],
+        "title": "RelatedElementData",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: application-logger)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/bundle/application-logger/list": {
+      "post": {
+        "description": "Get all paginated log entries. <br> \nYou can specify different filters in your request body. Available filters are: <br>\n<ul>\n  <li>\n    <strong>like and equals</strong>: Filter by key and value. Allowed keys:\n    <ul>\n      <li><strong>priority</strong></li>\n      <li><strong>component</strong></li>\n      <li><strong>relatedobject</strong></li>\n      <li><strong>message</strong></li>\n      <li><strong>pid</strong></li>\n    </ul>\n  </li>\n  <li><strong>dateFrom and dateTo</strong>: Filter by date (from, to)</li>\n  <li><strong>page</strong>: Used for offset calculation in pagination. To be used, needs to be defined together with the pageSize</li>\n  <li><strong>pageSize</strong>: Used for limiting the result numbers per page. To be used, needs to be defined together with the page</li>\n</ul>\n",
+        "operationId": "bundle_application_logger_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/BundleApplicationLoggerLogEntry"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated log entries with total count as header param as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all log entries",
+        "tags": [
+          "Bundle Application Logger"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/application-logger/file-object": {
+      "get": {
+        "description": "Stream the content of a file object from the application log storage.\n",
+        "operationId": "bundle_application_logger_get_file_object",
+        "parameters": [
+          {
+            "description": "Path to the file object in the application log storage",
+            "in": "query",
+            "name": "filePath",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "File object content as plain text"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get application logger file object content",
+        "tags": [
+          "Bundle Application Logger"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/application-logger/components": {
+      "get": {
+        "description": "List all available components used for filtering for the application logger.\n",
+        "operationId": "bundle_application_logger_list_components",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "description": "Log components used in the ApplicationLogger.",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "Components",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available components"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "List application logger components",
+        "tags": [
+          "Bundle Application Logger"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/application-logger/priorities": {
+      "get": {
+        "description": "List all available priorities for the application logger.\n",
+        "operationId": "bundle_application_logger_list_priorities",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "priorities": {
+                      "description": "Log priority levels used in the ApplicationLogger.",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "title": "Log priority levels",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "priorities"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available priorities"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List application logger priorities",
+        "tags": [
+          "Bundle Application Logger"
+        ]
+      }
+    }
+  }
+}

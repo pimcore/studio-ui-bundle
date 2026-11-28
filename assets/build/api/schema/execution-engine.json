@@ -1,0 +1,332 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "JobRun": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "ownerId": {
+            "description": "Owner ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "state": {
+            "description": "State",
+            "type": "string"
+          },
+          "executionContext": {
+            "description": "Execution context",
+            "type": "string"
+          },
+          "totalElements": {
+            "description": "Total elements",
+            "type": "integer"
+          },
+          "currentMessage": {
+            "description": "Current Message og the last Event",
+            "type": "string"
+          },
+          "jobRunChildId": {
+            "description": "Id of the child Job run",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "currentStep": {
+            "description": "Current Step of a running Job",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "totalSteps": {
+            "description": "Number of total Steps of a running Job",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "jobName": {
+            "description": "The name of the job",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ownerId",
+          "state",
+          "executionContext",
+          "totalElements",
+          "currentMessage",
+          "jobRunChildId",
+          "currentStep",
+          "totalSteps",
+          "creationDate",
+          "modificationDate",
+          "jobName"
+        ],
+        "title": "JobRun",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: execution-engine)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/execution-engine/abort/{jobRunId}": {
+      "post": {
+        "description": "Abort Job Run",
+        "operationId": "execution_engine_abort_job_run_by_id",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Abort Job Run by Id",
+        "tags": [
+          "Execution Engine"
+        ]
+      }
+    },
+    "/pimcore-studio/api/execution-engine/hide": {
+      "post": {
+        "description": "Hide Job Runs based on the given <strong>{jobRunIds}</strong>. <br> The <strong>{jobRunIds}</strong> must be an array of existing Job Run IDs.\n",
+        "operationId": "execution_engine_hide_job_runs",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "jobRunIds": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Hide Job Runs by IDs",
+        "tags": [
+          "Execution Engine"
+        ]
+      }
+    },
+    "/pimcore-studio/api/execution-engine/running-jobs": {
+      "post": {
+        "description": "List all studio jobs for the current user which are not hidden",
+        "operationId": "execution_engine_list_jobs",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/JobRun"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of studio jobs"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List studio jobs",
+        "tags": [
+          "Execution Engine"
+        ]
+      }
+    }
+  }
+}

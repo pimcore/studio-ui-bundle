@@ -1,0 +1,286 @@
+{
+  "components": {
+    "schemas": {
+      "ApproveAuthorization": {
+        "description": "The user's decision on a pending authorization.",
+        "properties": {
+          "approved": {
+            "description": "Whether the user approved the authorization",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "approved"
+        ],
+        "title": "ApproveAuthorization",
+        "type": "object"
+      },
+      "AuthorizationConsent": {
+        "description": "Details of a pending authorization shown on the Studio UI consent screen.",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "authorizationId": {
+            "description": "Opaque id of the pending authorization",
+            "type": "string"
+          },
+          "client": {
+            "$ref": "#/components/schemas/AuthorizationConsentClient"
+          },
+          "scopes": {
+            "description": "Requested scopes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "user": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AuthorizationConsentUser"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "authorizationId",
+          "client",
+          "scopes"
+        ],
+        "title": "OAuth Authorization Consent",
+        "type": "object"
+      },
+      "AuthorizationConsentClient": {
+        "properties": {
+          "identifier": {
+            "description": "Client identifier",
+            "type": "string"
+          },
+          "name": {
+            "description": "Client display name (self-chosen; not authoritative)",
+            "type": "string"
+          },
+          "redirectHost": {
+            "description": "Host (with port) of the redirect URI the authorization code will be sent to",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verified": {
+            "description": "True if the client was pre-registered by an administrator",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "identifier",
+          "name",
+          "verified"
+        ],
+        "title": "OAuth Consent Client",
+        "type": "object"
+      },
+      "AuthorizationConsentUser": {
+        "properties": {
+          "id": {
+            "description": "Pimcore user id the token will act as",
+            "type": "integer"
+          },
+          "username": {
+            "description": "Pimcore username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "username"
+        ],
+        "title": "OAuth Consent User",
+        "type": "object"
+      },
+      "AuthorizationRedirect": {
+        "description": "The location the browser must be sent to after completing an authorization —\nthe client redirect URI with the code, state and issuer.",
+        "properties": {
+          "location": {
+            "description": "Absolute URL to redirect the browser to",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location"
+        ],
+        "title": "OAuth Authorization Redirect",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: oauth)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/oauth/authorizations/{id}": {
+      "get": {
+        "description": "Get the details of the pending authorization with the given <strong>{id}</strong>. <br>\nReturns everything the consent screen has to show: the requesting client, the redirect URI,\nthe requested scopes and the currently signed-in user\n",
+        "operationId": "oauth_authorization_details",
+        "parameters": [
+          {
+            "description": "Opaque id of the pending authorization",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationConsent"
+                }
+              }
+            },
+            "description": "Details of the pending authorization to be shown on the consent screen"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get pending authorization details by ID",
+        "tags": [
+          "OAuth"
+        ]
+      },
+      "post": {
+        "description": "Complete the pending authorization with the given <strong>{id}</strong>. <br>\nSend <strong>approved: true</strong> to grant the requested access or <strong>approved: false</strong> to deny it.\nThe pending authorization is consumed either way and the returned location is the client redirect URI\ncarrying the authorization code, the original state and the issuer\n",
+        "operationId": "oauth_authorization_approve",
+        "parameters": [
+          {
+            "description": "Opaque id of the pending authorization",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveAuthorization"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationRedirect"
+                }
+              }
+            },
+            "description": "Location the browser must be sent to in order to complete the flow"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Approve or deny a pending authorization",
+        "tags": [
+          "OAuth"
+        ]
+      }
+    }
+  }
+}

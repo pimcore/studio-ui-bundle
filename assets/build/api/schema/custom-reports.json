@@ -1,0 +1,1722 @@
+{
+  "components": {
+    "schemas": {
+      "BundleCustomReportAdd": {
+        "properties": {
+          "name": {
+            "description": "Name of the new custom report",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Bundle Custom Report Add",
+        "type": "object"
+      },
+      "BundleCustomReportClone": {
+        "properties": {
+          "newName": {
+            "description": "New name the cloned custom report",
+            "type": "string"
+          }
+        },
+        "required": [
+          "newName"
+        ],
+        "title": "Bundle Custom Report Clone",
+        "type": "object"
+      },
+      "BundleCustomReportUpdate": {
+        "properties": {
+          "sql": {
+            "description": "Sql",
+            "type": "string"
+          },
+          "columnConfigurations": {
+            "description": "Configuration for columns to be displayed in report",
+            "items": {
+              "$ref": "#/components/schemas/BundleCustomReportsColumnConfigurationUpdate"
+            },
+            "type": "array"
+          },
+          "niceName": {
+            "description": "Label/nice name of report",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group of the report",
+            "type": "string"
+          },
+          "groupIconClass": {
+            "description": "Group icon class",
+            "type": "string"
+          },
+          "iconClass": {
+            "description": "Icon class",
+            "type": "string"
+          },
+          "menuShortcut": {
+            "description": "Whether the report has a shortcut in the menu",
+            "type": "boolean"
+          },
+          "reportClass": {
+            "description": "Report class of custom report implementation",
+            "type": "string"
+          },
+          "chartType": {
+            "description": "Chart type",
+            "type": "string"
+          },
+          "sharedUserNames": {
+            "description": "Array with user names the report is shared with",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sharedRoleNames": {
+            "description": "Array with roles the report is shared with",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sharedGlobally": {
+            "description": "Whether the report is shared globally",
+            "type": "boolean"
+          },
+          "dataSourceConfig": {
+            "description": "Configuration for data source. Content of array depends on selected adapter/data source",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "pieColumn": {
+            "description": "Data column for pie chart",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pieLabelColumn": {
+            "description": "Label of data column for pie chart",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "xAxis": {
+            "description": "X axis column names",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "yAxis": {
+            "description": "Y axis column information",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "sql",
+          "dataSourceConfig",
+          "columnConfigurations",
+          "niceName",
+          "group",
+          "groupIconClass",
+          "iconClass",
+          "menuShortcut",
+          "reportClass",
+          "chartType",
+          "pieColumn",
+          "pieLabelColumn",
+          "xAxis",
+          "yAxis",
+          "sharedUserNames",
+          "sharedRoleNames",
+          "sharedGlobally"
+        ],
+        "title": "Bundle Custom Report Update",
+        "type": "object"
+      },
+      "BundleCustomReportsChartData": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "data": {
+            "description": "Chart data depending on the adapter in the report configuration.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "Bundle Custom Reports Chart Data",
+        "type": "object"
+      },
+      "BundleCustomReportsColumnConfiguration": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BundleCustomReportsColumnConfigurationUpdate"
+          },
+          {
+            "properties": {
+              "name": {
+                "description": "Name",
+                "type": "string"
+              },
+              "display": {
+                "description": "Display column",
+                "type": "boolean"
+              },
+              "export": {
+                "description": "Whether the column should be included in exports",
+                "type": "boolean"
+              },
+              "order": {
+                "description": "Order",
+                "type": "boolean"
+              },
+              "label": {
+                "description": "Label/display name of column",
+                "type": "string"
+              },
+              "action": {
+                "description": "Action of the column",
+                "type": "string"
+              },
+              "id": {
+                "description": "Id",
+                "type": "string"
+              },
+              "width": {
+                "description": "Width of the column",
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "displayType": {
+                "description": "Display type of the column",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "filterType": {
+                "description": "Type of the filter",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "filterDrilldown": {
+                "description": "Drilldown filter",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "disableOrderBy": {
+                "description": "Disable order by",
+                "type": "boolean"
+              },
+              "disableFilterable": {
+                "description": "Disable filterable",
+                "type": "boolean"
+              },
+              "disableDropdownFilterable": {
+                "description": "Disable dropdown filterable",
+                "type": "boolean"
+              },
+              "disableLabel": {
+                "description": "Disable label",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "disableOrderBy",
+          "disableFilterable",
+          "disableDropdownFilterable",
+          "disableLabel"
+        ],
+        "title": "Bundle Custom Reports Column Configuration",
+        "type": "object"
+      },
+      "BundleCustomReportsColumnConfigurationUpdate": {
+        "properties": {
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "display": {
+            "description": "Display column",
+            "type": "boolean"
+          },
+          "export": {
+            "description": "Whether the column should be included in exports",
+            "type": "boolean"
+          },
+          "order": {
+            "description": "Order",
+            "type": "boolean"
+          },
+          "label": {
+            "description": "Label/display name of column",
+            "type": "string"
+          },
+          "action": {
+            "description": "Action of the column",
+            "type": "string"
+          },
+          "id": {
+            "description": "Id",
+            "type": "string"
+          },
+          "width": {
+            "description": "Width of the column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "displayType": {
+            "description": "Display type of the column",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "filterType": {
+            "description": "Type of the filter",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "filterDrilldown": {
+            "description": "Drilldown filter",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "display",
+          "export",
+          "order",
+          "label",
+          "action",
+          "id",
+          "width",
+          "displayType",
+          "filterType",
+          "filterDrilldown"
+        ],
+        "title": "Bundle Custom Reports Column Configuration Update Data",
+        "type": "object"
+      },
+      "BundleCustomReportsColumnInformation": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "disableOrderBy": {
+            "description": "Disable order by",
+            "type": "boolean"
+          },
+          "disableFilterable": {
+            "description": "Disable filterable",
+            "type": "boolean"
+          },
+          "disableDropdownFilterable": {
+            "description": "Disable dropdown filterable",
+            "type": "boolean"
+          },
+          "disableLabel": {
+            "description": "Disable label",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "disableOrderBy",
+          "disableFilterable",
+          "disableDropdownFilterable",
+          "disableLabel"
+        ],
+        "title": "Bundle Custom Reports Column Information",
+        "type": "object"
+      },
+      "BundleCustomReportsConfigurationTreeNode": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "string"
+          },
+          "text": {
+            "description": "text",
+            "type": "string"
+          },
+          "cls": {
+            "description": "css class",
+            "type": "string"
+          },
+          "writeable": {
+            "description": "writeable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "cls",
+          "writeable"
+        ],
+        "title": "Bundle Custom Reports Configuration Tree Node",
+        "type": "object"
+      },
+      "BundleCustomReportsDataSourceConfig": {
+        "properties": {
+          "configuration": {
+            "description": "Configuration for data source. Content of array depends on selected adapter/data source",
+            "type": "object"
+          }
+        },
+        "required": [
+          "configuration"
+        ],
+        "title": "Bundle Custom Reports Data Source Config",
+        "type": "object"
+      },
+      "BundleCustomReportsDetails": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "sql": {
+            "description": "Sql",
+            "type": "string"
+          },
+          "columnConfigurations": {
+            "description": "Configuration for columns to be displayed in report",
+            "items": {
+              "$ref": "#/components/schemas/BundleCustomReportsColumnConfiguration"
+            },
+            "type": "array"
+          },
+          "niceName": {
+            "description": "Label/nice name of report",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group of the report",
+            "type": "string"
+          },
+          "groupIconClass": {
+            "description": "Group icon class",
+            "type": "string"
+          },
+          "iconClass": {
+            "description": "Icon class",
+            "type": "string"
+          },
+          "menuShortcut": {
+            "description": "Whether the report has a shortcut in the menu",
+            "type": "boolean"
+          },
+          "reportClass": {
+            "description": "Report class of custom report implementation",
+            "type": "string"
+          },
+          "chartType": {
+            "description": "Chart type",
+            "type": "string"
+          },
+          "modificationDate": {
+            "description": "Modification date time stamp",
+            "type": "integer"
+          },
+          "creationDate": {
+            "description": "Creation date time stamp",
+            "type": "integer"
+          },
+          "sharedUserNames": {
+            "description": "Array with user names the report is shared with",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sharedRoleNames": {
+            "description": "Array with roles the report is shared with",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sharedGlobally": {
+            "description": "Whether the report is shared globally",
+            "type": "boolean"
+          },
+          "writeable": {
+            "description": "Whether the report is writeable",
+            "type": "boolean"
+          },
+          "dataSourceConfig": {
+            "description": "Configuration for data source. Content of array depends on selected adapter/data source",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pieColumn": {
+            "description": "Data column for pie chart",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pieLabelColumn": {
+            "description": "Label of data column for pie chart",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "xAxis": {
+            "description": "X axis column names",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "yAxis": {
+            "description": "Y axis column information",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "sql",
+          "dataSourceConfig",
+          "columnConfigurations",
+          "niceName",
+          "group",
+          "groupIconClass",
+          "iconClass",
+          "menuShortcut",
+          "reportClass",
+          "chartType",
+          "pieColumn",
+          "pieLabelColumn",
+          "xAxis",
+          "yAxis",
+          "modificationDate",
+          "creationDate",
+          "sharedUserNames",
+          "sharedRoleNames",
+          "sharedGlobally",
+          "writeable"
+        ],
+        "title": "Bundle Custom Reports Details",
+        "type": "object"
+      },
+      "BundleCustomReportsDrillDownOption": {
+        "description": "Drill down option data for custom reports",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "float"
+              }
+            ],
+            "description": "name"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "float"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "value"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "title": "Bundle Custom Reports Drill Down Option",
+        "type": "object"
+      },
+      "BundleCustomReportsTreeNode": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "report name",
+            "type": "string"
+          },
+          "niceName": {
+            "description": "nice name",
+            "type": "string"
+          },
+          "iconClass": {
+            "description": "icon class",
+            "type": "string"
+          },
+          "group": {
+            "description": "group",
+            "type": "string"
+          },
+          "groupIconClass": {
+            "description": "group icon class",
+            "type": "string"
+          },
+          "menuShortcut": {
+            "description": "menu shortcut",
+            "type": "boolean"
+          },
+          "reportClass": {
+            "description": "report class",
+            "type": "string"
+          },
+          "hasDataSourceConfig": {
+            "description": "Whether the report has a data source configuration.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "niceName",
+          "iconClass",
+          "group",
+          "groupIconClass",
+          "menuShortcut",
+          "reportClass",
+          "hasDataSourceConfig"
+        ],
+        "title": "Bundle Custom Reports Tree Node",
+        "type": "object"
+      },
+      "BundleCustomReportsTreeNodeFolder": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "string"
+          },
+          "group": {
+            "description": "group",
+            "type": "string"
+          },
+          "groupIconClass": {
+            "description": "group icon class",
+            "type": "string"
+          },
+          "children": {
+            "description": "Child nodes",
+            "items": {
+              "$ref": "#/components/schemas/BundleCustomReportsConfigurationTreeNode"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "group",
+          "groupIconClass",
+          "children"
+        ],
+        "title": "Bundle Custom Reports Tree Node Folder",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: custom-reports)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/bundle/custom-reports/drill-down-options": {
+      "post": {
+        "description": "Get all drill down options for a specific report by name and field. <br>\nThe <strong>{name}</strong> must be a name of an existing report and <strong>{field}</strong> must be a field of the report.\nIt is possible to use the <strong>filters</strong> to further narrow down the options.\n",
+        "operationId": "custom_reports_list_drill_down_options",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "field": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "filters": {
+                    "properties": {
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "drillDownFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "name",
+                  "field"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/BundleCustomReportsDrillDownOption"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of drill down options for the report"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all drill down options for a specific report by name and field",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/chart": {
+      "post": {
+        "description": "Get paginated chart data for a specific report by name. <br> Parameters are: \n<ul>\n  <li><strong>name (required)</strong>: Name of existing custom report</li>\n  <li><strong>filters</strong>: Array of filters to filter the data</li>\n    <ul>\n      <li><strong>columnFilters</strong>: Allow filtering based on the columns and their values</li>\n      <li><strong>drillDownFilters</strong>: Filter based on pre-defined drill down filters</li>\n    </ul>\n  <li><strong>sortBy</strong>: Column name to sort the data by</li>\n  <li><strong>sortOrder</strong>: Sort order (ASC/DESC)</li>\n  <li><strong>page</strong>: Offset, can be used in combination with pageSize</li>\n  <li><strong>pageSize</strong>: Limit returned data</li>\n  <li><strong>fields</strong>: Array of fields to be included in the data. If not provided, all fields will be included</li>\n</ul>\n",
+        "operationId": "custom_reports_chart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "filters": {
+                    "properties": {
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "drillDownFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "sortBy": {
+                    "description": "Sort by field.",
+                    "type": "string"
+                  },
+                  "sortOrder": {
+                    "description": "Sort order (ASC or DESC).",
+                    "type": "string"
+                  },
+                  "page": {
+                    "description": "Page of the report data",
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "description": "Page size of the report data",
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "fields": {
+                    "description": "Fields to be included in the chart data. If not provided, all fields will be included.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/BundleCustomReportsChartData"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Chart data as JSON. The actual data depends on the selected adapter in the report configuration."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get chart data for a specific report",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/config/add": {
+      "post": {
+        "description": "Add a new custom reports configuration with the provided name.\n",
+        "operationId": "custom_reports_config_add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BundleCustomReportAdd"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleCustomReportsDetails"
+                }
+              }
+            },
+            "description": "Successfully added custom report configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Add a new custom reports configuration",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/config/clone/{name}": {
+      "post": {
+        "description": "Clone an existing custom reports configuration with the provided new name by existing report name <strong>{reportName}</strong>. <br>\nThe <strong>{reportName}</strong> must be a name of an existing custom report. <br>\nThe <strong>{name}</strong> of the new report must be a unique valid name.\n",
+        "operationId": "custom_reports_config_clone",
+        "parameters": [
+          {
+            "description": "Name of the report to clone",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BundleCustomReportClone"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleCustomReportsDetails"
+                }
+              }
+            },
+            "description": "Successfully cloned custom report configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Clone an existing custom reports configuration",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/column-config/{name}": {
+      "post": {
+        "description": "Get all available column configurations for custom report by <strong>{name}</strong> and <strong>{configuration}</strong>. <br>\nThe <strong>{name}</strong> must be a name of an existing custom report and <strong>{configuration}</strong> must be a valid data source configuration of that report.\n",
+        "operationId": "custom_reports_column_config_list",
+        "parameters": [
+          {
+            "description": "Name of the report",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BundleCustomReportsDataSourceConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/BundleCustomReportsColumnInformation"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of column configurations for the custom report"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Get all available column configurations for custom report",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/config/{name}": {
+      "put": {
+        "description": "Update an existing custom reports configuration with the provided name and parameters. <br>\nThe <strong>{name}</strong> must be a name of an existing custom report. <br>\nPlease note that <strong>all fields<strong> have to be provided.\n",
+        "operationId": "custom_reports_config_update",
+        "parameters": [
+          {
+            "description": "Name of the report",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BundleCustomReportUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleCustomReportsDetails"
+                }
+              }
+            },
+            "description": "Successfully updated custom report configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update an existing custom reports configuration",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      },
+      "delete": {
+        "description": "Delete a custom reports configuration with the given <strong>{name}</strong>. <br>\nThe <strong>{name}</strong> must be a name of an existing custom report.\n",
+        "operationId": "custom_reports_config_delete",
+        "parameters": [
+          {
+            "description": "Name of the custom report to delete",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted custom report configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a custom reports configuration",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/config/{name}/export": {
+      "get": {
+        "description": "Export the custom report configuration with the given <strong>{name}</strong> as a JSON file. <br>\nEnvironment specific values such as creation and modification dates are not part of the export. <br>\nThe file can be imported again via the import endpoint.\n",
+        "operationId": "custom_reports_config_export",
+        "parameters": [
+          {
+            "description": "Name of the report to export",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "JSON file containing the custom report configuration",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Export a custom report configuration as JSON",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/report/{name}": {
+      "get": {
+        "operationId": "custom_reports_report",
+        "parameters": [
+          {
+            "description": "Name of the report",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleCustomReportsDetails"
+                }
+              }
+            },
+            "description": "Report data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get detailed configuration for a specific report by name",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/config/import": {
+      "post": {
+        "description": "Import a custom report configuration from a JSON file that was created by the export endpoint. <br>\nA new report is created with the <strong>name</strong> stored in the file. The name must not be in use yet.\n",
+        "operationId": "custom_reports_config_import",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "Custom report JSON export file to upload",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleCustomReportsDetails"
+                }
+              }
+            },
+            "description": "Successfully imported custom report configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Import a custom report configuration from JSON",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/tree/config": {
+      "get": {
+        "description": "Get all reports for the current user to display in configuration tree. <br>\nResults can be grouped based on the <strong>{withGroup}</strong> parameter.\n",
+        "operationId": "custom_reports_config_get_tree",
+        "parameters": [
+          {
+            "description": "Whether to group the results by report group.",
+            "in": "query",
+            "name": "withGroup",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/BundleCustomReportsConfigurationTreeNode"
+                          },
+                          {
+                            "$ref": "#/components/schemas/BundleCustomReportsTreeNodeFolder"
+                          }
+                        ]
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Configuration tree with nodes and optional group folders."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "All reports for the current user to display in configuration tree.",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/export/csv": {
+      "post": {
+        "description": "Creating the CSV export file for custom reports. <br> Parameters are: \n<ul>\n  <li><strong>name (required)</strong>: Name of custom report</li>\n  <li><strong>filters</strong>: Array of filters to filter the data</li>\n    <ul>\n      <li><strong>columnFilters</strong>: Allow filtering based on the columns and their values</li>\n      <li><strong>drillDownFilters</strong>: Filter based on pre-defined drill down filters</li>\n    </ul>\n  <li><strong>sortBy</strong>: Column name to sort the data by</li>\n  <li><strong>sortOrder</strong>: Sort order (ASC/DESC)</li>\n  <li><strong>page</strong>: Offset, can be used in combination with pageSize</li>\n  <li><strong>pageSize</strong>: Limit returned data</li>\n  <li><strong>includeHeaders</strong>: Include headers in the export</li>\n  <li><strong>delimiter</strong>: Delimiter can be set to anything, but the default is a <strong>semicolon</strong>/li>\n</ul>\nDownload has to be triggered separately via the csv download route with the <strong>{jobRunId}</strong> returned in the response\n",
+        "operationId": "custom_report_export_csv",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "filters": {
+                    "properties": {
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "drillDownFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "sortBy": {
+                    "description": "Sort by field.",
+                    "type": "string"
+                  },
+                  "sortOrder": {
+                    "description": "Sort order (ASC or DESC).",
+                    "type": "string"
+                  },
+                  "page": {
+                    "description": "Page of the report data",
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "description": "Page size of the report data",
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "includeHeaders": {
+                    "type": "boolean"
+                  },
+                  "delimiter": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for csv export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Export report data as CSV",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/custom-reports/tree": {
+      "get": {
+        "description": "Get all reports for the current user to display in tree.",
+        "operationId": "custom_reports_get_tree",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/BundleCustomReportsTreeNode"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Get all reports for the current user to display in tree."
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "All reports for the current user to display in tree.",
+        "tags": [
+          "Bundle Custom Reports"
+        ]
+      }
+    }
+  }
+}

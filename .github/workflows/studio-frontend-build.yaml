@@ -34,7 +34,11 @@ jobs:
       node-version: "24"
       build-script: ci-build
       build-output-path: ./build-dist/
-      api-client: true
+      # The API client is no longer regenerated and auto-committed here. The
+      # per-slice snapshots in assets/build/api/schema are the codegen input,
+      # and the "Studio API Client Check" workflow verifies consistency of the
+      # slices a PR touches (see assets/build/api/README.md).
+      api-client: false
       test: true
     secrets:
       SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}

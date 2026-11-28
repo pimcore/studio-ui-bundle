@@ -1,0 +1,1157 @@
+{
+  "components": {
+    "schemas": {
+      "AdvancedColumnConfig": {
+        "properties": {
+          "advancedColumns": {
+            "description": "advancedColumns",
+            "items": {
+              "properties": {
+                "key": {
+                  "description": "Type of the column, e.g. \"simpleField\", \"relationField\", \"staticText\"",
+                  "type": "string"
+                },
+                "config": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/RelationFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/SimpleFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/StaticTextConfig"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "key",
+                "config"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "transformers": {
+            "description": "List if Transformers that should be applied",
+            "items": {
+              "$ref": "#/components/schemas/Transformer"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "advancedColumns"
+        ],
+        "title": "Advanced Column Config",
+        "type": "object"
+      },
+      "Column": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "Config; a classification store column names its key by ID or identifier and may name a variant",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/AdvancedColumnConfig"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "width": {
+            "description": "Width of the Column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "Grid Column Request",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "DownloadAvailability": {
+        "properties": {
+          "available": {
+            "description": "Whether the exported file is still available for download",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "title": "Download Availability",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "ExportAllFilter": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "columnFilters": {
+            "description": "Column Filter",
+            "type": "object"
+          },
+          "sortFilter": {
+            "description": "Sort Filter",
+            "type": "object"
+          },
+          "additionalSortFilters": {
+            "description": "Additional Sort Filters for multi-column sorting",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columnFilters",
+          "sortFilter"
+        ],
+        "title": "Export All Filter",
+        "type": "object"
+      },
+      "RelationFieldConfig": {
+        "properties": {
+          "relation": {
+            "description": "Relation Getter",
+            "type": "string"
+          },
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "relation",
+          "field"
+        ],
+        "title": "Relation Field Config",
+        "type": "object"
+      },
+      "SimpleFieldConfig": {
+        "properties": {
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field"
+        ],
+        "title": "Simple Field Config",
+        "type": "object"
+      },
+      "StaticTextConfig": {
+        "properties": {
+          "text": {
+            "description": "Static Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "Static Text Config",
+        "type": "object"
+      },
+      "Transformer": {
+        "properties": {
+          "key": {
+            "description": "Key of the Transformer",
+            "type": "string"
+          },
+          "config": {
+            "description": "Configuration for the transformer",
+            "type": "object"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Transformer",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: export)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/export/download/csv/{jobRunId}/available": {
+      "get": {
+        "description": "Checks whether the CSV export for the given job run id is still available for download.\n",
+        "operationId": "export_download_csv_available",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadAvailability"
+                }
+              }
+            },
+            "description": "Availability flag for the CSV export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Check CSV export availability for job run id",
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/pimcore-studio/api/export/download/csv/{jobRunId}": {
+      "get": {
+        "description": "Download the CSV file using the <strong>{jobRunId}</strong> returned by the create export endpoint. <br>\nFor folder exports, you must provide the ID of the corresponding child job run. <br>\nThe folder export first collects all elements and then creates a child job run to export them.\n",
+        "operationId": "export_download_csv",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV File as attachment",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download CSV file for job run id",
+        "tags": [
+          "Export"
+        ]
+      },
+      "delete": {
+        "description": "Delete the CSV file with given <strong>{jobRunId}</strong> returned in the response of the create csv endpoint\n",
+        "operationId": "export_delete_csv",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete CSV export file based on jobRunId",
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/pimcore-studio/api/export/csv": {
+      "post": {
+        "description": "Creating the CSV file for elements. <br> Parameters are: <ul>\n  <li><strong>elements</strong>: Array of element ids</li>\n  <li><strong>columns</strong>: Describes the columns that should be exported. Can be obtained via the grid endpoint</li>\n  <li><strong>config</strong>: Delimiter and header options</li>\n  <li><strong>elementType</strong>: Type of element that should be exported</li>\n</ul> \nDelimiter can be set to anything, but the default is a <strong>semicolon</strong> <br> \nHeader options are: <strong>no_header</strong>, <strong>title</strong> and <strong>name</strong><br>\nDownload has to be triggered separately via the csv download route with the <strong>{jobRunId}</strong> returned in the response\n",
+        "operationId": "export_csv",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "elements": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "config": {
+                    "properties": {
+                      "header": {
+                        "enum": [
+                          "id",
+                          "custom_report_config",
+                          "custom_report_to_export",
+                          "element_class_id",
+                          "elements_to_export",
+                          "elements_to_rewrite_references",
+                          "elements_to_tag",
+                          "element_type",
+                          "element_type_to_tag",
+                          "element_type_to_rewrite_references",
+                          "export_format",
+                          "folder_to_export",
+                          "folders_to_clone",
+                          "grid_export_data",
+                          "grid_export_data_info",
+                          "config",
+                          "columns",
+                          "filters",
+                          "delimiter",
+                          "header",
+                          "no_header",
+                          "title",
+                          "name",
+                          "\r\n",
+                          "array",
+                          "int",
+                          "string",
+                          "bool",
+                          "items_to_batch_delete",
+                          "items_to_delete",
+                          "element_type_to_batch_delete",
+                          "items_to_restore",
+                          "configuration_ids",
+                          "configuration_type",
+                          "new_owner_id"
+                        ],
+                        "type": "string"
+                      },
+                      "delimiter": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "elementType": {
+                    "enum": [
+                      "data-object",
+                      "object",
+                      "asset",
+                      "document"
+                    ],
+                    "type": "string"
+                  },
+                  "classId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for csv export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Creating CSV file for elements",
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/pimcore-studio/api/export/csv/folder/{id}": {
+      "post": {
+        "description": "Creating the CSV file for elements based on the folder. <br> \nParameters are: <ul>\n  <li><strong>columns</strong>: Describes the columns that should be exported. Can be obtained via the grid endpoint. For folders you can also use filters and sorting</li>\n  <li><strong>filters</strong>: Filter elements from folder based on the grid filter schema</li>\n  <li><strong>config</strong>: Delimiter and header options</li>\n</ul> \nDelimiter can be set to anything, but the default is a <strong>semicolon</strong> <br> \nHeader options are: <strong>no_header</strong>, <strong>title</strong> and <strong>name</strong><br>\nDownload has to be triggered separately via the csv download route with the <strong>{jobRunId}</strong> returned in the response\n",
+        "operationId": "export_csv_folder",
+        "parameters": [
+          {
+            "description": "Id of the folder",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/ExportAllFilter"
+                  },
+                  "config": {
+                    "properties": {
+                      "header": {
+                        "enum": [
+                          "id",
+                          "custom_report_config",
+                          "custom_report_to_export",
+                          "element_class_id",
+                          "elements_to_export",
+                          "elements_to_rewrite_references",
+                          "elements_to_tag",
+                          "element_type",
+                          "element_type_to_tag",
+                          "element_type_to_rewrite_references",
+                          "export_format",
+                          "folder_to_export",
+                          "folders_to_clone",
+                          "grid_export_data",
+                          "grid_export_data_info",
+                          "config",
+                          "columns",
+                          "filters",
+                          "delimiter",
+                          "header",
+                          "no_header",
+                          "title",
+                          "name",
+                          "\r\n",
+                          "array",
+                          "int",
+                          "string",
+                          "bool",
+                          "items_to_batch_delete",
+                          "items_to_delete",
+                          "element_type_to_batch_delete",
+                          "items_to_restore",
+                          "configuration_ids",
+                          "configuration_type",
+                          "new_owner_id"
+                        ],
+                        "type": "string"
+                      },
+                      "delimiter": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "elementType": {
+                    "enum": [
+                      "data-object",
+                      "object",
+                      "asset",
+                      "document"
+                    ],
+                    "type": "string"
+                  },
+                  "classId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for csv export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Creating CSV file for elements based on folder",
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/pimcore-studio/api/export/download/xlsx/{jobRunId}/available": {
+      "get": {
+        "description": "Checks whether the XLSX export for the given job run id is still available for download.\n",
+        "operationId": "export_download_xlsx_available",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadAvailability"
+                }
+              }
+            },
+            "description": "Availability flag for the XLSX export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Check XLSX export availability for job run id",
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/pimcore-studio/api/export/download/xlsx/{jobRunId}": {
+      "get": {
+        "description": "Download the XLSX file using the <strong>{jobRunId}</strong> returned by the create export endpoint. <br>\nFor folder exports, you must provide the ID of the corresponding child job run. <br>\nThe folder export first collects all elements and then creates a child job run to export them.\n",
+        "operationId": "export_download_xlsx",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "XLSX File as attachment",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Download XLSX file for job run id",
+        "tags": [
+          "Export"
+        ]
+      },
+      "delete": {
+        "description": "Delete the XLSX file with given <strong>{jobRunId}</strong> returned in the response of the create export endpoint\n",
+        "operationId": "export_delete_xlsx",
+        "parameters": [
+          {
+            "description": "JobRunId of the JobRun",
+            "in": "path",
+            "name": "jobRunId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete XLSX export file based on jobRunId",
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/pimcore-studio/api/export/xlsx": {
+      "post": {
+        "description": "Creating the XLSX file for elements. <br> Parameters are: <ul>\n  <li><strong>elements</strong>: Array of element ids</li>\n  <li><strong>columns</strong>: Describes the columns that should be exported. Can be obtained via the grid endpoint</li>\n  <li><strong>config</strong>: Header options</li>\n  <li><strong>elementType</strong>: Type of element that should be exported</li>\n</ul>\nHeader options are: <strong>no_header</strong>, <strong>title</strong> and <strong>name</strong><br>\nDownload has to be triggered separately via the xlsx download route with the <strong>{jobRunId}</strong> returned in the response\n",
+        "operationId": "export_xlsx",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "elements": {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  },
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "config": {
+                    "properties": {
+                      "header": {
+                        "enum": [
+                          "id",
+                          "custom_report_config",
+                          "custom_report_to_export",
+                          "element_class_id",
+                          "elements_to_export",
+                          "elements_to_rewrite_references",
+                          "elements_to_tag",
+                          "element_type",
+                          "element_type_to_tag",
+                          "element_type_to_rewrite_references",
+                          "export_format",
+                          "folder_to_export",
+                          "folders_to_clone",
+                          "grid_export_data",
+                          "grid_export_data_info",
+                          "config",
+                          "columns",
+                          "filters",
+                          "delimiter",
+                          "header",
+                          "no_header",
+                          "title",
+                          "name",
+                          "\r\n",
+                          "array",
+                          "int",
+                          "string",
+                          "bool",
+                          "items_to_batch_delete",
+                          "items_to_delete",
+                          "element_type_to_batch_delete",
+                          "items_to_restore",
+                          "configuration_ids",
+                          "configuration_type",
+                          "new_owner_id"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "elementType": {
+                    "enum": [
+                      "data-object",
+                      "object",
+                      "asset",
+                      "document"
+                    ],
+                    "type": "string"
+                  },
+                  "classId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for XLSX export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Creating XLSX file export for elements",
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/pimcore-studio/api/export/xlsx/folder/{id}": {
+      "post": {
+        "description": "Creating the XLSX file for elements based on the folder. <br> \nParameters are: \n<ul>\n  <li><strong>columns</strong>: Describes the columns that should be exported. Can be obtained via the grid endpoint. For folders you can also use filters and sorting</li>\n  <li><strong>filters</strong>: Filter elements from folder based on the grid filter schema</li>\n  <li><strong>config</strong>: Header options</li>\n</ul> \nHeader options are: <strong>no_header</strong>, <strong>title</strong> and <strong>name</strong><br>\nDownload has to be triggered separately via the xlsx download route with the <strong>{jobRunId}</strong> returned in the response\n",
+        "operationId": "export_xlsx_folder",
+        "parameters": [
+          {
+            "description": "Id of the folder",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/ExportAllFilter"
+                  },
+                  "config": {
+                    "properties": {
+                      "header": {
+                        "enum": [
+                          "id",
+                          "custom_report_config",
+                          "custom_report_to_export",
+                          "element_class_id",
+                          "elements_to_export",
+                          "elements_to_rewrite_references",
+                          "elements_to_tag",
+                          "element_type",
+                          "element_type_to_tag",
+                          "element_type_to_rewrite_references",
+                          "export_format",
+                          "folder_to_export",
+                          "folders_to_clone",
+                          "grid_export_data",
+                          "grid_export_data_info",
+                          "config",
+                          "columns",
+                          "filters",
+                          "delimiter",
+                          "header",
+                          "no_header",
+                          "title",
+                          "name",
+                          "\r\n",
+                          "array",
+                          "int",
+                          "string",
+                          "bool",
+                          "items_to_batch_delete",
+                          "items_to_delete",
+                          "element_type_to_batch_delete",
+                          "items_to_restore",
+                          "configuration_ids",
+                          "configuration_type",
+                          "new_owner_id"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "elementType": {
+                    "enum": [
+                      "data-object",
+                      "object",
+                      "asset",
+                      "document"
+                    ],
+                    "type": "string"
+                  },
+                  "classId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully created <strong>jobRun</strong> for XLSX export"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Creating XLSX file for elements based on folder",
+        "tags": [
+          "Export"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,380 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "ElementUsage": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "data": {
+            "description": "Data",
+            "items": {
+              "$ref": "#/components/schemas/ElementUsageItem"
+            },
+            "type": "array"
+          },
+          "hasHidden": {
+            "description": "hasHidden",
+            "type": "boolean"
+          },
+          "totalCount": {
+            "description": "totalCount",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "data",
+          "hasHidden"
+        ],
+        "title": "Element Usage",
+        "type": "object"
+      },
+      "ElementUsageBaseItem": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "type": {
+            "description": "type",
+            "enum": [
+              "data-object",
+              "object",
+              "asset",
+              "document"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "title": "Element Usage Base Item",
+        "type": "object"
+      },
+      "ElementUsageItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ElementUsageBaseItem"
+          },
+          {
+            "properties": {
+              "additionalAttributes": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                },
+                "description": "AdditionalAttributes",
+                "type": "object"
+              },
+              "id": {
+                "description": "ID",
+                "type": "integer"
+              },
+              "type": {
+                "description": "type",
+                "type": "string"
+              },
+              "path": {
+                "description": "path",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "id",
+          "type",
+          "path"
+        ],
+        "title": "Element Usage Item",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: usage)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/elements/usage/{elementType}/{id}": {
+      "get": {
+        "description": "Get usage of element. Use <strong>{elementType}</strong> and <strong>{id}</strong> to specify the element.",
+        "operationId": "element_get_usage",
+        "parameters": [
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Sort order (asc or desc).",
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort by field.",
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "enum": [
+                "id",
+                "path",
+                "type"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementUsage"
+                }
+              }
+            },
+            "description": "Where the element is referenced"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get usage of element",
+        "tags": [
+          "Elements"
+        ]
+      }
+    },
+    "/pimcore-studio/api/elements/usage/replace/{elementType}/{id}": {
+      "post": {
+        "description": "Replace all references to an element with another element using generic execution engine.\nUse <strong>{elementType}</strong> and <strong>{id}</strong> to specify the source element, <strong>targetElementType</strong> and <strong>targetId</strong> in the request body to specify the target element.\nUse <strong>elements</strong> array in the request body to specify the elements to be replaced.\n<strong>Note:</strong> If no elements are passed, all elements will be replaced.\n",
+        "operationId": "element_usage_replace",
+        "parameters": [
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "targetType": {
+                    "enum": [
+                      "data-object",
+                      "object",
+                      "asset",
+                      "document"
+                    ],
+                    "type": "string"
+                  },
+                  "targetId": {
+                    "type": "integer"
+                  },
+                  "elements": {
+                    "items": {
+                      "$ref": "#/components/schemas/ElementUsageBaseItem"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "jobRunId": {
+                      "description": "ID of created jobRun",
+                      "title": "jobRunId",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "jobRunId"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Id of the created job run"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "201 - Created<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Replace all references to an element with another element",
+        "tags": [
+          "Elements"
+        ]
+      }
+    }
+  }
+}

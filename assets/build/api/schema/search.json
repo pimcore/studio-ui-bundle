@@ -1,0 +1,2294 @@
+{
+  "components": {
+    "schemas": {
+      "AdvancedColumnConfig": {
+        "properties": {
+          "advancedColumns": {
+            "description": "advancedColumns",
+            "items": {
+              "properties": {
+                "key": {
+                  "description": "Type of the column, e.g. \"simpleField\", \"relationField\", \"staticText\"",
+                  "type": "string"
+                },
+                "config": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/RelationFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/SimpleFieldConfig"
+                      },
+                      {
+                        "$ref": "#/components/schemas/StaticTextConfig"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "key",
+                "config"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "transformers": {
+            "description": "List if Transformers that should be applied",
+            "items": {
+              "$ref": "#/components/schemas/Transformer"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "advancedColumns"
+        ],
+        "title": "Advanced Column Config",
+        "type": "object"
+      },
+      "AssetSearchPreview": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SimpleSearchPreview"
+          },
+          {
+            "properties": {
+              "mimeType": {
+                "description": "Mimetype",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "thumbnail": {
+                "description": "Thumbnail path",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "mimeType",
+          "thumbnail"
+        ],
+        "title": "SimpleSearchAssetDetail",
+        "type": "object"
+      },
+      "Column": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "group": {
+            "description": "Group",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "Config; a classification store column names its key by ID or identifier and may name a variant",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/AdvancedColumnConfig"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "width": {
+            "description": "Width of the Column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "Grid Column Request",
+        "type": "object"
+      },
+      "ColumnData": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "Key",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "description": "Value",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "fieldType": {
+            "description": "Field Type of the column",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "inheritance": {
+            "description": "inheritance",
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "title": "GridColumnData",
+        "type": "object"
+      },
+      "ColumnSchema": {
+        "properties": {
+          "key": {
+            "description": "Key of the Column",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Locale of the Column",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Define the group structure",
+            "type": "object"
+          },
+          "width": {
+            "description": "Width of the Column",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "locale",
+          "group"
+        ],
+        "title": "Column",
+        "type": "object"
+      },
+      "CustomAttributes": {
+        "description": "Custom attributes used mainly for the tree",
+        "properties": {
+          "icon": {
+            "description": "Custom Icon",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElementIcon",
+                "description": "Custom Icon"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tooltip": {
+            "description": "Custom Tooltip",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalIcons": {
+            "description": "AdditionalIcons",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "key": {
+            "description": "Custom Key/Filename",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "additionalCssClasses": {
+            "description": "Additional Css Classes",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "icon",
+          "tooltip",
+          "additionalIcons",
+          "key",
+          "additionalCssClasses"
+        ],
+        "title": "CustomAttributes",
+        "type": "object"
+      },
+      "DataObjectSearchPreview": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SimpleSearchPreview"
+          },
+          {
+            "properties": {
+              "class": {
+                "description": "Class name and Id",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "objectData": {
+                "description": "Detail object data",
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "class",
+          "objectData"
+        ],
+        "title": "SimpleSearchDataObjectDetail",
+        "type": "object"
+      },
+      "DetailedConfiguration": {
+        "description": "Contains all data to configure a grid column",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shareGlobal": {
+            "description": "shareGlobal",
+            "type": "boolean"
+          },
+          "saveFilter": {
+            "description": "saveFilter",
+            "type": "boolean"
+          },
+          "setAsFavorite": {
+            "description": "setAsFavorite",
+            "type": "boolean"
+          },
+          "sharedUsers": {
+            "description": "sharedUsers",
+            "type": "object"
+          },
+          "sharedRoles": {
+            "description": "sharedRoles",
+            "type": "object"
+          },
+          "columns": {
+            "description": "columns",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/Column"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "filter": {
+            "description": "filter",
+            "items": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "type": "array"
+          },
+          "pageSize": {
+            "description": "Page Size",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "Modification Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ownerId": {
+            "description": "ID of the owner",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "id": {
+            "description": "ID of the configuration",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "shareGlobal",
+          "saveFilter",
+          "setAsFavorite",
+          "sharedUsers",
+          "sharedRoles",
+          "columns",
+          "filter",
+          "pageSize"
+        ],
+        "title": "GridDetailedConfiguration",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "DocumentSearchPreview": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SimpleSearchPreview"
+          },
+          {
+            "properties": {
+              "language": {
+                "description": "Document Language",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "documentData": {
+                "description": "Page document data",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PageSearchPreview",
+                    "description": "Page document data"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "language",
+          "documentData"
+        ],
+        "title": "SimpleSearchDocumentDetail",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "Filter": {
+        "description": "Contains all data that is needed to get all the data for the column.",
+        "properties": {
+          "page": {
+            "description": "Page",
+            "type": "integer"
+          },
+          "pageSize": {
+            "description": "Page Size",
+            "type": "integer"
+          },
+          "includeDescendants": {
+            "description": "Include Descendant Items",
+            "type": "boolean"
+          },
+          "columnFilters": {
+            "description": "Column Filter",
+            "type": "object"
+          },
+          "sortFilter": {
+            "description": "Sort Filter",
+            "type": "object"
+          },
+          "additionalSortFilters": {
+            "description": "Additional Sort Filters for multi-column sorting",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "page",
+          "pageSize",
+          "includeDescendants"
+        ],
+        "title": "Grid Filter",
+        "type": "object"
+      },
+      "PageSearchPreview": {
+        "properties": {
+          "title": {
+            "description": "Title",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "Navigation name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hasPreviewImage": {
+            "description": "Has Preview image",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "name",
+          "hasPreviewImage"
+        ],
+        "title": "SimpleSearchPageDetail",
+        "type": "object"
+      },
+      "Permissions": {
+        "properties": {
+          "list": {
+            "description": "List",
+            "type": "boolean"
+          },
+          "view": {
+            "description": "View",
+            "type": "boolean"
+          },
+          "publish": {
+            "description": "Publish",
+            "type": "boolean"
+          },
+          "delete": {
+            "description": "Delete",
+            "type": "boolean"
+          },
+          "rename": {
+            "description": "Rename",
+            "type": "boolean"
+          },
+          "create": {
+            "description": "Create",
+            "type": "boolean"
+          },
+          "settings": {
+            "description": "Settings",
+            "type": "boolean"
+          },
+          "versions": {
+            "description": "Versions",
+            "type": "boolean"
+          },
+          "properties": {
+            "description": "Properties",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "list",
+          "view",
+          "publish",
+          "delete",
+          "rename",
+          "create",
+          "settings",
+          "versions",
+          "properties"
+        ],
+        "title": "Permissions",
+        "type": "object"
+      },
+      "RelationFieldConfig": {
+        "properties": {
+          "relation": {
+            "description": "Relation Getter",
+            "type": "string"
+          },
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "relation",
+          "field"
+        ],
+        "title": "Relation Field Config",
+        "type": "object"
+      },
+      "SavedSearchConfiguration": {
+        "description": "Contains all data to configure a saved search",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "Saved Search Configuration",
+        "type": "object"
+      },
+      "SavedSearchConfigurationListItem": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner": {
+            "description": "Whether the configuration is owned by the current user (false if only shared)",
+            "type": "boolean"
+          },
+          "modificationDate": {
+            "description": "Modification Date",
+            "type": "integer"
+          },
+          "creationDate": {
+            "description": "Creation Date",
+            "type": "integer"
+          },
+          "menuShortcutGroup": {
+            "description": "Name of the group in the menu the shortcut belongs to",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "elementType": {
+            "description": "Element type the search targets (asset or data-object)",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "owner",
+          "modificationDate"
+        ],
+        "title": "Saved Search Configuration List Item",
+        "type": "object"
+      },
+      "SavedSearchDetailedConfiguration": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the saved search configuration",
+            "type": "integer"
+          },
+          "ownerId": {
+            "description": "ID of the owner. Null when the owner has been deleted.",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "Name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shareGlobal": {
+            "description": "shareGlobal",
+            "type": "boolean"
+          },
+          "sharedUsers": {
+            "description": "sharedUsers",
+            "type": "object"
+          },
+          "sharedRoles": {
+            "description": "sharedRoles",
+            "type": "object"
+          },
+          "createMenuShortcut": {
+            "description": "createMenuShortcut",
+            "type": "boolean"
+          },
+          "menuShortcutGroup": {
+            "description": "Name of the group in the menu the shortcut belongs to",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "classId": {
+            "description": "Class ID for data object searches",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "elementType": {
+            "description": "Element type the search targets (asset or data-object)",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "columns": {
+            "description": "Grid display columns",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/Column"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "filter": {
+            "description": "Filter data",
+            "items": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation Date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "ownerId",
+          "name",
+          "shareGlobal",
+          "sharedUsers",
+          "sharedRoles",
+          "createMenuShortcut",
+          "columns"
+        ],
+        "title": "Saved Search Detailed Configuration",
+        "type": "object"
+      },
+      "SimpleFieldConfig": {
+        "properties": {
+          "field": {
+            "description": "Field getter",
+            "type": "string"
+          },
+          "groupId": {
+            "description": "Classification store group id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "keyId": {
+            "description": "Classification store key id",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "groupIdentifier": {
+            "description": "Classification store group identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "keyIdentifier": {
+            "description": "Classification store key identifier",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field"
+        ],
+        "title": "Simple Field Config",
+        "type": "object"
+      },
+      "SimpleSearchPreview": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Id",
+            "type": "integer"
+          },
+          "elementType": {
+            "description": "elementType",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "userOwner": {
+            "description": "Id of owner",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "userOwnerName": {
+            "description": "Name of owner",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "userModification": {
+            "description": "Id of the user that modified the element",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "userModificationName": {
+            "description": "Name of the user that modified the element",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "elementType",
+          "type",
+          "userOwner",
+          "userOwnerName",
+          "userModification",
+          "userModificationName",
+          "creationDate",
+          "modificationDate"
+        ],
+        "title": "SimpleSearchDetail",
+        "type": "object"
+      },
+      "SimpleSearchResult": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "customAttributes": {
+            "$ref": "#/components/schemas/CustomAttributes",
+            "description": "Custom attributes for the tree"
+          },
+          "id": {
+            "description": "id",
+            "type": "integer"
+          },
+          "elementType": {
+            "description": "elementType",
+            "type": "string"
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "path": {
+            "description": "path",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "icon"
+          }
+        },
+        "required": [
+          "id",
+          "elementType",
+          "type",
+          "path",
+          "icon"
+        ],
+        "title": "SimpleSearchResult",
+        "type": "object"
+      },
+      "StaticTextConfig": {
+        "properties": {
+          "text": {
+            "description": "Static Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "Static Text Config",
+        "type": "object"
+      },
+      "Transformer": {
+        "properties": {
+          "key": {
+            "description": "Key of the Transformer",
+            "type": "string"
+          },
+          "config": {
+            "description": "Configuration for the transformer",
+            "type": "object"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "Transformer",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: search)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/search/configuration/assets": {
+      "get": {
+        "description": "Get asset configuration",
+        "operationId": "asset_get_search_configuration",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedConfiguration"
+                }
+              }
+            },
+            "description": "Asset search configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get asset search configuration",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/assets": {
+      "post": {
+        "description": "Asset grid for search",
+        "operationId": "asset_get_search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/Filter"
+                  }
+                },
+                "required": [
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "columns": {
+                            "items": {
+                              "$ref": "#/components/schemas/ColumnData"
+                            },
+                            "type": "array"
+                          },
+                          "isLocked": {
+                            "type": "boolean"
+                          },
+                          "permissions": {
+                            "$ref": "#/components/schemas/Permissions"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "required": [
+                        "id",
+                        "columns",
+                        "isLocked",
+                        "permissions"
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Assets for search grid"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get asset data for search",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/configuration/data-objects": {
+      "get": {
+        "description": "Get data object search configuration",
+        "operationId": "data_object_get_search_configuration",
+        "parameters": [
+          {
+            "description": "Class Id of the data object",
+            "in": "query",
+            "name": "classId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedConfiguration"
+                }
+              }
+            },
+            "description": "Data object search configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get data object search configuration",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/data-objects": {
+      "post": {
+        "description": "Get data object search results",
+        "operationId": "data_object_get_search",
+        "parameters": [
+          {
+            "description": "Class Id of the data object",
+            "in": "query",
+            "name": "classId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/Filter"
+                  }
+                },
+                "required": [
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "columns": {
+                            "items": {
+                              "$ref": "#/components/schemas/ColumnData"
+                            },
+                            "type": "array"
+                          },
+                          "isLocked": {
+                            "type": "boolean"
+                          },
+                          "permissions": {
+                            "$ref": "#/components/schemas/Permissions"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "required": [
+                        "id",
+                        "columns",
+                        "isLocked",
+                        "permissions"
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Data object search results"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get data object search results",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/documents": {
+      "post": {
+        "description": "Document grid for search",
+        "operationId": "document_get_search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "columns": {
+                    "items": {
+                      "$ref": "#/components/schemas/Column"
+                    },
+                    "type": "array"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/Filter"
+                  }
+                },
+                "required": [
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "columns": {
+                            "items": {
+                              "$ref": "#/components/schemas/ColumnData"
+                            },
+                            "type": "array"
+                          },
+                          "isLocked": {
+                            "type": "boolean"
+                          },
+                          "permissions": {
+                            "$ref": "#/components/schemas/Permissions"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "required": [
+                        "id",
+                        "columns",
+                        "isLocked",
+                        "permissions"
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "dcocument_get_search_success_response"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get document data for search",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/preview/{elementType}/{id}": {
+      "get": {
+        "description": "Returns search preview for elements based on the given type <strong>{elementType}</strong> and <strong>{id}</strong>. <br>\nThe <strong>{id}</strong> must be an ID of an existing element of the provided <strong>{elementType}</strong>.\n",
+        "operationId": "simple_search_preview_get",
+        "parameters": [
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AssetSearchPreview"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DataObjectSearchPreview"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DocumentSearchPreview"
+                    }
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Simple search results preview for elements"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Preview for element search result",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/saved/configuration/delete/{id}": {
+      "delete": {
+        "description": "Delete a saved search configuration by its <strong>{id}</strong>. <br>\nOnly the owner of the configuration is allowed to delete it.\n",
+        "operationId": "saved_search_delete_configuration",
+        "parameters": [
+          {
+            "description": "Id of the saved search configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved search configuration deleted successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a saved search configuration",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/saved/configuration/{id}": {
+      "get": {
+        "description": "Get a saved search configuration by its <strong>{id}</strong>. <br>\nReturns the full configuration including columns, filter state, and sharing settings.\n",
+        "operationId": "saved_search_get_configuration",
+        "parameters": [
+          {
+            "description": "Id of the saved search configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedSearchDetailedConfiguration"
+                }
+              }
+            },
+            "description": "Saved search configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get a saved search configuration",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/saved/configuration": {
+      "get": {
+        "description": "List the saved search configurations accessible to the current user. <br>\nIncludes configurations owned by the user as well as those shared with them. <br>\nOptionally filter by name via <strong>searchTerm</strong> and page through the results.\n",
+        "operationId": "saved_search_get_configurations",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Optional term to filter the saved search configurations by name.",
+            "in": "query",
+            "name": "searchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort by field.",
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "enum": [
+                "name",
+                "modificationDate"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort order (asc or desc).",
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SavedSearchConfigurationListItem"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of saved search configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List saved search configurations",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/saved/configuration/menu-shortcuts": {
+      "get": {
+        "description": "List all saved search configurations accessible to the current user that are flagged to create a menu shortcut. <br>\nIncludes configurations owned by the user as well as those shared with them. <br>\nThe full set is returned without pagination.\n",
+        "operationId": "saved_search_get_menu_shortcut_configurations",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SavedSearchConfigurationListItem"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of saved search menu shortcut configurations"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List saved search menu shortcut configurations",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/saved/configuration/save": {
+      "post": {
+        "description": "Save the current search state as a named configuration. <br>\nStores columns, filter state (pagination, sorting, column filters, path) and sharing options.\n",
+        "operationId": "saved_search_save_configuration",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "classId": {
+                    "type": "string"
+                  },
+                  "elementType": {
+                    "type": "string"
+                  },
+                  "shareGlobal": {
+                    "type": "boolean"
+                  },
+                  "createMenuShortcut": {
+                    "type": "boolean"
+                  },
+                  "menuShortcutGroup": {
+                    "type": "string"
+                  },
+                  "sharedUsers": {
+                    "type": "object"
+                  },
+                  "sharedRoles": {
+                    "type": "object"
+                  },
+                  "columns": {
+                    "items": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/components/schemas/ColumnSchema"
+                        },
+                        {
+                          "$ref": "#/components/schemas/Column"
+                        }
+                      ]
+                    },
+                    "type": "array"
+                  },
+                  "filter": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/Filter"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "name",
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedSearchConfiguration"
+                }
+              }
+            },
+            "description": "Saved search configuration created successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Save a search configuration",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/saved/configuration/update/{id}": {
+      "put": {
+        "description": "Update a saved search configuration by its <strong>{id}</strong>. <br>\nOverwrites columns, filter state (pagination, sorting, column filters, path) and sharing options. <br>\nOnly the owner of the configuration is allowed to update it.\n",
+        "operationId": "saved_search_update_configuration",
+        "parameters": [
+          {
+            "description": "Id of the saved search configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "classId": {
+                    "type": "string"
+                  },
+                  "elementType": {
+                    "type": "string"
+                  },
+                  "shareGlobal": {
+                    "type": "boolean"
+                  },
+                  "createMenuShortcut": {
+                    "type": "boolean"
+                  },
+                  "menuShortcutGroup": {
+                    "type": "string"
+                  },
+                  "sharedUsers": {
+                    "type": "object"
+                  },
+                  "sharedRoles": {
+                    "type": "object"
+                  },
+                  "columns": {
+                    "items": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/components/schemas/ColumnSchema"
+                        },
+                        {
+                          "$ref": "#/components/schemas/Column"
+                        }
+                      ]
+                    },
+                    "type": "array"
+                  },
+                  "filter": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/Filter"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "name",
+                  "columns"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Saved search configuration updated successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a saved search configuration",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search/saved/configuration/update-menu-shortcut/{id}": {
+      "put": {
+        "description": "Update the menu shortcut information of a saved search configuration. <br>\nSets whether the configuration has a menu shortcut and, optionally, the name of the group it belongs to. <br>\nOnly the owner of the configuration is allowed to update it.\n",
+        "operationId": "saved_search_update_menu_shortcut",
+        "parameters": [
+          {
+            "description": "Id of the saved search configuration",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "createMenuShortcut": {
+                    "type": "boolean"
+                  },
+                  "menuShortcutGroup": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "createMenuShortcut"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Saved search menu shortcut updated successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update a saved search menu shortcut",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/pimcore-studio/api/search": {
+      "get": {
+        "description": "Search for elements based on the given <strong>{search term}</strong>. <br>\nElements are searched with the fulltext filter applied via Generic Data Index. <br>\n",
+        "operationId": "simple_search_get",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "pageSize",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Search term",
+            "in": "query",
+            "name": "searchTerm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SimpleSearchResult"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Search results for elements"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Search for elements",
+        "tags": [
+          "Search"
+        ]
+      }
+    }
+  }
+}

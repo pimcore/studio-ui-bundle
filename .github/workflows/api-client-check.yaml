@@ -1,0 +1,18 @@
+name: "Studio API Client Check"
+
+on:
+  pull_request:
+    paths:
+      - "assets/**"
+      - ".github/workflows/api-client-check.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api-client-check:
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-studio-api-client-check.yaml@main
+    with:
+      working-directory: ./assets
+      node-version: "24"

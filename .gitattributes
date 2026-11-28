@@ -9,6 +9,12 @@
 /build-dist/build-*.zip binary
 /build-dist/build-*.zip merge=ours
 
+# Per-slice API schema snapshots and the clients generated from them are
+# machine-written (see assets/build/api/README.md). Collapse them in PR diffs;
+# they are never merged by hand, always regenerated with `npm run api:sync`.
+/assets/build/api/schema/*.json linguist-generated=true
+/assets/js/**/*.gen.ts linguist-generated=true
+
 # Exclude build/test files from archive to reduce ZIP size for composer dist download
 /.github export-ignore
 /tests export-ignore

@@ -1,0 +1,550 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "ElementProperty": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "key": {
+            "description": "key",
+            "type": "string"
+          },
+          "data": {
+            "description": "data",
+            "type": [
+              "mixed",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "inheritable": {
+            "description": "inheritable",
+            "type": "boolean"
+          },
+          "inherited": {
+            "description": "inherited",
+            "type": "boolean"
+          },
+          "config": {
+            "description": "config",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "predefinedName": {
+            "description": "predefinedName",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "description": "description",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "data",
+          "type",
+          "inheritable",
+          "inherited"
+        ],
+        "title": "DataProperty",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "PredefinedProperty": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "string"
+          },
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "description": {
+            "description": "description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "key": {
+            "description": "key",
+            "type": "string"
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "data": {
+            "description": "data",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "config",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ctype": {
+            "description": "ctype",
+            "type": "string"
+          },
+          "inheritable": {
+            "description": "inheritable",
+            "type": "boolean"
+          },
+          "creationDate": {
+            "description": "Creation date",
+            "type": "integer"
+          },
+          "modificationDate": {
+            "description": "Modification date",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "key",
+          "type",
+          "ctype",
+          "inheritable",
+          "creationDate",
+          "modificationDate"
+        ],
+        "title": "PredefinedProperty",
+        "type": "object"
+      },
+      "UpdatePredefinedProperty": {
+        "properties": {
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "description": {
+            "description": "description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "key": {
+            "description": "key",
+            "type": "string"
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "data": {
+            "description": "data",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "config": {
+            "description": "config",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ctype": {
+            "description": "ctype",
+            "type": "string"
+          },
+          "inheritable": {
+            "description": "inheritable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "key",
+          "type",
+          "ctype",
+          "inheritable"
+        ],
+        "title": "UpdatePredefinedProperty",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: properties)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/properties": {
+      "get": {
+        "description": "Listing all the predefined properties that are currently stored in the system. <br>\nTo list specific properties for a type you can use the <strong>elementType</strong> query parameter.<br>\nYou can also created element type specific listings for this, to show in the context of the element. <br>\nThe <strong>filter</strong> query parameter is applied on the string properties. <br>\nKeep in mind that the name is language specific.\n",
+        "operationId": "property_get_collection",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "query",
+            "name": "elementType",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for properties",
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/PredefinedProperty"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Predefined properties filtered based on type and query parameters"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all predefined properties. You can filter by type and query",
+        "tags": [
+          "Properties"
+        ]
+      }
+    },
+    "/pimcore-studio/api/property": {
+      "post": {
+        "description": "Creating the property with default values. <br>\n<ul>\n  <li>Name: New Property</li>\n  <li>Key: new_key</li>\n  <li>Type: Text</li>\n  <li>Element Type: Document (Ctype)</li>\n</ul>\n",
+        "operationId": "property_create",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredefinedProperty"
+                }
+              }
+            },
+            "description": "Created predefined property with default values"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Creating new property with default values",
+        "tags": [
+          "Properties"
+        ]
+      }
+    },
+    "/pimcore-studio/api/properties/{id}": {
+      "put": {
+        "description": "Updating the property with the given <strong>{id}</strong>. <br>\nSee the full description of updatable fields with the schema <strong>UpdatePredefinedProperty</strong>\n",
+        "operationId": "property_update",
+        "parameters": [
+          {
+            "description": "Id of the property",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePredefinedProperty"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredefinedProperty"
+                }
+              }
+            },
+            "description": "Updated predefined property"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Updating a property",
+        "tags": [
+          "Properties"
+        ]
+      },
+      "delete": {
+        "description": "Deleting the property with the given <strong>{id}</strong>. <br>\nIf the property is used in any element, it will not be deleted.\n",
+        "operationId": "property_delete",
+        "parameters": [
+          {
+            "description": "Id of the property",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted property with given id"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete property with given id",
+        "tags": [
+          "Properties"
+        ]
+      }
+    },
+    "/pimcore-studio/api/properties/{elementType}/{id}": {
+      "get": {
+        "description": "List all the saved properties of the element. <br>\nKeep in mind  that inherited properties should not be send back in an update request. <br>\nThis will result in the loss of the inheritance. <br>\n",
+        "operationId": "property_get_collection_for_element_by_type_and_id",
+        "parameters": [
+          {
+            "description": "Filter elements by matching element type.",
+            "in": "path",
+            "name": "elementType",
+            "required": true,
+            "schema": {
+              "enum": [
+                "asset",
+                "document",
+                "data-object"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Id of the element",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ElementProperty"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Element Properties data as json"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get properties for an element based on the element type and the element id",
+        "tags": [
+          "Properties"
+        ]
+      }
+    }
+  }
+}

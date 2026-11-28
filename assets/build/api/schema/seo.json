@@ -1,0 +1,1109 @@
+{
+  "components": {
+    "schemas": {
+      "BundleSeoRedirect": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "type": {
+            "description": "Type of redirect",
+            "type": "string"
+          },
+          "source": {
+            "description": "Source URL",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sourceSite": {
+            "description": "ID of the source site",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "passThroughParameters": {
+            "description": "Whether to pass through parameters",
+            "type": "boolean"
+          },
+          "target": {
+            "description": "Target URL",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetSite": {
+            "description": "ID of the target site",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "statusCode": {
+            "description": "Status code",
+            "type": "integer"
+          },
+          "priority": {
+            "description": "Priority",
+            "type": "integer"
+          },
+          "regex": {
+            "description": "Whether the redirect uses regex",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "active": {
+            "description": "Whether the redirect is active",
+            "type": "boolean"
+          },
+          "expiry": {
+            "description": "Expiry date in timestamp format",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date in timestamp format",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date in timestamp format",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "userOwner": {
+            "description": "ID of the user who owns the redirect",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "userModification": {
+            "description": "ID of the user who last modified the redirect",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "targetType": {
+            "description": "Type of the element the target points to - 'document', 'asset' or 'object'",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "source",
+          "sourceSite",
+          "passThroughParameters",
+          "target",
+          "targetSite",
+          "statusCode",
+          "priority",
+          "regex",
+          "active",
+          "expiry",
+          "creationDate",
+          "modificationDate",
+          "userOwner",
+          "userModification",
+          "targetType"
+        ],
+        "title": "Bundle Seo Redirect",
+        "type": "object"
+      },
+      "BundleSeoRedirectAdd": {
+        "properties": {
+          "type": {
+            "description": "Type of redirect",
+            "type": "string"
+          },
+          "source": {
+            "description": "Source URL",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "target": {
+            "description": "Target URL",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetType": {
+            "description": "Type of the element the target points to - 'document', 'asset' or 'object'. Detected from the target when omitted.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "source",
+          "target"
+        ],
+        "title": "Bundle Seo Redirect Add",
+        "type": "object"
+      },
+      "BundleSeoRedirectImportStats": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "total": {
+            "description": "Number of total redirects",
+            "type": "integer"
+          },
+          "imported": {
+            "description": "Number of imported redirects",
+            "type": "integer"
+          },
+          "created": {
+            "description": "Number of created redirects",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Number of updated redirects",
+            "type": "integer"
+          },
+          "errored": {
+            "description": "Number of errored redirects",
+            "type": "integer"
+          },
+          "errors": {
+            "description": "List of errors where index is the index of import line",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "total",
+          "imported",
+          "created",
+          "updated",
+          "errored",
+          "errors"
+        ],
+        "title": "Bundle Seo Redirects Import Statistics",
+        "type": "object"
+      },
+      "BundleSeoRedirectStatus": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "code": {
+            "description": "Status code",
+            "type": "integer"
+          },
+          "label": {
+            "description": "Status label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "label"
+        ],
+        "title": "Bundle Seo Redirect Status",
+        "type": "object"
+      },
+      "BundleSeoRedirectUpdate": {
+        "properties": {
+          "type": {
+            "description": "Type of redirect",
+            "type": "string"
+          },
+          "sourceSite": {
+            "description": "ID of the source site",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "source": {
+            "description": "Source URL",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetSite": {
+            "description": "ID of the target site",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "target": {
+            "description": "Target URL",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetType": {
+            "description": "Type of the element the target points to - 'document', 'asset' or 'object'. Detected from the target when omitted.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "statusCode": {
+            "description": "Status code",
+            "type": "integer"
+          },
+          "priority": {
+            "description": "Priority",
+            "type": "integer"
+          },
+          "regex": {
+            "description": "Whether the redirect uses regex",
+            "type": "boolean"
+          },
+          "active": {
+            "description": "Whether the redirect is active",
+            "type": "boolean"
+          },
+          "passThroughParameters": {
+            "description": "Whether to pass through parameters",
+            "type": "boolean"
+          },
+          "expiry": {
+            "description": "Expiry date in timestamp format",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "sourceSite",
+          "source",
+          "targetSite",
+          "target",
+          "statusCode",
+          "priority",
+          "regex",
+          "active",
+          "passThroughParameters",
+          "expiry"
+        ],
+        "title": "Bundle Seo Redirect Update",
+        "type": "object"
+      },
+      "BundleSeoRobotsTxtConfig": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "data": {
+            "description": "Robots.txt configuration per site",
+            "items": {
+              "$ref": "#/components/schemas/BundleSeoRobotsTxtSiteConfig"
+            },
+            "type": "array"
+          },
+          "onFileSystem": {
+            "description": "Whether a physical robots.txt file exists on the filesystem",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "data",
+          "onFileSystem"
+        ],
+        "title": "Bundle Seo Robots Txt Config",
+        "type": "object"
+      },
+      "BundleSeoRobotsTxtSiteConfig": {
+        "properties": {
+          "siteId": {
+            "description": "Site ID (0 for default site)",
+            "type": "integer"
+          },
+          "content": {
+            "description": "Robots.txt content for this site",
+            "type": "string"
+          }
+        },
+        "required": [
+          "siteId",
+          "content"
+        ],
+        "title": "Bundle Seo Robots Txt Site Config",
+        "type": "object"
+      },
+      "BundleSeoRobotsTxtUpdate": {
+        "properties": {
+          "data": {
+            "description": "Robots.txt configuration per site",
+            "items": {
+              "$ref": "#/components/schemas/BundleSeoRobotsTxtSiteConfig"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "Bundle Seo Robots Txt Update",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: seo)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/bundle/seo/redirects/add": {
+      "post": {
+        "description": "Add a new redirect entry. <br> See the full description of request fields with the schema <strong>BundleSeoRedirectAdd</strong>\n",
+        "operationId": "bundle_seo_redirect_add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BundleSeoRedirectAdd"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleSeoRedirect"
+                }
+              }
+            },
+            "description": "New redirect data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Add a new redirect",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects/cleanup": {
+      "delete": {
+        "description": "Cleanup all expired redirects. <br> This will delete all redirects which are expired based on the <strong>expiry</strong> field.\n",
+        "operationId": "bundle_seo_redirect_cleanup",
+        "responses": {
+          "200": {
+            "description": "Successfully cleaned up expired redirects"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Cleanup expired redirects",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects": {
+      "post": {
+        "description": "Get all paginated redirects entries. <br> You can specify different filters in your request body. Example filters are: <br>\n<ul>\n  <li><strong>page</strong>: Used for offset calculation in pagination. To be used, needs to be defined together with the page.size</li>\n  <li><strong>pageSize</strong>: Used for limiting the result numbers per page. To be used, needs to be defined together with the page</li>\n  <li><strong>url</strong>: Filter by redirect source URL</li>\n  <li><strong>type</strong>: Filter by redirect type (entire_uri, path_query, path, auto_create)</li>\n  <li><strong>date</strong>: Filter for example by expiry (on, from, to)</li>\n</ul>\n",
+        "operationId": "bundle_seo_redirects_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/BundleSeoRedirect"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated redirects with total count as header param as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all redirects",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects/{id}": {
+      "put": {
+        "description": "Update the redirect with the given <strong>{id}</strong>. The <strong>{id}</strong> must be an ID of existing redirect. <br>\nSee the full description of updatable fields with the schema <strong>BundleSeoRedirectUpdate</strong> <br>\nPlease note that <strong>all fields<strong> have to be provided.\n",
+        "operationId": "bundle_seo_redirect_update_by_id",
+        "parameters": [
+          {
+            "description": "Id of the redirect",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BundleSeoRedirectUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleSeoRedirect"
+                }
+              }
+            },
+            "description": "Successfully updated redirect"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update a redirect by ID",
+        "tags": [
+          "Bundle Seo"
+        ]
+      },
+      "delete": {
+        "description": "Delete the redirect with the given <strong>{id}</strong>. <br> The <strong>{id}</strong> must be an ID of existing redirect.\n",
+        "operationId": "bundle_seo_redirect_delete",
+        "parameters": [
+          {
+            "description": "Id of the redirect",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted redirect"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete a redirect by ID",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects/export": {
+      "get": {
+        "description": "Export all redirects as CSV file.\n",
+        "operationId": "bundle_seo_redirects_export",
+        "responses": {
+          "200": {
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV file with redirects as attachment",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Content-Disposition header",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Export all redirects as CSV",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects/import": {
+      "post": {
+        "description": "Import all redirects using a previously exported a CSV file.\n",
+        "operationId": "bundle_seo_redirects_import",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "CSV import file to upload",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleSeoRedirectImportStats"
+                }
+              }
+            },
+            "description": "Import statistics data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Import redirects from CSV",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects/priorities": {
+      "get": {
+        "description": "List all available priorities for the redirects. Priority 1 is the lowest, 10 highest and 99 is to overwrite all other redirects.\n",
+        "operationId": "bundle_seo_redirect_list_priorities",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "priorities": {
+                      "description": "Redirect priority used in the PimcoreSeoBundle.",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "title": "Redirect priority",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "priorities"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available redirect priorities"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List redirect priorities",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects/statuses": {
+      "get": {
+        "description": "List all available statuses for the redirects.\n",
+        "operationId": "bundle_seo_redirect_list_statuses",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "statuses": {
+                      "description": "List of redirect statuses used in the PimcoreSeoBundle.",
+                      "items": {
+                        "$ref": "#/components/schemas/BundleSeoRedirectStatus"
+                      },
+                      "title": "Redirect statuses",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "statuses"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available redirect statuses"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List redirect statuses",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/redirects/types": {
+      "get": {
+        "description": "List all available types for the redirects.\n",
+        "operationId": "bundle_seo_redirect_list_types",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "types": {
+                      "description": "List of redirect types used in the PimcoreSeoBundle.",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "Redirect types",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "types"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available redirect types"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List redirect types",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    },
+    "/pimcore-studio/api/bundle/seo/robots-txt": {
+      "get": {
+        "description": "Get the robots.txt configuration for all sites, including whether a physical robots.txt file exists on the filesystem.\n",
+        "operationId": "bundle_seo_robots_txt_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleSeoRobotsTxtConfig"
+                }
+              }
+            },
+            "description": "Robots.txt configuration data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get robots.txt configuration",
+        "tags": [
+          "Bundle Seo"
+        ]
+      },
+      "put": {
+        "description": "Update the robots.txt configuration for all sites. Saves the provided site-keyed robots.txt content to the settings store.\n",
+        "operationId": "bundle_seo_robots_txt_update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BundleSeoRobotsTxtUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleSeoRobotsTxtConfig"
+                }
+              }
+            },
+            "description": "Updated robots.txt configuration data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update robots.txt configuration",
+        "tags": [
+          "Bundle Seo"
+        ]
+      }
+    }
+  }
+}

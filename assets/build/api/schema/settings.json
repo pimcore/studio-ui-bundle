@@ -1,0 +1,830 @@
+{
+  "components": {
+    "schemas": {
+      "ActiveBundle": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Bundle name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Active Bundle",
+        "type": "object"
+      },
+      "AdminSettings": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "branding": {
+            "$ref": "#/components/schemas/Branding",
+            "description": "Branding configuration"
+          },
+          "assets": {
+            "$ref": "#/components/schemas/Assets",
+            "description": "Assets configuration"
+          },
+          "writeable": {
+            "description": "Whether the settings are writeable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "branding",
+          "assets",
+          "writeable"
+        ],
+        "title": "Admin Settings",
+        "type": "object"
+      },
+      "AdminSettingsThumbnailPath": {
+        "properties": {
+          "customLogoSmall": {
+            "description": "Path to custom logo thumbnail",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customLogo": {
+            "description": "Path to custom logo thumbnail",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "loginScreenCustomBackgroundImage": {
+            "description": "Path to custom background image",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "customLogoSmall",
+          "customLogo",
+          "loginScreenCustomBackgroundImage"
+        ],
+        "title": "Admin Settings Thumbnail Path",
+        "type": "object"
+      },
+      "Assets": {
+        "properties": {
+          "hide_edit_image": {
+            "description": "Hide edit image button",
+            "type": "boolean"
+          },
+          "disable_tree_preview": {
+            "description": "Disable tree preview",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "hide_edit_image",
+          "disable_tree_preview"
+        ],
+        "title": "Assets",
+        "type": "object"
+      },
+      "AvailableCountry": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "name": {
+            "description": "Country name",
+            "type": "string"
+          },
+          "code": {
+            "description": "Country ISO 3166-1 code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "code"
+        ],
+        "title": "Available Country",
+        "type": "object"
+      },
+      "Branding": {
+        "properties": {
+          "backgroundShade": {
+            "description": "Background shade",
+            "type": "string"
+          },
+          "brandColor": {
+            "description": "Brand color",
+            "type": "string"
+          },
+          "loginScreenCustomBackgroundImage": {
+            "description": "Custom image for login screen",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RelatedElementData",
+                "description": "Custom image for login screen"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "type": "object"
+          },
+          "customLogo": {
+            "description": "Custom logo",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RelatedElementData",
+                "description": "Custom logo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "backgroundShade",
+          "brandColor",
+          "loginScreenCustomBackgroundImage"
+        ],
+        "title": "Branding",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "RelatedElementData": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer"
+          },
+          "type": {
+            "description": "Type of the element",
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Subtype of the element",
+            "type": "string"
+          },
+          "fullPath": {
+            "description": "Full path of the element",
+            "type": "string"
+          },
+          "isPublished": {
+            "description": "Is the element published",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasViewAccess": {
+            "description": "Whether the current user is allowed to view the element",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "subtype",
+          "fullPath",
+          "isPublished",
+          "hasViewAccess"
+        ],
+        "title": "RelatedElementData",
+        "type": "object"
+      },
+      "UpdateAdminSettings": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "branding": {
+            "$ref": "#/components/schemas/Branding",
+            "description": "Branding configuration"
+          },
+          "assets": {
+            "$ref": "#/components/schemas/Assets",
+            "description": "Assets configuration"
+          }
+        },
+        "required": [
+          "branding",
+          "assets"
+        ],
+        "title": "Update Admin Settings",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: settings)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/settings/admin": {
+      "get": {
+        "description": "Get admin appearance system settings. <br>\nIncludes branding and asset configuration options.\n",
+        "operationId": "admin_settings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSettings"
+                }
+              }
+            },
+            "description": "Admin system settings data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get admin appearance settings",
+        "tags": [
+          "Settings Admin"
+        ]
+      }
+    },
+    "/pimcore-studio/api/settings/admin/save": {
+      "post": {
+        "description": "Update admin appearance system settings. <br>\nAllows updating branding and asset configuration options.\n",
+        "operationId": "admin_settings_update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAdminSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Admin system settings updated successfully"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update admin appearance settings",
+        "tags": [
+          "Settings Admin"
+        ]
+      }
+    },
+    "/pimcore-studio/api/setting/admin/thumbnail": {
+      "get": {
+        "operationId": "setting_admin_thumbnail",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSettingsThumbnailPath"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>429 - Too Many Requests"
+          }
+        },
+        "summary": "Get thumbnail for images in admin settings",
+        "tags": [
+          "Settings Admin"
+        ]
+      }
+    },
+    "/pimcore-studio/api/settings/available-countries": {
+      "get": {
+        "description": "Get all available countries in the system. <br>\nReturns a list of countries with their codes and names\n",
+        "operationId": "settings_country_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/AvailableCountry"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of available countries"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all available countries",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/pimcore-studio/api/settings": {
+      "get": {
+        "description": "Get system settings from different providers. <br>\nSystem settings are public and need no login.\n",
+        "operationId": "system_settings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "System settings data"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get system settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "description": "Update system settings. <br>\nThis endpoint allows you to update various system configuration parameters including: <br>\n<ul>\n  <li><strong>general</strong>: Language settings (valid languages, fallback languages, required languages, default language), domain configuration, and translation debugging</li>\n  <li><strong>objects</strong>: Object versioning settings (days and steps to keep)</li>\n  <li><strong>assets</strong>: Asset versioning settings (days and steps to keep)</li>\n  <li><strong>documents</strong>: Document versioning settings and localized error pages</li>\n</ul>\n<strong>Note:</strong> Only the settings provided in the request body will be updated.\n",
+        "operationId": "settings_update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "general": {
+                    "properties": {
+                      "valid_languages": {
+                        "description": "Valid language codes (ISO 639-1)",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "fallback_languages": {
+                        "description": "Language fallback mapping (e.g., {\"de\": \"en\", \"fr\": \"en\"})",
+                        "type": "object"
+                      },
+                      "required_languages": {
+                        "description": "Required language codes (ISO 639-1)",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "default_language": {
+                        "description": "Default system language",
+                        "type": "string"
+                      },
+                      "domain": {
+                        "description": "Main domain for the system",
+                        "type": "string"
+                      },
+                      "redirect_to_maindomain": {
+                        "description": "Redirect to main domain",
+                        "type": "boolean"
+                      },
+                      "debug_admin_translations": {
+                        "description": "Enable translation debugging",
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "objects": {
+                    "properties": {
+                      "versions": {
+                        "properties": {
+                          "days": {
+                            "description": "Number of days to keep object versions",
+                            "type": "integer"
+                          },
+                          "steps": {
+                            "description": "Number of version steps to keep for objects",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "assets": {
+                    "properties": {
+                      "versions": {
+                        "properties": {
+                          "days": {
+                            "description": "Number of days to keep asset versions",
+                            "type": "integer"
+                          },
+                          "steps": {
+                            "description": "Number of version steps to keep for assets",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "documents": {
+                    "properties": {
+                      "versions": {
+                        "properties": {
+                          "days": {
+                            "description": "Number of days to keep document versions",
+                            "type": "integer"
+                          },
+                          "steps": {
+                            "description": "Number of version steps to keep for documents",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "error_pages": {
+                        "properties": {
+                          "default": {
+                            "description": "Default error page",
+                            "type": "string"
+                          },
+                          "localized": {
+                            "description": "Localized error page IDs (e.g., {\"en\": \"1\", \"de\": \"2\"})",
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "email": {
+                    "properties": {
+                      "debug": {
+                        "properties": {
+                          "email_addresses": {
+                            "description": "Debug email addresses",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Updated system settings"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update system settings",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/pimcore-studio/api/settings/adapter/image": {
+      "get": {
+        "description": "Check what image adapter is used. <br>\nReturns <strong>true</strong> if Imagick extension is used for image processing. <br>\nReturns <strong>false</strong> if the GD library fallback is used, which provides lower quality image processing.\n",
+        "operationId": "settings_image_adapter_check",
+        "responses": {
+          "200": {
+            "description": "Image adapter availability"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Check image adapter",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/pimcore-studio/api/settings/active-bundles": {
+      "get": {
+        "description": "List all active and installed bundles in the system.\n",
+        "operationId": "active_bundles_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "bundles": {
+                      "description": "List of active and installed bundles in the system.",
+                      "items": {
+                        "$ref": "#/components/schemas/ActiveBundle"
+                      },
+                      "title": "Active Bundles",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "bundles"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of active bundles"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "List all active bundles",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/pimcore-studio/api/settings/ping": {
+      "get": {
+        "description": "Ping action to check if the API is reachable",
+        "operationId": "ping_action",
+        "responses": {
+          "200": {
+            "description": "API is reachable"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Ping action",
+        "tags": [
+          "Settings"
+        ]
+      }
+    }
+  }
+}

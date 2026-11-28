@@ -1,0 +1,923 @@
+{
+  "components": {
+    "schemas": {
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "Notification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NotificationListItem"
+          },
+          {
+            "properties": {
+              "message": {
+                "description": "message",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "payload": {
+                "description": "payload",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "attachmentType": {
+                "description": "linked attachment type",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "attachmentId": {
+                "description": "linked attachment ID",
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "attachmentFullPath": {
+                "description": "linked attachment fullPath",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "message",
+          "payload",
+          "attachmentType",
+          "attachmentId",
+          "attachmentFullPath"
+        ],
+        "title": "Notification",
+        "type": "object"
+      },
+      "NotificationAvailableChannel": {
+        "properties": {
+          "id": {
+            "description": "channel id",
+            "type": "string"
+          },
+          "translationKey": {
+            "description": "translation key for the column label",
+            "type": "string"
+          },
+          "unavailableReasonKey": {
+            "description": "translation key explaining why this channel cannot reach the caller, null when it can",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "translationKey"
+        ],
+        "title": "Notification Available Channel",
+        "type": "object"
+      },
+      "NotificationListItem": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "integer"
+          },
+          "type": {
+            "description": "type",
+            "type": "string"
+          },
+          "title": {
+            "description": "title",
+            "type": "string"
+          },
+          "read": {
+            "description": "read",
+            "type": "boolean"
+          },
+          "hasAttachment": {
+            "description": "has attachment",
+            "type": "boolean"
+          },
+          "creationDate": {
+            "description": "creation date",
+            "type": "integer"
+          },
+          "sender": {
+            "description": "sender",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "title",
+          "read",
+          "hasAttachment",
+          "creationDate",
+          "sender"
+        ],
+        "title": "NotificationListItem",
+        "type": "object"
+      },
+      "NotificationSubscribableType": {
+        "description": "One row of the notification preferences screen: a type, what the user has chosen for it, and\na cell per available channel.",
+        "properties": {
+          "typeId": {
+            "description": "notification type id",
+            "type": "string"
+          },
+          "translationKey": {
+            "description": "translation key for the row label",
+            "type": "string"
+          },
+          "descriptionKey": {
+            "description": "translation key for the row description",
+            "type": "string"
+          },
+          "group": {
+            "description": "grouping key",
+            "type": "string"
+          },
+          "sortOrder": {
+            "description": "explicit order; never rely on registration order",
+            "type": "integer"
+          },
+          "subscribed": {
+            "description": "whether the user is subscribed",
+            "type": "boolean"
+          },
+          "subscriptionLocked": {
+            "description": "whether the subscription cannot be turned off",
+            "type": "boolean"
+          },
+          "channels": {
+            "description": "one entry per available channel",
+            "items": {
+              "$ref": "#/components/schemas/NotificationSubscriptionChannel"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "typeId",
+          "translationKey",
+          "descriptionKey",
+          "group",
+          "sortOrder",
+          "subscribed",
+          "subscriptionLocked",
+          "channels"
+        ],
+        "title": "Notification Subscribable Type",
+        "type": "object"
+      },
+      "NotificationSubscriptionChannel": {
+        "description": "One channel cell for one notification type. Present for every available channel so the\nfrontend can render a complete row without cross-referencing.",
+        "properties": {
+          "id": {
+            "description": "channel id",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "whether the user has this channel enabled",
+            "type": "boolean"
+          },
+          "supported": {
+            "description": "whether this type can use this channel",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "enabled",
+          "supported"
+        ],
+        "title": "Notification Subscription Channel",
+        "type": "object"
+      },
+      "NotificationSubscriptionCollection": {
+        "description": "Everything the preferences screen needs in one response: the column set and the rows, merged\nand narrowed for the calling user. Not readonly — the pre-response event mutates it.",
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "availableChannels": {
+            "description": "channels offerable anywhere in this installation",
+            "items": {
+              "$ref": "#/components/schemas/NotificationAvailableChannel"
+            },
+            "type": "array"
+          },
+          "items": {
+            "description": "subscribable types with the caller's effective preferences",
+            "items": {
+              "$ref": "#/components/schemas/NotificationSubscribableType"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "availableChannels",
+          "items"
+        ],
+        "title": "Notification Subscription Collection",
+        "type": "object"
+      },
+      "NotificationUpdateSubscriptionItem": {
+        "properties": {
+          "typeId": {
+            "description": "notification type id",
+            "type": "string"
+          },
+          "subscribed": {
+            "description": "whether the user wants this type at all",
+            "type": "boolean"
+          },
+          "channels": {
+            "description": "enabled channel ids",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "typeId",
+          "subscribed",
+          "channels"
+        ],
+        "title": "Notification Update Subscription Item",
+        "type": "object"
+      },
+      "NotificationUpdateSubscriptionsParameters": {
+        "description": "Bulk by design: the preferences screen saves every row in one request, matching a single\nsave action in the UI.",
+        "properties": {
+          "items": {
+            "description": "preferences to store, one entry per notification type",
+            "items": {
+              "$ref": "#/components/schemas/NotificationUpdateSubscriptionItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "Notification Update Subscriptions Parameters",
+        "type": "object"
+      },
+      "Recipient": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "ID of the Recipient",
+            "type": "integer"
+          },
+          "recipientName": {
+            "description": "User name or Group Name of the Recipient",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "recipientName"
+        ],
+        "title": "Recipient",
+        "type": "object"
+      },
+      "SendNotificationParameters": {
+        "properties": {
+          "recipientId": {
+            "description": "recipient ID",
+            "type": "integer"
+          },
+          "title": {
+            "description": "title",
+            "type": "string"
+          },
+          "message": {
+            "description": "message",
+            "type": "string"
+          },
+          "attachmentType": {
+            "description": "type of the attachment",
+            "enum": [
+              "asset",
+              "document",
+              "object"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "attachmentId": {
+            "description": "ID of the attachment",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "recipientId",
+          "title",
+          "message"
+        ],
+        "title": "SendEmailParameters",
+        "type": "object"
+      },
+      "UnreadCount": {
+        "properties": {
+          "unreadNotificationsCount": {
+            "description": "Count of unread notifications",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "unreadNotificationsCount"
+        ],
+        "title": "Unread Count",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: notifications)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/notifications": {
+      "post": {
+        "description": "Get all paginated notifications for current user. <br> You can specify different filters in your request body. Available filters are: <br>\n<ul>\n  <li><strong>title</strong>: Filter by title string</li>\n  <li><strong>creationDate</strong>: Filter by creation date (on, from, to)</li>\n  <li><strong>page</strong>: Used for offset calculation in pagination. To be used, needs to be defined together with the page.size</li>\n  <li><strong>page.size</strong>: Used for limiting the result numbers per page. To be used, needs to be defined together with the page</li>\n</ul>\n",
+        "operationId": "notification_get_collection",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "filters": {
+                    "properties": {
+                      "page": {
+                        "type": "integer"
+                      },
+                      "pageSize": {
+                        "type": "integer"
+                      },
+                      "columnFilters": {
+                        "type": "object"
+                      },
+                      "sortFilter": {
+                        "type": "object"
+                      },
+                      "additionalSortFilters": {
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/NotificationListItem"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Paginated notifications with total count"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get paginated notifications",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "delete": {
+        "description": "Delete all notifications for the current user",
+        "operationId": "notification_delete_all",
+        "responses": {
+          "200": {
+            "description": "Successfully deleted all notifications"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete all user notifications",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notifications/{id}": {
+      "get": {
+        "description": "Get the notification with the given <strong>{id}</strong>. <br> Current user can only get notifications, where he is the recipient.\n",
+        "operationId": "notification_get_by_id",
+        "parameters": [
+          {
+            "description": "Id of the notification",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            },
+            "description": "Notification data as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get notification by ID",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "post": {
+        "description": "Mark the notification with the given <strong>{id}</strong> as read. <br> Current user can only mark notifications as read, where he is the recipient.\n",
+        "operationId": "notification_read_by_id",
+        "parameters": [
+          {
+            "description": "Id of the notification",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully marked notification as read"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Mark notification as read",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "delete": {
+        "description": "Delete the notification with the given <strong>{id}</strong>. <br> Current user can only delete notifications, where he is the recipient.\n",
+        "operationId": "notification_delete_by_id",
+        "parameters": [
+          {
+            "description": "Id of the notification",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted notification"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Delete notification with given id",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notifications/subscriptions": {
+      "get": {
+        "description": "Get the current user's notification preferences, merged with the defaults of every registered notification type",
+        "operationId": "notification_get_subscriptions",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationSubscriptionCollection"
+                }
+              }
+            },
+            "description": "Notification preferences for the current user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get notification preferences for the current user",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "put": {
+        "description": "Store the current user's notification preferences. Sent as a single bulk request; the stored state is returned so the client can re-seed from the server.",
+        "operationId": "notification_update_subscriptions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationUpdateSubscriptionsParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationSubscriptionCollection"
+                }
+              }
+            },
+            "description": "The stored notification preferences for the current user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Update notification preferences for the current user",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notifications/unread-count": {
+      "get": {
+        "description": "Count of unread notifications for the current user",
+        "operationId": "notification_get_unread_count",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadCount"
+                }
+              }
+            },
+            "description": "Count of unread notifications for the current user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Count of unread notifications for the current user",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notifications/recipients": {
+      "get": {
+        "description": "Get all notification recipients for the current user",
+        "operationId": "notification_get_recipients",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Recipient"
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List of notification recipients for the current user"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get all notification recipients for the current user",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/pimcore-studio/api/notifications/send": {
+      "post": {
+        "description": "Send a notification to the given <strong>{recipientId}</strong>. <br> See the full description of request fields with the schema <strong>SendNotificationParameters</strong>\n",
+        "operationId": "notification_send",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendNotificationParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully sent notification"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Send a notification",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    }
+  }
+}

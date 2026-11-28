@@ -1,0 +1,1113 @@
+{
+  "components": {
+    "schemas": {
+      "CreateThumbnailConfig": {
+        "properties": {
+          "name": {
+            "description": "Thumbnail configuration name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Create Thumbnail Config",
+        "type": "object"
+      },
+      "DevError": {
+        "description": "Error with details for developers",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          },
+          "details": {
+            "description": "Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "details"
+        ],
+        "title": "DevError",
+        "type": "object"
+      },
+      "ElementIcon": {
+        "properties": {
+          "type": {
+            "description": "Icon type",
+            "enum": [
+              "name",
+              "path"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Icon value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "ElementIcon",
+        "type": "object"
+      },
+      "Error": {
+        "description": "Bad credentials or missing token, bad request, method not allowed, etc.",
+        "properties": {
+          "message": {
+            "description": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "ImageThumbnailConfigDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/ImageThumbnailSettings",
+            "description": "Thumbnail settings"
+          },
+          "writeable": {
+            "description": "Is configuration writeable",
+            "type": "boolean"
+          },
+          "medias": {
+            "description": "Media query configurations with transformation items",
+            "type": "object"
+          }
+        },
+        "required": [
+          "settings",
+          "writeable",
+          "medias"
+        ],
+        "title": "Image Thumbnail Config Detail",
+        "type": "object"
+      },
+      "ImageThumbnailSettings": {
+        "properties": {
+          "name": {
+            "description": "Thumbnail name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Thumbnail description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Thumbnail group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "format": {
+            "description": "Output format",
+            "type": "string"
+          },
+          "quality": {
+            "description": "Quality setting",
+            "type": "integer"
+          },
+          "highResolution": {
+            "description": "High resolution factor",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "preserveColor": {
+            "description": "Preserve color profile",
+            "type": "boolean"
+          },
+          "forceProcessICCProfiles": {
+            "description": "Force process ICC profiles",
+            "type": "boolean"
+          },
+          "preserveMetaData": {
+            "description": "Preserve meta data",
+            "type": "boolean"
+          },
+          "rasterizeSVG": {
+            "description": "Rasterize SVG",
+            "type": "boolean"
+          },
+          "useCropBox": {
+            "description": "Use crop box",
+            "type": "boolean"
+          },
+          "downloadable": {
+            "description": "Is downloadable",
+            "type": "boolean"
+          },
+          "modificationDate": {
+            "description": "Modification date timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "filenameSuffix": {
+            "description": "Filename suffix",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preserveAnimation": {
+            "description": "Preserve animation",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "group",
+          "format",
+          "quality",
+          "highResolution",
+          "preserveColor",
+          "forceProcessICCProfiles",
+          "preserveMetaData",
+          "rasterizeSVG",
+          "useCropBox",
+          "downloadable",
+          "modificationDate",
+          "creationDate",
+          "filenameSuffix",
+          "preserveAnimation"
+        ],
+        "title": "Image Thumbnail Settings",
+        "type": "object"
+      },
+      "SettingsConfigurationData": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "Configuration ID",
+            "type": "string"
+          },
+          "name": {
+            "description": "Configuration name",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/ElementIcon",
+            "description": "Configuration icon"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "icon"
+        ],
+        "title": "Settings Configuration Data",
+        "type": "object"
+      },
+      "Thumbnail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "id": {
+            "description": "id",
+            "type": "string"
+          },
+          "text": {
+            "description": "text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "text"
+        ],
+        "title": "Thumbnail",
+        "type": "object"
+      },
+      "ThumbnailConfigurationData": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SettingsConfigurationData"
+          },
+          {
+            "properties": {
+              "writeable": {
+                "description": "Is configuration writeable",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "writeable"
+        ],
+        "title": "Thumbnail Configuration Data",
+        "type": "object"
+      },
+      "ThumbnailConfigurationFolderData": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SettingsConfigurationData"
+          },
+          {
+            "properties": {
+              "children": {
+                "description": "Child nodes",
+                "items": {
+                  "$ref": "#/components/schemas/ThumbnailConfigurationData"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "children"
+        ],
+        "title": "Thumbnail Configuration Folder Data",
+        "type": "object"
+      },
+      "UpdateThumbnailConfig": {
+        "properties": {
+          "settings": {
+            "description": "Thumbnail settings configuration",
+            "type": "object"
+          },
+          "medias": {
+            "description": "Media configurations with transformation items",
+            "type": "object"
+          },
+          "mediaOrder": {
+            "description": "Media configurations order",
+            "type": "object"
+          }
+        },
+        "required": [
+          "settings",
+          "medias",
+          "mediaOrder"
+        ],
+        "title": "Update Thumbnail Config",
+        "type": "object"
+      },
+      "VideoThumbnailConfigDetail": {
+        "properties": {
+          "additionalAttributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "AdditionalAttributes",
+            "type": "object"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/VideoThumbnailSettings",
+            "description": "Thumbnail settings"
+          },
+          "writeable": {
+            "description": "Is configuration writeable",
+            "type": "boolean"
+          },
+          "medias": {
+            "description": "Media query configurations with transformation items",
+            "type": "object"
+          }
+        },
+        "required": [
+          "settings",
+          "writeable",
+          "medias"
+        ],
+        "title": "Video Thumbnail Config Detail",
+        "type": "object"
+      },
+      "VideoThumbnailSettings": {
+        "properties": {
+          "name": {
+            "description": "Thumbnail name",
+            "type": "string"
+          },
+          "description": {
+            "description": "Thumbnail description",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "description": "Thumbnail group",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "videoBitrate": {
+            "description": "Video bitrate in kbps",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "audioBitrate": {
+            "description": "Audio bitrate in kbps",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "modificationDate": {
+            "description": "Modification date timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "creationDate": {
+            "description": "Creation date timestamp",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "filenameSuffix": {
+            "description": "Filename suffix",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "group",
+          "videoBitrate",
+          "audioBitrate",
+          "modificationDate",
+          "creationDate",
+          "filenameSuffix"
+        ],
+        "title": "Video Thumbnail Settings",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Studio Backend API (slice: asset-thumbnails)",
+    "version": "snapshot"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/pimcore-studio/api/thumbnails/image": {
+      "get": {
+        "description": "Get collection of thumbnails for images. <br>\nThe thumbnails have to be defined as downloadable in order to be listed in the collection.\n",
+        "operationId": "thumbnail_image_get_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Thumbnail"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "All downloadable image thumbnails"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get collection of thumbnails for images",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/thumbnails/image/config": {
+      "post": {
+        "description": "Create a new image thumbnail configuration with the specified name. <br>\nThe name must be unique and not already used by an existing thumbnail configuration.\n",
+        "operationId": "thumbnail_image_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThumbnailConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageThumbnailConfigDetail"
+                }
+              }
+            },
+            "description": "Created image thumbnail configuration as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new image thumbnail configuration",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/thumbnails/image/config/{name}": {
+      "get": {
+        "description": "Get a specific image thumbnail configuration by its name including settings and media transformations.\n",
+        "operationId": "thumbnail_image_get_by_name",
+        "parameters": [
+          {
+            "description": "Image thumbnail configuration name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageThumbnailConfigDetail"
+                }
+              }
+            },
+            "description": "Image thumbnail configuration as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get image thumbnail configuration",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      },
+      "put": {
+        "description": "Update a specific image thumbnail configuration by its name with new settings and media transformations.\n",
+        "operationId": "thumbnail_image_update",
+        "parameters": [
+          {
+            "description": "Image thumbnail configuration name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateThumbnailConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageThumbnailConfigDetail"
+                }
+              }
+            },
+            "description": "Updated image thumbnail configuration as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update image thumbnail configuration",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      },
+      "delete": {
+        "description": "Delete a specific image thumbnail configuration by its name.\n",
+        "operationId": "thumbnail_image_delete",
+        "parameters": [
+          {
+            "description": "Image thumbnail configuration name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image thumbnail configuration successfully deleted"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete image thumbnail configuration",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/thumbnails/image/tree": {
+      "get": {
+        "description": "Get image thumbnail configuration tree with thumbnails organized by groups. <br>\nThumbnails without a group are listed directly, while grouped thumbnails are organized into folder nodes.\n",
+        "operationId": "thumbnail_image_get_tree",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/ThumbnailConfigurationData"
+                          },
+                          {
+                            "$ref": "#/components/schemas/ThumbnailConfigurationFolderData"
+                          }
+                        ]
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Image thumbnail configuration tree as JSON"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get image thumbnails tree",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/thumbnails/video": {
+      "get": {
+        "description": "Get collection of all thumbnails for videos.\n",
+        "operationId": "thumbnail_video_get_collection",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Thumbnail"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "All video thumbnails"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get collection of thumbnails for videos",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/thumbnails/video/config": {
+      "post": {
+        "description": "Creates a new video thumbnail configuration with the given <strong>{name}</strong>. <br>\nThe <strong>{name}</strong> must be unique.\n",
+        "operationId": "thumbnail_video_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThumbnailConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoThumbnailConfigDetail"
+                }
+              }
+            },
+            "description": "Successfully created video thumbnail configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>409 - Conflict<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Create a new video thumbnail configuration",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/thumbnails/video/config/{name}": {
+      "get": {
+        "description": "Retrieves a specific video thumbnail configuration based on the given <strong>{name}</strong>. <br>\nThe <strong>{name}</strong> must be a name of an existing video thumbnail configuration.\n",
+        "operationId": "thumbnail_video_get_by_name",
+        "parameters": [
+          {
+            "description": "Video thumbnail configuration name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoThumbnailConfigDetail"
+                }
+              }
+            },
+            "description": "Successfully retrieved video thumbnail configuration details"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get video thumbnail configuration by name",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      },
+      "put": {
+        "description": "Updates a specific video thumbnail configuration based on the given <strong>{name}</strong>. <br>\nThe <strong>{name}</strong> must be a name of an existing video thumbnail configuration.\n",
+        "operationId": "thumbnail_video_update",
+        "parameters": [
+          {
+            "description": "Video thumbnail configuration name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateThumbnailConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoThumbnailConfigDetail"
+                }
+              }
+            },
+            "description": "Successfully updated video thumbnail configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Update video thumbnail configuration by name",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      },
+      "delete": {
+        "description": "Deletes a specific video thumbnail configuration based on the given <strong>{name}</strong>. <br>\nThe <strong>{name}</strong> must be a name of an existing video thumbnail configuration.\n",
+        "operationId": "thumbnail_video_delete",
+        "parameters": [
+          {
+            "description": "Video thumbnail configuration name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted video thumbnail configuration"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content<br>500 - Internal Server Error"
+          }
+        },
+        "summary": "Delete video thumbnail configuration by name",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    },
+    "/pimcore-studio/api/thumbnails/video/tree": {
+      "get": {
+        "description": "Retrieves a tree structure of all video thumbnail configurations. <br>\nThumbnails are grouped by their group property.\n",
+        "operationId": "thumbnail_video_get_tree",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer"
+                    },
+                    "items": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/ThumbnailConfigurationData"
+                          },
+                          {
+                            "$ref": "#/components/schemas/ThumbnailConfigurationFolderData"
+                          }
+                        ]
+                      },
+                      "title": "items",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved video thumbnail configuration tree"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content"
+          }
+        },
+        "summary": "Get video thumbnail configuration tree",
+        "tags": [
+          "Asset Thumbnails"
+        ]
+      }
+    }
+  }
+}
